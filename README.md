@@ -7,3 +7,8 @@ Pocket Plays is an open source, ad free Twitch browser and stream player for And
     <img alt="Get it on Google Play" height="80" 
          src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
+
+## Licensing
+
+Pocket Plays is licensed under the [GNU v3 Public License.](license.txt)
+I would also personally love to know if you use any of the code from this repository. Sharing is caring :)
