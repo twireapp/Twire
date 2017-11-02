@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:padding="@dimen/activity_margin_half"
+        android:fontFamily="@string/font_roboto_regular"
+        android:textSize="@dimen/update_dialog_cell_text_size"
+        android:textColor="?attr/textColor"
+        android:gravity="center"
+        android:id="@+id/txt_feature"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/update_dialog_cell_height" />
+
+</LinearLayout>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView_game"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="?attr/mainCardBackgroundColor"
+    app:cardCornerRadius="@dimen/game_card_corner_radius"
+    app:cardElevation="@dimen/game_card_elevation"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        >
+        <RelativeLayout
+            android:id="@+id/preview_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <com.sebastianrask.bettersubscription.views.DynamicImageView
+                android:id="@+id/image_game_preview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/game_card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/game_card_margin"
+            android:layout_marginRight="@dimen/game_card_margin"
+            android:maxLines = "2"
+            android:minLines = "1"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="3dp"
+            android:textAppearance="@style/cardPrimaryText"
+            android:text="@string/preview_game_title"
+            />
+
+        <!-- Shared Padding -->
+        <View
+            android:id="@+id/shared_padding"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/game_card_divider_height"/>
+
+        <TextView
+            android:id="@+id/game_viewers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|bottom"
+            android:gravity="center_horizontal|bottom"
+            android:textAppearance="@style/cardSecondaryText"
+            android:singleLine="true"
+            android:paddingRight="@dimen/game_card_divider_height"
+            android:paddingLeft="@dimen/game_card_divider_height"
+            android:paddingBottom="@dimen/game_card_divider_height"
+            android:paddingTop="0dp"
+            />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

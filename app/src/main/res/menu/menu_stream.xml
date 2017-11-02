@@ -1,0 +1,36 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item
+        android:id="@+id/menu_item_options"
+        android:title="@string/menu_options"
+        android:icon="@drawable/ic_settings_white_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_item_profile"
+        android:title="@string/menu_profile"
+        android:icon="@drawable/ic_person_white_24dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_item_sleep"
+        android:title="@string/menu_sleep"
+        android:icon="@drawable/ic_sleep_48dp"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/media_route_menu_item"
+        android:title="@string/ccl_media_route_menu_title"
+        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menu_item_external"
+        android:title="@string/menu_external"
+        android:icon="@drawable/ic_open_in_new_white_24dp"
+        app:showAsAction="never" />
+
+</menu>

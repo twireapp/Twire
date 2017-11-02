@@ -1,0 +1,25 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sebastianrask.bettersubscription.activities.settings.SettingsAppearanceActivity"
+    tools:ignore="MergeRootFrame" >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/settings_appearance_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimary"
+        android:height="@dimen/main_toolbar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        />
+    <fragment
+        android:name="com.sebastianrask.bettersubscription.fragments.AppearanceSettingsFragment"
+        android:id="@+id/appearance_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</LinearLayout>

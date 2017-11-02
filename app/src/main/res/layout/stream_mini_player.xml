@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mini_player_wrapper"
+    android:visibility="gone"
+    android:layout_alignParentBottom="true"
+    android:paddingLeft="@dimen/player_padding_left"
+    android:paddingStart="@dimen/player_padding_left"
+    android:background="?attr/mainCardBackgroundColor"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/player_height">
+
+    <FrameLayout
+        android:id="@+id/stream_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/stream_preview"
+        android:layout_toStartOf="@id/stream_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <TextView
+            android:textColor="?attr/cardTextColor"
+            android:id="@+id/streamer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:textColor="?attr/cardTextColor"
+            android:id="@+id/stream_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+
+
+</RelativeLayout>

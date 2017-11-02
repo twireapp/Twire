@@ -1,0 +1,76 @@
+/*
+ * Copyright (C) 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.0'
+    }
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+apply plugin: 'com.android.library'
+
+ext {
+    supportLibVersion = '25.2.0'
+    versionName = '2.8.4'
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.1'
+    publishNonDefault true
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 25
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            res.srcDirs = ['res']
+        }
+    }
+
+    buildTypes {
+        debug {
+            libraryVariants.all { variant ->
+                variant.outputs.each { output ->
+                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.
+                            replace(".aar", "-${versionName}.aar"))
+                }
+            }
+        }
+
+    }
+}
+
+
+dependencies {
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.android.support:mediarouter-v7:${supportLibVersion}"
+    compile 'com.google.android.gms:play-services-cast:10.2.0'
+}

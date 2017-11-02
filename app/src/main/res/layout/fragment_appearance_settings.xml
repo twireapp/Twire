@@ -1,0 +1,352 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="?attr/settingsBackgroundColor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.AppearanceSettingsFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/appearance_theme_color_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:id="@+id/appearance_theme_color_wrapper"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true">
+
+                    <ImageView
+                        android:src="@drawable/circle_theme_blue_chooser"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/appearance_theme_color"
+                        android:layout_width="@dimen/settings_theme_picket_color_size"
+                        android:layout_height="@dimen/settings_theme_picket_color_size"
+                        android:layout_marginRight="@dimen/settings_theme_picket_color_margin"
+                        android:layout_marginEnd="@dimen/settings_theme_picket_color_margin"
+                        android:layout_marginTop="@dimen/settings_theme_picket_color_margin"
+                        />
+                    <LinearLayout
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            style="@style/text_settings"
+                            android:id="@+id/appearance_theme_color_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/text_settings_title"
+                            android:text="@string/appearance_theme_color_title"
+                            />
+
+                        <TextView
+                            style="@style/text_settings"
+                            android:id="@+id/appearance_theme_color_summary"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/sub_text_settings"
+                            android:text="@string/blue_theme_name"
+                            />
+                    </LinearLayout>
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <TextView
+                android:text="@string/appearance_stream_header"
+                style="@style/settings_header_style"
+                android:textAppearance="@style/settings_header_text_style"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/appearance_streams_style_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <LinearLayout
+                    android:id="@+id/appearance_streams_style_wrapper"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_streams_style_title"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/appearance_streams_style_title"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:textAppearance="@style/sub_text_settings"
+                        android:id="@+id/appearance_streams_style_summary"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/appearance_streams_size_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <LinearLayout
+                    android:id="@+id/appearance_streams_size_wrapper"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_streams_size_title"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/appearance_streams_size_title"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_streams_size_summary"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <TextView
+                android:text="@string/appearance_game_header"
+                style="@style/settings_header_style"
+                android:textAppearance="@style/settings_header_text_style"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/appearance_game_style_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <LinearLayout
+                    android:id="@+id/appearance_game_style_wrapper"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_game_style_title"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/appearance_game_style_title"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_game_style_summary"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/appearance_game_size_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <LinearLayout
+                    android:id="@+id/appearance_game_size_wrapper"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_game_size_title"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/appearance_game_size_title"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_game_size_summary"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <TextView
+                android:text="@string/appearance_streamer_header"
+                style="@style/settings_header_style"
+                android:textAppearance="@style/settings_header_text_style"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/appearance_streamer_style_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <LinearLayout
+                    android:id="@+id/appearance_streamer_style_wrapper"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_streamer_style_title"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/appearance_streamer_style_title"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_streamer_style_summary"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/appearance_streamer_size_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <LinearLayout
+                    android:id="@+id/appearance_streamer_size_wrapper"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_streamer_size_title"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/appearance_streamer_size_title"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/appearance_streamer_size_summary"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </LinearLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

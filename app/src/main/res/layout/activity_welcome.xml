@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorSetupMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sebastianrask.bettersubscription.activities.setup.WelcomeActivity">
+
+    <FrameLayout
+        android:id="@+id/welcome_icon_layout"
+        android:layout_marginTop="@dimen/welcome_icon_margin_top"
+        android:layout_centerHorizontal="true"
+        android:layout_width="@dimen/welcome_icon_container_size"
+        android:layout_height="@dimen/welcome_icon_container_size"
+        >
+        <ImageView
+            android:id="@+id/welcome_icon"
+            android:src="@drawable/ic_logo_large"
+            android:layout_width="@dimen/welcome_icon_size"
+            android:layout_height="@dimen/welcome_icon_size"
+            android:layout_gravity="center"
+            />
+
+        <View
+            android:id="@+id/welcome_icon_center"
+            android:background="@drawable/center_for_welcome_icon"
+            android:layout_width="@dimen/welcome_icon_center_size"
+            android:layout_height="@dimen/welcome_icon_center_size"
+            android:layout_gravity="center"
+            />
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/welcome_text"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/welcome_text_container_height"
+        android:layout_centerHorizontal="true"
+        >
+        <TextView
+            android:id="@+id/welcome_text_line_one"
+            android:text="@string/welcome_text_line_one"
+            android:textSize="@dimen/welcome_text_line_one_size"
+            android:textAppearance="@style/text_setup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/welcome_text_line_one_margin_bottom"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/welcome_text_line_two"
+            android:text="@string/welcome_text_line_two"
+            android:textSize="@dimen/welcome_text_line_two_size"
+            android:textAppearance="@style/text_setup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/welcome_text_line_one"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/welcome_text_line_three"
+            android:text="@string/welcome_text_line_three"
+            android:textSize="@dimen/welcome_text_line_three_size"
+            android:textAppearance="@style/text_setup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcome_text_line_two"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/welcome_continue_circle_shadow"
+        android:src="@drawable/circle_for_welcome_shadow"
+        android:layout_width="@dimen/welcome_continue_circle_shadow_diameter"
+        android:layout_height="@dimen/welcome_continue_circle_shadow_diameter"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/welcome_continue_circle_shadow_margin_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        />
+
+    <FrameLayout
+        android:id="@+id/continue_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/welcome_continue_circle_margin_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        >
+
+        <View
+            android:id="@+id/welcome_continue_circle"
+            android:background="@drawable/circle_for_welcome"
+            android:layout_width="@dimen/welcome_continue_circle_diameter"
+            android:layout_height="@dimen/welcome_continue_circle_diameter"
+            android:layout_gravity="center"
+            />
+
+        <ImageView
+            android:id="@+id/forward_arrow"
+            android:src="@drawable/ic_arrow_forward"
+            android:tint="@color/colorSetupMain"
+            android:layout_width="@dimen/welcome_continue_arrow_diameter"
+            android:layout_height="@dimen/welcome_continue_arrow_diameter"
+            android:layout_gravity="center"
+            />
+
+    </FrameLayout>
+
+    <io.codetail.widget.RevealFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            android:id="@+id/transition_view"
+            android:background="@color/colorSetupSecond"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </View>
+    </io.codetail.widget.RevealFrameLayout>
+
+    <io.codetail.widget.RevealFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            android:id="@+id/transition_view_blue"
+            android:background="@color/colorSetupMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </View>
+    </io.codetail.widget.RevealFrameLayout>
+
+
+</RelativeLayout>

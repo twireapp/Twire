@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "115506641671",
+    "project_id": "pocket-plays"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115506641671:android:fbd1c365fc77d3af",
+        "android_client_info": {
+          "package_name": "net.nrask.notifyme"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPf9U212wx2hYCxd08PPr4srbt_i0zt00"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-77558918-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

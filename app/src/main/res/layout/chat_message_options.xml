@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:paddingTop="8dp"
+            android:background="?attr/backgroundColor"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/text_chat_message"
+                android:background="?attr/selectableItemBackground"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                style="@style/stream_settings_item" />
+
+            <TextView
+                android:id="@+id/text_mention"
+                android:background="?attr/selectableItemBackground"
+                android:text="@string/chat_message_option_mention"
+                style="@style/stream_settings_item" />
+
+            <TextView
+                android:id="@+id/text_duplicate_message"
+                android:background="?attr/selectableItemBackground"
+                android:text="@string/chat_message_option_duplicate"
+                style="@style/stream_settings_item" />
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/text_block_user"
+                android:background="?attr/selectableItemBackground"
+                android:text="@string/chat_message_option_block"
+                android:textColor="?attr/colorPrimary"
+                style="@style/stream_settings_item" />
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

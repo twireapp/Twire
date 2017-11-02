@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape
+            android:tint="@color/colorPreviewBackground"
+            android:shape="rectangle" >
+
+            <size
+                android:width="@dimen/subscription_card_preview_width"
+                android:height="@dimen/subscription_card_preview_width" />
+
+        </shape>
+    </item>
+
+</layer-list>

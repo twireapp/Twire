@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+
+        <LinearLayout
+            android:descendantFocusability="blocksDescendants"
+            android:background="?attr/backgroundColor"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:paddingTop="@dimen/activity_margin_half"
+                android:paddingBottom="@dimen/activity_margin_half"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:background="?attr/colorPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/twitch_name"
+                    android:textAppearance="@style/text_title"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/streamerInfo_name_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"/>
+
+                <ImageView
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:id="@+id/full_profile_icon"
+                    app:srcCompat="@drawable/ic_vods_black_24dp"
+                    android:tint="@color/white"
+                    android:layout_width="@dimen/streamer_preview_icon_size"
+                    android:layout_height="@dimen/streamer_preview_icon_size"/>
+
+                <ImageView
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:id="@+id/follow_unfollow_icon"
+                    app:srcCompat="@drawable/ic_heart_24dp"
+                    android:tint="?attr/colorAccent"
+                    android:layout_width="@dimen/streamer_preview_icon_size"
+                    android:layout_height="@dimen/streamer_preview_icon_size"/>
+
+                <LinearLayout
+                    android:layout_below="@+id/twitch_name"
+                    android:id="@+id/additional_info_wrapper"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/streamerInfo_additional_info_padding"
+                    android:gravity="center"
+                    android:layout_alignBottom="@id/additional_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <FrameLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_height="wrap_content"
+                            android:layout_width="wrap_content"
+                            >
+                            <TextView
+                                android:layout_gravity="center"
+                                android:textSize="@dimen/streamerInfo_followers_size"
+                                android:textAppearance="@style/text_streamer_info"
+                                android:id="@+id/txt_followers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                            <ImageView
+                                android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
+                                android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/ic_channels"
+                                android:tint="@color/white"
+                                android:layout_width="@dimen/streamerInfo_additional_info_icon_size"
+                                android:layout_height="@dimen/streamerInfo_additional_info_icon_size"/>
+                        </LinearLayout>
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:textSize="@dimen/streamerInfo_views_size"
+                                android:textAppearance="@style/text_streamer_info"
+                                android:id="@+id/txt_viewers"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                            <ImageView
+                                android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
+                                android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/ic_visibility_black_24dp"
+                                android:tint="@color/white"
+                                android:layout_width="@dimen/streamerInfo_additional_info_icon_size"
+                                android:layout_height="@dimen/streamerInfo_additional_info_icon_size"/>
+                        </LinearLayout>
+                    </FrameLayout>
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:paddingTop="@dimen/activity_margin_half"
+                android:id="@+id/panel_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

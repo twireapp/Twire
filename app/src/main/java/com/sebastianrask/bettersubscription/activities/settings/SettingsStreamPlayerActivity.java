@@ -1,0 +1,85 @@
+package com.sebastianrask.bettersubscription.activities.settings;
+
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckedTextView;
+import android.widget.TextView;
+
+import com.sebastianrask.bettersubscription.R;
+import com.sebastianrask.bettersubscription.activities.ThemeActivity;
+import com.sebastianrask.bettersubscription.service.Settings;
+
+public class SettingsStreamPlayerActivity extends ThemeActivity {
+
+	private Settings settings;
+	private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary;
+	private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_settings_stream_player);
+
+		settings = new Settings(getBaseContext());
+		mShowNavigationBarView = (CheckedTextView) findViewById(R.id.player_show_navigation_title);
+		mShowViewCountView = (CheckedTextView) findViewById(R.id.player_show_viewercount_title);
+		mAutoPlaybackView = (CheckedTextView) findViewById(R.id.player_auto_continue_playback_title);
+
+		mShowViewCountSummary = (TextView) findViewById(R.id.player_show_viewercount_title_summary);
+		mShowNavigationBarSummary = (TextView) findViewById(R.id.player_show_navigation_summary);
+		mAutoPlaybackSummary = (TextView) findViewById(R.id.player_auto_continue_playback_summary);
+
+		final Toolbar toolbar = (Toolbar) findViewById(R.id.settings_player_toolbar);
+		setSupportActionBar(toolbar);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setTitle(getString(R.string.settings_stream_player_name));
+		}
+
+		updateSummaries();
+	}
+
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		this.overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_right_anim);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		onBackPressed();
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void updateSummary(CheckedTextView checkView, TextView summary, boolean isEnabled) {
+		checkView.setChecked(isEnabled);
+		if (isEnabled) {
+			summary.setText(getString(R.string.enabled));
+		} else {
+			summary.setText(getString(R.string.disabled));
+		}
+	}
+
+	private void updateSummaries() {
+		updateSummary(mShowViewCountView, mShowViewCountSummary, settings.getStreamPlayerShowViewerCount());
+		updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, settings.getStreamPlayerShowNavigationBar());
+		updateSummary(mAutoPlaybackView, mAutoPlaybackSummary, settings.getStreamPlayerAutoContinuePlaybackOnReturn());
+	}
+
+	public void onClickShowNavigationBar(View v) {
+		settings.setStreamPlayerShowNavigationBar(!settings.getStreamPlayerShowNavigationBar());
+		updateSummaries();
+	}
+
+	public void onClickShowViewerCount(View v) {
+		settings.setStreamPlayerShowViewerCount(!settings.getStreamPlayerShowViewerCount());
+		updateSummaries();
+	}
+
+	public void onClickAutoPlayback(View v) {
+		settings.setStreamPlayerAutoContinuePlaybackOnReturn(!settings.getStreamPlayerAutoContinuePlaybackOnReturn());
+		updateSummaries();
+	}
+}

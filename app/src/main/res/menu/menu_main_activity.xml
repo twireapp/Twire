@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context="com.sebastianrask.bettersubscription.activities.main.MainActivity">
+
+    <!--<item-->
+        <!--android:id="@+id/search_menu_item"-->
+        <!--android:title="@string/menu_action_search"-->
+        <!--android:icon="@drawable/ic_search_white_24dp"-->
+        <!--app:showAsAction="never" />-->
+
+    <item
+        android:id="@+id/media_route_menu_item"
+        android:title="@string/ccl_media_route_menu_title"
+        app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
+        app:showAsAction="always" />
+
+</menu>

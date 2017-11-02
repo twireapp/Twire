@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:paddingTop="8dp"
+            android:background="?attr/backgroundColor"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/options_text"
+                android:visibility="gone"
+                style="@style/stream_settings_item"
+                android:textColor="?attr/secondaryTextColor"
+                android:text="@string/options" />
+
+            <CheckedTextView
+                android:visibility="gone"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                android:text="@string/audio_only"
+                android:id="@+id/audio_only_selector"
+                style="@style/stream_settings_item"/>
+
+            <CheckedTextView
+                android:visibility="gone"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                android:text="@string/chat_only"
+                android:id="@+id/chat_only_selector"
+                style="@style/stream_settings_item"/>
+
+            <LinearLayout
+                android:id="@+id/quality_wrapper"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/stream_settings_item"
+                    android:textColor="?attr/secondaryTextColor"
+                    android:text="@string/available_qualities" />
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    app:mrl_rippleDelayClick="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/auto"
+                        style="@style/stream_settings_item"
+                        android:text="@string/quality_auto"/>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    app:mrl_rippleDelayClick="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/source"
+                        style="@style/stream_settings_item"
+                        android:text="@string/quality_source"/>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    app:mrl_rippleDelayClick="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/high"
+                        style="@style/stream_settings_item"
+                        android:text="@string/quality_high"/>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    app:mrl_rippleDelayClick="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/medium"
+                        android:text="@string/quality_medium"
+                        style="@style/stream_settings_item"/>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    app:mrl_rippleDelayClick="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/low"
+                        android:text="@string/quality_low"
+                        style="@style/stream_settings_item"/>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    app:mrl_rippleDelayClick="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/mobile"
+                        android:text="@string/quality_mobile"
+                        style="@style/stream_settings_item"/>
+                </com.balysv.materialripple.MaterialRippleLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.sebastianrask.bettersubscription.views.FlingingNestedScrollView
+    android:overScrollMode="never"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:descendantFocusability="blocksDescendants"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <com.sebastianrask.bettersubscription.views.FontFitTextView
+            android:id="@+id/emote_error_view"
+            style="@style/style_emote_error"/>
+
+        <TextView
+            android:text="@string/streamerInfo_description"
+            android:id="@+id/error_view"
+            style="@style/style_no_elements_found"
+            />
+
+        <TextView
+            android:padding="@dimen/activity_horizontal_margin"
+            android:id="@+id/description"
+            android:lineSpacingMultiplier="1.3"
+            android:gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            style="@style/text_title"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/panel_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+</com.sebastianrask.bettersubscription.views.FlingingNestedScrollView>

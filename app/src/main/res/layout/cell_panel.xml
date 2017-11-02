@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    android:padding="@dimen/recyclerview_panel_padding"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.sebastianrask.bettersubscription.views.DynamicImageView
+        android:id="@+id/panel_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:enabled="true"
+        android:lineSpacingMultiplier="1.3"
+        android:textColor="?attr/textColor"
+        style="@style/text_body_light"
+        android:id="@+id/panel_html"
+        android:layout_marginTop="@dimen/activity_margin_half"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

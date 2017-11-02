@@ -1,0 +1,297 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_margin_half">8dp</dimen>
+    <dimen name="default_text_padding">16dp</dimen>
+    <dimen name="activity_fragment_vertical_margin">56dp</dimen>
+    <dimen name="main_toolbar_height">56dp</dimen>
+    <dimen name="additional_toolbar_height">230dp</dimen>
+    <dimen name="swipe_refresh_start_offset">30dp</dimen>
+    <dimen name="swipe_refresh_end_offset">80dp</dimen>
+    <dimen name="drawer_layout_edge_size">80dp</dimen>
+    <dimen name="button_size">14sp</dimen>
+    <dimen name="toolbar_extra_padding">5dp</dimen>
+    <dimen name="divider_height">2dp</dimen>
+    <dimen name="toolbar_elevation">4dp</dimen>
+    <dimen name="small_item_list_height">56dp</dimen>
+    <dimen name="large_item_list_height">72dp</dimen>
+
+
+    <!-- Emote -->
+    <dimen name="emote_error_padding_bottom">8dp</dimen>
+    <dimen name="emote_error_text_size">65sp</dimen>
+
+    <!-- Theme Dialog -->
+    <dimen name="theme_text_size">16sp</dimen>
+    <dimen name="theme_item_height">48dp</dimen>
+    <dimen name="theme_color_view_size">24dp</dimen>
+    <dimen name="theme_color_view_margin">16dp</dimen>
+
+    <!-- Animations -->
+    <dimen name="insert_animation_translation_length">200dp</dimen>
+
+    <!-- Chat -->
+    <dimen name="chat_landscape_width_large">440dp</dimen>
+    <dimen name="chat_landscape_width">250dp</dimen>
+    <dimen name="chat_emote_divider">1.5dp</dimen>
+    <dimen name="chat_emote_backspace_padding">7dp</dimen>
+    <dimen name="chat_emote_tabs_layout_height">36dp</dimen>
+    <dimen name="chat_emote_tab_icon_size">24dp</dimen>
+    <dimen name="chat_emote_tab_max_width">55dp</dimen>
+    <dimen name="chat_emote_icon_margin_right">16dp</dimen>
+    <dimen name="chat_message_text_sie">14sp</dimen>
+    <dimen name="chat_message_mention">16sp</dimen>
+    <dimen name="chat_send_ic_size">24dp</dimen>
+    <dimen name="chat_recyclerview_padding">8dp</dimen>
+    <dimen name="chat_message_margin">2dp</dimen>
+    <dimen name="chat_input_height">50dp</dimen>
+    <dimen name="chat_input_height_max">80dp</dimen>
+    <dimen name="chat_input_padding">8dp</dimen>
+    <dimen name="chat_status_bar_height">30dp</dimen>
+    <dimen name="chat_input_divider_height">3dp</dimen>
+
+    <dimen name="chat_grid_emote_size">48dp</dimen>
+    <dimen name="chat_grid_emote_padding">5dp</dimen>
+    <dimen name="chat_text_emote_size">30sp</dimen>
+
+    <dimen name="chat_mention_suggestions_max_height">180dp</dimen>
+
+    <!-- LiveStreamActivity -->
+    <dimen name="stream_chromecasting_msg_size">18sp</dimen>
+    <dimen name="toolbar_control_height">36dp</dimen>
+    <dimen name="toolbar_icon_size">24dp</dimen>
+    <dimen name="toolbar_icon_right_most_margin">16dp</dimen>
+    <dimen name="toolbar_viewers_text_size">16sp</dimen>
+    <dimen name="play_pause_wrapper_size">56dp</dimen>
+    <dimen name="buffer_spinner_size">60dp</dimen>
+    <dimen name="viewers_icon_margin">8dp</dimen>
+    <dimen name="viewers_icon_size">20dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="font_title_size">20sp</dimen>
+    <dimen name="font_activity_icon_size">20sp</dimen>
+    <dimen name="font_settings_size">18sp</dimen>
+    <dimen name="font_navigation_drawer_size">14sp</dimen>
+    <dimen name="font_navigation_drawer_title">18sp</dimen>
+    <dimen name="font_sub_settings_size">14sp</dimen>
+    <dimen name="font_body_size">14sp</dimen>
+
+    <!-- StreamerInfo Activity -->
+    <dimen name="streamerInfo_stat_icons_padding">5dp</dimen>
+    <dimen name="streamerInfo_displayName_height">56dp</dimen>
+    <dimen name="streamerInfo_logo_width">140dp</dimen>
+    <dimen name="streamerInfo_additional_toolbar_height">200dp</dimen>
+    <dimen name="streamerInfo_name_size">30sp</dimen>
+    <dimen name="streamerInfo_description_size">18sp</dimen>
+    <dimen name="streamerInfo_toolbar_padding_bottom">16dp</dimen>
+    <dimen name="streamerInfo_additional_info_padding">6dp</dimen>
+    <dimen name="streamerInfo_additional_info_icon_size">24dp</dimen>
+    <dimen name="streamerInfo_views_size">22sp</dimen>
+    <dimen name="streamerInfo_followers_size">@dimen/streamerInfo_views_size</dimen>
+    <dimen name="streamerInfo_views_title_size">18sp</dimen>
+    <dimen name="streamerInfo_followers_title_size">@dimen/streamerInfo_views_title_size</dimen>
+    <dimen name="streamerInfo_fab_margin">16dp</dimen>
+    <dimen name="streamerInfo_fab_size">56dp</dimen>
+    <dimen name="stream_sleep_timer_font_size">40sp</dimen>
+    <dimen name="stream_sleep_timer_indicator_font_size">15sp</dimen>
+    <dimen name="stream_sleep_timer_picker_padding">15dp</dimen>
+
+    <!-- Search Activity -->
+    <dimen name="search_new_adapter_top_margin">8dp</dimen>
+    <dimen name="search_card_height">60dp</dimen>
+    <dimen name="search_card_corner_radius">2dp</dimen>
+    <dimen name="search_card_margin_bottom">10dp</dimen>
+    <dimen name="search_card_margin_right_left">8dp</dimen>
+    <dimen name="search_toolbar_padding">0dp</dimen>
+    <dimen name="search_edittext_padding">4dp</dimen>
+    <dimen name="search_back_arrow_start_padding">16dp</dimen>
+    <dimen name="search_icon_padding">12dp</dimen>
+    <dimen name="search_circle_progress_size">56dp</dimen>
+
+    <!-- Game Activity -->
+    <dimen name="game_fab_size">@dimen/streamerInfo_fab_size</dimen>
+    <dimen name="game_fab_margin">@dimen/streamerInfo_fab_margin</dimen>
+
+    <!-- OnlineStreams Activity -->
+    <dimen name="main_activity_icon_circle_radius">80dp</dimen>
+    <dimen name="main_activity_icon_size">60dp</dimen>
+
+    <!-- Games Activity -->
+
+    <!-- Settings Activity -->
+    <dimen name="settings_divider_height">1dp</dimen>
+    <dimen name="settings_item_height">72dp</dimen>
+    <dimen name="settings_small_item_height">72dp</dimen>
+    <dimen name="settings_text_left_margin">16dp</dimen>
+    <dimen name="settings_text_right_margin">16dp</dimen>
+    <dimen name="settings_theme_picket_color_size">23dp</dimen>
+    <dimen name="settings_theme_picket_color_margin">16dp</dimen>
+    <dimen name="settings_header_height">30dp</dimen>
+
+    <!-- Layout Preview -->
+    <dimen name="layout_selector_height">48dp</dimen>
+    <dimen name="layout_selector_radiogroup_padding">16dp</dimen>
+    <dimen name="layout_preview_height">126dp</dimen>
+
+    <!-- Donation Activity -->
+    <dimen name="donation_fab_size">56dp</dimen>
+    <dimen name="donation_fab_margin">16dp</dimen>
+    <dimen name="donation_prompt_text_size">34sp</dimen>
+    <dimen name="donation_playstore_text_size">22sp</dimen>
+    <dimen name="donation_arrow_size">56dp</dimen>
+
+    <!-- Welcome Activity -->
+    <!-- FAB -->
+    <dimen name="welcome_continue_circle_diameter">56dp</dimen>
+    <dimen name="welcome_continue_circle_shadow_diameter">60dp</dimen>
+    <dimen name="welcome_continue_arrow_diameter">24dp</dimen>
+    <dimen name="welcome_continue_circle_margin_bottom">20dp</dimen>
+    <dimen name="welcome_continue_circle_shadow_margin_bottom">18dp</dimen>
+
+    <!-- Welcome Text -->
+    <dimen name="welcome_text_container_height">160sp</dimen>
+    <dimen name="welcome_text_line_one_margin_bottom">-7dp</dimen>
+    <dimen name="welcome_text_line_one_size">26sp</dimen>
+    <dimen name="welcome_text_line_two_size">28sp</dimen>
+    <dimen name="welcome_text_line_three_size">16sp</dimen>
+
+    <!-- Pocket PLays Icon -->
+    <dimen name="welcome_icon_container_size">155dp</dimen>
+    <dimen name="welcome_icon_size">135dp</dimen>
+    <dimen name="welcome_icon_center_size">30dp</dimen>
+    <dimen name="welcome_icon_margin_top">50dp</dimen>
+
+    <!-- Login Activity -->
+    <!-- Login Text -->
+    <dimen name="login_text_container_height">160sp</dimen>
+    <dimen name="login_text_line_one_margin_bottom">-7dp</dimen>
+    <dimen name="login_text_line_one_size">28sp</dimen>
+    <dimen name="login_text_line_two_size">28sp</dimen>
+    <dimen name="login_text_line_three_size">16sp</dimen>
+    <dimen name="login_success_message_size">30sp</dimen>
+    <dimen name="login_skip_text_margin">25dp</dimen>
+    <dimen name="login_skip_text_size">@dimen/notification_skip</dimen>
+
+
+    <!-- Gear Icon -->
+    <dimen name="login_icon_size">@dimen/welcome_icon_size</dimen>
+    <dimen name="login_icon_margin_top">60dp</dimen>
+
+    <!-- Success Icon -->
+    <dimen name="login_icon_success_padding">20dp</dimen>
+
+    <!-- Notification Activity -->
+    <!-- Notification Text -->
+    <dimen name="notification_text_container_height">160sp</dimen>
+    <dimen name="notification_text_line_one_margin_bottom">-7dp</dimen>
+    <dimen name="notification_text_line_one_size">28sp</dimen>
+    <dimen name="notification_text_line_two_size">28sp</dimen>
+    <dimen name="notification_success_message_size">30sp</dimen>
+    <dimen name="notification_customize_button">16sp</dimen>
+    <dimen name="notification_customize_width">150dp</dimen>
+    <dimen name="notification_skip">18sp</dimen>
+
+    <!-- Notification Icon -->
+    <dimen name="notification_icon_size">@dimen/welcome_icon_size</dimen>
+    <dimen name="notification_icon_margin_top">60dp</dimen>
+
+    <!-- StreamerInfo Fragment -->
+    <dimen name="fragment_streamerInfo_cardElevation">5dp</dimen>
+    <dimen name="fragment_streamerInfO_card_corner_radius">0dp</dimen>
+
+    <!-- OnlineStreams Card -->
+    <dimen name="stream_card_elevation">2dp</dimen>
+    <dimen name="stream_card_corner_radius">2dp</dimen>
+    <dimen name="stream_title_margin_top">3dp</dimen>
+    <dimen name="stream_title_margin_bottom">4dp</dimen>
+    <dimen name="stream_card_first_top_margin">190dp</dimen>
+    <dimen name="stream_card_top_margin">0dp</dimen>
+    <dimen name="stream_card_margin_half">1dp</dimen>
+    <dimen name="stream_card_bottom_margin">1dp</dimen>
+    <dimen name="stream_card_right_margin">2dp</dimen>
+    <dimen name="stream_card_left_margin">2dp</dimen>
+    <dimen name="stream_card_min_width">200dp</dimen>
+    <dimen name="stream_devider_height">7dp</dimen>
+    <dimen name="stream_devider_height_small">0dp</dimen>
+    <dimen name="stream_display_name_margin">16dp</dimen>
+    <dimen name="title_padding">8dp</dimen>
+    <dimen name="stream_template_width">320dp</dimen>
+    <dimen name="stream_template_height">180dp</dimen>
+    <dimen name="stream_preview_max_height">220dp</dimen>
+
+    <!-- Game Card -->
+    <dimen name="game_card_first_top_margin">@dimen/stream_card_first_top_margin</dimen>
+    <dimen name="game_card_margin">0dp</dimen>
+    <dimen name="game_card_margin_half">0dp</dimen>
+    <dimen name="game_card_bottom_margin">0dp</dimen>
+    <dimen name="game_card_divider_height">4dp</dimen>
+    <dimen name="game_card_corner_radius">2dp</dimen>
+    <dimen name="game_card_elevation">2dp</dimen>
+    <dimen name="game_card_width">100dp</dimen>
+    <dimen name="game_card_name_height">40dp</dimen>
+    <dimen name="game_template_width">272dp</dimen>
+    <dimen name="game_template_height">380dp</dimen>
+    <dimen name="game_preview_max_height">220dp</dimen>
+    <dimen name="game_preview_width">117dp</dimen>
+    <dimen name="game_preview_height">150dp</dimen>
+
+    <!-- Streamer cards -->
+    <dimen name="subscription_card_margin">0dp</dimen>
+    <dimen name="subscription_card_margin_half">0dp</dimen>
+    <dimen name="subscription_card_first_top_margin">@dimen/stream_card_first_top_margin</dimen>
+    <dimen name="subscription_card_corner_radius">2dp</dimen>
+    <dimen name="subscription_card_elevation">2dp</dimen>
+    <dimen name="subscription_card_width">120dp</dimen>
+    <dimen name="subscription_card_name_height">40dp</dimen>
+    <dimen name="subscription_card_preview_max_height">195dp</dimen>
+    <dimen name="subscription_card_preview_width">140dp</dimen>
+
+    <!-- Settings Card -->
+    <dimen name="settings_card_margin">5dp</dimen>
+    <dimen name="settings_card_corner_radius">0dp</dimen>
+    <dimen name="settings_card_elevation">4dp</dimen>
+
+
+    <!-- Navigation Drawer -->
+    <dimen name="navigation_drawer_devider_height">8dp</dimen>
+    <dimen name="navigation_drawer_width">300dp</dimen>
+    <dimen name="navigation_drawer_image_height">169dp</dimen>
+    <dimen name="navigation_drawer_item_height">48dp</dimen>
+    <dimen name="navigation_drawer_text_left_margin">72dp</dimen>
+    <dimen name="navigation_drawer_icon_left_margin">16dp</dimen>
+    <dimen name="navigation_drawer_app_icon_height_and_width">32dp</dimen>
+    <dimen name="navigation_drawer_icon_size">28dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="appbar_padding_top">8dp</dimen>
+
+    <!-- Tooltip -->
+    <dimen name="tooltip_stroke_size">2dp</dimen>
+    <dimen name="tooltip_corner_radius">2dp</dimen>
+    <dimen name="tooltip_text_size">20sp</dimen>
+    <dimen name="tooltip_text_padding">10dp</dimen>
+    <dimen name="tooltip_nav_size">30dp</dimen>
+
+    <!-- Stream mini player -->
+    <dimen name="player_padding_left">16dp</dimen>
+    <dimen name="player_height">64dp</dimen>
+    <dimen name="recyclerview_panel_padding">8dp</dimen>
+    <dimen name="streamer_preview_icon_size">24dp</dimen>
+
+    <!-- Update Dialog -->
+    <dimen name="update_dialog_corner_radius">5dp</dimen>
+    <dimen name="update_dialog_corner_radius_negative">-5dp</dimen>
+    <dimen name="update_dialog_elevation">2dp</dimen>
+    <dimen name="update_dialog_elevation_upper">3dp</dimen>
+    <dimen name="update_dialog_additional_margin">15dp</dimen>
+    <dimen name="update_dialog_base_margin">25dp</dimen>
+    <dimen name="update_dialog_indicator_height">72dp</dimen>
+    <dimen name="update_dialog_bottom_indicator_height">56dp</dimen>
+    <dimen name="update_dialog_cell_height">48dp</dimen>
+    <dimen name="update_dialog_cell_text_size">15dp</dimen>
+    <dimen name="cell_settings_category_icon_margin">16dp</dimen>
+    <dimen name="cell_settings_category_icon_size">28dp</dimen>
+    <dimen name="cell_settings_category_text_margin">64dp</dimen>
+
+
+</resources>

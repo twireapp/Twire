@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape
+            android:tint="@color/colorPreviewBackground"
+            android:shape="rectangle" >
+
+            <size
+                android:width="@dimen/game_preview_width"
+                android:height="@dimen/game_preview_height" />
+
+        </shape>
+    </item>
+
+</layer-list>

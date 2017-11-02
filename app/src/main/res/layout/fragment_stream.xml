@@ -1,0 +1,230 @@
+<RelativeLayout
+    android:id="@+id/main_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sebastianrask.bettersubscription.activities.stream.StreamActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/video_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:background="@color/black"
+            android:id="@+id/video_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <android.support.v7.widget.Toolbar
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/main_toolbar"
+            android:layout_height="@dimen/main_toolbar_height"
+            android:layout_width="match_parent"
+            android:background="?attr/streamToolbarColor"
+            android:minHeight="@dimen/main_toolbar_height"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            />
+
+        <com.sebastianrask.bettersubscription.views.VideoViewSimple
+            android:id="@+id/VideoView"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.sebastianrask.bettersubscription.views.DynamicImageView
+            android:id="@+id/preview"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:id="@+id/control_toolbar_wrapper"
+            android:background="?attr/streamToolbarColor"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_control_height"
+            android:layout_alignParentBottom="true"
+            android:paddingStart="@dimen/toolbar_icon_right_most_margin"
+            android:paddingEnd="@dimen/toolbar_icon_right_most_margin"
+            >
+
+            <android.support.v7.widget.Toolbar
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/video_control_toolbar"
+                android:background="?attr/streamToolbarColor"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                />
+
+            <ImageView
+                android:id="@+id/settings_icon"
+                app:srcCompat="@drawable/ic_settings_white_24dp"
+                android:tint="@android:color/white"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_centerVertical="true"
+                />
+
+            <LinearLayout
+                android:id="@+id/viewers_wrapper"
+                android:orientation="horizontal"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:gravity="center"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/txtViewViewers"
+                    android:text=""
+                    android:textSize="@dimen/toolbar_viewers_text_size"
+                    android:textColor="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/toolbar_icon_size"/>
+                <ImageView
+                    android:tint="@color/white"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/viewers_icon_margin"
+                    android:layout_marginStart="@dimen/viewers_icon_margin"
+                    app:srcCompat="@drawable/ic_group_black_24dp"
+                    android:layout_width="@dimen/viewers_icon_size"
+                    android:layout_height="@dimen/viewers_icon_size"/>
+            </LinearLayout>
+
+
+            <ImageView
+                android:id="@+id/fullscreen_icon"
+                app:srcCompat="@drawable/ic_fullscreen_24dp"
+                android:tint="@android:color/white"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_centerVertical="true"
+                />
+
+            <LinearLayout
+                android:id="@+id/time_controller"
+                android:layout_centerInParent="true"
+                android:layout_toRightOf="@id/settings_icon"
+                android:layout_toEndOf="@id/settings_icon"
+                android:layout_toLeftOf="@id/fullscreen_icon"
+                android:layout_toStartOf="@id/fullscreen_icon"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:shadowColor="@color/black"
+                    android:shadowRadius="5"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:text=""
+                    android:id="@+id/currentProgess"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <SeekBar
+                    android:layout_weight="3"
+                    android:id="@+id/progressBar"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:shadowColor="@color/black"
+                    android:shadowRadius="5"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:id="@+id/maxProgress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <com.rey.material.widget.ProgressView
+            android:id="@+id/circle_progress"
+            android:layout_width="@dimen/buffer_spinner_size"
+            android:layout_height="@dimen/buffer_spinner_size"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            app:pv_autostart="true"
+            app:pv_circular="true"
+            app:pv_progressMode="indeterminate"
+            app:pv_progressStyle="@style/CircularProgress"
+            app:cpd_transformDuration="500"
+            />
+
+        <FrameLayout
+            android:id="@+id/play_pause_wrapper"
+            android:layout_centerInParent="true"
+            android:layout_width="@dimen/play_pause_wrapper_size"
+            android:layout_height="@dimen/play_pause_wrapper_size">
+            <ImageView
+                app:srcCompat="@drawable/ic_play_arrow_96dp"
+                android:tint="@android:color/white"
+                android:alpha="1"
+                android:id="@+id/ic_play"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <ImageView
+                app:srcCompat="@drawable/ic_pause_96dp"
+                android:tint="@android:color/white"
+                android:alpha="0"
+                android:id="@+id/ic_pause"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </FrameLayout>
+
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/chromecast_text"
+            android:textColor="@color/white"
+            android:textSize="@dimen/stream_chromecasting_msg_size"
+            android:layout_below="@id/play_pause_wrapper"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/show_chat_button"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            app:srcCompat="@drawable/ic_navigate_before_white_48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/click_intercepter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?selectableItemBackground"
+    android:clickable="true"
+    android:layout_width="match_parent"
+    android:layout_height="72dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/img_category_icon"
+        android:tint="?attr/navigationDrawerIconTint"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/cell_settings_category_icon_margin"
+        android:layout_marginLeft="@dimen/cell_settings_category_icon_margin"
+        android:layout_width="@dimen/cell_settings_category_icon_size"
+        android:layout_height="@dimen/cell_settings_category_icon_size"/>
+
+    <LinearLayout
+        android:layout_marginStart="@dimen/cell_settings_category_text_margin"
+        android:layout_marginLeft="@dimen/cell_settings_category_text_margin"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+
+        <TextView
+            style="@style/text_settings"
+            android:id="@+id/txt_category_title"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/text_settings_title"
+            android:text="@string/settings_chat_name"
+            />
+
+        <TextView
+            style="@style/text_settings"
+            android:id="@+id/txt_category_summary"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/sub_text_settings"
+            android:text="@string/settings_chat_name_summary"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_divider_height"
+        android:background="?attr/dividerColor"
+        />
+</RelativeLayout>

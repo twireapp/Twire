@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_marginTop="@dimen/chat_message_margin"
+    android:layout_marginBottom="@dimen/chat_message_margin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    >
+    <TextView
+        android:textColor="?attr/textColor"
+        android:id="@+id/txtSuggestion"
+        android:paddingRight="@dimen/chat_recyclerview_padding"
+        android:paddingLeft="@dimen/chat_recyclerview_padding"
+        android:textSize="@dimen/chat_message_mention"
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"/>
+
+</RelativeLayout>

@@ -1,0 +1,282 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container_settings_chat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/settingsBackgroundColor"
+    tools:context="com.sebastianrask.bettersubscription.activities.settings.SettingsTwitchChatActivity"
+    tools:ignore="MergeRootFrame">
+
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/settings_player_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimary"
+        android:height="@dimen/main_toolbar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        />
+
+    <ScrollView
+        android:layout_below="@id/settings_player_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickEmoteSize"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/chat_emote_size_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/chat_emote_size"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/chat_emote_size_summary"
+                        android:layout_below="@id/chat_emote_size_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:id="@+id/notifications_twitch_name_divider"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickMessageSize"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/message_size_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/chat_message_size"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/message_size_summary"
+                        android:layout_below="@id/message_size_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickEmoteStorage"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/emote_storage_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/chat_emote_storage"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/emote_storage_summary"
+                        android:layout_below="@id/emote_storage_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickChatLandscapeEnable"
+                    >
+
+                    <CheckedTextView
+                        style="@style/text_settings"
+                        android:id="@+id/chat_landscape_enable_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:gravity="center_vertical"
+                        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/chat_landscape_enable"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/chat_landscape_enable_summary"
+                        android:layout_below="@id/chat_landscape_enable_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickChatLandscapeSwipeable"
+                    >
+
+                    <CheckedTextView
+                        style="@style/text_settings"
+                        android:id="@+id/chat_landscape_swipe_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center_vertical"
+                        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/chat_landscape_swipe"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/chat_landscape_swipe_summary"
+                        android:layout_below="@id/chat_landscape_swipe_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickChatLandScapeWidth"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/chat_landscape_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/chat_landscape_width"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/chat_landscape_summary"
+                        android:layout_below="@id/chat_landscape_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

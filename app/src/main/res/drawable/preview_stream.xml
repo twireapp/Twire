@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:tint="@color/colorPreviewBackground"
+            android:shape="rectangle" >
+
+            <size
+                android:width="@dimen/stream_template_width"
+                android:height="@dimen/stream_template_height" />
+
+        </shape>
+    </item>
+</selector>

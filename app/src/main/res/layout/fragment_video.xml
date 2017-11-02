@@ -1,0 +1,80 @@
+<RelativeLayout
+    android:id="@+id/video_wrapper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+        <com.sebastianrask.bettersubscription.views.VideoViewSimple
+            android:id="@+id/VideoView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/control_toolbar_wrapper"
+            android:background="?attr/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_control_height"
+            android:layout_alignBottom="@id/VideoView"
+            android:paddingRight="@dimen/toolbar_icon_right_most_margin">
+
+            <android.support.v7.widget.Toolbar
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/video_control_toolbar"
+                android:background="?attr/colorPrimary"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                />
+
+            <ImageView
+                android:id="@+id/settings_icon"
+                android:src="@drawable/ic_settings_white_24dp"
+                android:tint="@android:color/white"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/toolbar_icon_right_most_margin"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_centerVertical="true"
+                />
+
+            <Spinner
+                android:id="@+id/quality_spinner"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/toolbar_icon_right_most_margin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/black_transparent"/>
+
+            <ImageView
+                android:id="@+id/fullscreen_icon"
+                android:src="@drawable/ic_fullscreen_24dp"
+                android:tint="@android:color/white"
+                android:layout_alignParentRight="true"
+                android:layout_width="@dimen/toolbar_icon_size"
+                android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/play_pause_wrapper"
+            android:layout_centerInParent="true"
+            android:layout_width="@dimen/play_pause_wrapper_size"
+            android:layout_height="@dimen/play_pause_wrapper_size">
+            <ImageView
+                android:alpha="0"
+                android:src="@drawable/ic_play_arrow_96dp"
+                android:tint="@android:color/white"
+                android:id="@+id/ic_play"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+            <ImageView
+                android:src="@drawable/ic_pause_96dp"
+                android:tint="@android:color/white"
+                android:id="@+id/ic_pause"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </FrameLayout>
+    </RelativeLayout>

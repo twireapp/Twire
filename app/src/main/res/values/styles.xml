@@ -1,0 +1,405 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppTheme.Base"/>
+
+    <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:colorActivatedHighlight">@color/accent</item>
+        <item name="android:listPreferredItemHeight">72dp</item>
+    </style>
+
+    <style name="AppTheme.Base.Translucent">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+
+    </style>
+
+    <style name="WhiteBackgroundTheme" parent="AppTheme.Base">
+        <item name="android:colorBackground">@color/grey_300</item>
+        <item name="dividerColor">@color/black_dividers</item>
+        <item name="textColor">@color/black_text</item>
+        <item name="secondaryTextColor">@color/black_text_secondary</item>
+        <item name="disabledTextColor">@color/black_text_disabled</item>
+        <item name="backgroundColor">@color/white</item>
+
+        <!-- Search Activity -->
+        <item name="searchActivityCardColor">?attr/mainCardBackgroundColor</item>
+        <item name="searchActivityUpIconColor">@color/grey_700</item>
+
+        <!-- Main Activity -->
+        <item name="mainActivityIconColor">@color/white</item>
+        <item name="mainActivityIconTextColor">@color/white</item>
+
+        <!-- Settings Activity -->
+        <item name="settingsBackgroundColor">?attr/backgroundColor</item>
+        <item name="settingsTextColor">?attr/textColor</item>
+        <item name="settingsSecondaryTextColor">?attr/secondaryTextColor</item>
+        <item name="settingsDisabledTextColor">?attr/disabledTextColor</item>
+
+        <!-- Cards -->
+        <item name="mainCardBackgroundColor">?attr/backgroundColor</item>
+        <item name="cardTextColor">?attr/textColor</item>
+
+        <!-- Navigation Drawer -->
+        <item name="navigationDrawerBackground">?attr/backgroundColor</item>
+        <item name="navigationDrawerTextColor">?attr/textColor</item>
+        <item name="navigationDrawerIconTint">@color/colorActiveIcon</item>
+        <item name="navigationDrawerRippleColor">@color/grey_800</item>
+        <item name="navigationDrawerHighlighted">@color/grey_300</item>
+
+        <!-- Chat and stream -->
+        <item name="chatInputBackgroundColor">?attr/backgroundColor</item>
+        <item name="chatInputTextColor">?attr/textColor</item>
+        <item name="chatSendRippleColor">@color/grey_800</item>
+        <item name="chatInputHintColor">@color/grey_400</item>
+        <item name="chatSendIconColor">@color/grey_500</item>
+        <item name="chatRoomstateIconColor">@color/grey_900</item>
+        <item name="chatStatusBarColor">@color/grey_300</item>
+        <item name="chatStatusBarTextColor">@color/grey_900</item>
+        <item name="chatBackgroundColor">@color/grey_100</item>
+        <item name="streamToolbarColor">@color/black_transparent</item>
+    </style>
+
+    <style name="StartUpTheme" parent="WhiteBackgroundTheme">
+        <item name="colorPrimary">@color/grey_500</item>
+        <item name="colorPrimaryDark">@color/grey_500</item>
+        <item name="colorAccent">@color/accentColorBlueTheme</item>
+        <item name="android:colorActivatedHighlight">@color/accentColorBlueTheme</item>
+    </style>
+
+    <style name="BlueTheme" parent="WhiteBackgroundTheme">
+        <item name="colorPrimary">@color/primaryColorBlueTheme</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColorBlueTheme</item>
+        <item name="colorAccent">@color/accentColorBlueTheme</item>
+        <item name="android:colorActivatedHighlight">@color/accentColorBlueTheme</item>
+    </style>
+
+    <style name="PurpleTheme" parent="WhiteBackgroundTheme">
+        <item name="colorPrimary">@color/primaryColorPurpleTheme</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColorPurpleTheme</item>
+        <item name="colorAccent">@color/accentColorPurpleTheme</item>
+        <item name="android:colorActivatedHighlight">@color/accentColorPurpleTheme</item>
+    </style>
+
+    <style name="BlackTheme" parent="WhiteBackgroundTheme">
+        <item name="colorPrimary">@color/primaryColorBlackTheme</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColorBlackTheme</item>
+        <item name="colorAccent">@color/accentColorBlackTheme</item>
+        <item name="android:colorActivatedHighlight">@color/accentColorBlackTheme</item>
+    </style>
+
+    <style name="NightTheme" parent="WhiteBackgroundTheme">
+        <item name="colorPrimary">@color/primaryColorNightTheme</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColorNightTheme</item>
+        <item name="colorAccent">@color/accentColorNightTheme</item>
+        <item name="android:colorActivatedHighlight">@color/accentColorNightTheme</item>
+
+        <item name="android:colorBackground">@color/black</item>
+        <item name="dividerColor">@color/white_dividers</item>
+        <item name="textColor">@color/white_text</item>
+        <item name="secondaryTextColor">@color/white_text_secondary</item>
+        <item name="disabledTextColor">@color/white_text_disabled</item>
+        <item name="backgroundColor">@color/grey_850</item>
+
+        <item name="searchActivityUpIconColor">@color/grey_300</item>
+
+        <!-- Navigation Drawer -->
+        <item name="navigationDrawerBackground">?attr/colorPrimary</item>
+        <item name="navigationDrawerIconTint">@color/grey_400</item>
+        <item name="navigationDrawerRippleColor">@color/grey_700</item>
+        <item name="navigationDrawerHighlighted">@color/grey_700</item>
+
+        <!-- Chat -->
+        <item name="chatRoomstateIconColor">?attr/secondaryTextColor</item>
+        <item name="chatStatusBarColor">@color/black</item>
+        <item name="chatStatusBarTextColor">?attr/secondaryTextColor</item>
+        <item name="chatBackgroundColor">@color/grey_900</item>
+    </style>
+
+    <style name="TrueNightTheme" parent="NightTheme">
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/accentColorNightTheme</item>
+        <item name="android:colorActivatedHighlight">@color/accentColorNightTheme</item>
+
+        <item name="android:colorBackground">@color/black</item>
+        <item name="dividerColor">@color/black</item>
+        <item name="backgroundColor">@color/black</item>
+
+        <!-- Chat -->
+        <item name="chatStatusBarColor">@color/black</item>
+        <item name="chatBackgroundColor">@color/black</item>
+    </style>
+
+    <style name="TransparentTheme" parent="WhiteBackgroundTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+    </style>
+
+    <style name="cardPrimaryText" parent="text_title_light">
+        <item name="android:textColor">?attr/cardTextColor</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="cardSecondaryText" parent="text_body_light">
+        <item name="android:textColor">?attr/cardTextColor</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="ripple_settings">
+        <item name="mrl_rippleOverlay">false</item>
+        <item name="mrl_rippleDuration">250</item>
+        <item name="mrl_rippleColor">?attr/navigationDrawerRippleColor</item>
+        <item name="mrl_rippleDelayClick">false</item>
+    </style>
+
+    <!-- Navigation drawer Ripple-->
+    <style name="ripple_navigation_drawer">
+        <item name="mrl_rippleDuration">225</item>
+        <item name="mrl_rippleColor">?attr/navigationDrawerRippleColor</item>
+        <item name="mrl_rippleDelayClick">true</item>
+        <item name="android:layout_height">@dimen/navigation_drawer_item_height</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="navigation_drawer_item_container">
+        <item name="android:layout_height">@dimen/navigation_drawer_item_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">?selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <!-- Navigation drawer icons-->
+    <style name="icon_navigation_drawer">
+        <item name="android:layout_height">@dimen/navigation_drawer_icon_size</item>
+        <item name="android:layout_width">@dimen/navigation_drawer_icon_size</item>
+        <item name="android:layout_marginLeft">@dimen/navigation_drawer_icon_left_margin</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:tint">?attr/navigationDrawerIconTint</item>
+    </style>
+
+    <style name="autospanRecyclerView">
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+    </style>
+
+    <!-- Text Style for Navigation drawer's title -->
+    <style name="text_style_navigation_drawer_title">
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textSize">@dimen/font_navigation_drawer_title</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/white_text</item>
+    </style>
+
+    <!-- Navigation drawer item text Regular Black 87%-->
+    <style name="text_navigation_drawer">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginLeft">@dimen/navigation_drawer_text_left_margin</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textSize">@dimen/font_navigation_drawer_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?attr/navigationDrawerTextColor</item>
+    </style>
+
+    <style name="text_style_navigation_drawer">
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="text_style_activity_icon">
+        <item name="android:fontFamily">@string/font_roboto_medium</item>
+        <item name="android:textSize">@dimen/font_activity_icon_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?attr/mainActivityIconTextColor</item>
+    </style>
+
+    <style name="text_style_theme_chooser">
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textSize">@dimen/theme_text_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?attr/navigationDrawerTextColor</item>
+    </style>
+
+    <style name="text_style_donation_prompt">
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textSize">@dimen/donation_prompt_text_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="style_no_elements_found">
+        <item name="android:textColor">?attr/disabledTextColor</item>
+        <item name="android:textSize">@dimen/streamerInfo_description_size</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:gravity">center</item>
+        <item name="android:visibility">gone</item>
+        <item name="android:fontFamily">@string/font_roboto_mono</item>
+    </style>
+
+    <style name="style_emote_error" parent="style_no_elements_found">
+        <item name="android:textSize">@dimen/emote_error_text_size</item>
+        <item name="android:paddingBottom">@dimen/emote_error_padding_bottom</item>
+    </style>
+
+    <style name="snack_bar_style_mobile" parent="Material.Widget.SnackBar.Mobile.MultiLine"/>
+
+    <style name="snack_bar_style_tablet" parent="Material.Widget.SnackBar.Tablet.MultiLine"/>
+
+    <!-- Title Regular Black 87%-->
+    <style name="text_title">
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textSize">@dimen/font_title_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?attr/textColor</item>
+    </style>
+
+    <style name="text_title_w_shadow" parent="text_title">
+        <item name="android:shadowColor">@color/black</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+    </style>
+
+    <style name="text_streamer_info">
+        <item name="android:fontFamily">@string/font_roboto_light</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/white_text</item>
+    </style>
+
+    <style name="text_settings">
+        <item name="android:layout_marginEnd" tools:targetApi="jelly_bean_mr1">
+            @dimen/settings_text_right_margin
+        </item>
+        <item name="android:layout_marginRight">@dimen/settings_text_right_margin</item>
+        <item name="android:layout_marginStart" tools:targetApi="jelly_bean_mr1">
+            @dimen/settings_text_left_margin
+        </item>
+        <item name="android:layout_marginLeft">@dimen/settings_text_left_margin</item>
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_alignParentStart" tools:targetApi="jelly_bean_mr1">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+
+    <style name="settings_header_style" parent="text_settings">
+        <item name="android:gravity">bottom</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/settings_header_height</item>
+    </style>
+
+    <!-- Settings Light low Opacity Black-->
+    <style name="text_settings_title">
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textSize">@dimen/font_settings_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?attr/settingsTextColor</item>
+    </style>
+
+    <!-- Sub Text Settings Light low Opacity Black-->
+    <style name="sub_text_settings">
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textSize">@dimen/font_sub_settings_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?attr/settingsSecondaryTextColor</item>
+    </style>
+
+    <style name="settings_header_text_style" parent="sub_text_settings">
+        <item name="android:textColor">?attr/colorAccent</item>
+
+    </style>
+
+    <!-- Title Light Black 87%-->
+    <style name="text_title_light">
+        <item name="android:fontFamily">@string/font_roboto_light</item>
+        <item name="android:textSize">@dimen/font_title_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/black_text</item>
+    </style>
+
+
+    <!-- Body Light Black 87%-->
+    <style name="text_body_light">
+        <item name="android:fontFamily">@string/font_roboto_light</item>
+        <item name="android:textSize">@dimen/font_body_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?attr/textColor</item>
+    </style>
+
+    <!-- Title Regular Black 87%-->
+    <style name="text_setup">
+        <item name="android:fontFamily">@string/font_roboto_regular</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="updated_dialog_button_container">
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    <!-- Button-->
+    <style name="text_button">
+        <item name="android:fontFamily">@string/font_roboto_medium</item>
+        <item name="android:textSize">@dimen/button_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="updated_dialog_button">
+        <item name="android:fontFamily">@string/font_roboto_medium</item>
+        <item name="android:textSize">@dimen/button_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Settings Card -->
+    <style name="settings_card">
+        <item name="android:layout_marginTop">@dimen/settings_card_margin</item>
+        <item name="android:layout_marginBottom">@dimen/settings_card_margin</item>
+    </style>
+
+    <style name="stream_settings_item">
+        <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textAppearance">@style/text_settings_title</item>
+    </style>
+
+    <style name="CircularProgress" parent="Material.Drawable.CircularProgress">
+        <item name="cpd_strokeColor">?attr/colorAccent</item>
+    </style>
+
+
+    <bool name="isTablet">false</bool>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="WhiteBackgroundTheme.AppBarOverlay"
+           parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="WhiteBackgroundTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+</resources>

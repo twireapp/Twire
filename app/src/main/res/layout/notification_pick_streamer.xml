@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+    <CheckedTextView
+        style="@style/text_settings"
+        android:id="@+id/streamer_name"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:textAppearance="@style/text_settings_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/small_item_list_height"/>
+</LinearLayout>

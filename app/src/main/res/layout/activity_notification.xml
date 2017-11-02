@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
+    android:background="@color/colorSetupMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.sebastianrask.bettersubscription.activities.setup.NotificationActivity">
+
+
+    <!-- Notification icon -->
+    <ImageView
+        android:id="@+id/notification_icon"
+        android:src="@drawable/ic_notification_256px"
+        android:tint="@color/colorSetupSecond"
+        android:layout_marginTop="@dimen/notification_icon_margin_top"
+        android:layout_width="@dimen/notification_icon_size"
+        android:layout_height="@dimen/notification_icon_size"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        />
+
+    <!-- Container for the Login instructions -->
+    <RelativeLayout
+        android:id="@+id/notification_text_container"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/notification_text_container_height"
+        android:layout_centerHorizontal="true"
+
+        >
+        <TextView
+            android:id="@+id/notification_text_line_one"
+            android:text="@string/notification_text_line_one"
+            android:textSize="@dimen/notification_text_line_one_size"
+            android:textAppearance="@style/text_setup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/notification_text_line_one_margin_bottom"
+            android:gravity="center"
+            android:padding="@dimen/default_text_padding"
+            />
+    </RelativeLayout>
+
+    <!-- Shadow for the continue FAB -->
+    <View
+        android:id="@+id/notification_continue_circle_shadow"
+        android:src="@drawable/circle_for_login"
+        android:tint="@color/colorSetupFABShadow"
+        android:layout_width="@dimen/welcome_continue_circle_shadow_diameter"
+        android:layout_height="@dimen/welcome_continue_circle_shadow_diameter"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/welcome_continue_circle_shadow_margin_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        />
+
+    <ImageView
+        android:src="@drawable/circle_for_login"
+        android:tint="@color/colorSetupSecond"
+        android:layout_width="@dimen/welcome_continue_circle_diameter"
+        android:layout_height="@dimen/welcome_continue_circle_diameter"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/welcome_continue_circle_margin_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        />
+
+    <!-- Container for the Continue FAB -->
+    <FrameLayout
+        android:id="@+id/notification_continue_circle_container"
+        android:layout_width="@dimen/welcome_continue_circle_diameter"
+        android:layout_height="@dimen/welcome_continue_circle_diameter"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/welcome_continue_circle_margin_bottom"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        >
+
+        <ImageView
+            android:id="@+id/notification_continue_circle"
+            android:src="@drawable/circle_for_login"
+            android:tint="@color/colorSetupSecond"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            />
+
+        <ImageView
+            android:id="@+id/forward_arrow"
+            android:src="@drawable/ic_arrow_forward"
+            android:tint="@color/colorSetupMain"
+            android:layout_width="@dimen/welcome_continue_arrow_diameter"
+            android:layout_height="@dimen/welcome_continue_arrow_diameter"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/customize_text"
+            android:singleLine="true"
+            android:text="@string/notification_customize_button"
+            android:textSize="@dimen/notification_customize_button"
+            android:textAppearance="@style/text_button"
+            android:textColor="@color/colorSetupMain"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/skip_text"
+        android:singleLine="true"
+        android:text="@string/skip_text"
+        android:textSize="@dimen/notification_skip"
+        android:textAppearance="@style/text_button"
+        android:color="@color/colorSetupSecond"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/welcome_continue_circle_margin_bottom"
+        android:layout_marginRight="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <!-- RevealsFrames for the Transition to the next activity -->
+    <io.codetail.widget.RevealFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            android:id="@+id/transition_view"
+            android:background="@color/colorSetupSecond"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </View>
+    </io.codetail.widget.RevealFrameLayout>
+
+    <io.codetail.widget.RevealFrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
+            android:id="@+id/transition_view_blue"
+            android:background="@color/colorSetupMain"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </View>
+    </io.codetail.widget.RevealFrameLayout>
+
+</RelativeLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">-->
+    <!--<header-->
+        <!--android:title="@string/settings_general_name"-->
+        <!--android:summary="@string/settings_general_name_summary"-->
+        <!--android:icon="@drawable/ic_settings_black_24dp"/>-->
+
+    <!--<header-->
+        <!--android:title="@string/settings_appearance_name"-->
+        <!--android:summary="@string/settings_appearance_name_summary" />-->
+
+    <!--<header-->
+        <!--android:title="@string/settings_notifications_name"-->
+        <!--android:summary="@string/settings_notifications_name_summary" />-->
+
+    <!--<header-->
+        <!--android:title="@string/settings_chat_name"-->
+        <!--android:summary="@string/settings_chat_name_summary" />-->
+
+    <!--<header-->
+        <!--android:title="@string/settings_stream_player_name"-->
+        <!--android:summary="@string/settings_stream_player_summary" />-->
+
+    <!--<header-->
+        <!--android:title="@string/settings_rate_name"-->
+        <!--android:summary="@string/settings_rate_name_summary" />-->
+
+    <!--<header-->
+        <!--android:title="@string/settings_donate_name"-->
+        <!--android:summary="@string/settings_donate_name_summary" />-->
+
+<!--</preference-headers>-->
+
+<PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- opens a subscreen of settings -->
+    <PreferenceScreen
+        android:title="@string/settings_general_name"
+        android:summary="@string/settings_general_name_summary"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:persistent="false">
+
+        <ListPreference
+            android:key="button_voicemail_provider_key"
+            android:title="List" />
+
+    </PreferenceScreen>
+
+    <PreferenceScreen
+        android:key="button_voicemail_category_key"
+        android:title="@string/settings_general_name"
+        android:summary="@string/settings_general_name_summary"
+        android:persistent="false">
+
+        <ListPreference
+            android:key="button_voicemail_provider_key"
+            android:title="List" />
+
+    </PreferenceScreen>
+</PreferenceScreen>

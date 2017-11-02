@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="checkIntervals">
+        <item>@string/notifications_never</item>
+        <item>@string/notifications_15</item>
+        <item>@string/notifications_30</item>
+        <item>@string/notifications_60</item>
+        <item>@string/notifications_120</item>
+    </string-array>
+
+    <string-array name="StartupPages">
+        <item>@string/navigation_drawer_featured_title</item>
+        <item>@string/navigation_drawer_follows_title</item>
+        <item>@string/navigation_drawer_my_streams_title</item>
+        <item>@string/navigation_drawer_my_games_title</item>
+        <item>@string/navigation_drawer_top_streams_title</item>
+        <item>@string/navigation_drawer_top_games_title</item>
+    </string-array>
+
+    <string-array name="StartupPagesNoLogin">
+        <item>@string/navigation_drawer_featured_title</item>
+        <item>@string/navigation_drawer_top_streams_title</item>
+        <item>@string/navigation_drawer_top_games_title</item>
+    </string-array>
+
+    <string-array name="StreamsCardStyles">
+        <item>@string/card_style_minimal</item>
+        <item>@string/card_style_normal</item>
+        <item>@string/card_style_expanded</item>
+    </string-array>
+
+    <string-array name="GameCardStyles">
+        <item>@string/card_style_minimal</item>
+        <item>@string/card_style_normal</item>
+        <item>@string/card_style_expanded</item>
+    </string-array>
+
+    <string-array name="FollowCardStyles">
+        <item>@string/card_style_minimal</item>
+        <item>@string/card_style_normal</item>
+    </string-array>
+
+    <string-array name="CardSizes">
+        <item>@string/card_size_small</item>
+        <item>@string/card_size_normal</item>
+        <item>@string/card_size_large</item>
+        <item>@string/card_size_huge</item>
+    </string-array>
+
+    <string-array name="ChatSize">
+        <item>@string/chat_size_small</item>
+        <item>@string/chat_size_medium</item>
+        <item>@string/chat_size_high</item>
+    </string-array>
+
+</resources>

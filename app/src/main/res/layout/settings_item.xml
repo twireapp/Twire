@@ -1,0 +1,33 @@
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/settings_item_height"
+    android:id="@+id/settings_item_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.balysv.materialripple.MaterialRippleLayout
+        app:mrl_rippleDelayClick="true"
+        android:id="@+id/item_ripple"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/settings_item_height">
+            <TextView
+                android:gravity="center_vertical"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/settings_text_left_margin"
+                android:layout_marginLeft="@dimen/settings_text_left_margin"
+                android:textAppearance="@style/text_settings_title"
+                android:id="@+id/settings_item_text"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?attr/dividerColor"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+    </com.balysv.materialripple.MaterialRippleLayout>
+
+</FrameLayout>

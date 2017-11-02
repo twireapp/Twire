@@ -1,0 +1,186 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container_settings_general"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/settingsBackgroundColor"
+    tools:context="com.sebastianrask.bettersubscription.activities.settings.SettingsGeneralActivity"
+    tools:ignore="MergeRootFrame">
+
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/settings_general_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimary"
+        android:height="@dimen/main_toolbar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        />
+
+    <ScrollView
+        android:layout_below="@id/settings_general_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/general_twitch_name_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickTwitchName"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/general_twitch_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/gen_twitch_name"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/general_current_twitch_name"
+                        android:layout_below="@id/general_twitch_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:id="@+id/notifications_twitch_name_divider"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/start_page_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickStartPage"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/message_size_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/gen_start_page"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/start_page_sub_text"
+                        android:layout_below="@id/message_size_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/show_donation_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickShowDonation"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/show_donation_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/gen_disable_donation"
+                        />
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/show_donation_sub_text"
+                        android:layout_below="@id/show_donation_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/reset_tips_ripple"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="onClickResetTips"
+                    >
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:id="@+id/reset_tips_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/gen_reset_tips"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor"
+                />
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

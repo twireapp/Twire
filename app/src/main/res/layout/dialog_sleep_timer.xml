@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/pickerWrapper"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+        <biz.kasual.materialnumberpicker.MaterialNumberPicker
+            android:id="@+id/hourPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:npMinValue="0"
+            app:npMaxValue="24"
+            app:npDefaultValue="0"
+            app:npBackgroundColor="?attr/navigationDrawerBackground"
+            app:npTextColor="?attr/navigationDrawerTextColor"
+            app:npTextSize="@dimen/stream_sleep_timer_font_size"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:gravity="bottom"
+                android:text="@string/hours_short"
+                android:textSize="@dimen/stream_sleep_timer_indicator_font_size"
+                android:textColor="?attr/navigationDrawerTextColor"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/stream_sleep_timer_font_size"/>
+        </FrameLayout>
+
+        <TextView
+            android:padding="@dimen/stream_sleep_timer_picker_padding"
+            android:text=":"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="?attr/navigationDrawerTextColor"
+            android:textSize="@dimen/stream_sleep_timer_font_size"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+        <biz.kasual.materialnumberpicker.MaterialNumberPicker
+            android:id="@+id/minutePicker"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:npMinValue="0"
+            app:npMaxValue="59"
+            app:npDefaultValue="15"
+            app:npBackgroundColor="?attr/navigationDrawerBackground"
+            app:npTextColor="?attr/navigationDrawerTextColor"
+            app:npTextSize="@dimen/stream_sleep_timer_font_size"/>
+    </LinearLayout>
+    <TextView
+        android:layout_toRightOf="@id/pickerWrapper"
+        android:layout_toEndOf="@id/pickerWrapper"
+        android:layout_centerVertical="true"
+        android:gravity="bottom"
+        android:text="@string/minutes_short"
+        android:textSize="@dimen/stream_sleep_timer_indicator_font_size"
+        android:textColor="?attr/navigationDrawerTextColor"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/stream_sleep_timer_font_size"/>
+
+</RelativeLayout>

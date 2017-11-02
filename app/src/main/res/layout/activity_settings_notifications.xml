@@ -1,0 +1,449 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container_settings_notifications"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/settingsBackgroundColor"
+    tools:context="com.sebastianrask.bettersubscription.activities.settings.SettingsNotificationsActivity"
+    tools:ignore="MergeRootFrame">
+
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/settings_notifications_toolbar"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimary"
+        android:height="@dimen/main_toolbar_height"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        />
+
+
+    <!--
+    <RelativeLayout
+        android:id="@+id/container_settings_notifications_vibrate"
+        android:layout_below="@id/settings_notifications_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_item_height"
+        tools:context="com.sebastianrask.bettersubscription.Settings.SettingsGeneralActivity"
+        tools:ignore="MergeRootFrame">
+
+        <TextView
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/settings_text_left_margin"
+            android:textAppearance="@style/text_title"
+            android:text="@string/vibrate_activity_settings_notifications"
+            android:id="@+id/notifications_vibrate_textview"
+            />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/settings_text_left_margin"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+    -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/settings_notifications_toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/notifications_check_ripple"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="setCheckInterval"
+                    >
+
+                    <TextView
+                        android:id="@+id/notifications_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/settings_text_right_margin"
+                        android:layout_marginRight="@dimen/settings_text_right_margin"
+                        android:layout_marginStart="@dimen/settings_text_left_margin"
+                        android:layout_marginLeft="@dimen/settings_text_left_margin"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/check_activity_settings_notifications"
+                        />
+
+                    <TextView
+                        android:id="@+id/notifications_current_check"
+                        android:layout_below="@id/notifications_check"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/settings_text_right_margin"
+                        android:layout_marginRight="@dimen/settings_text_right_margin"
+                        android:layout_marginStart="@dimen/settings_text_left_margin"
+                        android:layout_marginLeft="@dimen/settings_text_left_margin"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:id="@+id/notifications_check_divider"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@id/notifications_check_ripple"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:visibility="visible"
+                android:id="@+id/notifications_choose_who_ripple"
+                android:layout_below="@id/notifications_check_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:gravity="center_vertical"
+                    android:clickable="true"
+                    android:onClick="chooseStreamers"
+                    >
+
+                    <TextView
+                        android:id="@+id/notifications_choose_who_title"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:layout_marginEnd="@dimen/settings_text_right_margin"
+                        android:layout_marginRight="@dimen/settings_text_right_margin"
+                        android:layout_marginStart="@dimen/settings_text_left_margin"
+                        android:layout_marginLeft="@dimen/settings_text_left_margin"
+                        android:layout_centerInParent="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textAppearance="@style/text_settings_title"
+                        android:text="@string/choose_streamers_activity_settings_notifications_title"
+                        />
+
+                    <TextView
+                        android:id="@+id/notifications_choose_who_summary"
+                        android:layout_below="@id/notifications_choose_who_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/settings_text_right_margin"
+                        android:layout_marginRight="@dimen/settings_text_right_margin"
+                        android:layout_marginStart="@dimen/settings_text_left_margin"
+                        android:layout_marginLeft="@dimen/settings_text_left_margin"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:maxLines="1"
+                        android:ellipsize="marquee"
+                        android:text="@string/choose_who_summary_activity_settings_notifications"
+                        android:textAppearance="@style/sub_text_settings"
+                        />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:id="@+id/notifications_choose_divider"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@id/notifications_choose_who_ripple"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/notifications_vibrate_ripple"
+                android:layout_below="@id/notifications_choose_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+                <CheckedTextView
+                    android:id="@+id/notifications_vibrate"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginEnd="@dimen/settings_text_right_margin"
+                    android:layout_marginRight="@dimen/settings_text_right_margin"
+                    android:layout_marginStart="@dimen/settings_text_left_margin"
+                    android:layout_marginLeft="@dimen/settings_text_left_margin"
+                    android:gravity="center_vertical"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:textAppearance="@style/text_settings_title"
+                    android:text="@string/vibrate_activity_settings_notifications"
+                    />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:id="@+id/notifications_vibrate_divider"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@id/notifications_vibrate_ripple"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/notifications_screen_wake_ripple"
+                android:layout_below="@id/notifications_vibrate_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+                <CheckedTextView
+                    android:id="@+id/notifications_screen_wake"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginEnd="@dimen/settings_text_right_margin"
+                    android:layout_marginRight="@dimen/settings_text_right_margin"
+                    android:layout_marginStart="@dimen/settings_text_left_margin"
+                    android:layout_marginLeft="@dimen/settings_text_left_margin"
+                    android:gravity="center_vertical"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:textAppearance="@style/text_settings_title"
+                    android:text="@string/screen_wake_activity_settings_notifications"
+                    />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:id="@+id/notifications_screen_wake_divider"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@id/notifications_screen_wake_ripple"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/notifications_sound_ripple"
+                android:layout_below="@id/notifications_screen_wake_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <CheckedTextView
+                    android:id="@+id/notifications_sound"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginEnd="@dimen/settings_text_right_margin"
+                    android:layout_marginRight="@dimen/settings_text_right_margin"
+                    android:layout_marginStart="@dimen/settings_text_left_margin"
+                    android:layout_marginLeft="@dimen/settings_text_left_margin"
+                    android:gravity="center_vertical"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:textAppearance="@style/text_settings_title"
+                    android:text="@string/sound_activity_settings_notifications"
+                    />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:id="@+id/notifications_sound_divider"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@id/notifications_sound_ripple"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/notifications_led_ripple"
+                android:layout_below="@id/notifications_sound_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+                <CheckedTextView
+                    android:id="@+id/notifications_led"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginEnd="@dimen/settings_text_right_margin"
+                    android:layout_marginRight="@dimen/settings_text_right_margin"
+                    android:layout_marginStart="@dimen/settings_text_left_margin"
+                    android:layout_marginLeft="@dimen/settings_text_left_margin"
+                    android:gravity="center_vertical"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:textAppearance="@style/text_settings_title"
+                    android:text="@string/led_activity_settings_notifications" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:id="@+id/notifications_led_divider"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@id/notifications_led_ripple"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/notifications_quiet_hours_ripple"
+                android:layout_below="@id/notifications_led_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false" >
+                <CheckedTextView
+                    android:id="@+id/notifications_quiet_hours"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginEnd="@dimen/settings_text_right_margin"
+                    android:layout_marginRight="@dimen/settings_text_right_margin"
+                    android:layout_marginStart="@dimen/settings_text_left_margin"
+                    android:layout_marginLeft="@dimen/settings_text_left_margin"
+                    android:gravity="center_vertical"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:textAppearance="@style/text_settings_title"
+                    android:text="@string/quiet_hours_activity_settings_notifications" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:id="@+id/notifications_quiet_hours_divider"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@id/notifications_quiet_hours_ripple"
+                />
+
+            <LinearLayout
+                android:id="@+id/notifications_quiet_hours_picker"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/notifications_quiet_hours_divider">
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/notifications_quiet_hours_start_ripple"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleDelayClick="false">
+
+                    <RelativeLayout
+                        android:id="@+id/notifications_quiet_hours_start_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/settings_small_item_height"
+                        android:clickable="true"
+                        android:onClick="setQuietHoursStart"
+                        >
+
+                        <TextView
+                            android:id="@+id/notifications_quiet_hours_start_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginStart="@dimen/settings_text_left_margin"
+                            android:layout_marginLeft="@dimen/settings_text_left_margin"
+                            android:textAppearance="@style/sub_text_settings"
+                            android:text="@string/quiet_hours_start_tag_activity_settings_notifications"
+                            />
+
+                        <TextView
+                            android:id="@+id/notifications_quiet_hours_start"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:textAppearance="@style/text_settings_title"
+                            android:text="22:00"
+                            />
+
+                    </RelativeLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+                <com.balysv.materialripple.MaterialRippleLayout
+                    android:id="@+id/notifications_quiet_hours_end_ripple"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    app:mrl_rippleDelayClick="false">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/settings_small_item_height"
+                        android:clickable="true"
+                        android:onClick="setQuietHoursEnd"
+                        >
+
+                        <TextView
+                            android:id="@+id/notifications_quiet_hours_end_tag"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_marginStart="@dimen/settings_text_left_margin"
+                            android:layout_marginLeft="@dimen/settings_text_left_margin"
+                            android:textAppearance="@style/sub_text_settings"
+                            android:text="@string/quiet_hours_end_tag_activity_settings_notifications"
+                            />
+
+                        <TextView
+                            android:id="@+id/notifications_quiet_hours_end"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:textAppearance="@style/text_settings_title"
+                            android:text="10:00"
+                            />
+
+                    </RelativeLayout>
+                </com.balysv.materialripple.MaterialRippleLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:id="@+id/notifications_show_in_quiet_hours_divider"
+                android:background="?android:attr/listDivider"
+                android:layout_below="@id/notifications_quiet_hours_picker"
+                />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/notifications_show_in_quiet_hours_ripple"
+                android:layout_below="@id/notifications_show_in_quiet_hours_divider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false" >
+                <CheckedTextView
+                    android:id="@+id/notifications_show_in_quiet_hours"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginEnd="@dimen/settings_text_right_margin"
+                    android:layout_marginRight="@dimen/settings_text_right_margin"
+                    android:layout_marginStart="@dimen/settings_text_left_margin"
+                    android:layout_marginLeft="@dimen/settings_text_left_margin"
+                    android:gravity="center_vertical"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:textAppearance="@style/text_settings_title"
+                    android:text="@string/quiet_hours_show_notifications" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
+
