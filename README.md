@@ -8,10 +8,16 @@ Pocket Plays is an open source, ad free Twitch browser and stream player for And
          src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
+</br>
+</br>
+</br>
+
+
 ## [Here Be Dragons](https://en.wikipedia.org/wiki/Here_be_dragons)
 
-I started development of Pocket Plays at the start of my Computer Science education as a way to learn about Java and Android. This means that quite a bit of the program has high coupling, low coherence and generally poorly written and structured. 
-This will surely impact the way you navigate, understand and maybe contribute to the project. Just be aware of this before you start.
+Pocket Plays started as an Android learning project on my first semester of Computer Science. 
+This means that quite a bit of the program has high coupling, low coherence and generally poorly written and structured code.  
+This will surely impact the way you navigate, understand and maybe contribute to the project. 
 
 I've done my best to rewrite the worst parts before making Pocket Plays open source.
 
@@ -34,5 +40,5 @@ issues to the GitHub issue tracker, to make sure they get squashed.
 
 ## Licensing
 
-Pocket Plays is licensed under the [GNU v3 Public License.](license.txt)
+Pocket Plays is licensed under the [GNU v3 Public License.](https://github.com/SebastianRask/Pocket-Plays-for-Twitch/blob/master/LICENSE)
 I would also personally love to know if you use any of the code from this repository. Sharing is caring :)
