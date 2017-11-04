@@ -240,9 +240,20 @@ public class NotificationReceiver extends BroadcastReceiver {
     }
 
     private void updateCurrentNotifications(NotificationFetchData notificationFetchData, NotificationManager notificationManager, Context context) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || notificationManager == null || notificationManager.getActiveNotifications() == null) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             return;
         }
+
+        // This try-catch is needed because of an Android 6.0 issue where calling getActiveNotifications may throw a nullpointerexception
+        // https://github.com/googlesamples/android-ActiveNotifications/issues/1
+        try {
+            if (notificationManager == null || notificationManager.getActiveNotifications() == null) {
+                return;
+            }
+        } catch (NullPointerException e) {
+            return;
+        }
+
 
         // Nested for loops :/
         for (StatusBarNotification statusBarNotification : notificationManager.getActiveNotifications()) {
