@@ -21,26 +21,26 @@ import io.fabric.sdk.android.Fabric;
 public class PocketPlaysApplication extends Application {
 	private Tracker mTracker;
 	public static boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
-	//TODO: REMEMBER TO ADD NEW FEATURES IN UPDATE DIALOG
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		initCastFunctionality();
 
-		try {
-			Fabric.with(this, new Crashlytics());
+		if (!BuildConfig.DEBUG) {
+			try {
+				Fabric.with(this, new Crashlytics());
 
-			final Fabric fabric = new Fabric.Builder(this)
-					.kits(new Crashlytics())
-					.debuggable(true)
-					.build();
-			Fabric.with(fabric);
+				final Fabric fabric = new Fabric.Builder(this)
+						.kits(new Crashlytics())
+						.debuggable(true)
+						.build();
+				Fabric.with(fabric);
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class PocketPlaysApplication extends Application {
 	}
 
 	private void initCastFunctionality() {
-		String applicationID = SecretKeys.CHROME_CAST_APPLICATION_ID; // "CC1AD845"; // This string is for testing. App hosted by Google
+		String applicationID = SecretKeys.CHROME_CAST_APPLICATION_ID;
 		CastConfiguration options = new CastConfiguration.Builder(applicationID)
 											.enableAutoReconnect()
 											.enableDebug()
