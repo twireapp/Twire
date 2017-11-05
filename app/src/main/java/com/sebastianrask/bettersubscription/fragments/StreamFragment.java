@@ -1592,13 +1592,15 @@ public class StreamFragment extends Fragment {
 	}
 
 	private void playWithExternalPlayer() {
+		Toast errorToast = Toast.makeText(getContext(), R.string.error_external_playback_failed, Toast.LENGTH_LONG);
 		if (qualityURLs == null) {
-			Toast.makeText(getContext(), R.string.error_external_playback_failed, Toast.LENGTH_LONG).show();
+			errorToast.show();
+			return;
 		}
 
 		String castQuality = getBestCastQuality(qualityURLs, settings.getPrefStreamQuality(), 0);
 		if (castQuality == null) {
-			Toast.makeText(getContext(), R.string.error_external_playback_failed, Toast.LENGTH_LONG).show();
+			errorToast.show();
 			return;
 		}
 

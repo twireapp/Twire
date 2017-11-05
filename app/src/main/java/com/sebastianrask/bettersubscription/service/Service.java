@@ -35,6 +35,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
@@ -929,6 +930,7 @@ public class Service {
 	 */
 	public static Bitmap getBitmapFromUrl(String url) {
 		Bitmap bitmap = null;
+
 		try {
 			HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
 			connection.connect();
