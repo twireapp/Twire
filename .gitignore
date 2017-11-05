@@ -1,5 +1,3 @@
-# Secret file
-SecretKeys.java
 
 # Built application files
 *.apk
@@ -56,3 +54,7 @@ google-services.json
 freeline.py
 freeline/
 freeline_project_description.json
+
+
+
+app/src/main/java/com/sebastianrask/bettersubscription/misc/SecretKeys\.java
