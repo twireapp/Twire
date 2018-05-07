@@ -26,7 +26,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
 		String token = "";
 
 		try {
-			String url = "http://api.twitch.tv/api/vods/" + vodId + "/access_token";
+			String url = "https://api.twitch.tv/api/vods/" + vodId + "/access_token";
 			Log.d(LOG_TAG, url);
 			JSONObject topobject = new JSONObject(Service.urlToJSONString(url));
 			token = topobject.getString("token").replaceAll("\\\\", ""); // Remove all backslashes from the returned string. We need the string to make a jsonobject
