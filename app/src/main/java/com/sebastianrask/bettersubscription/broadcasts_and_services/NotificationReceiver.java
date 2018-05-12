@@ -1,6 +1,7 @@
 package com.sebastianrask.bettersubscription.broadcasts_and_services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -112,8 +113,13 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     private void makeBundledNotifications(NotificationFetchData notificationData, Context context) {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
         if (mNotificationManager == null) { return; }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mNotificationManager.createNotificationChannel(
+                    new NotificationChannel("", "", NotificationManager.IMPORTANCE_DEFAULT)
+            );
+        }
 
         // Remove all notifications for streams that are no longer live.
         for (StreamInfo stream : notificationData.getNewOfflineStreams()) {
