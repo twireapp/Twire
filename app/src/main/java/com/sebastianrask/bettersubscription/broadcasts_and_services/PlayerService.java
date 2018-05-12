@@ -1,10 +1,12 @@
 package com.sebastianrask.bettersubscription.broadcasts_and_services;
 
 
+import android.app.NotificationChannel;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.ResultReceiver;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.os.ResultReceiver;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -370,6 +372,12 @@ public class PlayerService extends Service {
 		}
 
 		NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
+		if (notificationManager == null) return;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			notificationManager.createNotificationChannel(
+                    new NotificationChannel("streamCastNotification", "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
+            );
+		}
 		notificationManager.notify( NOTIFICATION_ID, noti.build() );
 	}
 

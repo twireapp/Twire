@@ -117,7 +117,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNotificationManager.createNotificationChannel(
-                    new NotificationChannel("", "", NotificationManager.IMPORTANCE_DEFAULT)
+                    new NotificationChannel("liveStreamerNotificationId", "New Streamer is live", NotificationManager.IMPORTANCE_DEFAULT)
             );
         }
 
@@ -136,15 +136,12 @@ public class NotificationReceiver extends BroadcastReceiver {
         }
 
         // Make a new bundled notification for every new stream. Get one of the stream icons to show for the summary notification
-
-
         Bitmap largeIconSummaryNotification = createBundledStreamNotificationsAndGetLargeIcon(
                 newLiveStreams,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M, // Only show viewer count if we can update the notification,
                 mNotificationManager,
                 context
         );
-
 
         createStreamSummaryNotification(largeIconSummaryNotification, notificationData, mNotificationManager, context);
     }
