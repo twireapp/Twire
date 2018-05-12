@@ -16,11 +16,12 @@
 
 buildscript {
     repositories {
+        google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.1'
+        classpath 'com.android.tools.build:gradle:3.1.2'
     }
 }
 
@@ -33,12 +34,9 @@ repositories {
 
 apply plugin: 'com.android.library'
 
-
 android {
     publishNonDefault true
-
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -55,9 +53,10 @@ android {
     buildTypes {
         debug {
             libraryVariants.all { variant ->
-                variant.outputs.each { output ->
-                    output.outputFile = new File(output.outputFile.parent, output.outputFile.name.
-                            replace(".aar", "-2.8.4.aar"))
+                variant.outputs.all { output ->
+                    outputFileName = outputFileName.replace(".aar", "-2.8.4.aar")
+//                    output.outputFile = new File(output.outputFile.parent, output.outputFile.getName().
+//                            replace(".aar", "-2.8.4.aar"))
                 }
             }
         }
@@ -67,7 +66,7 @@ android {
 
 
 dependencies {
-    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibraryVersion}"
+    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibraryVersion}"
     compile "com.android.support:mediarouter-v7:${rootProject.ext.supportLibraryVersion}"
-    compile 'com.google.android.gms:play-services-cast:10.2.0'
+    implementation 'com.google.android.gms:play-services-cast:10.2.0'
 }

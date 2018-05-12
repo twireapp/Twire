@@ -117,7 +117,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mNotificationManager.createNotificationChannel(
-                    new NotificationChannel("liveStreamerNotificationId", "New Streamer is live", NotificationManager.IMPORTANCE_DEFAULT)
+                    new NotificationChannel(context.getString(R.string.live_streamer_notification_id), "New Streamer is live", NotificationManager.IMPORTANCE_DEFAULT)
             );
         }
 
@@ -157,7 +157,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             return;
         }
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, context.getString(R.string.live_streamer_notification_id))
                 .setAutoCancel(true)
                 .setContentTitle(notificationText.getTitle())
                 .setContentText(notificationText.getContent())
@@ -292,7 +292,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         );
 
         NotificationTextData textData = constructStreamNotificationText(stream, context);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, context.getString(R.string.live_streamer_notification_id))
                 .setAutoCancel(false)
                 .setContentTitle(textData.getTitle())
                 .setContentText(textData.getContent())

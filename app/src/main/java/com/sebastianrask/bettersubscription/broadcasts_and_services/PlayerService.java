@@ -352,7 +352,7 @@ public class PlayerService extends Service {
 				PendingIntent.FLAG_UPDATE_CURRENT
 		);
 
-		NotificationCompat.Builder noti = (NotificationCompat.Builder) new NotificationCompat.Builder( this )
+		NotificationCompat.Builder noti = new NotificationCompat.Builder( this, getString(R.string.stream_cast_notification_id) )
 										.setSmallIcon( R.drawable.ic_notification_icon_refresh )
 										.setContentTitle( mChannelInfo.getDisplayName() )
 										.setDeleteIntent( pendingIntent )
@@ -375,7 +375,7 @@ public class PlayerService extends Service {
 		if (notificationManager == null) return;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			notificationManager.createNotificationChannel(
-                    new NotificationChannel("streamCastNotification", "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
+                    new NotificationChannel(getString(R.string.stream_cast_notification_id), "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
             );
 		}
 		notificationManager.notify( NOTIFICATION_ID, noti.build() );

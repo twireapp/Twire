@@ -790,16 +790,20 @@ public class VideoCastManager extends BaseCastManager
      * if the notification feature has been enabled during the initialization.
      * @see {@link BaseCastManager#enableFeatures()}
      */
-    private boolean startNotificationService() {
+    private void startNotificationService() {
         if (!isFeatureEnabled(CastConfiguration.FEATURE_NOTIFICATION)) {
-            return true;
+            return;
         }
         LOGD(TAG, "startNotificationService()");
         Intent service = new Intent(mContext, mNotificationServiceClass);
         service.setPackage(mContext.getPackageName());
         service.setAction(VideoCastNotificationService.ACTION_VISIBILITY);
         service.putExtra(VideoCastNotificationService.NOTIFICATION_VISIBILITY, !mUiVisible);
-        return mContext.startService(service) != null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mContext.startForegroundService(service);
+        } else {
+            mContext.startService(service);
+        }
     }
 
     private void stopNotificationService() {
