@@ -33,19 +33,15 @@ repositories {
 
 apply plugin: 'com.android.library'
 
-ext {
-    supportLibVersion = '25.2.0'
-    versionName = '2.8.4'
-}
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.1'
     publishNonDefault true
 
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 25
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 
     sourceSets {
@@ -61,7 +57,7 @@ android {
             libraryVariants.all { variant ->
                 variant.outputs.each { output ->
                     output.outputFile = new File(output.outputFile.parent, output.outputFile.name.
-                            replace(".aar", "-${versionName}.aar"))
+                            replace(".aar", "-2.8.4.aar"))
                 }
             }
         }
@@ -71,7 +67,7 @@ android {
 
 
 dependencies {
-    compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "com.android.support:mediarouter-v7:${supportLibVersion}"
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibraryVersion}"
+    compile "com.android.support:mediarouter-v7:${rootProject.ext.supportLibraryVersion}"
     compile 'com.google.android.gms:play-services-cast:10.2.0'
 }

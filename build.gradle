@@ -20,10 +20,10 @@ allprojects {
 }
 
 ext {
-    buildToolsVersion = '25.0.1'
-    compileSdkVersion = 25
+    buildToolsVersion = '27.0.0'
+    compileSdkVersion = 27
     minSdkVersion = 16
-    targetSdkVersion = 25
-    supportLibraryVersion = '25.2.0'
+    targetSdkVersion = 27
+    supportLibraryVersion = '27.1.1'
     playServicesVersion = '10.2.0'
 }
