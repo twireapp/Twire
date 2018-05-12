@@ -373,11 +373,6 @@ public class PlayerService extends Service {
 
 		NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
 		if (notificationManager == null) return;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			notificationManager.createNotificationChannel(
-                    new NotificationChannel(getString(R.string.stream_cast_notification_id), "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
-            );
-		}
 		notificationManager.notify( NOTIFICATION_ID, noti.build() );
 	}
 

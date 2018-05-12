@@ -1,7 +1,10 @@
 package com.sebastianrask.bettersubscription;
 
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
@@ -26,6 +29,7 @@ public class PocketPlaysApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		initCastFunctionality();
+		initNotificationChannels();
 
 		if (!BuildConfig.DEBUG) {
 			try {
@@ -61,6 +65,21 @@ public class PocketPlaysApplication extends Application {
 		}
 
 		return mTracker;
+	}
+
+	private void initNotificationChannels() {
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || notificationManager == null) {
+			return;
+		}
+
+		notificationManager.createNotificationChannel(
+				new NotificationChannel(getString(R.string.live_streamer_notification_id), "New Streamer is live", NotificationManager.IMPORTANCE_DEFAULT)
+		);
+
+		notificationManager.createNotificationChannel(
+				new NotificationChannel(getString(R.string.stream_cast_notification_id), "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
+		);
 	}
 
 	private void initCastFunctionality() {

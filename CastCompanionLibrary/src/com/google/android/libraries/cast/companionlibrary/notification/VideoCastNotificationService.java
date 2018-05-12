@@ -336,7 +336,7 @@ public class VideoCastNotificationService extends Service {
                 mCastManager.getDeviceName());
 
         NotificationCompat.Builder builder
-                = new NotificationCompat.Builder(this)
+                = new NotificationCompat.Builder(this, "streamCastNotificationId")
                 .setSmallIcon(R.drawable.ic_new_notification_pocket_plays)
                 .setContentTitle(metadata.getString(MediaMetadata.KEY_TITLE))
                 .setContentText(castingTo)

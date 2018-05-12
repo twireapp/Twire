@@ -115,12 +115,6 @@ public class NotificationReceiver extends BroadcastReceiver {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (mNotificationManager == null) { return; }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mNotificationManager.createNotificationChannel(
-                    new NotificationChannel(context.getString(R.string.live_streamer_notification_id), "New Streamer is live", NotificationManager.IMPORTANCE_DEFAULT)
-            );
-        }
-
         // Remove all notifications for streams that are no longer live.
         for (StreamInfo stream : notificationData.getNewOfflineStreams()) {
             mNotificationManager.cancel(stream.getChannelInfo().getNotificationTag(), NOTIFICATION_ID);
