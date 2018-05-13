@@ -31,15 +31,19 @@
         <meta-data
             android:name="com.sec.android.support.multiwindow"
             android:value="true"/>
+
         <meta-data
             android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W"
             android:value="632.0dip"/>
+
         <meta-data
             android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H"
             android:value="598.0dip"/>
+
         <meta-data
             android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W"
             android:value="632.0dip"/>
+
         <meta-data
             android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H"
             android:value="598.0dip"/>
@@ -47,6 +51,14 @@
         <meta-data
             android:name= "com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="com.sebastianrask.bettersubscription.cast.CastOptionsProvider" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3d7eff6d68afabdc3bdbae620d5d81c0a4be098c"/>
 
         <receiver android:name=".broadcasts_and_services.RemoteControlReceiver">
             <intent-filter>
@@ -73,26 +85,8 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name="com.google.android.libraries.cast.companionlibrary.remotecontrol.VideoIntentReceiver">
-            <intent-filter>
-                <action android:name="android.media.AUDIO_BECOMING_NOISY"/>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
-                <action android:name="com.google.android.libraries.cast.companionlibrary.action.toggleplayback"/>
-                <action android:name="com.google.android.libraries.cast.companionlibrary.action.stop"/>
-            </intent-filter>
-        </receiver>
 
-        <service
-            android:name="com.google.android.libraries.cast.companionlibrary.notification.VideoCastNotificationService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.libraries.cast.companionlibrary.action.toggleplayback"/>
-                <action android:name="com.google.android.libraries.cast.companionlibrary.action.stop"/>
-                <action android:name="com.google.android.libraries.cast.companionlibrary.action.notificationvisibility"/>
-            </intent-filter>
-        </service>
         <service android:name=".broadcasts_and_services.PlayerService"/>
-        <service android:name="com.google.android.libraries.cast.companionlibrary.cast.reconnection.ReconnectionService"/>
 
         <activity
             android:name=".activities.stream.LiveStreamActivity"
@@ -206,13 +200,6 @@
             android:label="@string/navigation_drawer_my_games_title"
             android:launchMode="singleTop">
         </activity>
-        <!--
- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-        -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
 
         <activity
             android:name=".activities.SearchActivity"
@@ -222,11 +209,6 @@
             android:name=".activities.DonationActivity"
             android:theme="@style/AppTheme.Base.Translucent">
         </activity>
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="3d7eff6d68afabdc3bdbae620d5d81c0a4be098c"/>
-
         <activity android:name=".activities.settings.SettingsStreamPlayerActivity">
         </activity>
         <activity android:name=".activities.settings.SettingsPickNotificationsActivity">
