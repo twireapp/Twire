@@ -65,12 +65,14 @@ import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.MediaStatus;
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.CastState;
+import com.google.android.gms.cast.framework.CastStateListener;
+import com.google.android.gms.cast.framework.Session;
+import com.google.android.gms.cast.framework.SessionManager;
 import com.google.android.gms.common.images.WebImage;
-import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
-import com.google.android.libraries.cast.companionlibrary.cast.callbacks.VideoCastConsumerImpl;
-import com.google.android.libraries.cast.companionlibrary.cast.dialog.video.VideoMediaRouteDialogFactory;
-import com.google.android.libraries.cast.companionlibrary.cast.exceptions.NoConnectionException;
-import com.google.android.libraries.cast.companionlibrary.cast.exceptions.TransientNetworkDisconnectionException;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.gson.Gson;
@@ -136,14 +138,7 @@ public class StreamFragment extends Fragment {
 	private boolean isLandscape = false, previewInbackGround = false;
 	private Runnable fetchViewCountRunnable;
 	private Runnable fetchChattersRunnable;
-	// This is the media router window for the chromecast dialog
-	private MediaRouteDialogFactory mMediaRouteDialogFactory = new VideoMediaRouteDialogFactory() {
-		@NonNull
-		@Override
-		public MediaRouteChooserDialogFragment onCreateChooserDialogFragment() {
-			return new CustomMediaRouteChooserDialogFragment();
-		}
-	};
+
 	private View mVideoBackground;
 	private VideoViewSimple 	mVideoView;
 	private Toolbar 			mToolbar;
@@ -161,6 +156,7 @@ public class StreamFragment extends Fragment {
 	private AppCompatActivity 	mActivity;
 	private Snackbar 			snackbar;
 	private ProgressView		mBufferingView;
+	private CastContext mCastContext;
 
 	private final Runnable progressRunnable = new Runnable() {
 		@Override
@@ -185,7 +181,6 @@ public class StreamFragment extends Fragment {
 	private MenuItem 			optionsMenuItem;
 	private LinearLayout		mQualityWrapper;
 	private View 				mClickIntercepter;
-	private VideoCastManager mCastManager;
 	private final Runnable 	hideAnimationRunnable = new Runnable() {
 		@Override
 		public void run() {
@@ -202,83 +197,83 @@ public class StreamFragment extends Fragment {
 			fetchChattersDelay = 1000 * 60; // 30 seco... Nah just kidding. Also a minute.
 
 	private Integer triesForNextBest = 0;
-	private final VideoCastConsumerImpl mCastConsumer = new VideoCastConsumerImpl() {
-		private final String LOG_TAG = "VideoCastConsumer";
-		@Override
-		public void onVolumeChanged(double value, boolean isMute) {
-			super.onVolumeChanged(value, isMute);
-			Log.d(LOG_TAG, "Volume Changed " + value + " - Is mute " + isMute);
-		}
-
-		@Override
-		public void onRemoteMediaPlayerStatusUpdated() {
-			super.onRemoteMediaPlayerStatusUpdated();
-			Log.d(LOG_TAG, "MediaPlayer status updated");
-			if (mCastManager.getMediaStatus().getPlayerState() == MediaStatus.PLAYER_STATE_PLAYING) {
-				castingTextView.setText(getString(R.string.stream_chromecast_playing, mCastManager.getDeviceName()));
-			}
-		}
-
-		@Override
-		public void onApplicationStatusChanged(String appStatus) {
-			super.onApplicationStatusChanged(appStatus);
-			Log.d(LOG_TAG, "Application Status changed to " + appStatus);
-		}
-
-		@Override
-		public void onApplicationConnected(ApplicationMetadata appMetadata, String sessionId, boolean wasLaunched) {
-			super.onApplicationConnected(appMetadata, sessionId, wasLaunched);
-			Log.d(LOG_TAG, "Application connected. Was launched: " + wasLaunched);
-
-			if (qualityURLs != null && qualityURLs.containsKey(GetLiveStreamURL.QUALITY_MEDIUM)) {
-				onCastMediaPlaying();
-				playOnCast();
-			}
-		}
-
-		@Override
-		public void onApplicationConnectionFailed(int errorCode) {
-			super.onApplicationConnectionFailed(errorCode);
-			Log.d(LOG_TAG, "Application connection failed " + errorCode);
-			showSnackbar(getString(R.string.stream_chromecast_connection_failed, mCastManager.getDeviceName()), Snackbar.LENGTH_LONG);
-		}
-
-		@Override
-		public void onDataMessageSendFailed(int errorCode) {
-			super.onDataMessageSendFailed(errorCode);
-			Log.d(LOG_TAG, "Data message send failed " + errorCode);
-		}
-
-		@Override
-		public void onDataMessageReceived(String message) {
-			super.onDataMessageReceived(message);
-			Log.d(LOG_TAG, "Data message received " + message);
-		}
-
-		@Override
-		public void onConnected() {
-			super.onConnected();
-			Log.d(LOG_TAG, "Connected");
-			initCastingView();
-		}
-
-		@Override
-		public void onDisconnected() {
-			super.onDisconnected();
-			Log.d(LOG_TAG, "Disconnected");
-			disableCastingView();
-			startStreamWithQuality(settings.getPrefStreamQuality());
-		}
-
-		@Override
-		public void onFailed(int resourceId, int statusCode) {
-			super.onFailed(resourceId, statusCode);
-			if (mCastManager.getMediaStatus() != null && mCastManager.getMediaStatus().getPlayerState() != MediaStatus.PLAYER_STATE_BUFFERING) {
-				showSnackbar(getString(R.string.stream_chromecast_failed, mCastManager.getDeviceName()), Snackbar.LENGTH_LONG);
-			}
-			Log.d(LOG_TAG, "Failed " + statusCode);
-		}
-	};
+//	private final VideoCastConsumerImpl mCastConsumer = new VideoCastConsumerImpl() {
+//		private final String LOG_TAG = "VideoCastConsumer";
+//		@Override
+//		public void onVolumeChanged(double value, boolean isMute) {
+//			super.onVolumeChanged(value, isMute);
+//			Log.d(LOG_TAG, "Volume Changed " + value + " - Is mute " + isMute);
+//		}
+//
+//		@Override
+//		public void onRemoteMediaPlayerStatusUpdated() {
+//			super.onRemoteMediaPlayerStatusUpdated();
+//			Log.d(LOG_TAG, "MediaPlayer status updated");
+//			if (mCastManager.getMediaStatus().getPlayerState() == MediaStatus.PLAYER_STATE_PLAYING) {
+//				castingTextView.setText(getString(R.string.stream_chromecast_playing, mCastManager.getDeviceName()));
+//			}
+//		}
+//
+//		@Override
+//		public void onApplicationStatusChanged(String appStatus) {
+//			super.onApplicationStatusChanged(appStatus);
+//			Log.d(LOG_TAG, "Application Status changed to " + appStatus);
+//		}
+//
+//		@Override
+//		public void onApplicationConnected(ApplicationMetadata appMetadata, String sessionId, boolean wasLaunched) {
+//			super.onApplicationConnected(appMetadata, sessionId, wasLaunched);
+//			Log.d(LOG_TAG, "Application connected. Was launched: " + wasLaunched);
+//
+//			if (qualityURLs != null && qualityURLs.containsKey(GetLiveStreamURL.QUALITY_MEDIUM)) {
+//				onCastMediaPlaying();
+//				playOnCast();
+//			}
+//		}
+//
+//		@Override
+//		public void onApplicationConnectionFailed(int errorCode) {
+//			super.onApplicationConnectionFailed(errorCode);
+//			Log.d(LOG_TAG, "Application connection failed " + errorCode);
+//			showSnackbar(getString(R.string.stream_chromecast_connection_failed, mCastManager.getDeviceName()), Snackbar.LENGTH_LONG);
+//		}
+//
+//		@Override
+//		public void onDataMessageSendFailed(int errorCode) {
+//			super.onDataMessageSendFailed(errorCode);
+//			Log.d(LOG_TAG, "Data message send failed " + errorCode);
+//		}
+//
+//		@Override
+//		public void onDataMessageReceived(String message) {
+//			super.onDataMessageReceived(message);
+//			Log.d(LOG_TAG, "Data message received " + message);
+//		}
+//
+//		@Override
+//		public void onConnected() {
+//			super.onConnected();
+//			Log.d(LOG_TAG, "Connected");
+//			initCastingView();
+//		}
+//
+//		@Override
+//		public void onDisconnected() {
+//			super.onDisconnected();
+//			Log.d(LOG_TAG, "Disconnected");
+//			disableCastingView();
+//			startStreamWithQuality(settings.getPrefStreamQuality());
+//		}
+//
+//		@Override
+//		public void onFailed(int resourceId, int statusCode) {
+//			super.onFailed(resourceId, statusCode);
+//			if (mCastManager.getMediaStatus() != null && mCastManager.getMediaStatus().getPlayerState() != MediaStatus.PLAYER_STATE_BUFFERING) {
+//				showSnackbar(getString(R.string.stream_chromecast_failed, mCastManager.getDeviceName()), Snackbar.LENGTH_LONG);
+//			}
+//			Log.d(LOG_TAG, "Failed " + statusCode);
+//		}
+//	};
 
 	public static StreamFragment newInstance(Bundle args) {
 		StreamFragment fragment = new StreamFragment();
@@ -328,9 +323,7 @@ public class StreamFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 
-		VideoCastManager.checkGooglePlayServices(getActivity());
-		mCastManager = VideoCastManager.getInstance();
-		mCastManager.reconnectSessionIfPossible(10);
+		mCastContext = CastContext.getSharedInstance(getContext());
 
 		Bundle args = getArguments();
 		setHasOptionsMenu(true);
@@ -367,23 +360,23 @@ public class StreamFragment extends Fragment {
 		}
 
 		rootView			= (ViewGroup) mRootView;
-		mToolbar 			= (Toolbar) mRootView.findViewById(R.id.main_toolbar);
-		mControlToolbar 	= (RelativeLayout) mRootView.findViewById(R.id.control_toolbar_wrapper);
-		mVideoWrapper		= (RelativeLayout) mRootView.findViewById(R.id.video_wrapper);
-		mVideoView 			= (VideoViewSimple) mRootView.findViewById(R.id.VideoView);
+		mToolbar 			= mRootView.findViewById(R.id.main_toolbar);
+		mControlToolbar 	= mRootView.findViewById(R.id.control_toolbar_wrapper);
+		mVideoWrapper		= mRootView.findViewById(R.id.video_wrapper);
+		mVideoView 			= mRootView.findViewById(R.id.VideoView);
 		mVideoBackground 	= mRootView.findViewById(R.id.video_background);
-		mPlayPauseWrapper 	= (FrameLayout) mRootView.findViewById(R.id.play_pause_wrapper);
-		mPlayIcon 			= (ImageView) mRootView.findViewById(R.id.ic_play);
-		mPauseIcon 			= (ImageView) mRootView.findViewById(R.id.ic_pause);
-		mPreview 			= (ImageView) mRootView.findViewById(R.id.preview);
-		mQualityButton 		= (ImageView) mRootView.findViewById(R.id.settings_icon);
-		mFullScreenButton 	= (ImageView) mRootView.findViewById(R.id.fullscreen_icon);
-		mShowChatButton		= (ImageView) mRootView.findViewById(R.id.show_chat_button);
-		mCurrentProgressView= (TextView) mRootView.findViewById(R.id.currentProgess);
-		castingTextView		= (TextView) mRootView.findViewById(R.id.chromecast_text);
-		mProgressBar 		= (SeekBar) mRootView.findViewById(R.id.progressBar);
-		mBufferingView		= (ProgressView) mRootView.findViewById(R.id.circle_progress);
-		mCurrentViewersView = (TextView) mRootView.findViewById(R.id.txtViewViewers);
+		mPlayPauseWrapper 	= mRootView.findViewById(R.id.play_pause_wrapper);
+		mPlayIcon 			= mRootView.findViewById(R.id.ic_play);
+		mPauseIcon 			= mRootView.findViewById(R.id.ic_pause);
+		mPreview 			= mRootView.findViewById(R.id.preview);
+		mQualityButton 		= mRootView.findViewById(R.id.settings_icon);
+		mFullScreenButton 	= mRootView.findViewById(R.id.fullscreen_icon);
+		mShowChatButton		= mRootView.findViewById(R.id.show_chat_button);
+		mCurrentProgressView= mRootView.findViewById(R.id.currentProgess);
+		castingTextView		= mRootView.findViewById(R.id.chromecast_text);
+		mProgressBar 		= mRootView.findViewById(R.id.progressBar);
+		mBufferingView		= mRootView.findViewById(R.id.circle_progress);
+		mCurrentViewersView = mRootView.findViewById(R.id.txtViewViewers);
 		mActivity 			= ((AppCompatActivity) getActivity());
 		mClickIntercepter	= mRootView.findViewById(R.id.click_intercepter);
 		View mCurrentViewersWrapper = mRootView.findViewById(R.id.viewers_wrapper);
@@ -394,7 +387,6 @@ public class StreamFragment extends Fragment {
 		setupProfileBottomSheet();
 		setupLandscapeChat();
 		setupShowChatButton();
-
 
 		mFullScreenButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -410,12 +402,14 @@ public class StreamFragment extends Fragment {
 				}
 
 				try {
-					if(mVideoView.isPlaying() || (isAudioOnlyModeEnabled() && PlayerService.getInstance().getMediaPlayer().isPlaying()) || (mCastManager.isConnected() && mCastManager.isRemoteMediaPlaying()) ) {
+					CastSession currentSession = mCastContext.getSessionManager().getCurrentCastSession();
+
+					if(mVideoView.isPlaying() || (isAudioOnlyModeEnabled() && PlayerService.getInstance().getMediaPlayer().isPlaying()) || (currentSession != null && currentSession.isConnected() && currentSession.getRemoteMediaClient().isPlaying()) ) {
 						pauseStream();
 					} else if (!mVideoView.isPlaying()){
 						resumeStream();
 					}
-				} catch (TransientNetworkDisconnectionException | NoConnectionException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					startStreamWithQuality(settings.getPrefStreamQuality());
 				}
@@ -534,7 +528,7 @@ public class StreamFragment extends Fragment {
 		} else {
 			mCurrentViewersWrapper.setVisibility(View.GONE);
 
-			TextView maxProgress = (TextView) mRootView.findViewById(R.id.maxProgress);
+			TextView maxProgress = mRootView.findViewById(R.id.maxProgress);
 			maxProgress.setText(Service.calculateTwitchVideoLength(vodLength));
 
 			mProgressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -621,14 +615,18 @@ public class StreamFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 
-		mCastManager.addVideoCastConsumer(mCastConsumer);
-		mCastManager.incrementUiCounter();
+		mCastContext.addCastStateListener(new CastStateListener() {
+			@Override
+			public void onCastStateChanged(int i) {
+
+			}
+		});
 
 		originalMainToolbarPadding = mToolbar.getPaddingRight();
 		originalCtrlToolbarPadding = mControlToolbar.getPaddingRight();
 
 		if (castingViewVisible) {
-			if ((!mCastManager.isConnected() && !mCastManager.isConnecting())) {
+			if (isCastConnected() && !isCastConnecting()) {
 				disableCastingView();
 				startStreamWithQuality(settings.getPrefStreamQuality());
 			} else {
@@ -656,8 +654,6 @@ public class StreamFragment extends Fragment {
 		super.onPause();
 
 		Log.d(LOG_TAG, "Stream Fragment paused");
-		mCastManager.removeVideoCastConsumer(mCastConsumer);
-		mCastManager.decrementUiCounter();
 		hasPaused = true;
 		if (PlayerService.getInstance() != null) {
 			PlayerService.getInstance().unregisterDelegate();
@@ -836,11 +832,7 @@ public class StreamFragment extends Fragment {
 		if (!embedded) {
 			// Only add chromecast btn for live streams
 			if (vodId == null) {
-				mCastManager.addMediaRouterButton(menu, R.id.media_route_menu_item);
-
-				MenuItem routeItem = menu.findItem(R.id.media_route_menu_item);
-				MediaRouteActionProvider mediaRouteButton = (MediaRouteActionProvider) MenuItemCompat.getActionProvider(routeItem);
-				mediaRouteButton.setDialogFactory(mMediaRouteDialogFactory);
+				MenuItem routeItem = CastButtonFactory.setUpMediaRouteButton(getContext().getApplicationContext(), menu, R.id.media_route_menu_item);
 			}
 
 			optionsMenuItem = menu.findItem(R.id.menu_item_options);
@@ -971,14 +963,15 @@ public class StreamFragment extends Fragment {
 	}
 
 	private void checkChromecastConnection() {
-		if (mCastManager.isConnected() || mCastManager.isConnecting()) {
+		if (isCastConnected() || isCastConnecting()) {
 			if (getActivity() instanceof VODActivity) {
 				showSnackbar(getString(R.string.stream_chromecast_no_vod), SNACKBAR_SHOW_DURATION);
-				mCastManager.disconnect();
+				mCastContext.getSessionManager().endCurrentSession(true);
 			} else {
 				initCastingView();
 				try {
-					if (mCastManager.isRemoteMediaLoaded()) {
+					CastSession currentCastSession = mCastContext.getSessionManager().getCurrentCastSession();
+					if (currentCastSession.getRemoteMediaClient().hasMediaSession()) {
 						showPauseIcon();
 						onCastMediaPlaying();
 					}
@@ -990,7 +983,10 @@ public class StreamFragment extends Fragment {
 	}
 
 	private void onCastMediaPlaying() {
-		castingTextView.setText(getString(R.string.stream_chromecast_playing, mCastManager.getDeviceName()));
+		CastSession session = mCastContext.getSessionManager().getCurrentCastSession();
+		if (session == null) return;
+
+		castingTextView.setText(getString(R.string.stream_chromecast_playing, session.getCastDevice().getFriendlyName()));
 	}
 
 	private void initCastingView() {
@@ -1071,8 +1067,7 @@ public class StreamFragment extends Fragment {
 		try {
 			String logoImageUrl = mChannelInfo.getLogoURLString();
 			String streamerName = mChannelInfo.getDisplayName();
-
-			if(mCastManager.isConnected()) {
+			if(mCastContext.getCastState() == CastState.CONNECTED) {
 				MediaMetadata mediaMetadata = new MediaMetadata();
 				mediaMetadata.putString(getString(R.string.stream_fragment_vod_id), vodId);
 				mediaMetadata.putInt(getString(R.string.stream_fragment_vod_length), vodLength);
@@ -1098,12 +1093,9 @@ public class StreamFragment extends Fragment {
 				}
 
 
-				try {
-					mCastManager.loadMedia(mediaBuilder.build(), true, 0);
-
-
-				} catch (TransientNetworkDisconnectionException | NoConnectionException e) {
-					e.printStackTrace();
+				CastSession session = mCastContext.getSessionManager().getCurrentCastSession();
+				if (session != null) {
+					session.getRemoteMediaClient().load(mediaBuilder.build(), true, 0);
 				}
 			}
 		} catch (Exception e) {
@@ -1275,7 +1267,7 @@ public class StreamFragment extends Fragment {
 	 * Hides the video control interface with animations
 	 */
 	private void hideVideoInterface() {
-		if(mToolbar != null && !mCastManager.isConnected() && !mCastManager.isConnecting() && !audioViewVisible && !chatOnlyViewVisible) {
+		if(mToolbar != null && !isCastConnected() && !isCastConnecting() && !audioViewVisible && !chatOnlyViewVisible) {
 			mToolbar .animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
 			mControlToolbar .animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
 			mPlayPauseWrapper.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
@@ -1399,9 +1391,9 @@ public class StreamFragment extends Fragment {
 
 		delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
 
-		if (mCastManager.isConnected()) {
+		if (isCastConnected()) {
 			try {
-				mCastManager.pause();
+				mCastContext.getSessionManager().getCurrentCastSession().getRemoteMediaClient().pause();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1423,9 +1415,9 @@ public class StreamFragment extends Fragment {
 		showPauseIcon();
 		mBufferingView.start();
 
-		if (mCastManager.isConnected() || mCastManager.isConnecting()) {
+		if (isCastConnected() || isCastConnecting()) {
 			try {
-				mCastManager.play();
+				mCastContext.getSessionManager().getCurrentCastSession().getRemoteMediaClient().play();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1444,6 +1436,16 @@ public class StreamFragment extends Fragment {
 
 		checkVodProgress();
 		keepScreenOn();
+	}
+
+	private boolean isCastConnected() {
+		CastSession session = mCastContext.getSessionManager().getCurrentCastSession();
+		return session != null && session.isConnected();
+	}
+
+	private boolean isCastConnecting() {
+		CastSession session = mCastContext.getSessionManager().getCurrentCastSession();
+		return session != null && session.isConnecting();
 	}
 
 	/**
@@ -1583,7 +1585,7 @@ public class StreamFragment extends Fragment {
 	 * @param url
 	 */
 	private void playUrl(String url) {
-		if (mCastManager.isConnected() || mCastManager.isConnecting()) {
+		if (isCastConnected() || isCastConnecting()) {
 			playOnCast();
 		}
 
@@ -1620,7 +1622,7 @@ public class StreamFragment extends Fragment {
 		if (urlToPlay != null) {
 			try {
 				if (castingViewVisible) {
-					mCastManager.disconnect();
+					mCastContext.getSessionManager().endCurrentSession(true);
 				}
 
 				Intent playerService = PlayerService.createPlayServiceIntent(
@@ -1816,12 +1818,12 @@ public class StreamFragment extends Fragment {
 			}
 		});
 
-		TextView mNameView = (TextView) mProfileBottomSheet.findViewById(R.id.twitch_name);
-		TextView mFollowers = (TextView) mProfileBottomSheet.findViewById(R.id.txt_followers);
-		TextView mViewers = (TextView) mProfileBottomSheet.findViewById(R.id.txt_viewers);
-		ImageView mFollowButton = (ImageView) mProfileBottomSheet.findViewById(R.id.follow_unfollow_icon);
-		ImageView mFullProfileButton = (ImageView) mProfileBottomSheet.findViewById(R.id.full_profile_icon);
-		RecyclerView mPanelsRecyclerView = (RecyclerView) mProfileBottomSheet.findViewById(R.id.panel_recyclerview);
+		TextView mNameView = mProfileBottomSheet.findViewById(R.id.twitch_name);
+		TextView mFollowers = mProfileBottomSheet.findViewById(R.id.txt_followers);
+		TextView mViewers = mProfileBottomSheet.findViewById(R.id.txt_viewers);
+		ImageView mFollowButton = mProfileBottomSheet.findViewById(R.id.follow_unfollow_icon);
+		ImageView mFullProfileButton = mProfileBottomSheet.findViewById(R.id.full_profile_icon);
+		RecyclerView mPanelsRecyclerView = mProfileBottomSheet.findViewById(R.id.panel_recyclerview);
 
 		mNameView.setText(mChannelInfo.getDisplayName());
 		mFollowers.setText(mChannelInfo.getFollowers() + "");
@@ -1957,17 +1959,17 @@ public class StreamFragment extends Fragment {
 			}
 		});
 
-		auto 	= (TextView) mQualityBottomSheet.findViewById(R.id.auto);
-		source 	= (TextView) mQualityBottomSheet.findViewById(R.id.source);
-		high 	= (TextView) mQualityBottomSheet.findViewById(R.id.high);
-		medium 	= (TextView) mQualityBottomSheet.findViewById(R.id.medium);
-		low 	= (TextView) mQualityBottomSheet.findViewById(R.id.low);
-		mobile 	= (TextView) mQualityBottomSheet.findViewById(R.id.mobile);
+		auto 	= mQualityBottomSheet.findViewById(R.id.auto);
+		source 	= mQualityBottomSheet.findViewById(R.id.source);
+		high 	= mQualityBottomSheet.findViewById(R.id.high);
+		medium 	= mQualityBottomSheet.findViewById(R.id.medium);
+		low 	= mQualityBottomSheet.findViewById(R.id.low);
+		mobile 	= mQualityBottomSheet.findViewById(R.id.mobile);
 
-		mQualityWrapper = (LinearLayout) mQualityBottomSheet.findViewById(R.id.quality_wrapper);
-		mAudioOnlySelector = (CheckedTextView) mQualityBottomSheet.findViewById(R.id.audio_only_selector);
-		mChatOnlySelector = (CheckedTextView) mQualityBottomSheet.findViewById(R.id.chat_only_selector);
-		TextView optionsTitle = (TextView) mQualityBottomSheet.findViewById(R.id.options_text);
+		mQualityWrapper = mQualityBottomSheet.findViewById(R.id.quality_wrapper);
+		mAudioOnlySelector = mQualityBottomSheet.findViewById(R.id.audio_only_selector);
+		mChatOnlySelector = mQualityBottomSheet.findViewById(R.id.chat_only_selector);
+		TextView optionsTitle = mQualityBottomSheet.findViewById(R.id.options_text);
 
 		if (optionsTitle != null) {
 			optionsTitle.setVisibility(View.VISIBLE);
@@ -2199,13 +2201,6 @@ public class StreamFragment extends Fragment {
 
 	private void hideQualities() {
 		mQualityWrapper.setVisibility(View.GONE);
-	}
-
-	public static class CustomMediaRouteChooserDialogFragment extends MediaRouteChooserDialogFragment {
-		@Override
-		public MediaRouteChooserDialog onCreateChooserDialog(Context context, Bundle savedInstanceState) {
-			return new MediaRouteChooserDialog(context);
-		}
 	}
 
 	/**

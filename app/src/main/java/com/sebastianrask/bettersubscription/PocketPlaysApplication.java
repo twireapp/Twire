@@ -6,14 +6,11 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
-import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
-import com.sebastianrask.bettersubscription.activities.stream.LiveStreamActivity;
-import com.sebastianrask.bettersubscription.misc.SecretKeys;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -21,14 +18,13 @@ import io.fabric.sdk.android.Fabric;
 /**
  * Created by SebastianRask on 20-02-2016.
  */
-public class PocketPlaysApplication extends Application {
+public class PocketPlaysApplication extends MultiDexApplication {
 	private Tracker mTracker;
 	public static boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		initCastFunctionality();
 		initNotificationChannels();
 
 		if (!BuildConfig.DEBUG) {
@@ -80,21 +76,5 @@ public class PocketPlaysApplication extends Application {
 		notificationManager.createNotificationChannel(
 				new NotificationChannel(getString(R.string.stream_cast_notification_id), "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
 		);
-	}
-
-	private void initCastFunctionality() {
-		String applicationID = SecretKeys.CHROME_CAST_APPLICATION_ID;
-		CastConfiguration options = new CastConfiguration.Builder(applicationID)
-											.enableAutoReconnect()
-											.enableDebug()
-											.enableWifiReconnection()
-											.setCastControllerImmersive(false)
-											.setTargetActivity(LiveStreamActivity.class)
-											.enableNotification()
-											.addNotificationAction(CastConfiguration.NOTIFICATION_ACTION_PLAY_PAUSE, true)
-											.addNotificationAction(CastConfiguration.NOTIFICATION_ACTION_DISCONNECT,true)
-											.enableLockScreen()
-											.build();
-		VideoCastManager castManager = VideoCastManager.initialize(getApplicationContext(), options);
 	}
 }

@@ -93,19 +93,27 @@
             android:layout_height="wrap_content"
             />
 
-        <com.google.android.libraries.cast.companionlibrary.widgets.MiniController
-            android:id="@+id/mini_controller"
-            android:layout_width="match_parent"
+        <!--<com.google.android.libraries.cast.companionlibrary.widgets.MiniController-->
+            <!--android:id="@+id/mini_controller"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--app:auto_setup="true"-->
+            <!--android:background="@drawable/mini_bg_shadow"-->
+            <!--android:visibility="gone">-->
+        <!--</com.google.android.libraries.cast.companionlibrary.widgets.MiniController>-->
+
+        <fragment
+            android:id="@+id/cast_mini_controller"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:auto_setup="true"
-            android:background="@drawable/mini_bg_shadow"
-            android:visibility="gone">
-        </com.google.android.libraries.cast.companionlibrary.widgets.MiniController>
+            android:visibility="gone"
+            class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"
-            android:layout_above="@+id/mini_controller"
+            android:layout_above="@+id/cast_mini_controller"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView

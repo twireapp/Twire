@@ -1,22 +1,16 @@
 package com.sebastianrask.bettersubscription.activities.main;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.MediaRouteActionProvider;
-import android.support.v7.app.MediaRouteChooserDialog;
-import android.support.v7.app.MediaRouteChooserDialogFragment;
-import android.support.v7.app.MediaRouteDialogFactory;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,14 +22,11 @@ import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
-import com.google.android.libraries.cast.companionlibrary.cast.dialog.video.VideoMediaRouteDialogFactory;
-import com.google.android.libraries.cast.companionlibrary.widgets.MiniController;
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
 import com.rey.material.widget.ProgressView;
 import com.sebastianrask.bettersubscription.BuildConfig;
 import com.sebastianrask.bettersubscription.R;
-import com.sebastianrask.bettersubscription.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
-import com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView;
 import com.sebastianrask.bettersubscription.activities.DonationActivity;
 import com.sebastianrask.bettersubscription.activities.ThemeActivity;
 import com.sebastianrask.bettersubscription.adapters.MainActivityAdapter;
@@ -48,559 +39,534 @@ import com.sebastianrask.bettersubscription.service.AnimationService;
 import com.sebastianrask.bettersubscription.service.Service;
 import com.sebastianrask.bettersubscription.service.Settings;
 import com.sebastianrask.bettersubscription.tasks.ScrollToStartPositionTask;
+import com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView;
+import com.sebastianrask.bettersubscription.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
 public abstract class MainActivity extends ThemeActivity {
-	private static final String FIRST_VISIBLE_ELEMENT_POSITION = "firstVisibleElementPosition";
+    private static final String FIRST_VISIBLE_ELEMENT_POSITION = "firstVisibleElementPosition";
 
-	@BindView(R.id.followed_channels_drawer_layout)
-	protected DrawerLayout              mDrawerLayout;
+    @BindView(R.id.followed_channels_drawer_layout)
+    protected DrawerLayout mDrawerLayout;
 
-	@BindView(R.id.progress_view)
-	protected ProgressView mProgressView;
+    @BindView(R.id.progress_view)
+    protected ProgressView mProgressView;
 
-	@BindView(R.id.swipe_container)
-	protected SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.swipe_container)
+    protected SwipeRefreshLayout mSwipeRefreshLayout;
 
-	@BindView(R.id.main_list)
-	protected AutoSpanRecyclerView mRecyclerView;
+    @BindView(R.id.main_list)
+    protected AutoSpanRecyclerView mRecyclerView;
 
-	@BindView(R.id.toolbar_shadow)
-	protected View mToolbarShadow;
+    @BindView(R.id.toolbar_shadow)
+    protected View mToolbarShadow;
 
-	@BindView(R.id.icon_container)
-	protected View mCircleIconWrapper;
+    @BindView(R.id.icon_container)
+    protected View mCircleIconWrapper;
 
-	@BindView(R.id.txt_title)
-	protected TextView mTitleView;
+    @BindView(R.id.txt_title)
+    protected TextView mTitleView;
 
-	@BindView(R.id.error_view)
-	protected TextView mErrorView;
+    @BindView(R.id.error_view)
+    protected TextView mErrorView;
 
-	@BindView(R.id.emote_error_view)
-	protected TextView mErrorEmoteView;
+    @BindView(R.id.emote_error_view)
+    protected TextView mErrorEmoteView;
 
-	@BindView(R.id.img_icon)
-	protected ImageView mIcon;
+    @BindView(R.id.img_icon)
+    protected ImageView mIcon;
 
-	@BindView(R.id.main_toolbar)
-	protected Toolbar mMainToolbar;
+    @BindView(R.id.main_toolbar)
+    protected Toolbar mMainToolbar;
 
-	@BindView(R.id.main_decorative_toolbar)
-	protected Toolbar mDecorativeToolbar;
+    @BindView(R.id.main_decorative_toolbar)
+    protected Toolbar mDecorativeToolbar;
 
-	// The position of the toolbars for the activity that started the transition to this activity
-    private float 	fromToolbarPosition,
-            		fromMainToolbarPosition;
+    // The position of the toolbars for the activity that started the transition to this activity
+    private float fromToolbarPosition,
+            fromMainToolbarPosition;
     private boolean isTransitioned = false;
 
-	protected String LOG_TAG;
-	protected VideoCastManager mCastManager;
-	protected MainActivityAdapter mAdapter;
-	protected NavigationDrawerFragment mDrawerFragment;
-	protected UniversalOnScrollListener mScrollListener;
-	protected Settings settings;
-	protected TooltipWindow mTooltip;
+    protected String LOG_TAG;
+    protected MainActivityAdapter mAdapter;
+    protected NavigationDrawerFragment mDrawerFragment;
+    protected UniversalOnScrollListener mScrollListener;
+    protected Settings settings;
+    protected TooltipWindow mTooltip;
+    protected CastContext mCastContext;
 
-	// This is the media router window for the chromecast dialog
-	private MediaRouteDialogFactory mMediaRouteDialogFactory = new VideoMediaRouteDialogFactory() {
-		@NonNull
-		@Override
-		public MediaRouteChooserDialogFragment onCreateChooserDialogFragment() {
-			return new CustomMediaRouteChooserDialogFragment();
-		}
-	};
+    /**
+     * Refreshes the content of the activity
+     */
+    public abstract void refreshElements();
 
-	/**
-	 * Refreshes the content of the activity
-	 */
-	public abstract void refreshElements();
+    /**
+     * Construct the adapter used for this activity's list
+     */
+    protected abstract MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView);
 
-	/**
-	 * Construct the adapter used for this activity's list
-	 */
-	protected abstract MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView);
+    /**
+     * Get the drawable ressource int used to represent this activity
+     *
+     * @return the ressource int
+     */
+    protected abstract int getActivityIconRes();
 
-	/**
-	 * Get the drawable ressource int used to represent this activity
-	 * @return the ressource int
-	 */
-	protected abstract int getActivityIconRes();
+    /***
+     * Get the string ressource int used for the title of this activity
+     * @return the ressource int
+     */
+    protected abstract int getActivityTitleRes();
 
-	/***
-	 * Get the string ressource int used for the title of this activity
-	 * @return the ressource int
-	 */
-	protected abstract int getActivityTitleRes();
+    /***
+     * Construct the AutoSpanBehaviour used for this main activity's AutoSpanRecyclerView
+     * @return
+     */
+    protected abstract AutoSpanBehaviour constructSpanBehaviour();
 
-	/***
-	 * Construct the AutoSpanBehaviour used for this main activity's AutoSpanRecyclerView
-	 * @return
-	 */
-	protected abstract AutoSpanBehaviour constructSpanBehaviour();
-	/**
-	 * Allows the child class to specialize the functionality in the onCreate method, although it is not required.
-	 */
-	protected void customizeActivity(){}
+    /**
+     * Allows the child class to specialize the functionality in the onCreate method, although it is not required.
+     */
+    protected void customizeActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-		setContentView(R.layout.activity_main);
-		ButterKnife.bind(this);
+        setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-		mDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
-		settings = new Settings(getBaseContext());
+        mDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
+        settings = new Settings(getBaseContext());
 
-		initCast();
-		initErrorView();
-		initTitleAndIcon();
+        mCastContext = CastContext.getSharedInstance(this);
+        initErrorView();
+        initTitleAndIcon();
 
         setSupportActionBar(mMainToolbar);
         getSupportActionBar().setTitle("");
-		mMainToolbar.setPadding(0, 0, Service.dpToPixels(getBaseContext(), 5), 0); // to make sure the cast icon is aligned 16 dp from the right edge.
+        mMainToolbar.setPadding(0, 0, Service.dpToPixels(getBaseContext(), 5), 0); // to make sure the cast icon is aligned 16 dp from the right edge.
         mMainToolbar.bringToFront();
         mMainToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent));
         mToolbarShadow.bringToFront();
         mToolbarShadow.setAlpha(0f);
         mTitleView.bringToFront();
 
-		// Setup Drawer Fragment
-		mDrawerFragment.setUp((DrawerLayout) findViewById(R.id.followed_channels_drawer_layout), mMainToolbar);
+        // Setup Drawer Fragment
+        mDrawerFragment.setUp((DrawerLayout) findViewById(R.id.followed_channels_drawer_layout), mMainToolbar);
 
-		// Set up the RecyclerView
-		mRecyclerView.setBehaviour(constructSpanBehaviour());
-		mAdapter = constructAdapter(mRecyclerView);
-		mRecyclerView.setAdapter(mAdapter);
-		mRecyclerView.setItemAnimator(null); // We want to implement our own animations
-		mRecyclerView.setHasFixedSize(true);
-		mScrollListener = new UniversalOnScrollListener(this, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mCircleIconWrapper, mTitleView, LOG_TAG, true);
-		mRecyclerView.addOnScrollListener(mScrollListener);
-		mRecyclerView.setHasTransientState(false);
+        // Set up the RecyclerView
+        mRecyclerView.setBehaviour(constructSpanBehaviour());
+        mAdapter = constructAdapter(mRecyclerView);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(null); // We want to implement our own animations
+        mRecyclerView.setHasFixedSize(true);
+        mScrollListener = new UniversalOnScrollListener(this, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mCircleIconWrapper, mTitleView, LOG_TAG, true);
+        mRecyclerView.addOnScrollListener(mScrollListener);
+        mRecyclerView.setHasTransientState(false);
 
-		// Only animate when the view is first started, not when screen rotates
-		if (savedInstance == null) {
-			mTitleView.setAlpha(0f);
-			initActivityAnimation();
-		}
+        // Only animate when the view is first started, not when screen rotates
+        if (savedInstance == null) {
+            mTitleView.setAlpha(0f);
+            initActivityAnimation();
+        }
 
-		Service.increaseNavigationDrawerEdge(mDrawerLayout, getBaseContext());
+        Service.increaseNavigationDrawerEdge(mDrawerLayout, getBaseContext());
 
-		checkForTip();
-		checkIfUpdated();
-		customizeActivity();
+        checkForTip();
+        checkIfUpdated();
+        customizeActivity();
 
-		if (settings.getTheme().equals(getString(R.string.night_theme_name)) || settings.getTheme().equals(getString(R.string.true_night_theme_name))) {
-			MiniController miniController = (MiniController) findViewById(R.id.mini_controller);
-			miniController.setDarkMode();
-		}
+        if (settings.getTheme().equals(getString(R.string.night_theme_name)) || settings.getTheme().equals(getString(R.string.true_night_theme_name))) {
+//			MiniController miniController = (MiniController) findViewById(R.id.mini_controller);
+//			miniController.setDarkMode();
+            //TODO Enable dark mode on minicontroller
+        }
     }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		mCastManager.incrementUiCounter();
-		checkIsBackFromMainActivity();
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
+        checkIsBackFromMainActivity();
+    }
 
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		if (hasFocus) {
-			// Check if the user has changed any size or style setting.
-			if (!checkElementStyleChange()) {
-				checkElementSizeChange();
-			}
-		}
-	}
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
+            // Check if the user has changed any size or style setting.
+            if (!checkElementStyleChange()) {
+                checkElementSizeChange();
+            }
+        }
+    }
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		mCastManager.decrementUiCounter();
-	}
+    @Override
+    protected void onDestroy() {
+        if (mTooltip != null && mTooltip.isTooltipShown()) {
+            mTooltip.dismissTooltip();
+        }
 
-	@Override
-	protected void onDestroy() {
-		if(mTooltip != null && mTooltip.isTooltipShown()){
-			mTooltip.dismissTooltip();
-		}
+        super.onDestroy();
+    }
 
-		super.onDestroy();
-	}
+    @Override
+    public void onBackPressed() {
+        boolean isFromOtherMain = handleBackPressed();
 
-	@Override
-	public void onBackPressed() {
-		boolean isFromOtherMain = handleBackPressed();
+        // If this activity was not started from another main activity, then just use the usual onBackPressed.
+        if (!isFromOtherMain) {
+            super.onBackPressed();
+        }
+    }
 
-		// If this activity was not started from another main activity, then just use the usual onBackPressed.
-		if(!isFromOtherMain) {
-			super.onBackPressed();
-		}
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main_activity, menu);
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_main_activity, menu);
-		mCastManager.addMediaRouterButton(menu, R.id.media_route_menu_item);
+        MenuItem routeItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
+        return true;
+    }
 
-		MenuItem routeItem = menu.findItem(R.id.media_route_menu_item);
-		MediaRouteActionProvider mediaRouteButton = (MediaRouteActionProvider) MenuItemCompat.getActionProvider(routeItem);
-		mediaRouteButton.setDialogFactory(mMediaRouteDialogFactory);
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            if (mAdapter.getItemCount() >= 0) {
+                mRecyclerView.scrollToPosition(0);
+            }
+        }
+    }
 
-		return true;
-	}
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
 
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-		if (savedInstanceState != null) {
-			if (mAdapter.getItemCount() >= 0) {
-				mRecyclerView.scrollToPosition(0);
-			}
-		}
-	}
+        int firstVisibleElement = mRecyclerView.getManager().findFirstCompletelyVisibleItemPosition() == 0
+                ? mRecyclerView.getManager().findFirstVisibleItemPosition()
+                : mRecyclerView.getManager().findFirstCompletelyVisibleItemPosition();
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(FIRST_VISIBLE_ELEMENT_POSITION, firstVisibleElement);
+        super.onSaveInstanceState(outState);
+    }
 
-		int firstVisibleElement = mRecyclerView.getManager().findFirstCompletelyVisibleItemPosition() == 0
-										  ? mRecyclerView.getManager().findFirstVisibleItemPosition()
-										  : mRecyclerView.getManager().findFirstCompletelyVisibleItemPosition();
+    /**
+     * Initializes the error view, but does NOT find the view with ID's
+     */
+    protected void initErrorView() {
+        if (mErrorView != null && mErrorEmoteView != null) {
+            mErrorEmoteView.setText(Service.getErrorEmote());
+            mErrorEmoteView.setAlpha(0f);
+            mErrorView.setAlpha(0f);
+        } else {
+            throw new IllegalStateException("You need to find the views before you can use them");
+        }
+    }
 
-		outState.putInt(FIRST_VISIBLE_ELEMENT_POSITION, firstVisibleElement);
-		super.onSaveInstanceState(outState);
-	}
+    /***
+     * Set the title and icon that is used to identify this activity and the content of its list
+     */
+    protected void initTitleAndIcon() {
+        mIcon.setImageResource(getActivityIconRes());
+        //mIcon.setImageDrawable(getResources().getDrawable());
+        mTitleView.setText(getString(getActivityTitleRes()));
+    }
 
-	/**
-	 * Initializes the error view, but does NOT find the view with ID's
-	 */
-	protected void initErrorView() {
-		if (mErrorView != null && mErrorEmoteView != null) {
-			mErrorEmoteView.setText(Service.getErrorEmote());
-			mErrorEmoteView.setAlpha(0f);
-			mErrorView.setAlpha(0f);
-		} else {
-			throw new IllegalStateException("You need to find the views before you can use them");
-		}
-	}
+    /**
+     * Scrolls to the top of the recyclerview. When the position is reached refreshElements() is called
+     */
+    public void scrollToTopAndRefresh() {
+        ScrollToStartPositionTask scrollTask = new ScrollToStartPositionTask(new ScrollToStartPositionTask.PositionCallBack() {
+            @Override
+            public void positionReached() {
+                if (mRecyclerView != null && mAdapter != null) {
+                    refreshElements();
+                }
+            }
 
-	/***
-	 * Set the title and icon that is used to identify this activity and the content of its list
-	 */
-	protected void initTitleAndIcon() {
-		mIcon.setImageResource(getActivityIconRes());
-		//mIcon.setImageDrawable(getResources().getDrawable());
-		mTitleView.setText(getString(getActivityTitleRes()));
-	}
+            @Override
+            public void cancelled() {
 
-	/**
-	 * Scrolls to the top of the recyclerview. When the position is reached refreshElements() is called
-	 */
-	public void scrollToTopAndRefresh() {
-		ScrollToStartPositionTask scrollTask = new ScrollToStartPositionTask(new ScrollToStartPositionTask.PositionCallBack() {
-			@Override
-			public void positionReached() {
-				if(mRecyclerView != null && mAdapter != null) {
-					refreshElements();
-				}
-			}
+            }
+        }, mRecyclerView, mScrollListener);
+        scrollTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
 
-			@Override
-			public void cancelled() {
+    /**
+     * Shows the error views with an alpha animation
+     */
+    public void showErrorView() {
+        if (mErrorView != null && mErrorEmoteView != null) {
+            mErrorEmoteView.setVisibility(View.VISIBLE);
+            mErrorView.setVisibility(View.VISIBLE);
 
-			}
-		}, mRecyclerView, mScrollListener);
-		scrollTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-	}
+            mErrorEmoteView.animate().alpha(1f).start();
+            mErrorView.animate().alpha(1f).start();
+        }
+    }
 
-	/**
-	 * Shows the error views with an alpha animation
-	 */
-	public void showErrorView() {
-		if (mErrorView != null && mErrorEmoteView != null) {
-			mErrorEmoteView.setVisibility(View.VISIBLE);
-			mErrorView.setVisibility(View.VISIBLE);
+    /**
+     * Hide the error views with an alpha animation
+     */
+    public void hideErrorView() {
+        if (mErrorView != null && mErrorEmoteView != null) {
+            mErrorEmoteView.animate().alpha(0f).start();
+            mErrorView.animate().alpha(0f).start();
+        }
+    }
 
-			mErrorEmoteView.animate().alpha(1f).start();
-			mErrorView.animate().alpha(1f).start();
-		}
-	}
+    private void checkIfUpdated() {
+        UpdateDialogHandler dialogHandler = new UpdateDialogHandler((ViewGroup) findViewById(android.R.id.content), getLayoutInflater());
 
-	/**
-	 * Hide the error views with an alpha animation
-	 */
-	public void hideErrorView() {
-		if (mErrorView != null && mErrorEmoteView !=  null) {
-			mErrorEmoteView.animate().alpha(0f).start();
-			mErrorView.animate().alpha(0f).start();
-		}
-	}
+        String versionName = BuildConfig.VERSION_NAME;
 
-	private void checkIfUpdated() {
-		UpdateDialogHandler dialogHandler = new UpdateDialogHandler((ViewGroup) findViewById(android.R.id.content), getLayoutInflater());
+        if (settings.getIsUpdated() && !settings.getLastVersionName().equals(versionName)) {
+            settings.setIsUpdated(false);
+            settings.setLastVersionName(versionName);
+            //dialogHandler.show();
+        }
+    }
 
-		String versionName = BuildConfig.VERSION_NAME;
+    /**
+     * Check if useablity Tips should be shown to the user
+     */
+    private void checkForTip() {
+        if (!settings.isTipsShown()) {
+            try {
+                mTooltip = new TooltipWindow(this, TooltipWindow.POSITION_TO_RIGHT);
+                mMainToolbar.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                    @Override
+                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                        v.removeOnLayoutChangeListener(this);
 
-		if (settings.getIsUpdated() && !settings.getLastVersionName().equals(versionName)) {
-			settings.setIsUpdated(false);
-			settings.setLastVersionName(versionName);
-			//dialogHandler.show();
-		}
-	}
+                        if (!mTooltip.isTooltipShown()) {
+                            final View anchor = Service.getNavButtonView(mMainToolbar);
+                            if (anchor != null) {
+                                anchor.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                                    @Override
+                                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                                        mTooltip.showToolTip(anchor, getString(R.string.tip_navigate));
+                                    }
+                                });
+                            }
+                        }
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(LOG_TAG, "Failed to Show ToolTip");
+            }
 
-	/**
-	 * Check if useablity Tips should be shown to the user
-	 */
-	private void checkForTip() {
-		if (!settings.isTipsShown()) {
-			try	{
-				mTooltip = new TooltipWindow(this, TooltipWindow.POSITION_TO_RIGHT);
-				mMainToolbar.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-					@Override
-					public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-						v.removeOnLayoutChangeListener(this);
+        }
+    }
 
-						if(!mTooltip.isTooltipShown()) {
-							final View anchor = Service.getNavButtonView(mMainToolbar);
-							if (anchor != null) {
-								anchor.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-									@Override
-									public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-										mTooltip.showToolTip(anchor, getString(R.string.tip_navigate));
-									}
-								});
-							}
-						}
-					}
-				});
-			} catch (Exception e) {
-				Log.e(LOG_TAG, "Failed to Show ToolTip");
-			}
+    /**
+     * Checks if the user has changed the element style of this adapter type.
+     * If it has Update the adapter element style and refresh the elements.
+     */
+    public boolean checkElementStyleChange() {
+        String currentAdapterStyle = mAdapter.getElementStyle();
+        String actualStyle = mAdapter.initElementStyle();
 
-		}
-	}
+        if (!currentAdapterStyle.equals(actualStyle)) {
+            mAdapter.setElementStyle(mAdapter.initElementStyle());
+            scrollToTopAndRefresh();
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-	/**
-	 * Finds or reconnects to nearby chromecast devices
-	 */
-	protected void initCast() {
-		VideoCastManager.checkGooglePlayServices(this);
-		mCastManager = VideoCastManager.getInstance();
-		mCastManager.reconnectSessionIfPossible(5);
-	}
-
-	/**
-	 * Checks if the user has changed the element style of this adapter type.
-	 * If it has Update the adapter element style and refresh the elements.
-	 */
-	public boolean checkElementStyleChange() {
-		String currentAdapterStyle = mAdapter.getElementStyle();
-		String actualStyle = mAdapter.initElementStyle();
-
-		if (!currentAdapterStyle.equals(actualStyle)) {
-			mAdapter.setElementStyle(mAdapter.initElementStyle());
-			scrollToTopAndRefresh();
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public boolean checkElementSizeChange() {
-		if (mRecyclerView.hasSizedChanged()) {
-			scrollToTopAndRefresh();
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public boolean checkElementSizeChange() {
+        if (mRecyclerView.hasSizedChanged()) {
+            scrollToTopAndRefresh();
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 
-	/**
-	 * Returns the activity's recyclerview.
-	 * @return The Recyclerview
-	 */
-	public RecyclerView getRecyclerView() {
-		return mRecyclerView;
-	}
+    /**
+     * Returns the activity's recyclerview.
+     *
+     * @return The Recyclerview
+     */
+    public RecyclerView getRecyclerView() {
+        return mRecyclerView;
+    }
 
-	/**
-	 * Decides which animation to run based the intent that started the activity.
-	 */
-	public void initActivityAnimation() {
-		Intent intent = this.getIntent();
-		fromToolbarPosition = intent.getFloatExtra(
-														  this.getResources().getString(R.string.decorative_toolbar_position_y), -1
-		);
+    /**
+     * Decides which animation to run based the intent that started the activity.
+     */
+    public void initActivityAnimation() {
+        Intent intent = this.getIntent();
+        fromToolbarPosition = intent.getFloatExtra(
+                this.getResources().getString(R.string.decorative_toolbar_position_y), -1
+        );
 
-		fromMainToolbarPosition = intent.getFloatExtra(
-														  this.getResources().getString(R.string.main_toolbar_position_y), -1
-		);
+        fromMainToolbarPosition = intent.getFloatExtra(
+                this.getResources().getString(R.string.main_toolbar_position_y), -1
+        );
 
-		// If the position is equal to the default value,
-		// then the intent was not put into from another MainActivity
-		if(fromToolbarPosition != -1) {
-			AnimationService.setActivityToolbarReset(mMainToolbar, mDecorativeToolbar, this, fromToolbarPosition, fromMainToolbarPosition);
-		} else {
-			AnimationService.setActivityToolbarCircularRevealAnimation(mDecorativeToolbar);
-		}
+        // If the position is equal to the default value,
+        // then the intent was not put into from another MainActivity
+        if (fromToolbarPosition != -1) {
+            AnimationService.setActivityToolbarReset(mMainToolbar, mDecorativeToolbar, this, fromToolbarPosition, fromMainToolbarPosition);
+        } else {
+            AnimationService.setActivityToolbarCircularRevealAnimation(mDecorativeToolbar);
+        }
 
-		AnimationService.setActivityIconRevealAnimation(mCircleIconWrapper, mTitleView);
-	}
+        AnimationService.setActivityIconRevealAnimation(mCircleIconWrapper, mTitleView);
+    }
 
-	/**
-	 * Navigates to the Donation Activity.
-	 */
-	public void navigateToDonationActivity() {
-		final Intent intent = new Intent(this, DonationActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		intent.putExtra(this.getResources().getString(R.string.main_toolbar_position_y), fromMainToolbarPosition);
-		intent.putExtra(this.getResources().getString(R.string.decorative_toolbar_position_y), fromToolbarPosition);
-		startActivity(intent);
-	}
+    /**
+     * Navigates to the Donation Activity.
+     */
+    public void navigateToDonationActivity() {
+        final Intent intent = new Intent(this, DonationActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra(this.getResources().getString(R.string.main_toolbar_position_y), fromMainToolbarPosition);
+        intent.putExtra(this.getResources().getString(R.string.decorative_toolbar_position_y), fromToolbarPosition);
+        startActivity(intent);
+    }
 
-	/**
-	 * Starts the transition animation to another Main Activity. The method takes an intent where the final result activty has been set.
-	 * The method puts extra necessary information on the intent before it is started.
-	 * @param aIntent Intent containing the destination Activity
-	 */
+    /**
+     * Starts the transition animation to another Main Activity. The method takes an intent where the final result activty has been set.
+     * The method puts extra necessary information on the intent before it is started.
+     *
+     * @param aIntent Intent containing the destination Activity
+     */
 
-	public void transitionToOtherMainActivity(final Intent aIntent) {
-		hideErrorView();
-		GridLayoutManager manager = (GridLayoutManager) mRecyclerView.getLayoutManager();
-		final int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
-		final int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
+    public void transitionToOtherMainActivity(final Intent aIntent) {
+        hideErrorView();
+        GridLayoutManager manager = (GridLayoutManager) mRecyclerView.getLayoutManager();
+        final int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
+        final int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
 
-		aIntent.putExtra(
-								this.getResources().getString(R.string.decorative_toolbar_position_y),
-								mDecorativeToolbar.getTranslationY()
-		);
+        aIntent.putExtra(
+                this.getResources().getString(R.string.decorative_toolbar_position_y),
+                mDecorativeToolbar.getTranslationY()
+        );
 
-		aIntent.putExtra(
-								this.getResources().getString(R.string.main_toolbar_position_y),
-								mMainToolbar.getTranslationY()
-		);
+        aIntent.putExtra(
+                this.getResources().getString(R.string.main_toolbar_position_y),
+                mMainToolbar.getTranslationY()
+        );
 
-		Animation.AnimationListener animationListener = new Animation.AnimationListener() {
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				isTransitioned = true;
-				ActivityCompat.startActivity(MainActivity.this, aIntent, null);
-			}
+        Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isTransitioned = true;
+                ActivityCompat.startActivity(MainActivity.this, aIntent, null);
+            }
 
-			public void onAnimationStart(Animation animation) {}
-			public void onAnimationRepeat(Animation animation) {}
-		};
+            public void onAnimationStart(Animation animation) {
+            }
 
-		AnimationService.startAlphaHideAnimation(mCircleIconWrapper);
-		AnimationSet alphaHideAnimation = AnimationService.startAlphaHideAnimation(mTitleView);
-		if(mRecyclerView.getAdapter().getItemCount() != 0) {
-			AnimationService.animateFakeClearing(lastVisibleItemPosition, firstVisibleItemPosition, mRecyclerView, animationListener, mAdapter instanceof StreamsAdapter);
-		} else {
-			alphaHideAnimation.setAnimationListener(animationListener);
-		}
-	}
+            public void onAnimationRepeat(Animation animation) {
+            }
+        };
 
-	/**
-	 * Checks if the user started this activity by pressing the back button on another main activity.
-	 * If so it runs the show animation for the activity's icon, text and visual elements.
-	 */
-	public void checkIsBackFromMainActivity() {
-		if(isTransitioned) {
-			GridLayoutManager manager = (GridLayoutManager) mRecyclerView.getLayoutManager();
-			final int DELAY_BETWEEN = 50;
-			int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
-			int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
+        AnimationService.startAlphaHideAnimation(mCircleIconWrapper);
+        AnimationSet alphaHideAnimation = AnimationService.startAlphaHideAnimation(mTitleView);
+        if (mRecyclerView.getAdapter().getItemCount() != 0) {
+            AnimationService.animateFakeClearing(lastVisibleItemPosition, firstVisibleItemPosition, mRecyclerView, animationListener, mAdapter instanceof StreamsAdapter);
+        } else {
+            alphaHideAnimation.setAnimationListener(animationListener);
+        }
+    }
 
-			int startPositionCol = AnimationService.getColumnPosFromIndex(firstVisibleItemPosition, mRecyclerView);
-			int startPositionRow = AnimationService.getRowPosFromIndex(firstVisibleItemPosition, mRecyclerView);
+    /**
+     * Checks if the user started this activity by pressing the back button on another main activity.
+     * If so it runs the show animation for the activity's icon, text and visual elements.
+     */
+    public void checkIsBackFromMainActivity() {
+        if (isTransitioned) {
+            GridLayoutManager manager = (GridLayoutManager) mRecyclerView.getLayoutManager();
+            final int DELAY_BETWEEN = 50;
+            int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
+            int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
 
-			// Show the Activity Icon and Text
-			AnimationService.startAlphaRevealAnimation(mCircleIconWrapper);
-			AnimationService.startAlphaRevealAnimation(mTitleView);
+            int startPositionCol = AnimationService.getColumnPosFromIndex(firstVisibleItemPosition, mRecyclerView);
+            int startPositionRow = AnimationService.getRowPosFromIndex(firstVisibleItemPosition, mRecyclerView);
 
-			// Fake fill the RecyclerViews with children again
-			for(int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
-				final View mView = mRecyclerView.getChildAt(i-firstVisibleItemPosition);
+            // Show the Activity Icon and Text
+            AnimationService.startAlphaRevealAnimation(mCircleIconWrapper);
+            AnimationService.startAlphaRevealAnimation(mTitleView);
 
-				int positionColumnDistance = Math.abs(AnimationService.getColumnPosFromIndex(i, mRecyclerView) - startPositionCol);
-				int positionRowDistance = Math.abs(AnimationService.getRowPosFromIndex(i, mRecyclerView) - startPositionRow);
-				int delay = (positionColumnDistance + positionRowDistance) * DELAY_BETWEEN;
+            // Fake fill the RecyclerViews with children again
+            for (int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
+                final View mView = mRecyclerView.getChildAt(i - firstVisibleItemPosition);
 
-				//int delay = (i - firstVisibleItemPosition) * DELAY_BETWEEN;
-				if(mView != null) {
-					AnimationService.startAlphaRevealAnimation(delay, mView, mAdapter instanceof StreamsAdapter);
-				}
-			}
-			isTransitioned = false;
-		}
-	}
+                int positionColumnDistance = Math.abs(AnimationService.getColumnPosFromIndex(i, mRecyclerView) - startPositionCol);
+                int positionRowDistance = Math.abs(AnimationService.getRowPosFromIndex(i, mRecyclerView) - startPositionRow);
+                int delay = (positionColumnDistance + positionRowDistance) * DELAY_BETWEEN;
 
-	/**
-	 * Starts appropriate animations if the activity has been started by anouther main activity. When the animations end super.onBackPressed() is called.
-	 * Returns true if that activity has been started through another main activity, else return false;
-	 */
-	public boolean handleBackPressed() {
-		if(fromToolbarPosition != -1) {
-			Animation.AnimationListener animationListener = new Animation.AnimationListener() {
-				@Override
-				public void onAnimationStart(Animation animation) {
+                //int delay = (i - firstVisibleItemPosition) * DELAY_BETWEEN;
+                if (mView != null) {
+                    AnimationService.startAlphaRevealAnimation(delay, mView, mAdapter instanceof StreamsAdapter);
+                }
+            }
+            isTransitioned = false;
+        }
+    }
 
-				}
+    /**
+     * Starts appropriate animations if the activity has been started by anouther main activity. When the animations end super.onBackPressed() is called.
+     * Returns true if that activity has been started through another main activity, else return false;
+     */
+    public boolean handleBackPressed() {
+        if (fromToolbarPosition != -1) {
+            Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
-				@Override
-				public void onAnimationEnd(Animation animation) {
-					try {
-						MainActivity.super.onBackPressed();
-						overridePendingTransition(0, 0);
-					} catch (IllegalStateException e) {
-						e.printStackTrace();
-					}
-				}
+                }
 
-				@Override
-				public void onAnimationRepeat(Animation animation) {
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    try {
+                        MainActivity.super.onBackPressed();
+                        overridePendingTransition(0, 0);
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-				}
-			};
+                @Override
+                public void onAnimationRepeat(Animation animation) {
 
-			// Animate the Activity Icon and text away
-			AnimationService.startAlphaHideAnimation(mCircleIconWrapper);
-			AnimationSet alphaHideAnimation = AnimationService.startAlphaHideAnimation(mTitleView);
+                }
+            };
 
-			GridLayoutManager manager = (GridLayoutManager) mRecyclerView.getLayoutManager();
-			final int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
-			final int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
-			int duration = (int) alphaHideAnimation.getDuration();
-			if(mRecyclerView.getAdapter().getItemCount() != 0) {
-				duration = AnimationService.animateFakeClearing(lastVisibleItemPosition, firstVisibleItemPosition, mRecyclerView, animationListener, mAdapter instanceof StreamsAdapter);
-			} else {
-				alphaHideAnimation.setAnimationListener(animationListener);
-			}
-			AnimationService.setActivityToolbarPosition(
-					duration,
-					mMainToolbar,
-					mDecorativeToolbar,
-					this,
-					mDecorativeToolbar.getTranslationY(),
-					fromToolbarPosition,
-					mMainToolbar.getTranslationY(),
-					fromMainToolbarPosition
-			);
+            // Animate the Activity Icon and text away
+            AnimationService.startAlphaHideAnimation(mCircleIconWrapper);
+            AnimationSet alphaHideAnimation = AnimationService.startAlphaHideAnimation(mTitleView);
 
-			return true;
-		}
-		return false;
-	}
+            GridLayoutManager manager = (GridLayoutManager) mRecyclerView.getLayoutManager();
+            final int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
+            final int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
+            int duration = (int) alphaHideAnimation.getDuration();
+            if (mRecyclerView.getAdapter().getItemCount() != 0) {
+                duration = AnimationService.animateFakeClearing(lastVisibleItemPosition, firstVisibleItemPosition, mRecyclerView, animationListener, mAdapter instanceof StreamsAdapter);
+            } else {
+                alphaHideAnimation.setAnimationListener(animationListener);
+            }
+            AnimationService.setActivityToolbarPosition(
+                    duration,
+                    mMainToolbar,
+                    mDecorativeToolbar,
+                    this,
+                    mDecorativeToolbar.getTranslationY(),
+                    fromToolbarPosition,
+                    mMainToolbar.getTranslationY(),
+                    fromMainToolbarPosition
+            );
 
-	public static class CustomMediaRouteChooserDialogFragment extends MediaRouteChooserDialogFragment {
-		@Override
-		public MediaRouteChooserDialog onCreateChooserDialog(Context context, Bundle savedInstanceState) {
-			return new MediaRouteChooserDialog(context);
-		}
-	}
+            return true;
+        }
+        return false;
+    }
 }
