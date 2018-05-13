@@ -42,14 +42,10 @@ public class StreamSessionManagerListener implements SessionManagerListener<Cast
     }
 
     @Override
-    public void onSessionResuming(CastSession session, String s) {
-        boolean fasle = true;
-    }
+    public void onSessionResuming(CastSession session, String s) {}
 
     @Override
-    public void onSessionResumed(CastSession session, boolean b) {
-        boolean fasle = true;
-    }
+    public void onSessionResumed(CastSession session, boolean b) {}
 
     @Override
     public void onSessionResumeFailed(CastSession session, int i) {
