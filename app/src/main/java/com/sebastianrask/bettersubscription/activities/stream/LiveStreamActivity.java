@@ -23,9 +23,8 @@ import android.widget.RelativeLayout;
 
 import com.google.android.gms.cast.MediaInfo;
 import com.google.android.gms.cast.MediaMetadata;
-import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
-import com.google.android.libraries.cast.companionlibrary.cast.exceptions.NoConnectionException;
-import com.google.android.libraries.cast.companionlibrary.cast.exceptions.TransientNetworkDisconnectionException;
+
+import com.google.android.gms.cast.framework.CastContext;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sebastianrask.bettersubscription.R;
@@ -80,10 +79,8 @@ public class LiveStreamActivity extends StreamActivity {
 
 		if (mChannelInfo == null) {
 			try {
-				VideoCastManager mCastManager = VideoCastManager.getInstance();
-				mCastManager.reconnectSessionIfPossible(5);
+				MediaInfo mediaInfo = CastContext.getSharedInstance(this).getSessionManager().getCurrentCastSession().getRemoteMediaClient().getMediaInfo();
 
-				MediaInfo mediaInfo = mCastManager.getRemoteMediaInformation();
 				if (mediaInfo != null) {
 					MediaMetadata metadata = mediaInfo.getMetadata();
 					mChannelInfo = new Gson().fromJson(metadata.getString(getString(R.string.stream_fragment_streamerInfo)), new TypeToken<ChannelInfo>() {
@@ -91,7 +88,7 @@ public class LiveStreamActivity extends StreamActivity {
 					autoPlay = false;
 				}
 
-			} catch (TransientNetworkDisconnectionException | NoConnectionException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

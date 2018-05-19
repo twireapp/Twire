@@ -141,7 +141,6 @@
 
     <style name="TransparentTheme" parent="WhiteBackgroundTheme">
         <item name="android:windowBackground">@android:color/transparent</item>
-
     </style>
 
     <style name="cardPrimaryText" parent="text_title_light">

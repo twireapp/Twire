@@ -11,6 +11,7 @@ import com.sebastianrask.bettersubscription.service.Service;
 import com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView;
 import com.sebastianrask.bettersubscription.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.sebastianrask.bettersubscription.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour;
+import android.support.v4.app.Fragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -3,6 +3,8 @@
     <string name="hello_world">Hello World</string>
     <string name="app_name">Pocket Plays</string>
     <string name="app_slogan"> </string>
+    <string name="app_id">net.nrask.notifyme</string>
+
     <string name="ok">OK</string>
     <string name="done">DONE</string>
     <string name="start">START</string>
@@ -339,6 +341,7 @@
     <!-- Menu Actions -->
     <string name="menu_action_refresh">Refresh</string>
     <string name="menu_action_search">Search</string>
+    <string name="ccl_media_route_menu_title">Play on&#8230;</string>
 
     <!-- Theme Dialog -->
     <string name="theme_dialog_title">Themes</string>
@@ -442,5 +445,7 @@
     <string name="click_here_to_donate">Click here to donate</string>
     <string name="update_share_text">Pocket Plays for Twitch, have just been with awesome new features updated!\nDownload Pocket Plays for Android on Google Play - https://play.google.com/store/apps/details?id=net.nrask.notifyme </string>
     <string name="stream_external_play_using">Play using...</string>
+    <string name="live_streamer_notification_id">liveStreamerNotificationId</string>
+    <string name="stream_cast_notification_id">streamCastNotificationId</string>
 
 </resources>

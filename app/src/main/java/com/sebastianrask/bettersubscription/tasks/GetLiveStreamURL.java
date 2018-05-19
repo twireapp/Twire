@@ -84,7 +84,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
 		String sig = "";
 		String tokenString = "";
 
-		String resultString = Service.urlToJSONString("http://api.twitch.tv/api/channels/" + streamerName + "/access_token");
+		String resultString = Service.urlToJSONString("https://api.twitch.tv/api/channels/" + streamerName + "/access_token");
 		try {
 			JSONObject resultJSON = new JSONObject(resultString);
 			tokenString = resultJSON.getString("token").replaceAll("\\\\", ""); // Remove all backslashes from the returned string. We need the string to make a jsonobject
