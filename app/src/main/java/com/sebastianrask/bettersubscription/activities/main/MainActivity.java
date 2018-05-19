@@ -10,7 +10,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -179,12 +178,6 @@ public abstract class MainActivity extends ThemeActivity {
         checkForTip();
         checkIfUpdated();
         customizeActivity();
-
-        if (settings.getTheme().equals(getString(R.string.night_theme_name)) || settings.getTheme().equals(getString(R.string.true_night_theme_name))) {
-//			MiniController miniController = (MiniController) findViewById(R.id.mini_controller);
-//			miniController.setDarkMode();
-            //TODO Enable dark mode on minicontroller
-        }
     }
 
     @Override

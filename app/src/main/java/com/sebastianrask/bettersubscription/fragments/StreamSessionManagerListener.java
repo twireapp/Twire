@@ -59,6 +59,9 @@ public class StreamSessionManagerListener implements SessionManagerListener<Cast
     }
 
     private String getDeviceName(CastSession session) {
+        if (session == null || session.getCastDevice() == null) {
+            return "Chromecast";
+        }
         return session.getCastDevice().getFriendlyName();
     }
 

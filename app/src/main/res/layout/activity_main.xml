@@ -109,7 +109,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:visibility="gone"
-            class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"/>
+            class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
+            app:castTitleTextAppearance="@style/cardPrimaryText"
+            app:castButtonColor="?attr/textColor"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"

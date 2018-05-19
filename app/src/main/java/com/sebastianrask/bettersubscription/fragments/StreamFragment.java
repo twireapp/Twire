@@ -100,7 +100,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class StreamFragment extends Fragment implements StreamSessionManagerListener.Callback {
+public class StreamFragment extends Fragment implements StreamSessionManagerListener.Callback, CastStateListener {
     private final int PLAY_PAUSE_ANIMATION_DURATION = 500,
             HIDE_ANIMATION_DELAY = 3000,
             SNACKBAR_SHOW_DURATION = 4000;
@@ -533,12 +533,13 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
         super.onResume();
 
         mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
+        mCastContext.addCastStateListener(this);
 
         originalMainToolbarPadding = mToolbar.getPaddingRight();
         originalCtrlToolbarPadding = mControlToolbar.getPaddingRight();
 
         if (castingViewVisible) {
-            if (isCastConnected() && !isCastConnecting()) {
+            if (!isCastConnected() && !isCastConnecting()) {
                 disableCastingView();
                 startStreamWithQuality(settings.getPrefStreamQuality());
             } else {
@@ -566,6 +567,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
         super.onPause();
 
         mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener, CastSession.class);
+        mCastContext.removeCastStateListener(this);
 
         Log.d(LOG_TAG, "Stream Fragment paused");
         hasPaused = true;
@@ -897,10 +899,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
     }
 
     private void onCastMediaPlaying() {
-        CastSession session = mCastContext.getSessionManager().getCurrentCastSession();
-        if (session == null) return;
-
-        castingTextView.setText(getString(R.string.stream_chromecast_playing, session.getCastDevice().getFriendlyName()));
+        onCastStateChanged(CastState.CONNECTED);
     }
 
     private void initCastingView() {
@@ -910,7 +909,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
         mBufferingView.setVisibility(View.GONE);
         previewInbackGround = false;
         castingTextView.setVisibility(View.VISIBLE);
-        castingTextView.setText(getString(R.string.stream_chromecast_connecting));
+        //castingTextView.setText(getString(R.string.stream_chromecast_connecting));
         showVideoInterface();
     }
 
@@ -987,7 +986,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
                 mediaMetadata.putString(getString(R.string.stream_fragment_vod_id), vodId);
                 mediaMetadata.putInt(getString(R.string.stream_fragment_vod_length), vodLength);
                 mediaMetadata.putString(getString(R.string.stream_fragment_streamerInfo), new Gson().toJson(mChannelInfo));
-                mediaMetadata.putString(MediaMetadata.KEY_TITLE, getString(R.string.app_name) + " " + streamerName);
+                mediaMetadata.putString(MediaMetadata.KEY_TITLE, streamerName);
                 if (logoImageUrl != null) {
                     mediaMetadata.addImage(new WebImage(Uri.parse(logoImageUrl)));
                 }
@@ -1410,7 +1409,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
      * If no URLs are available for the stream, the user is notified.
      */
     private void startStreamWithTask() {
-        GetLiveStreamURL.AsyncResponse delegate = new GetLiveStreamURL.AsyncResponse() {
+        GetLiveStreamURL.AsyncResponse callback = new GetLiveStreamURL.AsyncResponse() {
             @Override
             public void finished(HashMap<String, String> url) {
                 try {
@@ -1432,10 +1431,10 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
         };
 
         if (vodId == null) {
-            GetLiveStreamURL task = new GetLiveStreamURL(delegate);
+            GetLiveStreamURL task = new GetLiveStreamURL(callback);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mChannelInfo.getStreamerName());
         } else {
-            GetLiveStreamURL task = new GetVODStreamURL(delegate);
+            GetLiveStreamURL task = new GetVODStreamURL(callback);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId.substring(1));
         }
     }
@@ -2161,6 +2160,24 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
         Log.d(LOG_TAG, "Disconnected");
         disableCastingView();
         startStreamWithQuality(settings.getPrefStreamQuality());
+    }
+
+    @Override
+    public void onCastStateChanged(int i) {
+        switch (i) {
+            case CastState.CONNECTED:
+                CastSession session = mCastContext.getSessionManager().getCurrentCastSession();
+                if (session == null) break;
+                castingTextView.setText(getString(R.string.stream_chromecast_playing, session.getCastDevice().getFriendlyName()));
+                break;
+
+            case CastState.CONNECTING:
+                castingTextView.setText(getString(R.string.stream_chromecast_connecting));
+                break;
+
+            default:
+                break;
+        }
     }
 
     /**
