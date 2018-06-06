@@ -68,7 +68,7 @@ public class MyGamesActivity extends LazyMainActivity<Game> {
 		List<Game> resultList = new ArrayList<>();
 
 		//Indentation is meant to mimic the structure of the JSON code
-		final String URL = "http://api.twitch.tv/api/users/" + new Settings(getBaseContext()).getGeneralTwitchName() + "/follows/games/live?limit=" + getLimit() + "&offset=" + getCurrentOffset();
+		final String URL = "https://api.twitch.tv/api/users/" + new Settings(getBaseContext()).getGeneralTwitchName() + "/follows/games/live?limit=" + getLimit() + "&offset=" + getCurrentOffset();
 		final String TOTAL_NUMBER_OF_GAMES = "_total";
 		final String GAMES_ARRAY_KEY = "follows";
 			final String VIEWERS_INTEGER_KEY = "viewers";
