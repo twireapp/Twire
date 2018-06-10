@@ -35,7 +35,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.AttrRes;
 import android.support.annotation.ColorRes;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.ViewDragHelper;
@@ -51,6 +50,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.sebastianrask.bettersubscription.PocketPlaysApplication;
 import com.sebastianrask.bettersubscription.R;
 import com.sebastianrask.bettersubscription.activities.main.FeaturedStreamsActivity;
 import com.sebastianrask.bettersubscription.activities.main.MyChannelsActivity;
@@ -601,6 +601,10 @@ public class Service {
 	}
 
 	public static String urlToJSONString(String urlToRead) {
+		if (!PocketPlaysApplication.isCrawlerUpdate && urlToRead.contains("api.twitch")) {
+			PocketPlaysApplication.trackEvent(R.string.category_api, R.string.action_api_twitch, urlToRead);
+		}
+
 		URL url;
 		HttpURLConnection conn = null;
 		Scanner in = null;

@@ -27,8 +27,7 @@ public abstract class UsageTrackingAppCompatActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstance) {
 		super.onCreate(savedInstance);
 		if (!PocketPlaysApplication.isCrawlerUpdate) {
-			PocketPlaysApplication application = (PocketPlaysApplication) getApplication();
-			mTracker = application.getDefaultTracker();
+			mTracker = PocketPlaysApplication.getDefaultTracker();
 		}
 
 		checkStartdate();
@@ -66,27 +65,11 @@ public abstract class UsageTrackingAppCompatActivity extends AppCompatActivity {
 	}
 
 	public void trackEvent(@StringRes int category, @StringRes int action, @Nullable String label) {
-		trackEvent(getString(category), getString(action), label, null);
+		PocketPlaysApplication.trackEvent(getString(category), getString(action), label, null);
 	}
 
 	public void trackEvent(String category, String action) {
-		trackEvent(category, action, null, null);
-	}
-
-	public void trackEvent(String category, String action, @Nullable String label, @Nullable Long value) {
-		HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(category).setAction(action);
-
-		if (label != null) {
-			builder.setLabel(label);
-		}
-
-		if (value != null) {
-			builder.setValue(value);
-		}
-
-		if (mTracker != null) {
-			mTracker.send(builder.build());
-		}
+		PocketPlaysApplication.trackEvent(category, action, null, null);
 	}
 
 	private void checkStartdate() {

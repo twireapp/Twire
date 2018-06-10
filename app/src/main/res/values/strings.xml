@@ -401,8 +401,10 @@
     <string name="category_click">CLICK</string>
     <string name="category_read">READ</string>
     <string name="category_write">WRITE</string>
+    <string name="category_api">API</string>
 
     <!-- Tracking actions -->
+    <string name="action_api_twitch">TWITCH</string>
     <string name="action_playstore">PLAY_STORE_LINK</string>
     <string name="action_not_now">NOT_NOW</string>
     <string name="action_welcome">WELCOME</string>

@@ -1,11 +1,15 @@
 package com.sebastianrask.bettersubscription;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.multidex.MultiDex;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
 import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
@@ -18,14 +22,17 @@ import io.fabric.sdk.android.Fabric;
 /**
  * Created by SebastianRask on 20-02-2016.
  */
+@SuppressLint("StaticFieldLeak") // It is alright to store application context statically
 public class PocketPlaysApplication extends Application {
-	private Tracker mTracker;
+	private static Tracker mTracker;
+	private static Context mContext;
 	public static boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		initCastFunctionality();
+		mContext = this;
 
 		if (!BuildConfig.DEBUG) {
 			try {
@@ -53,14 +60,36 @@ public class PocketPlaysApplication extends Application {
 	 * Gets the default {@link Tracker} for this {@link Application}.
 	 * @return tracker
 	 */
-	synchronized public Tracker getDefaultTracker() {
+	static synchronized public Tracker getDefaultTracker() {
 		if (mTracker == null) {
-			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+			GoogleAnalytics analytics = GoogleAnalytics.getInstance(mContext);
 			mTracker = analytics.newTracker(R.xml.global_tracker);
 			mTracker.enableAdvertisingIdCollection(true);
+			mTracker.enableExceptionReporting(true);
 		}
 
 		return mTracker;
+	}
+
+	public static void trackEvent(@StringRes int category, @StringRes int action, @Nullable String label) {
+		PocketPlaysApplication.trackEvent(mContext.getString(category), mContext.getString(action), label, null);
+	}
+
+	public static void trackEvent(String category, String action, @Nullable String label, @Nullable Long value) {
+		HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(category).setAction(action);
+
+		if (label != null) {
+			builder.setLabel(label);
+		}
+
+		if (value != null) {
+			builder.setValue(value);
+		}
+
+		Tracker tracker = getDefaultTracker();
+		if (tracker != null && tracker.isInitialized() && !isCrawlerUpdate) {
+			tracker.send(builder.build());
+		}
 	}
 
 	private void initCastFunctionality() {
