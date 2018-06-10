@@ -28,8 +28,8 @@ android {
         applicationId 'net.nrask.notifyme'
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 125
-        versionName "1.6.9"
+        versionCode 126
+        versionName "1.6.10"
     }
     buildTypes {
         release {
