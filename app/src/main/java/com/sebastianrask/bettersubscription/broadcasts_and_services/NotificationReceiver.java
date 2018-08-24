@@ -1,6 +1,7 @@
 package com.sebastianrask.bettersubscription.broadcasts_and_services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -112,7 +113,6 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     private void makeBundledNotifications(NotificationFetchData notificationData, Context context) {
         NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
         if (mNotificationManager == null) { return; }
 
         // Remove all notifications for streams that are no longer live.
@@ -130,15 +130,12 @@ public class NotificationReceiver extends BroadcastReceiver {
         }
 
         // Make a new bundled notification for every new stream. Get one of the stream icons to show for the summary notification
-
-
         Bitmap largeIconSummaryNotification = createBundledStreamNotificationsAndGetLargeIcon(
                 newLiveStreams,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.M, // Only show viewer count if we can update the notification,
                 mNotificationManager,
                 context
         );
-
 
         createStreamSummaryNotification(largeIconSummaryNotification, notificationData, mNotificationManager, context);
     }
@@ -154,7 +151,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             return;
         }
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, context.getString(R.string.live_streamer_notification_id))
                 .setAutoCancel(true)
                 .setContentTitle(notificationText.getTitle())
                 .setContentText(notificationText.getContent())
@@ -289,7 +286,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         );
 
         NotificationTextData textData = constructStreamNotificationText(stream, context);
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, context.getString(R.string.live_streamer_notification_id))
                 .setAutoCancel(false)
                 .setContentTitle(textData.getTitle())
                 .setContentText(textData.getContent())

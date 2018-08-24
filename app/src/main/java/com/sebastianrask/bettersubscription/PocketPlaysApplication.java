@@ -2,19 +2,19 @@ package com.sebastianrask.bettersubscription;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.os.Build;
 import android.support.multidex.MultiDex;
+import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
-import com.google.android.libraries.cast.companionlibrary.cast.VideoCastManager;
-import com.sebastianrask.bettersubscription.activities.stream.LiveStreamActivity;
-import com.sebastianrask.bettersubscription.misc.SecretKeys;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -23,16 +23,19 @@ import io.fabric.sdk.android.Fabric;
  * Created by SebastianRask on 20-02-2016.
  */
 @SuppressLint("StaticFieldLeak") // It is alright to store application context statically
-public class PocketPlaysApplication extends Application {
+public class PocketPlaysApplication extends MultiDexApplication {
 	private static Tracker mTracker;
 	private static Context mContext;
+	
 	public static boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		mContext = this.getApplicationContext();
+		
 		initCastFunctionality();
-		mContext = this;
+		initNotificationChannels();
 
 		if (!BuildConfig.DEBUG) {
 			try {
@@ -106,5 +109,20 @@ public class PocketPlaysApplication extends Application {
 											.enableLockScreen()
 											.build();
 		VideoCastManager castManager = VideoCastManager.initialize(getApplicationContext(), options);
+	}
+
+	private void initNotificationChannels() {
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || notificationManager == null) {
+			return;
+		}
+
+		notificationManager.createNotificationChannel(
+				new NotificationChannel(getString(R.string.live_streamer_notification_id), "New Streamer is live", NotificationManager.IMPORTANCE_DEFAULT)
+		);
+
+		notificationManager.createNotificationChannel(
+				new NotificationChannel(getString(R.string.stream_cast_notification_id), "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
+		);
 	}
 }

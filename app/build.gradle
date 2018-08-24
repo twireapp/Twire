@@ -1,125 +1,79 @@
+// Manifest version information!
+def versionMajor = 1
+def versionMinor = 7
+def versionPatch = 0
+def versionBuild = 2 // bump for dogfood builds, public betas, etc.
+
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
     }
 
+
     dependencies {
         classpath 'io.fabric.tools:gradle:1.+'
     }
 }
-apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
 
 android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        vectorDrawables.useSupportLibrary = true
-    }
-
-    dexOptions {
-        maxProcessCount 4
-        javaMaxHeapSize "2g"
-    }
-
-
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
-    defaultConfig {
+        applicationId "net.nrask.notifyme"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         multiDexEnabled true
-        applicationId 'net.nrask.notifyme'
-        minSdkVersion 16
-        targetSdkVersion 25
-        versionCode 126
-        versionName "1.6.10"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable false
         }
-    }
-    productFlavors {
-    }
-
-    packagingOptions {
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/NOTICE.txt'
     }
 }
 
 repositories {
-    maven {
-        url "https://jitpack.io"
-    }
     maven { url 'https://maven.fabric.io/public' }
-    google()
-}
-
-ext {
-    supportLibVersion = '25.4.0'
-    playServicesVersion = '11.4.2'
-    versionName = '2.8.4'
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support:multidex:1.0.3'
 
-    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
-    compile "com.android.support:cardview-v7:${supportLibVersion}"
-    compile "com.android.support:support-v4:${supportLibVersion}"
-    compile "com.android.support:design:${supportLibVersion}"
-    compile "com.android.support:palette-v7:${supportLibVersion}"
-    compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "commons-codec:commons-codec:1.5"
-    compile "com.google.guava:guava:20.0"
-    compile "com.google.code.gson:gson:2.7"
-    compile "com.android.support:customtabs:${supportLibVersion}"
-    compile "com.jakewharton:butterknife:8.5.1"
+    implementation "com.android.support:recyclerview-v7:$supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$supportLibraryVersion"
+    implementation "com.android.support:support-v4:$supportLibraryVersion"
+    implementation "com.android.support:design:$supportLibraryVersion"
+    implementation "com.android.support:palette-v7:$supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation "com.android.support:mediarouter-v7:$supportLibraryVersion"
+    implementation "com.android.support:customtabs:$supportLibraryVersion"
+
+    implementation "com.google.android.gms:play-services-analytics:$playServicesVersion"
+    implementation "com.google.android.gms:play-services-cast-framework:$playServicesVersion"
+
+    implementation 'com.squareup.picasso:picasso:2.4.0'
+    implementation 'com.balysv:material-ripple:1.0.2'
+    implementation 'com.github.traex.rippleeffect:library:1.3'
+    implementation 'com.github.rey5137:material:1.2.1'
+    implementation 'com.andkulikov:transitionseverywhere:1.7.6'
+    implementation 'com.github.sebastianrask:srjneeds:85306c8'
+    implementation 'biz.kasual:materialnumberpicker:1.2.1'
+    implementation 'commons-codec:commons-codec:1.5'
+    implementation 'com.google.guava:guava:23.0-android'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.jakewharton:butterknife:8.5.1'
     annotationProcessor "com.jakewharton:butterknife-compiler:8.5.1"
 
-    // For loading images - "lazy loading"
-    compile "com.squareup.picasso:picasso:2.4.0"
+    implementation('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') { transitive = true }
+    implementation('com.github.ozodrukh:CircularReveal:1.3.1@aar') { transitive = true }
+    implementation('com.github.afollestad.material-dialogs:core:0.8.5.8@aar') { transitive = true }
+    implementation('com.github.afollestad.material-dialogs:commons:0.8.5.8@aar') { transitive = true }
 
-    //compile "com.github.bumptech.glide:glide:3.5.2"
-
-    // For Dialogs
-    // https://github.com/afollestad/material-dialogs
-    compile("com.github.afollestad.material-dialogs:core:0.8.5.8@aar") {
-        transitive = true
-    }
-    compile("com.github.afollestad.material-dialogs:commons:0.8.5.8@aar") {
-        transitive = true
-    }
-    // For drawing a ripple on touch
-    compile "com.balysv:material-ripple:1.0.2"
-    // For Ripple animations https://github.com/traex/RippleEffect
-    compile "com.github.traex.rippleeffect:library:1.3"
-    // For material design components
-    // https://github.com/rey5137/material
-    compile "com.github.rey5137:material:1.2.1"
-
-    // For circular reveal
-    compile("com.github.ozodrukh:CircularReveal:1.3.1@aar") {
-        transitive = true;
-    }
-
-    // For material number picker
-    compile "biz.kasual:materialnumberpicker:1.2.1"
-    // For Cast functionality https://github.com/googlecast/CastCompanionLibrary-android
-    compile project(":CastCompanionLibraryProject")
-    compile "com.google.android.gms:play-services-cast:${playServicesVersion}"
-    compile "com.google.android.gms:play-services-analytics:${playServicesVersion}"
-
-    compile "com.andkulikov:transitionseverywhere:1.7.6"
-
-    compile "com.github.sebastianrask:srjneeds:85306c8"
-
-    // Google Services
-    // Should be at bottom
     apply plugin: "com.google.gms.google-services"
-    compile("com.crashlytics.sdk.android:crashlytics:2.6.7@aar") {
-        transitive = true;
-    }
 }

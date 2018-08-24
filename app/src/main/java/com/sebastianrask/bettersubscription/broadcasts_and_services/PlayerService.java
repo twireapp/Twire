@@ -1,10 +1,12 @@
 package com.sebastianrask.bettersubscription.broadcasts_and_services;
 
 
+import android.app.NotificationChannel;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.support.v4.os.ResultReceiver;
-import android.support.v7.app.NotificationCompat;
+import android.os.Build;
+import android.os.ResultReceiver;
+import android.support.v4.app.NotificationCompat;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -350,13 +352,13 @@ public class PlayerService extends Service {
 				PendingIntent.FLAG_UPDATE_CURRENT
 		);
 
-		NotificationCompat.Builder noti = (NotificationCompat.Builder) new NotificationCompat.Builder( this )
+		NotificationCompat.Builder noti = new NotificationCompat.Builder( this, getString(R.string.stream_cast_notification_id) )
 										.setSmallIcon( R.drawable.ic_notification_icon_refresh )
 										.setContentTitle( mChannelInfo.getDisplayName() )
 										.setDeleteIntent( pendingIntent )
 										.addAction(action)
 										.addAction(generateAction(R.drawable.ic_clear_black_36dp, getString(R.string.stop_lower), ACTION_STOP))
-										.setStyle(new NotificationCompat.MediaStyle()
+										.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
 														  .setMediaSession(mediaSession.getSessionToken())
 														  .setShowCancelButton(true)
 														  .setShowActionsInCompactView(0,1)
@@ -370,6 +372,7 @@ public class PlayerService extends Service {
 		}
 
 		NotificationManager notificationManager = (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
+		if (notificationManager == null) return;
 		notificationManager.notify( NOTIFICATION_ID, noti.build() );
 	}
 

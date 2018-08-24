@@ -1,7 +1,6 @@
 package com.sebastianrask.bettersubscription.activities;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
