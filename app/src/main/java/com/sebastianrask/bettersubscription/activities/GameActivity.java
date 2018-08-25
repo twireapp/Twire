@@ -18,7 +18,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,9 +66,9 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
 	}
 
 	@Override
-	public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
-		String gameTitleNoSpaces = game.getGameTitle().replace(" ", "%20");
-		String url = "https://api.twitch.tv/kraken/streams?game=" + gameTitleNoSpaces + "&limit=" + getLimit() + "&offset=" + getCurrentOffset();
+	public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException, UnsupportedEncodingException {
+		String gameTitleEncoded = URLEncoder.encode(game.getGameTitle(), "UTF-8");
+		String url = "https://api.twitch.tv/kraken/streams?game=" + gameTitleEncoded + "&limit=" + getLimit() + "&offset=" + getCurrentOffset();
 		final String GAMES_ARRAY_KEY = "streams";
 
 		List<StreamInfo> mResultList = new ArrayList<>();
