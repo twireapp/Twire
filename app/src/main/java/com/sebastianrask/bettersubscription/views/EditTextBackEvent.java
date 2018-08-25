@@ -3,12 +3,11 @@ package com.sebastianrask.bettersubscription.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.widget.EditText;
 
 /**
  * Created by Sebastian Rask JEpsen on 28/07/16.
  */
-public class EditTextBackEvent extends android.support.v7.widget.AppCompatEditText {
+public class EditTextBackEvent extends androidx.appcompat.widget.AppCompatEditText {
 
 	private EditTextImeBackListener mOnImeBack;
 

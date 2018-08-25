@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/additional_toolbar_height"/>
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/main_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/main_toolbar_height"
@@ -24,7 +24,7 @@
             app:srcCompat="@drawable/ic_menu_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <io.codetail.widget.RevealFrameLayout
         android:id="@+id/reveal_layout"
@@ -116,7 +116,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <android.support.design.widget.FloatingActionButton
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:layout_centerHorizontal="true"
                     android:id="@+id/fab"
                     android:layout_gravity="bottom|center_horizontal"

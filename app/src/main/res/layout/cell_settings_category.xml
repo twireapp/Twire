@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="72dp">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/img_category_icon"
         android:tint="?attr/navigationDrawerIconTint"
         android:layout_centerVertical="true"

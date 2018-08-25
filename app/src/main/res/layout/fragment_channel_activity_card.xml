@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_gravity="center_horizontal">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fragment_streamerInfo_card_layout"
@@ -63,5 +63,5 @@
                 />
 
         </RelativeLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 </LinearLayout>

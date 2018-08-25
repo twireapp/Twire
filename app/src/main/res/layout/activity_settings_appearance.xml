@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context="com.sebastianrask.bettersubscription.activities.settings.SettingsAppearanceActivity"
     tools:ignore="MergeRootFrame" >
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_appearance_toolbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"

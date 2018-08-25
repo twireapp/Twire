@@ -1,10 +1,10 @@
 package com.sebastianrask.bettersubscription.service;
 
 import android.app.Activity;
-import android.support.annotation.ArrayRes;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
+import androidx.annotation.ArrayRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;

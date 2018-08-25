@@ -1,8 +1,8 @@
 package com.sebastianrask.bettersubscription.views.recyclerviews;
 
 import android.content.Context;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.AttributeSet;
 
 import com.sebastianrask.bettersubscription.R;

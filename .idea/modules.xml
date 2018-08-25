@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CastCompanionLibrary/CastCompanionLibraryProject.iml" filepath="$PROJECT_DIR$/CastCompanionLibrary/CastCompanionLibraryProject.iml" />
-      <module fileurl="file://C:\repos\TwitchSubscriptionApp\Pocket-Plays.iml" filepath="C:\repos\TwitchSubscriptionApp\Pocket-Plays.iml" />
       <module fileurl="file://$PROJECT_DIR$/Pocket-Plays-for-Twitch.iml" filepath="$PROJECT_DIR$/Pocket-Plays-for-Twitch.iml" />
-      <module fileurl="file://C:\Users\Sebastian\Documents\Repos\Pocket-Plays\TwitchSubscriptionApp.iml" filepath="C:\Users\Sebastian\Documents\Repos\Pocket-Plays\TwitchSubscriptionApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

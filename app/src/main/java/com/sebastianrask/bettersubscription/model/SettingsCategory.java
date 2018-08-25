@@ -1,8 +1,8 @@
 package com.sebastianrask.bettersubscription.model;
 
 import android.content.Intent;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
 
 /**
  * Created by Sebastian Rask on 16-05-2017.

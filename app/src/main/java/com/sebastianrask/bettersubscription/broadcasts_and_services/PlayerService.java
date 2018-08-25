@@ -1,12 +1,10 @@
 package com.sebastianrask.bettersubscription.broadcasts_and_services;
 
 
-import android.app.NotificationChannel;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.ResultReceiver;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -19,7 +17,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.TaskStackBuilder;
+import androidx.core.app.TaskStackBuilder;
+
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -358,7 +357,7 @@ public class PlayerService extends Service {
 										.setDeleteIntent( pendingIntent )
 										.addAction(action)
 										.addAction(generateAction(R.drawable.ic_clear_black_36dp, getString(R.string.stop_lower), ACTION_STOP))
-										.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
+										.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
 														  .setMediaSession(mediaSession.getSessionToken())
 														  .setShowCancelButton(true)
 														  .setShowActionsInCompactView(0,1)

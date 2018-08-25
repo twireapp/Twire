@@ -1,11 +1,10 @@
 package com.sebastianrask.bettersubscription.activities.settings;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
+import androidx.fragment.app.FragmentManager;
+import androidx.appcompat.widget.Toolbar;
+
 import android.view.MenuItem;
-import android.view.View;
 
 import com.sebastianrask.bettersubscription.R;
 import com.sebastianrask.bettersubscription.activities.ThemeActivity;

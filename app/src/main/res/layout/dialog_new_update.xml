@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/title_container"
             app:cardCornerRadius="@dimen/update_dialog_corner_radius"
             app:cardElevation="@dimen/update_dialog_elevation"
@@ -54,9 +54,9 @@
                     android:layout_height="48dp"/>
 
             </RelativeLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             app:cardCornerRadius="@dimen/update_dialog_corner_radius"
             app:cardElevation="@dimen/update_dialog_elevation_upper"
             android:minHeight="50dp"
@@ -68,16 +68,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:background="?attr/backgroundColor"
                     android:id="@+id/whats_new_recyclerview"
                     android:overScrollMode="never"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"/>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/action_container"
             app:cardCornerRadius="@dimen/update_dialog_corner_radius"
             app:cardElevation="@dimen/update_dialog_elevation"
@@ -116,14 +116,14 @@
                         android:text="@string/action_got_it"/>
                 </FrameLayout>
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
         <io.codetail.widget.RevealFrameLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 app:cardCornerRadius="@dimen/update_dialog_corner_radius"
                 app:cardElevation="@dimen/update_dialog_elevation_upper"
                 android:id="@+id/donation_container"
@@ -156,7 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
         </io.codetail.widget.RevealFrameLayout>
 
     </io.codetail.widget.RevealLinearLayout>
