@@ -5,9 +5,9 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.os.Build;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
@@ -24,105 +24,89 @@ import io.fabric.sdk.android.Fabric;
  */
 @SuppressLint("StaticFieldLeak") // It is alright to store application context statically
 public class PocketPlaysApplication extends MultiDexApplication {
-	private static Tracker mTracker;
-	private static Context mContext;
-	
-	public static boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
+    private static Tracker mTracker;
+    private static Context mContext;
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		mContext = this.getApplicationContext();
-		
-		initCastFunctionality();
-		initNotificationChannels();
+    public static boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
 
-		if (!BuildConfig.DEBUG) {
-			try {
-				Fabric.with(this, new Crashlytics());
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = this.getApplicationContext();
 
-				final Fabric fabric = new Fabric.Builder(this)
-						.kits(new Crashlytics())
-						.debuggable(true)
-						.build();
-				Fabric.with(fabric);
+        initNotificationChannels();
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        if (!BuildConfig.DEBUG) {
+            try {
+                Fabric.with(this, new Crashlytics());
 
-	@Override
-	protected void attachBaseContext(Context base) {
-		super.attachBaseContext(base);
-		MultiDex.install(this);
-	}
+                final Fabric fabric = new Fabric.Builder(this)
+                        .kits(new Crashlytics())
+                        .debuggable(true)
+                        .build();
+                Fabric.with(fabric);
 
-	/**
-	 * Gets the default {@link Tracker} for this {@link Application}.
-	 * @return tracker
-	 */
-	static synchronized public Tracker getDefaultTracker() {
-		if (mTracker == null) {
-			GoogleAnalytics analytics = GoogleAnalytics.getInstance(mContext);
-			mTracker = analytics.newTracker(R.xml.global_tracker);
-			mTracker.enableAdvertisingIdCollection(true);
-			mTracker.enableExceptionReporting(true);
-		}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-		return mTracker;
-	}
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
-	public static void trackEvent(@StringRes int category, @StringRes int action, @Nullable String label) {
-		PocketPlaysApplication.trackEvent(mContext.getString(category), mContext.getString(action), label, null);
-	}
+    /**
+     * Gets the default {@link Tracker} for this {@link Application}.
+     *
+     * @return tracker
+     */
+    static synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(mContext);
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+            mTracker.enableAdvertisingIdCollection(true);
+            mTracker.enableExceptionReporting(true);
+        }
 
-	public static void trackEvent(String category, String action, @Nullable String label, @Nullable Long value) {
-		HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(category).setAction(action);
+        return mTracker;
+    }
 
-		if (label != null) {
-			builder.setLabel(label);
-		}
+    public static void trackEvent(@StringRes int category, @StringRes int action, @Nullable String label) {
+        PocketPlaysApplication.trackEvent(mContext.getString(category), mContext.getString(action), label, null);
+    }
 
-		if (value != null) {
-			builder.setValue(value);
-		}
+    public static void trackEvent(String category, String action, @Nullable String label, @Nullable Long value) {
+        HitBuilders.EventBuilder builder = new HitBuilders.EventBuilder().setCategory(category).setAction(action);
 
-		Tracker tracker = getDefaultTracker();
-		if (tracker != null && tracker.isInitialized() && !isCrawlerUpdate) {
-			tracker.send(builder.build());
-		}
-	}
+        if (label != null) {
+            builder.setLabel(label);
+        }
 
-	private void initCastFunctionality() {
-		String applicationID = SecretKeys.CHROME_CAST_APPLICATION_ID;
-		CastConfiguration options = new CastConfiguration.Builder(applicationID)
-											.enableAutoReconnect()
-											.enableDebug()
-											.enableWifiReconnection()
-											.setCastControllerImmersive(false)
-											.setTargetActivity(LiveStreamActivity.class)
-											.enableNotification()
-											.addNotificationAction(CastConfiguration.NOTIFICATION_ACTION_PLAY_PAUSE, true)
-											.addNotificationAction(CastConfiguration.NOTIFICATION_ACTION_DISCONNECT,true)
-											.enableLockScreen()
-											.build();
-		VideoCastManager castManager = VideoCastManager.initialize(getApplicationContext(), options);
-	}
+        if (value != null) {
+            builder.setValue(value);
+        }
 
-	private void initNotificationChannels() {
-		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || notificationManager == null) {
-			return;
-		}
+        Tracker tracker = getDefaultTracker();
+        if (tracker != null && tracker.isInitialized() && !isCrawlerUpdate) {
+            tracker.send(builder.build());
+        }
+    }
 
-		notificationManager.createNotificationChannel(
-				new NotificationChannel(getString(R.string.live_streamer_notification_id), "New Streamer is live", NotificationManager.IMPORTANCE_DEFAULT)
-		);
+    private void initNotificationChannels() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || notificationManager == null) {
+            return;
+        }
 
-		notificationManager.createNotificationChannel(
-				new NotificationChannel(getString(R.string.stream_cast_notification_id), "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
-		);
-	}
+        notificationManager.createNotificationChannel(
+                new NotificationChannel(getString(R.string.live_streamer_notification_id), "New Streamer is live", NotificationManager.IMPORTANCE_DEFAULT)
+        );
+
+        notificationManager.createNotificationChannel(
+                new NotificationChannel(getString(R.string.stream_cast_notification_id), "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
+        );
+    }
 }

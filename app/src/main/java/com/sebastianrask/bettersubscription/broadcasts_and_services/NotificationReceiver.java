@@ -186,7 +186,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         if(toVibrate && !isInQuietHours) {
             // Set the notification to vibrate
             final int DELAY = 0;
-            final int VIBRATE_DURATION = 180;
+            final int VIBRATE_DURATION = 100;
             mBuilder.setVibrate(new long[] {
                     DELAY,
                     VIBRATE_DURATION,

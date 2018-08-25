@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by Sebastian Rask Jepsen on 13/05/2018.
  */
-
+// This class is used in the AndroidManifest
 public class CastOptionsProvider implements OptionsProvider {
     @Override
     public CastOptions getCastOptions(Context context) {
