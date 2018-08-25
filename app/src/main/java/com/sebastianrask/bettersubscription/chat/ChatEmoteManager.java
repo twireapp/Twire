@@ -313,7 +313,7 @@ public class ChatEmoteManager {
     public static String getEmoteUrl(boolean isEmoteBttv, String emoteId, int size) {
         return isEmoteBttv
                 ? "https://cdn.betterttv.net/emote/" + emoteId + "/" + size + "x"
-                : "http://static-cdn.jtvnw.net/emoticons/v1/" + emoteId + "/" + size + ".0";
+                : "https://static-cdn.jtvnw.net/emoticons/v1/" + emoteId + "/" + size + ".0";
     }
 
     public static String getEmoteUrl(Emote emote, int size) {

@@ -21,6 +21,7 @@ import android.text.style.ImageSpan;
 
 import android.text.style.RelativeSizeSpan;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -231,8 +232,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 					mTabs.setExitAnimations(context, R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim);
 					mTabs.build().launchUrl(context, Uri.parse(url));
 
-					Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-					vibrator.vibrate(25);
+					mRecyclerView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
 				}
 			};
 
@@ -336,7 +336,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
 		public ContactViewHolder(View itemView) {
 			super(itemView);
-			message = (TextView) itemView.findViewById(R.id.txtMessage);
+			message = itemView.findViewById(R.id.txtMessage);
 		}
 	}
 

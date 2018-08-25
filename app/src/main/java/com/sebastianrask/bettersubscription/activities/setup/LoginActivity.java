@@ -238,12 +238,9 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 
 		toTransition = true;
 		showSuccessAnimation();
-		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				if(toTransition) {
-					showTransitionAnimation();
-				}
+		new Handler().postDelayed(() -> {
+			if(toTransition) {
+				showTransitionAnimation();
 			}
 		}, TRANSITION_DELAY);
 

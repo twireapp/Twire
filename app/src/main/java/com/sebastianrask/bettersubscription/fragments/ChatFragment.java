@@ -28,6 +28,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.transition.Transition;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +78,7 @@ import butterknife.ButterKnife;
 
 
 interface EmoteKeyboardDelegate {
-	void onEmoteClicked(Emote clickedEmote);
+	void onEmoteClicked(Emote clickedEmote, View view);
 }
 
 public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, ChatAdapter.ChatAdapterCallback {
@@ -93,7 +94,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 	private static ArrayList<Emote> recentEmotes, emotesToHide;
 
 	private final String LOG_TAG = getClass().getSimpleName();
-	private final int VIBRATE_DURATION_SHORT = 25;
+	private final int VIBRATION_FEEDBACK = HapticFeedbackConstants.KEYBOARD_TAP;
 
 	private boolean chatStatusBarShowing = true;
 
@@ -146,23 +147,23 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 		llm.setStackFromEnd(true);
 		settings = new Settings(getContext());
 
-		mSendText = (EditTextBackEvent) mRootView.findViewById(R.id.send_message_textview);
-		mSendButton = (ImageView) mRootView.findViewById(R.id.chat_send_ic);
-		mSlowmodeIcon = (ImageView) mRootView.findViewById(R.id.slowmode_ic);
-		mSubonlyIcon = (ImageView) mRootView.findViewById(R.id.subsonly_ic);
-		mR9KIcon = (ImageView) mRootView.findViewById(R.id.r9k_ic);
-		mRecyclerView = (ChatRecyclerView) mRootView.findViewById(R.id.ChatRecyclerView);
+		mSendText = mRootView.findViewById(R.id.send_message_textview);
+		mSendButton = mRootView.findViewById(R.id.chat_send_ic);
+		mSlowmodeIcon = mRootView.findViewById(R.id.slowmode_ic);
+		mSubonlyIcon = mRootView.findViewById(R.id.subsonly_ic);
+		mR9KIcon = mRootView.findViewById(R.id.r9k_ic);
+		mRecyclerView = mRootView.findViewById(R.id.ChatRecyclerView);
 		chatInputDivider = mRootView.findViewById(R.id.chat_input_divider);
-		mChatInputLayout = (RelativeLayout) mRootView.findViewById(R.id.chat_input); mChatInputLayout.bringToFront();
-		mChatStatus = (TextView) mRootView.findViewById(R.id.chat_status_text);
+		mChatInputLayout = mRootView.findViewById(R.id.chat_input); mChatInputLayout.bringToFront();
+		mChatStatus = mRootView.findViewById(R.id.chat_status_text);
 		mChatAdapter = new ChatAdapter(mRecyclerView, getActivity(), this);
-		mChatStatusBar = (FrameLayout) mRootView.findViewById(R.id.chat_status_bar);
+		mChatStatusBar = mRootView.findViewById(R.id.chat_status_bar);
 
-		mEmoteKeyboardButton = (ImageView) mRootView.findViewById(R.id.chat_emote_keyboard_ic);
-		mEmoteChatBackspace = (ImageView) mRootView.findViewById(R.id.emote_backspace);
-		emoteKeyboardContainer = (ViewGroup) mRootView.findViewById(R.id.emote_keyboard_container);
-		mEmoteTabs = (TabLayout) mRootView.findViewById(R.id.tabs);
-		mEmoteViewPager = (ViewPager) mRootView.findViewById(R.id.tabs_viewpager);
+		mEmoteKeyboardButton = mRootView.findViewById(R.id.chat_emote_keyboard_ic);
+		mEmoteChatBackspace = mRootView.findViewById(R.id.emote_backspace);
+		emoteKeyboardContainer = mRootView.findViewById(R.id.emote_keyboard_container);
+		mEmoteTabs = mRootView.findViewById(R.id.tabs);
+		mEmoteViewPager = mRootView.findViewById(R.id.tabs_viewpager);
 		selectedTabColorRes = Service.getColorAttribute(R.attr.textColor, R.color.black_text, getContext());
 		unselectedTabColorRes = Service.getColorAttribute(R.attr.disabledTextColor, R.color.black_text_disabled, getContext());
 		vibe = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
@@ -513,7 +514,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 	}
 
 	private void emoteButtonClicked(View clickedView) {
-		vibe.vibrate(VIBRATE_DURATION_SHORT);
+		clickedView.performHapticFeedback(VIBRATION_FEEDBACK);
+
 		if (hasSoftKeyboardBeenShown) {
 			getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
 		}
@@ -575,18 +577,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
 	private void setupEmoteViews() {
 		setInitialKeyboardHeight();
-		mEmoteKeyboardButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				emoteButtonClicked(view);
-			}
-		});
-		mEmoteChatBackspace.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				mSendText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-				vibe.vibrate(VIBRATE_DURATION_SHORT);
-			}
+		mEmoteKeyboardButton.setOnClickListener(this::emoteButtonClicked);
+
+		mEmoteChatBackspace.setOnClickListener(view -> {
+			mSendText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+			view.performHapticFeedback(VIBRATION_FEEDBACK);
 		});
 
 		setupEmoteTabs();
@@ -685,15 +680,12 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 				setMentionSuggestions(new ArrayList<String>());
 			}
 		});
-		mSendText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-			@Override
-			public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-				if (actionId == EditorInfo.IME_ACTION_SEND) {
-					sendMessage();
-					return true;
-				}
-				return false;
+		mSendText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+			if (actionId == EditorInfo.IME_ACTION_SEND) {
+				sendMessage();
+				return true;
 			}
+			return false;
 		});
 
 		final Pattern mentionPattern = Pattern.compile("@(\\w+)$");
@@ -816,7 +808,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 			return;
 		}
 
-		vibe.vibrate(VIBRATE_DURATION_SHORT);
+		mSendButton.performHapticFeedback(VIBRATION_FEEDBACK);
+
 		Log.d(LOG_TAG, "Sending Message: " + message);
 		ConstructChatMessageTask getMessageTask = new ConstructChatMessageTask(
 				new ConstructChatMessageTask.Callback() {
@@ -861,8 +854,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 	 * @param clickedEmote
 	 */
 	@Override
-	public void onEmoteClicked(Emote clickedEmote) {
-		vibe.vibrate(VIBRATE_DURATION_SHORT);
+	public void onEmoteClicked(Emote clickedEmote, View view) {
+		view.performHapticFeedback(VIBRATION_FEEDBACK);
+
 		if (clickedEmote != null) {
 			int startPosition = mSendText.getSelectionStart();
 			String emoteKeyword = clickedEmote.getKeyword();
@@ -887,32 +881,20 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 		final BottomSheetBehavior behavior = BottomSheetBehavior.from((View) v.getParent());
 		behavior.setPeekHeight(getContext().getResources().getDisplayMetrics().heightPixels/3);
 
-		bottomSheetDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-			@Override
-			public void onDismiss(DialogInterface dialogInterface) {
-				behavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-			}
-		});
+		bottomSheetDialog.setOnDismissListener(dialogInterface -> behavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
 
-		TextView mMessage = (TextView) v.findViewById(R.id.text_chat_message);
-		TextView mMention = (TextView) v.findViewById(R.id.text_mention);
-		TextView mDuplicateMessage = (TextView) v.findViewById(R.id.text_duplicate_message);
-		TextView mBlockUser = (TextView) v.findViewById(R.id.text_block_user);
+		TextView mMessage = v.findViewById(R.id.text_chat_message);
+		TextView mMention = v.findViewById(R.id.text_mention);
+		TextView mDuplicateMessage = v.findViewById(R.id.text_duplicate_message);
 
 		mMessage.setText(formattedMessage);
-		mMention.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				insertSendText("@" + userName);
-				bottomSheetDialog.dismiss();
-			}
+		mMention.setOnClickListener(view -> {
+			insertSendText("@" + userName);
+			bottomSheetDialog.dismiss();
 		});
-		mDuplicateMessage.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				insertSendText(message);
-				bottomSheetDialog.dismiss();
-			}
+		mDuplicateMessage.setOnClickListener(view -> {
+			insertSendText(message);
+			bottomSheetDialog.dismiss();
 		});
 
 		bottomSheetDialog.show();
@@ -973,7 +955,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 		}
 	}
 
-	// TODO: Should not use Enums for android development :(
 	protected enum EmoteFragmentType {
 		UNICODE,
 		BTTV,
@@ -1106,7 +1087,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 					Emote emoteClicked = emotes.get(itemPosition);
 
 					if (callback != null) {
-						callback.onEmoteClicked(emoteClicked);
+						callback.onEmoteClicked(emoteClicked, view);
 					}
 				}
 			};
@@ -1244,9 +1225,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
 				public EmoteViewHolder(View itemView) {
 					super(itemView);
-					mImageEmote = (ImageView) itemView.findViewById(R.id.imageEmote);
-					mTextEmote = (TextView) itemView.findViewById(R.id.textEmote);
-					mEmoteContainer = (FrameLayout) itemView.findViewById(R.id.emote_container);
+					mImageEmote = itemView.findViewById(R.id.imageEmote);
+					mTextEmote = itemView.findViewById(R.id.textEmote);
+					mEmoteContainer = itemView.findViewById(R.id.emote_container);
 				}
 			}
 		}
