@@ -21,6 +21,8 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.net.ssl.HttpsURLConnection;
+
 /**
  * Async task. Gets the required access token for a specific streamer. Then starts the streamers live stream.
  * Requires to be executed with the username of the streamer and a reference to the videoview
@@ -118,11 +120,13 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
 		HttpURLConnection conn = null;
 		Scanner in = null;
 		String line;
-		String result = "";
+		StringBuilder result = new StringBuilder();
 
 		try {
 			url = new URL(urlToRead);
-			conn = (HttpURLConnection) url.openConnection();
+
+			conn = Service.openConnection(url);
+
 			conn.setReadTimeout(3000);
 			conn.setConnectTimeout(3000);
 			conn.setRequestMethod("GET");
@@ -130,7 +134,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
 
 			while(in.hasNextLine()) {
 				line = in.nextLine();
-				result += line + "\n";
+				result.append(line).append("\n");
 			}
 
 			in.close();
@@ -150,7 +154,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
 		qualitiesAvailable.addAll(new ArrayList<>(Arrays.asList(NEW_QUALITIES)));
 		for(String quality : qualitiesAvailable) {
 			Pattern p = Pattern.compile("VIDEO=\"" + quality + "\"\\n(http:\\/\\/\\S+)");
-			Matcher m = p.matcher(result);
+			Matcher m = p.matcher(result.toString());
 
 			if(m.find()) {
 				String resultQualityName = quality;

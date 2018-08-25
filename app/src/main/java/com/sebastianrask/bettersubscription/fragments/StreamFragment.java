@@ -304,128 +304,98 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
         setupLandscapeChat();
         setupShowChatButton();
 
-        mFullScreenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFullscreen();
+        mFullScreenButton.setOnClickListener(v -> toggleFullscreen());
+        mPlayPauseWrapper.setOnClickListener(v -> {
+            if (mPlayPauseWrapper.getAlpha() < 0.5f) {
+                return;
             }
-        });
-        mPlayPauseWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPlayPauseWrapper.getAlpha() < 0.5f) {
-                    return;
-                }
 
-                try {
-                    CastSession currentSession = mCastContext.getSessionManager().getCurrentCastSession();
+            try {
+                CastSession currentSession = mCastContext.getSessionManager().getCurrentCastSession();
 
-                    if (mVideoView.isPlaying() || (isAudioOnlyModeEnabled() && PlayerService.getInstance().getMediaPlayer().isPlaying()) || (currentSession != null && currentSession.isConnected() && currentSession.getRemoteMediaClient().isPlaying())) {
-                        pauseStream();
-                    } else if (!mVideoView.isPlaying()) {
-                        resumeStream();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    startStreamWithQuality(settings.getPrefStreamQuality());
+                if (mVideoView.isPlaying() || (isAudioOnlyModeEnabled() && PlayerService.getInstance().getMediaPlayer().isPlaying()) || (currentSession != null && currentSession.isConnected() && currentSession.getRemoteMediaClient().isPlaying())) {
+                    pauseStream();
+                } else if (!mVideoView.isPlaying()) {
+                    resumeStream();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                startStreamWithQuality(settings.getPrefStreamQuality());
             }
         });
 
-        mVideoWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
-                if (isVideoInterfaceShowing()) {
-                    hideVideoInterface();
-                    if (isDeviceBelowKitkat())
-                        setAndroidUiMode();
-                } else {
-                    showVideoInterface();
+        mVideoWrapper.setOnClickListener(v -> {
+            delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
+            if (isVideoInterfaceShowing()) {
+                hideVideoInterface();
+                if (isDeviceBelowKitkat())
+                    setAndroidUiMode();
+            } else {
+                showVideoInterface();
 
-                    // Show the navigation bar
-                    if (isLandscape && settings.getStreamPlayerShowNavigationBar() && Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-                        View decorView = getActivity().getWindow().getDecorView();
-                        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_FULLSCREEN // Hide Status bar
-                                | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                    }
-
-                    if (mVideoView.isPlaying()) {
-                        delayHiding();
-                    }
-
-                    Handler h = new Handler();
-                    h.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            setAndroidUiMode();
-                        }
-                    }, HIDE_ANIMATION_DELAY);
+                // Show the navigation bar
+                if (isLandscape && settings.getStreamPlayerShowNavigationBar() && Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                    View decorView = getActivity().getWindow().getDecorView();
+                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN // Hide Status bar
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
                 }
+
+                if (mVideoView.isPlaying()) {
+                    delayHiding();
+                }
+
+                Handler h = new Handler();
+                h.postDelayed(() -> setAndroidUiMode(), HIDE_ANIMATION_DELAY);
             }
         });
 
-        mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                Log.e(LOG_TAG, "Something went wrong playing the stream for " + mChannelInfo.getDisplayName() + " - What: " + what + " - Extra: " + extra);
-                if (getActivity() != null && getActivity() instanceof UsageTrackingAppCompatActivity) {
-                    UsageTrackingAppCompatActivity mUsageTrackingActivity = (UsageTrackingAppCompatActivity) getActivity();
-                    mUsageTrackingActivity.trackEvent("Error", "StreamPlayback error " + mChannelInfo.getDisplayName() + " - What: " + what + " - Extra: " + extra);
-                }
-
-                playbackFailed();
-                return true;
+        mVideoView.setOnErrorListener((mp, what, extra) -> {
+            Log.e(LOG_TAG, "Something went wrong playing the stream for " + mChannelInfo.getDisplayName() + " - What: " + what + " - Extra: " + extra);
+            if (getActivity() != null && getActivity() instanceof UsageTrackingAppCompatActivity) {
+                UsageTrackingAppCompatActivity mUsageTrackingActivity = (UsageTrackingAppCompatActivity) getActivity();
+                mUsageTrackingActivity.trackEvent("Error", "StreamPlayback error " + mChannelInfo.getDisplayName() + " - What: " + what + " - Extra: " + extra);
             }
+
+            playbackFailed();
+            return true;
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            mVideoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-                @Override
-                public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                    Log.d(LOG_TAG, "" + what);
-                    if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START || what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
-                        mBufferingView.stop();
-                        hideVideoInterface();
-                        delayHiding();
+            mVideoView.setOnInfoListener((mp, what, extra) -> {
+                Log.d(LOG_TAG, "" + what);
+                if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START || what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
+                    mBufferingView.stop();
+                    hideVideoInterface();
+                    delayHiding();
 
-                        Log.d(LOG_TAG, "Render Start");
-                        if (!previewInbackGround) {
-                            hidePreview();
-                        }
+                    Log.d(LOG_TAG, "Render Start");
+                    if (!previewInbackGround) {
+                        hidePreview();
                     }
-
-                    if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
-                        mBufferingView.start();
-                        delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
-                        showVideoInterface();
-
-                        Log.d(LOG_TAG, "Render stop. Buffering start");
-                    }
-
-                    return true;
                 }
+
+                if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
+                    mBufferingView.start();
+                    delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
+                    showVideoInterface();
+
+                    Log.d(LOG_TAG, "Render stop. Buffering start");
+                }
+
+                return true;
             });
         } else {
             // ToDo: Find a way to see buffering on API level 16
         }
 
         mRootView.setOnSystemUiVisibilityChangeListener(
-                new View.OnSystemUiVisibilityChangeListener() {
-                    @Override
-                    public void onSystemUiVisibilityChange(int visibility) {
-                        if (visibility == 0) {
-                            showVideoInterface();
-                            delayHiding();
-                            Handler h = new Handler();
-                            h.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    setAndroidUiMode();
-                                }
-                            }, HIDE_ANIMATION_DELAY);
-                        }
+                visibility -> {
+                    if (visibility == 0) {
+                        showVideoInterface();
+                        delayHiding();
+                        Handler h = new Handler();
+                        h.postDelayed(this::setAndroidUiMode, HIDE_ANIMATION_DELAY);
                     }
                 }
         );
