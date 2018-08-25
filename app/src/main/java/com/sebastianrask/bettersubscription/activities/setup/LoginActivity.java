@@ -51,8 +51,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 
 	private boolean isWebViewShown = false,
 					isWebViewHiding = false,
-					hasTransitioned = false,
-					isSkipping = false;
+					hasTransitioned = false;
 
 	private SupportAnimator transitionAnimationWhite = null,
 							transitionAnimationBlue = null;
@@ -101,18 +100,18 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 		setContentView(R.layout.activity_login);
 		trackEvent(R.string.category_read, R.string.action_login);
 
-		mLoginTextContainer 	= (RelativeLayout) findViewById(R.id.login_text_container);
-		mWebViewProgress 		= (ProgressView) findViewById(R.id.SetupProgress);
-		mWebViewContainer 		= (FrameLayout) findViewById(R.id.webview_container);
-		mContinueFABContainer 	= (FrameLayout) findViewById(R.id.login_continue_circle_container);
-		mGearIcon 				= (ImageView) findViewById(R.id.login_icon);
-		mSuccessIcon 			= (ImageView) findViewById(R.id.login_icon_done);
-		mContinueIcon			= (ImageView) findViewById(R.id.forward_arrow);
-		mLoginTextLineOne 		= (TextView) findViewById(R.id.login_text_line_one);
-		mLoginTextLineTwo 		= (TextView) findViewById(R.id.login_text_line_two);
-		mSuccessMessage			= (TextView) findViewById(R.id.login_success_message);
-		mSkipText				= (TextView) findViewById(R.id.skip_text);
-		loginWebView 			= (WebView) findViewById(R.id.login_webview);
+		mLoginTextContainer 	= findViewById(R.id.login_text_container);
+		mWebViewProgress 		= findViewById(R.id.SetupProgress);
+		mWebViewContainer 		= findViewById(R.id.webview_container);
+		mContinueFABContainer 	= findViewById(R.id.login_continue_circle_container);
+		mGearIcon 				= findViewById(R.id.login_icon);
+		mSuccessIcon 			= findViewById(R.id.login_icon_done);
+		mContinueIcon			= findViewById(R.id.forward_arrow);
+		mLoginTextLineOne 		= findViewById(R.id.login_text_line_one);
+		mLoginTextLineTwo 		= findViewById(R.id.login_text_line_two);
+		mSuccessMessage			= findViewById(R.id.login_success_message);
+		mSkipText				= findViewById(R.id.skip_text);
+		loginWebView 			= findViewById(R.id.login_webview);
 		mContinueFAB 			= findViewById(R.id.login_continue_circle);
 		mContinueFABShadow 		= findViewById(R.id.login_continue_circle_shadow);
 		mSuccessCircle 			= findViewById(R.id.login_success_circle);
@@ -138,14 +137,11 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 		float textPosition = (int) (2.5 * (getScreenHeight() / 5));
 		mLoginTextContainer	.setY(textPosition);
 		mSuccessMessage		.setY(textPosition);
-		mContinueFABContainer.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showLoginView();
+		mContinueFABContainer.setOnClickListener(v -> {
+			showLoginView();
 
-				if (PocketPlaysApplication.isCrawlerUpdate)
-					showSkippingAnimation();
-			}
+			if (PocketPlaysApplication.isCrawlerUpdate)
+				showSkippingAnimation();
 		});
 
 		Service.bringToBack(mTransitionViewWhite);
@@ -154,6 +150,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 		mLoginTextLineTwo		.bringToFront();
 
 		initSkipView();
+		setupPrelaunchLogin();
 		initSnackbar();
 		initLoginView();
 		showLogoAnimations();
@@ -166,17 +163,20 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 		animationSet.start();
 	}
 
+	private void setupPrelaunchLogin() {
+		findViewById(R.id.btn_prelaunch_login).setOnClickListener(v -> {
+			HandlerUserLoginTask handleTask = new HandlerUserLoginTask();
+			handleTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext(), new Settings(this).getGeneralTwitchAccessToken(), LoginActivity.this);
+		});
+	}
+
 	/**
 	 * initiates the skip view.
 	 */
 	private void initSkipView() {
-		mSkipText.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				trackEvent(R.string.category_click, R.string.action_skip);
-				isSkipping = true;
-				showSkippingAnimation();
-			}
+		mSkipText.setOnClickListener(v -> {
+			trackEvent(R.string.category_click, R.string.action_skip);
+			showSkippingAnimation();
 		});
 	}
 
@@ -231,11 +231,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 		}
 	}
 	public static boolean hasLoadedFollows() {
-		if(subscriptionsTask != null && subscriptionsTask.isFinished()) {
-			return true;
-		} else {
-			return false;
-		}
+		return subscriptionsTask != null && subscriptionsTask.isFinished();
 	}
 	public void handleLoginSuccess() {
 		new Settings(this).setLogin(true);
@@ -304,12 +300,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 				.duration(SNACKBAR_DURATION)
 				.text(getResources().getString(R.string.login_user_cancel))
 				.actionText(getResources().getString(R.string.login_user_cancel_action))
-				.actionClickListener(new SnackBar.OnActionClickListener() {
-					@Override
-					public void onActionClick(SnackBar sb, int actionId) {
-						sb.dismiss();
-					}
-				});
+				.actionClickListener((sb, actionId) -> sb.dismiss());
 
 
 		hideLoginView().getAnimations().get(0).setAnimationListener(new Animation.AnimationListener() {
