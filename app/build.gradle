@@ -1,8 +1,8 @@
 // Manifest version information!
 def versionMajor = 1
-def versionMinor = 7
+def versionMinor = 8
 def versionPatch = 0
-def versionBuild = 3 // bump for dogfood builds, public betas, etc.
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: "com.android.application"
 apply plugin: "io.fabric"
