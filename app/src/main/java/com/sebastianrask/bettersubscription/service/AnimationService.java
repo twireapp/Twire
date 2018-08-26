@@ -370,12 +370,8 @@ public class AnimationService {
 			mHideAnimations.addAnimation(mTransitionAnimation);
 		}
 
-		new Handler().postDelayed(new Runnable() {
-			@Override
-			public void run() {
-				if(VIEW != null)
-					VIEW.startAnimation(mHideAnimations);
-			}
+		new Handler().postDelayed(() -> {
+			VIEW.startAnimation(mHideAnimations);
 		}, DELAY);
 
 		return mHideAnimations;

@@ -1022,7 +1022,7 @@ public class Service {
             connection.connect();
             InputStream input = connection.getInputStream();
             bitmap = BitmapFactory.decodeStream(input);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
