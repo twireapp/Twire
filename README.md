@@ -1,5 +1,5 @@
 # Pocket Plays for Twitch
-<img src="https://lh3.googleusercontent.com/uYQLNHtuzLKnyCFUA5CeAqaO6EcsTHXl6kI9D4xc1Rp67cxoTjXuvIJUycSLl2rLXw=w300-rw" align="left" width="200" hspace="10" vspace="10"/>
+<img src="https://lh3.googleusercontent.com/uYQLNHtuzLKnyCFUA5CeAqaO6EcsTHXl6kI9D4xc1Rp67cxoTjXuvIJUycSLl2rLXw=s180" align="left" width="200" hspace="10" vspace="10"/>
 
 Pocket Plays is an open source, ad free Twitch browser and stream player for Android.
 
