@@ -432,7 +432,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
             // Get Streams that was not live last notification check.
             List<StreamWithImage> newLiveStreams = new ArrayList<>();
-            List<StreamInfo> liveChannelsFromLastNotificationCheck = new ArrayList<>();//settings.getLastNotificationCheckLiveChannels();
+            List<StreamInfo> liveChannelsFromLastNotificationCheck = settings.getLastNotificationCheckLiveChannels();
             for (StreamInfo liveStream : currentlyLive) {
                 if (!liveChannelsFromLastNotificationCheck.contains(liveStream)) {
                     Bitmap channelLogo = SRJUtil.getBitmapFromURL(liveStream.getChannelInfo().getLowPreview());
