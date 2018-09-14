@@ -3,13 +3,6 @@ package com.sebastianrask.bettersubscription.activities.main;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,6 +34,13 @@ import com.sebastianrask.bettersubscription.tasks.ScrollToStartPositionTask;
 import com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView;
 import com.sebastianrask.bettersubscription.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -141,7 +141,7 @@ public abstract class MainActivity extends ThemeActivity {
         mDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
         settings = new Settings(getBaseContext());
 
-        mCastContext = CastContext.getSharedInstance(this);
+        mCastContext = Service.getShareCastContext(this);
         initErrorView();
         initTitleAndIcon();
 
@@ -220,7 +220,9 @@ public abstract class MainActivity extends ThemeActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main_activity, menu);
 
-        MenuItem routeItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
+        if (mCastContext != null) {
+            MenuItem routeItem = CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), menu, R.id.media_route_menu_item);
+        }
         return true;
     }
 

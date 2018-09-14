@@ -5,9 +5,12 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
 import android.os.Build;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.media.AudioAttributesCompat;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
@@ -15,6 +18,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.sebastianrask.bettersubscription.service.Settings;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -108,5 +112,22 @@ public class PocketPlaysApplication extends MultiDexApplication {
         notificationManager.createNotificationChannel(
                 new NotificationChannel(getString(R.string.stream_cast_notification_id), "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
         );
+
+
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || notificationManager == null) {
+//            return;
+//        }
+//
+//        NotificationChannel channel = notificationManager.getNotificationChannel(getString(R.string.live_streamer_notification_id));
+//        if (new Settings(mContext).getNotificationsSound()) {
+//
+//            channel.setSound(
+//                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
+//                    new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build()
+//            );
+//        } else {
+//            channel.setSound(null, null);
+//        }
     }
 }

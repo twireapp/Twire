@@ -7,8 +7,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-alpha07'
-        classpath 'com.google.gms:google-services:3.0.0'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha08'
+        classpath 'com.google.gms:google-services:3.2.1'
     }
 }
 
@@ -24,6 +24,6 @@ ext {
     compileSdkVersion = 28
     minSdkVersion = 16
     targetSdkVersion = 28
-    androidXVersion = '1.0.0-rc01'
+    androidXVersion = '1.0.0-rc02'
     playServicesVersion = '16.0.1'
 }

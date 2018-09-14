@@ -45,6 +45,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.sebastianrask.bettersubscription.PocketPlaysApplication;
 import com.sebastianrask.bettersubscription.R;
 import com.sebastianrask.bettersubscription.activities.main.FeaturedStreamsActivity;
@@ -88,6 +91,7 @@ import javax.security.cert.X509Certificate;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.customview.widget.ViewDragHelper;
@@ -689,6 +693,8 @@ public class Service {
 //        } else {
 //            conn = (HttpURLConnection) url.openConnection();
 //        }
+//
+//        return conn;
 
         return (HttpURLConnection) url.openConnection();
     }
@@ -1018,14 +1024,32 @@ public class Service {
         Bitmap bitmap = null;
 
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            HttpURLConnection connection = openConnection(new URL(url));
             connection.connect();
             InputStream input = connection.getInputStream();
             bitmap = BitmapFactory.decodeStream(input);
+
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+
+            if (url.contains("https")) {
+                return getBitmapFromUrl(url.replace("https", "http"));
+            }
         }
 
         return bitmap;
+    }
+
+    @Nullable
+    public static CastContext getShareCastContext(Context context) {
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
+            try {
+                return CastContext.getSharedInstance(context);
+            } catch (Exception e) {
+                Log.e("Cast", "Failed to initialize cast context");
+            }
+        }
+
+        return null;
     }
 }

@@ -238,7 +238,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        mCastContext = CastContext.getSharedInstance(getContext());
+        mCastContext = Service.getShareCastContext(getContext());
         mSessionManagerListener = new StreamSessionManagerListener(this, getContext());
 
         Bundle args = getArguments();
@@ -311,7 +311,10 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
             }
 
             try {
-                CastSession currentSession = mCastContext.getSessionManager().getCurrentCastSession();
+                CastSession currentSession = null;
+                if (mCastContext != null) {
+                    currentSession = mCastContext.getSessionManager().getCurrentCastSession();
+                }
 
                 if (mVideoView.isPlaying() || (isAudioOnlyModeEnabled() && PlayerService.getInstance().getMediaPlayer().isPlaying()) || (currentSession != null && currentSession.isConnected() && currentSession.getRemoteMediaClient().isPlaying())) {
                     pauseStream();
@@ -502,8 +505,10 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
     public void onResume() {
         super.onResume();
 
-        mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
-        mCastContext.addCastStateListener(this);
+        if (mCastContext != null) {
+            mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener, CastSession.class);
+            mCastContext.addCastStateListener(this);
+        }
 
         originalMainToolbarPadding = mToolbar.getPaddingRight();
         originalCtrlToolbarPadding = mControlToolbar.getPaddingRight();
@@ -536,8 +541,10 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
     public void onPause() {
         super.onPause();
 
-        mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener, CastSession.class);
-        mCastContext.removeCastStateListener(this);
+        if (mCastContext != null) {
+            mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener, CastSession.class);
+            mCastContext.removeCastStateListener(this);
+        }
 
         Log.d(LOG_TAG, "Stream Fragment paused");
         hasPaused = true;
@@ -852,12 +859,14 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
         if (isCastConnected() || isCastConnecting()) {
             if (getActivity() instanceof VODActivity) {
                 showSnackbar(getString(R.string.stream_chromecast_no_vod), SNACKBAR_SHOW_DURATION);
-                mCastContext.getSessionManager().endCurrentSession(true);
+                if (mCastContext != null) {
+                    mCastContext.getSessionManager().endCurrentSession(true);
+                }
             } else {
                 initCastingView();
                 try {
-                    CastSession currentCastSession = mCastContext.getSessionManager().getCurrentCastSession();
-                    if (currentCastSession.getRemoteMediaClient().hasMediaSession()) {
+                    CastSession currentCastSession = mCastContext != null ? mCastContext.getSessionManager().getCurrentCastSession() : null;
+                    if (currentCastSession != null && currentCastSession.getRemoteMediaClient().hasMediaSession()) {
                         showPauseIcon();
                         onCastMediaPlaying();
                     }
@@ -951,7 +960,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
         try {
             String logoImageUrl = mChannelInfo.getLogoURLString();
             String streamerName = mChannelInfo.getDisplayName();
-            if (mCastContext.getCastState() == CastState.CONNECTED) {
+            if (mCastContext != null && mCastContext.getCastState() == CastState.CONNECTED) {
                 MediaMetadata mediaMetadata = new MediaMetadata();
                 mediaMetadata.putString(getString(R.string.stream_fragment_vod_id), vodId);
                 mediaMetadata.putInt(getString(R.string.stream_fragment_vod_length), vodLength);
@@ -1288,7 +1297,9 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
 
         if (isCastConnected()) {
             try {
-                mCastContext.getSessionManager().getCurrentCastSession().getRemoteMediaClient().pause();
+                if (mCastContext != null) {
+                    mCastContext.getSessionManager().getCurrentCastSession().getRemoteMediaClient().pause();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1312,7 +1323,9 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
 
         if (isCastConnected() || isCastConnecting()) {
             try {
-                mCastContext.getSessionManager().getCurrentCastSession().getRemoteMediaClient().play();
+                if (mCastContext != null) {
+                    mCastContext.getSessionManager().getCurrentCastSession().getRemoteMediaClient().play();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1334,12 +1347,12 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
     }
 
     private boolean isCastConnected() {
-        CastSession session = mCastContext.getSessionManager().getCurrentCastSession();
+        CastSession session = mCastContext != null ? mCastContext.getSessionManager().getCurrentCastSession() : null;
         return session != null && session.isConnected();
     }
 
     private boolean isCastConnecting() {
-        CastSession session = mCastContext.getSessionManager().getCurrentCastSession();
+        CastSession session = mCastContext != null ? mCastContext.getSessionManager().getCurrentCastSession() : null;
         return session != null && session.isConnecting();
     }
 
@@ -1518,7 +1531,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
         String urlToPlay = getLowestQualityUrl();
         if (urlToPlay != null) {
             try {
-                if (castingViewVisible) {
+                if (castingViewVisible && mCastContext != null) {
                     mCastContext.getSessionManager().endCurrentSession(true);
                 }
 
@@ -1820,7 +1833,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
 
     private void setupPanels(RecyclerView recyclerView) {
         final PanelAdapter mPanelAdapter = new PanelAdapter(getActivity());
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(mPanelAdapter);
 
         GetPanelsTask mTask = new GetPanelsTask(mChannelInfo.getStreamerName(), new GetPanelsTask.Delegate() {
@@ -2136,7 +2149,7 @@ public class StreamFragment extends Fragment implements StreamSessionManagerList
     public void onCastStateChanged(int i) {
         switch (i) {
             case CastState.CONNECTED:
-                CastSession session = mCastContext.getSessionManager().getCurrentCastSession();
+                CastSession session = mCastContext != null ? mCastContext.getSessionManager().getCurrentCastSession() : null;
                 if (session == null) break;
                 castingTextView.setText(getString(R.string.stream_chromecast_playing, session.getCastDevice().getFriendlyName()));
                 break;

@@ -46,21 +46,11 @@
             android:id="@+id/control_toolbar_wrapper"
             android:background="?attr/streamToolbarColor"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_control_height"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:paddingStart="@dimen/toolbar_icon_right_most_margin"
             android:paddingEnd="@dimen/toolbar_icon_right_most_margin"
             >
-
-            <androidx.appcompat.widget.Toolbar
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/video_control_toolbar"
-                android:background="?attr/streamToolbarColor"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                />
 
             <ImageView
                 android:id="@+id/settings_icon"
@@ -70,6 +60,9 @@
                 android:layout_alignParentLeft="true"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
+                android:paddingLeft="@dimen/toolbar_icon_padding"
+                android:paddingRight="@dimen/toolbar_icon_padding"
+                android:paddingTop="@dimen/toolbar_icon_padding"
                 android:layout_centerVertical="true"
                 />
 
@@ -79,7 +72,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="36dp">
                 <TextView
                     android:gravity="center"
                     android:layout_gravity="center_vertical"
@@ -108,6 +101,9 @@
                 android:layout_alignParentEnd="true"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
+                android:paddingLeft="@dimen/toolbar_icon_padding"
+                android:paddingRight="@dimen/toolbar_icon_padding"
+                android:paddingTop="@dimen/toolbar_icon_padding"
                 android:layout_centerVertical="true"
                 />
 

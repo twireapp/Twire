@@ -65,20 +65,20 @@
 
             <ImageView
                 android:id="@+id/img_icon_background"
-                android:src="@drawable/circle_for_activity_icon"
                 android:tint="?attr/colorPrimaryDark"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
+                app:srcCompat="@drawable/circle_for_activity_icon"
                 />
 
             <ImageView
                 android:id="@+id/img_icon"
-                android:src="@drawable/ic_channels"
                 android:tint="?attr/mainActivityIconColor"
                 android:layout_width="@dimen/main_activity_icon_size"
                 android:layout_height="@dimen/main_activity_icon_size"
                 android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_channels"
                 />
 
         </FrameLayout>

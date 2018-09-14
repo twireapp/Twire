@@ -33,6 +33,7 @@ import com.sebastianrask.bettersubscription.fragments.ChatFragment;
 import com.sebastianrask.bettersubscription.fragments.StreamFragment;
 import com.sebastianrask.bettersubscription.model.ChannelInfo;
 import com.sebastianrask.bettersubscription.model.StreamInfo;
+import com.sebastianrask.bettersubscription.service.Service;
 import com.sebastianrask.bettersubscription.service.Settings;
 
 import java.util.ArrayList;
@@ -79,7 +80,12 @@ public class LiveStreamActivity extends StreamActivity {
 
 		if (mChannelInfo == null) {
 			try {
-				MediaInfo mediaInfo = CastContext.getSharedInstance(this).getSessionManager().getCurrentCastSession().getRemoteMediaClient().getMediaInfo();
+				CastContext sharedContext = Service.getShareCastContext(this);
+
+				MediaInfo mediaInfo = null;
+				if (sharedContext != null) {
+					mediaInfo = sharedContext.getSessionManager().getCurrentCastSession().getRemoteMediaClient().getMediaInfo();
+				}
 
 				if (mediaInfo != null) {
 					MediaMetadata metadata = mediaInfo.getMetadata();

@@ -175,7 +175,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             PowerManager.WakeLock screenOn = null;
             PowerManager powerManager = ((PowerManager) context.getSystemService(Context.POWER_SERVICE));
             if (powerManager != null) {
-                screenOn = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "lock");
+                screenOn = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "pocketplays:lock");
             }
             if (screenOn != null) {
                 screenOn.acquire(2000);
@@ -294,7 +294,8 @@ public class NotificationReceiver extends BroadcastReceiver {
                 .setShowWhen(true)
                 .setSmallIcon(R.drawable.ic_notification_icon_refresh)
                 .setColor(ContextCompat.getColor(context, R.color.primary))
-                .setContentIntent(clickIntent);
+                .setContentIntent(clickIntent)
+                .setSound(null);
 
         if (image != null) {
             mBuilder.setLargeIcon(image);
@@ -433,12 +434,7 @@ public class NotificationReceiver extends BroadcastReceiver {
             settings.setLastNotificationCheckLiveChannels(currentlyLive);
 
             // Sort the streams by amount of followers
-            Collections.sort(newLiveStreams, new Comparator<StreamWithImage>() {
-                @Override
-                public int compare(StreamWithImage lhs, StreamWithImage rhs) {
-                    return lhs.getStream().getChannelInfo().getFollowers() - rhs.getStream().getChannelInfo().getFollowers();
-                }
-            });
+            Collections.sort(newLiveStreams, (lhs, rhs) -> lhs.getStream().getChannelInfo().getFollowers() - rhs.getStream().getChannelInfo().getFollowers());
 
             return new NotificationFetchData(newLiveStreams, currentlyLive, noLongerLiveStreams);
         }

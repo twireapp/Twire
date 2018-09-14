@@ -1,12 +1,11 @@
 package com.sebastianrask.bettersubscription.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Vibrator;
+
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -148,7 +147,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 					final ImageSpan emoteSpan = new ImageSpan(context, emote.getEmoteBitmap(), emoteAlignment);
 					resultMessage.setSpan(emoteSpan, fromPosition + PREMESSAGE.length(), toPosition + 1 + PREMESSAGE.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 
-					holder.message.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 					holder.message.setTextIsSelectable(true);
 
 					/*
@@ -187,12 +185,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 			holder.message.setText(builder);
 			holder.message.setMovementMethod(LinkMovementMethod.getInstance());
 
-			holder.itemView.findViewById(R.id.message_button).setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					mCallback.onMessageClicked(builder, message.getName(), message.getMessage());
-					Log.d("Click", "Button clicked");
-				}
+			holder.itemView.findViewById(R.id.btn_message).setOnClickListener(view -> {
+				mCallback.onMessageClicked(builder, message.getName(), message.getMessage());
+				Log.d("Click", "Button clicked");
 			});
 
 		} catch(Exception e) {
@@ -336,7 +331,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
 		public ContactViewHolder(View itemView) {
 			super(itemView);
-			message = itemView.findViewById(R.id.txtMessage);
+			message = itemView.findViewById(R.id.txt_message);
 		}
 	}
 

@@ -60,8 +60,9 @@
     <!-- LiveStreamActivity -->
     <dimen name="stream_chromecasting_msg_size">18sp</dimen>
     <dimen name="toolbar_control_height">36dp</dimen>
-    <dimen name="toolbar_icon_size">24dp</dimen>
-    <dimen name="toolbar_icon_right_most_margin">16dp</dimen>
+    <dimen name="toolbar_icon_size">48dp</dimen>
+    <dimen name="toolbar_icon_padding">12dp</dimen>
+    <dimen name="toolbar_icon_right_most_margin">4dp</dimen>
     <dimen name="toolbar_viewers_text_size">16sp</dimen>
     <dimen name="play_pause_wrapper_size">56dp</dimen>
     <dimen name="buffer_spinner_size">60dp</dimen>

@@ -2,7 +2,7 @@
 def versionMajor = 1
 def versionMinor = 8
 def versionPatch = 0
-def versionBuild = 0 // bump for dogfood builds, public betas, etc.
+def versionBuild = 5 // bump for dogfood builds, public betas, etc.
 
 apply plugin: "com.android.application"
 apply plugin: "io.fabric"
@@ -26,6 +26,7 @@ android {
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
