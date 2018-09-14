@@ -1,6 +1,7 @@
 package com.sebastianrask.bettersubscription.broadcasts_and_services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -61,12 +63,32 @@ public class NotificationReceiver extends BroadcastReceiver {
             return;
         }
 
+        updateNotificationChannelIfNeeded(context);
+
         if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) || intent.getAction().equals(Intent.ACTION_MY_PACKAGE_REPLACED)) {
             Log.d(LOG_TAG, "Device booted - Scheduling new Alarm!");
             Service.startNotifications(context);
         } else {
             FetchNotificationDataTask fetchNotificationDataTask = new FetchNotificationDataTask(context);
             fetchNotificationDataTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    private void updateNotificationChannelIfNeeded(Context context) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || notificationManager == null) {
+            return;
+        }
+
+        NotificationChannel channel = notificationManager.getNotificationChannel(context.getString(R.string.live_streamer_notification_id));
+        if (new Settings(context).getNotificationsSound()) {
+
+            channel.setSound(
+                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
+                    new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build()
+            );
+        } else {
+            channel.setSound(null, null);
         }
     }
 
@@ -410,7 +432,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
             // Get Streams that was not live last notification check.
             List<StreamWithImage> newLiveStreams = new ArrayList<>();
-            List<StreamInfo> liveChannelsFromLastNotificationCheck = settings.getLastNotificationCheckLiveChannels();
+            List<StreamInfo> liveChannelsFromLastNotificationCheck = new ArrayList<>();//settings.getLastNotificationCheckLiveChannels();
             for (StreamInfo liveStream : currentlyLive) {
                 if (!liveChannelsFromLastNotificationCheck.contains(liveStream)) {
                     Bitmap channelLogo = SRJUtil.getBitmapFromURL(liveStream.getChannelInfo().getLowPreview());

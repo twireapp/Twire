@@ -106,28 +106,11 @@ public class PocketPlaysApplication extends MultiDexApplication {
         }
 
         notificationManager.createNotificationChannel(
-                new NotificationChannel(getString(R.string.live_streamer_notification_id), "New Streamer is live", NotificationManager.IMPORTANCE_DEFAULT)
+                new NotificationChannel(getString(R.string.live_streamer_notification_id), "New Streamer is live", NotificationManager.IMPORTANCE_LOW)
         );
 
         notificationManager.createNotificationChannel(
                 new NotificationChannel(getString(R.string.stream_cast_notification_id), "Stream Playback Control", NotificationManager.IMPORTANCE_DEFAULT)
         );
-
-
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || notificationManager == null) {
-//            return;
-//        }
-//
-//        NotificationChannel channel = notificationManager.getNotificationChannel(getString(R.string.live_streamer_notification_id));
-//        if (new Settings(mContext).getNotificationsSound()) {
-//
-//            channel.setSound(
-//                    RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION),
-//                    new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_NOTIFICATION).build()
-//            );
-//        } else {
-//            channel.setSound(null, null);
-//        }
     }
 }
