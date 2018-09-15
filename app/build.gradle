@@ -1,8 +1,8 @@
 // Manifest version information!
 def versionMajor = 1
 def versionMinor = 8
-def versionPatch = 0
-def versionBuild = 5 // bump for dogfood builds, public betas, etc.
+def versionPatch = 1
+def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: "com.android.application"
 apply plugin: "io.fabric"
@@ -59,8 +59,8 @@ dependencies {
     implementation "androidx.mediarouter:mediarouter:$androidXVersion"
     implementation "androidx.browser:browser:$androidXVersion"
 
-    implementation "com.google.android.gms:play-services-analytics:$playServicesVersion"
-    implementation "com.google.android.gms:play-services-cast-framework:$playServicesVersion"
+    implementation "com.google.android.gms:play-services-analytics:16.0.3"
+    implementation "com.google.android.gms:play-services-cast-framework:16.0.2"
 
     implementation "com.squareup.picasso:picasso:2.4.0"
     implementation "com.balysv:material-ripple:1.0.2"

@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -123,14 +124,22 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
 		StringBuilder result = new StringBuilder();
 
 		try {
-			url = new URL(urlToRead);
+			url = new URL(urlToRead.replace(" ","%20"));
 
 			conn = Service.openConnection(url);
-
 			conn.setReadTimeout(3000);
 			conn.setConnectTimeout(3000);
 			conn.setRequestMethod("GET");
-			in = new Scanner(new InputStreamReader(conn.getInputStream()));
+
+			InputStream inputs;
+			if (conn.getResponseCode() < HttpURLConnection.HTTP_BAD_REQUEST) {
+				inputs = conn.getInputStream();
+			} else {
+				// Error
+				inputs = conn.getErrorStream();
+			}
+
+			in = new Scanner(new InputStreamReader(inputs));
 
 			while(in.hasNextLine()) {
 				line = in.nextLine();
