@@ -203,11 +203,6 @@ public class NavigationDrawerFragment extends Fragment {
 		view.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (getActivity() instanceof UsageTrackingAppCompatActivity) {
-					UsageTrackingAppCompatActivity activity = ((UsageTrackingAppCompatActivity) getActivity());
-					activity.trackEvent(R.string.category_click, R.string.action_navigation_drawer, activityClass.getSimpleName());
-				}
-
 				Intent intent = new Intent(getActivity(), activityClass);
 
 				ActivityOptionsCompat searchAnim = ActivityOptionsCompat.makeCustomAnimation(getActivity(), inAnimation, outAnimation);
@@ -256,11 +251,6 @@ public class NavigationDrawerFragment extends Fragment {
 		mViewToListen.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (getActivity() instanceof UsageTrackingAppCompatActivity) {
-					UsageTrackingAppCompatActivity activity = ((UsageTrackingAppCompatActivity) getActivity());
-					activity.trackEvent(R.string.category_click, R.string.action_navigation_drawer, mToClass.getSimpleName());
-				}
-
 				Intent intent = new Intent(mFromActivity, mToClass);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION); // We don't want to use a transition animation
 

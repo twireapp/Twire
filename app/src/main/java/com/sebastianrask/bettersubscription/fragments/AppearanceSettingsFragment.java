@@ -265,10 +265,7 @@ public class AppearanceSettingsFragment extends Fragment {
 	}
 
 	private void track(@StringRes int type, String title) {
-		if (getActivity() instanceof UsageTrackingAppCompatActivity) {
-			UsageTrackingAppCompatActivity activity = ((UsageTrackingAppCompatActivity) getActivity());
-			activity.trackEvent(R.string.category_click, type, title);
-		}
+		// No-op
 	}
 
 	public void onClickStreamSize(View v) {

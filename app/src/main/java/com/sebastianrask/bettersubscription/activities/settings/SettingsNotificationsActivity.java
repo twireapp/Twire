@@ -22,7 +22,6 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.sebastianrask.bettersubscription.R;
 import com.sebastianrask.bettersubscription.activities.ThemeActivity;
 import com.sebastianrask.bettersubscription.service.Service;
-import com.sebastianrask.bettersubscription.broadcasts_and_services.NotificationReceiver;
 import com.sebastianrask.bettersubscription.service.Settings;
 
 
@@ -369,54 +368,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
 							new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
-									// Translate the index position to the correct String and save it to settings
-									String clicked = getActivity().getResources().getString(R.string.notifications_disabled_key);
-
-									if (which == 1)
-										clicked = "15";
-									else if (which == 2)
-										clicked = "30";
-									else if (which == 3)
-										clicked = "60";
-									else if (which == 4)
-										clicked = "120";
-
-									// The interval selected is different from the previously selected interval
-									if (finalPosition != which) {
-										settings.setNotificationsCheckInterval(clicked);
-										// Update the text shown by the current interval TextView
-										final CheckedTextView quietHoursView = (CheckedTextView) getActivity().findViewById(R.id.notifications_quiet_hours);
-										final TextView currentCheckView = (TextView) getActivity().findViewById(R.id.notifications_current_check);
-										currentCheckView.setText(formatCheckInterval(clicked, getActivity()));
-
-										if (clicked.equals(getActivity().getResources().getString(R.string.notifications_disabled_key))) {
-											Log.d("CheckIntervalFragment", "Terminating broadcastreceiver");
-											settings.setNotificationsDisabled(true);
-											ComponentName receiver = new ComponentName(getActivity().getBaseContext(), NotificationReceiver.class);
-											PackageManager pm = getActivity().getBaseContext().getPackageManager();
-											pm.setComponentEnabledSetting(receiver,
-													PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-													PackageManager.DONT_KILL_APP);
-											enableNotifications(false, quietHoursView.isChecked(), getActivity());
-										} else {
-											Log.d("CheckIntervalFragment", "Starting broadcastreceiver");
-											settings.setNotificationsDisabled(false);
-											ComponentName receiver = new ComponentName(getActivity().getBaseContext(), NotificationReceiver.class);
-											PackageManager pm = getActivity().getBaseContext().getPackageManager();
-
-											// Disable any currently running broadcastreceivers before enabling and running a new receiver
-											pm.setComponentEnabledSetting(receiver,
-													PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-													PackageManager.DONT_KILL_APP);
-
-											pm.setComponentEnabledSetting(receiver,
-													PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-													PackageManager.DONT_KILL_APP);
-											enableNotifications(true, quietHoursView.isChecked(), getActivity());
-											Service.startNotifications(getActivity().getBaseContext());
-										}
 										dialog.dismiss();
-									}
 								}
 							})
 

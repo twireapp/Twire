@@ -3,11 +3,8 @@ package com.sebastianrask.bettersubscription.activities;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 
-import com.sebastianrask.bettersubscription.AnalyticsTrackers;
-import com.sebastianrask.bettersubscription.PocketPlaysApplication;
 import com.sebastianrask.bettersubscription.R;
 import com.sebastianrask.bettersubscription.activities.setup.LoginActivity;
 import com.sebastianrask.bettersubscription.activities.setup.WelcomeActivity;
@@ -22,11 +19,6 @@ public class StartUpActivity extends ThemeActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start_up);
-
-		// We don't want analytics for crawler update
-		if (!PocketPlaysApplication.isCrawlerUpdate) {
-			AnalyticsTrackers.initialize(getBaseContext());
-		}
 
 		final Settings settings = new Settings(getBaseContext());
 		final boolean isSetup = settings.isSetup();

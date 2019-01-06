@@ -42,10 +42,6 @@ public class DialogService {
 
 						new Settings(activity).setTheme(theme);
 						if (!theme.equals(CURRENT_THEME)) {
-							if (activity instanceof UsageTrackingAppCompatActivity) {
-								UsageTrackingAppCompatActivity trackingAppCompatActivity = ((UsageTrackingAppCompatActivity) activity);
-								trackingAppCompatActivity.trackEvent(R.string.category_click, R.string.action_theme, theme);
-							}
 							activity.recreate();
 						}
 					}

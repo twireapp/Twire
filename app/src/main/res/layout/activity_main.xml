@@ -103,19 +103,19 @@
             <!--android:visibility="gone">-->
         <!--</com.google.android.libraries.cast.companionlibrary.widgets.MiniController>-->
 
-        <fragment
-            android:id="@+id/cast_mini_controller"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone"
-            class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
-            app:castTitleTextAppearance="@style/cardPrimaryText"
-            app:castButtonColor="?attr/textColor"/>
+        <!--<fragment-->
+            <!--android:id="@+id/cast_mini_controller"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:visibility="gone"-->
+            <!--class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"-->
+            <!--app:castTitleTextAppearance="@style/cardPrimaryText"-->
+            <!--app:castButtonColor="?attr/textColor"/>-->
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"
-            android:layout_above="@+id/cast_mini_controller"
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView

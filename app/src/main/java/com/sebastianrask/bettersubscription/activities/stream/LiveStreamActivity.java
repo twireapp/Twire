@@ -21,10 +21,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.cast.MediaInfo;
-import com.google.android.gms.cast.MediaMetadata;
-
-import com.google.android.gms.cast.framework.CastContext;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sebastianrask.bettersubscription.R;
@@ -77,28 +73,7 @@ public class LiveStreamActivity extends StreamActivity {
 		Intent intent = getIntent();
 		ChannelInfo mChannelInfo = intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
 		int currentViewers = intent.getIntExtra(getResources().getString(R.string.intent_key_stream_viewers), -1);
-
-		if (mChannelInfo == null) {
-			try {
-				CastContext sharedContext = Service.getShareCastContext(this);
-
-				MediaInfo mediaInfo = null;
-				if (sharedContext != null) {
-					mediaInfo = sharedContext.getSessionManager().getCurrentCastSession().getRemoteMediaClient().getMediaInfo();
-				}
-
-				if (mediaInfo != null) {
-					MediaMetadata metadata = mediaInfo.getMetadata();
-					mChannelInfo = new Gson().fromJson(metadata.getString(getString(R.string.stream_fragment_streamerInfo)), new TypeToken<ChannelInfo>() {
-					}.getType());
-					autoPlay = false;
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
+		
 		Bundle args = new Bundle();
 		args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mChannelInfo);
 		args.putInt(getString(R.string.stream_fragment_viewers), currentViewers);

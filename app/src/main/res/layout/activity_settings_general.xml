@@ -110,40 +110,6 @@
                 android:background="?attr/dividerColor"
                 />
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/show_donation_ripple"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleDelayClick="false">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/settings_small_item_height"
-                    android:gravity="center_vertical"
-                    android:clickable="true"
-                    android:onClick="onClickShowDonation"
-                    >
-
-                    <TextView
-                        style="@style/text_settings"
-                        android:id="@+id/show_donation_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/text_settings_title"
-                        android:text="@string/gen_disable_donation"
-                        />
-
-                    <TextView
-                        style="@style/text_settings"
-                        android:id="@+id/show_donation_sub_text"
-                        android:layout_below="@id/show_donation_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/sub_text_settings"
-                        />
-
-                </RelativeLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_divider_height"

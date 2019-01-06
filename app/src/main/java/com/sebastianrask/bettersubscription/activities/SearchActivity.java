@@ -80,7 +80,6 @@ public class SearchActivity extends ThemeActivity {
 				mStreamsFragment.reset(newQuery);
 				mGamesFragment.reset(newQuery);
 				query = newQuery;
-				trackEvent(R.string.category_write, R.string.action_search, newQuery);
 			}
 
 			@Override

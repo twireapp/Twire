@@ -230,13 +230,6 @@
         <item name="android:textColor">?attr/navigationDrawerTextColor</item>
     </style>
 
-    <style name="text_style_donation_prompt">
-        <item name="android:fontFamily">@string/font_roboto_regular</item>
-        <item name="android:textSize">@dimen/donation_prompt_text_size</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
     <style name="style_no_elements_found">
         <item name="android:textColor">?attr/disabledTextColor</item>
         <item name="android:textSize">@dimen/streamerInfo_description_size</item>

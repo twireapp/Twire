@@ -70,12 +70,6 @@ public class Settings {
 	private final String SETUP_IS_LOGGED_IN     = "setupIsLoggedIn";
 	private final String TIP_IS_SHOWN			= "tipsAreShown";
 
-	private final String USAGE_TIME_BEFORE_DONATION = "usageTimeBeforeDonation";
-	private final String USAGE_STARTDATE		= "usageStartUp";
-	private final String USAGE_TIME_IN_APP		= "usageTimeInApp";
-	private final String USAGE_DONATION_SHOWN	= "usageIsDonationPromptShown";
-	private final String USAGE_SHOW_DONATION_PROMPT = "usageShowDonationPrompt";
-
 	private final String GENERAL_START_PAGE		= "genUserStartPage";
 
 	private final String CHAT_EMOTE_STORAGE 	= "genSaveEmotesToLocalStorage";
@@ -437,97 +431,6 @@ public class Settings {
 		SharedPreferences preferences = getPreferences();
 		return preferences.getBoolean(this.TIP_IS_SHOWN, false);
 	}
-
-	/**
-	 * Usage - Time spent in app
-	 * Time measured in milliseconds
-	 */
-
-	public void setDonationPromptShown(boolean isUserNotified) {
-		SharedPreferences.Editor editor = getEditor();
-		editor.putBoolean(this.USAGE_DONATION_SHOWN, isUserNotified);
-		editor.commit();
-	}
-
-	public boolean isDonationPromptShown() {
-		SharedPreferences preferences = getPreferences();
-		return preferences.getBoolean(this.USAGE_DONATION_SHOWN, false);
-	}
-
-	/**
-	 * Usage - Time spent in app
-	 * Time measured in milliseconds
-	 */
-
-	public void addUsageTimeInApp(long additionalTime) {
-		long totalTime = getUsageTimeInApp() + additionalTime;
-		SharedPreferences.Editor editor = getEditor();
-		editor.putLong(this.USAGE_TIME_IN_APP, totalTime);
-		editor.commit();
-	}
-
-	/**
-	 * Usage - Time spent in app
-	 * Time measured in milliseconds
-	 * @return the time spent in milliseconds
-	 */
-	public long getUsageTimeInApp() {
-		SharedPreferences preferences = getPreferences();
-		return preferences.getLong(this.USAGE_TIME_IN_APP, -1);
-	}
-
-	/**
-	 * Should the donation prompt be shown?
-	 * @param show
-	 */
-	public void setShowDonationPrompt(boolean show) {
-		SharedPreferences.Editor editor = getEditor();
-		editor.putBoolean(this.USAGE_SHOW_DONATION_PROMPT, show);
-		editor.commit();
-	}
-
-	public boolean getShowDonationPrompt() {
-		SharedPreferences preferences = getPreferences();
-		return preferences.getBoolean(this.USAGE_SHOW_DONATION_PROMPT, false);
-	}
-
-	/**
-	 * Usage - Time spent in app
-	 * Time measured in milliseconds
-	 */
-
-	public void setUsageTimeBeforeDonation(long additionalTime) {
-		long totalTime = getUsageTimeInApp() + additionalTime;
-		SharedPreferences.Editor editor = getEditor();
-		editor.putLong(this.USAGE_TIME_BEFORE_DONATION, totalTime);
-		editor.commit();
-	}
-
-	public long getUsageTimeBeforeDonation() {
-		SharedPreferences preferences = getPreferences();
-		return preferences.getLong(this.USAGE_TIME_BEFORE_DONATION, 1000 * 60 * 60); // Defaults to 1 hour
-	}
-
-	/**
-	 * Usage - StartDate
-	 * The date the app was started for the first time
-	 */
-
-	public void setUsageStartDate(long startDate) {
-		SharedPreferences.Editor editor = getEditor();
-		editor.putLong(this.USAGE_STARTDATE, startDate);
-		editor.commit();
-	}
-
-	/**
-	 * Usage - StartDate
-	 * The date the app was started for the first time
-	 */
-	public long getUsageStartDate() {
-		SharedPreferences preferences = getPreferences();
-		return preferences.getLong(this.USAGE_STARTDATE, -1);
-	}
-
 
 	/**
 	 * Theme

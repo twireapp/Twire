@@ -1,3 +1,19 @@
+# Pocket Plays (Google-less Fork)
+
+This is a fork of the [Pocket Plays for Twitch](https://github.com/SebastianRask/Pocket-Plays-for-Twitch) Android application.
+
+It differs in these basic ways:
+
+- No Google Play services reliance. This means Chromecast support is gone.
+- Google Analytics stripped out.
+- Crashlytics stripped out.
+- Doesn't leak OAuth Client ID to random parked domain
+- Notification support removed
+- Donation prompt removed (if you like, install the original and donate to the author that way, they deserve it)
+- Made a few mb leaner by stripping unused resources
+
+It is not published on any app stores.
+
 # Pocket Plays for Twitch
 <img src="https://lh3.googleusercontent.com/uYQLNHtuzLKnyCFUA5CeAqaO6EcsTHXl6kI9D4xc1Rp67cxoTjXuvIJUycSLl2rLXw=s180" align="left" width="200" hspace="10" vspace="10"/>
 

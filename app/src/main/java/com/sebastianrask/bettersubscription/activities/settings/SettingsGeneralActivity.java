@@ -24,7 +24,7 @@ import com.sebastianrask.bettersubscription.service.Settings;
 public class SettingsGeneralActivity extends ThemeActivity {
 	private String LOG_TAG = getClass().getSimpleName();
 	private Settings settings;
-	private TextView twitchNameView, startPageSubText, showDonationSubText;
+	private TextView twitchNameView, startPageSubText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +41,9 @@ public class SettingsGeneralActivity extends ThemeActivity {
 		//Service.isTranslucentActionbar(LOG_TAG, getBaseContext(), toolbar, this);
 		twitchNameView = (TextView) findViewById(R.id.general_current_twitch_name);
 		startPageSubText = (TextView) findViewById(R.id.start_page_sub_text);
-		showDonationSubText = (TextView) findViewById(R.id.show_donation_sub_text);
 
 		initTwitchDisplayName();
 		initStartPageText();
-		updateSummeries();
 	}
 
 	@Override
@@ -136,19 +134,5 @@ public class SettingsGeneralActivity extends ThemeActivity {
 		}
 		settings.setTipsShown(false);
 	}
-
-	public void onClickShowDonation(View v) {
-		settings.setShowDonationPrompt(!settings.getShowDonationPrompt());
-		updateSummeries();
-	}
-
-	private void updateSummeries() {
-		if (settings.getShowDonationPrompt()) {
-			showDonationSubText.setText(getString(R.string.yes));
-		} else {
-			showDonationSubText.setText(getString(R.string.no));
-		}
-	}
-
 
 }

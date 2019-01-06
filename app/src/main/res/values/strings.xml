@@ -257,7 +257,6 @@
     <string name="gen_dialog_login_or_out_logout_action">LOGOUT</string>
     <string name="gen_twitch_name">Twitch Username</string>
     <string name="gen_start_page">Startup Page</string>
-    <string name="gen_disable_donation">Disable Donation Prompt</string>
     <string name="gen_reset_tips">Reset Tutorial Tips</string>
     <string name="gen_tips_have_been_reset">Tutorial Tips have been reset</string>
 
@@ -350,19 +349,6 @@
     <string name="black_theme_name">Black</string>
     <string name="night_theme_name">Night</string>
     <string name="true_night_theme_name">True Night</string>
-
-    <!-- Donation Prompt -->
-    <string name="donation_remind_later">REMIND ME\nLATER</string>
-    <string name="donation_prompt_one">I hope you are enjoying Pocket Plays so far.</string>
-    <string name="donation_prompt_three">Every user pays what they think the app is worth.</string>
-    <string name="donation_prompt_four">What do you want to pay for the app?</string>
-    <string name="donation_prompt_nothing">That\'s okay!\nHowever, I would appreciate if you rate the app on the Play Store.</string>
-    <string name="donation_prompt_donated">Thank you so much for supporting the app!</string>
-    <string name="donation_play_store">Rate on Google Play Store ></string>
-    <string name="donation_amount">%d $</string>
-    <string name="donation_step_zero">Nothing</string>
-    <string name="donation_how_much">How much do you want to donate?</string>
-    <string name="donation_flow_is_user_started">IsUserStartedFlow</string>
 
     <!-- Shared Preferences -->
     <string name="pref_online_streams_error_key">pref_online_streams_error</string>

@@ -45,9 +45,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.google.android.gms.cast.framework.CastContext;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.sebastianrask.bettersubscription.PocketPlaysApplication;
 import com.sebastianrask.bettersubscription.R;
 import com.sebastianrask.bettersubscription.activities.main.FeaturedStreamsActivity;
@@ -56,7 +53,6 @@ import com.sebastianrask.bettersubscription.activities.main.MyGamesActivity;
 import com.sebastianrask.bettersubscription.activities.main.MyStreamsActivity;
 import com.sebastianrask.bettersubscription.activities.main.TopGamesActivity;
 import com.sebastianrask.bettersubscription.activities.main.TopStreamsActivity;
-import com.sebastianrask.bettersubscription.broadcasts_and_services.NotificationReceiver;
 import com.sebastianrask.bettersubscription.misc.SecretKeys;
 import com.sebastianrask.bettersubscription.model.ChannelInfo;
 
@@ -119,17 +115,6 @@ public class Service {
      */
     public static String getApplicationClientID() {
         return SecretKeys.TWITCH_CLIENT_ID;
-    }
-
-    /**
-     * Creates and returns an intent that navigates the user to the Google Play landing page for the app
-     *
-     * @return The intent
-     */
-    public static Intent getPlayStoreIntent() {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("market://details?id=net.nrask.notifyme"));
-        return intent;
     }
 
     public static String getErrorEmote() {
@@ -526,30 +511,6 @@ public class Service {
     public static int NOTIFICATION_ALARM_ID = 754641782;
 
     public static void startNotifications(Context context) {
-        Settings settings = new Settings(context);
-
-        // Initiate the AlarmManager, that will Periodically check if any new streamers has come online.
-        String checkInterval = settings.getNotificationsCheckInterval();
-        AlarmManager alarmMngr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        if (!checkInterval.equals(context.getString(R.string.notifications_disabled_key)) && alarmMngr != null) {
-            int checkIntervalInt = Integer.parseInt(checkInterval);
-            Intent alarmIntent = new Intent(context, NotificationReceiver.class);
-            alarmIntent.setAction("dummy_action"); // Must be present to avoid null pointer in the broadcast receiver, as it checks on the intent action and compares it.
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ALARM_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-            Log.d("StartNotifications", "Check Interval: " + checkIntervalInt);
-            int type = AlarmManager.ELAPSED_REALTIME;
-            int triggerAt = 1000 * 30;
-            if (checkIntervalInt != 15 && checkIntervalInt != 30 && checkIntervalInt != 60)
-                alarmMngr.setInexactRepeating(type, triggerAt, 1000 * 60 * checkIntervalInt, pendingIntent);
-            else if (checkIntervalInt == 15)
-                alarmMngr.setInexactRepeating(type, triggerAt, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
-            else if (checkIntervalInt == 30)
-                alarmMngr.setInexactRepeating(type, triggerAt, AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
-            else // 60 minutes
-                alarmMngr.setInexactRepeating(type, triggerAt, AlarmManager.INTERVAL_HOUR, pendingIntent);
-        }
     }
 
     public static void isTranslucentActionbar(String LOG_TAG, Context context, Toolbar toolbar, Activity activity) {
@@ -637,10 +598,6 @@ public class Service {
     }
 
     public static String urlToJSONString(String urlToRead) {
-        if (!PocketPlaysApplication.isCrawlerUpdate && urlToRead.contains("api.twitch")) {
-            PocketPlaysApplication.trackEvent(R.string.category_api, R.string.action_api_twitch, urlToRead);
-        }
-
         URL url;
         HttpURLConnection conn = null;
         Scanner in = null;
@@ -1038,18 +995,5 @@ public class Service {
         }
 
         return bitmap;
-    }
-
-    @Nullable
-    public static CastContext getShareCastContext(Context context) {
-        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
-            try {
-                return CastContext.getSharedInstance(context);
-            } catch (Exception e) {
-                Log.e("Cast", "Failed to initialize cast context");
-            }
-        }
-
-        return null;
     }
 }

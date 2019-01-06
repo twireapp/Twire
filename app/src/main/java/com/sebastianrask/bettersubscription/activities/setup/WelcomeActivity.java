@@ -64,7 +64,6 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_welcome);
-		trackEvent(R.string.category_read, R.string.action_welcome);
 
 		mWelcomeText 			= (RelativeLayout) findViewById(R.id.welcome_text);
 		mWelcomeTextLineOne 	= (TextView) findViewById(R.id.welcome_text_line_one);

@@ -47,7 +47,10 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 	private static GetFollowsFromDB subscriptionsTask;
 	private static boolean toTransition = false, isPartOfSetup = true;
 	private String LOG_TAG = "LoginActivity";
-	private final String LOGIN_URL = "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=" + Service.getApplicationClientID() + "&redirect_uri=http%3A%2F%2Fnrask.net%2Foauth_authorizing&scope=user_read+chat_login+user_follows_edit+user_subscriptions";
+	private final String LOGIN_URL = "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=" +
+			Service.getApplicationClientID() +
+			"&redirect_uri=http%3A%2F%2Flocalhost/oauth_authorizing" +
+			"&scope=user_read+chat:read+chat:edit+user_follows_edit+user_subscriptions";
 
 	private boolean isWebViewShown = false,
 					isWebViewHiding = false,
@@ -98,7 +101,6 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
-		trackEvent(R.string.category_read, R.string.action_login);
 
 		mLoginTextContainer 	= findViewById(R.id.login_text_container);
 		mWebViewProgress 		= findViewById(R.id.SetupProgress);
@@ -175,7 +177,6 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 	 */
 	private void initSkipView() {
 		mSkipText.setOnClickListener(v -> {
-			trackEvent(R.string.category_click, R.string.action_skip);
 			showSkippingAnimation();
 		});
 	}

@@ -135,13 +135,6 @@
     <dimen name="layout_selector_radiogroup_padding">16dp</dimen>
     <dimen name="layout_preview_height">126dp</dimen>
 
-    <!-- Donation Activity -->
-    <dimen name="donation_fab_size">56dp</dimen>
-    <dimen name="donation_fab_margin">16dp</dimen>
-    <dimen name="donation_prompt_text_size">34sp</dimen>
-    <dimen name="donation_playstore_text_size">22sp</dimen>
-    <dimen name="donation_arrow_size">56dp</dimen>
-
     <!-- Welcome Activity -->
     <!-- FAB -->
     <dimen name="welcome_continue_circle_diameter">56dp</dimen>
@@ -279,20 +272,8 @@
     <dimen name="recyclerview_panel_padding">8dp</dimen>
     <dimen name="streamer_preview_icon_size">24dp</dimen>
 
-    <!-- Update Dialog -->
-    <dimen name="update_dialog_corner_radius">5dp</dimen>
-    <dimen name="update_dialog_corner_radius_negative">-5dp</dimen>
-    <dimen name="update_dialog_elevation">2dp</dimen>
-    <dimen name="update_dialog_elevation_upper">3dp</dimen>
-    <dimen name="update_dialog_additional_margin">15dp</dimen>
-    <dimen name="update_dialog_base_margin">25dp</dimen>
-    <dimen name="update_dialog_indicator_height">72dp</dimen>
-    <dimen name="update_dialog_bottom_indicator_height">56dp</dimen>
-    <dimen name="update_dialog_cell_height">48dp</dimen>
-    <dimen name="update_dialog_cell_text_size">15dp</dimen>
     <dimen name="cell_settings_category_icon_margin">16dp</dimen>
     <dimen name="cell_settings_category_icon_size">28dp</dimen>
     <dimen name="cell_settings_category_text_margin">64dp</dimen>
-
 
 </resources>

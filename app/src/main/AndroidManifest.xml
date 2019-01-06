@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="com.android.vending.BILLING"/>
 
     <uses-feature
         android:name="android.hardware.wifi"
@@ -52,41 +51,6 @@
         <meta-data
             android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H"
             android:value="598.0dip"/>
-
-        <meta-data
-            android:name= "com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="com.sebastianrask.bettersubscription.cast.CastOptionsProvider" />
-
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
-
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="3d7eff6d68afabdc3bdbae620d5d81c0a4be098c"/>
-
-        <receiver android:name=".broadcasts_and_services.RemoteControlReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".broadcasts_and_services.NotificationReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name=".broadcasts_and_services.UpdateReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".broadcasts_and_services.PlayerService"/>
 
         <activity
             android:name=".activities.stream.LiveStreamActivity"
@@ -204,10 +168,6 @@
         <activity
             android:name=".activities.SearchActivity"
             android:label="@string/title_activity_search">
-        </activity>
-        <activity
-            android:name=".activities.DonationActivity"
-            android:theme="@style/AppTheme.Base.Translucent">
         </activity>
         <activity android:name=".activities.settings.SettingsStreamPlayerActivity">
         </activity>
