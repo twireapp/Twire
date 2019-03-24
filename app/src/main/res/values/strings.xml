@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello_world">Hello World</string>
-    <string name="app_name">Pocket Plays</string>
+    <string name="app_name">Twire</string>
     <string name="app_slogan"> </string>
     <string name="app_id">net.nrask.notifyme</string>
 
@@ -100,7 +100,7 @@
     <string name="stream_chromecast_playing">Playing on %s</string>
     <string name="stream_chromecast_failed">Something went wrong playing on %s</string>
     <string name="stream_chromecast_no_vod">Sorry, Video On Demand is currently not supported for chromecasting</string>
-    <string name="stream_chromecast_connection_failed">Pocket Plays could not connect to %s</string>
+    <string name="stream_chromecast_connection_failed">Twire could not connect to %s</string>
     <string name="stream_chromecast_connecting">Connecting…</string>
     <string name="stream_no_audio_only">Sorry, audio only is not available for this stream</string>
     <string name="stream_audio_only_active">Playing Audio Only</string>
@@ -203,18 +203,18 @@
     <string name="streams_adapter_viewers">viewers</string>
 
     <!-- Welcome Activity -->
-    <string name="title_activity_welcome">Pocket Plays Set Up</string>
+    <string name="title_activity_welcome">Twire Set Up</string>
     <string name="welcome_text_line_one">Welcome to</string>
-    <string name="welcome_text_line_two">Pocket  Plays</string>
+    <string name="welcome_text_line_two">Twire</string>
     <string name="welcome_text_line_three">@string/app_slogan</string>
 
     <!-- Login Activity-->
     <string name="title_activity_login">@string/title_activity_welcome</string>
     <string name="login_text_line_one">Let\'s get you setup!</string>
     <string name="login_text_line_two">First, sign into Twitch</string>
-    <string name="login_user_cancel">You do really need to log in to use Pocket Plays :-)</string>
+    <string name="login_user_cancel">You do really need to log in to use Twire</string>
     <string name="login_user_cancel_action">GOT IT</string>
-    <string name="login_user_no_internet">You\'ll need an internet connection to setup Pocket Plays :-) </string>
+    <string name="login_user_no_internet">You\'ll need an internet connection to setup Twire</string>
     <string name="login_user_no_internet_action">TRY AGAIN</string>
     <string name="login_on_success_message">Hello %s</string>
     <string name="login_intent_part_of_setup">login_intent_part_of_setup</string>
@@ -429,9 +429,9 @@
     <string name="chat_message_option_block">Block</string>
     <string name="action_got_it">Got it</string>
     <string name="action_share">Share</string>
-    <string name="help_keep_pocket_plays_ad_free">Help keep Pocket Plays ad-free</string>
+    <string name="help_keep_pocket_plays_ad_free">Help keep Twire ad-free</string>
     <string name="click_here_to_donate">Click here to donate</string>
-    <string name="update_share_text">Pocket Plays for Twitch, have just been with awesome new features updated!\nDownload Pocket Plays for Android on Google Play - https://play.google.com/store/apps/details?id=net.nrask.notifyme </string>
+    <string name="update_share_text">Twire for Twitch, have just been with awesome new features updated!\nDownload Twire for Android on Google Play - https://play.google.com/store/apps/details?id=net.nrask.notifyme </string>
     <string name="stream_external_play_using">Play using...</string>
     <string name="live_streamer_notification_id">liveStreamerNotificationId</string>
     <string name="stream_cast_notification_id">streamCastNotificationId</string>

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.sebastianrask.bettersubscription.activities.main.MainActivity">
+      tools:context="com.perflyst.twire.activities.main.MainActivity">
 
     <!--<item-->
         <!--android:id="@+id/search_menu_item"-->

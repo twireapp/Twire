@@ -6,7 +6,7 @@
     android:background="@color/colorSetupMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sebastianrask.bettersubscription.activities.setup.LoginActivity">
+    tools:context="com.perflyst.twire.activities.setup.LoginActivity">
 
     <RelativeLayout
         android:id="@+id/login_activity_container"

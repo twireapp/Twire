@@ -11,12 +11,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView
+        <com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView
             android:id="@+id/emote_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView
+        <com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView
             android:id="@+id/promoted_emotes_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

@@ -8,7 +8,7 @@
      android:layout_width="match_parent"
      android:layout_height="match_parent"
      android:fitsSystemWindows="true"
-     tools:context="com.sebastianrask.bettersubscription.activities.SearchActivity">
+     tools:context="com.perflyst.twire.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"

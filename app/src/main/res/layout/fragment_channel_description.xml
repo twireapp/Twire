@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.sebastianrask.bettersubscription.views.FlingingNestedScrollView
+<com.perflyst.twire.views.FlingingNestedScrollView
     android:overScrollMode="never"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <com.sebastianrask.bettersubscription.views.FontFitTextView
+        <com.perflyst.twire.views.FontFitTextView
             android:id="@+id/emote_error_view"
             style="@style/style_emote_error"/>
 
@@ -38,4 +38,4 @@
             android:layout_height="match_parent"/>
     </LinearLayout>
 
-</com.sebastianrask.bettersubscription.views.FlingingNestedScrollView>
+</com.perflyst.twire.views.FlingingNestedScrollView>

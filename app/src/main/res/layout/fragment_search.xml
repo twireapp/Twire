@@ -6,7 +6,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView
+    <com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView
         android:id="@+id/span_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

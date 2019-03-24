@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/settingsBackgroundColor"
-    tools:context="com.sebastianrask.bettersubscription.activities.settings.SettingsNotificationsActivity"
+    tools:context="com.perflyst.twire.activities.settings.SettingsNotificationsActivity"
     tools:ignore="MergeRootFrame">
 
     <androidx.appcompat.widget.Toolbar
@@ -26,7 +26,7 @@
         android:layout_below="@id/settings_notifications_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_item_height"
-        tools:context="com.sebastianrask.bettersubscription.Settings.SettingsGeneralActivity"
+        tools:context="com.perflyst.twire.Settings.SettingsGeneralActivity"
         tools:ignore="MergeRootFrame">
 
         <TextView

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.sebastianrask.bettersubscription.views.DynamicImageView
+    <com.perflyst.twire.views.DynamicImageView
         android:id="@+id/panel_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

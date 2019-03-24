@@ -5,7 +5,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-    <com.sebastianrask.bettersubscription.views.FontFitTextView
+    <com.perflyst.twire.views.FontFitTextView
         android:id="@+id/emote_error_view"
         style="@style/style_emote_error"/>
 
@@ -16,7 +16,7 @@
         style="@style/style_no_elements_found"
         />
 
-    <com.sebastianrask.bettersubscription.views.recyclerviews.AutoSpanRecyclerView
+    <com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/recyclerview_vods"
         android:layout_width="match_parent"

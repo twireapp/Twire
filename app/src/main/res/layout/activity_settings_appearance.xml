@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.sebastianrask.bettersubscription.activities.settings.SettingsAppearanceActivity"
+    tools:context="com.perflyst.twire.activities.settings.SettingsAppearanceActivity"
     tools:ignore="MergeRootFrame" >
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_appearance_toolbar"
@@ -17,7 +17,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         />
     <fragment
-        android:name="com.sebastianrask.bettersubscription.fragments.AppearanceSettingsFragment"
+        android:name="com.perflyst.twire.fragments.AppearanceSettingsFragment"
         android:id="@+id/appearance_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

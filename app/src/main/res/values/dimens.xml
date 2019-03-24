@@ -150,7 +150,7 @@
     <dimen name="welcome_text_line_two_size">28sp</dimen>
     <dimen name="welcome_text_line_three_size">16sp</dimen>
 
-    <!-- Pocket PLays Icon -->
+    <!-- Twire Icon -->
     <dimen name="welcome_icon_container_size">155dp</dimen>
     <dimen name="welcome_icon_size">135dp</dimen>
     <dimen name="welcome_icon_center_size">30dp</dimen>

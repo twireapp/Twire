@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/navigationDrawerBackground"
-    tools:context="com.sebastianrask.bettersubscription.fragments.NavigationDrawerFragment">
+    tools:context="com.perflyst.twire.fragments.NavigationDrawerFragment">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

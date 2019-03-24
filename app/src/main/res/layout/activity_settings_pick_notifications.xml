@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/settingsBackgroundColor"
-    tools:context="com.sebastianrask.bettersubscription.activities.settings.SettingsPickNotificationsActivity">
+    tools:context="com.perflyst.twire.activities.settings.SettingsPickNotificationsActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -35,7 +35,7 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
-        <com.sebastianrask.bettersubscription.views.FontFitTextView
+        <com.perflyst.twire.views.FontFitTextView
             android:visibility="gone"
             android:id="@+id/emote_error_view"
             style="@style/style_emote_error"/>

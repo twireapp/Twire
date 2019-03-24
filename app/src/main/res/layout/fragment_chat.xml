@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.sebastianrask.bettersubscription.fragments.ChatFragment"
+    tools:context="com.perflyst.twire.fragments.ChatFragment"
     android:orientation="vertical">
     <LinearLayout
         android:orientation="vertical"
@@ -120,7 +120,7 @@
             android:layout_width="@dimen/chat_send_ic_size"
             android:layout_height="@dimen/chat_send_ic_size"/>
 
-        <com.sebastianrask.bettersubscription.views.EditTextBackEvent
+        <com.perflyst.twire.views.EditTextBackEvent
             android:id="@+id/send_message_textview"
             android:layout_toStartOf="@id/chat_emote_keyboard_ic"
             android:layout_toLeftOf="@id/chat_emote_keyboard_ic"
@@ -197,7 +197,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/chat_input_divider_height"/>
 
-    <com.sebastianrask.bettersubscription.views.recyclerviews.ChatRecyclerView
+    <com.perflyst.twire.views.recyclerviews.ChatRecyclerView
         android:overScrollMode="never"
         android:background="?attr/chatBackgroundColor"
         android:id="@+id/ChatRecyclerView"

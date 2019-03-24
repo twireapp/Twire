@@ -5,7 +5,7 @@
     android:background="@color/colorSetupMain"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sebastianrask.bettersubscription.activities.setup.WelcomeActivity">
+    tools:context="com.perflyst.twire.activities.setup.WelcomeActivity">
 
     <FrameLayout
         android:id="@+id/welcome_icon_layout"

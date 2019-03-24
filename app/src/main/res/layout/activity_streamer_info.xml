@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.sebastianrask.bettersubscription.activities.SearchActivity">
+    tools:context="com.perflyst.twire.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -50,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
-                <com.sebastianrask.bettersubscription.views.RoundedImageView
+                <com.perflyst.twire.views.RoundedImageView
                     android:src="@drawable/ic_profile_template_300p"
                     android:layout_width="@dimen/streamerInfo_logo_width"
                     android:layout_height="@dimen/streamerInfo_logo_width"

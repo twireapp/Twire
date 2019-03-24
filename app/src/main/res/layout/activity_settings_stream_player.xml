@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/settingsBackgroundColor"
-    tools:context="com.sebastianrask.bettersubscription.activities.settings.SettingsStreamPlayerActivity"
+    tools:context="com.perflyst.twire.activities.settings.SettingsStreamPlayerActivity"
     tools:ignore="MergeRootFrame">
 
     <androidx.appcompat.widget.Toolbar
