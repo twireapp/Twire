@@ -6,8 +6,8 @@ android {
         applicationId "com.perflyst.twire"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 500
-        versionName "1.9.0"
+        versionCode 501
+        versionName "1.9.1"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
