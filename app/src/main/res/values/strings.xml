@@ -3,7 +3,7 @@
     <string name="hello_world">Hello World</string>
     <string name="app_name">Twire</string>
     <string name="app_slogan"> </string>
-    <string name="app_id">net.nrask.notifyme</string>
+    <string name="app_id">com.perflyst.twire</string>
 
     <string name="ok">OK</string>
     <string name="done">DONE</string>
