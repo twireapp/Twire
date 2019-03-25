@@ -245,8 +245,6 @@
     <string name="settings_notifications_summary">Check Interval, Sound, Vibration etc</string>
     <string name="settings_rate_name">Rate App</string>
     <string name="settings_rate_summary">Give Feedback</string>
-    <string name="settings_donate_name">Donate</string>
-    <string name="settings_donate_summary">Support the development</string>
     <string name="settings_chat_name">Twitch Chat</string>
     <string name="settings_chat_name_summary">Emote size, Message size</string>
 

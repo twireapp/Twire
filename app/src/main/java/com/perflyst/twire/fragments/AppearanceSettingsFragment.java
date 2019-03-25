@@ -260,10 +260,6 @@ public class AppearanceSettingsFragment extends Fragment {
 		}).show();
 	}
 
-	private void track(@StringRes int type, String title) {
-		// No-op
-	}
-
 	public void onClickStreamSize(View v) {
 		DialogService.getChooseCardSizeDialog(
 				getActivity(),

@@ -33,14 +33,6 @@ public class TwireApplication extends MultiDexApplication {
         MultiDex.install(this);
     }
 
-    public static void trackEvent(@StringRes int category, @StringRes int action, @Nullable String label) {
-        TwireApplication.trackEvent(mContext.getString(category), mContext.getString(action), label, null);
-    }
-
-    public static void trackEvent(String category, String action, @Nullable String label, @Nullable Long value) {
-        // No-op
-    }
-
     private void initNotificationChannels() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || notificationManager == null) {

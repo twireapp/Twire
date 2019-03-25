@@ -25,10 +25,6 @@
         <!--android:title="@string/settings_rate_name"-->
         <!--android:summary="@string/settings_rate_name_summary" />-->
 
-    <!--<header-->
-        <!--android:title="@string/settings_donate_name"-->
-        <!--android:summary="@string/settings_donate_name_summary" />-->
-
 <!--</preference-headers>-->
 
 <PreferenceScreen  xmlns:android="http://schemas.android.com/apk/res/android">
