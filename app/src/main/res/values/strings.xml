@@ -386,52 +386,12 @@
         <item>Hungarian|hu</item>
     </string-array>
 
-    <!-- Tracking category -->
-    <string name="category_click">CLICK</string>
-    <string name="category_read">READ</string>
-    <string name="category_write">WRITE</string>
-    <string name="category_api">API</string>
-
-    <!-- Tracking actions -->
-    <string name="action_api_twitch">TWITCH</string>
-    <string name="action_playstore">PLAY_STORE_LINK</string>
-    <string name="action_not_now">NOT_NOW</string>
-    <string name="action_welcome">WELCOME</string>
-    <string name="action_login">LOGIN</string>
-    <string name="action_skip">SKIP</string>
-    <string name="action_search">SEARCH</string>
-    <string name="action_theme">THEME</string>
-    <string name="action_rate">RATE</string>
-    <string name="action_donate">DONATE</string>
-    <string name="action_setting">SETTING</string>
-    <string name="action_navigation_drawer">NAVIGATION_DRAWER</string>
-    <string name="action_stream_style">STREAM STYLE</string>
-    <string name="action_game_style">GAME STYLE</string>
-    <string name="action_streamer_style">STREAMER STYLE</string>
-    <string name="action_stream_size">STREAM SIZE</string>
-    <string name="action_game_size">GAME SIZE</string>
-    <string name="action_streamer_size">STREAMER SIZE</string>
-
-    <!--Notifications-->
-    <string name="notification_channel_list_separator">", "</string>
-    <string name="notification_channel_single_live">%s is now live</string>
-    <string name="notification_channel_multiple_live">%1$s and %2$s are now live</string>
-    <string name="notification_channel_is_playing_game">%1$s is playing %2$s</string>
-    <string name="notification_channel_is_playing_game_short">is playing %1$s</string>
-    <string name="notification_stream_viewers">%d Viewers</string>
-    <string name="notification_number_streams_live">%d streams just went live</string>
-    <string name="notification_additional_multiple_live">%d additional streams are live</string>
-    <string name="notification_additional_single_live">%d additional stream is live</string>
-
     <string name="title_activity_deep_link_test">@string/app_name</string>
     <string name="chat_message_option_mention">Mention</string>
     <string name="chat_message_option_duplicate">Duplicate Message</string>
     <string name="chat_message_option_block">Block</string>
     <string name="action_got_it">Got it</string>
     <string name="action_share">Share</string>
-    <string name="help_keep_pocket_plays_ad_free">Help keep Twire ad-free</string>
-    <string name="click_here_to_donate">Click here to donate</string>
-    <string name="update_share_text">Twire for Twitch, have just been with awesome new features updated!\nDownload Twire for Android on Google Play - https://play.google.com/store/apps/details?id=net.nrask.notifyme </string>
     <string name="stream_external_play_using">Play using...</string>
     <string name="live_streamer_notification_id">liveStreamerNotificationId</string>
     <string name="stream_cast_notification_id">streamCastNotificationId</string>
