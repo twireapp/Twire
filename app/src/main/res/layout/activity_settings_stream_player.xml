@@ -123,8 +123,7 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:minHeight="@dimen/settings_small_item_height"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/settings_small_item_height"
                     android:gravity="center_vertical"
                     android:clickable="true"
                     android:onClick="onClickAutoPlayback"
