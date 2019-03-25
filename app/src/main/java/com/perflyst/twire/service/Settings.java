@@ -550,7 +550,7 @@ public class Settings {
 
 	public String getGeneralTwitchName() {
 		SharedPreferences preferences = getPreferences();
-		return preferences.getString(this.GENERAL_TWITCH_NAME_KEY, "pocketplaysbot");
+		return preferences.getString(this.GENERAL_TWITCH_NAME_KEY, "twireapp");
 	}
 
 	/**
@@ -566,7 +566,7 @@ public class Settings {
 
 	public String getGeneralTwitchDisplayName() {
 		SharedPreferences preferences = getPreferences();
-		return preferences.getString(this.GENERAL_TWITCH_DISPLAY_NAME_KEY, "PocketPlaysDummy");
+		return preferences.getString(this.GENERAL_TWITCH_DISPLAY_NAME_KEY, "TwireApp");
 	}
 
 	/**
