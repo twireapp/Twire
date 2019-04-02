@@ -1,6 +1,7 @@
 # Twire
 
-This is a fork of the [Pocket Plays for Twitch](https://github.com/SebastianRask/Pocket-Plays-for-Twitch) Android application.
+This is a fork of the [Pocket Plays for Twitch](https://github.com/SebastianRask/Pocket-Plays-for-Twitch) Android application.  
+I forked the original app because I wanted a full FLOSS Twitch app (on F-Droid), more information [in this issue](https://github.com/SebastianRask/Pocket-Plays-for-Twitch/issues/1).
 
 Twire is an open source, ad free Twitch browser and stream player for Android.
 
