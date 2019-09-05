@@ -187,7 +187,7 @@
 
     <!-- Featured Streams Activity -->
     <string name="featured_activity_title">@string/navigation_drawer_featured_title</string>
-    <string name="featured_error_no_more_streams">Twitch n\'a plus de stream en tête d'affiche pour le moment</string>
+    <string name="featured_error_no_more_streams">Twitch n\'a plus de stream en tête d\'affiche pour le moment</string>
 
     <!-- Online Streams Status -->
     <string name="enum_ready_message"> </string>
