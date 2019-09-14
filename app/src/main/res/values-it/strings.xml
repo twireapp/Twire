@@ -28,7 +28,7 @@
     <string name="drawer_open">Aperto</string>
     <string name="drawer_close">Chiuso</string>
     <string name="subscription_card_displayName">Nome</string>
-    <string name="content_desc_twitchProfileBanner_imageView">Il banner del profilo specificato dall'\utente</string>
+    <string name="content_desc_twitchProfileBanner_imageView">Il banner del profilo specificato dall\'utente</string>
     <string name="content_desc_twitchLogo_imageView">Immagine degli Streamers di Twitch logo</string>
     <string name="description">Controlli dei Media</string>
     <string name="no_elements_added_notice">No %s non è stato trovato</string>
@@ -102,11 +102,11 @@
     <string name="stream_chromecast_no_vod">Scusa, il Video On Demand non attualmente supportato per il chromecasting</string>
     <string name="stream_chromecast_connection_failed">Twire non ha potuto connettersi a %s</string>
     <string name="stream_chromecast_connecting">Colleganamento…</string>
-    <string name="stream_no_audio_only">Scusa, è solamente disponibile l'\audio per questo stream</string>
+    <string name="stream_no_audio_only">Scusa, è solamente disponibile l\'audio per questo stream</string>
     <string name="stream_audio_only_active">Riproduzione Solo Audio</string>
 
     <!-- VOD activity -->
-    <string name="vod_playback_failed">Non è riuscito a riprodurre il VOD. Prova con un'\altra qualità</string>
+    <string name="vod_playback_failed">Non è riuscito a riprodurre il VOD. Prova con un\'altra qualità</string>
     <string name="title_activity_vod">Video On Demand</string>
     <string name="intent_vod">intent_vod</string>
     <string name="vod_views">%d visualizzazioni</string>
@@ -144,8 +144,8 @@
     <string name="top_games_activity_title">@string/navigation_drawer_top_games_title</string>
 
     <!--Errors -->
-    <string name="error_external_playback_failed">Fallimento dell'\URL mandato al player esterno</string>
-    <string name="error_nothing_found">Qui non c'\è niente</string>
+    <string name="error_external_playback_failed">Fallimento dell\'URL mandato al player esterno</string>
+    <string name="error_nothing_found">Qui non c\'è niente</string>
     <string name="no_server_response_message">Oops. I server di Twitch non sembrano rispondere. Ricarica?</string>
     <string name="no_server_response_action">OK</string>
 
@@ -164,7 +164,7 @@
     <string name="title_activity_live_stream">Trasmissione in diretta</string>
     <string name="chat_send_message_hint">Tipo Messaggio</string>
     <string name="chat_status_connecting">Connessione alla chat</string>
-    <string name="chat_status_connected">Pronto per l'\uso della Chat</string>
+    <string name="chat_status_connected">Pronto per l\'uso della Chat</string>
     <string name="chat_status_reconnecting">Riconnessione</string>
     <string name="chat_status_connection_failed">Connessione Fallita</string>
     <string name="chat_emote_size_title">Dimensione Emote</string>
@@ -220,7 +220,7 @@
     <string name="login_intent_part_of_setup">login_intent_part_of_setup</string>
     <string name="login_intent_token_not_valid">login_intent_token_not_valid</string>
     <string name="login_unvalid_token_text_line_one">Sfortunatamente tu</string>
-    <string name="login_unvalid_token_text_line_two">devi effettuare di nuovo l'accesso</string>
+    <string name="login_unvalid_token_text_line_two">devi effettuare di nuovo l\'accesso</string>
 
 
     <!-- Notification Activity -->
@@ -236,25 +236,25 @@
 
     <!-- Settings -->
     <string name="settings_general_name">Generale</string>
-    <string name="settings_general_name_summary">Profilo Twitch, Pagina d'\Avvio</string>
+    <string name="settings_general_name_summary">Profilo Twitch, Pagina d\'\Avvio</string>
     <string name="settings_stream_player_name">Riproduttore Stream</string>
     <string name="settings_stream_player_summary">Contatore degli spettatori correnti, Comportamento Player</string>
     <string name="settings_appearance_name">Aspetto</string>
     <string name="settings_appearance_summary">Temi, Stile schede, Dimensione schede</string>
     <string name="settings_notifications_name">Notifiche</string>
     <string name="settings_notifications_summary">Controllo Periodo, Suono, Vibrazione ecc</string>
-    <string name="settings_rate_name">Valuta l'\app</string>
+    <string name="settings_rate_name">Valuta l\'\app</string>
     <string name="settings_rate_summary">Manda un feedback</string>
     <string name="settings_chat_name">Twitch Chat</string>
     <string name="settings_chat_name_summary">Dimensione Emote, Dimensione Messaggio</string>
 
     <!-- General settings -->
-    <string name="gen_not_logged_in">Clicca per l'accesso</string>
+    <string name="gen_not_logged_in">Clicca per l\'accesso</string>
     <string name="gen_dialog_login_or_out_content">Vuoi accedere a un nuovo profilo o disconnetterti come %s</string>
     <string name="gen_dialog_login_or_out_login_action">ACCEDI</string>
     <string name="gen_dialog_login_or_out_logout_action">DISCONNETTI</string>
     <string name="gen_twitch_name">Twitch Nome Utente</string>
-    <string name="gen_start_page">Pagina d'avvio</string>
+    <string name="gen_start_page">Pagina d\'avvio</string>
     <string name="gen_reset_tips">Resetta i suggerimenti del Tutorial</string>
     <string name="gen_tips_have_been_reset">I suggerimenti del Tutorial sono stati resettati </string>
 
