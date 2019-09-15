@@ -1265,18 +1265,24 @@ public class StreamFragment extends Fragment {
     private void playbackFailed() {
         mBufferingView.stop();
         if (vodId == null) {
-            showSnackbar(getString(R.string.stream_playback_failed), SNACKBAR_SHOW_DURATION);
+            showSnackbar(getString(R.string.stream_playback_failed), SNACKBAR_SHOW_DURATION, "Retry", v -> startStreamWithTask());
         } else {
-            showSnackbar(getString(R.string.vod_playback_failed), SNACKBAR_SHOW_DURATION);
+            showSnackbar(getString(R.string.vod_playback_failed), SNACKBAR_SHOW_DURATION, "Retry", v -> startStreamWithTask());
         }
     }
 
     private void showSnackbar(String message, int duration) {
+        showSnackbar(message, duration, null, null);
+    }
+
+    private void showSnackbar(String message, int duration, String actionText, View.OnClickListener action) {
         if (getActivity() != null && !isDetached()) {
             View mainView = ((StreamActivity) getActivity()).getMainContentLayout();
 
             if ((snackbar == null || !snackbar.isShown()) && mainView != null) {
                 snackbar = Snackbar.make(mainView, message, duration);
+                if (actionText != null)
+                    snackbar.setAction(actionText, action);
                 snackbar.show();
             }
         }
