@@ -1150,7 +1150,6 @@ public class StreamFragment extends Fragment {
      */
     private void resumeStream() {
         showPauseIcon();
-        mBufferingView.start();
 
         if (isAudioOnlyModeEnabled()) {
         } else {
