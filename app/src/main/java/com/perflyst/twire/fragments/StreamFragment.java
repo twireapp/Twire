@@ -19,17 +19,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-
-import androidx.annotation.DrawableRes;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -54,9 +43,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.DrawableRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.rey.material.widget.ProgressView;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.StreamActivity;
@@ -75,6 +74,7 @@ import com.perflyst.twire.tasks.GetStreamChattersTask;
 import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.perflyst.twire.views.VideoViewSimple;
+import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
@@ -137,7 +137,8 @@ public class StreamFragment extends Fragment {
         @Override
         public void run() {
             if (mVideoView.isPlaying()) {
-                mProgressBar.setProgress(currentProgress + 1);
+                if (currentProgress != mVideoView.getCurrentPosition())
+                    mProgressBar.setProgress(mVideoView.getCurrentPosition());
 
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     mBufferingView.stop();
@@ -399,19 +400,17 @@ public class StreamFragment extends Fragment {
                         pauseStream();
                     }
 
-                    if (progress != currentProgress + 1) {
-                        if (audioViewVisible) {
-                        } else {
-                            mVideoView.seekTo(progress * 1000);
-                            showVideoInterface();
 
-                            if (progress > 0) {
-                                settings.setVodProgress(vodId, progress);
-                            }
+                    if (fromUser && !audioViewVisible) {
+                        mVideoView.seekTo(progress);
+                        showVideoInterface();
+
+                        if (progress > 0) {
+                            settings.setVodProgress(vodId, progress / 1000);
                         }
                     }
                     currentProgress = progress;
-                    mCurrentProgressView.setText(Service.calculateTwitchVideoLength(currentProgress));
+                    mCurrentProgressView.setText(Service.calculateTwitchVideoLength(currentProgress / 1000));
                 }
 
                 @Override
@@ -423,7 +422,7 @@ public class StreamFragment extends Fragment {
                     delayHiding();
                 }
             });
-            mProgressBar.setMax(vodLength);
+            mProgressBar.setMax(vodLength * 1000);
         }
         progressHandler.postDelayed(progressRunnable, 1000);
 
@@ -488,6 +487,8 @@ public class StreamFragment extends Fragment {
             showVideoInterface();
             updateUI();
         }
+
+        checkVodProgress();
     }
 
     @Override
@@ -510,7 +511,7 @@ public class StreamFragment extends Fragment {
         }
 
         if (vodId != null) {
-            settings.setVodProgress(vodId, currentProgress);
+            settings.setVodProgress(vodId, currentProgress / 1000);
             settings.setVodLength(vodId, vodLength);
             Log.d(LOG_TAG, "Saving Current progress: " + currentProgress);
         }
@@ -918,12 +919,12 @@ public class StreamFragment extends Fragment {
     private void checkVodProgress() {
         if (vodId != null) {
             if (currentProgress == 0) {
-                currentProgress = settings.getVodProgress(vodId);
-                mVideoView.seekTo(currentProgress * 1000);
+                currentProgress = settings.getVodProgress(vodId) * 1000;
+                mVideoView.seekTo(currentProgress);
                 Log.d(LOG_TAG, "Current progress: " + currentProgress);
             } else {
-                mVideoView.seekTo(currentProgress * 1000);
-                Log.d(LOG_TAG, "Seeking to " + currentProgress * 1000);
+                mVideoView.seekTo(currentProgress);
+                Log.d(LOG_TAG, "Seeking to " + currentProgress);
             }
         }
     }
@@ -1151,7 +1152,6 @@ public class StreamFragment extends Fragment {
      */
     private void resumeStream() {
         showPauseIcon();
-        mBufferingView.start();
 
         if (isAudioOnlyModeEnabled()) {
         } else {
@@ -1162,7 +1162,6 @@ public class StreamFragment extends Fragment {
             mVideoView.start();
         }
 
-        checkVodProgress();
         keepScreenOn();
     }
 
@@ -1266,18 +1265,24 @@ public class StreamFragment extends Fragment {
     private void playbackFailed() {
         mBufferingView.stop();
         if (vodId == null) {
-            showSnackbar(getString(R.string.stream_playback_failed), SNACKBAR_SHOW_DURATION);
+            showSnackbar(getString(R.string.stream_playback_failed), SNACKBAR_SHOW_DURATION, "Retry", v -> startStreamWithTask());
         } else {
-            showSnackbar(getString(R.string.vod_playback_failed), SNACKBAR_SHOW_DURATION);
+            showSnackbar(getString(R.string.vod_playback_failed), SNACKBAR_SHOW_DURATION, "Retry", v -> startStreamWithTask());
         }
     }
 
     private void showSnackbar(String message, int duration) {
+        showSnackbar(message, duration, null, null);
+    }
+
+    private void showSnackbar(String message, int duration, String actionText, View.OnClickListener action) {
         if (getActivity() != null && !isDetached()) {
             View mainView = ((StreamActivity) getActivity()).getMainContentLayout();
 
             if ((snackbar == null || !snackbar.isShown()) && mainView != null) {
                 snackbar = Snackbar.make(mainView, message, duration);
+                if (actionText != null)
+                    snackbar.setAction(actionText, action);
                 snackbar.show();
             }
         }
@@ -1306,6 +1311,7 @@ public class StreamFragment extends Fragment {
      */
     private void playUrl(String url) {
         mVideoView.setVideoPath(url);
+        checkVodProgress();
         resumeStream();
     }
 

@@ -11,8 +11,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -102,7 +104,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
 												 "&allow_audio_only=true" +
 												 "&allow_source=true" +
 												 "&type=any" +
-												 "&p=%s", streamerName, tokenString, sig, "" + new Random().nextInt(6));
+												 "&p=%s", streamerName, safeEncode(tokenString), sig, "" + new Random().nextInt(6));
 
 		Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
 		return parseM3U8(streamUrl);
@@ -177,5 +179,13 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
 		resultList.put(QUALITY_AUTO, urlToRead);
 
 		return resultList;
+	}
+
+	String safeEncode(String s) {
+		try {
+			return URLEncoder.encode(s, "utf-8");
+		} catch (UnsupportedEncodingException ignore) {
+			return s;
+		}
 	}
 }

@@ -42,6 +42,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorRes;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.customview.widget.ViewDragHelper;
+import androidx.drawerlayout.widget.DrawerLayout;
+
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.FeaturedStreamsActivity;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
@@ -78,13 +85,6 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-
-import androidx.annotation.AttrRes;
-import androidx.annotation.ColorRes;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.customview.widget.ViewDragHelper;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 /**
  * Created by Sebastian Rask on 12-02-2015.
@@ -147,10 +147,8 @@ public class Service {
         if (hours >= 1) {
             result = ((int) Math.floor(hours)) + ":";
         }
-        if (minutes >= 1 || hours >= 1) {
-            result += numberToTime(minutes) + ":";
-        }
-        result += numberToTime(Math.round(seconds));
+
+        result += numberToTime(minutes) + ":" + numberToTime(Math.round(seconds));
 
         return result;
     }
@@ -355,7 +353,7 @@ public class Service {
     }
 
     /**
-     * Hides the onscreen keyboard if it is visisble
+     * Hides the onscreen keyboard if it is visible
      */
     public static void hideKeyboard(Activity activity) {
         // Check if no view has focus:
@@ -404,7 +402,7 @@ public class Service {
     }
 
     /**
-     * Returns a resized bitmap with a spcified factor to change the width and height with.
+     * Returns a resized bitmap with a specified factor to change the width and height with.
      */
     public static Bitmap getResizedBitmap(Bitmap bm, float factorchange) {
         return getResizedBitmap(bm, (int) (bm.getWidth() * factorchange), (int) (bm.getHeight() * factorchange));
@@ -624,7 +622,7 @@ public class Service {
                 conn.disconnect();
         }
 
-        if (result.length() == 0 || (result.length() >= 1 && result.charAt(0) != '{')) {
+        if (result.length() == 0 || (result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[')) {
             Log.v("URL TO JSON STRING", urlToRead + " did not successfully get read");
             Log.v("URL TO JSON STRING", "Result of reading - " + result);
         }
