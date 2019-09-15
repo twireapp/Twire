@@ -45,6 +45,9 @@ public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
 				JSONObject panelObject = json.getJSONObject(i);
 				JSONObject dataObject = panelObject.getJSONObject(DATA_OBJECT_KEY);
 
+				if (dataObject.length() == 0)
+					continue;
+
 				int order = panelObject.getInt(DISPLAY_ORDER_INT_KEY);
 				int userId = panelObject.getInt(USER_ID_INT_KEY);
 				String html = panelObject.has(HTML_DESCRIPTION_STRING_KEY) ? panelObject.getString(HTML_DESCRIPTION_STRING_KEY) : "";
