@@ -487,6 +487,8 @@ public class StreamFragment extends Fragment {
             showVideoInterface();
             updateUI();
         }
+
+        checkVodProgress();
     }
 
     @Override
@@ -1160,7 +1162,6 @@ public class StreamFragment extends Fragment {
             mVideoView.start();
         }
 
-        checkVodProgress();
         keepScreenOn();
     }
 
@@ -1310,6 +1311,7 @@ public class StreamFragment extends Fragment {
      */
     private void playUrl(String url) {
         mVideoView.setVideoPath(url);
+        checkVodProgress();
         resumeStream();
     }
 
