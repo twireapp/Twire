@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
 
 import com.perflyst.twire.model.ChatEmote;
@@ -27,7 +28,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -54,6 +57,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 	private String channelName;
 	private String hashChannel;
 	private int channelUserId;
+	private String vodId;
 	private ChatCallback callback;
 	private Context context;
 	private Settings appSettings;
@@ -72,7 +76,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
 	private ChatEmoteManager mEmoteManager;
 
-	public ChatManager(Context aContext, String aChannel, int aChannelUserId, ChatCallback aCallback){
+	public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback){
 		mEmoteManager = new ChatEmoteManager(aChannelUserId, aChannel, aContext);
 		appSettings = new Settings(aContext);
 		user = appSettings.getGeneralTwitchName();
@@ -80,6 +84,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 		hashChannel = "#" + aChannel;
 		channelName = aChannel;
 		channelUserId = aChannelUserId;
+		vodId = aVodId;
 		callback = aCallback;
 		context = aContext;
 
@@ -113,15 +118,19 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 			}
 		});
 
-		ChatProperties properties = fetchChatProperties();
-		if(properties != null) {
-			String ipAndPort = properties.getChatIp();
-			String[] ipAndPortArr = ipAndPort.split(":");
-			twitchChatServer = ipAndPortArr[0];
-			twitchChatPort = Integer.parseInt(ipAndPortArr[1]);
-		}
+		if (vodId == null) {
+			ChatProperties properties = fetchChatProperties();
+			if (properties != null) {
+				String ipAndPort = properties.getChatIp();
+				String[] ipAndPortArr = ipAndPort.split(":");
+				twitchChatServer = ipAndPortArr[0];
+				twitchChatPort = Integer.parseInt(ipAndPortArr[1]);
+			}
 
-		connect(twitchChatServer, twitchChatPort);
+			connect(twitchChatServer, twitchChatPort);
+		} else {
+			processVodChat();
+		}
 
 		return null;
 	}
@@ -225,6 +234,111 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 			}
 
 		} catch (IOException e) {
+			e.printStackTrace();
+			onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTION_FAILED));
+		}
+	}
+
+	private static double currentProgress;
+	private static String cursor = "";
+	private static boolean seek = false;
+	private void processVodChat() {
+		try {
+			onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTED));
+
+			List<JSONObject> downloadedComments = new ArrayList<>();
+			boolean reconnecting = false;
+			while (!isStopping) {
+				if (currentProgress == VOD_LOADING) {
+					continue;
+				}
+
+				if (seek) {
+					seek = false;
+					cursor = "";
+					downloadedComments.clear();
+				}
+
+				if (downloadedComments.size() == 0) {
+					String result = Service.urlToJSONString("https://api.twitch.tv/v5/videos/" + vodId.substring(1) + "/comments?cursor=" + cursor + "&content_offset_seconds=" + currentProgress);
+
+					if (result.isEmpty()) {
+						reconnecting = true;
+						onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
+						SystemClock.sleep(2500);
+						continue;
+					} else if (reconnecting) {
+						reconnecting = false;
+						onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTED));
+					}
+
+					JSONObject commentsObject = new JSONObject(result);
+					JSONArray comments = commentsObject.getJSONArray("comments");
+
+					for (int i = 0; i < comments.length(); i++) {
+						JSONObject comment = comments.getJSONObject(i);
+						downloadedComments.add(comment);
+					}
+
+					// Assumption: If the VOD has no comments and no previous or next comments, there are no comments on the VOD.
+					if (comments.length() == 0 && !commentsObject.has("_next") && !commentsObject.has("_prev")) {
+						break;
+					}
+
+					if (commentsObject.has("_next"))
+						cursor = commentsObject.getString("_next");
+				}
+
+				if (seek) {
+					seek = false;
+					cursor = "";
+					downloadedComments.clear();
+					continue;
+				}
+
+				for (int i = 0; i < downloadedComments.size(); i++) {
+					JSONObject comment = downloadedComments.get(i);
+					if (currentProgress >= comment.getDouble("content_offset_seconds")) {
+						JSONObject commenter = comment.getJSONObject("commenter");
+						JSONObject message = comment.getJSONObject("message");
+
+						Map<String, Integer> badges = new HashMap<>();
+						if (message.has("user_badges")) {
+							JSONArray userBadgesArray = message.getJSONArray("user_badges");
+							for (int j = 0; j < userBadgesArray.length(); j++) {
+								JSONObject userBadge = userBadgesArray.getJSONObject(j);
+								badges.put(userBadge.getString("_id"), userBadge.getInt("version"));
+							}
+						}
+
+						String color = message.has("user_color") ? message.getString("user_color") : "";
+						String displayName = commenter.getString("display_name");
+						boolean isMod = badges.containsKey("moderator");
+						boolean isSubscriber = badges.containsKey("subscriber");
+						boolean isTurbo = badges.containsKey("turbo");
+						String body = message.getString("body");
+
+						List<ChatEmote> emotes = new ArrayList<>();
+						if (message.has("emoticons")) {
+							JSONArray emoticonsArray = message.getJSONArray("emoticons");
+							for (int j = 0; j < emoticonsArray.length(); j++) {
+								JSONObject emoticon = emoticonsArray.getJSONObject(j);
+								emotes.add(new ChatEmote(new String[]{emoticon.getString("begin") + "-" + emoticon.getString("end")}, getEmoteFromId(emoticon.getString("_id"), false)));
+							}
+						}
+						emotes.addAll(mEmoteManager.findBttvEmotes(body));
+
+						boolean highlight = false;//Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
+
+						ChatMessage chatMessage = new ChatMessage(body, displayName, color, isMod, isTurbo, isSubscriber, emotes, subscriberIcon, highlight);
+						publishProgress(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
+
+						downloadedComments.remove(i);
+						i--;
+					}
+				}
+			}
+		} catch (Exception e) {
 			e.printStackTrace();
 			onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTION_FAILED));
 		}
@@ -386,6 +500,12 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 		return mEmoteManager.getEmoteFromId(emoteId, isBttvEmote);
 	}
 
+	public static final int VOD_LOADING = -1;
+
+	public static void updateVodProgress(int aCurrentProgress, boolean aSeek) {
+		currentProgress = aCurrentProgress / 1000;
+		seek = aSeek;
+	}
 
 	/**
 	 * Fetches the chat properties from Twitch.

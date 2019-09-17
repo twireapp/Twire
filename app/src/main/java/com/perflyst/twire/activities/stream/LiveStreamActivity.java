@@ -2,32 +2,21 @@ package com.perflyst.twire.activities.stream;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.ViewTreeObserver;
+
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.transition.Fade;
-import android.transition.Slide;
-import android.transition.Transition;
-import android.transition.TransitionSet;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewTreeObserver;
-import android.widget.RelativeLayout;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.MentionAdapter;
-import com.perflyst.twire.fragments.ChatFragment;
-import com.perflyst.twire.fragments.StreamFragment;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
-import com.perflyst.twire.service.Settings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,19 +36,17 @@ public class LiveStreamActivity extends StreamActivity {
 	}
 
 	private String LOG_TAG = getClass().getSimpleName();
-	private ChatFragment mChatFragment;
 	private RecyclerView mMentionRecyclerView;
-	private Settings settings;
 	private MentionAdapter mMentionAdapter;
 	private View mMentionContainer;
 
 	@Override
-	protected int getLayoutRessource() {
+	protected int getLayoutResource() {
 		return R.layout.activity_stream;
 	}
 
 	@Override
-	protected int getVideoContainerRessource() {
+	protected int getVideoContainerResource() {
 		return R.id.video_fragment_container;
 	}
 
@@ -84,16 +71,6 @@ public class LiveStreamActivity extends StreamActivity {
 		if (savedInstance == null) {
 			FragmentManager fm = getSupportFragmentManager();
 
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				getWindow().setEnterTransition(constructTransitions());
-				getWindow().setReturnTransition(constructTransitions());
-			}
-
-			if (mChatFragment == null) {
-				mChatFragment = ChatFragment.getInstance(getStreamArguments());
-				fm.beginTransaction().replace(R.id.chat_fragment, mChatFragment).commit();
-			}
-
 			if (mMentionRecyclerView == null) {
 				mMentionContainer = findViewById(R.id.mention_container);
 				mMentionContainer.setVisibility(View.GONE);
@@ -101,9 +78,6 @@ public class LiveStreamActivity extends StreamActivity {
 				setupMentionSuggestionRecyclerView();
 			}
 		}
-
-		settings = new Settings(this);
-		checkCreateLandscapeChat();
 	}
 
 	@Override
@@ -115,15 +89,6 @@ public class LiveStreamActivity extends StreamActivity {
 	@Override
 	public void onBackPressed() {
 		setMentionSuggestions(new ArrayList<String>(), null);
-		if (mChatFragment == null || (mChatFragment.notifyBackPressed())) {
-			super.onBackPressed();
-		}
-	}
-
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		checkCreateLandscapeChat();
 	}
 
 	@Override
@@ -131,24 +96,6 @@ public class LiveStreamActivity extends StreamActivity {
 		if (this.mStreamFragment != null && !this.mStreamFragment.chatOnlyViewVisible) {
 			super.update(vectors);
 		}
-	}
-
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-	private TransitionSet constructTransitions() {
-		int[] slideTargets = {R.id.ChatRecyclerView, R.id.chat_input, R.id.chat_input_divider};
-
-		Transition slideTransition = new Slide(Gravity.BOTTOM);
-		Transition fadeTransition = new Fade();
-
-		for (int slideTarget : slideTargets) {
-			slideTransition.addTarget(slideTarget);
-			fadeTransition.excludeTarget(slideTarget, true);
-		}
-
-		TransitionSet set = new TransitionSet();
-		set.addTransition(slideTransition);
-		set.addTransition(fadeTransition);
-		return set;
 	}
 
 	public void setMentionSuggestions(List<String> mentionSuggestions, @Nullable final Rect inputRect) {
@@ -190,19 +137,6 @@ public class LiveStreamActivity extends StreamActivity {
 				mMentionContainer.setY(inputRect.top - inputRect.height() - (int) currentHeight);
 			}
 		});
-	}
-
-	private void checkCreateLandscapeChat() {
-		int orientation = getResources().getConfiguration().orientation;
-		View chat = findViewById(R.id.chat_fragment);
-		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) findViewById(R.id.chat_landscape_fragment).getLayoutParams();
-			lp.width = (int) (StreamFragment.getScreenWidth(this) * (settings.getChatLandscapeWidth() / 100.0));
-			Log.d(LOG_TAG, "TARGET WIDTH: " + lp.width);
-			chat.setLayoutParams(lp);
-		} else {
-			chat.setLayoutParams(findViewById(R.id.chat_placement_wrapper).getLayoutParams());
-		}
 	}
 
 	private void setupMentionSuggestionRecyclerView() {

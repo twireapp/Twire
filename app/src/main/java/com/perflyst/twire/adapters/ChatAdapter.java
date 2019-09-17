@@ -289,6 +289,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 		Log.d(LOG_TAG, "Adding Message " + message.getMessage());
 	}
 
+	public void clear() {
+		int size = messages.size();
+		messages.clear();
+		notifyItemRangeRemoved(0, size);
+	}
+
 	/**
 	 * Checks if the data structure contains more items that the specified max amount, if so. Remove the first item in the structure.
 	 * Notifies observers that item has been removed

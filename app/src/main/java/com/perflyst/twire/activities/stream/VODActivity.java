@@ -2,11 +2,12 @@ package com.perflyst.twire.activities.stream;
 
 import android.content.Context;
 import android.content.Intent;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ChannelActivity;
@@ -28,12 +29,12 @@ public class VODActivity extends StreamActivity {
 	private TextView mTitleView, mViewsView;
 
 	@Override
-	protected int getLayoutRessource() {
+	protected int getLayoutResource() {
 		return R.layout.activity_vod;
 	}
 
 	@Override
-	protected int getVideoContainerRessource() {
+	protected int getVideoContainerResource() {
 		return R.id.video_fragment_container;
 	}
 

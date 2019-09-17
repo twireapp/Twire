@@ -1,40 +1,58 @@
 package com.perflyst.twire.activities.stream;
 
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.content.ContextCompat;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
+import com.perflyst.twire.fragments.ChatFragment;
 import com.perflyst.twire.fragments.StreamFragment;
+import com.perflyst.twire.service.Settings;
 
-public abstract class StreamActivity extends ThemeActivity implements SensorEventListener {
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
+public abstract class StreamActivity extends ThemeActivity implements SensorEventListener, StreamFragment.OnSeekListener {
 	private static final int SENSOR_DELAY = 500 * 1000; // 500ms
 	private static final int FROM_RADS_TO_DEGS = -57;
 
 	private String LOG_TAG = getClass().getSimpleName();
 	private Sensor mRotationSensor;
+	private Settings settings;
 	public StreamFragment mStreamFragment;
+	public ChatFragment mChatFragment;
 
-	protected abstract int getLayoutRessource();
-	protected abstract int getVideoContainerRessource();
+	protected abstract int getLayoutResource();
+	protected abstract int getVideoContainerResource();
 	protected abstract Bundle getStreamArguments();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(getLayoutRessource());
+		setContentView(getLayoutResource());
 
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
@@ -45,11 +63,22 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 
 		if(savedInstanceState == null) {
 			FragmentManager fm = getSupportFragmentManager();
+
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+				getWindow().setEnterTransition(constructTransitions());
+				getWindow().setReturnTransition(constructTransitions());
+			}
+
 			// If the Fragment is non-null, then it is currently being
 			// retained across a configuration change.
 			if (mStreamFragment == null) {
 				mStreamFragment = StreamFragment.newInstance(getStreamArguments());
-				fm.beginTransaction().replace(getVideoContainerRessource(), mStreamFragment, getString(R.string.stream_fragment_tag)).commit();
+				fm.beginTransaction().replace(getVideoContainerResource(), mStreamFragment, getString(R.string.stream_fragment_tag)).commit();
+			}
+
+			if (mChatFragment == null) {
+				mChatFragment = ChatFragment.getInstance(getStreamArguments());
+				fm.beginTransaction().replace(R.id.chat_fragment, mChatFragment).commit();
 			}
 		}
 
@@ -60,6 +89,15 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		settings = new Settings(this);
+		updateOrientation();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		updateOrientation();
 	}
 
 	@Override
@@ -108,7 +146,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 	protected void resetStream() {
 		FragmentManager fm = getSupportFragmentManager();
 		mStreamFragment = StreamFragment.newInstance(getStreamArguments());
-		fm.beginTransaction().replace(getVideoContainerRessource(), mStreamFragment).commit();
+		fm.beginTransaction().replace(getVideoContainerResource(), mStreamFragment).commit();
 	}
 
 	@Override
@@ -128,6 +166,10 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 
 	@Override
 	public void onBackPressed() {
+		if (mChatFragment == null || (mChatFragment.notifyBackPressed())) {
+			super.onBackPressed();
+		}
+
 		// Eww >(
 		if (mStreamFragment != null) {
 			if(mStreamFragment.isFullscreen) {
@@ -148,6 +190,25 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 			super.onBackPressed();
 			this.overrideTransition();
 		}
+	}
+
+
+	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+	private TransitionSet constructTransitions() {
+		int[] slideTargets = {R.id.ChatRecyclerView, R.id.chat_input, R.id.chat_input_divider};
+
+		Transition slideTransition = new Slide(Gravity.BOTTOM);
+		Transition fadeTransition = new Fade();
+
+		for (int slideTarget : slideTargets) {
+			slideTransition.addTarget(slideTarget);
+			fadeTransition.excludeTarget(slideTarget, true);
+		}
+
+		TransitionSet set = new TransitionSet();
+		set.addTransition(slideTransition);
+		set.addTransition(fadeTransition);
+		return set;
 	}
 
 	private void overrideTransition() {
@@ -193,7 +254,36 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 		return super.onOptionsItemSelected(item);
 	}
 
-	public View getMainContentLayout() {
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (fragment instanceof StreamFragment) {
+            StreamFragment streamFragment = (StreamFragment) fragment;
+            streamFragment.onSeekCallback = this;
+        }
+    }
+
+    @Override
+	public void onSeek() {
+		mChatFragment.clearMessages();
+	}
+
+    public View getMainContentLayout() {
 		return findViewById(R.id.main_content);
+	}
+
+	void updateOrientation() {
+		int orientation = getResources().getConfiguration().orientation;
+		View chat = findViewById(R.id.chat_fragment);
+		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) findViewById(R.id.chat_landscape_fragment).getLayoutParams();
+			lp.width = (int) (StreamFragment.getScreenWidth(this) * (settings.getChatLandscapeWidth() / 100.0));
+			Log.d(LOG_TAG, "TARGET WIDTH: " + lp.width);
+			chat.setLayoutParams(lp);
+		} else {
+			chat.setLayoutParams(findViewById(R.id.chat_placement_wrapper).getLayoutParams());
+		}
+
+		ViewGroup.LayoutParams layoutParams = findViewById(getVideoContainerResource()).getLayoutParams();
+		layoutParams.height = orientation == Configuration.ORIENTATION_LANDSCAPE ? MATCH_PARENT : WRAP_CONTENT;
 	}
 }
