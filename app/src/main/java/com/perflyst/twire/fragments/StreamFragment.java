@@ -60,6 +60,7 @@ import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.StreamActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
+import com.perflyst.twire.chat.ChatManager;
 import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
 import com.perflyst.twire.misc.ResizeWidthAnimation;
@@ -105,7 +106,8 @@ public class StreamFragment extends Fragment {
             audioViewVisible = false,
             chatOnlyViewVisible = false,
             autoPlay = true,
-            hasPaused = false;
+            hasPaused = false,
+            seeking = false;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
     private Settings settings;
     private SleepTimer sleepTimer;
@@ -390,6 +392,8 @@ public class StreamFragment extends Fragment {
         } else {
             mCurrentViewersWrapper.setVisibility(View.GONE);
 
+            ChatManager.updateVodProgress(ChatManager.VOD_LOADING, true);
+
             TextView maxProgress = mRootView.findViewById(R.id.maxProgress);
             maxProgress.setText(Service.calculateTwitchVideoLength(vodLength));
 
@@ -400,8 +404,11 @@ public class StreamFragment extends Fragment {
                         pauseStream();
                     }
 
+                    if (vodId != null && !seeking && !fromUser) {
+                        ChatManager.updateVodProgress(progress, false);
+                    }
 
-                    if (fromUser && !audioViewVisible) {
+                    if ((fromUser || seeking) && !audioViewVisible) {
                         mVideoView.seekTo(progress);
                         showVideoInterface();
 
@@ -415,11 +422,18 @@ public class StreamFragment extends Fragment {
 
                 @Override
                 public void onStartTrackingTouch(SeekBar seekBar) {
+                    seeking = true;
                 }
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
+                    seeking = false;
                     delayHiding();
+
+                    if (vodId != null) {
+                        ChatManager.updateVodProgress(currentProgress, true);
+                        onSeekCallback.onSeek();
+                    }
                 }
             });
             mProgressBar.setMax(vodLength * 1000);
@@ -438,6 +452,12 @@ public class StreamFragment extends Fragment {
         }
 
         return mRootView;
+    }
+
+    public OnSeekListener onSeekCallback;
+
+    public interface OnSeekListener {
+        public void onSeek();
     }
 
     /**
@@ -629,7 +649,7 @@ public class StreamFragment extends Fragment {
      * If the screen is in landscape it is show, else it is shown
      */
     private void checkShowChatButtonVisibility() {
-        if (isLandscape && vodId == null && settings.isChatInLandscapeEnabled()) {
+        if (isLandscape && settings.isChatInLandscapeEnabled()) {
             mShowChatButton.setRotation(0f);
             mShowChatButton.setVisibility(View.VISIBLE);
         } else {
@@ -920,9 +940,11 @@ public class StreamFragment extends Fragment {
         if (vodId != null) {
             if (currentProgress == 0) {
                 currentProgress = settings.getVodProgress(vodId) * 1000;
+                ChatManager.updateVodProgress(currentProgress, true);
                 mVideoView.seekTo(currentProgress);
                 Log.d(LOG_TAG, "Current progress: " + currentProgress);
             } else {
+                ChatManager.updateVodProgress(currentProgress, true);
                 mVideoView.seekTo(currentProgress);
                 Log.d(LOG_TAG, "Seeking to " + currentProgress);
             }

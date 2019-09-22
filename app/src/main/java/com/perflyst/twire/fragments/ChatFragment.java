@@ -100,6 +100,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 	private ChatAdapter mChatAdapter;
 	private ChatManager chatManager;
 	private ChannelInfo mChannelInfo;
+	private String vodID;
 	private Settings settings;
 
 	private RelativeLayout 		mChatInputLayout;
@@ -173,8 +174,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 		mRecyclerView.setItemAnimator(null);
 
 		mChannelInfo = getArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo));// intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
+		vodID = getArguments().getString(getString(R.string.stream_fragment_vod_id));
 
-		if (!settings.isLoggedIn()) {
+		if (!settings.isLoggedIn() || vodID != null) {
 			userNotLoggedIn();
 		} else {
 			setupChatInput();
@@ -197,7 +199,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 	public void onStart() {
 		super.onStart();
 		final ChatFragment instance = this;
-		chatManager = new ChatManager(getContext(), mChannelInfo.getStreamerName(), mChannelInfo.getUserId(), new ChatManager.ChatCallback() {
+		chatManager = new ChatManager(getContext(), mChannelInfo.getStreamerName(), mChannelInfo.getUserId(), vodID, new ChatManager.ChatCallback() {
 			private boolean connected = false;
 
 			private boolean isFragmentActive() {
@@ -846,6 +848,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 	 */
 	public void addMessage(ChatMessage message) {
 		mChatAdapter.add(message);
+	}
+
+	public void clearMessages() {
+		if (mChatAdapter != null)
+			mChatAdapter.clear();
 	}
 
 	/**
