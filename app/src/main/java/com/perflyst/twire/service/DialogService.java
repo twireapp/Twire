@@ -1,19 +1,20 @@
 package com.perflyst.twire.service;
 
 import android.app.Activity;
+import android.view.View;
+
 import androidx.annotation.ArrayRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import android.view.View;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
-import com.rey.material.widget.Slider;
 import com.perflyst.twire.R;
 import com.perflyst.twire.views.LayoutSelector;
+import com.rey.material.widget.Slider;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
@@ -182,6 +183,32 @@ public class DialogService {
 
 		hourPicker.setValue(hourValue);
 		minPicker.setValue(minuteValue);
+
+		return dialog;
+	}
+
+	public static MaterialDialog getSeekDialog(Activity activity, MaterialDialog.SingleButtonCallback buttonCallback, int currentProgress, int maxProgress) {
+		MaterialDialog dialog = getBaseThemedDialog(activity)
+				.title(R.string.stream_seek_dialog_title)
+				.customView(R.layout.dialog_seek, false)
+				.positiveText(R.string.done)
+				.negativeText(R.string.cancel)
+				.onPositive(buttonCallback)
+				.onNegative(buttonCallback)
+				.build();
+
+		View customView = dialog.getCustomView();
+		MaterialNumberPicker hourPicker = customView.findViewById(R.id.hour_picker);
+		MaterialNumberPicker minutePicker = customView.findViewById(R.id.minute_picker);
+		MaterialNumberPicker secondPicker = customView.findViewById(R.id.second_picker);
+
+		hourPicker.setMaxValue(maxProgress / 3600);
+		minutePicker.setMaxValue(Math.min(maxProgress / 60, 59));
+		secondPicker.setMaxValue(Math.min(maxProgress, 59));
+
+		hourPicker.setValue(currentProgress / 3600);
+		minutePicker.setValue(currentProgress / 60 % 60);
+		secondPicker.setValue(currentProgress % 60);
 
 		return dialog;
 	}
