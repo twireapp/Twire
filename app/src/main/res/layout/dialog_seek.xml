@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/seek_dialog"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <biz.kasual.materialnumberpicker.MaterialNumberPicker
+        android:id="@+id/hour_picker"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toStartOf="@id/colon_separator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:npBackgroundColor="?attr/navigationDrawerBackground"
+        app:npMinValue="0"
+        app:npTextColor="?attr/navigationDrawerTextColor"
+        app:npTextSize="@dimen/stream_sleep_timer_font_size" />
+
+    <TextView
+        android:id="@+id/colon_separator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:textSize="@dimen/stream_sleep_timer_font_size"
+        android:textColor="?attr/navigationDrawerTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/hour_picker"
+        app:layout_constraintEnd_toStartOf="@id/minute_picker"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <biz.kasual.materialnumberpicker.MaterialNumberPicker
+        android:id="@+id/minute_picker"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toStartOf="@id/colon_separator_2"
+        app:layout_constraintStart_toEndOf="@id/colon_separator"
+        app:npBackgroundColor="?attr/navigationDrawerBackground"
+        app:npMinValue="0"
+        app:npTextColor="?attr/navigationDrawerTextColor"
+        app:npTextSize="@dimen/stream_sleep_timer_font_size" />
+
+
+    <TextView
+        android:id="@+id/colon_separator_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=":"
+        android:textSize="@dimen/stream_sleep_timer_font_size"
+        android:textColor="?attr/navigationDrawerTextColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/minute_picker"
+        app:layout_constraintEnd_toStartOf="@id/second_picker"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <biz.kasual.materialnumberpicker.MaterialNumberPicker
+        android:id="@+id/second_picker"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/colon_separator_2"
+        app:npMinValue="0"
+        app:npTextSize="@dimen/stream_sleep_timer_font_size"
+        app:npBackgroundColor="?attr/navigationDrawerBackground"
+        app:npTextColor="?attr/navigationDrawerTextColor" />
+</androidx.constraintlayout.widget.ConstraintLayout>

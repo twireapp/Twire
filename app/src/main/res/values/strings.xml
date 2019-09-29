@@ -97,6 +97,7 @@
     <string name="stream_preview_alpha">stream_image_alpha</string>
     <string name="stream_preview_vod">stream_remove_black_bars</string>
     <string name="stream_sleep_timer_title">Sleep Timer</string>
+    <string name="stream_seek_dialog_title">Seek To</string>
     <string name="stream_chromecast_playing">Playing on %s</string>
     <string name="stream_chromecast_failed">Something went wrong playing on %s</string>
     <string name="stream_chromecast_no_vod">Sorry, Video On Demand is currently not supported for chromecasting</string>
@@ -104,6 +105,12 @@
     <string name="stream_chromecast_connecting">Connecting…</string>
     <string name="stream_no_audio_only">Sorry, audio only is not available for this stream</string>
     <string name="stream_audio_only_active">Playing Audio Only</string>
+
+    <string name="stream_fullscreen">Fullscreen</string>
+    <string name="stream_viewers">Viewers</string>
+    <string name="stream_show_chat">Show Chat</string>
+    <string name="stream_forward">Forward 10 seconds</string>
+    <string name="stream_backward">Backward 10 seconds</string>
 
     <!-- VOD activity -->
     <string name="vod_playback_failed">Failed to play VOD. Try another quality</string>

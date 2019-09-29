@@ -35,7 +35,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.CheckedTextView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -46,11 +45,13 @@ import android.widget.Toast;
 import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -67,6 +68,7 @@ import com.perflyst.twire.misc.ResizeWidthAnimation;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.Panel;
 import com.perflyst.twire.model.SleepTimer;
+import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetLiveStreamURL;
@@ -87,6 +89,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
 public class StreamFragment extends Fragment {
     private final int PLAY_PAUSE_ANIMATION_DURATION = 500,
@@ -120,15 +124,17 @@ public class StreamFragment extends Fragment {
     private View mVideoBackground;
     private VideoViewSimple mVideoView;
     private Toolbar mToolbar;
-    private RelativeLayout mControlToolbar,
-            mVideoWrapper;
-    private FrameLayout mPlayPauseWrapper;
+    private RelativeLayout mControlToolbar;
+    private ConstraintLayout mVideoWrapper;
+    private ConstraintLayout mPlayPauseWrapper;
     private ImageView mPauseIcon,
             mPlayIcon,
             mQualityButton,
             mFullScreenButton,
             mPreview,
-            mShowChatButton;
+            mShowChatButton,
+            mForward,
+            mBackward;
     private SeekBar mProgressBar;
     private TextView mCurrentProgressView, source, high, medium, low, mobile, auto, castingTextView, mCurrentViewersView;
     private AppCompatActivity mActivity;
@@ -272,6 +278,8 @@ public class StreamFragment extends Fragment {
         mQualityButton = mRootView.findViewById(R.id.settings_icon);
         mFullScreenButton = mRootView.findViewById(R.id.fullscreen_icon);
         mShowChatButton = mRootView.findViewById(R.id.show_chat_button);
+        mForward = mRootView.findViewById(R.id.forward);
+        mBackward = mRootView.findViewById(R.id.backward);
         mCurrentProgressView = mRootView.findViewById(R.id.currentProgess);
         castingTextView = mRootView.findViewById(R.id.chromecast_text);
         mProgressBar = mRootView.findViewById(R.id.progressBar);
@@ -379,6 +387,10 @@ public class StreamFragment extends Fragment {
         );
 
 
+        int seekButtonVisibility = vodId == null ? View.INVISIBLE : View.VISIBLE;
+        mForward.setVisibility(seekButtonVisibility);
+        mBackward.setVisibility(seekButtonVisibility);
+
         if (vodId == null) {
             View mTimeController = mRootView.findViewById(R.id.time_controller);
             mTimeController.setVisibility(View.INVISIBLE);
@@ -391,6 +403,25 @@ public class StreamFragment extends Fragment {
             }
         } else {
             mCurrentViewersWrapper.setVisibility(View.GONE);
+
+            mForward.setOnClickListener(v -> {
+                seeking = true;
+                mProgressBar.setProgress(currentProgress + 10000);
+                seeking = false;
+                ChatManager.updateVodProgress(currentProgress, false);
+            });
+
+            mBackward.setOnClickListener(v -> {
+                seeking = true;
+                mProgressBar.setProgress(currentProgress - 10000);
+                seeking = false;
+                onSeekCallback.onSeek();
+                ChatManager.updateVodProgress(currentProgress, true);
+            });
+
+            mCurrentProgressView.setOnClickListener(v -> {
+                showSeekDialog();
+            });
 
             ChatManager.updateVodProgress(ChatManager.VOD_LOADING, true);
 
@@ -685,6 +716,27 @@ public class StreamFragment extends Fragment {
         sleepTimer.show(getActivity());
     }
 
+    private void showSeekDialog() {
+        DialogService.getSeekDialog(getActivity(), (dialog, which) -> {
+            if (which == DialogAction.NEGATIVE)
+                return;
+
+            View customView = dialog.getCustomView();
+            MaterialNumberPicker hourPicker = customView.findViewById(R.id.hour_picker);
+            MaterialNumberPicker minutePicker = customView.findViewById(R.id.minute_picker);
+            MaterialNumberPicker secondPicker = customView.findViewById(R.id.second_picker);
+
+            seeking = true;
+            mProgressBar.setProgress((hourPicker.getValue() * 3600 + minutePicker.getValue() * 60 + secondPicker.getValue()) * 1000);
+            seeking = false;
+            onSeekCallback.onSeek();
+            ChatManager.updateVodProgress(currentProgress, true);
+        },
+        currentProgress / 1000,
+        vodLength)
+        .show();
+    }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -726,7 +778,7 @@ public class StreamFragment extends Fragment {
     }
 
     private void setupLandscapeChat() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && vodId == null && settings.isChatLandscapeSwipable() && settings.isChatInLandscapeEnabled()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && settings.isChatLandscapeSwipable() && settings.isChatInLandscapeEnabled()) {
             final int width = getScreenWidth(getActivity());
 
             View.OnTouchListener touchListener = new View.OnTouchListener() {
@@ -738,7 +790,7 @@ public class StreamFragment extends Fragment {
                         final int X = (int) event.getRawX();
                         switch (event.getAction() & MotionEvent.ACTION_MASK) {
                             case MotionEvent.ACTION_DOWN:
-                                RelativeLayout.LayoutParams lParams = (RelativeLayout.LayoutParams) mVideoWrapper.getLayoutParams();
+                                ConstraintLayout.LayoutParams lParams = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
                                 if (lParams.width > 0)
                                     widthOnDown = lParams.width;
 
@@ -746,9 +798,9 @@ public class StreamFragment extends Fragment {
                                 break;
                             case MotionEvent.ACTION_UP:
                                 int upPosition = (int) event.getRawX();
-                                int deltaPostion = upPosition - downPosition;
+                                int deltaPosition = upPosition - downPosition;
 
-                                if (deltaPostion < 20 && deltaPostion > -20) {
+                                if (deltaPosition < 20 && deltaPosition > -20) {
                                     return false;
                                 }
 
@@ -760,7 +812,7 @@ public class StreamFragment extends Fragment {
 
                                 break;
                             case MotionEvent.ACTION_MOVE:
-                                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mVideoWrapper.getLayoutParams();
+                                ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
                                 int newWidth = 0;
 
                                 if (X > downPosition) { // Swiping right
@@ -769,9 +821,7 @@ public class StreamFragment extends Fragment {
                                     newWidth = widthOnDown - (downPosition - X);
                                 }
 
-                                if (newWidth > width - getLandscapeChatTargetWidth()) {
-                                    layoutParams.width = newWidth;
-                                }
+                                layoutParams.width = Math.max(Math.min(newWidth, width), width - getLandscapeChatTargetWidth());
 
                                 mVideoWrapper.setLayoutParams(layoutParams);
                                 break;
@@ -1007,13 +1057,14 @@ public class StreamFragment extends Fragment {
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int width = displaymetrics.widthPixels;
-        RelativeLayout.LayoutParams layoutWrapper = (RelativeLayout.LayoutParams) mVideoWrapper.getLayoutParams();
+        ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
         if (isLandscape) {
-            layoutWrapper.height = FrameLayout.LayoutParams.MATCH_PARENT;
+            layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_PARENT : getScreenWidth(getActivity()) - getLandscapeChatTargetWidth();
+            layoutWrapper.height = ConstraintLayout.LayoutParams.MATCH_PARENT;
         } else {
-            layoutWrapper.height = (int) Math.ceil(1.0 * width / (16.0 / 9.0));
+            layoutWrapper.width = ConstraintLayout.LayoutParams.WRAP_CONTENT;
+            layoutWrapper.height = ConstraintLayout.LayoutParams.MATCH_PARENT;
         }
-        layoutWrapper.width = RelativeLayout.LayoutParams.MATCH_PARENT;
         mVideoWrapper.setLayoutParams(layoutWrapper);
     }
 
@@ -1042,6 +1093,8 @@ public class StreamFragment extends Fragment {
             mControlToolbar.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
             mPlayPauseWrapper.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
             mShowChatButton.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+            mForward.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+            mBackward.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
             changeVideoControlClickablity(false);
         }
     }
@@ -1064,6 +1117,8 @@ public class StreamFragment extends Fragment {
         mToolbar.animate().alpha(1f).start();
         mPlayPauseWrapper.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
         mShowChatButton.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+        mForward.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+        mBackward.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
         changeVideoControlClickablity(true);
     }
 

@@ -40,6 +40,7 @@ dependencies {
     implementation "androidx.palette:palette:$androidXVersion"
     implementation "androidx.appcompat:appcompat:$androidXVersion"
     implementation "androidx.browser:browser:$androidXVersion"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
     implementation "com.squareup.picasso:picasso:2.4.0"
     implementation "com.balysv:material-ripple:1.0.2"

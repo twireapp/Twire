@@ -1,226 +1,269 @@
-<RelativeLayout
-    android:id="@+id/main_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.perflyst.twire.activities.stream.StreamActivity">
 
 
-    <RelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/video_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <View
-            android:background="@color/black"
             android:id="@+id/video_background"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <androidx.appcompat.widget.Toolbar
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/main_toolbar"
-            android:layout_height="@dimen/main_toolbar_height"
-            android:layout_width="match_parent"
-            android:background="?attr/streamToolbarColor"
-            android:minHeight="@dimen/main_toolbar_height"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            />
+            android:layout_height="match_parent"
+            android:background="@color/black" />
 
         <com.perflyst.twire.views.VideoViewSimple
             android:id="@+id/VideoView"
-            android:layout_centerInParent="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1.777"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <com.perflyst.twire.views.DynamicImageView
-            android:id="@+id/preview"
-            android:layout_centerInParent="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/backward"
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:contentDescription="@string/stream_backward"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/play_pause_wrapper"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_replay_10" />
+
+        <ImageView
+            android:id="@+id/forward"
+            android:layout_width="@dimen/toolbar_icon_size"
+            android:layout_height="@dimen/toolbar_icon_size"
+            android:contentDescription="@string/stream_forward"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/play_pause_wrapper"
+            app:layout_constraintStart_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_forward_10" />
+
+        <ImageView
+            android:id="@+id/show_chat_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:contentDescription="@string/stream_show_chat"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_navigate_before_white_48dp"
+            tools:ignore="RtlHardcoded" />
 
         <RelativeLayout
             android:id="@+id/control_toolbar_wrapper"
-            android:background="?attr/streamToolbarColor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:background="?attr/streamToolbarColor"
             android:paddingStart="@dimen/toolbar_icon_right_most_margin"
             android:paddingEnd="@dimen/toolbar_icon_right_most_margin"
-            >
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageView
                 android:id="@+id/settings_icon"
-                app:srcCompat="@drawable/ic_settings_white_24dp"
-                android:tint="@android:color/white"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/action_settings"
                 android:paddingLeft="@dimen/toolbar_icon_padding"
-                android:paddingRight="@dimen/toolbar_icon_padding"
                 android:paddingTop="@dimen/toolbar_icon_padding"
-                android:layout_centerVertical="true"
-                />
-
-            <LinearLayout
-                android:id="@+id/viewers_wrapper"
-                android:orientation="horizontal"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp">
-                <TextView
-                    android:gravity="center"
-                    android:layout_gravity="center_vertical"
-                    android:id="@+id/txtViewViewers"
-                    android:text=""
-                    android:textSize="@dimen/toolbar_viewers_text_size"
-                    android:textColor="@android:color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/toolbar_icon_size"/>
-                <ImageView
-                    android:tint="@color/white"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/viewers_icon_margin"
-                    android:layout_marginStart="@dimen/viewers_icon_margin"
-                    app:srcCompat="@drawable/ic_group_black_24dp"
-                    android:layout_width="@dimen/viewers_icon_size"
-                    android:layout_height="@dimen/viewers_icon_size"/>
-            </LinearLayout>
-
+                android:paddingRight="@dimen/toolbar_icon_padding"
+                android:paddingBottom="@dimen/toolbar_icon_padding"
+                android:tint="@android:color/white"
+                app:srcCompat="@drawable/ic_settings_white_24dp" />
 
             <ImageView
                 android:id="@+id/fullscreen_icon"
-                app:srcCompat="@drawable/ic_fullscreen_24dp"
-                android:tint="@android:color/white"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
-                android:paddingLeft="@dimen/toolbar_icon_padding"
-                android:paddingRight="@dimen/toolbar_icon_padding"
-                android:paddingTop="@dimen/toolbar_icon_padding"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                />
+                android:contentDescription="@string/stream_fullscreen"
+                android:paddingLeft="@dimen/toolbar_icon_padding"
+                android:paddingTop="@dimen/toolbar_icon_padding"
+                android:paddingRight="@dimen/toolbar_icon_padding"
+                android:paddingBottom="@dimen/toolbar_icon_padding"
+                android:tint="@android:color/white"
+                app:srcCompat="@drawable/ic_fullscreen_24dp" />
+
+            <LinearLayout
+                android:id="@+id/viewers_wrapper"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/viewers_icon_size"
+                    android:layout_height="@dimen/viewers_icon_size"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/viewers_icon_margin"
+                    android:layout_marginLeft="@dimen/viewers_icon_margin"
+                    android:contentDescription="@string/stream_viewers"
+                    android:tint="@color/white"
+                    app:srcCompat="@drawable/ic_group_black_24dp" />
+
+                <TextView
+                    android:id="@+id/txtViewViewers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/toolbar_icon_size"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/toolbar_viewers_text_size" />
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/time_controller"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@id/settings_icon"
-                android:layout_toEndOf="@id/settings_icon"
-                android:layout_toLeftOf="@id/fullscreen_icon"
-                android:layout_toStartOf="@id/fullscreen_icon"
-                android:orientation="horizontal"
-                android:gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_toStartOf="@id/fullscreen_icon"
+                android:layout_toLeftOf="@id/fullscreen_icon"
+                android:layout_toEndOf="@id/settings_icon"
+                android:layout_toRightOf="@id/settings_icon"
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:shadowColor="@color/black"
-                    android:shadowRadius="5"
-                    android:shadowDx="1"
-                    android:shadowDy="1"
-
-                    android:gravity="center"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    android:text=""
                     android:id="@+id/currentProgess"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
 
-                <SeekBar
-                    android:layout_weight="3"
-                    android:id="@+id/progressBar"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"/>
-
-                <TextView
+                    android:gravity="center"
                     android:shadowColor="@color/black"
-                    android:shadowRadius="5"
                     android:shadowDx="1"
                     android:shadowDy="1"
+                    android:shadowRadius="5"
+                    android:text=""
+                    android:textColor="@color/white" />
 
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/white"
+                <SeekBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp" />
+
+                <TextView
                     android:id="@+id/maxProgress"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+
+                    android:gravity="center"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1"
+                    android:shadowDy="1"
+                    android:shadowRadius="5"
+                    android:textColor="@color/white" />
             </LinearLayout>
 
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/chromecast_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/play_pause_wrapper"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/stream_chromecasting_msg_size"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/main_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/main_toolbar_height"
+            android:background="?attr/streamToolbarColor"
+            android:minHeight="@dimen/main_toolbar_height"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/play_pause_wrapper"
+            android:layout_width="@dimen/play_pause_wrapper_size"
+            android:layout_height="@dimen/play_pause_wrapper_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <ImageView
+                android:id="@+id/ic_play"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="1"
+                android:contentDescription="@string/play"
+                android:tint="@android:color/white"
+                app:srcCompat="@drawable/ic_play_arrow_96dp" />
+
+            <ImageView
+                android:id="@+id/ic_pause"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                android:contentDescription="@string/pause"
+                android:tint="@android:color/white"
+                app:srcCompat="@drawable/ic_pause_96dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <com.perflyst.twire.views.DynamicImageView
+            android:id="@+id/preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.rey.material.widget.ProgressView
             android:id="@+id/circle_progress"
             android:layout_width="@dimen/buffer_spinner_size"
             android:layout_height="@dimen/buffer_spinner_size"
-            android:layout_gravity="center"
-            android:layout_centerInParent="true"
-            android:gravity="center"
+            app:cpd_transformDuration="500"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:pv_autostart="true"
             app:pv_circular="true"
             app:pv_progressMode="indeterminate"
-            app:pv_progressStyle="@style/CircularProgress"
-            app:cpd_transformDuration="500"
-            />
-
-        <FrameLayout
-            android:id="@+id/play_pause_wrapper"
-            android:layout_centerInParent="true"
-            android:layout_width="@dimen/play_pause_wrapper_size"
-            android:layout_height="@dimen/play_pause_wrapper_size">
-            <ImageView
-                app:srcCompat="@drawable/ic_play_arrow_96dp"
-                android:tint="@android:color/white"
-                android:alpha="1"
-                android:id="@+id/ic_play"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-            <ImageView
-                app:srcCompat="@drawable/ic_pause_96dp"
-                android:tint="@android:color/white"
-                android:alpha="0"
-                android:id="@+id/ic_pause"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-        </FrameLayout>
-
-        <TextView
-            android:visibility="invisible"
-            android:id="@+id/chromecast_text"
-            android:textColor="@color/white"
-            android:textSize="@dimen/stream_chromecasting_msg_size"
-            android:layout_below="@id/play_pause_wrapper"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <ImageView
-            android:id="@+id/show_chat_button"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            app:srcCompat="@drawable/ic_navigate_before_white_48dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            app:pv_progressStyle="@style/CircularProgress" />
 
         <View
-            android:clickable="true"
-            android:focusable="true"
             android:id="@+id/click_intercepter"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </RelativeLayout>
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true" />
 
-
-
-</RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
