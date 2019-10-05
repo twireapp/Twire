@@ -1,6 +1,5 @@
 package com.perflyst.twire.tasks;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import com.perflyst.twire.chat.ChatManager;
@@ -91,7 +90,7 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
 			if (emotesToCheck != null) {
 				for (Emote emote : emotesToCheck) {
 					if (word.equals(emote.getKeyword())) {
-						Bitmap bitmapEmote = chatManager.getEmoteFromId(emote.getEmoteId(), emote.isBetterTTVEmote());
+						String emoteUrl = chatManager.getEmoteFromId(emote.getEmoteId(), emote.isBetterTTVEmote());
 						int fromIndex = wordOccurenc.containsKey(word) ? wordOccurenc.get(word) : 0;
 						int wordIndex = message.indexOf(word, fromIndex);
 
@@ -101,7 +100,7 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
 								new String[] {
 										wordIndex + "-" + (wordIndex + word.length() - 1)
 								},
-								bitmapEmote
+								emoteUrl
 						));
 					}
 				}

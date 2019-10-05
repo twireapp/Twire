@@ -3,7 +3,6 @@ package com.perflyst.twire.chat;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.LruCache;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.model.ChatEmote;
@@ -15,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +26,7 @@ import java.util.regex.Pattern;
  */
 
 public class ChatEmoteManager {
-    private static LruCache<String, Bitmap> cachedEmotes = new LruCache<>(4 * 1024 * 1024);
     private static Map<String, String> bttvEmotesToId;
-
-    private static final int 	EMOTE_SMALL_SIZE 	= 20,
-                                EMOTE_MEDIUM_SIZE 	= 30,
-                                EMOTE_LARGE_SIZE 	= 40;
 
     private final List<Emote> bttvGlobal = new ArrayList<>();
     private final List<Emote> bttvChannel = new ArrayList<>();
@@ -170,9 +163,9 @@ public class ChatEmoteManager {
             String emoteId = bttvEmotesToId.get(emoteKeyword);
 
             String[] positions = new String[] {bttvEmoteMatcher.start() + "-" + (bttvEmoteMatcher.end() - 1)};
-            Bitmap emote = getEmoteFromId(emoteId, true);
-            if (emote != null) {
-                final ChatEmote chatEmote = new ChatEmote(positions, emote);
+            String emoteUrl = getEmoteFromId(emoteId, true);
+            if (emoteUrl != null) {
+                final ChatEmote chatEmote = new ChatEmote(positions, emoteUrl);
                 emotes.add(chatEmote);
             }
         }
@@ -204,87 +197,15 @@ public class ChatEmoteManager {
      * connects to the twitchemotes.com API to get the emote image.
      * The image is cached and converted to a bitmap which is returned.
      */
-    protected Bitmap getEmoteFromId(String emoteId, boolean isBttvEmote) {
-        String emoteKey = getEmoteStorageKey(emoteId, settings.getEmoteSize());
-        if(cachedEmotes.get(emoteKey) != null) {
-            return cachedEmotes.get(emoteKey);
-        } else if (Service.doesStorageFileExist(emoteKey, context) && settings.getSaveEmotes()) {
-            try {
-                Bitmap emote = Service.getImageFromStorage(emoteKey, context);
-                if (emote != null) {
-                    cachedEmotes.put(emoteKey, emote);
-                }
-                return emote;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return saveAndGetEmote(getEmoteFromInternet(isBttvEmote, emoteId), emoteId);
-    }
-
-    /**
-     * Gets and loads an emote from the internet.
-     * @param isBttvEmote Is the emote a Better Twitch Tv emote?
-     * @param emoteId The id of the emote
-     * @return The emote. Might be null.S
-     */
-    private Bitmap getEmoteFromInternet(boolean isBttvEmote, String emoteId) {
+    protected String getEmoteFromId(String emoteId, boolean isBttvEmote) {
         int settingsSize = getApiEmoteSizeFromSettingsSize(settings.getEmoteSize());
         String emoteUrl = getEmoteUrl(isBttvEmote, emoteId, settingsSize);
 
-        Bitmap emote = Service.getBitmapFromUrl(emoteUrl);
-        emote = getDpSizedEmote(emote);
-
-        return emote;
-    }
-
-    protected Bitmap getDpSizedEmote(Bitmap emote) {
-        int settingsSize = settings.getEmoteSize();
-        int dpSize;
-
-        switch (settingsSize) {
-            case 1:
-                dpSize = EMOTE_SMALL_SIZE;
-                break;
-            case 2:
-                dpSize = EMOTE_MEDIUM_SIZE;
-                break;
-            case 3:
-                dpSize = EMOTE_LARGE_SIZE;
-                break;
-            default:
-                dpSize = EMOTE_MEDIUM_SIZE;
-        }
-
-        if (emote == null) {
-            return null;
-        }
-
-        return Service.getResizedBitmap(emote, dpSize, context);
+        return emoteUrl;
     }
 
     private int getApiEmoteSizeFromSettingsSize(int settingsSize) {
         return settingsSize == 1 ? 2 : settingsSize;
-    }
-
-    /**
-     * If emote is null an error emote is returned. Else the emote is saved to storage and cache, then returned.
-     * @param emote The emote bitmap.
-     * @param emoteId The id of the emote
-     * @return The final emote image.
-     */
-    private Bitmap saveAndGetEmote(Bitmap emote, String emoteId) {
-        if(emote != null) {
-            String emoteKey = getEmoteStorageKey(emoteId, settings.getEmoteSize());
-            if (settings.getSaveEmotes() && !Service.doesStorageFileExist(emoteKey, context)) {
-                Service.saveImageToStorage(emote, emoteKey, context);
-            }
-            cachedEmotes.put(emoteKey, emote);
-            return emote;
-        } else {
-            return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_missing_emote);
-        }
     }
 
 
@@ -300,16 +221,6 @@ public class ChatEmoteManager {
         void onEmoteFetched();
     }
 
-    /**
-     * Generates a key to save and map an emote bitmap in storage and cache.
-     * @param emoteId The emotes id
-     * @param size The emotes size
-     * @return The key
-     */
-    public static String getEmoteStorageKey(String emoteId, int size) {
-        return "emote-" + emoteId + "-" + size + "Upgraded";
-    }
-
     public static String getEmoteUrl(boolean isEmoteBttv, String emoteId, int size) {
         return isEmoteBttv
                 ? "https://cdn.betterttv.net/emote/" + emoteId + "/" + size + "x"
@@ -318,9 +229,5 @@ public class ChatEmoteManager {
 
     public static String getEmoteUrl(Emote emote, int size) {
         return getEmoteUrl(emote.isBetterTTVEmote(), emote.getEmoteId(), size);
-    }
-
-    public static Bitmap constructMediumSizedEmote(Bitmap emote, Context context) {
-        return Service.getResizedBitmap(emote, EMOTE_MEDIUM_SIZE, context);
     }
 }

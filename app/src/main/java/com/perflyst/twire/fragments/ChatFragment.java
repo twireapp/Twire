@@ -1133,47 +1133,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 				if (emoteAtPosition.isTextEmote()) {
 					holder.mTextEmote.setText(emoteAtPosition.getKeyword());
 				} else {
-					final String emoteKey = ChatEmoteManager.getEmoteStorageKey(emoteAtPosition.getEmoteId(), EMOTE_SIZE);
-					if (Service.doesStorageFileExist(emoteKey, getContext())) {
-						try {
-							Bitmap emote = Service.getImageFromStorage(emoteKey, getContext());
-							holder.mImageEmote.setImageBitmap(emote);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					} else {
-						String emoteUrl = ChatEmoteManager.getEmoteUrl(emoteAtPosition, EMOTE_SIZE);
+					String emoteUrl = ChatEmoteManager.getEmoteUrl(emoteAtPosition, EMOTE_SIZE);
 
-						if (settings.getSaveEmotes()) {
-							Target target = picassoTargets.containsKey(emoteAtPosition.getEmoteId())
-									? picassoTargets.get(emoteAtPosition.getEmoteId())
-									: new Target() {
-
-								@Override
-								public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-									holder.mImageEmote.setImageBitmap(bitmap);
-
-									if (bitmap.getConfig() != null) {
-										Bitmap emote = bitmap.copy(bitmap.getConfig(), true);
-										Service.saveImageToStorage(ChatEmoteManager.constructMediumSizedEmote(emote, getContext()), emoteKey, getContext());
-									}
-								}
-
-								@Override
-								public void onBitmapFailed(Drawable errorDrawable) {}
-
-								@Override
-								public void onPrepareLoad(Drawable placeHolderDrawable) {}
-							};
-
-							if (!picassoTargets.containsKey(emoteAtPosition.getEmoteId()))
-								picassoTargets.put(emoteAtPosition.getEmoteId(), target);
-
-							Picasso.with(getContext()).load(emoteUrl).into(target);
-						} else {
-							Picasso.with(getContext()).load(emoteUrl).into(holder.mImageEmote);
-						}
-					}
+					Picasso.with(getContext()).load(emoteUrl).into(holder.mImageEmote);
 				}
 			}
 
