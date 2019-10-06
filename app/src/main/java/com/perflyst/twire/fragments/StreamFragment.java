@@ -681,7 +681,6 @@ public class StreamFragment extends Fragment {
      */
     private void checkShowChatButtonVisibility() {
         if (isLandscape && settings.isChatInLandscapeEnabled()) {
-            mShowChatButton.setRotation(0f);
             mShowChatButton.setVisibility(View.VISIBLE);
         } else {
             mShowChatButton.setVisibility(View.GONE);

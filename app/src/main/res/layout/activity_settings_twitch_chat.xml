@@ -119,46 +119,6 @@
                     android:layout_height="@dimen/settings_small_item_height"
                     android:gravity="center_vertical"
                     android:clickable="true"
-                    android:onClick="onClickEmoteStorage"
-                    >
-
-                    <TextView
-                        style="@style/text_settings"
-                        android:id="@+id/emote_storage_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/text_settings_title"
-                        android:text="@string/chat_emote_storage"
-                        />
-
-                    <TextView
-                        style="@style/text_settings"
-                        android:id="@+id/emote_storage_summary"
-                        android:layout_below="@id/emote_storage_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/sub_text_settings"
-                        />
-
-                </RelativeLayout>
-            </com.balysv.materialripple.MaterialRippleLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_divider_height"
-                android:background="?attr/dividerColor"
-                />
-
-            <com.balysv.materialripple.MaterialRippleLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:mrl_rippleDelayClick="false">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/settings_small_item_height"
-                    android:gravity="center_vertical"
-                    android:clickable="true"
                     android:onClick="onClickChatLandscapeEnable"
                     >
 

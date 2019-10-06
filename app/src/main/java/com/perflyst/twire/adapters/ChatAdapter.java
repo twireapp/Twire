@@ -3,22 +3,17 @@ package com.perflyst.twire.adapters;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.DynamicDrawableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.ImageSpan;
-
 import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -26,7 +21,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.perflyst.twire.R;
+import com.perflyst.twire.misc.GlideImageSpan;
+import com.perflyst.twire.misc.VerticalImageSpan;
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.service.Service;
@@ -53,10 +54,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 	private Pattern linkPattern;
 	private Matcher linkMatcher;
 
-	private ImageSpan imageMod;
-	private ImageSpan imageTurbo;
-	private ImageSpan imageSub;
-	private int emoteAlignment;
+	private VerticalImageSpan imageMod;
+	private VerticalImageSpan imageTurbo;
+	private VerticalImageSpan imageSub;
 	private ChatAdapterCallback mCallback;
 
 	private boolean isNightTheme;
@@ -73,9 +73,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 		settings = new Settings(context);
 		linkPattern = Pattern.compile("((http|https|ftp)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\\/?([a-zA-Z0\u200C123456789\\-\\._\\?\\,\\'\\/\\\\\\+&amp;%\\$#\\=~])*[^\\.\\,\\)\\(\\s])");
 
-		emoteAlignment = DynamicDrawableSpan.ALIGN_BASELINE;
-		imageMod = new ImageSpan(context, R.drawable.ic_moderator, emoteAlignment);
-		imageTurbo = new ImageSpan(context, R.drawable.ic_twitch_turbo, emoteAlignment);
+		imageMod = new VerticalImageSpan(context, R.drawable.ic_moderator);
+		imageTurbo = new VerticalImageSpan(context, R.drawable.ic_twitch_turbo);
 		isNightTheme = settings.getTheme().equals(context.getString(R.string.night_theme_name)) || settings.getTheme().equals(context.getString(R.string.true_night_theme_name));
 	}
 
@@ -87,6 +86,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
 		return new ContactViewHolder(itemView);
 	}
+
+	SpannableStringBuilder AppendSpan(SpannableStringBuilder builder, CharSequence charSequence, Object... whats) {
+	    int preLength = builder.length();
+	    builder.append(charSequence);
+
+	    for (Object what : whats) {
+	        builder.setSpan(what, preLength, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+	    return builder;
+    }
 
 	@Override
 	public void onBindViewHolder(final ContactViewHolder holder, int position) {
@@ -100,79 +110,50 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 				Bitmap resizedSubscriberEmote = Service.getResizedBitmap(message.getSubscriberIcon(),
 																				imageMod.getDrawable().getIntrinsicWidth(),
 																				imageMod.getDrawable().getIntrinsicHeight());
-				imageSub = new ImageSpan(context, resizedSubscriberEmote, emoteAlignment);
+				imageSub = new VerticalImageSpan(context, resizedSubscriberEmote);
 			}
 
 
 			final SpannableStringBuilder builder = new SpannableStringBuilder();
-			if(message.isMod()) {
-				builder
-						.append("  ")
-						.setSpan(imageMod, 0, 1, 0);
+			if (message.isMod()) {
+			    AppendSpan(builder, "  ", imageMod).append(" ");
 			}
 
-			if(message.isSubscriber()) {
-				builder
-						.append("  ")
-						.setSpan(imageSub, builder.length() - 2, builder.length() - 1, 0);
+			if (message.isSubscriber()) {
+				AppendSpan(builder, "  ", imageSub).append(" ");
 			}
 
-			if(message.isTurbo()) {
-				builder
-						.append("  ")
-						.setSpan(imageTurbo, builder.length() - 2, builder.length() - 1, 0);
+			if (message.isTurbo()) {
+				AppendSpan(builder, "  ", imageTurbo).append(" ");
 			}
 
 			if (message.getName() == null) {
 				return;
 			}
 
-			builder.append(message.getName());
 			int nameColor = getNameColor(message.getColor());
-			builder.setSpan(new ForegroundColorSpan(nameColor), 0, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			AppendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
 
+			int preLength = builder.length();
 			String messageWithPre = PREMESSAGE + message.getMessage();
-			final SpannableStringBuilder resultMessage = new SpannableStringBuilder(messageWithPre);
-			resultMessage.setSpan(new ForegroundColorSpan(getMessageColor()), 0, resultMessage.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+			AppendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
 
-			checkForLink(messageWithPre, resultMessage);
+			checkForLink(builder.toString(), builder);
 
 			for(ChatEmote emote : message.getEmotes()) {
 				for(String emotePosition : emote.getEmotePositions()) {
 					String[] toAndFrom = emotePosition.split("-");
-					final int fromPosition = Integer.parseInt(toAndFrom[0]);
-					final int toPosition = Integer.parseInt(toAndFrom[1]);
+					final int fromPosition = Integer.parseInt(toAndFrom[0]) + preLength;
+					final int toPosition = Integer.parseInt(toAndFrom[1]) + preLength;
 
+					int emoteSize = settings.getEmoteSize();
+					int emotePixels = emoteSize == 1 ? 28 : emoteSize == 2 ? 56 : 112;
 
-					final ImageSpan emoteSpan = new ImageSpan(context, emote.getEmoteBitmap(), emoteAlignment);
-					resultMessage.setSpan(emoteSpan, fromPosition + PREMESSAGE.length(), toPosition + 1 + PREMESSAGE.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+					final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(), holder.message, builder, emotePixels);
 
 					holder.message.setTextIsSelectable(true);
 
-					/*
-					if (BuildConfig.DEBUG && false) {
-						Glide
-								.with(context)
-								.load("https://cdn.betterttv.net/emote/561c1cb4f291bd650621b2c5/2x")
-								.asGif()
-								.into(new SimpleTarget<GifDrawable>() {
-									@Override
-									public void onResourceReady(GifDrawable gifDrawable, GlideAnimation<? super GifDrawable> glideAnimation) {
-										gifDrawable.setBounds(0, 0, gifDrawable.getIntrinsicWidth(), gifDrawable.getIntrinsicHeight());
-										gifDrawable.setCallback(ChatAdapter.this);
-
-										final SpannableStringBuilder ssb = new SpannableStringBuilder("test\ufffc");
-
-										ssb.setSpan(new ImageSpan(gifDrawable), ssb.length() - 1, ssb.length(), 0);
-										holder.message.setText(ssb);
-										gifDrawable.stop();
-										gifDrawable.start();
-										Log.d(LOG_TAG, "Gif frames: " + gifDrawable.getFrameCount());
-										//Log.d(LOG_TAG, "Setting GIF");
-									}
-								});
-					}
-					*/
+					builder.setSpan(emoteSpan, fromPosition + PREMESSAGE.length(), toPosition + 1 + PREMESSAGE.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 				}
 			}
 
@@ -180,15 +161,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 				holder.message.setBackgroundColor(Service.getColorAttribute(R.attr.colorAccent, R.color.accent, context));
 			}
 
-			builder.append(resultMessage);
 			builder.setSpan(new RelativeSizeSpan(getTextSize()), 0, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			holder.message.setText(builder);
 			holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-
-			holder.itemView.findViewById(R.id.btn_message).setOnClickListener(view -> {
-				mCallback.onMessageClicked(builder, message.getName(), message.getMessage());
-				Log.d("Click", "Button clicked");
-			});
+			holder.message.setOnClickListener(view -> mCallback.onMessageClicked(builder, message.getName(), message.getMessage()));
 
 		} catch(Exception e) {
 			//In case twitch doesn't comply to their own API.

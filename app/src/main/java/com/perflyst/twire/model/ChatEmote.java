@@ -1,23 +1,21 @@
 package com.perflyst.twire.model;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by SebastianRask on 03-03-2016.
  */
 public class ChatEmote {
 	private String[] emotePositions;
-	private Bitmap emoteBitmap;
+	private String emoteUrl;
 
 	private boolean isGif = false;
 
-	public ChatEmote(String[] emotePositions, Bitmap emoteBitmap) {
+	public ChatEmote(String[] emotePositions, String emoteUrl) {
 		this.emotePositions = emotePositions;
-		this.emoteBitmap = emoteBitmap;
+		this.emoteUrl = emoteUrl;
 	}
 
-	public Bitmap getEmoteBitmap() {
-		return emoteBitmap;
+	public String getEmoteUrl() {
+		return emoteUrl;
 	}
 
 	public String[] getEmotePositions() {

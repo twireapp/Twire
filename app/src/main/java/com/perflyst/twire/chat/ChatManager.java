@@ -493,10 +493,10 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 	}
 
 	/**
-	 * Returns a Bitmap of the emote with the specified emote id.
+	 * Returns a URL of the emote with the specified emote id.
 	 * If the emote has not been cached from an earlier download the method
 	 */
-	public Bitmap getEmoteFromId(String emoteId, boolean isBttvEmote) {
+	public String getEmoteFromId(String emoteId, boolean isBttvEmote) {
 		return mEmoteManager.getEmoteFromId(emoteId, isBttvEmote);
 	}
 

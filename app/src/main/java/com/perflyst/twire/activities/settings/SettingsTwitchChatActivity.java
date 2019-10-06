@@ -19,7 +19,7 @@ import com.perflyst.twire.service.Settings;
 public class SettingsTwitchChatActivity extends ThemeActivity {
 	private String LOG_TAG = getClass().getSimpleName();
 	private Settings settings;
-	private TextView emoteSizeSummary, messageSizeSummary, emoteStorageSummary, chatLandscapeWidthSummary, chatLandscapeToggleSummary, chatLandscapeSwipeToShowSummary;
+	private TextView emoteSizeSummary, messageSizeSummary, chatLandscapeWidthSummary, chatLandscapeToggleSummary, chatLandscapeSwipeToShowSummary;
 	private CheckedTextView chatLandscapeToggle, chatSwipeToShowToggle;
 
 	@Override
@@ -36,7 +36,6 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 
 		emoteSizeSummary = (TextView) findViewById(R.id.chat_emote_size_summary);
 		messageSizeSummary = (TextView) findViewById(R.id.message_size_summary);
-		emoteStorageSummary = (TextView) findViewById(R.id.emote_storage_summary);
 		chatLandscapeWidthSummary = (TextView) findViewById(R.id.chat_landscape_summary);
 		chatLandscapeToggleSummary = (TextView) findViewById(R.id.chat_landscape_enable_summary);
 		chatLandscapeSwipeToShowSummary = (TextView) findViewById(R.id.chat_landscape_swipe_summary);
@@ -51,11 +50,6 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 		emoteSizeSummary.setText(sizes[settings.getEmoteSize() - 1]);
 		messageSizeSummary.setText(sizes[settings.getMessageSize() - 1]);
 		chatLandscapeWidthSummary.setText(String.format(getString(R.string.percent), settings.getChatLandscapeWidth()));
-		if (settings.getSaveEmotes()) {
-			emoteStorageSummary.setText(getString(R.string.yes));
-		} else {
-			emoteStorageSummary.setText(getString(R.string.no));
-		}
 
 		// Chat enabled in landscape
 		chatLandscapeToggle.setChecked(settings.isChatInLandscapeEnabled());
@@ -109,14 +103,6 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 			}
 		});
 		dialog.show();
-	}
-
-	public void onClickEmoteStorage(View v) {
-		settings.setSaveEmotes(!settings.getSaveEmotes());
-		if (!settings.getSaveEmotes()) {
-			//ToDo: Delete all emotes from storage
-		}
-		updateSummaries();
 	}
 
 	public void onClickChatLandscapeEnable(View v) {

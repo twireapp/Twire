@@ -312,22 +312,6 @@ public class Settings {
 	}
 
 	/**
-	 * Chat - Should the chat save emotes to local storage
-	 * @param saveEmotes True if yes, false if no.
-	 */
-
-	public void setSaveEmotes(boolean saveEmotes) {
-		SharedPreferences.Editor editor = getEditor();
-		editor.putBoolean(this.CHAT_EMOTE_STORAGE, saveEmotes);
-		editor.commit();
-	}
-
-	public boolean getSaveEmotes() {
-		SharedPreferences preferences = getPreferences();
-		return preferences.getBoolean(this.CHAT_EMOTE_STORAGE, true);
-	}
-
-	/**
 	 * Chat - Get the chats emote size.
 	 * @param emoteSize The emote size. From 1 to 3.
 	 */
