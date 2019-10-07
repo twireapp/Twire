@@ -3,8 +3,8 @@ package com.perflyst.twire.service;
 import android.content.Context;
 import android.util.Log;
 
-import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.model.ChannelInfo;
+import com.perflyst.twire.model.StreamInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,12 +33,13 @@ public class StreamsService {
      * Returns a list of Streams that are online.
      * Connects to twitch API by making a list of URLs from the streamer's streamername. The connection input is parsed to JSON objects.
      * The objects are converted into StreamInfo objects.
+     *
      * @param streamers A map of streamers
      * @return
      */
     public static List<StreamInfo> getOnlineStreams(Map<String, ChannelInfo> streamers, Context context) {
         List<String> streamerIds = new ArrayList<>();
-        for(String streamerName : streamers.keySet()){
+        for (String streamerName : streamers.keySet()) {
             streamerIds.add(streamers.get(streamerName).getUserId() + "");
         }
 
@@ -48,6 +49,7 @@ public class StreamsService {
     /**
      * Returns a list of all followed currently live streams for the user with specific oauth token.
      * This should not be used for time critical tasks.
+     *
      * @param context
      * @param oauthToken
      * @return list of all currently live followed streams
@@ -84,7 +86,8 @@ public class StreamsService {
     /**
      * Returns a list of Streams that are online.
      * Connects to a given list of URL strings and parses the input to JSON objects. The objects are converted into StreamInfo objects.
-     * @param streamers A map of streamers
+     *
+     * @param streamers  A map of streamers
      * @param urlStrings A list of URL strings
      * @return A list of online streams
      */
@@ -95,14 +98,14 @@ public class StreamsService {
 
         try {
             // Get the data download over with.
-            if(Service.isNetworkConnectedThreadOnly(context)) {
-                for(String url : urlStrings) {
+            if (Service.isNetworkConnectedThreadOnly(context)) {
+                for (String url : urlStrings) {
                     jsonObjects.add(new JSONObject(Service.urlToJSONString(url)).getJSONArray(ARRAY_NAME));
                 }
             }
 
-            for(JSONArray array : jsonObjects){
-                for(int i = 0; i < array.length(); i++){
+            for (JSONArray array : jsonObjects) {
+                for (int i = 0; i < array.length(); i++) {
                     JSONObject JSONStream = array.getJSONObject(i);
                     JSONObject JSONChannel = JSONStream.getJSONObject("channel");
                     String streamerName = JSONChannel.getString("name");
@@ -122,10 +125,11 @@ public class StreamsService {
     /**
      * Returns a list of URL Strings formatted correctly for connecting to twitch and receiving a number of JSON objects.
      * Mainly used for getting a list of online streams.
+     *
      * @param streamerIds The ids of the streamers you to check is online.
      * @return List of String representing URLS
      */
-    public static List<String> getStreamURLS(List<String> streamerIds){
+    public static List<String> getStreamURLS(List<String> streamerIds) {
         final int MAXIMUM_STREAMS_FOR_QUERY = 100;
         final String BASE_URL = "https://api.twitch.tv/kraken/streams?channel="; // With this base url we only get JSON objects for the streamers that are only
         int streamersCount = streamerIds.size();
@@ -134,14 +138,14 @@ public class StreamsService {
 
         // Determine how many URLs we need.
         int numberURL = (int) Math.ceil((streamersCount * 1.0) / MAXIMUM_STREAMS_FOR_QUERY);
-        for (int i = 0; i < numberURL; i++){
+        for (int i = 0; i < numberURL; i++) {
             String stringURL = BASE_URL;
 
             int iterationCount = MAXIMUM_STREAMS_FOR_QUERY;
-            if(i == numberURL - 1) // Last iteration
+            if (i == numberURL - 1) // Last iteration
                 iterationCount = streamersCount - ((numberURL - 1) * MAXIMUM_STREAMS_FOR_QUERY); // Only iterate to the last index in the list.
 
-            for(int j = 0; j < iterationCount; j++)
+            for (int j = 0; j < iterationCount; j++)
                 stringURL += streamerIds.get(j + (i * MAXIMUM_STREAMS_FOR_QUERY)) + ",";
 
             resultList.add(stringURL);
@@ -151,7 +155,7 @@ public class StreamsService {
     }
 
     /* ------ UNDER THIS IS KINDA DEPRECATED -------*/
-    private static StreamInfo jsonToStreamInfo(JSONObject JSONString, ChannelInfo streamer) throws Exception{
+    private static StreamInfo jsonToStreamInfo(JSONObject JSONString, ChannelInfo streamer) throws Exception {
         StreamInfo stream = null;
         if (!JSONString.isNull("stream")) {
             JSONObject JSONStream = JSONString.getJSONObject("stream");
@@ -192,11 +196,12 @@ public class StreamsService {
     /**
      * Checks whether or not a user is currently streaming and creates and returns a StreamInfo Object if true.
      * Can return null
+     *
      * @param streamer The username of the streamer you want to check is online
      * @return boolean
      */
 
-    public static StreamInfo ifOnlineMakeStreamObj (ChannelInfo streamer){
+    public static StreamInfo ifOnlineMakeStreamObj(ChannelInfo streamer) {
         URL url;
         HttpURLConnection conn = null;
         Scanner in = null;
@@ -213,7 +218,7 @@ public class StreamsService {
             conn.setRequestMethod("GET");
             in = new Scanner(new InputStreamReader(conn.getInputStream()));
 
-            while(in.hasNextLine()) {
+            while (in.hasNextLine()) {
                 line = in.nextLine();
                 result += line;
             }
@@ -227,9 +232,9 @@ public class StreamsService {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(in != null)
+            if (in != null)
                 in.close();
-            if(conn != null)
+            if (conn != null)
                 conn.disconnect();
         }
 
@@ -239,11 +244,12 @@ public class StreamsService {
     /**
      * Checks whether or not a user is currently streaming and creates and returns a StreamInfo Object if true.
      * Can return null
+     *
      * @param streamers The username of the streamers you want to check is online
      * @return boolean
      */
 
-    public static List<StreamInfo> getOnlineStreams (List<ChannelInfo> streamers) {
+    public static List<StreamInfo> getOnlineStreams(List<ChannelInfo> streamers) {
         final String BASE_URL = "https://api.twitch.tv/kraken/streams/";
         List<StreamInfo> onlineStreams = new ArrayList<>();
         HttpURLConnection conn = null;
@@ -268,7 +274,7 @@ public class StreamsService {
 
                 JSONObject JSONString = new JSONObject(result);
                 StreamInfo stream = jsonToStreamInfo(JSONString, streamer);
-                if(stream != null)
+                if (stream != null)
                     onlineStreams.add(stream);
             }
         } catch (Exception e) {
@@ -277,7 +283,7 @@ public class StreamsService {
         } finally {
             if (conn != null)
                 conn.disconnect();
-            if(in != null)
+            if (in != null)
                 in.close();
         }
 

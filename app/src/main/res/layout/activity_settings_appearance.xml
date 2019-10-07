@@ -1,25 +1,24 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.perflyst.twire.activities.settings.SettingsAppearanceActivity"
-    tools:ignore="MergeRootFrame" >
+    tools:ignore="MergeRootFrame">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_appearance_toolbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:background="?attr/colorPrimary"
         android:height="@dimen/main_toolbar_height"
+        android:background="?attr/colorPrimary"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <fragment
-        android:name="com.perflyst.twire.fragments.AppearanceSettingsFragment"
         android:id="@+id/appearance_fragment"
+        android:name="com.perflyst.twire.fragments.AppearanceSettingsFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" />
 </LinearLayout>

@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@android:color/holo_blue_bright"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/navigation_drawer_item_container"
     android:layout_width="match_parent"
     android:layout_height="@dimen/navigation_drawer_item_height"
-    android:id="@+id/navigation_drawer_item_container">
+    android:background="@android:color/holo_blue_bright"
+    android:orientation="vertical">
 
     <ImageView
-        android:layout_centerVertical="true"
+        android:id="@+id/navigation_drawer_item_icon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/navigation_drawer_icon_left_margin"
-        android:id="@+id/navigation_drawer_item_icon"/>
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/navigation_drawer_icon_left_margin" />
 
     <TextView
-        android:background="@android:color/holo_green_light"
-        android:layout_centerVertical="true"
-        android:gravity="center_vertical"
+        android:id="@+id/navigation_drawer_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/navigation_drawer_text_left_margin"
-        android:id="@+id/navigation_drawer_item_text"/>
+        android:background="@android:color/holo_green_light"
+        android:gravity="center_vertical" />
 
 </RelativeLayout>

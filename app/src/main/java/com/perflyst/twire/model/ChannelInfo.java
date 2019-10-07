@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import com.perflyst.twire.R;
@@ -20,326 +21,325 @@ import java.util.ArrayList;
  * Created by Sebastian Rask on 30-01-2015.
  * This class is designed to hold all relevant information about a twitch user/streamer
  */
-public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainElement{
-	private int userId;
-	private String streamerName;
-	private String displayName;
-	private String streamDescription;
-	private int followers;
-	private int views;
-	private URL logoURL;
-	private URL videoBannerURL;
-	private URL profileBannerURL;
-	private Bitmap logoImage;
-	private Bitmap videoBannerImage;
-	private Bitmap profileBannerImage;
-	private boolean notifyWhenLive;
+public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainElement {
+    public static final Parcelable.Creator<ChannelInfo> CREATOR = new ClassLoaderCreator<ChannelInfo>() {
+        @Override
+        public ChannelInfo createFromParcel(Parcel source) {
+            return new ChannelInfo(source);
+        }
 
-	public ChannelInfo(int userId, String streamerName, String displayName, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL, Boolean loadBitmap) {
-		this.streamerName = streamerName;
-		this.displayName = displayName;
-		this.streamDescription = streamDescription;
-		this.followers = followers;
-		this.views = views;
-		this.logoURL = logoURL;
-		this.videoBannerURL = videoBannerURL;
-		this.profileBannerURL = profileBannerURL;
-		this.userId = userId;
+        @Override
+        public ChannelInfo createFromParcel(Parcel source, ClassLoader loader) {
+            return new ChannelInfo(source);
+        }
 
-		if(loadBitmap) {
-			LoadBitmapTask imageTask = new LoadBitmapTask();
-			imageTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this.logoURL, this.videoBannerURL, this.profileBannerURL);
-		}
-	}
+        @Override
+        public ChannelInfo[] newArray(int size) {
+            return new ChannelInfo[size];
+        }
+    };
+    private int userId;
+    private String streamerName;
+    private String displayName;
+    private String streamDescription;
+    private int followers;
+    private int views;
+    private URL logoURL;
+    private URL videoBannerURL;
+    private URL profileBannerURL;
+    private Bitmap logoImage;
+    private Bitmap videoBannerImage;
+    private Bitmap profileBannerImage;
+    private boolean notifyWhenLive;
 
-	public ChannelInfo(int userId, String streamerName, String displayName, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL) {
-		this.displayName = displayName;
-		this.streamerName = streamerName;
-		this.streamDescription = streamDescription;
-		this.followers = followers;
-		this.views = views;
-		this.logoURL = logoURL;
-		this.videoBannerURL = videoBannerURL;
-		this.profileBannerURL = profileBannerURL;
-		this.userId = userId;
-	}
+    public ChannelInfo(int userId, String streamerName, String displayName, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL, Boolean loadBitmap) {
+        this.streamerName = streamerName;
+        this.displayName = displayName;
+        this.streamDescription = streamDescription;
+        this.followers = followers;
+        this.views = views;
+        this.logoURL = logoURL;
+        this.videoBannerURL = videoBannerURL;
+        this.profileBannerURL = profileBannerURL;
+        this.userId = userId;
 
-	// Parcel Part
-	// Constructor to recreate the streamerInfo object when an activity receives it. - I think
-	public ChannelInfo(Parcel in) {
-		String[] data = new String[9];
+        if (loadBitmap) {
+            LoadBitmapTask imageTask = new LoadBitmapTask();
+            imageTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this.logoURL, this.videoBannerURL, this.profileBannerURL);
+        }
+    }
 
-		in.readStringArray(data);
-		this.userId = Integer.parseInt(data[0]);
-		this.streamerName = data[1];
-		this.displayName = data[2];
-		this.streamDescription = data[3];
-		this.followers = Integer.parseInt(data[4]);
-		this.views = Integer.parseInt(data[5]);
-		// Test for null in URL and make sure the URLs are viable
-		try {
-			if(data[6] != null) {
-				this.logoURL = new URL(data[6]);
-			}
+    public ChannelInfo(int userId, String streamerName, String displayName, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL) {
+        this.displayName = displayName;
+        this.streamerName = streamerName;
+        this.streamDescription = streamDescription;
+        this.followers = followers;
+        this.views = views;
+        this.logoURL = logoURL;
+        this.videoBannerURL = videoBannerURL;
+        this.profileBannerURL = profileBannerURL;
+        this.userId = userId;
+    }
 
-			if(data[7] != null) {
-				this.videoBannerURL = new URL(data[7]);
-			}
+    // Parcel Part
+    // Constructor to recreate the streamerInfo object when an activity receives it. - I think
+    public ChannelInfo(Parcel in) {
+        String[] data = new String[9];
 
-			if(data[8] != null) {
-				this.profileBannerURL = new URL(data[8]);
-			}
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-	}
+        in.readStringArray(data);
+        this.userId = Integer.parseInt(data[0]);
+        this.streamerName = data[1];
+        this.displayName = data[2];
+        this.streamDescription = data[3];
+        this.followers = Integer.parseInt(data[4]);
+        this.views = Integer.parseInt(data[5]);
+        // Test for null in URL and make sure the URLs are viable
+        try {
+            if (data[6] != null) {
+                this.logoURL = new URL(data[6]);
+            }
 
-	public static final Parcelable.Creator<ChannelInfo> CREATOR = new ClassLoaderCreator<ChannelInfo>(){
-		@Override
-		public ChannelInfo createFromParcel(Parcel source) {
-			return new ChannelInfo(source);
-		}
+            if (data[7] != null) {
+                this.videoBannerURL = new URL(data[7]);
+            }
 
-		@Override
-		public ChannelInfo createFromParcel(Parcel source, ClassLoader loader) {
-			return new ChannelInfo(source);
-		}
+            if (data[8] != null) {
+                this.profileBannerURL = new URL(data[8]);
+            }
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+    }
 
-		@Override
-		public ChannelInfo[] newArray(int size) {
-			return new ChannelInfo[size];
-		}
-	};
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        // Create array with values to send with intent - I think
+        String[] toSend = new String[]{
+                String.valueOf(this.userId),
+                this.streamerName,
+                this.displayName,
+                this.streamDescription,
+                String.valueOf(this.followers),
+                String.valueOf(this.views),
+                null, //this.logoURL.toString(),
+                null, //this.videoBannerURL.toString(),
+                null, //this.profileBannerURL.toString()
+        };
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		// Create array with values to send with intent - I think
-		String[] toSend = new String[] {
-				String.valueOf(this.userId),
-				this.streamerName,
-				this.displayName,
-				this.streamDescription,
-				String.valueOf(this.followers),
-				String.valueOf(this.views),
-				null, //this.logoURL.toString(),
-				null, //this.videoBannerURL.toString(),
-				null, //this.profileBannerURL.toString()
-		};
+        // Only send URLS with if they are not null
+        if (this.logoURL != null) {
+            toSend[6] = String.valueOf(this.logoURL);
+        }
 
-		// Only send URLS with if they are not null
-		if(this.logoURL != null) {
-			toSend[6] = String.valueOf(this.logoURL);
-		}
+        if (this.videoBannerURL != null) {
+            toSend[7] = String.valueOf(this.videoBannerURL);
+        }
 
-		if(this.videoBannerURL != null) {
-			toSend[7] = String.valueOf(this.videoBannerURL);
-		}
+        if (this.profileBannerURL != null) {
+            toSend[8] = String.valueOf(this.profileBannerURL);
+        }
 
-		if(this.profileBannerURL != null) {
-			toSend[8] = String.valueOf(this.profileBannerURL);
-		}
+        dest.writeStringArray(toSend);
+    }
 
-		dest.writeStringArray(toSend);
-	}
-
-	// Parcel Part End
+    // Parcel Part End
 
 
-	public boolean isNotifyWhenLive() {
-		return notifyWhenLive;
-	}
+    public boolean isNotifyWhenLive() {
+        return notifyWhenLive;
+    }
 
-	public void setNotifyWhenLive(boolean notifyWhenLive) {
-		this.notifyWhenLive = notifyWhenLive;
-	}
+    public void setNotifyWhenLive(boolean notifyWhenLive) {
+        this.notifyWhenLive = notifyWhenLive;
+    }
 
-	public String toString() {
-		return this.displayName;
-	}
+    public String toString() {
+        return this.displayName;
+    }
 
-	public boolean equals(Object o) {
-		ChannelInfo other = (ChannelInfo) o;
-		return this.streamerName.equals(other.getStreamerName());
+    public boolean equals(Object o) {
+        ChannelInfo other = (ChannelInfo) o;
+        return this.streamerName.equals(other.getStreamerName());
 
-	}
+    }
 
-	@Override
-	public int compareTo(@NonNull ChannelInfo another) {
-		return String.CASE_INSENSITIVE_ORDER.compare(another.getDisplayName(), getDisplayName());
-	}
+    @Override
+    public int compareTo(@NonNull ChannelInfo another) {
+        return String.CASE_INSENSITIVE_ORDER.compare(another.getDisplayName(), getDisplayName());
+    }
 
-	public String getNotificationTag() {
-		return streamerName;
-	}
+    public String getNotificationTag() {
+        return streamerName;
+    }
 
-	public Bitmap getLogoImage() {
-		return logoImage;
-	}
+    public Bitmap getLogoImage() {
+        return logoImage;
+    }
 
-	public void setLogoImage(Bitmap logoImage) {
-		this.logoImage = logoImage;
-	}
+    public void setLogoImage(Bitmap logoImage) {
+        this.logoImage = logoImage;
+    }
 
-	public Bitmap getVideoBannerImage() {
-		return videoBannerImage;
-	}
+    public Bitmap getVideoBannerImage() {
+        return videoBannerImage;
+    }
 
-	public void setVideoBannerImage(Bitmap videoBannerImage) {
-		this.videoBannerImage = videoBannerImage;
-	}
+    public void setVideoBannerImage(Bitmap videoBannerImage) {
+        this.videoBannerImage = videoBannerImage;
+    }
 
-	public Bitmap getProfileBannerImage() {
-		return profileBannerImage;
-	}
+    public Bitmap getProfileBannerImage() {
+        return profileBannerImage;
+    }
 
-	public void setProfileBannerImage(Bitmap profileBannerImage) {
-		this.profileBannerImage = profileBannerImage;
-	}
+    public void setProfileBannerImage(Bitmap profileBannerImage) {
+        this.profileBannerImage = profileBannerImage;
+    }
 
-	public int getUserId() {
-		return userId;
-	}
+    public int getUserId() {
+        return userId;
+    }
 
-	public String getDisplayName() {
-		return this.displayName;
-	}
+    public String getDisplayName() {
+        return this.displayName;
+    }
 
-	public String getStreamerName() {
-		return this.streamerName;
-	}
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 
-	public String getStreamDescription() {
-		return this.streamDescription;
-	}
+    public String getStreamerName() {
+        return this.streamerName;
+    }
 
-	public int getFollowers() {
-		return followers;
-	}
+    public void setStreamerName(String streamerName) {
+        this.streamerName = streamerName;
+    }
 
-	public int getViews() {
-		return views;
-	}
+    public String getStreamDescription() {
+        return this.streamDescription;
+    }
 
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
-	}
+    public void setStreamDescription(String streamDescription) {
+        this.streamDescription = streamDescription;
+    }
 
-	public void setStreamerName(String streamerName) {
-		this.streamerName = streamerName;
-	}
+    public int getFollowers() {
+        return followers;
+    }
 
-	public void setStreamDescription(String streamDescription) {
-		this.streamDescription = streamDescription;
-	}
+    public void setFollowers(int followers) {
+        this.followers = followers;
+    }
 
-	public void setFollowers(int followers) {
-		this.followers = followers;
-	}
+    public int getViews() {
+        return views;
+    }
 
-	public void setViews(int views) {
-		this.views = views;
-	}
+    public void setViews(int views) {
+        this.views = views;
+    }
 
-	public URL getVideoBannerURL() {
-		return videoBannerURL;
-	}
+    public URL getVideoBannerURL() {
+        return videoBannerURL;
+    }
 
-	public void setVideoBannerURL(URL videoBannerURL) {
-		this.videoBannerURL = videoBannerURL;
-	}
+    public void setVideoBannerURL(URL videoBannerURL) {
+        this.videoBannerURL = videoBannerURL;
+    }
 
-	public URL getLogoURL() {
-		return logoURL;
-	}
+    public URL getLogoURL() {
+        return logoURL;
+    }
 
-	public String getLogoURLString() {
-		if (logoURL == null) {
-			return null;
-		} else {
-			return logoURL.toString();
-		}
-	}
+    public void setLogoURL(URL logoURL) {
+        this.logoURL = logoURL;
+    }
 
-	public void setLogoURL(URL logoURL) {
-		this.logoURL = logoURL;
-	}
+    public String getLogoURLString() {
+        if (logoURL == null) {
+            return null;
+        } else {
+            return logoURL.toString();
+        }
+    }
 
-	public URL getProfileBannerURL() {
-		return profileBannerURL;
-	}
+    public URL getProfileBannerURL() {
+        return profileBannerURL;
+    }
 
-	public void setProfileBannerURL(URL profileBannerURL) {
-		this.profileBannerURL = profileBannerURL;
-	}
+    public void setProfileBannerURL(URL profileBannerURL) {
+        this.profileBannerURL = profileBannerURL;
+    }
 
-	@Override
-	public String getHighPreview() {
-		return getMediumPreview();
-	}
+    @Override
+    public String getHighPreview() {
+        return getMediumPreview();
+    }
 
-	@Override
-	public String getMediumPreview() {
-		if(getLogoURL() == null) return null;
-		return getLogoURL().toString();
-	}
+    @Override
+    public String getMediumPreview() {
+        if (getLogoURL() == null) return null;
+        return getLogoURL().toString();
+    }
 
-	@Override
-	public String getLowPreview() {
-		return getMediumPreview();
-	}
+    @Override
+    public String getLowPreview() {
+        return getMediumPreview();
+    }
 
     @Override
     public int getPlaceHolder(Context context) {
         return R.drawable.ic_profile_template_300p;
     }
 
-	/**
-	 * Requires 3 URLs for images. Also if one of the URLs is null.
-	 * This Async class loads and creates bitmaps for a StreamerInfo object if a boolean value for the constructor is true
-	 */
-	public class LoadBitmapTask extends AsyncTask<URL, Void, ArrayList<Bitmap>> {
+    /**
+     * Requires 3 URLs for images. Also if one of the URLs is null.
+     * This Async class loads and creates bitmaps for a StreamerInfo object if a boolean value for the constructor is true
+     */
+    public class LoadBitmapTask extends AsyncTask<URL, Void, ArrayList<Bitmap>> {
 
-		@Override
-		protected ArrayList<Bitmap> doInBackground(URL... params) {
-			URL[] urls = new URL[] {params[0], params[1], params[2]};
-			ArrayList<Bitmap> bitmaps = new ArrayList<>();
+        @Override
+        protected ArrayList<Bitmap> doInBackground(URL... params) {
+            URL[] urls = new URL[]{params[0], params[1], params[2]};
+            ArrayList<Bitmap> bitmaps = new ArrayList<>();
 
-			for(URL url : urls) {
-				Bitmap bitmap = null;
-				if(url != null) {
-					try {
-						InputStream is = (InputStream) url.getContent();
-						bitmap = BitmapFactory.decodeStream(is);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+            for (URL url : urls) {
+                Bitmap bitmap = null;
+                if (url != null) {
+                    try {
+                        InputStream is = (InputStream) url.getContent();
+                        bitmap = BitmapFactory.decodeStream(is);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-				bitmaps.add(bitmap);
-			}
+                bitmaps.add(bitmap);
+            }
 
-			return bitmaps;
+            return bitmaps;
 
-		}
+        }
 
-		protected void onPostExecute(ArrayList<Bitmap> results) {
+        protected void onPostExecute(ArrayList<Bitmap> results) {
 
-			if(results.get(0) != null) {
-				setLogoImage(results.get(0));
-			}
+            if (results.get(0) != null) {
+                setLogoImage(results.get(0));
+            }
 
-			if(results.get(1) != null) {
-				setVideoBannerImage(results.get(1));
-			}
+            if (results.get(1) != null) {
+                setVideoBannerImage(results.get(1));
+            }
 
-			if(results.get(2) != null) {
-				setProfileBannerImage(results.get(2));
-			}
-		}
-	}
+            if (results.get(2) != null) {
+                setProfileBannerImage(results.get(2));
+            }
+        }
+    }
 }

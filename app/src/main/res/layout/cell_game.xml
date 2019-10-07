@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView_game"
     android:layout_width="wrap_content"
@@ -12,41 +11,40 @@
     app:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        >
+        android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/preview_wrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <com.perflyst.twire.views.DynamicImageView
                 android:id="@+id/image_game_preview"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
         </RelativeLayout>
 
         <TextView
             android:id="@+id/game_card_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/game_card_margin"
-            android:layout_marginRight="@dimen/game_card_margin"
-            android:maxLines = "2"
-            android:minLines = "1"
-            android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/game_card_margin"
             android:layout_marginTop="3dp"
-            android:textAppearance="@style/cardPrimaryText"
+            android:layout_marginRight="@dimen/game_card_margin"
+            android:gravity="center_horizontal"
+            android:maxLines="2"
+            android:minLines="1"
             android:text="@string/preview_game_title"
-            />
+            android:textAppearance="@style/cardPrimaryText" />
 
         <!-- Shared Padding -->
         <View
             android:id="@+id/shared_padding"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/game_card_divider_height"/>
+            android:layout_height="@dimen/game_card_divider_height" />
 
         <TextView
             android:id="@+id/game_viewers"
@@ -54,13 +52,12 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal|bottom"
             android:gravity="center_horizontal|bottom"
-            android:textAppearance="@style/cardSecondaryText"
-            android:singleLine="true"
-            android:paddingRight="@dimen/game_card_divider_height"
             android:paddingLeft="@dimen/game_card_divider_height"
-            android:paddingBottom="@dimen/game_card_divider_height"
             android:paddingTop="0dp"
-            />
+            android:paddingRight="@dimen/game_card_divider_height"
+            android:paddingBottom="@dimen/game_card_divider_height"
+            android:singleLine="true"
+            android:textAppearance="@style/cardSecondaryText" />
 
     </LinearLayout>
 

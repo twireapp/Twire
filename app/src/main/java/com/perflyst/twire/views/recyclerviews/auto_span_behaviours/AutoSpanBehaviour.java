@@ -9,6 +9,7 @@ import com.perflyst.twire.service.Settings;
  */
 
 public interface AutoSpanBehaviour {
-	String getElementSizeName(Settings settings);
-	int getElementWidth(Context context);
+    String getElementSizeName(Settings settings);
+
+    int getElementWidth(Context context);
 }

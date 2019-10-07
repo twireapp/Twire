@@ -21,11 +21,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=":"
-        android:textSize="@dimen/stream_sleep_timer_font_size"
         android:textColor="?attr/navigationDrawerTextColor"
+        android:textSize="@dimen/stream_sleep_timer_font_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/hour_picker"
         app:layout_constraintEnd_toStartOf="@id/minute_picker"
+        app:layout_constraintStart_toEndOf="@id/hour_picker"
         app:layout_constraintTop_toTopOf="parent" />
 
     <biz.kasual.materialnumberpicker.MaterialNumberPicker
@@ -45,11 +45,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=":"
-        android:textSize="@dimen/stream_sleep_timer_font_size"
         android:textColor="?attr/navigationDrawerTextColor"
+        android:textSize="@dimen/stream_sleep_timer_font_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/minute_picker"
         app:layout_constraintEnd_toStartOf="@id/second_picker"
+        app:layout_constraintStart_toEndOf="@id/minute_picker"
         app:layout_constraintTop_toTopOf="parent" />
 
     <biz.kasual.materialnumberpicker.MaterialNumberPicker
@@ -58,8 +58,8 @@
         android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/colon_separator_2"
-        app:npMinValue="0"
-        app:npTextSize="@dimen/stream_sleep_timer_font_size"
         app:npBackgroundColor="?attr/navigationDrawerBackground"
-        app:npTextColor="?attr/navigationDrawerTextColor" />
+        app:npMinValue="0"
+        app:npTextColor="?attr/navigationDrawerTextColor"
+        app:npTextSize="@dimen/stream_sleep_timer_font_size" />
 </androidx.constraintlayout.widget.ConstraintLayout>

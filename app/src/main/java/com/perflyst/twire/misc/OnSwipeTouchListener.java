@@ -10,70 +10,69 @@ import android.view.View.OnTouchListener;
 
 public class OnSwipeTouchListener implements OnTouchListener {
 
-	private final GestureDetector gestureDetector;
-	private final String LOG_TAG = getClass().getSimpleName();
+    private final GestureDetector gestureDetector;
+    private final String LOG_TAG = getClass().getSimpleName();
 
-	public OnSwipeTouchListener (Context ctx){
-		gestureDetector = new GestureDetector(ctx, new GestureListener());
-	}
+    public OnSwipeTouchListener(Context ctx) {
+        gestureDetector = new GestureDetector(ctx, new GestureListener());
+    }
 
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		return gestureDetector.onTouchEvent(event);
-	}
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
+    }
 
-	private final class GestureListener extends SimpleOnGestureListener {
+    public void onSwipeRight() {
+    }
 
-		private static final int SWIPE_THRESHOLD = 100;
-		private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+    public void onSwipeLeft() {
+    }
 
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return true;
-		}
+    public void onSwipeTop() {
+    }
 
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			boolean result = false;
-			try {
-				float diffY = e2.getY() - e1.getY();
-				float diffX = e2.getX() - e1.getX();
-				if (Math.abs(diffX) > Math.abs(diffY)) {
-					if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-						if (diffX > 0) {
-							onSwipeRight();
-						} else {
-							Log.d(LOG_TAG, "" + diffX);
-							onSwipeLeft();
-						}
-					}
-					result = true;
-				}
-				else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-					if (diffY > 0) {
-						onSwipeBottom();
-					} else {
-						onSwipeTop();
-					}
-				}
-				result = true;
+    public void onSwipeBottom() {
+    }
 
-			} catch (Exception exception) {
-				exception.printStackTrace();
-			}
-			return result;
-		}
-	}
+    private final class GestureListener extends SimpleOnGestureListener {
 
-	public void onSwipeRight() {
-	}
+        private static final int SWIPE_THRESHOLD = 100;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
-	public void onSwipeLeft() {
-	}
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
 
-	public void onSwipeTop() {
-	}
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            boolean result = false;
+            try {
+                float diffY = e2.getY() - e1.getY();
+                float diffX = e2.getX() - e1.getX();
+                if (Math.abs(diffX) > Math.abs(diffY)) {
+                    if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        if (diffX > 0) {
+                            onSwipeRight();
+                        } else {
+                            Log.d(LOG_TAG, "" + diffX);
+                            onSwipeLeft();
+                        }
+                    }
+                    result = true;
+                } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                    if (diffY > 0) {
+                        onSwipeBottom();
+                    } else {
+                        onSwipeTop();
+                    }
+                }
+                result = true;
 
-	public void onSwipeBottom() {
-	}
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+            return result;
+        }
+    }
 }

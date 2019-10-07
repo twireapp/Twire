@@ -1,7 +1,6 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container_settings_chat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,26 +8,24 @@
     tools:context="com.perflyst.twire.activities.settings.SettingsTwitchChatActivity"
     tools:ignore="MergeRootFrame">
 
-    <androidx.appcompat.widget.Toolbar
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.appcompat.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/settings_player_toolbar"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:background="?attr/colorPrimary"
+        android:layout_height="wrap_content"
         android:height="@dimen/main_toolbar_height"
+        android:background="?attr/colorPrimary"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <ScrollView
-        android:layout_below="@id/settings_player_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@id/settings_player_toolbar">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent">
+            android:orientation="vertical">
 
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
@@ -38,37 +35,33 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
-                    android:gravity="center_vertical"
                     android:clickable="true"
-                    android:onClick="onClickEmoteSize"
-                    >
+                    android:gravity="center_vertical"
+                    android:onClick="onClickEmoteSize">
 
                     <TextView
-                        style="@style/text_settings"
                         android:id="@+id/chat_emote_size_title"
+                        style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/text_settings_title"
                         android:text="@string/chat_emote_size"
-                        />
+                        android:textAppearance="@style/text_settings_title" />
 
                     <TextView
-                        style="@style/text_settings"
                         android:id="@+id/chat_emote_size_summary"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_below="@id/chat_emote_size_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/sub_text_settings"
-                        />
+                        android:textAppearance="@style/sub_text_settings" />
                 </RelativeLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_divider_height"
                 android:id="@+id/notifications_twitch_name_divider"
-                android:background="?attr/dividerColor"
-                />
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
 
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
@@ -78,36 +71,33 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
-                    android:gravity="center_vertical"
                     android:clickable="true"
-                    android:onClick="onClickMessageSize"
-                    >
+                    android:gravity="center_vertical"
+                    android:onClick="onClickMessageSize">
 
                     <TextView
-                        style="@style/text_settings"
                         android:id="@+id/message_size_title"
+                        style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/text_settings_title"
                         android:text="@string/chat_message_size"
-                        />
+                        android:textAppearance="@style/text_settings_title" />
 
                     <TextView
-                        style="@style/text_settings"
                         android:id="@+id/message_size_summary"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_below="@id/message_size_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/sub_text_settings"
-                        />
+                        android:textAppearance="@style/sub_text_settings" />
 
                 </RelativeLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_divider_height"
-                android:background="?attr/dividerColor"
-                />
+                android:background="?attr/dividerColor" />
 
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
@@ -117,32 +107,29 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
-                    android:gravity="center_vertical"
                     android:clickable="true"
-                    android:onClick="onClickChatLandscapeEnable"
-                    >
+                    android:gravity="center_vertical"
+                    android:onClick="onClickChatLandscapeEnable">
 
                     <CheckedTextView
-                        style="@style/text_settings"
                         android:id="@+id/chat_landscape_enable_title"
+                        style="@style/text_settings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
 
-                        android:gravity="center_vertical"
                         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-                        android:textAppearance="@style/text_settings_title"
+                        android:gravity="center_vertical"
                         android:text="@string/chat_landscape_enable"
-                        />
+                        android:textAppearance="@style/text_settings_title" />
 
                     <TextView
-                        style="@style/text_settings"
                         android:id="@+id/chat_landscape_enable_summary"
-                        android:layout_below="@id/chat_landscape_enable_title"
+                        style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/sub_text_settings"
-                        />
+                        android:layout_below="@id/chat_landscape_enable_title"
+                        android:textAppearance="@style/sub_text_settings" />
 
                 </RelativeLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -150,8 +137,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_divider_height"
-                android:background="?attr/dividerColor"
-                />
+                android:background="?attr/dividerColor" />
 
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
@@ -161,31 +147,28 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
-                    android:gravity="center_vertical"
                     android:clickable="true"
-                    android:onClick="onClickChatLandscapeSwipeable"
-                    >
+                    android:gravity="center_vertical"
+                    android:onClick="onClickChatLandscapeSwipeable">
 
                     <CheckedTextView
-                        style="@style/text_settings"
                         android:id="@+id/chat_landscape_swipe_title"
+                        style="@style/text_settings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:gravity="center_vertical"
                         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-                        android:textAppearance="@style/text_settings_title"
+                        android:gravity="center_vertical"
                         android:text="@string/chat_landscape_swipe"
-                        />
+                        android:textAppearance="@style/text_settings_title" />
 
                     <TextView
-                        style="@style/text_settings"
                         android:id="@+id/chat_landscape_swipe_summary"
-                        android:layout_below="@id/chat_landscape_swipe_title"
+                        style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/sub_text_settings"
-                        />
+                        android:layout_below="@id/chat_landscape_swipe_title"
+                        android:textAppearance="@style/sub_text_settings" />
 
                 </RelativeLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
@@ -193,8 +176,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_divider_height"
-                android:background="?attr/dividerColor"
-                />
+                android:background="?attr/dividerColor" />
 
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
@@ -204,37 +186,33 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
-                    android:gravity="center_vertical"
                     android:clickable="true"
-                    android:onClick="onClickChatLandScapeWidth"
-                    >
+                    android:gravity="center_vertical"
+                    android:onClick="onClickChatLandScapeWidth">
 
                     <TextView
-                        style="@style/text_settings"
                         android:id="@+id/chat_landscape_title"
+                        style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/text_settings_title"
                         android:text="@string/chat_landscape_width"
-                        />
+                        android:textAppearance="@style/text_settings_title" />
 
                     <TextView
-                        style="@style/text_settings"
                         android:id="@+id/chat_landscape_summary"
-                        android:layout_below="@id/chat_landscape_title"
+                        style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/sub_text_settings"
-                        />
+                        android:layout_below="@id/chat_landscape_title"
+                        android:textAppearance="@style/sub_text_settings" />
 
                 </RelativeLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_divider_height"
-                android:background="?attr/dividerColor"
-                />
-
+                android:background="?attr/dividerColor" />
 
 
         </LinearLayout>

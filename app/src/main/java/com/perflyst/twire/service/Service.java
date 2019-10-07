@@ -100,6 +100,7 @@ public class Service {
             return true;
         }
     };
+    public static int NOTIFICATION_ALARM_ID = 754641782;
 
     /**
      * Returns the Twitch Client ID
@@ -408,7 +409,6 @@ public class Service {
         return getResizedBitmap(bm, (int) (bm.getWidth() * factorchange), (int) (bm.getHeight() * factorchange));
     }
 
-
     /**
      * Creates a new resized bitmap with a specified width and height.
      */
@@ -498,8 +498,6 @@ public class Service {
 
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
-
-    public static int NOTIFICATION_ALARM_ID = 754641782;
 
     public static void startNotifications(Context context) {
     }

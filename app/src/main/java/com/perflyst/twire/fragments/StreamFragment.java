@@ -112,6 +112,7 @@ public class StreamFragment extends Fragment {
             autoPlay = true,
             hasPaused = false,
             seeking = false;
+    public OnSeekListener onSeekCallback;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
     private Settings settings;
     private SleepTimer sleepTimer;
@@ -120,7 +121,6 @@ public class StreamFragment extends Fragment {
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
     private Runnable fetchChattersRunnable;
-
     private View mVideoBackground;
     private VideoViewSimple mVideoView;
     private Toolbar mToolbar;
@@ -140,7 +140,6 @@ public class StreamFragment extends Fragment {
     private AppCompatActivity mActivity;
     private Snackbar snackbar;
     private ProgressView mBufferingView;
-
     private final Runnable progressRunnable = new Runnable() {
         @Override
         public void run() {
@@ -179,7 +178,6 @@ public class StreamFragment extends Fragment {
             videoHeightBeforeChatOnly,
             fetchViewCountDelay = 1000 * 60, // A minute
             fetchChattersDelay = 1000 * 60; // 30 seco... Nah just kidding. Also a minute.
-
     private Integer triesForNextBest = 0;
 
     public static StreamFragment newInstance(Bundle args) {
@@ -485,12 +483,6 @@ public class StreamFragment extends Fragment {
         return mRootView;
     }
 
-    public OnSeekListener onSeekCallback;
-
-    public interface OnSeekListener {
-        public void onSeek();
-    }
-
     /**
      * Hides the preview image and updates the state
      */
@@ -717,23 +709,23 @@ public class StreamFragment extends Fragment {
 
     private void showSeekDialog() {
         DialogService.getSeekDialog(getActivity(), (dialog, which) -> {
-            if (which == DialogAction.NEGATIVE)
-                return;
+                    if (which == DialogAction.NEGATIVE)
+                        return;
 
-            View customView = dialog.getCustomView();
-            MaterialNumberPicker hourPicker = customView.findViewById(R.id.hour_picker);
-            MaterialNumberPicker minutePicker = customView.findViewById(R.id.minute_picker);
-            MaterialNumberPicker secondPicker = customView.findViewById(R.id.second_picker);
+                    View customView = dialog.getCustomView();
+                    MaterialNumberPicker hourPicker = customView.findViewById(R.id.hour_picker);
+                    MaterialNumberPicker minutePicker = customView.findViewById(R.id.minute_picker);
+                    MaterialNumberPicker secondPicker = customView.findViewById(R.id.second_picker);
 
-            seeking = true;
-            mProgressBar.setProgress((hourPicker.getValue() * 3600 + minutePicker.getValue() * 60 + secondPicker.getValue()) * 1000);
-            seeking = false;
-            onSeekCallback.onSeek();
-            ChatManager.updateVodProgress(currentProgress, true);
-        },
-        currentProgress / 1000,
-        vodLength)
-        .show();
+                    seeking = true;
+                    mProgressBar.setProgress((hourPicker.getValue() * 3600 + minutePicker.getValue() * 60 + secondPicker.getValue()) * 1000);
+                    seeking = false;
+                    onSeekCallback.onSeek();
+                    ChatManager.updateVodProgress(currentProgress, true);
+                },
+                currentProgress / 1000,
+                vodLength)
+                .show();
     }
 
     @Override
@@ -1921,6 +1913,10 @@ public class StreamFragment extends Fragment {
 
     private void hideQualities() {
         mQualityWrapper.setVisibility(View.GONE);
+    }
+
+    public interface OnSeekListener {
+        public void onSeek();
     }
 
     /**

@@ -3,8 +3,8 @@
 
     <item>
         <shape
-            android:tint="@color/colorPreviewBackground"
-            android:shape="rectangle" >
+            android:shape="rectangle"
+            android:tint="@color/colorPreviewBackground">
 
             <size
                 android:width="@dimen/game_preview_width"

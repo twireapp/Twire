@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Main Content -->
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-     android:id="@+id/main_content"
-     xmlns:android="http://schemas.android.com/apk/res/android"
-     xmlns:app="http://schemas.android.com/apk/res-auto"
-     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_width="match_parent"
-     android:layout_height="match_parent"
-     android:fitsSystemWindows="true"
-     tools:context="com.perflyst.twire.activities.SearchActivity">
+<?xml version="1.0" encoding="utf-8"?><!-- Main Content -->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.perflyst.twire.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -23,76 +21,77 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
 
-            app:contentInsetLeft="@dimen/search_toolbar_padding"
-            app:contentInsetStart="@dimen/search_toolbar_padding"
-            app:contentInsetRight="@dimen/search_toolbar_padding"
             app:contentInsetEnd="@dimen/search_toolbar_padding"
+            app:contentInsetLeft="@dimen/search_toolbar_padding"
+            app:contentInsetRight="@dimen/search_toolbar_padding"
+            app:contentInsetStart="@dimen/search_toolbar_padding"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <io.codetail.widget.RevealFrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/search_card"
-                    android:layout_marginBottom="@dimen/search_card_margin_bottom"
-                    android:layout_marginRight="@dimen/search_card_margin_right_left"
-                    android:layout_marginLeft="@dimen/search_card_margin_right_left"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="@dimen/search_card_corner_radius"
+                    android:layout_marginLeft="@dimen/search_card_margin_right_left"
+                    android:layout_marginRight="@dimen/search_card_margin_right_left"
+                    android:layout_marginBottom="@dimen/search_card_margin_bottom"
                     app:cardBackgroundColor="?attr/searchActivityCardColor"
-                    >
+                    app:cardCornerRadius="@dimen/search_card_corner_radius">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
+
                         <ImageView
                             android:id="@+id/ic_back_arrow"
-                            android:tint="?attr/searchActivityUpIconColor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
                             android:paddingStart="@dimen/search_back_arrow_start_padding"
                             android:paddingLeft="@dimen/search_back_arrow_start_padding"
                             android:paddingRight="@dimen/search_back_arrow_start_padding"
-                            android:layout_centerVertical="true"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_arrow_back_black_24dp"
-                            />
+                            android:tint="?attr/searchActivityUpIconColor"
+                            app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
+
                         <EditText
                             android:id="@+id/edit_text_search"
-                            android:layout_toEndOf="@+id/ic_back_arrow"
-                            android:layout_toRightOf="@+id/ic_back_arrow"
-                            android:padding="@dimen/search_edittext_padding"
-                            android:inputType="text"
-                            android:imeActionLabel="Search"
-                            android:imeOptions="actionDone"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_toEndOf="@+id/ic_back_arrow"
+                            android:layout_toRightOf="@+id/ic_back_arrow"
                             android:background="@android:color/transparent"
                             android:hint="@string/search_hint"
-                            android:textColorHint="?attr/secondaryTextColor"
+                            android:imeActionLabel="Search"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            android:padding="@dimen/search_edittext_padding"
                             android:textColor="?attr/textColor"
-                            android:maxLines="1"/>
+                            android:textColorHint="?attr/secondaryTextColor" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </io.codetail.widget.RevealFrameLayout>
 
             <ImageView
-                android:tint="?attr/searchActivityUpIconColor"
-                android:layout_gravity="end"
-                app:srcCompat="@drawable/ic_search_black_24dp"
                 android:id="@+id/ic_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="end"
                 android:clickable="true"
-                android:padding="@dimen/search_icon_padding"/>
+                android:padding="@dimen/search_icon_padding"
+                android:tint="?attr/searchActivityUpIconColor"
+                app:srcCompat="@drawable/ic_search_black_24dp" />
 
         </androidx.appcompat.widget.Toolbar>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -100,7 +99,7 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

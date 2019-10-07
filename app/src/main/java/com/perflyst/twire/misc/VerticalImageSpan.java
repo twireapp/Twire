@@ -19,7 +19,9 @@ public class VerticalImageSpan extends ImageSpan {
         super(context, bitmap);
     }
 
-    public VerticalImageSpan(Drawable drawable) { super(drawable); }
+    public VerticalImageSpan(Drawable drawable) {
+        super(drawable);
+    }
 
     @Override
     public int getSize(Paint paint, CharSequence text,

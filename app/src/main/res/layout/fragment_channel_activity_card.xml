@@ -2,12 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_streamerInfo_container_layout"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_gravity="center_horizontal">
 
-    <androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fragment_streamerInfo_card_layout"
         android:layout_width="match_parent"
@@ -16,17 +15,14 @@
         app:cardCornerRadius="@dimen/fragment_streamerInfO_card_corner_radius"
         app:cardElevation="@dimen/fragment_streamerInfo_cardElevation"
         app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
-        >
+        app:cardUseCompatPadding="true">
 
-        <RelativeLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/streamerInfo_rel_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            >
+            android:layout_centerHorizontal="true">
 
             <TextView
                 android:id="@+id/streamerInfo_displayName"
@@ -36,31 +32,28 @@
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
                 android:text="@string/channel_info_name"
-                android:textAppearance="@style/text_title"
-                />
+                android:textAppearance="@style/text_title" />
 
             <TextView
-                android:layout_below="@id/streamerInfo_displayName"
                 android:id="@+id/streamerInfo_bio"
-                android:text="@string/channel_info_bio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/font_title_size"
-                android:fontFamily="@string/font_roboto_light"
+                android:layout_below="@id/streamerInfo_displayName"
                 android:layout_centerHorizontal="true"
-                android:gravity="center_horizontal"
                 android:layout_marginLeft="@dimen/activity_vertical_margin"
                 android:layout_marginRight="@dimen/activity_vertical_margin"
-                />
+                android:fontFamily="@string/font_roboto_light"
+                android:gravity="center_horizontal"
+                android:text="@string/channel_info_bio"
+                android:textSize="@dimen/font_title_size" />
 
             <TextView
+                android:id="@+id/streamerInfo_enable_scroll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2000dp"
                 android:layout_centerHorizontal="true"
-                android:id="@+id/streamerInfo_enable_scroll"
-                android:text="@string/content_desc_twitchLogo_imageView"
-                />
+                android:layout_marginTop="2000dp"
+                android:text="@string/content_desc_twitchLogo_imageView" />
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

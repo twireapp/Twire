@@ -3,8 +3,6 @@ package com.perflyst.twire.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.cardview.widget.CardView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -12,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.model.ChannelInfo;
@@ -61,7 +62,7 @@ public class StreamerInfoFragment extends Fragment {
 
         // Set this Fragment's view with the appropriate information
         StreamerInfoName.setText(info.getDisplayName());
-        if(info.getStreamDescription() != null) { // Some times twitch fucks up and doesn't send bio with its API
+        if (info.getStreamDescription() != null) { // Some times twitch fucks up and doesn't send bio with its API
             StreamerInfoBio.setText(info.getStreamDescription());
         }
 
@@ -73,7 +74,7 @@ public class StreamerInfoFragment extends Fragment {
         StreamerInfoName.setTextColor(textColor);
         StreamerInfoName.setBackgroundColor(colorLight);
 
-        if(inLandScape){
+        if (inLandScape) {
             Log.v(LOG_TAG, "Is in landscape - Fragment");
             //StreamerInfoName.getLayoutParams().width = (int) (((getResources().getDisplayMetrics().widthPixels)/100) * StreamerInfoActivity.landscape_content_width - (context.getResources().getDimension(R.dimen.fragment_streamerInfo_cardElevation) * 2));
         } else {
@@ -82,10 +83,10 @@ public class StreamerInfoFragment extends Fragment {
             int screenWidth = (getResources().getDisplayMetrics().widthPixels);
             LinearLayout llContainer = (LinearLayout) rootView.findViewById(R.id.fragment_streamerInfo_container_layout);
 
-            int newWidth = (int)(screenWidth + getResources().getDimension(R.dimen.fragment_streamerInfo_cardElevation));
+            int newWidth = (int) (screenWidth + getResources().getDimension(R.dimen.fragment_streamerInfo_cardElevation));
             llContainer.getLayoutParams().width = newWidth;
 
-            float newTranslationX = (float)((newWidth - screenWidth) * -0.5);
+            float newTranslationX = (float) ((newWidth - screenWidth) * -0.5);
             llContainer.setTranslationX(newTranslationX);
             llContainer.setGravity(Gravity.CENTER_HORIZONTAL);
 

@@ -1,126 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:tools="http://schemas.android.com/tools"
-    package="com.perflyst.twire"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.perflyst.twire">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-feature
         android:name="android.hardware.wifi"
-        android:required="true">
-    </uses-feature>
+        android:required="true"></uses-feature>
 
     <application
         android:name="com.perflyst.twire.TwireApplication"
         android:allowBackup="true"
+        android:fullBackupContent="false"
         android:hardwareAccelerated="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/WhiteBackgroundTheme"
-        android:fullBackupContent="false"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/WhiteBackgroundTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
         <uses-library
             android:name="com.sec.android.app.multiwindow"
-            android:required="false"/>
+            android:required="false" />
 
         <meta-data
             android:name="com.sec.android.support.multiwindow"
-            android:value="true"/>
+            android:value="true" />
 
         <meta-data
             android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W"
-            android:value="632.0dip"/>
+            android:value="632.0dip" />
 
         <meta-data
             android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H"
-            android:value="598.0dip"/>
+            android:value="598.0dip" />
 
         <meta-data
             android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W"
-            android:value="632.0dip"/>
+            android:value="632.0dip" />
 
         <meta-data
             android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H"
-            android:value="598.0dip"/>
+            android:value="598.0dip" />
 
         <activity
             android:name="com.perflyst.twire.activities.stream.LiveStreamActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:label="@string/title_activity_live_stream"
             android:launchMode="singleTop"
-            android:screenOrientation="sensor">
-        </activity>
+            android:screenOrientation="sensor"></activity>
         <activity
             android:name="com.perflyst.twire.activities.stream.VODActivity"
             android:configChanges="screenSize|orientation"
             android:label="@string/title_activity_vod"
             android:launchMode="singleTop"
-            android:screenOrientation="fullSensor">
-        </activity>
+            android:screenOrientation="fullSensor"></activity>
         <activity
             android:name="com.perflyst.twire.activities.main.MyChannelsActivity"
             android:label="@string/my_channels_activity_label"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"></activity>
         <activity
             android:name="com.perflyst.twire.activities.settings.SettingsActivity"
-            android:label="@string/settings_activity_title">
-        </activity>
+            android:label="@string/settings_activity_title"></activity>
         <activity
             android:name="com.perflyst.twire.activities.ChannelActivity"
-            android:label="@string/title_activity_streamer_info">
-        </activity>
+            android:label="@string/title_activity_streamer_info"></activity>
         <activity
             android:name="com.perflyst.twire.activities.settings.SettingsNotificationsActivity"
-            android:label="@string/settings_notifications_name">
-        </activity>
+            android:label="@string/settings_notifications_name"></activity>
         <activity
             android:name="com.perflyst.twire.activities.settings.SettingsGeneralActivity"
-            android:label="@string/settings_general_name">
-        </activity>
+            android:label="@string/settings_general_name"></activity>
         <activity
             android:name="com.perflyst.twire.activities.settings.SettingsAppearanceActivity"
-            android:label="@string/settings_appearance_name">
-        </activity>
+            android:label="@string/settings_appearance_name"></activity>
         <activity
             android:name="com.perflyst.twire.activities.settings.SettingsTwitchChatActivity"
-            android:label="@string/settings_chat_name">
-        </activity>
+            android:label="@string/settings_chat_name"></activity>
         <activity
             android:name="com.perflyst.twire.activities.main.MyStreamsActivity"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"></activity>
         <activity
             android:name="com.perflyst.twire.activities.main.TopGamesActivity"
             android:label="@string/top_games_activity_title"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"></activity>
         <activity
             android:name="com.perflyst.twire.activities.GameActivity"
             android:label="@string/title_activity_game"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"></activity>
         <activity
             android:name="com.perflyst.twire.activities.main.TopStreamsActivity"
             android:label="@string/top_streams_activity_title"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"></activity>
         <activity
             android:name="com.perflyst.twire.activities.main.FeaturedStreamsActivity"
             android:label="@string/featured_activity_title"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"></activity>
         <activity
             android:name="com.perflyst.twire.activities.setup.WelcomeActivity"
             android:label="@string/title_activity_welcome"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.perflyst.twire.activities.setup.LoginActivity"
             android:label="@string/title_activity_login"
@@ -128,7 +112,7 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.perflyst.twire.activities.setup.WelcomeActivity"/>
+                android:value="com.perflyst.twire.activities.setup.WelcomeActivity" />
         </activity>
         <activity
             android:name="com.perflyst.twire.activities.setup.NotificationActivity"
@@ -137,39 +121,34 @@
             android:screenOrientation="portrait">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.perflyst.twire.activities.setup.LoginActivity"/>
+                android:value="com.perflyst.twire.activities.setup.LoginActivity" />
         </activity>
         <activity
             android:name="com.perflyst.twire.activities.setup.ConfirmSetupActivity"
             android:label="@string/title_activity_welcome"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.perflyst.twire.activities.StartUpActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/StartUpTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.perflyst.twire.activities.main.MyGamesActivity"
             android:label="@string/navigation_drawer_my_games_title"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop"></activity>
 
         <activity
             android:name="com.perflyst.twire.activities.SearchActivity"
-            android:label="@string/title_activity_search">
-        </activity>
-        <activity android:name="com.perflyst.twire.activities.settings.SettingsStreamPlayerActivity">
-        </activity>
-        <activity android:name="com.perflyst.twire.activities.settings.SettingsPickNotificationsActivity">
-        </activity>
+            android:label="@string/title_activity_search"></activity>
+        <activity android:name="com.perflyst.twire.activities.settings.SettingsStreamPlayerActivity"></activity>
+        <activity android:name="com.perflyst.twire.activities.settings.SettingsPickNotificationsActivity"></activity>
         <activity
             android:name="com.perflyst.twire.activities.tests.DeepLinkTestActivity"
             android:exported="true"
@@ -194,8 +173,7 @@
             </intent-filter
             -->
         </activity>
-        <activity android:name="com.perflyst.twire.activities.tests.TestPreferenceActivity">
-        </activity>
+        <activity android:name="com.perflyst.twire.activities.tests.TestPreferenceActivity"></activity>
     </application>
 
 </manifest>

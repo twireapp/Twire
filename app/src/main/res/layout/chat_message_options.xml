@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
@@ -11,38 +9,38 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:paddingTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="?attr/backgroundColor"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/text_chat_message"
-                android:background="?attr/selectableItemBackground"
+                style="@style/stream_settings_item"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
-                style="@style/stream_settings_item" />
+                android:background="?attr/selectableItemBackground"
+                android:minHeight="48dp" />
 
             <TextView
                 android:id="@+id/text_mention"
+                style="@style/stream_settings_item"
                 android:background="?attr/selectableItemBackground"
-                android:text="@string/chat_message_option_mention"
-                style="@style/stream_settings_item" />
+                android:text="@string/chat_message_option_mention" />
 
             <TextView
                 android:id="@+id/text_duplicate_message"
+                style="@style/stream_settings_item"
                 android:background="?attr/selectableItemBackground"
-                android:text="@string/chat_message_option_duplicate"
-                style="@style/stream_settings_item" />
+                android:text="@string/chat_message_option_duplicate" />
 
             <TextView
-                android:visibility="gone"
                 android:id="@+id/text_block_user"
+                style="@style/stream_settings_item"
                 android:background="?attr/selectableItemBackground"
                 android:text="@string/chat_message_option_block"
                 android:textColor="?attr/colorPrimary"
-                style="@style/stream_settings_item" />
+                android:visibility="gone" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

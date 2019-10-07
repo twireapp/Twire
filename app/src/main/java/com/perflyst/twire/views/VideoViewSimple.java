@@ -11,26 +11,26 @@ import android.widget.VideoView;
  */
 public class VideoViewSimple extends VideoView {
 
-	public VideoViewSimple(Context context) {
-		super(context);
-	}
+    public VideoViewSimple(Context context) {
+        super(context);
+    }
 
-	public VideoViewSimple(Context context, AttributeSet attrs) {
-		super(context, attrs);
-	}
+    public VideoViewSimple(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
 
-	public VideoViewSimple(Context context, AttributeSet attrs, int defStyleAttr) {
-		super(context, attrs, defStyleAttr);
-	}
+    public VideoViewSimple(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
 
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	public VideoViewSimple(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-		super(context, attrs, defStyleAttr, defStyleRes);
-	}
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public VideoViewSimple(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
 
-	@Override
-	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-		super.onLayout(changed, left, top, right, bottom);
-		getHolder().setSizeFromLayout();
-	}
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        getHolder().setSizeFromLayout();
+    }
 }

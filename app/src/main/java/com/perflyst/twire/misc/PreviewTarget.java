@@ -8,13 +8,13 @@ import com.squareup.picasso.Target;
  * Created by Sebastian Rask on 09-05-2016.
  */
 public abstract class PreviewTarget implements Target {
-	private Bitmap preview;
+    private Bitmap preview;
 
-	public Bitmap getPreview() {
-		return preview;
-	}
+    public Bitmap getPreview() {
+        return preview;
+    }
 
-	public void setPreview(Bitmap preview) {
-		this.preview = preview;
-	}
+    public void setPreview(Bitmap preview) {
+        this.preview = preview;
+    }
 }

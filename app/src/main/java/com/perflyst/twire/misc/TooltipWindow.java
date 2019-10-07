@@ -27,172 +27,169 @@ import io.codetail.animation.ViewAnimationUtils;
 
 public class TooltipWindow {
 
-	private static final int MSG_DISMISS_TOOLTIP = 100;
-	private final int REVEAL_DURATION = 500, HIDEDELAY = 1000 * 5;
+    private static final int MSG_DISMISS_TOOLTIP = 100;
+    public static int POSITION_TO_RIGHT = 0,
+            POSITION_BOTTOM = 1;
+    private final int REVEAL_DURATION = 500, HIDEDELAY = 1000 * 5;
+    private PopupWindow tipWindow;
+    private View contentView;
+    private TextView mTipText;
+    private ImageView mNavLeftArrow, mNavUpArrow;
+    private LinearLayout mainLayout;
+    private SupportAnimator revealTransition;
+    Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            switch (msg.what) {
+                case MSG_DISMISS_TOOLTIP:
+                    if (tipWindow != null && tipWindow.isShowing()) {
+                        if (revealTransition != null) {
+                            SupportAnimator hideAnim = revealTransition.reverse();
+                            if (hideAnim != null) {
+                                hideAnim.setInterpolator(new AccelerateDecelerateInterpolator());
+                                hideAnim.setDuration(REVEAL_DURATION);
+                                hideAnim.addListener(new SupportAnimator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart() {
 
-	public static int 	POSITION_TO_RIGHT = 0,
-						POSITION_BOTTOM = 1;
+                                    }
 
-	private PopupWindow tipWindow;
-	private View contentView;
-	private TextView mTipText;
-	private ImageView mNavLeftArrow, mNavUpArrow;
-	private LinearLayout mainLayout;
-	private SupportAnimator revealTransition;
-	private int position = POSITION_TO_RIGHT;
+                                    @Override
+                                    public void onAnimationEnd() {
+                                        if (tipWindow != null) {
+                                            tipWindow.dismiss();
+                                        }
+                                    }
 
-	public TooltipWindow(Context ctx, int aPosition) {
-		tipWindow = new PopupWindow(ctx);
-		position = aPosition;
+                                    @Override
+                                    public void onAnimationCancel() {
 
-		LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		contentView = inflater.inflate(R.layout.tooltip_layout, null);
-		mTipText = (TextView) contentView.findViewById(R.id.tooltip_text);
-		mNavLeftArrow = (ImageView) contentView.findViewById(R.id.tooltip_nav_left);
-		mNavUpArrow = (ImageView) contentView.findViewById(R.id.tooltip_nav_up);
-		mainLayout = (LinearLayout) contentView.findViewById(R.id.main_layout);
+                                    }
 
-	}
+                                    @Override
+                                    public void onAnimationRepeat() {
 
-	public void showToolTip(View anchor, String tipText) {
-		mTipText.setText(tipText);
-
-		tipWindow.setHeight(LayoutParams.WRAP_CONTENT);
-		tipWindow.setWidth(LayoutParams.WRAP_CONTENT);
-
-		tipWindow.setOutsideTouchable(true);
-		tipWindow.setTouchable(true);
-
-		tipWindow.setBackgroundDrawable(new BitmapDrawable());
-
-		tipWindow.setContentView(contentView);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			tipWindow.setElevation(1f);
-		}
-
-		int screen_pos[] = new int[2];
-		anchor.getLocationOnScreen(screen_pos);
-
-		// Get rect for anchor view
-		Rect anchor_rect = new Rect(screen_pos[0], screen_pos[1], screen_pos[0]
-				+ anchor.getWidth(), screen_pos[1] + anchor.getHeight());
-
-		// Call view measure to calculate how big your view should be.
-		contentView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-
-		int position_x = 0;
-		int position_y = 0;
-		if (position == POSITION_TO_RIGHT) {
-			position_x = anchor_rect.right;
-			position_y = (int) anchor.getY() + anchor.getHeight() / 2;
-		} else if (position == POSITION_BOTTOM) {
-			mNavUpArrow.setVisibility(View.VISIBLE);
-			mNavLeftArrow.setVisibility(View.GONE);
-			mTipText.forceLayout();
-
-			position_x = anchor_rect.centerX() - (contentView.getMeasuredWidth() / 2);//anchor_rect.centerX() - (contentView.getWidth() / 2);
-			position_y = anchor_rect.bottom - (anchor_rect.height() / 2);
-		}
-
-		tipWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, position_x,
-				position_y);
+                                    }
+                                });
+                                hideAnim.start();
+                            } else {
+                                if (tipWindow != null) {
+                                    tipWindow.dismiss();
+                                }
+                            }
 
 
-		contentView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-			@Override
-			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-				revealTransition = ViewAnimationUtils.createCircularReveal(mainLayout, (int) mainLayout.getX(), (int) (mainLayout.getY() + mainLayout.getHeight() / 2), 0, mainLayout.getWidth());
-				revealTransition.setInterpolator(new AccelerateDecelerateInterpolator());
-				revealTransition.setDuration(REVEAL_DURATION);
-				revealTransition.addListener(new SupportAnimator.AnimatorListener() {
-					@Override
-					public void onAnimationStart() {
-						mainLayout.setVisibility(View.VISIBLE);
-					}
+                        } else {
+                            tipWindow.dismiss();
+                        }
+                    }
 
-					@Override
-					public void onAnimationEnd() {
+                    break;
+            }
+        }
+    };
+    private int position = POSITION_TO_RIGHT;
 
-					}
+    public TooltipWindow(Context ctx, int aPosition) {
+        tipWindow = new PopupWindow(ctx);
+        position = aPosition;
 
-					@Override
-					public void onAnimationCancel() {
+        LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        contentView = inflater.inflate(R.layout.tooltip_layout, null);
+        mTipText = (TextView) contentView.findViewById(R.id.tooltip_text);
+        mNavLeftArrow = (ImageView) contentView.findViewById(R.id.tooltip_nav_left);
+        mNavUpArrow = (ImageView) contentView.findViewById(R.id.tooltip_nav_up);
+        mainLayout = (LinearLayout) contentView.findViewById(R.id.main_layout);
 
-					}
+    }
 
-					@Override
-					public void onAnimationRepeat() {
+    public void showToolTip(View anchor, String tipText) {
+        mTipText.setText(tipText);
 
-					}
-				});
-				revealTransition.start();
-			}
-		});
+        tipWindow.setHeight(LayoutParams.WRAP_CONTENT);
+        tipWindow.setWidth(LayoutParams.WRAP_CONTENT);
 
-		handler.sendEmptyMessageDelayed(MSG_DISMISS_TOOLTIP, HIDEDELAY);
-	}
+        tipWindow.setOutsideTouchable(true);
+        tipWindow.setTouchable(true);
 
-	public boolean isTooltipShown() {
-		if (tipWindow != null && tipWindow.isShowing())
-			return true;
-		return false;
-	}
+        tipWindow.setBackgroundDrawable(new BitmapDrawable());
 
-	public void dismissTooltip() {
-		if (tipWindow != null && tipWindow.isShowing())
-		tipWindow.dismiss();
-	}
+        tipWindow.setContentView(contentView);
 
-	Handler handler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			switch (msg.what) {
-				case MSG_DISMISS_TOOLTIP:
-					if (tipWindow != null && tipWindow.isShowing()) {
-						if (revealTransition != null) {
-							SupportAnimator hideAnim = revealTransition.reverse();
-							if (hideAnim != null) {
-								hideAnim.setInterpolator(new AccelerateDecelerateInterpolator());
-								hideAnim.setDuration(REVEAL_DURATION);
-								hideAnim.addListener(new SupportAnimator.AnimatorListener() {
-									@Override
-									public void onAnimationStart() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tipWindow.setElevation(1f);
+        }
 
-									}
+        int screen_pos[] = new int[2];
+        anchor.getLocationOnScreen(screen_pos);
 
-									@Override
-									public void onAnimationEnd() {
-										if (tipWindow != null) {
-											tipWindow.dismiss();
-										}
-									}
+        // Get rect for anchor view
+        Rect anchor_rect = new Rect(screen_pos[0], screen_pos[1], screen_pos[0]
+                + anchor.getWidth(), screen_pos[1] + anchor.getHeight());
 
-									@Override
-									public void onAnimationCancel() {
+        // Call view measure to calculate how big your view should be.
+        contentView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
-									}
+        int position_x = 0;
+        int position_y = 0;
+        if (position == POSITION_TO_RIGHT) {
+            position_x = anchor_rect.right;
+            position_y = (int) anchor.getY() + anchor.getHeight() / 2;
+        } else if (position == POSITION_BOTTOM) {
+            mNavUpArrow.setVisibility(View.VISIBLE);
+            mNavLeftArrow.setVisibility(View.GONE);
+            mTipText.forceLayout();
 
-									@Override
-									public void onAnimationRepeat() {
+            position_x = anchor_rect.centerX() - (contentView.getMeasuredWidth() / 2);//anchor_rect.centerX() - (contentView.getWidth() / 2);
+            position_y = anchor_rect.bottom - (anchor_rect.height() / 2);
+        }
 
-									}
-								});
-								hideAnim.start();
-							} else {
-								if (tipWindow != null) {
-									tipWindow.dismiss();
-								}
-							}
+        tipWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, position_x,
+                position_y);
 
 
-						} else {
-							tipWindow.dismiss();
-						}
-					}
+        contentView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                revealTransition = ViewAnimationUtils.createCircularReveal(mainLayout, (int) mainLayout.getX(), (int) (mainLayout.getY() + mainLayout.getHeight() / 2), 0, mainLayout.getWidth());
+                revealTransition.setInterpolator(new AccelerateDecelerateInterpolator());
+                revealTransition.setDuration(REVEAL_DURATION);
+                revealTransition.addListener(new SupportAnimator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart() {
+                        mainLayout.setVisibility(View.VISIBLE);
+                    }
 
-					break;
-			}
-		}
-	};
+                    @Override
+                    public void onAnimationEnd() {
+
+                    }
+
+                    @Override
+                    public void onAnimationCancel() {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat() {
+
+                    }
+                });
+                revealTransition.start();
+            }
+        });
+
+        handler.sendEmptyMessageDelayed(MSG_DISMISS_TOOLTIP, HIDEDELAY);
+    }
+
+    public boolean isTooltipShown() {
+        if (tipWindow != null && tipWindow.isShowing())
+            return true;
+        return false;
+    }
+
+    public void dismissTooltip() {
+        if (tipWindow != null && tipWindow.isShowing())
+            tipWindow.dismiss();
+    }
 
 }

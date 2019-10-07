@@ -10,13 +10,13 @@ import com.perflyst.twire.service.Settings;
  */
 
 public class EmoteAutoSpanBehaviour implements AutoSpanBehaviour {
-	@Override
-	public String getElementSizeName(Settings settings) {
-		return "";
-	}
+    @Override
+    public String getElementSizeName(Settings settings) {
+        return "";
+    }
 
-	@Override
-	public int getElementWidth(Context context) {
-		return (int) context.getResources().getDimension(R.dimen.chat_grid_emote_size);
-	}
+    @Override
+    public int getElementWidth(Context context) {
+        return (int) context.getResources().getDimension(R.dimen.chat_grid_emote_size);
+    }
 }

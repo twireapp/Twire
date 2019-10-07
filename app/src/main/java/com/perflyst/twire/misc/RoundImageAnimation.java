@@ -11,31 +11,31 @@ import com.perflyst.twire.service.Service;
  * Created by Sebastian Rask on 24-06-2016.
  */
 public class RoundImageAnimation extends Animation {
-	int fromRounded, toRounded;
-	ImageView view;
-	Bitmap imageBitmap;
+    int fromRounded, toRounded;
+    ImageView view;
+    Bitmap imageBitmap;
 
-	public RoundImageAnimation(int fromRounded, int toRounded, ImageView view, Bitmap imageBitmap) {
-		this.fromRounded = fromRounded;
-		this.toRounded = toRounded;
-		this.view = view;
-		this.imageBitmap = imageBitmap;
-	}
+    public RoundImageAnimation(int fromRounded, int toRounded, ImageView view, Bitmap imageBitmap) {
+        this.fromRounded = fromRounded;
+        this.toRounded = toRounded;
+        this.view = view;
+        this.imageBitmap = imageBitmap;
+    }
 
-	@Override
-	protected void applyTransformation(float interpolatedTime, Transformation t) {
-		int rounded = (int) (fromRounded + (toRounded - fromRounded) * interpolatedTime);
-		view.setImageBitmap(Service.getRoundedCornerBitmap(imageBitmap, rounded));
-		view.requestLayout();
-	}
+    @Override
+    protected void applyTransformation(float interpolatedTime, Transformation t) {
+        int rounded = (int) (fromRounded + (toRounded - fromRounded) * interpolatedTime);
+        view.setImageBitmap(Service.getRoundedCornerBitmap(imageBitmap, rounded));
+        view.requestLayout();
+    }
 
-	@Override
-	public void initialize(int width, int height, int parentWidth, int parentHeight) {
-		super.initialize(width, height, parentWidth, parentHeight);
-	}
+    @Override
+    public void initialize(int width, int height, int parentWidth, int parentHeight) {
+        super.initialize(width, height, parentWidth, parentHeight);
+    }
 
-	@Override
-	public boolean willChangeBounds() {
-		return false;
-	}
+    @Override
+    public boolean willChangeBounds() {
+        return false;
+    }
 }

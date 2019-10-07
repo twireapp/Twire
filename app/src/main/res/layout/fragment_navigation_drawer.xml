@@ -1,19 +1,19 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_container"
-    android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/navigationDrawerBackground"
+    android:clickable="true"
     tools:context="com.perflyst.twire.fragments.NavigationDrawerFragment">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:overScrollMode="never"
         android:layout_above="@+id/settings_divider"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:overScrollMode="never">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -21,124 +21,124 @@
 
             <ImageView
                 android:id="@+id/img_drawer_banner"
-                android:adjustViewBounds="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginBottom="@dimen/navigation_drawer_devider_height"/>
+                android:layout_marginBottom="@dimen/navigation_drawer_devider_height"
+                android:adjustViewBounds="true" />
 
             <ImageView
                 android:id="@+id/img_app_icon"
-                android:layout_marginBottom="36dp"
-                android:layout_marginStart="@dimen/navigation_drawer_icon_left_margin"
-                android:layout_marginLeft="@dimen/navigation_drawer_icon_left_margin"
-                android:src="@drawable/ic_notification_icon_refresh"
                 android:layout_width="@dimen/navigation_drawer_app_icon_height_and_width"
                 android:layout_height="@dimen/navigation_drawer_app_icon_height_and_width"
-                android:layout_alignBottom="@+id/img_drawer_banner"/>
+                android:layout_alignBottom="@+id/img_drawer_banner"
+                android:layout_marginStart="@dimen/navigation_drawer_icon_left_margin"
+                android:layout_marginLeft="@dimen/navigation_drawer_icon_left_margin"
+                android:layout_marginBottom="36dp"
+                android:src="@drawable/ic_notification_icon_refresh" />
 
             <TextView
                 android:id="@+id/txt_app_name"
-                android:text="@string/app_name"
-                android:textAppearance="@style/text_style_navigation_drawer_title"
-                android:layout_marginBottom="36dp"
-                android:layout_marginStart="@dimen/navigation_drawer_text_left_margin"
-                android:layout_marginLeft="@dimen/navigation_drawer_text_left_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/navigation_drawer_app_icon_height_and_width"
                 android:layout_alignBottom="@+id/img_drawer_banner"
-                android:gravity="center_vertical" />
+                android:layout_marginStart="@dimen/navigation_drawer_text_left_margin"
+                android:layout_marginLeft="@dimen/navigation_drawer_text_left_margin"
+                android:layout_marginBottom="36dp"
+                android:gravity="center_vertical"
+                android:text="@string/app_name"
+                android:textAppearance="@style/text_style_navigation_drawer_title" />
 
             <TextView
                 android:id="@+id/txt_twitch_displayname"
-                android:textAppearance="@style/text_style_navigation_drawer"
-                android:textColor="@color/white_text_secondary"
-                android:textSize="12sp"
-                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/navigation_drawer_item_height"
                 android:layout_alignBottom="@+id/img_drawer_banner"
                 android:layout_marginStart="@dimen/navigation_drawer_text_left_margin"
                 android:layout_marginLeft="@dimen/navigation_drawer_text_left_margin"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/navigation_drawer_item_height"/>
+                android:gravity="center_vertical"
+                android:textAppearance="@style/text_style_navigation_drawer"
+                android:textColor="@color/white_text_secondary"
+                android:textSize="12sp" />
 
             <LinearLayout
-                android:layout_below="@id/img_drawer_banner"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/img_drawer_banner"
+                android:orientation="vertical">
+
                 <RelativeLayout
                     android:id="@+id/featured_streams_container"
                     style="@style/navigation_drawer_item_container">
+
                     <ImageView
-                        style="@style/icon_navigation_drawer"
                         android:id="@+id/navigation_drawer_home_icon"
-                        android:src="@drawable/ic_featured_streams"
-                        />
+                        style="@style/icon_navigation_drawer"
+                        android:src="@drawable/ic_featured_streams" />
 
                     <TextView
-                        style="@style/text_navigation_drawer"
                         android:id="@+id/navigation_drawer_home_text"
-                        android:text="@string/navigation_drawer_featured_title"
-                        />
+                        style="@style/text_navigation_drawer"
+                        android:text="@string/navigation_drawer_featured_title" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/my_channels_container"
                     style="@style/navigation_drawer_item_container">
+
                     <ImageView
-                        style="@style/icon_navigation_drawer"
                         android:id="@+id/navigation_drawer_follows_icon"
-                        android:src="@drawable/ic_channels"
-                        />
+                        style="@style/icon_navigation_drawer"
+                        android:src="@drawable/ic_channels" />
 
                     <TextView
-                        style="@style/text_navigation_drawer"
                         android:id="@+id/navigation_drawer_follows_text"
-                        android:text="@string/navigation_drawer_follows_title"
-                        />
+                        style="@style/text_navigation_drawer"
+                        android:text="@string/navigation_drawer_follows_title" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/my_streams_container"
                     style="@style/navigation_drawer_item_container">
+
                     <ImageView
-                        style="@style/icon_navigation_drawer"
                         android:id="@+id/navigation_drawer_my_streams_icon"
-                        android:src="@drawable/ic_my_streams"
-                        />
+                        style="@style/icon_navigation_drawer"
+                        android:src="@drawable/ic_my_streams" />
 
                     <TextView
-                        style="@style/text_navigation_drawer"
                         android:id="@+id/navigation_drawer_my_streams_text"
-                        android:text="@string/navigation_drawer_my_streams_title"
-                        />
+                        style="@style/text_navigation_drawer"
+                        android:text="@string/navigation_drawer_my_streams_title" />
 
                     <FrameLayout
-                        android:visibility="invisible"
                         android:id="@+id/streams_count_wrapper"
-                        android:layout_marginRight="@dimen/navigation_drawer_icon_left_margin"
-                        android:layout_marginEnd="@dimen/navigation_drawer_icon_left_margin"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/navigation_drawer_icon_size">
+                        android:layout_height="@dimen/navigation_drawer_icon_size"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="@dimen/navigation_drawer_icon_left_margin"
+                        android:layout_marginRight="@dimen/navigation_drawer_icon_left_margin"
+                        android:visibility="invisible">
+
                         <ImageView
                             android:id="@+id/streams_count_icon"
-                            android:tint="?attr/colorAccent"
-                            app:srcCompat="@drawable/navigation_drawer_count_background"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent"
+                            android:tint="?attr/colorAccent"
+                            app:srcCompat="@drawable/navigation_drawer_count_background" />
+
                         <TextView
                             android:id="@+id/streams_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:fontFamily="@string/font_roboto_regular"
                             android:paddingLeft="16dp"
                             android:paddingRight="16dp"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/font_navigation_drawer_size"
-                            android:fontFamily="@string/font_roboto_regular"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:textSize="@dimen/font_navigation_drawer_size" />
                     </FrameLayout>
 
                 </RelativeLayout>
@@ -146,100 +146,95 @@
                 <RelativeLayout
                     android:id="@+id/my_games_container"
                     style="@style/navigation_drawer_item_container">
+
                     <ImageView
-                        style="@style/icon_navigation_drawer"
                         android:id="@+id/navigation_drawer_my_games_icon"
-                        android:src="@drawable/ic_my_games"
-                        />
+                        style="@style/icon_navigation_drawer"
+                        android:src="@drawable/ic_my_games" />
 
                     <TextView
-                        style="@style/text_navigation_drawer"
                         android:id="@+id/navigation_drawer_my_games_text"
-                        android:text="@string/navigation_drawer_my_games_title"
-                        />
+                        style="@style/text_navigation_drawer"
+                        android:text="@string/navigation_drawer_my_games_title" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/top_streams_container"
                     style="@style/navigation_drawer_item_container">
+
                     <ImageView
-                        style="@style/icon_navigation_drawer"
                         android:id="@+id/navigation_drawer_top_streams_icon"
-                        android:src="@drawable/ic_top_streams_one"
-                        />
+                        style="@style/icon_navigation_drawer"
+                        android:src="@drawable/ic_top_streams_one" />
 
                     <TextView
-                        style="@style/text_navigation_drawer"
                         android:id="@+id/navigation_drawer_top_streams_text"
-                        android:text="@string/navigation_drawer_top_streams_title"
-                        />
+                        style="@style/text_navigation_drawer"
+                        android:text="@string/navigation_drawer_top_streams_title" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/top_games_container"
                     style="@style/navigation_drawer_item_container">
+
                     <ImageView
-                        style="@style/icon_navigation_drawer"
                         android:id="@+id/navigation_drawer_top_games_icon"
-                        android:src="@drawable/ic_top_games"
-                        />
+                        style="@style/icon_navigation_drawer"
+                        android:src="@drawable/ic_top_games" />
 
                     <TextView
-                        style="@style/text_navigation_drawer"
                         android:id="@+id/navigation_drawer_top_games_text"
-                        android:text="@string/navigation_drawer_top_games_title"
-                        />
+                        style="@style/text_navigation_drawer"
+                        android:text="@string/navigation_drawer_top_games_title" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/search_container"
                     style="@style/navigation_drawer_item_container">
+
                     <ImageView
-                        style="@style/icon_navigation_drawer"
                         android:id="@+id/navigation_drawer_search_icon"
-                        android:src="@drawable/ic_search"
-                        />
+                        style="@style/icon_navigation_drawer"
+                        android:src="@drawable/ic_search" />
 
                     <TextView
-                        style="@style/text_navigation_drawer"
                         android:id="@+id/navigation_drawer_search_text"
-                        android:text="@string/navigation_drawer_search_title"
-                        />
+                        style="@style/text_navigation_drawer"
+                        android:text="@string/navigation_drawer_search_title" />
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
     </ScrollView>
 
     <RelativeLayout
-        android:layout_alignParentBottom="true"
-        android:background="?attr/navigationDrawerBackground"
         android:id="@+id/setting_wrapper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/navigationDrawerBackground">
 
         <RelativeLayout
             android:id="@+id/settings_container"
             style="@style/navigation_drawer_item_container">
+
             <ImageView
-                style="@style/icon_navigation_drawer"
                 android:id="@+id/navigation_drawer_settings_icon"
-                app:srcCompat="@drawable/ic_settings_black_24dp"
-                />
+                style="@style/icon_navigation_drawer"
+                app:srcCompat="@drawable/ic_settings_black_24dp" />
 
             <TextView
-                style="@style/text_navigation_drawer"
                 android:id="@+id/navigation_drawer_settings_text"
-                android:text="@string/navigation_drawer_settings_title"
-                />
+                style="@style/text_navigation_drawer"
+                android:text="@string/navigation_drawer_settings_title" />
         </RelativeLayout>
     </RelativeLayout>
+
     <View
         android:id="@+id/settings_divider"
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
-        android:background="?attr/dividerColor"
         android:layout_above="@+id/setting_wrapper"
-        />
+        android:background="?attr/dividerColor" />
 </RelativeLayout>
 
 

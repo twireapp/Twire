@@ -16,7 +16,7 @@ public class TempStorage {
     //
 
     public static CopyOnWriteArrayList<ChannelInfo> getLoadedStreamers() {
-        if(loaded_streamers == null)
+        if (loaded_streamers == null)
             loaded_streamers = new CopyOnWriteArrayList<>();
 
         return loaded_streamers;

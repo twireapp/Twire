@@ -36,223 +36,226 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public abstract class StreamActivity extends ThemeActivity implements SensorEventListener, StreamFragment.OnSeekListener {
-	private static final int SENSOR_DELAY = 500 * 1000; // 500ms
-	private static final int FROM_RADS_TO_DEGS = -57;
+    private static final int SENSOR_DELAY = 500 * 1000; // 500ms
+    private static final int FROM_RADS_TO_DEGS = -57;
+    public StreamFragment mStreamFragment;
+    public ChatFragment mChatFragment;
+    private String LOG_TAG = getClass().getSimpleName();
+    private Sensor mRotationSensor;
+    private Settings settings;
 
-	private String LOG_TAG = getClass().getSimpleName();
-	private Sensor mRotationSensor;
-	private Settings settings;
-	public StreamFragment mStreamFragment;
-	public ChatFragment mChatFragment;
+    protected abstract int getLayoutResource();
 
-	protected abstract int getLayoutResource();
-	protected abstract int getVideoContainerResource();
-	protected abstract Bundle getStreamArguments();
+    protected abstract int getVideoContainerResource();
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(getLayoutResource());
+    protected abstract Bundle getStreamArguments();
 
-		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(getLayoutResource());
 
-		if (Build.VERSION.SDK_INT >= 21) {
-			getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.black));
-			getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.black));
-		}
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
-		if(savedInstanceState == null) {
-			FragmentManager fm = getSupportFragmentManager();
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.black));
+            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+        }
 
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-				getWindow().setEnterTransition(constructTransitions());
-				getWindow().setReturnTransition(constructTransitions());
-			}
+        if (savedInstanceState == null) {
+            FragmentManager fm = getSupportFragmentManager();
 
-			// If the Fragment is non-null, then it is currently being
-			// retained across a configuration change.
-			if (mStreamFragment == null) {
-				mStreamFragment = StreamFragment.newInstance(getStreamArguments());
-				fm.beginTransaction().replace(getVideoContainerResource(), mStreamFragment, getString(R.string.stream_fragment_tag)).commit();
-			}
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                getWindow().setEnterTransition(constructTransitions());
+                getWindow().setReturnTransition(constructTransitions());
+            }
 
-			if (mChatFragment == null) {
-				mChatFragment = ChatFragment.getInstance(getStreamArguments());
-				fm.beginTransaction().replace(R.id.chat_fragment, mChatFragment).commit();
-			}
-		}
+            // If the Fragment is non-null, then it is currently being
+            // retained across a configuration change.
+            if (mStreamFragment == null) {
+                mStreamFragment = StreamFragment.newInstance(getStreamArguments());
+                fm.beginTransaction().replace(getVideoContainerResource(), mStreamFragment, getString(R.string.stream_fragment_tag)).commit();
+            }
 
-		try {
-			SensorManager mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-			mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-			mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            if (mChatFragment == null) {
+                mChatFragment = ChatFragment.getInstance(getStreamArguments());
+                fm.beginTransaction().replace(R.id.chat_fragment, mChatFragment).commit();
+            }
+        }
 
-		settings = new Settings(this);
-		updateOrientation();
-	}
+        try {
+            SensorManager mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+            mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+            mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-		updateOrientation();
-	}
+        settings = new Settings(this);
+        updateOrientation();
+    }
 
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// Do nothing :)
-	}
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        updateOrientation();
+    }
 
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		try {
-			if (event.sensor == mRotationSensor && getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-				if (event.values.length > 4) {
-					float[] truncatedRotationVector = new float[4];
-					System.arraycopy(event.values, 0, truncatedRotationVector, 0, 4);
-					update(truncatedRotationVector);
-				} else {
-					update(event.values);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // Do nothing :)
+    }
 
-	protected void update(float[] vectors) {
-		int worldAxisX = SensorManager.AXIS_X;
-		int worldAxisZ = SensorManager.AXIS_Z;
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        try {
+            if (event.sensor == mRotationSensor && getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                if (event.values.length > 4) {
+                    float[] truncatedRotationVector = new float[4];
+                    System.arraycopy(event.values, 0, truncatedRotationVector, 0, 4);
+                    update(truncatedRotationVector);
+                } else {
+                    update(event.values);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		float[] rotationMatrix = new float[9];
-		float[] adjustedRotationMatrix = new float[9];
-		float[] orientation = new float[3];
+    protected void update(float[] vectors) {
+        int worldAxisX = SensorManager.AXIS_X;
+        int worldAxisZ = SensorManager.AXIS_Z;
 
-		SensorManager.getRotationMatrixFromVector(rotationMatrix, vectors);
-		SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisX, worldAxisZ, adjustedRotationMatrix);
-		SensorManager.getOrientation(adjustedRotationMatrix, orientation);
+        float[] rotationMatrix = new float[9];
+        float[] adjustedRotationMatrix = new float[9];
+        float[] orientation = new float[3];
 
-		float roll = orientation[2] * FROM_RADS_TO_DEGS;
+        SensorManager.getRotationMatrixFromVector(rotationMatrix, vectors);
+        SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisX, worldAxisZ, adjustedRotationMatrix);
+        SensorManager.getOrientation(adjustedRotationMatrix, orientation);
 
-		if (roll > -45 && roll < 45) {
-			setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-			Log.d(LOG_TAG, "Requesting undefined");
-		}
-		Log.d(LOG_TAG, "Roll: " + roll);
-	}
+        float roll = orientation[2] * FROM_RADS_TO_DEGS;
 
-	protected void resetStream() {
-		FragmentManager fm = getSupportFragmentManager();
-		mStreamFragment = StreamFragment.newInstance(getStreamArguments());
-		fm.beginTransaction().replace(getVideoContainerResource(), mStreamFragment).commit();
-	}
+        if (roll > -45 && roll < 45) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+            Log.d(LOG_TAG, "Requesting undefined");
+        }
+        Log.d(LOG_TAG, "Roll: " + roll);
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		if (getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
-			Log.d(LOG_TAG, "Orientations is reverse portrait");
-		}
+    protected void resetStream() {
+        FragmentManager fm = getSupportFragmentManager();
+        mStreamFragment = StreamFragment.newInstance(getStreamArguments());
+        fm.beginTransaction().replace(getVideoContainerResource(), mStreamFragment).commit();
+    }
 
-		Log.d(LOG_TAG, "Current orientation: " + getResources().getConfiguration().orientation);
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
+            Log.d(LOG_TAG, "Orientations is reverse portrait");
+        }
 
-	@Override
-	public void onPause() {
-		super.onPause();
-	}
+        Log.d(LOG_TAG, "Current orientation: " + getResources().getConfiguration().orientation);
+    }
 
-	@Override
-	public void onBackPressed() {
-		if (mChatFragment == null || (mChatFragment.notifyBackPressed())) {
-			super.onBackPressed();
-		}
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
 
-		// Eww >(
-		if (mStreamFragment != null) {
-			if(mStreamFragment.isFullscreen) {
-				mStreamFragment.toggleFullscreen();
-			} else if (mStreamFragment.chatOnlyViewVisible) {
-				this.finish();
-				this.overrideTransition();
-			} else {
-				super.onBackPressed();
-				try {
-					mStreamFragment.backPressed();
-				} catch (NullPointerException e){
-					e.printStackTrace();
-				}
-				this.overrideTransition();
-			}
-		} else {
-			super.onBackPressed();
-			this.overrideTransition();
-		}
-	}
+    @Override
+    public void onBackPressed() {
+        if (mChatFragment == null || (mChatFragment.notifyBackPressed())) {
+            super.onBackPressed();
+        }
+
+        // Eww >(
+        if (mStreamFragment != null) {
+            if (mStreamFragment.isFullscreen) {
+                mStreamFragment.toggleFullscreen();
+            } else if (mStreamFragment.chatOnlyViewVisible) {
+                this.finish();
+                this.overrideTransition();
+            } else {
+                super.onBackPressed();
+                try {
+                    mStreamFragment.backPressed();
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
+                this.overrideTransition();
+            }
+        } else {
+            super.onBackPressed();
+            this.overrideTransition();
+        }
+    }
 
 
-	@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-	private TransitionSet constructTransitions() {
-		int[] slideTargets = {R.id.ChatRecyclerView, R.id.chat_input, R.id.chat_input_divider};
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private TransitionSet constructTransitions() {
+        int[] slideTargets = {R.id.ChatRecyclerView, R.id.chat_input, R.id.chat_input_divider};
 
-		Transition slideTransition = new Slide(Gravity.BOTTOM);
-		Transition fadeTransition = new Fade();
+        Transition slideTransition = new Slide(Gravity.BOTTOM);
+        Transition fadeTransition = new Fade();
 
-		for (int slideTarget : slideTargets) {
-			slideTransition.addTarget(slideTarget);
-			fadeTransition.excludeTarget(slideTarget, true);
-		}
+        for (int slideTarget : slideTargets) {
+            slideTransition.addTarget(slideTarget);
+            fadeTransition.excludeTarget(slideTarget, true);
+        }
 
-		TransitionSet set = new TransitionSet();
-		set.addTransition(slideTransition);
-		set.addTransition(fadeTransition);
-		return set;
-	}
+        TransitionSet set = new TransitionSet();
+        set.addTransition(slideTransition);
+        set.addTransition(fadeTransition);
+        return set;
+    }
 
-	private void overrideTransition() {
-		this.overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim);
-	}
+    private void overrideTransition() {
+        this.overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim);
+    }
 
-	@Override
-	public void onWindowFocusChanged(boolean hasFocus) {
-		super.onWindowFocusChanged(hasFocus);
-		if(mStreamFragment == null) { return; }
-		mStreamFragment.onWindowFocusChanged(hasFocus);
-	}
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (mStreamFragment == null) {
+            return;
+        }
+        mStreamFragment.onWindowFocusChanged(hasFocus);
+    }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.menu_stream, menu);
-		return true;
-	}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_stream, menu);
+        return true;
+    }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				// Call the super method as we also want the user to go all the way back to last mActivity if the user is in full screen mode
-				if (mStreamFragment != null) {
-					if (!mStreamFragment.isVideoInterfaceShowing()) {
-						return false;
-					}
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // Call the super method as we also want the user to go all the way back to last mActivity if the user is in full screen mode
+                if (mStreamFragment != null) {
+                    if (!mStreamFragment.isVideoInterfaceShowing()) {
+                        return false;
+                    }
 
-					if (mStreamFragment.chatOnlyViewVisible) {
-						finish();
-					} else {
-						super.onBackPressed();
-						mStreamFragment.backPressed();
-					}
-					overrideTransition();
-				}
+                    if (mStreamFragment.chatOnlyViewVisible) {
+                        finish();
+                    } else {
+                        super.onBackPressed();
+                        mStreamFragment.backPressed();
+                    }
+                    overrideTransition();
+                }
 
-				return true;
-		}
+                return true;
+        }
 
-		return super.onOptionsItemSelected(item);
-	}
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onAttachFragment(Fragment fragment) {
@@ -263,27 +266,27 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     @Override
-	public void onSeek() {
-		mChatFragment.clearMessages();
-	}
+    public void onSeek() {
+        mChatFragment.clearMessages();
+    }
 
     public View getMainContentLayout() {
-		return findViewById(R.id.main_content);
-	}
+        return findViewById(R.id.main_content);
+    }
 
-	void updateOrientation() {
-		int orientation = getResources().getConfiguration().orientation;
-		View chat = findViewById(R.id.chat_fragment);
-		if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) findViewById(R.id.chat_landscape_fragment).getLayoutParams();
-			lp.width = (int) (StreamFragment.getScreenWidth(this) * (settings.getChatLandscapeWidth() / 100.0));
-			Log.d(LOG_TAG, "TARGET WIDTH: " + lp.width);
-			chat.setLayoutParams(lp);
-		} else {
-			chat.setLayoutParams(findViewById(R.id.chat_placement_wrapper).getLayoutParams());
-		}
+    void updateOrientation() {
+        int orientation = getResources().getConfiguration().orientation;
+        View chat = findViewById(R.id.chat_fragment);
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) findViewById(R.id.chat_landscape_fragment).getLayoutParams();
+            lp.width = (int) (StreamFragment.getScreenWidth(this) * (settings.getChatLandscapeWidth() / 100.0));
+            Log.d(LOG_TAG, "TARGET WIDTH: " + lp.width);
+            chat.setLayoutParams(lp);
+        } else {
+            chat.setLayoutParams(findViewById(R.id.chat_placement_wrapper).getLayoutParams());
+        }
 
-		ViewGroup.LayoutParams layoutParams = findViewById(getVideoContainerResource()).getLayoutParams();
-		layoutParams.height = orientation == Configuration.ORIENTATION_LANDSCAPE ? MATCH_PARENT : WRAP_CONTENT;
-	}
+        ViewGroup.LayoutParams layoutParams = findViewById(getVideoContainerResource()).getLayoutParams();
+        layoutParams.height = orientation == Configuration.ORIENTATION_LANDSCAPE ? MATCH_PARENT : WRAP_CONTENT;
+    }
 }
