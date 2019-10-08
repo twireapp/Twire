@@ -95,17 +95,17 @@ public class ChannelActivity extends ThemeActivity {
         setContentView(R.layout.activity_streamer_info);
 
         // Get the various handles of view and layouts that is part of this view
-        streamerImage = (ImageView) findViewById(R.id.profileImageView);
-        additionalInfoLayout = (LinearLayout) findViewById(R.id.additional_info_wrapper);
-        streamerInfoName = (TextView) findViewById(R.id.twitch_name);
-        streamerViewers = (TextView) findViewById(R.id.txt_viewers);
-        streamerFollowers = (TextView) findViewById(R.id.txt_followers);
-        toolbar = (Toolbar) findViewById(R.id.StreamerInfo_Toolbar);
-        additionalToolbar = (Toolbar) findViewById(R.id.additional_toolbar);
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mTabs = (TabLayout) findViewById(R.id.tabs);
-        mAppBar = (AppBarLayout) findViewById(R.id.appbar);
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        streamerImage = findViewById(R.id.profileImageView);
+        additionalInfoLayout = findViewById(R.id.additional_info_wrapper);
+        streamerInfoName = findViewById(R.id.twitch_name);
+        streamerViewers = findViewById(R.id.txt_viewers);
+        streamerFollowers = findViewById(R.id.txt_followers);
+        toolbar = findViewById(R.id.StreamerInfo_Toolbar);
+        additionalToolbar = findViewById(R.id.additional_toolbar);
+        mViewPager = findViewById(R.id.container);
+        mTabs = findViewById(R.id.tabs);
+        mAppBar = findViewById(R.id.appbar);
+        mFab = findViewById(R.id.fab);
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -431,8 +431,8 @@ public class ChannelActivity extends ThemeActivity {
         protected TextView mErrorEmote, mErrorText;
 
         protected void findErrorView(View rootView) {
-            mErrorEmote = (TextView) rootView.findViewById(R.id.emote_error_view);
-            mErrorText = (TextView) rootView.findViewById(R.id.error_view);
+            mErrorEmote = rootView.findViewById(R.id.emote_error_view);
+            mErrorText = rootView.findViewById(R.id.error_view);
         }
 
         protected void showError() {
@@ -469,8 +469,8 @@ public class ChannelActivity extends ThemeActivity {
 
             info = getArguments().getParcelable(fragmentStreamerInfoArg);
 
-            mPanelsRecyclerView = (RecyclerView) rootView.findViewById(R.id.panel_recyclerview);
-            mDescription = (TextView) rootView.findViewById(R.id.description);
+            mPanelsRecyclerView = rootView.findViewById(R.id.panel_recyclerview);
+            mDescription = rootView.findViewById(R.id.description);
             findErrorView(rootView);
 
             if (info != null && info.getStreamDescription() != null && !info.getStreamDescription().equals("null") && !info.getStreamDescription().equals("")) {
@@ -542,8 +542,8 @@ public class ChannelActivity extends ThemeActivity {
             channelInfo = args.getParcelable(fragmentVodsStreamerInfoArg);
             broadcasts = args.getBoolean(fragmentVodsBroadCastsOnlyArg);
 
-            mRecyclerView = (AutoSpanRecyclerView) rootView.findViewById(R.id.recyclerview_vods);
-            progressView = (ProgressView) rootView.findViewById(R.id.circle_progress);
+            mRecyclerView = rootView.findViewById(R.id.recyclerview_vods);
+            progressView = rootView.findViewById(R.id.circle_progress);
 
             findErrorView(rootView);
             if (showError) {

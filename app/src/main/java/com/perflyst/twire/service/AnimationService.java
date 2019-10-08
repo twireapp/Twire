@@ -285,11 +285,7 @@ public class AnimationService {
      * @return
      */
     private static boolean isImageViewValidForTransition(ImageView imageView) {
-        if (imageView.getDrawable() == null || imageView.getDrawable() instanceof TransitionDrawable) {
-            return false;
-        } else {
-            return true;
-        }
+        return imageView.getDrawable() != null && !(imageView.getDrawable() instanceof TransitionDrawable);
     }
 
     public static void setPicassoShowImageAnimationTwo(final ImageView aImageView, final Bitmap toImage, Context context) {

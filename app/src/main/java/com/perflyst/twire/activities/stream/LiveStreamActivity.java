@@ -74,7 +74,7 @@ public class LiveStreamActivity extends StreamActivity {
             if (mMentionRecyclerView == null) {
                 mMentionContainer = findViewById(R.id.mention_container);
                 mMentionContainer.setVisibility(View.GONE);
-                mMentionRecyclerView = (RecyclerView) findViewById(R.id.mention_recyclerview);
+                mMentionRecyclerView = findViewById(R.id.mention_recyclerview);
                 setupMentionSuggestionRecyclerView();
             }
         }

@@ -45,8 +45,8 @@ public class LayoutSelector {
 
     private void init() {
         layoutSelectorView = activity.getLayoutInflater().inflate(R.layout.stream_layout_preview, null);
-        final RadioGroup rg = (RadioGroup) layoutSelectorView.findViewById(R.id.layouts_radiogroup);
-        final FrameLayout previewWrapper = (FrameLayout) layoutSelectorView.findViewById(R.id.preview_wrapper);
+        final RadioGroup rg = layoutSelectorView.findViewById(R.id.layouts_radiogroup);
+        final FrameLayout previewWrapper = layoutSelectorView.findViewById(R.id.preview_wrapper);
 
         if (previewMaxHeightRes != -1) {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -57,7 +57,7 @@ public class LayoutSelector {
             //previewWrapper.setMinimumHeight((int) activity.getResources().getDimension(previewMaxHeightRes));
         }
 
-        ViewStub preview = (ViewStub) layoutSelectorView.findViewById(R.id.layout_stub);
+        ViewStub preview = layoutSelectorView.findViewById(R.id.layout_stub);
         preview.setLayoutResource(previewLayout);
         final View inflated = preview.inflate();
 

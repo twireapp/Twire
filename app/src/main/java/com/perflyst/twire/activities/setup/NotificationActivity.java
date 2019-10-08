@@ -75,14 +75,14 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
 
-        mLayout = (RelativeLayout) findViewById(R.id.layout);
-        mLoginTextContainer = (RelativeLayout) findViewById(R.id.notification_text_container);
-        mContinueFABContainer = (FrameLayout) findViewById(R.id.notification_continue_circle_container);
-        mGearIcon = (ImageView) findViewById(R.id.notification_icon);
-        mContinueIcon = (ImageView) findViewById(R.id.forward_arrow);
-        mLoginTextLineOne = (TextView) findViewById(R.id.notification_text_line_one);
-        mCustomizeText = (TextView) findViewById(R.id.customize_text);
-        mSkipText = (TextView) findViewById(R.id.skip_text);
+        mLayout = findViewById(R.id.layout);
+        mLoginTextContainer = findViewById(R.id.notification_text_container);
+        mContinueFABContainer = findViewById(R.id.notification_continue_circle_container);
+        mGearIcon = findViewById(R.id.notification_icon);
+        mContinueIcon = findViewById(R.id.forward_arrow);
+        mLoginTextLineOne = findViewById(R.id.notification_text_line_one);
+        mCustomizeText = findViewById(R.id.customize_text);
+        mSkipText = findViewById(R.id.skip_text);
         mContinueFAB = findViewById(R.id.notification_continue_circle);
         mContinueFABShadow = findViewById(R.id.notification_continue_circle_shadow);
         mTransitionViewWhite = findViewById(R.id.transition_view);

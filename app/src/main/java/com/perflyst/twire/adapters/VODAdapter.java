@@ -40,13 +40,13 @@ class VODViewHolder extends MainActivityAdapter.ElementsViewHolder {
 
     public VODViewHolder(View v) {
         super(v);
-        vCard = (CardView) v.findViewById(R.id.card_view_vod_stream);
-        vPreviewImage = (ImageView) v.findViewById(R.id.image_stream_preview);
-        vDisplayName = (TextView) v.findViewById(R.id.displayName);
-        vTitle = (TextView) v.findViewById(R.id.stream_title);
-        vGame = (TextView) v.findViewById(R.id.stream_game_and_viewers);
-        vTimeStamp = (TextView) v.findViewById(R.id.timestamp);
-        vProgressBar = (SeekBar) v.findViewById(R.id.progressBar);
+        vCard = v.findViewById(R.id.card_view_vod_stream);
+        vPreviewImage = v.findViewById(R.id.image_stream_preview);
+        vDisplayName = v.findViewById(R.id.displayName);
+        vTitle = v.findViewById(R.id.stream_title);
+        vGame = v.findViewById(R.id.stream_game_and_viewers);
+        vTimeStamp = v.findViewById(R.id.timestamp);
+        vProgressBar = v.findViewById(R.id.progressBar);
         sharedPadding = v.findViewById(R.id.shared_padding);
     }
 

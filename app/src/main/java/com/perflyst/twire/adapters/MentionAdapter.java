@@ -64,7 +64,7 @@ public class MentionAdapter extends RecyclerView.Adapter<MentionAdapter.Suggesti
 
         SuggestionViewHolder(View itemView) {
             super(itemView);
-            mName = (TextView) itemView.findViewById(R.id.txtSuggestion);
+            mName = itemView.findViewById(R.id.txtSuggestion);
         }
     }
 }

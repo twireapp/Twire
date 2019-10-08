@@ -100,7 +100,7 @@ public class Settings {
 
     public <T> T getValue(String key, Class<T> type, T defaultValue) {
         SharedPreferences preferences = getPreferences();
-        return preferences.contains(key) ? (T) new Gson().fromJson(preferences.getString(key, ""), type) : defaultValue;
+        return preferences.contains(key) ? new Gson().fromJson(preferences.getString(key, ""), type) : defaultValue;
     }
 
     public <T> T getValue(String key, Type type, T defaultValue) {

@@ -29,20 +29,20 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         setContentView(R.layout.activity_settings_twitch_chat);
         settings = new Settings(getBaseContext());
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.settings_player_toolbar);
+        final Toolbar toolbar = findViewById(R.id.settings_player_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        emoteSizeSummary = (TextView) findViewById(R.id.chat_emote_size_summary);
-        messageSizeSummary = (TextView) findViewById(R.id.message_size_summary);
-        chatLandscapeWidthSummary = (TextView) findViewById(R.id.chat_landscape_summary);
-        chatLandscapeToggleSummary = (TextView) findViewById(R.id.chat_landscape_enable_summary);
-        chatLandscapeSwipeToShowSummary = (TextView) findViewById(R.id.chat_landscape_swipe_summary);
+        emoteSizeSummary = findViewById(R.id.chat_emote_size_summary);
+        messageSizeSummary = findViewById(R.id.message_size_summary);
+        chatLandscapeWidthSummary = findViewById(R.id.chat_landscape_summary);
+        chatLandscapeToggleSummary = findViewById(R.id.chat_landscape_enable_summary);
+        chatLandscapeSwipeToShowSummary = findViewById(R.id.chat_landscape_swipe_summary);
 
-        chatLandscapeToggle = (CheckedTextView) findViewById(R.id.chat_landscape_enable_title);
-        chatSwipeToShowToggle = (CheckedTextView) findViewById(R.id.chat_landscape_swipe_title);
+        chatLandscapeToggle = findViewById(R.id.chat_landscape_enable_title);
+        chatSwipeToShowToggle = findViewById(R.id.chat_landscape_swipe_title);
         updateSummaries();
     }
 

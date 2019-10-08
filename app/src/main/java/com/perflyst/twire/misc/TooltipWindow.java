@@ -95,10 +95,10 @@ public class TooltipWindow {
 
         LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         contentView = inflater.inflate(R.layout.tooltip_layout, null);
-        mTipText = (TextView) contentView.findViewById(R.id.tooltip_text);
-        mNavLeftArrow = (ImageView) contentView.findViewById(R.id.tooltip_nav_left);
-        mNavUpArrow = (ImageView) contentView.findViewById(R.id.tooltip_nav_up);
-        mainLayout = (LinearLayout) contentView.findViewById(R.id.main_layout);
+        mTipText = contentView.findViewById(R.id.tooltip_text);
+        mNavLeftArrow = contentView.findViewById(R.id.tooltip_nav_left);
+        mNavUpArrow = contentView.findViewById(R.id.tooltip_nav_up);
+        mainLayout = contentView.findViewById(R.id.main_layout);
 
     }
 
@@ -119,7 +119,7 @@ public class TooltipWindow {
             tipWindow.setElevation(1f);
         }
 
-        int screen_pos[] = new int[2];
+        int[] screen_pos = new int[2];
         anchor.getLocationOnScreen(screen_pos);
 
         // Get rect for anchor view
@@ -182,9 +182,7 @@ public class TooltipWindow {
     }
 
     public boolean isTooltipShown() {
-        if (tipWindow != null && tipWindow.isShowing())
-            return true;
-        return false;
+        return tipWindow != null && tipWindow.isShowing();
     }
 
     public void dismissTooltip() {

@@ -100,8 +100,8 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
 
         PanelViewHolder(View itemView) {
             super(itemView);
-            mImageView = (ImageView) itemView.findViewById(R.id.panel_image);
-            mHtmlText = (TextView) itemView.findViewById(R.id.panel_html);
+            mImageView = itemView.findViewById(R.id.panel_image);
+            mHtmlText = itemView.findViewById(R.id.panel_html);
         }
     }
 }

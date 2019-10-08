@@ -63,14 +63,14 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        mWelcomeText = (RelativeLayout) findViewById(R.id.welcome_text);
-        mWelcomeTextLineOne = (TextView) findViewById(R.id.welcome_text_line_one);
-        mWelcomeTextLineTwo = (TextView) findViewById(R.id.welcome_text_line_two);
-        mWelcomeTextLineThree = (TextView) findViewById(R.id.welcome_text_line_three);
+        mWelcomeText = findViewById(R.id.welcome_text);
+        mWelcomeTextLineOne = findViewById(R.id.welcome_text_line_one);
+        mWelcomeTextLineTwo = findViewById(R.id.welcome_text_line_two);
+        mWelcomeTextLineThree = findViewById(R.id.welcome_text_line_three);
 
-        mLogo = (ImageView) findViewById(R.id.welcome_icon);
-        mContinueIcon = (ImageView) findViewById(R.id.forward_arrow);
-        mLogoContainer = (FrameLayout) findViewById(R.id.welcome_icon_layout);
+        mLogo = findViewById(R.id.welcome_icon);
+        mContinueIcon = findViewById(R.id.forward_arrow);
+        mLogoContainer = findViewById(R.id.welcome_icon_layout);
         mLogoCenter = findViewById(R.id.welcome_icon_center);
         mContinueFAB = findViewById(R.id.continue_circle);
         mContinueFABShadow = findViewById(R.id.welcome_continue_circle_shadow);

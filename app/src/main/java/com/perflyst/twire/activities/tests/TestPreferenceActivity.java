@@ -21,7 +21,7 @@ public class TestPreferenceActivity extends android.preference.PreferenceActivit
         getDelegate().onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preference_categories);
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         addPreferencesFromResource(R.xml.preference_test);
 
     }

@@ -154,11 +154,7 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
 
         String thisStreamerName = getChannelInfo().getStreamerName();
         String otherStreamerName = ((StreamInfo) obj).getChannelInfo().getStreamerName();
-        if (thisStreamerName.equals(otherStreamerName)) {
-            return true;
-        } else {
-            return false;
-        }
+        return thisStreamerName.equals(otherStreamerName);
     }
 
     /**

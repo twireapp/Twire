@@ -43,15 +43,15 @@ public class SettingsPickNotificationsActivity extends ThemeActivity implements 
         mAdapter = new PickStreamersAdapter();
 
         mErrorText = findViewById(R.id.error_view);
-        mErrorEmoji = (TextView) findViewById(R.id.emote_error_view);
-        mRecyclerView = (RecyclerView) findViewById(R.id.streamers_recycler_view);
+        mErrorEmoji = findViewById(R.id.emote_error_view);
+        mRecyclerView = findViewById(R.id.streamers_recycler_view);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
         GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB(this);
         subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.settings_choose_toolbar);
+        final Toolbar toolbar = findViewById(R.id.settings_choose_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -153,7 +153,7 @@ public class SettingsPickNotificationsActivity extends ThemeActivity implements 
 
         public PickStreamerViewHolder(View itemView) {
             super(itemView);
-            checkedTextView = (CheckedTextView) itemView.findViewById(R.id.streamer_name);
+            checkedTextView = itemView.findViewById(R.id.streamer_name);
         }
     }
 

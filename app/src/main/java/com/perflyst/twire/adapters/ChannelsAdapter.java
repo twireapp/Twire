@@ -38,10 +38,10 @@ class StreamerInfoViewHolder extends MainActivityAdapter.ElementsViewHolder {
 
     public StreamerInfoViewHolder(View v) {
         super(v);
-        vDisplayName = (TextView) v.findViewById(R.id.displayName);
-        vDisplayName = (TextView) v.findViewById(R.id.displayName);
-        vProfileLogoImage = (ImageView) v.findViewById(R.id.profileLogoImageView);
-        vCard = (CardView) v.findViewById(R.id.card_view);
+        vDisplayName = v.findViewById(R.id.displayName);
+        vDisplayName = v.findViewById(R.id.displayName);
+        vProfileLogoImage = v.findViewById(R.id.profileLogoImageView);
+        vCard = v.findViewById(R.id.card_view);
     }
 
     @Override

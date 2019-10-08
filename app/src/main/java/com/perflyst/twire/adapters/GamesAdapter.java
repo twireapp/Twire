@@ -30,10 +30,10 @@ class GameViewHolder extends MainActivityAdapter.ElementsViewHolder {
 
     public GameViewHolder(View v) {
         super(v);
-        vGamePreview = (ImageView) v.findViewById(R.id.image_game_preview);
-        vGameTitle = (TextView) v.findViewById(R.id.game_card_title);
-        vGameViewers = (TextView) v.findViewById(R.id.game_viewers);
-        vCard = (CardView) v.findViewById(R.id.cardView_game);
+        vGamePreview = v.findViewById(R.id.image_game_preview);
+        vGameTitle = v.findViewById(R.id.game_card_title);
+        vGameViewers = v.findViewById(R.id.game_viewers);
+        vCard = v.findViewById(R.id.cardView_game);
         sharedPadding = v.findViewById(R.id.shared_padding);
     }
 

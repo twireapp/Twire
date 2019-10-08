@@ -910,10 +910,7 @@ public class Service {
         int orientation = aContext.getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             return true;
-        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            return false;
-        }
-        return true;
+        } else return orientation != Configuration.ORIENTATION_LANDSCAPE;
     }
 
     public static void setTopRounded(Bitmap workingBitmap, ImageView v, Context context, float cornerRadius) {

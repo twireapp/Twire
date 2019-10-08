@@ -178,8 +178,8 @@ public class DialogService {
                 .build();
 
         View customView = dialog.getCustomView();
-        MaterialNumberPicker hourPicker = (MaterialNumberPicker) customView.findViewById(R.id.hourPicker);
-        MaterialNumberPicker minPicker = (MaterialNumberPicker) customView.findViewById(R.id.minutePicker);
+        MaterialNumberPicker hourPicker = customView.findViewById(R.id.hourPicker);
+        MaterialNumberPicker minPicker = customView.findViewById(R.id.minutePicker);
 
         hourPicker.setValue(hourValue);
         minPicker.setValue(minuteValue);
@@ -225,7 +225,7 @@ public class DialogService {
 
         View customView = dialog.getCustomView();
         if (customView != null) {
-            Slider slider = (Slider) customView.findViewById(R.id.slider);
+            Slider slider = customView.findViewById(R.id.slider);
             slider.setValueRange(minValue, maxValue, false);
             slider.setValue(startValue, false);
             slider.setOnPositionChangeListener(sliderChangeListener);

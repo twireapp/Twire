@@ -67,8 +67,8 @@ public class SleepTimer {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         View customView = dialog.getCustomView();
-                        MaterialNumberPicker hourPicker = (MaterialNumberPicker) customView.findViewById(R.id.hourPicker);
-                        MaterialNumberPicker minPicker = (MaterialNumberPicker) customView.findViewById(R.id.minutePicker);
+                        MaterialNumberPicker hourPicker = customView.findViewById(R.id.hourPicker);
+                        MaterialNumberPicker minPicker = customView.findViewById(R.id.minutePicker);
 
                         int hour = hourPicker.getValue(), minute = minPicker.getValue();
 

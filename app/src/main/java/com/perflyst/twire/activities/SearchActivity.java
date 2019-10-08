@@ -109,7 +109,7 @@ public class SearchActivity extends ThemeActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         assert tabLayout != null;
         tabLayout.setupWithViewPager(mViewPager);
     }

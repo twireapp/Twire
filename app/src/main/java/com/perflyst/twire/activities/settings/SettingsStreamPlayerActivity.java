@@ -24,15 +24,15 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         setContentView(R.layout.activity_settings_stream_player);
 
         settings = new Settings(getBaseContext());
-        mShowNavigationBarView = (CheckedTextView) findViewById(R.id.player_show_navigation_title);
-        mShowViewCountView = (CheckedTextView) findViewById(R.id.player_show_viewercount_title);
-        mAutoPlaybackView = (CheckedTextView) findViewById(R.id.player_auto_continue_playback_title);
+        mShowNavigationBarView = findViewById(R.id.player_show_navigation_title);
+        mShowViewCountView = findViewById(R.id.player_show_viewercount_title);
+        mAutoPlaybackView = findViewById(R.id.player_auto_continue_playback_title);
 
-        mShowViewCountSummary = (TextView) findViewById(R.id.player_show_viewercount_title_summary);
-        mShowNavigationBarSummary = (TextView) findViewById(R.id.player_show_navigation_summary);
-        mAutoPlaybackSummary = (TextView) findViewById(R.id.player_auto_continue_playback_summary);
+        mShowViewCountSummary = findViewById(R.id.player_show_viewercount_title_summary);
+        mShowNavigationBarSummary = findViewById(R.id.player_show_navigation_summary);
+        mAutoPlaybackSummary = findViewById(R.id.player_auto_continue_playback_summary);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.settings_player_toolbar);
+        final Toolbar toolbar = findViewById(R.id.settings_player_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

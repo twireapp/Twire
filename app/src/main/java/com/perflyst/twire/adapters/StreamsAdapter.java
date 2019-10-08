@@ -35,11 +35,11 @@ class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
 
     public StreamViewHolder(View v) {
         super(v);
-        vCard = (CardView) v.findViewById(R.id.cardView_online_streams);
-        vPreviewImage = (ImageView) v.findViewById(R.id.image_stream_preview);
-        vDisplayName = (TextView) v.findViewById(R.id.displayName);
-        vTitle = (TextView) v.findViewById(R.id.stream_title);
-        vGame = (TextView) v.findViewById(R.id.stream_game_and_viewers);
+        vCard = v.findViewById(R.id.cardView_online_streams);
+        vPreviewImage = v.findViewById(R.id.image_stream_preview);
+        vDisplayName = v.findViewById(R.id.displayName);
+        vTitle = v.findViewById(R.id.stream_title);
+        vGame = v.findViewById(R.id.stream_game_and_viewers);
         sharedPadding = v.findViewById(R.id.shared_padding);
         //vOnlineSince = (TextView) v.findViewById(R.id.stream_online_since);
     }

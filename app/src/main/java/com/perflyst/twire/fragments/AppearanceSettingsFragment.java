@@ -47,16 +47,16 @@ public class AppearanceSettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_appearance_settings, container, false);
         settings = new Settings(getContext());
-        themeSummary = (TextView) rootView.findViewById(R.id.appearance_theme_color_summary);
-        themeSummaryColor = (ImageView) rootView.findViewById(R.id.appearance_theme_color);
+        themeSummary = rootView.findViewById(R.id.appearance_theme_color_summary);
+        themeSummaryColor = rootView.findViewById(R.id.appearance_theme_color);
 
-        streamsStyleSummary = (TextView) rootView.findViewById(R.id.appearance_streams_style_summary);
-        gameStyleSummary = (TextView) rootView.findViewById(R.id.appearance_game_style_summary);
-        followStyleSummary = (TextView) rootView.findViewById(R.id.appearance_streamer_style_summary);
+        streamsStyleSummary = rootView.findViewById(R.id.appearance_streams_style_summary);
+        gameStyleSummary = rootView.findViewById(R.id.appearance_game_style_summary);
+        followStyleSummary = rootView.findViewById(R.id.appearance_streamer_style_summary);
 
-        streamSizeSummary = (TextView) rootView.findViewById(R.id.appearance_streams_size_summary);
-        gameSizeSummary = (TextView) rootView.findViewById(R.id.appearance_game_size_summary);
-        streamerSizeSummary = (TextView) rootView.findViewById(R.id.appearance_streamer_size_summary);
+        streamSizeSummary = rootView.findViewById(R.id.appearance_streams_size_summary);
+        gameSizeSummary = rootView.findViewById(R.id.appearance_game_size_summary);
+        streamerSizeSummary = rootView.findViewById(R.id.appearance_streamer_size_summary);
 
         initSummaries();
         initOnClicks(rootView);
@@ -164,7 +164,7 @@ public class AppearanceSettingsFragment extends Fragment {
             public void onSelected(String title, int index, View previewView) {
 
                 View sharedPadding = previewView.findViewById(R.id.shared_padding);
-                ImageView view = (ImageView) previewView.findViewById(R.id.image_stream_preview);
+                ImageView view = previewView.findViewById(R.id.image_stream_preview);
                 view.setImageResource(R.drawable.preview_stream);
                 View streamTitle = previewView.findViewById(R.id.stream_title);
                 View viewersAndGame = previewView.findViewById(R.id.stream_game_and_viewers);
@@ -196,7 +196,7 @@ public class AppearanceSettingsFragment extends Fragment {
             public void onSelected(String title, int index, View previewView) {
 
                 View sharedPadding = previewView.findViewById(R.id.shared_padding);
-                ImageView view = (ImageView) previewView.findViewById(R.id.image_game_preview);
+                ImageView view = previewView.findViewById(R.id.image_game_preview);
                 view.setImageResource(R.drawable.preview_game);
 
                 FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
@@ -207,7 +207,7 @@ public class AppearanceSettingsFragment extends Fragment {
                 previewView.setLayoutParams(lp);
 
                 View gameTitle = previewView.findViewById(R.id.game_card_title);
-                TextView gameViewers = (TextView) previewView.findViewById(R.id.game_viewers);
+                TextView gameViewers = previewView.findViewById(R.id.game_viewers);
                 if (gameViewers.getText().equals("")) {
                     gameViewers.setText(getString(R.string.preview_game_viewers));
                 }
@@ -238,7 +238,7 @@ public class AppearanceSettingsFragment extends Fragment {
             public void onSelected(String title, int index, View previewView) {
 
                 View nameView = previewView.findViewById(R.id.displayName);
-                ImageView streamerLogo = (ImageView) previewView.findViewById(R.id.profileLogoImageView);
+                ImageView streamerLogo = previewView.findViewById(R.id.profileLogoImageView);
                 streamerLogo.setImageResource(R.drawable.preview_streamer);
 
                 FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(

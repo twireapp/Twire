@@ -64,8 +64,8 @@ public class VODActivity extends StreamActivity {
             }
         }
 
-        mTitleView = (TextView) findViewById(R.id.title);
-        mViewsView = (TextView) findViewById(R.id.views);
+        mTitleView = findViewById(R.id.title);
+        mViewsView = findViewById(R.id.views);
 
         setVodData();
     }

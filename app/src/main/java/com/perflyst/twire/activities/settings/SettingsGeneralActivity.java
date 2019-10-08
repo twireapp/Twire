@@ -33,15 +33,15 @@ public class SettingsGeneralActivity extends ThemeActivity {
         setContentView(R.layout.activity_settings_general);
         settings = new Settings(getBaseContext());
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.settings_general_toolbar);
+        final Toolbar toolbar = findViewById(R.id.settings_general_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         //Service.isTranslucentActionbar(LOG_TAG, getBaseContext(), toolbar, this);
-        twitchNameView = (TextView) findViewById(R.id.general_current_twitch_name);
-        startPageSubText = (TextView) findViewById(R.id.start_page_sub_text);
+        twitchNameView = findViewById(R.id.general_current_twitch_name);
+        startPageSubText = findViewById(R.id.start_page_sub_text);
 
         initTwitchDisplayName();
         initStartPageText();

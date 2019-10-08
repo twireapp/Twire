@@ -1916,7 +1916,7 @@ public class StreamFragment extends Fragment {
     }
 
     public interface OnSeekListener {
-        public void onSeek();
+        void onSeek();
     }
 
     /**

@@ -145,7 +145,7 @@ public abstract class MainActivity extends ThemeActivity {
         mTitleView.bringToFront();
 
         // Setup Drawer Fragment
-        mDrawerFragment.setUp((DrawerLayout) findViewById(R.id.followed_channels_drawer_layout), mMainToolbar);
+        mDrawerFragment.setUp(findViewById(R.id.followed_channels_drawer_layout), mMainToolbar);
 
         // Set up the RecyclerView
         mRecyclerView.setBehaviour(constructSpanBehaviour());

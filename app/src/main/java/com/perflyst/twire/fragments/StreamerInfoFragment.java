@@ -52,9 +52,9 @@ public class StreamerInfoFragment extends Fragment {
         setRetainInstance(true);
 
         // Get the various handles of view and layouts that is part of this view
-        ContentLayout = (CardView) rootView.findViewById(R.id.fragment_streamerInfo_card_layout);
-        StreamerInfoName = (TextView) rootView.findViewById(R.id.streamerInfo_displayName);
-        StreamerInfoBio = (TextView) rootView.findViewById(R.id.streamerInfo_bio);
+        ContentLayout = rootView.findViewById(R.id.fragment_streamerInfo_card_layout);
+        StreamerInfoName = rootView.findViewById(R.id.streamerInfo_displayName);
+        StreamerInfoBio = rootView.findViewById(R.id.streamerInfo_bio);
 
         // Get the StreamerInfo object sent with the intent to open this activity
         Intent intent = getActivity().getIntent();
@@ -81,7 +81,7 @@ public class StreamerInfoFragment extends Fragment {
             ContentLayout.setMaxCardElevation(0);
             ContentLayout.setCardElevation(0);
             int screenWidth = (getResources().getDisplayMetrics().widthPixels);
-            LinearLayout llContainer = (LinearLayout) rootView.findViewById(R.id.fragment_streamerInfo_container_layout);
+            LinearLayout llContainer = rootView.findViewById(R.id.fragment_streamerInfo_container_layout);
 
             int newWidth = (int) (screenWidth + getResources().getDimension(R.dimen.fragment_streamerInfo_cardElevation));
             llContainer.getLayoutParams().width = newWidth;

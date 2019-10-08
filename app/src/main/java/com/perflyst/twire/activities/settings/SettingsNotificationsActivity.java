@@ -81,11 +81,11 @@ public class SettingsNotificationsActivity extends ThemeActivity {
      * It also changes the color of the view
      */
     private static void enableQuietHours(boolean boo, Activity ac) {
-        final TextView quietHourStartView = (TextView) ac.findViewById(R.id.notifications_quiet_hours_start);
-        final TextView quietHourEndView = (TextView) ac.findViewById(R.id.notifications_quiet_hours_end);
-        final TextView quietHourStartTagView = (TextView) ac.findViewById(R.id.notifications_quiet_hours_start_tag);
-        final TextView quietHourEndTagView = (TextView) ac.findViewById(R.id.notifications_quiet_hours_end_tag);
-        final TextView notificationsDuringQuietHours = (TextView) ac.findViewById(R.id.notifications_show_in_quiet_hours);
+        final TextView quietHourStartView = ac.findViewById(R.id.notifications_quiet_hours_start);
+        final TextView quietHourEndView = ac.findViewById(R.id.notifications_quiet_hours_end);
+        final TextView quietHourStartTagView = ac.findViewById(R.id.notifications_quiet_hours_start_tag);
+        final TextView quietHourEndTagView = ac.findViewById(R.id.notifications_quiet_hours_end_tag);
+        final TextView notificationsDuringQuietHours = ac.findViewById(R.id.notifications_show_in_quiet_hours);
 
         int color = getEnabledTextColor(ac);
 
@@ -98,13 +98,13 @@ public class SettingsNotificationsActivity extends ThemeActivity {
         quietHourEndTagView.setTextColor(color);
         notificationsDuringQuietHours.setTextColor(color);
 
-        MaterialRippleLayout rippleStart = (MaterialRippleLayout) ac.findViewById(R.id.notifications_quiet_hours_start_ripple);
+        MaterialRippleLayout rippleStart = ac.findViewById(R.id.notifications_quiet_hours_start_ripple);
         rippleStart.setEnabled(boo);
 
-        MaterialRippleLayout rippleEnd = (MaterialRippleLayout) ac.findViewById(R.id.notifications_quiet_hours_end_ripple);
+        MaterialRippleLayout rippleEnd = ac.findViewById(R.id.notifications_quiet_hours_end_ripple);
         rippleEnd.setEnabled(boo);
 
-        MaterialRippleLayout rippleShowNotificationsInQuietHours = (MaterialRippleLayout) ac.findViewById(R.id.notifications_show_in_quiet_hours_ripple);
+        MaterialRippleLayout rippleShowNotificationsInQuietHours = ac.findViewById(R.id.notifications_show_in_quiet_hours_ripple);
         rippleShowNotificationsInQuietHours.setEnabled(boo);
     }
 
@@ -113,8 +113,8 @@ public class SettingsNotificationsActivity extends ThemeActivity {
      * It also changes the color of the view
      */
     private static void enableVibrate(boolean boo, Activity ac) {
-        final TextView vibrateView = (TextView) ac.findViewById(R.id.notifications_vibrate);
-        MaterialRippleLayout rippleVibrate = (MaterialRippleLayout) ac.findViewById(R.id.notifications_vibrate_ripple);
+        final TextView vibrateView = ac.findViewById(R.id.notifications_vibrate);
+        MaterialRippleLayout rippleVibrate = ac.findViewById(R.id.notifications_vibrate_ripple);
 
         int color = getEnabledTextColor(ac);
 
@@ -131,8 +131,8 @@ public class SettingsNotificationsActivity extends ThemeActivity {
      * It also changes the color of the view
      */
     private static void enableScreenWake(boolean boo, Activity ac) {
-        final TextView screenWakeView = (TextView) ac.findViewById(R.id.notifications_screen_wake);
-        MaterialRippleLayout rippleScreenWake = (MaterialRippleLayout) ac.findViewById(R.id.notifications_screen_wake_ripple);
+        final TextView screenWakeView = ac.findViewById(R.id.notifications_screen_wake);
+        MaterialRippleLayout rippleScreenWake = ac.findViewById(R.id.notifications_screen_wake_ripple);
 
         int color = getEnabledTextColor(ac);
 
@@ -148,8 +148,8 @@ public class SettingsNotificationsActivity extends ThemeActivity {
      * It also changes the color of the view
      */
     private static void enableSoundPlay(boolean boo, Activity ac) {
-        final TextView soundPlayView = (TextView) ac.findViewById(R.id.notifications_sound);
-        MaterialRippleLayout rippleSoundPlay = (MaterialRippleLayout) ac.findViewById(R.id.notifications_sound_ripple);
+        final TextView soundPlayView = ac.findViewById(R.id.notifications_sound);
+        MaterialRippleLayout rippleSoundPlay = ac.findViewById(R.id.notifications_sound_ripple);
 
         int color = getEnabledTextColor(ac);
 
@@ -165,8 +165,8 @@ public class SettingsNotificationsActivity extends ThemeActivity {
      * It also changes the color of the view
      */
     private static void enableBlinkLED(boolean boo, Activity ac) {
-        final CheckedTextView soundPlayView = (CheckedTextView) ac.findViewById(R.id.notifications_led);
-        MaterialRippleLayout rippleSoundPlay = (MaterialRippleLayout) ac.findViewById(R.id.notifications_led_ripple);
+        final CheckedTextView soundPlayView = ac.findViewById(R.id.notifications_led);
+        MaterialRippleLayout rippleSoundPlay = ac.findViewById(R.id.notifications_led_ripple);
 
         int color = getEnabledTextColor(ac);
 
@@ -182,8 +182,8 @@ public class SettingsNotificationsActivity extends ThemeActivity {
      * It also changes the color of the view
      */
     private static void enableQuietHoursCheck(boolean boo, Activity ac) {
-        final TextView quietHoursView = (TextView) ac.findViewById(R.id.notifications_quiet_hours);
-        MaterialRippleLayout rippleSoundPlay = (MaterialRippleLayout) ac.findViewById(R.id.notifications_quiet_hours_ripple);
+        final TextView quietHoursView = ac.findViewById(R.id.notifications_quiet_hours);
+        MaterialRippleLayout rippleSoundPlay = ac.findViewById(R.id.notifications_quiet_hours_ripple);
 
         int color = getEnabledTextColor(ac);
 
@@ -221,14 +221,14 @@ public class SettingsNotificationsActivity extends ThemeActivity {
 
         checkChooseWhoViability();
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.settings_notifications_toolbar);
+        final Toolbar toolbar = findViewById(R.id.settings_notifications_toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         //Service.isTranslucentActionbar(LOG_TAG, getBaseContext(), toolbar, this);
 
-        final TextView currentCheckView = (TextView) findViewById(R.id.notifications_current_check);
+        final TextView currentCheckView = findViewById(R.id.notifications_current_check);
         String interval = settings.getNotificationsCheckInterval();
         // Format the string received from settings in a correct way
         interval = formatCheckInterval(interval, this);
@@ -236,7 +236,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
             currentCheckView.setText(interval);
         }
 
-        final CheckedTextView vibrateView = (CheckedTextView) findViewById(R.id.notifications_vibrate);
+        final CheckedTextView vibrateView = findViewById(R.id.notifications_vibrate);
         if (vibrateView != null) {
             vibrateView.setChecked(settings.getNotificationsVibrations());
 
@@ -254,7 +254,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
             });
         }
 
-        final CheckedTextView screenWakeView = (CheckedTextView) findViewById(R.id.notifications_screen_wake);
+        final CheckedTextView screenWakeView = findViewById(R.id.notifications_screen_wake);
         if (screenWakeView != null) {
             screenWakeView.setChecked(settings.getNotificationsScreenWake());
 
@@ -272,7 +272,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
             });
         }
 
-        final CheckedTextView soundView = (CheckedTextView) findViewById(R.id.notifications_sound);
+        final CheckedTextView soundView = findViewById(R.id.notifications_sound);
         if (soundView != null) {
             soundView.setChecked(settings.getNotificationsSound());
 
@@ -290,7 +290,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
             });
         }
 
-        final CheckedTextView ledView = (CheckedTextView) findViewById(R.id.notifications_led);
+        final CheckedTextView ledView = findViewById(R.id.notifications_led);
         if (ledView != null) {
             ledView.setChecked(settings.getNotificationsLED());
 
@@ -308,7 +308,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
             });
         }
 
-        final CheckedTextView quietHoursView = (CheckedTextView) findViewById(R.id.notifications_quiet_hours);
+        final CheckedTextView quietHoursView = findViewById(R.id.notifications_quiet_hours);
         boolean isQuietHoursEnabled = settings.getNotificationsQuietHours();
         if (quietHoursView != null) {
             quietHoursView.setChecked(isQuietHoursEnabled);
@@ -335,7 +335,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
             });
         }
 
-        final CheckedTextView showNotificationsDuringQuietHoursView = (CheckedTextView) findViewById(R.id.notifications_show_in_quiet_hours);
+        final CheckedTextView showNotificationsDuringQuietHoursView = findViewById(R.id.notifications_show_in_quiet_hours);
         showNotificationsDuringQuietHoursView.setChecked(settings.isNotificationsShowInQuietHours());
         showNotificationsDuringQuietHoursView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -350,13 +350,13 @@ public class SettingsNotificationsActivity extends ThemeActivity {
             }
         });
 
-        final TextView quietHourStartView = (TextView) findViewById(R.id.notifications_quiet_hours_start);
+        final TextView quietHourStartView = findViewById(R.id.notifications_quiet_hours_start);
         String timeOfDayStart = getResources().getString(R.string.notifications_time_of_day, formatTimeOfDay(settings.getNotificationsQuietStartHour()), formatTimeOfDay(settings.getNotificationsQuietStartMinute()));
         if (quietHourStartView != null) {
             quietHourStartView.setText(timeOfDayStart);
         }
 
-        final TextView quietHourEndView = (TextView) findViewById(R.id.notifications_quiet_hours_end);
+        final TextView quietHourEndView = findViewById(R.id.notifications_quiet_hours_end);
         String timeOfDayEnd = getResources().getString(R.string.notifications_time_of_day, formatTimeOfDay(settings.getNotificationsQuietEndHour()), formatTimeOfDay(settings.getNotificationsQuietEndMinute()));
         if (quietHourEndView != null) {
             quietHourEndView.setText(timeOfDayEnd);
@@ -412,7 +412,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
                         settings.setNotificationsQuietStartHour(hour);
                         settings.setNotificationsQuietStartMinute(minute);
 
-                        final TextView quietHourStartView = (TextView) findViewById(R.id.notifications_quiet_hours_start);
+                        final TextView quietHourStartView = findViewById(R.id.notifications_quiet_hours_start);
                         String timeOfDay = getResources().getString(R.string.notifications_time_of_day, formatTimeOfDay(hour), formatTimeOfDay(minute));
                         if (quietHourStartView != null) {
                             quietHourStartView.setText(timeOfDay);
@@ -448,7 +448,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
                         settings.setNotificationsQuietEndHour(hour);
                         settings.setNotificationsQuietEndMinute(minute);
 
-                        final TextView quietHourEndView = (TextView) findViewById(R.id.notifications_quiet_hours_end);
+                        final TextView quietHourEndView = findViewById(R.id.notifications_quiet_hours_end);
                         String timeOfDay = getResources().getString(R.string.notifications_time_of_day, formatTimeOfDay(hour), formatTimeOfDay(minute));
                         if (quietHourEndView != null) {
                             quietHourEndView.setText(timeOfDay);

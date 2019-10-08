@@ -26,7 +26,7 @@ public class SettingsAppearanceActivity extends ThemeActivity {
             }
         }
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.settings_appearance_toolbar);
+        Toolbar mToolbar = findViewById(R.id.settings_appearance_toolbar);
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

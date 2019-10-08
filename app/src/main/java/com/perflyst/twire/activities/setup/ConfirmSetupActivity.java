@@ -58,13 +58,13 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_setup);
 
-        mLoginTextContainer = (RelativeLayout) findViewById(R.id.login_text_container);
-        mSetupProgress = (ProgressView) findViewById(R.id.SetupProgress);
-        mContinueFABContainer = (FrameLayout) findViewById(R.id.login_continue_circle_container);
-        mGearIcon = (ImageView) findViewById(R.id.login_icon);
-        mContinueIcon = (ImageView) findViewById(R.id.forward_arrow);
-        mLoginTextLineOne = (TextView) findViewById(R.id.login_text_line_one);
-        mLoginTextLineTwo = (TextView) findViewById(R.id.login_text_line_two);
+        mLoginTextContainer = findViewById(R.id.login_text_container);
+        mSetupProgress = findViewById(R.id.SetupProgress);
+        mContinueFABContainer = findViewById(R.id.login_continue_circle_container);
+        mGearIcon = findViewById(R.id.login_icon);
+        mContinueIcon = findViewById(R.id.forward_arrow);
+        mLoginTextLineOne = findViewById(R.id.login_text_line_one);
+        mLoginTextLineTwo = findViewById(R.id.login_text_line_two);
         mContinueFAB = findViewById(R.id.login_continue_circle);
         mContinueFABShadow = findViewById(R.id.login_continue_circle_shadow);
         mTransitionViewWhite = findViewById(R.id.transition_view_blue);
