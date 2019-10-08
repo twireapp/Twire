@@ -74,7 +74,6 @@ public class Settings {
     private final String CHAT_RECENT_EMOTES = "chatRecentEmotes";
     private final String CHAT_KEYBOARD_HEIGHT = "chatKeyboardHeight";
     private final String NOTIFY_LIVE = "notifyUserLive";
-    private final String LAST_NOTIFICATIONS_CHECK_LIVESTREAMS = "lastNotificationCheckStreamList";
     private final String LAST_START_UP_VERSION_CODE = "lastStartUpVersionCode";
     private final String IS_UPDATED = "hasBeenUpdated";
     private Context context;
@@ -83,40 +82,41 @@ public class Settings {
         this.context = context;
     }
 
-    public SharedPreferences.Editor getEditor() {
+    private SharedPreferences.Editor getEditor() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return preferences.edit();
     }
 
-    public SharedPreferences getPreferences() {
+    private SharedPreferences getPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public <T> void setValue(String key, T value) {
+    private <T> void setValue(String key, T value) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(key, new Gson().toJson(value));
         editor.commit();
     }
 
-    public <T> T getValue(String key, Class<T> type, T defaultValue) {
+    private <T> T getValue(String key, Class<T> type, T defaultValue) {
         SharedPreferences preferences = getPreferences();
         return preferences.contains(key) ? new Gson().fromJson(preferences.getString(key, ""), type) : defaultValue;
     }
 
-    public <T> T getValue(String key, Type type, T defaultValue) {
+    private <T> T getValue(Type type, T defaultValue) {
         SharedPreferences preferences = getPreferences();
-        return preferences.contains(key) ? (T) new Gson().fromJson(preferences.getString(key, ""), type) : defaultValue;
+        return preferences.contains("lastNotificationCheckStreamList") ? (T) new Gson().fromJson(preferences.getString("lastNotificationCheckStreamList", ""), type) : defaultValue;
     }
 
     public List<StreamInfo> getLastNotificationCheckLiveChannels() {
-        return getValue(LAST_NOTIFICATIONS_CHECK_LIVESTREAMS, new TypeToken<List<StreamInfo>>() {
-        }.getType(), new ArrayList<StreamInfo>());
+        return getValue(new TypeToken<List<StreamInfo>>() {
+        }.getType(), new ArrayList<>());
     }
 
     /***
      * Get and set Channel names that were online last notification check.
      */
     public void setLastNotificationCheckLiveChannels(List<StreamInfo> liveChannels) {
+        String LAST_NOTIFICATIONS_CHECK_LIVESTREAMS = "lastNotificationCheckStreamList";
         setValue(LAST_NOTIFICATIONS_CHECK_LIVESTREAMS, liveChannels);
     }
 
@@ -153,7 +153,7 @@ public class Settings {
      * This is only used for when upgrading DB
      */
 
-    public void setUsersNotToNotifyWhenLive(ArrayList<Integer> emotes) {
+    void setUsersNotToNotifyWhenLive(ArrayList<Integer> emotes) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.NOTIFY_LIVE, new Gson().toJson(emotes));
         editor.commit();
@@ -297,7 +297,7 @@ public class Settings {
         editor.commit();
     }
 
-    public String getDefaultStartUpPageTitle() {
+    private String getDefaultStartUpPageTitle() {
         return context.getResources().getString(R.string.navigation_drawer_my_streams_title);
     }
 
@@ -857,7 +857,7 @@ public class Settings {
 
     public int getNotificationsQuietStartMinute() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getInt(this.NOTIFICATIONS_QUIET_HOURS_START_MINUTE, 00);
+        return preferences.getInt(this.NOTIFICATIONS_QUIET_HOURS_START_MINUTE, 0);
     }
 
     public void setNotificationsQuietStartMinute(int minute) {
@@ -883,7 +883,7 @@ public class Settings {
 
     public int getNotificationsQuietEndMinute() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getInt(this.NOTIFICATIONS_QUIET_HOURS_END_MINUTE, 00);
+        return preferences.getInt(this.NOTIFICATIONS_QUIET_HOURS_END_MINUTE, 0);
     }
 
     public void setNotificationsQuietEndMinute(int minute) {

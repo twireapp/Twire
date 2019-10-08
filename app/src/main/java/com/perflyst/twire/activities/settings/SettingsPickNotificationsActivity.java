@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsPickNotificationsActivity extends ThemeActivity implements FollowingFetcher {
-    private RecyclerView mRecyclerView;
     private PickStreamersAdapter mAdapter;
     private View mErrorText;
     private TextView mErrorEmoji;
@@ -44,7 +43,7 @@ public class SettingsPickNotificationsActivity extends ThemeActivity implements 
 
         mErrorText = findViewById(R.id.error_view);
         mErrorEmoji = findViewById(R.id.emote_error_view);
-        mRecyclerView = findViewById(R.id.streamers_recycler_view);
+        RecyclerView mRecyclerView = findViewById(R.id.streamers_recycler_view);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getBaseContext()));
 
@@ -68,31 +67,29 @@ public class SettingsPickNotificationsActivity extends ThemeActivity implements 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case R.id.menu_toggle_streamers:
-                @StringRes int newTitleRes;
-                boolean enable;
-                if (item.getTitle().equals(getString(R.string.disable_all))) {
-                    // Disable all
-                    enable = false;
-                    newTitleRes = R.string.enable_all;
-                } else {
-                    //Enable all
-                    enable = true;
-                    newTitleRes = R.string.disable_all;
-                }
+        if (item.getItemId() == R.id.menu_toggle_streamers) {
+            @StringRes int newTitleRes;
+            boolean enable;
+            if (item.getTitle().equals(getString(R.string.disable_all))) {
+                // Disable all
+                enable = false;
+                newTitleRes = R.string.enable_all;
+            } else {
+                //Enable all
+                enable = true;
+                newTitleRes = R.string.disable_all;
+            }
 
-                Service.updateStreamerInfoNotificationSettingForAll(getBaseContext(), enable);
-                item.setTitle(getString(newTitleRes));
+            Service.updateStreamerInfoNotificationSettingForAll(getBaseContext(), enable);
+            item.setTitle(getString(newTitleRes));
 
-                for (ChannelInfo channelInfo : mAdapter.mStreamers) {
-                    channelInfo.setNotifyWhenLive(enable);
-                }
+            for (ChannelInfo channelInfo : mAdapter.mStreamers) {
+                channelInfo.setNotifyWhenLive(enable);
+            }
 
-                mAdapter.notifyDataSetChanged();
-                break;
-            default:
-                onBackPressed();
+            mAdapter.notifyDataSetChanged();
+        } else {
+            onBackPressed();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -151,7 +148,7 @@ public class SettingsPickNotificationsActivity extends ThemeActivity implements 
     private class PickStreamerViewHolder extends RecyclerView.ViewHolder {
         private CheckedTextView checkedTextView;
 
-        public PickStreamerViewHolder(View itemView) {
+        PickStreamerViewHolder(View itemView) {
             super(itemView);
             checkedTextView = itemView.findViewById(R.id.streamer_name);
         }
@@ -160,7 +157,7 @@ public class SettingsPickNotificationsActivity extends ThemeActivity implements 
     private class PickStreamersAdapter extends RecyclerView.Adapter<PickStreamerViewHolder> {
         List<ChannelInfo> mStreamers;
 
-        public PickStreamersAdapter() {
+        PickStreamersAdapter() {
             mStreamers = new ArrayList<>();
         }
 
@@ -179,14 +176,11 @@ public class SettingsPickNotificationsActivity extends ThemeActivity implements 
 
             holder.checkedTextView.setText(streamer.getDisplayName());
             holder.checkedTextView.setChecked(streamer.isNotifyWhenLive());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    streamer.setNotifyWhenLive(!holder.checkedTextView.isChecked());
-                    holder.checkedTextView.setChecked(!holder.checkedTextView.isChecked());
+            holder.itemView.setOnClickListener(v -> {
+                streamer.setNotifyWhenLive(!holder.checkedTextView.isChecked());
+                holder.checkedTextView.setChecked(!holder.checkedTextView.isChecked());
 
-                    Service.updateStreamerInfoNotificationSetting(streamer, getBaseContext());
-                }
+                Service.updateStreamerInfoNotificationSetting(streamer, getBaseContext());
             });
         }
 

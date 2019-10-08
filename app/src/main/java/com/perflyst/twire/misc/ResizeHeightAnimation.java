@@ -8,9 +8,9 @@ import android.view.animation.Transformation;
  * Created by SebastianRask on 24-01-2016.
  */
 public class ResizeHeightAnimation extends Animation {
-    final int startHeight;
-    final int targetHeight;
-    View view;
+    private final int startHeight;
+    private final int targetHeight;
+    private View view;
 
     public ResizeHeightAnimation(View view, int targetHeight) {
         this.view = view;

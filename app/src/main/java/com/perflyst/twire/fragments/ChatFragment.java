@@ -203,7 +203,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             private boolean connected = false;
 
             private boolean isFragmentActive() {
-                return instance != null && !instance.isDetached() && instance.isAdded();
+                return !instance.isDetached() && instance.isAdded();
             }
 
             @Override
@@ -348,7 +348,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
     private void showThenHideChatStatusBar() {
         this.showChatStatusBar();
-        this.hideChatStatusBar(1000);
+        this.hideChatStatusBar();
     }
 
     /**
@@ -368,10 +368,10 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     /**
      * Hides the chat status bar with an animation
      */
-    private void hideChatStatusBar(int delay) {
+    private void hideChatStatusBar() {
         if (this.chatStatusBarShowing) {
             ResizeHeightAnimation heightAnimation = new ResizeHeightAnimation(this.mChatStatusBar, (int) getResources().getDimension(R.dimen.chat_input_divider_height));
-            heightAnimation.setStartOffset(delay);
+            heightAnimation.setStartOffset(1000);
             heightAnimation.setDuration(140);
             heightAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
             this.mChatStatusBar.startAnimation(heightAnimation);
@@ -454,14 +454,14 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
      *
      * @param emotesLoaded The loaded twitch emotes
      */
-    protected void twitchEmotesLoaded(List<Emote> emotesLoaded) {
+    private void twitchEmotesLoaded(List<Emote> emotesLoaded) {
         twitchEmotes = new ArrayList<>(emotesLoaded);
         if (settings.isLoggedIn() && twitchEmotesFragment != null) {
             twitchEmotesFragment.addTwitchEmotes();
         }
     }
 
-    protected void subscriberEmotesLoaded(List<Emote> subscriberEmotesLoaded, EmotesPagerAdapter adapter) {
+    private void subscriberEmotesLoaded(List<Emote> subscriberEmotesLoaded, EmotesPagerAdapter adapter) {
         if (subscriberEmotesLoaded.size() > 0 && adapter != null && getContext() != null) {
             Log.d(LOG_TAG, "Adding subscriber emotes: " + subscriberEmotesLoaded.size());
 
@@ -486,7 +486,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
      * Notifies the ChatFragment that the bttvEmotes have been loaded from the API.
      * Emotes are made and added to the EmoteKeyboard;
      */
-    protected void bttvEmoteInfoLoaded(List<Emote> bttvChannel, List<Emote> bttvGlobal) {
+    private void bttvEmoteInfoLoaded(List<Emote> bttvChannel, List<Emote> bttvGlobal) {
         Log.d(LOG_TAG, "Bttv Emotes loaded: " + bttvGlobal.size());
         bttvChannelEmotes = new ArrayList<>(bttvChannel);
         bttvEmotes = new ArrayList<>(bttvGlobal);
@@ -502,7 +502,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private void setInitialKeyboardHeight() {
         int recordedHeight = settings.getKeyboardHeight();
 
-        if (recordedHeight != 0 && recordedHeight > 200) {
+        if (recordedHeight > 200) {
             ViewGroup.LayoutParams lp = emoteKeyboardContainer.getLayoutParams();
             lp.height = recordedHeight;
             emoteKeyboardContainer.setLayoutParams(lp);
@@ -567,13 +567,13 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mEmoteKeyboardButton.setColorFilter(defaultBackgroundColor);
     }
 
-    public void openSoftKeyboard() {
+    private void openSoftKeyboard() {
         Service.showKeyboard(getActivity());
         isSoftKeyboardOpen = true;
         mEmoteKeyboardButton.setColorFilter(defaultBackgroundColor);
     }
 
-    public void closeSoftKeyboard() {
+    private void closeSoftKeyboard() {
         isSoftKeyboardOpen = false;
         Service.hideKeyboard(getActivity());
 
@@ -656,12 +656,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
         );
 
-        GetTwitchEmotesTask getTwitchEmotesTask = new GetTwitchEmotesTask(new GetTwitchEmotesTask.Delegate() {
-            @Override
-            public void onEmotesLoaded(List<Emote> twitchEmotes, List<Emote> subscriberEmotes) {
-                twitchEmotesLoaded(twitchEmotes);
-                subscriberEmotesLoaded(subscriberEmotes, pagerAdapter);
-            }
+        GetTwitchEmotesTask getTwitchEmotesTask = new GetTwitchEmotesTask((twitchEmotes, subscriberEmotes) -> {
+            twitchEmotesLoaded(twitchEmotes);
+            subscriberEmotesLoaded(subscriberEmotes, pagerAdapter);
         }, getContext());
         getTwitchEmotesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
@@ -671,21 +668,13 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         chatInputDivider.bringToFront();
         mSendText.bringToFront();
 
-        mSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage();
+        mSendButton.setOnClickListener(v -> sendMessage());
+        mSendText.setOnEditTextImeBackListener((ctrl, text) -> {
+            if (isEmoteKeyboardOpen && isSoftKeyboardOpen) {
+                hideEmoteKeyboard();
             }
-        });
-        mSendText.setOnEditTextImeBackListener(new EditTextBackEvent.EditTextImeBackListener() {
-            @Override
-            public void onImeBack(EditTextBackEvent ctrl, String text) {
-                if (isEmoteKeyboardOpen && isSoftKeyboardOpen) {
-                    hideEmoteKeyboard();
-                }
 
-                setMentionSuggestions(new ArrayList<String>());
-            }
+            setMentionSuggestions(new ArrayList<>());
         });
         mSendText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
@@ -717,7 +706,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 if (userName != null && !userName.isEmpty()) {
                     setMentionSuggestions(mChatAdapter.getNamesThatMatches(userName));
                 } else {
-                    setMentionSuggestions(new ArrayList<String>());
+                    setMentionSuggestions(new ArrayList<>());
                 }
             }
         });
@@ -742,14 +731,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
             }
         });
-        mSendText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isEmoteKeyboardOpen) {
-                    getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-                    isSoftKeyboardOpen = true;
-                    mEmoteKeyboardButton.setColorFilter(defaultBackgroundColor);
-                }
+        mSendText.setOnClickListener(view -> {
+            if (isEmoteKeyboardOpen) {
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
+                isSoftKeyboardOpen = true;
+                mEmoteKeyboardButton.setColorFilter(defaultBackgroundColor);
             }
         });
     }
@@ -789,7 +775,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                                 View view = mRootWindow.getDecorView();
                                 view.getWindowVisibleDisplayFrame(r);
 
-                                if (lastBottom > r.bottom && (lastBottom - r.bottom) > 200 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                if (lastBottom > r.bottom && (lastBottom - r.bottom) > 200 &&
+                                        getResources().getConfiguration().orientation
+                                                == Configuration.ORIENTATION_PORTRAIT) {
                                     Log.d(LOG_TAG, "Soft Keyboard shown");
                                     if (hideKeyboardWhenShown) {
                                         closeSoftKeyboard();
@@ -823,16 +811,13 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         Log.d(LOG_TAG, "Sending Message: " + message);
         ConstructChatMessageTask getMessageTask = new ConstructChatMessageTask(
-                new ConstructChatMessageTask.Callback() {
-                    @Override
-                    public void onMessageConstructed(ChatMessage chatMessage) {
-                        if (chatMessage != null) {
-                            try {
-                                addMessage(chatMessage);
-                                Log.d(LOG_TAG, "Message added");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                chatMessage -> {
+                    if (chatMessage != null) {
+                        try {
+                            addMessage(chatMessage);
+                            Log.d(LOG_TAG, "Message added");
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                     }
                 },
@@ -857,7 +842,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
      *
      * @param message
      */
-    public void addMessage(ChatMessage message) {
+    private void addMessage(ChatMessage message) {
         mChatAdapter.add(message);
     }
 
@@ -942,17 +927,17 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         protected AutoSpanRecyclerView mPromotedEmotesRecyclerView;
         private String LOG_TAG = getClass().getSimpleName();
         private EmoteFragmentType fragmentType;
-        private EmoteAdapter mAdapter, mPromotedAdapter;
+        private EmoteAdapter mAdapter;
         private EmoteKeyboardDelegate callback;
 
-        public static EmoteGridFragment newInstance(EmoteFragmentType fragmentType, EmoteKeyboardDelegate callback) {
+        static EmoteGridFragment newInstance(EmoteFragmentType fragmentType, EmoteKeyboardDelegate callback) {
             EmoteGridFragment emoteGridFragment = new EmoteGridFragment();
             emoteGridFragment.fragmentType = fragmentType;
             emoteGridFragment.callback = callback;
             return emoteGridFragment;
         }
 
-        public static EmoteGridFragment newInstance() {
+        static EmoteGridFragment newInstance() {
             return new EmoteGridFragment();
         }
 
@@ -975,7 +960,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             mPromotedEmotesRecyclerView.setHasFixedSize(false);
 
             mAdapter = new EmoteAdapter();
-            mPromotedAdapter = new EmoteAdapter();
+            EmoteAdapter mPromotedAdapter = new EmoteAdapter();
 
             mEmoteRecyclerView.setAdapter(mAdapter);
             mPromotedEmotesRecyclerView.setAdapter(mPromotedAdapter);
@@ -1034,7 +1019,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             }
         }
 
-        public void addEmote(Emote emote) {
+        void addEmote(Emote emote) {
             if (mAdapter != null)
                 mAdapter.addEmote(emote);
         }
@@ -1045,7 +1030,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         }
 
         public class EmoteAdapter extends RecyclerView.Adapter<EmoteAdapter.EmoteViewHolder> {
-            private final int EMOTE_SIZE = 2;
             private ArrayList<Emote> emotes;
             private Settings settings;
             private HashMap<String, Target> picassoTargets;
@@ -1073,7 +1057,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
             };
 
-            public EmoteAdapter() {
+            EmoteAdapter() {
                 emotes = new ArrayList<>();
                 settings = new Settings(getContext());
                 picassoTargets = new HashMap<>();
@@ -1097,6 +1081,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 if (emoteAtPosition.isTextEmote()) {
                     holder.mTextEmote.setText(emoteAtPosition.getKeyword());
                 } else {
+                    int EMOTE_SIZE = 2;
                     String emoteUrl = ChatEmoteManager.getEmoteUrl(emoteAtPosition, EMOTE_SIZE);
 
                     Picasso.with(getContext()).load(emoteUrl).into(holder.mImageEmote);
@@ -1108,7 +1093,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 return emotes.size();
             }
 
-            public void hideEmotes() {
+            void hideEmotes() {
                 List<Emote> emotesToRemove = new ArrayList<>();
                 for (Emote emote : emotes) {
                     if (emotesToHide.contains(emote)) {
@@ -1120,7 +1105,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 notifyDataSetChanged();
             }
 
-            public void addEmote(Emote emote) {
+            void addEmote(Emote emote) {
                 if (fragmentType == EmoteFragmentType.ALL && emotesToHide != null && emotesToHide.contains(emote)) {
                     return;
                 }
@@ -1141,7 +1126,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
             }
 
-            public void addEmotes(List<Emote> emoteList) {
+            void addEmotes(List<Emote> emoteList) {
                 emotes.addAll(emoteList);
                 if (fragmentType == EmoteFragmentType.ALL && emotesToHide != null && emotes != null) {
                     emotes.removeAll(emotesToHide);
@@ -1150,12 +1135,12 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 notifyDataSetChanged();
             }
 
-            protected class EmoteViewHolder extends RecyclerView.ViewHolder {
-                protected ImageView mImageEmote;
-                protected TextView mTextEmote;
-                protected FrameLayout mEmoteContainer;
+            class EmoteViewHolder extends RecyclerView.ViewHolder {
+                ImageView mImageEmote;
+                TextView mTextEmote;
+                FrameLayout mEmoteContainer;
 
-                public EmoteViewHolder(View itemView) {
+                EmoteViewHolder(View itemView) {
                     super(itemView);
                     mImageEmote = itemView.findViewById(R.id.imageEmote);
                     mTextEmote = itemView.findViewById(R.id.textEmote);
@@ -1166,14 +1151,14 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     }
 
     private class EmotesPagerAdapter extends FragmentPagerAdapter {
-        public final int RECENT_POSITION = 0,
+        final int RECENT_POSITION = 0,
                 TWITCH_POSITION = 1,
                 SUBSCRIBE_POSITION = 2,
                 BTTV_POSITION = 3,
                 EMOJI_POSITION = 4;
-        public boolean showSubscriberEmote = false;
+        boolean showSubscriberEmote = false;
 
-        public EmotesPagerAdapter(FragmentManager fm) {
+        EmotesPagerAdapter(FragmentManager fm) {
             super(fm);
             EmoteKeyboardDelegate delegate = ChatFragment.this;
 

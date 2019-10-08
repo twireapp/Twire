@@ -108,12 +108,9 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void fetchAndSetOnlineSteamsCount() {
-        GetStreamsCountTask getStreamsCountTask = new GetStreamsCountTask(getContext(), new GetStreamsCountTask.Delegate() {
-            @Override
-            public void TaskFinished(int count) {
-                if (count >= 0 && mStreamsCountWrapper != null && mStreamsCount != null) {
-                    showAndSetStreamCount(count);
-                }
+        GetStreamsCountTask getStreamsCountTask = new GetStreamsCountTask(getContext(), count -> {
+            if (count >= 0 && mStreamsCountWrapper != null && mStreamsCount != null) {
+                showAndSetStreamCount(count);
             }
         });
         getStreamsCountTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -163,12 +160,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         // This simple method gives us the burger icon for the toolbar
-        mDrawerLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mDrawerToggle.syncState();
-            }
-        });
+        mDrawerLayout.post(() -> mDrawerToggle.syncState());
 
         setClickListeners();
         checkUserLogin();
@@ -183,25 +175,22 @@ public class NavigationDrawerFragment extends Fragment {
         setOnClick(R.id.my_streams_container, MyStreamsActivity.class);
         setOnClick(R.id.my_games_container, MyGamesActivity.class);
 
-        setInstantOnClick(R.id.search_container, SearchActivity.class, R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim);
-        setInstantOnClick(R.id.settings_container, SettingsActivity.class, R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim);
+        setInstantOnClick(R.id.search_container, SearchActivity.class, R.anim.slide_in_bottom_anim);
+        setInstantOnClick(R.id.settings_container, SettingsActivity.class, R.anim.slide_in_right_anim);
     }
 
-    private void setInstantOnClick(@IdRes int viewRes, final Class activityClass, @AnimRes final int inAnimation, @AnimRes final int outAnimation) {
+    private void setInstantOnClick(@IdRes int viewRes, final Class activityClass, @AnimRes final int inAnimation) {
         View view = getActivity().findViewById(viewRes);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), activityClass);
+        view.setOnClickListener(view1 -> {
+            Intent intent = new Intent(getActivity(), activityClass);
 
-                ActivityOptionsCompat searchAnim = ActivityOptionsCompat.makeCustomAnimation(getActivity(), inAnimation, outAnimation);
-                ActivityCompat.startActivity(getActivity(), intent, searchAnim.toBundle());
-                mDrawerLayout.closeDrawer(containerView);
-            }
+            ActivityOptionsCompat searchAnim = ActivityOptionsCompat.makeCustomAnimation(getActivity(), inAnimation, R.anim.fade_out_semi_anim);
+            ActivityCompat.startActivity(getActivity(), intent, searchAnim.toBundle());
+            mDrawerLayout.closeDrawer(containerView);
         });
     }
 
-    private View setOnClick(@IdRes int viewID, Class aActivity) {
+    private void setOnClick(@IdRes int viewID, Class aActivity) {
         View view = getActivity().findViewById(viewID);
 
         if (getActivity().getClass() == aActivity) {
@@ -218,37 +207,31 @@ public class NavigationDrawerFragment extends Fragment {
             setStandardOnClick(view, getActivity(), aActivity, mDrawerLayout, containerView);
         }
 
-        return view;
     }
 
     private void setCloseDrawerOnClick(View mViewToListen, final DrawerLayout mDrawerLayout, final View mDrawerView) {
-        mViewToListen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (getActivity() instanceof MainActivity) {
-                    ((MainActivity) getActivity()).scrollToTopAndRefresh();
-                } else {
-                    getActivity().recreate();
-                }
-
-                mDrawerLayout.closeDrawer(mDrawerView);
+        mViewToListen.setOnClickListener(v -> {
+            if (getActivity() instanceof MainActivity) {
+                ((MainActivity) getActivity()).scrollToTopAndRefresh();
+            } else {
+                getActivity().recreate();
             }
+
+            mDrawerLayout.closeDrawer(mDrawerView);
         });
     }
 
-    private void setStandardOnClick(View mViewToListen, final Activity mFromActivity, final Class mToClass, final DrawerLayout mDrawerLayout, final View mDrawerView) {
-        mViewToListen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mFromActivity, mToClass);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION); // We don't want to use a transition animation
+    private void setStandardOnClick(View mViewToListen, final Activity mFromActivity, final Class mToClass,
+                                    final DrawerLayout mDrawerLayout, final View mDrawerView) {
+        mViewToListen.setOnClickListener(v -> {
+            Intent intent = new Intent(mFromActivity, mToClass);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION); // We don't want to use a transition animation
 
-                mIntent = intent;
+            mIntent = intent;
 
-                // Close the drawer. This way the intent will be used to launch the next activity,
-                // as the OnCloseListener will start the activity, now that the mIntent contains an actual reference
-                mDrawerLayout.closeDrawer(mDrawerView);
-            }
+            // Close the drawer. This way the intent will be used to launch the next activity,
+            // as the OnCloseListener will start the activity, now that the mIntent contains an actual reference
+            mDrawerLayout.closeDrawer(mDrawerView);
         });
     }
 
@@ -278,15 +261,10 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
-    public void initHeaderImage(final ImageView headerImageView) {
+    private void initHeaderImage(final ImageView headerImageView) {
         headerImageView.setImageResource(R.drawable.nav_top);
 
         final MaterialDialog themeChooserDialog = DialogService.getThemeDialog(getActivity());
-        headerImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                themeChooserDialog.show();
-            }
-        });
+        headerImageView.setOnClickListener(v -> themeChooserDialog.show());
     }
 }

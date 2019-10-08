@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.perflyst.twire.R;
 import com.perflyst.twire.model.Panel;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,13 +27,11 @@ import java.util.List;
 
 public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHolder> {
     private List<Panel> mPanels;
-    private List<Target> mTargets;
     private Activity mActivity;
 
     public PanelAdapter(Activity mActivity) {
         this.mActivity = mActivity;
         this.mPanels = new ArrayList<>();
-        this.mTargets = new ArrayList<>();
     }
 
     public void addPanels(List<Panel> panels) {
@@ -67,19 +64,16 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
 
         final String link = mPanel.getmLinkUrl();
         if (link != null && !link.isEmpty() && !link.equals("null")) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CustomTabsIntent.Builder mTabs = new CustomTabsIntent.Builder();
-                    mTabs.setStartAnimations(mActivity, R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim);
-                    mTabs.setExitAnimations(mActivity, R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim);
+            holder.itemView.setOnClickListener(view -> {
+                CustomTabsIntent.Builder mTabs = new CustomTabsIntent.Builder();
+                mTabs.setStartAnimations(mActivity, R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim);
+                mTabs.setExitAnimations(mActivity, R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim);
 
-                    try {
-                        mTabs.build().launchUrl(mActivity, Uri.parse(link));
+                try {
+                    mTabs.build().launchUrl(mActivity, Uri.parse(link));
 
-                    } catch (ActivityNotFoundException e) {
-                        e.printStackTrace();
-                    }
+                } catch (ActivityNotFoundException e) {
+                    e.printStackTrace();
                 }
             });
         }
@@ -94,9 +88,9 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
         }
     }
 
-    protected class PanelViewHolder extends RecyclerView.ViewHolder {
-        protected ImageView mImageView;
-        protected TextView mHtmlText;
+    class PanelViewHolder extends RecyclerView.ViewHolder {
+        ImageView mImageView;
+        TextView mHtmlText;
 
         PanelViewHolder(View itemView) {
             super(itemView);

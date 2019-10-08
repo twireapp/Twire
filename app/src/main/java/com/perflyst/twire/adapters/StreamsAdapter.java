@@ -27,13 +27,13 @@ import java.util.Comparator;
  * Created by Sebastian Rask on 11-04-2016.
  */
 class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
-    protected CardView vCard;
-    protected ImageView vPreviewImage;
-    protected TextView vDisplayName, vTitle, vGame;
-    protected View sharedPadding;
+    ImageView vPreviewImage;
+    TextView vDisplayName, vTitle, vGame;
+    View sharedPadding;
+    private CardView vCard;
     //private TextView vOnlineSince;
 
-    public StreamViewHolder(View v) {
+    StreamViewHolder(View v) {
         super(v);
         vCard = v.findViewById(R.id.cardView_online_streams);
         vPreviewImage = v.findViewById(R.id.image_stream_preview);
@@ -41,7 +41,7 @@ class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
         vTitle = v.findViewById(R.id.stream_title);
         vGame = v.findViewById(R.id.stream_game_and_viewers);
         sharedPadding = v.findViewById(R.id.shared_padding);
-        //vOnlineSince = (TextView) v.findViewById(R.id.stream_online_since);
+        //vOnlineSince = v.findViewById(R.id.stream_online_since);
     }
 
     @Override

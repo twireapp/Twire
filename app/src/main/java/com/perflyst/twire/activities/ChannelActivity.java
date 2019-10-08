@@ -44,7 +44,6 @@ import com.perflyst.twire.adapters.VODAdapter;
 import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
 import com.perflyst.twire.model.ChannelInfo;
-import com.perflyst.twire.model.Panel;
 import com.perflyst.twire.model.VideoOnDemand;
 import com.perflyst.twire.service.JSONService;
 import com.perflyst.twire.service.Service;
@@ -60,7 +59,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,13 +67,8 @@ public class ChannelActivity extends ThemeActivity {
             fragmentVodsBroadCastsOnlyArg = "vodsBroadcastsOnlyArg",
             fragmentVodsStreamerInfoArg = "streamerNameArg";
     private final String LOG_TAG = getClass().getSimpleName();
-    private final int SHOW_FAB_DURATION = 300,
-            SHOW_FAB_DELAY = 300,
-            HIDE_FAB_DURATION = 200;
+    private final int SHOW_FAB_DELAY = 300;
     private ChannelInfo info;
-    private TextView streamerInfoName,
-            streamerViewers,
-            streamerFollowers;
     private ImageView streamerImage;
     private LinearLayout additionalInfoLayout;
     private Toolbar toolbar,
@@ -97,9 +90,9 @@ public class ChannelActivity extends ThemeActivity {
         // Get the various handles of view and layouts that is part of this view
         streamerImage = findViewById(R.id.profileImageView);
         additionalInfoLayout = findViewById(R.id.additional_info_wrapper);
-        streamerInfoName = findViewById(R.id.twitch_name);
-        streamerViewers = findViewById(R.id.txt_viewers);
-        streamerFollowers = findViewById(R.id.txt_followers);
+        TextView streamerInfoName = findViewById(R.id.twitch_name);
+        TextView streamerViewers = findViewById(R.id.txt_viewers);
+        TextView streamerFollowers = findViewById(R.id.txt_followers);
         toolbar = findViewById(R.id.StreamerInfo_Toolbar);
         additionalToolbar = findViewById(R.id.additional_toolbar);
         mViewPager = findViewById(R.id.container);
@@ -240,7 +233,7 @@ public class ChannelActivity extends ThemeActivity {
                 int mutedDark = palette.getDarkMutedColor(defaultColor);
                 int mutedLight = palette.getLightMutedColor(defaultColor);
 
-                Palette.Swatch swatch = null;
+                Palette.Swatch swatch;
 
                 if (vibrant != defaultColor) {
                     swatch = palette.getVibrantSwatch();
@@ -329,24 +322,18 @@ public class ChannelActivity extends ThemeActivity {
                 }
         );
 
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mFollowHandler.isStreamerFollowed()) {
-                    mFollowHandler.unfollowStreamer();
-                } else {
-                    mFollowHandler.followStreamer();
-                }
-
-                hideFAB();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateFABIcon(!mFollowHandler.isStreamerFollowed());
-                        showFAB();
-                    }
-                }, SHOW_FAB_DELAY);
+        mFab.setOnClickListener(v -> {
+            if (mFollowHandler.isStreamerFollowed()) {
+                mFollowHandler.unfollowStreamer();
+            } else {
+                mFollowHandler.followStreamer();
             }
+
+            hideFAB();
+            new Handler().postDelayed(() -> {
+                updateFABIcon(!mFollowHandler.isStreamerFollowed());
+                showFAB();
+            }, SHOW_FAB_DELAY);
         });
 
         updateFABIcon(mFollowHandler.isStreamerFollowed());
@@ -361,6 +348,7 @@ public class ChannelActivity extends ThemeActivity {
 
     private void hideFAB() {
         mFab.setClickable(false);
+        int HIDE_FAB_DURATION = 200;
         mFab.animate()
                 .translationY(getResources().getDimension(R.dimen.streamerInfo_fab_size) + getResources().getDimension(R.dimen.streamerInfo_fab_margin))
                 .setDuration(HIDE_FAB_DURATION)
@@ -369,6 +357,7 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private void showFAB() {
+        int SHOW_FAB_DURATION = 300;
         mFab.animate()
                 .translationY(0)
                 .setDuration(SHOW_FAB_DURATION)
@@ -411,26 +400,26 @@ public class ChannelActivity extends ThemeActivity {
      * Example: 1000000 becomes "1 000 000"
      */
     private String getReadableInt(int number) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         String numberAsString = number + "";
         int x = 1;
         for (int i = numberAsString.length() - 1; i >= 0; i--) {
-            result = numberAsString.charAt(i) + result;
+            result.insert(0, numberAsString.charAt(i));
 
             if (x % 3 == 0 && i != numberAsString.length() - 1) {
-                result = " " + result;
+                result.insert(0, " ");
             }
 
             x++;
         }
 
-        return result;
+        return result.toString();
     }
 
     public static abstract class ChannelFragment extends Fragment {
-        protected TextView mErrorEmote, mErrorText;
+        TextView mErrorEmote, mErrorText;
 
-        protected void findErrorView(View rootView) {
+        void findErrorView(View rootView) {
             mErrorEmote = rootView.findViewById(R.id.emote_error_view);
             mErrorText = rootView.findViewById(R.id.error_view);
         }
@@ -446,10 +435,9 @@ public class ChannelActivity extends ThemeActivity {
         private final String LOG_TAG = getClass().getSimpleName();
         private ChannelInfo info;
 
-        private TextView mDescription;
         private RecyclerView mPanelsRecyclerView;
 
-        public static InfoFragment newInstance(ChannelInfo info) {
+        static InfoFragment newInstance(ChannelInfo info) {
             InfoFragment fragment = new InfoFragment();
             Bundle args = new Bundle();
             args.putParcelable(fragmentStreamerInfoArg, info);
@@ -470,7 +458,7 @@ public class ChannelActivity extends ThemeActivity {
             info = getArguments().getParcelable(fragmentStreamerInfoArg);
 
             mPanelsRecyclerView = rootView.findViewById(R.id.panel_recyclerview);
-            mDescription = rootView.findViewById(R.id.description);
+            TextView mDescription = rootView.findViewById(R.id.description);
             findErrorView(rootView);
 
             if (info != null && info.getStreamDescription() != null && !info.getStreamDescription().equals("null") && !info.getStreamDescription().equals("")) {
@@ -491,12 +479,7 @@ public class ChannelActivity extends ThemeActivity {
             mPanelsRecyclerView.setAdapter(mPanelsAdapter);
             mPanelsRecyclerView.setLayoutManager(llm);
 
-            GetPanelsTask mTask = new GetPanelsTask(info.getStreamerName(), new GetPanelsTask.Delegate() {
-                @Override
-                public void onPanelsFetched(List<Panel> result) {
-                    mPanelsAdapter.addPanels(result);
-                }
-            });
+            GetPanelsTask mTask = new GetPanelsTask(info.getStreamerName(), mPanelsAdapter::addPanels);
             mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }
@@ -507,7 +490,6 @@ public class ChannelActivity extends ThemeActivity {
         private String LOG_TAG = getClass().getSimpleName();
         private ChannelInfo channelInfo;
         private boolean broadcasts, showError;
-        private LazyFetchingOnScrollListener<VideoOnDemand> lazyFetchingOnScrollListener;
         private int limit = 10,
                 offset = 0,
                 maxElementsToFetch = 500;
@@ -560,7 +542,7 @@ public class ChannelActivity extends ThemeActivity {
             mAdapter.setTopMargin((int) getResources().getDimension(R.dimen.search_new_adapter_top_margin));
             mAdapter.setSortElements(false);
             mAdapter.disableInsertAnimation();
-            lazyFetchingOnScrollListener = new LazyFetchingOnScrollListener<>("VodFragment", this);
+            LazyFetchingOnScrollListener<VideoOnDemand> lazyFetchingOnScrollListener = new LazyFetchingOnScrollListener<>("VodFragment", this);
             mRecyclerView.addOnScrollListener(lazyFetchingOnScrollListener);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setItemAnimator(null);
@@ -643,7 +625,7 @@ public class ChannelActivity extends ThemeActivity {
         }
 
         @Override
-        public List<VideoOnDemand> getVisualElements() throws JSONException, MalformedURLException {
+        public List<VideoOnDemand> getVisualElements() throws JSONException {
             List<VideoOnDemand> result = new ArrayList<>();
             final String VIDEOS_ARRAY = "videos";
             final String TOTAL_VODS_INT = "_total";
@@ -659,13 +641,10 @@ public class ChannelActivity extends ThemeActivity {
             }
 
             if (vodsTopObject.getInt(TOTAL_VODS_INT) <= 0) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (mErrorEmote != null && mErrorText != null) {
-                            showError();
-                            showError = true;
-                        }
+                getActivity().runOnUiThread(() -> {
+                    if (mErrorEmote != null && mErrorText != null) {
+                        showError();
+                        showError = true;
                     }
                 });
             }
@@ -680,7 +659,7 @@ public class ChannelActivity extends ThemeActivity {
         private final int POSITION_HIGHLIGHTS = 2;
 
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             mDescriptionFragment = InfoFragment.newInstance(info);
             mBroadcastsFragment = VodFragment.newInstance(true, info);

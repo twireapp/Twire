@@ -24,20 +24,20 @@ public class AutoSpanRecyclerView extends RecyclerView {
 
     public AutoSpanRecyclerView(Context context) {
         super(context);
-        init(context, null);
+        init();
     }
 
     public AutoSpanRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context, attrs);
+        init();
     }
 
     public AutoSpanRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(context, attrs);
+        init();
     }
 
-    protected void init(Context context, AttributeSet attrs) {
+    protected void init() {
         mSettings = new Settings(getContext());
         mSpanCount = 1;
 

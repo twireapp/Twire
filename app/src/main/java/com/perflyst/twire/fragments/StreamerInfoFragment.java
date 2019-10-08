@@ -19,10 +19,8 @@ import com.perflyst.twire.model.ChannelInfo;
 
 
 public class StreamerInfoFragment extends Fragment {
-    private String LOG_TAG = "StreamerInfoFragment";
-    private TextView StreamerInfoName, StreamerInfoBio;
+    private TextView StreamerInfoName;
     private CardView ContentLayout;
-    private ChannelInfo info;
     private Context context;
     private View rootView;
 
@@ -54,16 +52,16 @@ public class StreamerInfoFragment extends Fragment {
         // Get the various handles of view and layouts that is part of this view
         ContentLayout = rootView.findViewById(R.id.fragment_streamerInfo_card_layout);
         StreamerInfoName = rootView.findViewById(R.id.streamerInfo_displayName);
-        StreamerInfoBio = rootView.findViewById(R.id.streamerInfo_bio);
+        TextView streamerInfoBio = rootView.findViewById(R.id.streamerInfo_bio);
 
         // Get the StreamerInfo object sent with the intent to open this activity
         Intent intent = getActivity().getIntent();
-        info = intent.getParcelableExtra("StreamerInfo");
+        ChannelInfo info = intent.getParcelableExtra("StreamerInfo");
 
         // Set this Fragment's view with the appropriate information
         StreamerInfoName.setText(info.getDisplayName());
         if (info.getStreamDescription() != null) { // Some times twitch fucks up and doesn't send bio with its API
-            StreamerInfoBio.setText(info.getStreamDescription());
+            streamerInfoBio.setText(info.getStreamDescription());
         }
 
         return rootView;
@@ -75,8 +73,9 @@ public class StreamerInfoFragment extends Fragment {
         StreamerInfoName.setBackgroundColor(colorLight);
 
         if (inLandScape) {
+            String LOG_TAG = "StreamerInfoFragment";
             Log.v(LOG_TAG, "Is in landscape - Fragment");
-            //StreamerInfoName.getLayoutParams().width = (int) (((getResources().getDisplayMetrics().widthPixels)/100) * StreamerInfoActivity.landscape_content_width - (context.getResources().getDimension(R.dimen.fragment_streamerInfo_cardElevation) * 2));
+            //StreamerInfoName.getLayoutParams().width = (int) (((getResources().getDisplayMetrics().widthPixels) / 100) * StreamerInfoActivity.landscape_content_width - (context.getResources().getDimension(R.dimen.fragment_streamerInfo_cardElevation) * 2));
         } else {
             ContentLayout.setMaxCardElevation(0);
             ContentLayout.setCardElevation(0);

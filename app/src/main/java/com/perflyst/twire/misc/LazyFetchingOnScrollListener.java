@@ -16,14 +16,12 @@ import com.perflyst.twire.tasks.GetVisualElementsTask;
  * Created by Sebastian on 06-08-2015.
  */
 public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
-    private String LOG_TAG;
     private GetVisualElementsTask<T> getElementsTask;
     private LazyFetchingActivity<T> mLazyFetchingActivity;
 
 
     public LazyFetchingOnScrollListener(AppCompatActivity mActivity, Toolbar mMainToolbar, Toolbar mDecorativeToolbar, View mToolbarShadow, View mIconCircle, TextView mIconText, String LOG_TAG, LazyFetchingActivity<T> aLazyFetchingActivity, boolean isMainActivity) {
         super(mActivity, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mIconCircle, mIconText, LOG_TAG, isMainActivity);
-        this.LOG_TAG = LOG_TAG;
         this.getElementsTask = new GetVisualElementsTask<>();
         this.mLazyFetchingActivity = aLazyFetchingActivity;
     }

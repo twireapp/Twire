@@ -35,13 +35,8 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
     public static final String QUALITY_SOURCE = "chunked";
     public static final String QUALITY_AUTO = "auto";
     public static final String QUALITY_AUDIO_ONLY = "audio_only";
-
-    public static final String QUALITY_720p60 = "720p60";
-    public static final String QUALITY_720p30 = "720p30";
     public static final String QUALITY_540p30 = "540p30";
-    public static final String QUALITY_480p30 = "480p30";
     public static final String QUALITY_360p30 = "360p30";
-    public static final String QUALITY_240p30 = "240p30";
     public static final String QUALITY_144p30 = "144p30";
     public static final String[] QUALITIES = {
             QUALITY_MOBILE,
@@ -59,6 +54,10 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
             QUALITY_HIGH,
             QUALITY_SOURCE
     };
+    private static final String QUALITY_720p60 = "720p60";
+    private static final String QUALITY_720p30 = "720p30";
+    private static final String QUALITY_480p30 = "480p30";
+    private static final String QUALITY_240p30 = "240p30";
     private final String[] NEW_QUALITIES = {
             QUALITY_240p30,
             QUALITY_480p30,
@@ -107,7 +106,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
         callback.finished(result);
     }
 
-    protected HashMap<String, String> parseM3U8(String urlToRead) {
+    HashMap<String, String> parseM3U8(String urlToRead) {
         URL url;
         HttpURLConnection conn = null;
         Scanner in = null;
@@ -153,7 +152,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
         ArrayList<String> qualitiesAvailable = new ArrayList<>(Arrays.asList(QUALITIES));
         qualitiesAvailable.addAll(new ArrayList<>(Arrays.asList(NEW_QUALITIES)));
         for (String quality : qualitiesAvailable) {
-            Pattern p = Pattern.compile("VIDEO=\"" + quality + "\"\\n(http:\\/\\/\\S+)");
+            Pattern p = Pattern.compile("VIDEO=\"" + quality + "\"\\n(http://\\S+)");
             Matcher m = p.matcher(result.toString());
 
             if (m.find()) {
@@ -181,7 +180,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
         return resultList;
     }
 
-    String safeEncode(String s) {
+    private String safeEncode(String s) {
         try {
             return URLEncoder.encode(s, "utf-8");
         } catch (UnsupportedEncodingException ignore) {

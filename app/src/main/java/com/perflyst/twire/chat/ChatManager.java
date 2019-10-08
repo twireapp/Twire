@@ -40,27 +40,23 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private static String cursor = "";
     private static boolean seek = false;
     private final String LOG_TAG = getClass().getSimpleName();
-    private Pattern roomstatePattern = Pattern.compile("@broadcaster-lang=(.*);r9k=(0|1);slow=(0|\\d+);subs-only=(0|1)"),
-            userStatePattern = Pattern.compile("color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod=(0|1);subscriber=(0|1);(turbo=(0|1)|user)"),
-            stdVarPattern = Pattern.compile("color=(#?\\w*);display-name=(\\w+).*;mod=(0|1);room-id=\\d+;.*subscriber=(0|1);.*turbo=(0|1);.* PRIVMSG #\\S* :(.*)"),
+    private Pattern roomstatePattern = Pattern.compile("@broadcaster-lang=(.*);r9k=([01]);slow=(0|\\d+);subs-only=([01])"),
+            userStatePattern = Pattern.compile("color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod=([01]);subscriber=([01]);(turbo=([01])|user)"),
+            stdVarPattern = Pattern.compile("color=(#?\\w*);display-name=(\\w+).*;mod=([01]);room-id=\\d+;.*subscriber=([01]);.*turbo=([01]);.* PRIVMSG #\\S* :(.*)"),
             noticePattern = Pattern.compile("@msg-id=(\\w*)");
     // Default Twitch Chat connect IP/domain and port
     private String twitchChatServer = "irc.twitch.tv";
     private int twitchChatPort = 6667;
     private Bitmap subscriberIcon;
     private BufferedWriter writer;
-    private BufferedReader reader;
     private Handler callbackHandler;
     private boolean isStopping;
     private String user;
     private String oauth_key;
     private String channelName;
     private String hashChannel;
-    private int channelUserId;
     private String vodId;
     private ChatCallback callback;
-    private Context context;
-    private Settings appSettings;
     // Data about the user and how to display his/hers message
     private String userDisplayName;
     private String userColor;
@@ -75,15 +71,13 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
         mEmoteManager = new ChatEmoteManager(aChannelUserId, aChannel, aContext);
-        appSettings = new Settings(aContext);
+        Settings appSettings = new Settings(aContext);
         user = appSettings.getGeneralTwitchName();
         oauth_key = "oauth:" + appSettings.getGeneralTwitchAccessToken();
         hashChannel = "#" + aChannel;
         channelName = aChannel;
-        channelUserId = aChannelUserId;
         vodId = aVodId;
         callback = aCallback;
-        context = aContext;
 
         executeOnExecutor(THREAD_POOL_EXECUTOR);
     }
@@ -103,12 +97,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     protected Void doInBackground(Void... params) {
         Log.d(LOG_TAG, "Trying to start chat " + hashChannel + " for user " + user);
         subscriberIcon = mEmoteManager.getSubscriberEmote();
-        mEmoteManager.loadBttvEmotes(new ChatEmoteManager.EmoteFetchCallback() {
-            @Override
-            public void onEmoteFetched() {
-                onProgressUpdate(new ChatManager.ProgressUpdate(ChatManager.ProgressUpdate.UpdateType.ON_BTTV_FETCHED));
-            }
-        });
+        mEmoteManager.loadBttvEmotes(() -> onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_BTTV_FETCHED)));
 
         if (vodId == null) {
             ChatProperties properties = fetchChatProperties();
@@ -132,34 +121,31 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         super.onProgressUpdate(values);
         final ProgressUpdate update = values[0];
         final ProgressUpdate.UpdateType type = update.getUpdateType();
-        callbackHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                switch (type) {
-                    case ON_MESSAGE:
-                        callback.onMessage(update.getMessage());
-                        break;
-                    case ON_CONNECTED:
-                        callback.onConnected();
-                        break;
-                    case ON_CONNECTING:
-                        callback.onConnecting();
-                        break;
-                    case ON_CONNECTION_FAILED:
-                        callback.onConnectionFailed();
-                        break;
-                    case ON_RECONNECTING:
-                        callback.onReconnecting();
-                        break;
-                    case ON_ROOMSTATE_CHANGE:
-                        callback.onRoomstateChange(chatIsR9kmode, chatIsSlowmode, chatIsSubsonlymode);
-                        break;
-                    case ON_BTTV_FETCHED:
-                        callback.onBttvEmoteIdFetched(
-                                mEmoteManager.getChanncelBttvEmotes(), mEmoteManager.getGlobalBttvEmotes()
-                        );
-                        break;
-                }
+        callbackHandler.post(() -> {
+            switch (type) {
+                case ON_MESSAGE:
+                    callback.onMessage(update.getMessage());
+                    break;
+                case ON_CONNECTED:
+                    callback.onConnected();
+                    break;
+                case ON_CONNECTING:
+                    callback.onConnecting();
+                    break;
+                case ON_CONNECTION_FAILED:
+                    callback.onConnectionFailed();
+                    break;
+                case ON_RECONNECTING:
+                    callback.onReconnecting();
+                    break;
+                case ON_ROOMSTATE_CHANGE:
+                    callback.onRoomstateChange(chatIsR9kmode, chatIsSlowmode, chatIsSubsonlymode);
+                    break;
+                case ON_BTTV_FETCHED:
+                    callback.onBttvEmoteIdFetched(
+                            mEmoteManager.getChanncelBttvEmotes(), mEmoteManager.getGlobalBttvEmotes()
+                    );
+                    break;
             }
         });
     }
@@ -183,14 +169,14 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             @SuppressWarnings("resource")
             Socket socket = new Socket(address, port);
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             writer.write("PASS " + oauth_key + "\r\n");
             writer.write("NICK " + user + "\r\n");
             writer.write("USER " + user + " \r\n");
             writer.flush();
 
-            String line = "";
+            String line;
             while ((line = reader.readLine()) != null) {
                 if (isStopping) {
                     leaveChannel();
@@ -317,9 +303,9 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                         }
                         emotes.addAll(mEmoteManager.findBttvEmotes(body));
 
-                        boolean highlight = false;//Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
+                        //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
-                        ChatMessage chatMessage = new ChatMessage(body, displayName, color, isMod, isTurbo, isSubscriber, emotes, subscriberIcon, highlight);
+                        ChatMessage chatMessage = new ChatMessage(body, displayName, color, isMod, isTurbo, isSubscriber, emotes, subscriberIcon, false);
                         publishProgress(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
 
                         downloadedComments.remove(i);
@@ -338,18 +324,25 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         Matcher noticeMatcher = noticePattern.matcher(line);
         if (noticeMatcher.find()) {
             String msgId = noticeMatcher.group(1);
-            if (msgId.equals("subs_on")) {
-                chatIsSubsonlymode = true;
-            } else if (msgId.equals("subs_off")) {
-                chatIsSubsonlymode = false;
-            } else if (msgId.equals("slow_on")) {
-                chatIsSlowmode = true;
-            } else if (msgId.equals("slow_off")) {
-                chatIsSlowmode = false;
-            } else if (msgId.equals("r9k_on")) {
-                chatIsR9kmode = true;
-            } else if (msgId.equals("r9k_off")) {
-                chatIsR9kmode = false;
+            switch (msgId) {
+                case "subs_on":
+                    chatIsSubsonlymode = true;
+                    break;
+                case "subs_off":
+                    chatIsSubsonlymode = false;
+                    break;
+                case "slow_on":
+                    chatIsSlowmode = true;
+                    break;
+                case "slow_off":
+                    chatIsSlowmode = false;
+                    break;
+                case "r9k_on":
+                    chatIsR9kmode = true;
+                    break;
+                case "r9k_off":
+                    chatIsR9kmode = false;
+                    break;
             }
 
             onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_ROOMSTATE_CHANGE));
@@ -424,9 +417,9 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             boolean isTurbo = stdVarMatcher.group(5).equals("1");
             String message = stdVarMatcher.group(6);
             emotes.addAll(mEmoteManager.findBttvEmotes(message));
-            boolean highlight = false;//Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
+            //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
-            ChatMessage chatMessage = new ChatMessage(message, displayName, color, isMod, isTurbo, isSubscriber, emotes, subscriberIcon, highlight);
+            ChatMessage chatMessage = new ChatMessage(message, displayName, color, isMod, isTurbo, isSubscriber, emotes, subscriberIcon, false);
             publishProgress(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
         } else {
             Log.e(LOG_TAG, "Failed to find message pattern in: \n" + line);
@@ -482,7 +475,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     /**
      * Leaves the current hashChannel
      */
-    public void leaveChannel() {
+    private void leaveChannel() {
         sendRawMessage("PART " + hashChannel);
     }
 
@@ -578,16 +571,16 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         private UpdateType updateType;
         private ChatMessage message;
 
-        public ProgressUpdate(UpdateType type) {
+        ProgressUpdate(UpdateType type) {
             updateType = type;
         }
 
-        public ProgressUpdate(UpdateType type, ChatMessage aMessage) {
+        ProgressUpdate(UpdateType type, ChatMessage aMessage) {
             updateType = type;
             message = aMessage;
         }
 
-        public UpdateType getUpdateType() {
+        UpdateType getUpdateType() {
             return updateType;
         }
 

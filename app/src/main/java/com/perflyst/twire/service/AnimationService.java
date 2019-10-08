@@ -268,13 +268,9 @@ public class AnimationService {
         });
 
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (aCard != null)
-                    aCard.startAnimation(animationSet);
-            }
-
+        new Handler().postDelayed(() -> {
+            if (aCard != null)
+                aCard.startAnimation(animationSet);
         }, delay);
     }
 
@@ -319,7 +315,7 @@ public class AnimationService {
     /**
      * For the Card Views
      */
-    public static AnimationSet startAlphaRevealAnimation(int delay, final View VIEW, boolean includeTransition) {
+    public static void startAlphaRevealAnimation(int delay, final View VIEW, boolean includeTransition) {
         final int ANIMATION_DURATION = 300;
 
         final Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
@@ -339,18 +335,14 @@ public class AnimationService {
             mRevealAnimations.addAnimation(mTransitionAnimation);
         }
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (VIEW != null)
-                    VIEW.startAnimation(mRevealAnimations);
-            }
+        new Handler().postDelayed(() -> {
+            if (VIEW != null)
+                VIEW.startAnimation(mRevealAnimations);
         }, delay);
 
-        return mRevealAnimations;
     }
 
-    public static AnimationSet startAlphaHideAnimation(final int DELAY, final View VIEW, boolean includeTransition) {
+    private static AnimationSet startAlphaHideAnimation(final int DELAY, final View VIEW, boolean includeTransition) {
         final int ANIMATION_DURATION = 300;
         if (VIEW == null)
             return null;
@@ -372,9 +364,7 @@ public class AnimationService {
             mHideAnimations.addAnimation(mTransitionAnimation);
         }
 
-        new Handler().postDelayed(() -> {
-            VIEW.startAnimation(mHideAnimations);
-        }, DELAY);
+        new Handler().postDelayed(() -> VIEW.startAnimation(mHideAnimations), DELAY);
 
         return mHideAnimations;
     }
@@ -383,7 +373,7 @@ public class AnimationService {
      * For the Activity Circle Icon and text
      */
 
-    public static AnimationSet startAlphaRevealAnimation(final View VIEW) {
+    public static void startAlphaRevealAnimation(final View VIEW) {
         final int ANIMATION_DURATION = 1000;
 
         final Animation mShowViewAnimation = new AlphaAnimation(0f, 1f);
@@ -397,7 +387,6 @@ public class AnimationService {
         if (VIEW != null)
             VIEW.startAnimation(mAnimations);
 
-        return mAnimations;
     }
 
     public static AnimationSet startAlphaHideAnimation(final View VIEW) {

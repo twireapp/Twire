@@ -3,9 +3,6 @@ package com.perflyst.twire.activities.main;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.perflyst.twire.R;
@@ -35,14 +32,11 @@ public abstract class LazyMainActivity<T> extends MainActivity implements LazyFe
 
         // Fetch new elements after the adapter animations are done
         // ToDo: These elements should be loaded while the animations are running. But not be added until the animations are done.
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setCurrentOffset(0);
-                getRecyclerView().scrollToPosition(0);
-                GetVisualElementsTask<Game> getTopGamesTask = new GetVisualElementsTask<>();
-                getTopGamesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LazyMainActivity.this);
-            }
+        new Handler().postDelayed(() -> {
+            setCurrentOffset(0);
+            getRecyclerView().scrollToPosition(0);
+            GetVisualElementsTask<Game> getTopGamesTask = new GetVisualElementsTask<>();
+            getTopGamesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LazyMainActivity.this);
         }, duration);
     }
 
@@ -54,19 +48,7 @@ public abstract class LazyMainActivity<T> extends MainActivity implements LazyFe
         snackbar = setupSnackbar();
 
         mSwipeRefreshLayout.setProgressViewOffset(true, (int) getResources().getDimension(R.dimen.swipe_refresh_start_offset), (int) getResources().getDimension(R.dimen.swipe_refresh_end_offset));
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Runnable() {
-
-                    @Override
-                    public void run() {
-                        refreshElements();
-                    }
-
-                }.run();
-            }
-        });
+        mSwipeRefreshLayout.setOnRefreshListener(this::refreshElements);
 
         //  Set up the specialized OnScrollListener
         mRecyclerView.clearOnScrollListeners();
@@ -99,26 +81,18 @@ public abstract class LazyMainActivity<T> extends MainActivity implements LazyFe
         String actionString = getResources().getString(R.string.no_server_response_action);
         Snackbar snackbar = Snackbar
                 .make(mRecyclerView, responseMessage, Snackbar.LENGTH_LONG);
-        snackbar.setAction(actionString, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scrollToTopAndRefresh();
-            }
-        });
+        snackbar.setAction(actionString, v -> scrollToTopAndRefresh());
 
         return snackbar;
     }
 
     protected void shouldShowErrorView() {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mErrorEmoteView != null && mErrorView != null) {
-                    if (getMaxElementsToFetch() == 0) {
-                        showErrorView();
-                    } else {
-                        hideErrorView();
-                    }
+        runOnUiThread(() -> {
+            if (mErrorEmoteView != null && mErrorView != null) {
+                if (getMaxElementsToFetch() == 0) {
+                    showErrorView();
+                } else {
+                    hideErrorView();
                 }
             }
         });

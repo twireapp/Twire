@@ -8,7 +8,9 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.TextView;
 
-public class FontFitTextView extends TextView {
+import androidx.appcompat.widget.AppCompatTextView;
+
+public class FontFitTextView extends AppCompatTextView {
 
     // Minimum text size for this text view
     public static final float MIN_TEXT_SIZE = 20;

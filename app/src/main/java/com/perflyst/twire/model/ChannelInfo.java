@@ -181,7 +181,7 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         return logoImage;
     }
 
-    public void setLogoImage(Bitmap logoImage) {
+    private void setLogoImage(Bitmap logoImage) {
         this.logoImage = logoImage;
     }
 
@@ -189,7 +189,7 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         return videoBannerImage;
     }
 
-    public void setVideoBannerImage(Bitmap videoBannerImage) {
+    private void setVideoBannerImage(Bitmap videoBannerImage) {
         this.videoBannerImage = videoBannerImage;
     }
 
@@ -197,7 +197,7 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         return profileBannerImage;
     }
 
-    public void setProfileBannerImage(Bitmap profileBannerImage) {
+    private void setProfileBannerImage(Bitmap profileBannerImage) {
         this.profileBannerImage = profileBannerImage;
     }
 

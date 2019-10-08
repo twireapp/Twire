@@ -36,8 +36,9 @@ import java.util.List;
 /**
  * Created by Sebastian Rask on 03-04-2016.
  */
-public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement, T extends MainActivityAdapter.ElementsViewHolder> extends RecyclerView.Adapter<T> {
-    protected boolean isBelowLollipop, removeBlackbars;
+public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
+        T extends MainActivityAdapter.ElementsViewHolder> extends RecyclerView.Adapter<T> {
+    private boolean isBelowLollipop, removeBlackbars;
     private String LOG_TAG,
             elementStyle;
     private List<E> mElements;
@@ -70,18 +71,10 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         isBelowLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
         sortElements = true;
         animateInsert = true;
-        mOnClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleElementOnClick(v);
-            }
-        };
-        mOnLongClickListener = new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                handleElementOnLongClick(v);
-                return true;
-            }
+        mOnClickListener = this::handleElementOnClick;
+        mOnLongClickListener = v -> {
+            handleElementOnLongClick(v);
+            return true;
         };
     }
 
@@ -133,7 +126,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
      *
      * @param viewHolder The viewholder to apply the style to
      */
-    protected void initElementStyle(T viewHolder) {
+    private void initElementStyle(T viewHolder) {
         String elementStyle = getElementStyle();
         if (elementStyle.equals(getContext().getString(R.string.card_style_expanded))) {
             setExpandedStyle(viewHolder);
@@ -144,7 +137,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         }
     }
 
-    protected void loadImagePreview(String previewURL, E element, final ElementsViewHolder viewHolder) {
+    private void loadImagePreview(String previewURL, E element, final ElementsViewHolder viewHolder) {
         if (previewURL != null && !previewURL.isEmpty()) {
             if (previewURL.contains("https")) {
                 previewURL = previewURL.replace("https", "http");
@@ -281,13 +274,10 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
             mAnimSet.setFillAfter(true);
             mAnimSet.setFillBefore(true);
 
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    View v = mRecyclerView.getManager().getChildAt(finalI);
-                    if (v != null) {
-                        v.startAnimation(mAnimSet);
-                    }
+            new Handler().postDelayed(() -> {
+                View v = mRecyclerView.getManager().getChildAt(finalI);
+                if (v != null) {
+                    v.startAnimation(mAnimSet);
                 }
             }, delay);
 
@@ -296,12 +286,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
             }
         }
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                clearNoAnimation();
-            }
-        }, timeBeforeLastAnimIsDone);
+        new Handler().postDelayed(this::clearNoAnimation, timeBeforeLastAnimIsDone);
 
         return timeBeforeLastAnimIsDone;
     }
@@ -417,7 +402,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
 
     abstract int calculateCardWidth();
 
-    public List<E> getElements() {
+    List<E> getElements() {
         return mElements;
     }
 
@@ -437,7 +422,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         return mRecyclerView;
     }
 
-    public int getTopMargin() {
+    int getTopMargin() {
         return topMargin;
     }
 
@@ -445,7 +430,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         topMargin = newTopMargin;
     }
 
-    public int getCardWidth() {
+    int getCardWidth() {
         return cardWidth;
     }
 
@@ -461,7 +446,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         animateInsert = false;
     }
 
-    public HashMap<CharSequence, PreviewTarget> getTargets() {
+    HashMap<CharSequence, PreviewTarget> getTargets() {
         return mTargets;
     }
 
@@ -470,7 +455,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
     }
 
     protected abstract static class ElementsViewHolder extends RecyclerView.ViewHolder {
-        public ElementsViewHolder(View v) {
+        ElementsViewHolder(View v) {
             super(v);
         }
 

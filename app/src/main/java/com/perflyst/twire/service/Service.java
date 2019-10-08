@@ -1,9 +1,7 @@
 package com.perflyst.twire.service;
 
-import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
@@ -40,7 +38,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorRes;
@@ -72,6 +69,8 @@ import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
@@ -82,7 +81,6 @@ import java.util.TreeMap;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
@@ -94,12 +92,7 @@ import javax.net.ssl.X509TrustManager;
 public class Service {
 
     // always verify the host - dont check for certificate
-    public final static HostnameVerifier DO_NOT_VERIFY = new HostnameVerifier() {
-        @SuppressLint("BadHostnameVerifier")
-        public boolean verify(String hostname, SSLSession session) {
-            return true;
-        }
-    };
+    public final static HostnameVerifier DO_NOT_VERIFY = (hostname, session) -> true;
     public static int NOTIFICATION_ALARM_ID = 754641782;
 
     /**
@@ -157,7 +150,7 @@ public class Service {
     /**
      * Converts Double to time. f.eks. 4.5 becomes "04"
      */
-    public static String numberToTime(double time) {
+    private static String numberToTime(double time) {
         int timeInt = ((int) Math.floor(time));
 
         if (timeInt < 10) {
@@ -263,13 +256,11 @@ public class Service {
      * @param toColor   The To Color
      * @param fromColor The From Color
      * @param duration  The Duration of the animation
-     * @return the animator
      */
-    public static Animator animateBackgroundColorChange(View v, int toColor, int fromColor, int duration) {
+    public static void animateBackgroundColorChange(View v, int toColor, int fromColor, int duration) {
         ObjectAnimator colorFade = ObjectAnimator.ofObject(v, "backgroundColor", new ArgbEvaluator(), fromColor, toColor);
         colorFade.setDuration(duration);
         colorFade.start();
-        return colorFade;
     }
 
     /**
@@ -321,8 +312,8 @@ public class Service {
     /**
      * Converts a drawable to a bitmap and returns it.
      */
-    public static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap = null;
+    private static Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap;
 
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
@@ -590,7 +581,7 @@ public class Service {
         URL url;
         HttpURLConnection conn = null;
         Scanner in = null;
-        String result = "";
+        StringBuilder result = new StringBuilder();
 
         try {
             url = new URL(urlToRead);
@@ -606,7 +597,7 @@ public class Service {
 
             while (in.hasNextLine()) {
                 String line = in.nextLine();
-                result += line;
+                result.append(line);
             }
 
             in.close();
@@ -625,23 +616,24 @@ public class Service {
             Log.v("URL TO JSON STRING", "Result of reading - " + result);
         }
 
-        return result;
+        return result.toString();
     }
 
     public static HttpURLConnection openConnection(URL url) throws IOException {
-//        HttpURLConnection conn = null;
-//
-//        if (url.getProtocol().toLowerCase().equals("https")) {
-//            trustAllHosts();
-//            HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
-//            https.setHostnameVerifier(DO_NOT_VERIFY);
-//            conn = https;
-//        } else {
-//            conn = (HttpURLConnection) url.openConnection();
-//        }
-//
-//        return conn;
+/*
+        HttpURLConnection conn = null;
 
+        if (url.getProtocol().toLowerCase().equals("https")) {
+            trustAllHosts();
+            HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
+            https.setHostnameVerifier(DO_NOT_VERIFY);
+            conn = https;
+        } else {
+            conn = (HttpURLConnection) url.openConnection();
+        }
+
+        return conn;
+*/
         return (HttpURLConnection) url.openConnection();
     }
 
@@ -653,17 +645,17 @@ public class Service {
         TrustManager[] trustAllCerts = new TrustManager[]{
                 new X509TrustManager() {
                     @Override
-                    public void checkClientTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) throws java.security.cert.CertificateException {
+                    public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
 
                     }
 
                     @Override
-                    public void checkServerTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) throws java.security.cert.CertificateException {
+                    public void checkServerTrusted(X509Certificate[] x509Certificates, String s) {
 
                     }
 
-                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                        return new java.security.cert.X509Certificate[]{};
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return new X509Certificate[]{};
                     }
                 }
         };
@@ -671,7 +663,7 @@ public class Service {
         // Install the all-trusting trust manager
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            sc.init(null, trustAllCerts, new SecureRandom());
             HttpsURLConnection
                     .setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
@@ -722,7 +714,7 @@ public class Service {
     /**
      * Connects to the database containing data of user follows. Loops through every record of in the database and creates a StreamerInfo object for these
      */
-    public static Map<String, ChannelInfo> getStreamerInfoFromDB(String LOG_TAG, Context context, boolean includeThumbnails) {
+    public static Map<String, ChannelInfo> getStreamerInfoFromDB(Context context, boolean includeThumbnails) {
         Map<String, ChannelInfo> subscriptions = new TreeMap<>();
         SubscriptionsDbHelper mDbHelper = new SubscriptionsDbHelper(context);
         final boolean DISTINCT = true;
@@ -772,7 +764,8 @@ public class Service {
                 }
 
                 // Create new StreamerInfo object from data fetched from database
-                ChannelInfo mChannelInfo = new ChannelInfo(streamerId, streamerName, displayName, streamDescription, followers, views, logo, videoBanner, profileBanner, includeThumbnails);
+                ChannelInfo mChannelInfo = new ChannelInfo(streamerId, streamerName, displayName,
+                        streamDescription, followers, views, logo, videoBanner, profileBanner, includeThumbnails);
                 mChannelInfo.setNotifyWhenLive(notifyWhenLive);
                 subscriptions.put(mChannelInfo.getStreamerName(), mChannelInfo);
 
@@ -913,7 +906,7 @@ public class Service {
         } else return orientation != Configuration.ORIENTATION_LANDSCAPE;
     }
 
-    public static void setTopRounded(Bitmap workingBitmap, ImageView v, Context context, float cornerRadius) {
+    public static void setTopRounded(Bitmap workingBitmap, float cornerRadius) {
         int w = workingBitmap.getWidth();
         int h = workingBitmap.getHeight();
         Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);

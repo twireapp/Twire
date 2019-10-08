@@ -4,10 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 
+import androidx.appcompat.widget.AppCompatEditText;
+
 /**
  * Created by Sebastian Rask JEpsen on 28/07/16.
  */
-public class EditTextBackEvent extends androidx.appcompat.widget.AppCompatEditText {
+public class EditTextBackEvent extends AppCompatEditText {
 
     private EditTextImeBackListener mOnImeBack;
 

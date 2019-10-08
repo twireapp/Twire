@@ -26,12 +26,7 @@ public class SettingsCategoryAdapter extends SRJAdapter<SettingsCategory, Settin
 
     @Override
     protected ViewHolderFactory<SettingsCategoryViewHolder> getViewHolderCreator(int i) {
-        return new ViewHolderFactory<SettingsCategoryViewHolder>() {
-            @Override
-            public SettingsCategoryViewHolder create(View view) {
-                return new SettingsCategoryViewHolder(view);
-            }
-        };
+        return SettingsCategoryViewHolder::new;
     }
 
     public class SettingsCategoryViewHolder extends SRJViewHolder<SettingsCategory> {
@@ -44,7 +39,7 @@ public class SettingsCategoryAdapter extends SRJAdapter<SettingsCategory, Settin
         @BindView(R.id.img_category_icon)
         protected ImageView mCategoryIconView;
 
-        public SettingsCategoryViewHolder(View itemView) {
+        SettingsCategoryViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

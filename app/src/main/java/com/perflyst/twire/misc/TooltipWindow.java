@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,64 +31,62 @@ public class TooltipWindow {
     private static final int MSG_DISMISS_TOOLTIP = 100;
     public static int POSITION_TO_RIGHT = 0,
             POSITION_BOTTOM = 1;
-    private final int REVEAL_DURATION = 500, HIDEDELAY = 1000 * 5;
+    private final int REVEAL_DURATION = 500;
     private PopupWindow tipWindow;
     private View contentView;
     private TextView mTipText;
     private ImageView mNavLeftArrow, mNavUpArrow;
     private LinearLayout mainLayout;
     private SupportAnimator revealTransition;
-    Handler handler = new Handler() {
-        public void handleMessage(android.os.Message msg) {
-            switch (msg.what) {
-                case MSG_DISMISS_TOOLTIP:
-                    if (tipWindow != null && tipWindow.isShowing()) {
-                        if (revealTransition != null) {
-                            SupportAnimator hideAnim = revealTransition.reverse();
-                            if (hideAnim != null) {
-                                hideAnim.setInterpolator(new AccelerateDecelerateInterpolator());
-                                hideAnim.setDuration(REVEAL_DURATION);
-                                hideAnim.addListener(new SupportAnimator.AnimatorListener() {
-                                    @Override
-                                    public void onAnimationStart() {
 
-                                    }
+    private Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            if (msg.what == MSG_DISMISS_TOOLTIP) {
+                if (tipWindow != null && tipWindow.isShowing()) {
+                    if (revealTransition != null) {
+                        SupportAnimator hideAnim = revealTransition.reverse();
+                        if (hideAnim != null) {
+                            hideAnim.setInterpolator(new AccelerateDecelerateInterpolator());
+                            hideAnim.setDuration(REVEAL_DURATION);
+                            hideAnim.addListener(new SupportAnimator.AnimatorListener() {
+                                @Override
+                                public void onAnimationStart() {
 
-                                    @Override
-                                    public void onAnimationEnd() {
-                                        if (tipWindow != null) {
-                                            tipWindow.dismiss();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onAnimationCancel() {
-
-                                    }
-
-                                    @Override
-                                    public void onAnimationRepeat() {
-
-                                    }
-                                });
-                                hideAnim.start();
-                            } else {
-                                if (tipWindow != null) {
-                                    tipWindow.dismiss();
                                 }
-                            }
 
+                                @Override
+                                public void onAnimationEnd() {
+                                    if (tipWindow != null) {
+                                        tipWindow.dismiss();
+                                    }
+                                }
 
+                                @Override
+                                public void onAnimationCancel() {
+
+                                }
+
+                                @Override
+                                public void onAnimationRepeat() {
+
+                                }
+                            });
+                            hideAnim.start();
                         } else {
-                            tipWindow.dismiss();
+                            if (tipWindow != null) {
+                                tipWindow.dismiss();
+                            }
                         }
-                    }
 
-                    break;
+
+                    } else {
+                        tipWindow.dismiss();
+                    }
+                }
             }
         }
     };
-    private int position = POSITION_TO_RIGHT;
+    private int position;
 
     public TooltipWindow(Context ctx, int aPosition) {
         tipWindow = new PopupWindow(ctx);
@@ -147,37 +146,35 @@ public class TooltipWindow {
                 position_y);
 
 
-        contentView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                revealTransition = ViewAnimationUtils.createCircularReveal(mainLayout, (int) mainLayout.getX(), (int) (mainLayout.getY() + mainLayout.getHeight() / 2), 0, mainLayout.getWidth());
-                revealTransition.setInterpolator(new AccelerateDecelerateInterpolator());
-                revealTransition.setDuration(REVEAL_DURATION);
-                revealTransition.addListener(new SupportAnimator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart() {
-                        mainLayout.setVisibility(View.VISIBLE);
-                    }
+        contentView.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            revealTransition = ViewAnimationUtils.createCircularReveal(mainLayout, (int) mainLayout.getX(), (int) (mainLayout.getY() + mainLayout.getHeight() / 2), 0, mainLayout.getWidth());
+            revealTransition.setInterpolator(new AccelerateDecelerateInterpolator());
+            revealTransition.setDuration(REVEAL_DURATION);
+            revealTransition.addListener(new SupportAnimator.AnimatorListener() {
+                @Override
+                public void onAnimationStart() {
+                    mainLayout.setVisibility(View.VISIBLE);
+                }
 
-                    @Override
-                    public void onAnimationEnd() {
+                @Override
+                public void onAnimationEnd() {
 
-                    }
+                }
 
-                    @Override
-                    public void onAnimationCancel() {
+                @Override
+                public void onAnimationCancel() {
 
-                    }
+                }
 
-                    @Override
-                    public void onAnimationRepeat() {
+                @Override
+                public void onAnimationRepeat() {
 
-                    }
-                });
-                revealTransition.start();
-            }
+                }
+            });
+            revealTransition.start();
         });
 
+        int HIDEDELAY = 1000 * 5;
         handler.sendEmptyMessageDelayed(MSG_DISMISS_TOOLTIP, HIDEDELAY);
     }
 

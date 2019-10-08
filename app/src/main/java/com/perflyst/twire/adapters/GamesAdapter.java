@@ -22,13 +22,13 @@ import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
  * Created by Sebastian Rask on 11-04-2016.
  */
 class GameViewHolder extends MainActivityAdapter.ElementsViewHolder {
-    protected View sharedPadding;
+    View sharedPadding;
     private TextView vGameViewers;
     private TextView vGameTitle;
     private ImageView vGamePreview;
     private CardView vCard;
 
-    public GameViewHolder(View v) {
+    GameViewHolder(View v) {
         super(v);
         vGamePreview = v.findViewById(R.id.image_game_preview);
         vGameTitle = v.findViewById(R.id.game_card_title);
@@ -37,15 +37,15 @@ class GameViewHolder extends MainActivityAdapter.ElementsViewHolder {
         sharedPadding = v.findViewById(R.id.shared_padding);
     }
 
-    public TextView getGameViewers() {
+    TextView getGameViewers() {
         return vGameViewers;
     }
 
-    public TextView getGameTitle() {
+    TextView getGameTitle() {
         return vGameTitle;
     }
 
-    public ImageView getGamePreview() {
+    private ImageView getGamePreview() {
         return vGamePreview;
     }
 

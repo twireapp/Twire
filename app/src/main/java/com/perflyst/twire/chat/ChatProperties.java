@@ -16,7 +16,7 @@ class ChatProperties {
     private List<String> chatServers;
     private Random random = new Random();
 
-    public ChatProperties(boolean hideLinks, boolean requireVerifiedAccount, boolean isSubsOnly, boolean isEvent, String cluster, List<String> chatServers) {
+    ChatProperties(boolean hideLinks, boolean requireVerifiedAccount, boolean isSubsOnly, boolean isEvent, String cluster, List<String> chatServers) {
         this.hideLinks = hideLinks;
         this.requireVerifiedAccount = requireVerifiedAccount;
         this.isSubsOnly = isSubsOnly;
@@ -25,7 +25,7 @@ class ChatProperties {
         this.chatServers = chatServers;
     }
 
-    public String getChatIp() {
+    String getChatIp() {
         int positions = random.nextInt(chatServers.size());
         return chatServers.get(positions);
     }

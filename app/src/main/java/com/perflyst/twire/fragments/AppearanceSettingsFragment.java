@@ -19,7 +19,6 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
-import com.perflyst.twire.views.LayoutSelector;
 
 public class AppearanceSettingsFragment extends Fragment {
     private String LOG_TAG = getClass().getSimpleName();
@@ -66,60 +65,25 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void initOnClicks(View rootView) {
         final View themeColorWrapper = rootView.findViewById(R.id.appearance_theme_color_wrapper);
-        themeColorWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickThemeColor(themeColorWrapper);
-            }
-        });
+        themeColorWrapper.setOnClickListener(v -> onClickThemeColor());
 
         final View streamStyleWrapper = rootView.findViewById(R.id.appearance_streams_style_wrapper);
-        streamStyleWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickStreamStyle(v);
-            }
-        });
+        streamStyleWrapper.setOnClickListener(view -> onClickStreamStyle());
 
         final View streamSizeWrapper = rootView.findViewById(R.id.appearance_streams_size_wrapper);
-        streamSizeWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickStreamSize(v);
-            }
-        });
+        streamSizeWrapper.setOnClickListener(v -> onClickStreamSize());
 
         final View gameStyleWrapper = rootView.findViewById(R.id.appearance_game_style_wrapper);
-        gameStyleWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickGameStyle(v);
-            }
-        });
+        gameStyleWrapper.setOnClickListener(view -> onClickGameStyle());
 
         final View gameSizeWrapper = rootView.findViewById(R.id.appearance_game_size_wrapper);
-        gameSizeWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickGameSize(v);
-            }
-        });
+        gameSizeWrapper.setOnClickListener(v1 -> onClickGameSize());
 
         final View streamerStyleWrapper = rootView.findViewById(R.id.appearance_streamer_style_wrapper);
-        streamerStyleWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickStreamerStyle(v);
-            }
-        });
+        streamerStyleWrapper.setOnClickListener(view -> onClickStreamerStyle());
 
         final View streamerSizeWrapper = rootView.findViewById(R.id.appearance_streamer_size_wrapper);
-        streamerSizeWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onClickStreamerSize(v);
-            }
-        });
+        streamerSizeWrapper.setOnClickListener(v -> onClickStreamerSize());
     }
 
     private void initSummaries() {
@@ -153,158 +117,139 @@ public class AppearanceSettingsFragment extends Fragment {
         return ContextCompat.getDrawable(getContext(), drawableRes);
     }
 
-    public void onClickThemeColor(View view) {
+    private void onClickThemeColor() {
         MaterialDialog themeChooserDialog = DialogService.getThemeDialog(getActivity());
         themeChooserDialog.show();
     }
 
-    public void onClickStreamStyle(View view) {
-        DialogService.getChooseStreamCardStyleDialog(getActivity(), new LayoutSelector.OnLayoutSelected() {
-            @Override
-            public void onSelected(String title, int index, View previewView) {
+    private void onClickStreamStyle() {
+        DialogService.getChooseStreamCardStyleDialog(getActivity(), (title, index, previewView) -> {
 
-                View sharedPadding = previewView.findViewById(R.id.shared_padding);
-                ImageView view = previewView.findViewById(R.id.image_stream_preview);
-                view.setImageResource(R.drawable.preview_stream);
-                View streamTitle = previewView.findViewById(R.id.stream_title);
-                View viewersAndGame = previewView.findViewById(R.id.stream_game_and_viewers);
+            View sharedPadding = previewView.findViewById(R.id.shared_padding);
+            ImageView view1 = previewView.findViewById(R.id.image_stream_preview);
+            view1.setImageResource(R.drawable.preview_stream);
+            View streamTitle = previewView.findViewById(R.id.stream_title);
+            View viewersAndGame = previewView.findViewById(R.id.stream_game_and_viewers);
 
-                if (title.equals(getString(R.string.card_style_expanded))) {
-                    streamTitle.setVisibility(View.VISIBLE);
-                    viewersAndGame.setVisibility(View.VISIBLE);
-                    sharedPadding.setVisibility(View.VISIBLE);
-                } else if (title.equals(getString(R.string.card_style_normal))) {
-                    streamTitle.setVisibility(View.GONE);
-                    viewersAndGame.setVisibility(View.VISIBLE);
-                    sharedPadding.setVisibility(View.VISIBLE);
-                } else if (title.equals(getString(R.string.card_style_minimal))) {
-                    streamTitle.setVisibility(View.GONE);
-                    viewersAndGame.setVisibility(View.GONE);
-                    sharedPadding.setVisibility(View.GONE);
-                }
-
-                settings.setAppearanceStreamStyle(title);
-                initSummaries();
-
+            if (title.equals(getString(R.string.card_style_expanded))) {
+                streamTitle.setVisibility(View.VISIBLE);
+                viewersAndGame.setVisibility(View.VISIBLE);
+                sharedPadding.setVisibility(View.VISIBLE);
+            } else if (title.equals(getString(R.string.card_style_normal))) {
+                streamTitle.setVisibility(View.GONE);
+                viewersAndGame.setVisibility(View.VISIBLE);
+                sharedPadding.setVisibility(View.VISIBLE);
+            } else if (title.equals(getString(R.string.card_style_minimal))) {
+                streamTitle.setVisibility(View.GONE);
+                viewersAndGame.setVisibility(View.GONE);
+                sharedPadding.setVisibility(View.GONE);
             }
+
+            settings.setAppearanceStreamStyle(title);
+            initSummaries();
+
         }).show();
     }
 
-    public void onClickGameStyle(View view) {
-        DialogService.getChooseGameCardStyleDialog(getActivity(), new LayoutSelector.OnLayoutSelected() {
-            @Override
-            public void onSelected(String title, int index, View previewView) {
+    private void onClickGameStyle() {
+        DialogService.getChooseGameCardStyleDialog(getActivity(), (title, index, previewView) -> {
 
-                View sharedPadding = previewView.findViewById(R.id.shared_padding);
-                ImageView view = previewView.findViewById(R.id.image_game_preview);
-                view.setImageResource(R.drawable.preview_game);
+            View sharedPadding = previewView.findViewById(R.id.shared_padding);
+            ImageView view1 = previewView.findViewById(R.id.image_game_preview);
+            view1.setImageResource(R.drawable.preview_game);
 
-                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                        (int) getContext().getResources().getDimension(R.dimen.game_preview_width),
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                lp.gravity = Gravity.CENTER;
-                previewView.setLayoutParams(lp);
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                    (int) getContext().getResources().getDimension(R.dimen.game_preview_width),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            lp.gravity = Gravity.CENTER;
+            previewView.setLayoutParams(lp);
 
-                View gameTitle = previewView.findViewById(R.id.game_card_title);
-                TextView gameViewers = previewView.findViewById(R.id.game_viewers);
-                if (gameViewers.getText().equals("")) {
-                    gameViewers.setText(getString(R.string.preview_game_viewers));
-                }
-
-                if (title.equals(getString(R.string.card_style_expanded))) {
-                    gameTitle.setVisibility(View.VISIBLE);
-                    gameViewers.setVisibility(View.VISIBLE);
-                    sharedPadding.setVisibility(View.VISIBLE);
-                } else if (title.equals(getString(R.string.card_style_normal))) {
-                    gameTitle.setVisibility(View.GONE);
-                    gameViewers.setVisibility(View.VISIBLE);
-                    sharedPadding.setVisibility(View.VISIBLE);
-                } else if (title.equals(getString(R.string.card_style_minimal))) {
-                    gameTitle.setVisibility(View.GONE);
-                    gameViewers.setVisibility(View.GONE);
-                    sharedPadding.setVisibility(View.GONE);
-                }
-
-                settings.setAppearanceGameStyle(title);
-                initSummaries();
+            View gameTitle = previewView.findViewById(R.id.game_card_title);
+            TextView gameViewers = previewView.findViewById(R.id.game_viewers);
+            if (gameViewers.getText().equals("")) {
+                gameViewers.setText(getString(R.string.preview_game_viewers));
             }
+
+            if (title.equals(getString(R.string.card_style_expanded))) {
+                gameTitle.setVisibility(View.VISIBLE);
+                gameViewers.setVisibility(View.VISIBLE);
+                sharedPadding.setVisibility(View.VISIBLE);
+            } else if (title.equals(getString(R.string.card_style_normal))) {
+                gameTitle.setVisibility(View.GONE);
+                gameViewers.setVisibility(View.VISIBLE);
+                sharedPadding.setVisibility(View.VISIBLE);
+            } else if (title.equals(getString(R.string.card_style_minimal))) {
+                gameTitle.setVisibility(View.GONE);
+                gameViewers.setVisibility(View.GONE);
+                sharedPadding.setVisibility(View.GONE);
+            }
+
+            settings.setAppearanceGameStyle(title);
+            initSummaries();
         }).show();
     }
 
-    public void onClickStreamerStyle(View view) {
-        DialogService.getChooseStreamerCardStyleDialog(getActivity(), new LayoutSelector.OnLayoutSelected() {
-            @Override
-            public void onSelected(String title, int index, View previewView) {
+    private void onClickStreamerStyle() {
+        DialogService.getChooseStreamerCardStyleDialog(getActivity(), (title, index, previewView) -> {
 
-                View nameView = previewView.findViewById(R.id.displayName);
-                ImageView streamerLogo = previewView.findViewById(R.id.profileLogoImageView);
-                streamerLogo.setImageResource(R.drawable.preview_streamer);
+            View nameView = previewView.findViewById(R.id.displayName);
+            ImageView streamerLogo = previewView.findViewById(R.id.profileLogoImageView);
+            streamerLogo.setImageResource(R.drawable.preview_streamer);
 
-                FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                        (int) getContext().getResources().getDimension(R.dimen.subscription_card_preview_width),
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                lp.gravity = Gravity.CENTER;
-                previewView.setLayoutParams(lp);
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
+                    (int) getContext().getResources().getDimension(R.dimen.subscription_card_preview_width),
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+            lp.gravity = Gravity.CENTER;
+            previewView.setLayoutParams(lp);
 
-                if (title.equals(getString(R.string.card_style_normal))) {
-                    nameView.setVisibility(View.VISIBLE);
-                } else if (title.equals(getString(R.string.card_style_minimal))) {
-                    nameView.setVisibility(View.GONE);
-                }
-
-                settings.setAppearanceChannelStyle(title);
-                initSummaries();
+            if (title.equals(getString(R.string.card_style_normal))) {
+                nameView.setVisibility(View.VISIBLE);
+            } else if (title.equals(getString(R.string.card_style_minimal))) {
+                nameView.setVisibility(View.GONE);
             }
+
+            settings.setAppearanceChannelStyle(title);
+            initSummaries();
         }).show();
     }
 
-    public void onClickStreamSize(View v) {
+    private void onClickStreamSize() {
         DialogService.getChooseCardSizeDialog(
                 getActivity(),
                 R.string.appearance_streams_size_title,
                 settings.getAppearanceStreamSize(),
-                new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        settings.setAppearanceStreamSize(text.toString());
-                        initSummaries();
-                        return true;
-                    }
+                (dialog, itemView, which, text) -> {
+                    settings.setAppearanceStreamSize(text.toString());
+                    initSummaries();
+                    return true;
                 }
         ).show();
     }
 
-    public void onClickStreamerSize(View v) {
+    private void onClickStreamerSize() {
         DialogService.getChooseCardSizeDialog(
                 getActivity(),
                 R.string.appearance_streamer_size_title,
                 settings.getAppearanceChannelSize(),
-                new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-
-                        settings.setAppearanceChannelSize(text.toString());
-                        initSummaries();
-                        return true;
-                    }
+                (dialog, itemView, which, text) -> {
+                    settings.setAppearanceChannelSize(text.toString());
+                    initSummaries();
+                    return true;
                 }
         ).show();
     }
 
-    public void onClickGameSize(View v) {
+    private void onClickGameSize() {
         DialogService.getChooseCardSizeDialog(
                 getActivity(),
                 R.string.appearance_game_size_title,
                 settings.getAppearanceGameSize(),
-                new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        settings.setAppearanceGameSize(text.toString());
-                        initSummaries();
-                        return true;
-                    }
+                (dialog, itemView, which, text) -> {
+                    settings.setAppearanceGameSize(text.toString());
+                    initSummaries();
+                    return true;
                 }
         ).show();
     }

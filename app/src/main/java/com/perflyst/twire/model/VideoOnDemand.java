@@ -46,7 +46,8 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
     private Calendar recordedAt;
     private ChannelInfo channelInfo;
 
-    public VideoOnDemand(String videoTitle, String gameTitle, String previewUrl, String videoId, String channelName, String displayName, int views, int length, String recordedAt) {
+    public VideoOnDemand(String videoTitle, String gameTitle, String previewUrl, String videoId,
+                         String channelName, String displayName, int views, int length, String recordedAt) {
         this.videoTitle = videoTitle;
         this.gameTitle = gameTitle;
         this.previewUrl = previewUrl;
@@ -60,7 +61,7 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         setRecordedAtDate(recordedAt);
     }
 
-    public VideoOnDemand(Parcel in) {
+    private VideoOnDemand(Parcel in) {
         String[] data = new String[10];
         in.readStringArray(data);
 
@@ -161,7 +162,7 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         this.gameTitle = gameTitle;
     }
 
-    public String getPreviewUrl() {
+    private String getPreviewUrl() {
         return previewUrl;
     }
 

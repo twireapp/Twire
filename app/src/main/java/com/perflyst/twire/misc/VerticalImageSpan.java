@@ -19,7 +19,7 @@ public class VerticalImageSpan extends ImageSpan {
         super(context, bitmap);
     }
 
-    public VerticalImageSpan(Drawable drawable) {
+    VerticalImageSpan(Drawable drawable) {
         super(drawable);
     }
 

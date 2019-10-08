@@ -5,10 +5,8 @@ import android.view.View;
 
 import androidx.annotation.ArrayRes;
 import androidx.annotation.DrawableRes;
-import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
@@ -25,32 +23,29 @@ public class DialogService {
     public static MaterialDialog getThemeDialog(final Activity activity) {
         final String CURRENT_THEME = new Settings(activity).getTheme();
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(activity);
-        final MaterialSimpleListItem blueTheme = getThemeDialogAdapterItem(R.string.blue_theme_name, R.drawable.circle_theme_blue_chooser, CURRENT_THEME, activity);
-        final MaterialSimpleListItem purpleTheme = getThemeDialogAdapterItem(R.string.purple_theme_name, R.drawable.circle_theme_purple_chooser, CURRENT_THEME, activity);
-        final MaterialSimpleListItem blackTheme = getThemeDialogAdapterItem(R.string.black_theme_name, R.drawable.circle_theme_black_chooser, CURRENT_THEME, activity);
-        final MaterialSimpleListItem nightTheme = getThemeDialogAdapterItem(R.string.night_theme_name, R.drawable.circle_theme_night_chooser, CURRENT_THEME, activity);
-        final MaterialSimpleListItem trueNightTheme = getThemeDialogAdapterItem(R.string.true_night_theme_name, R.drawable.circle_theme_black_chooser, CURRENT_THEME, activity);
+        final MaterialSimpleListItem blueTheme = getThemeDialogAdapterItem(R.string.blue_theme_name, R.drawable.circle_theme_blue_chooser, activity);
+        final MaterialSimpleListItem purpleTheme = getThemeDialogAdapterItem(R.string.purple_theme_name, R.drawable.circle_theme_purple_chooser, activity);
+        final MaterialSimpleListItem blackTheme = getThemeDialogAdapterItem(R.string.black_theme_name, R.drawable.circle_theme_black_chooser, activity);
+        final MaterialSimpleListItem nightTheme = getThemeDialogAdapterItem(R.string.night_theme_name, R.drawable.circle_theme_night_chooser, activity);
+        final MaterialSimpleListItem trueNightTheme = getThemeDialogAdapterItem(R.string.true_night_theme_name, R.drawable.circle_theme_black_chooser, activity);
         adapter.addAll(blueTheme, purpleTheme, blackTheme, nightTheme, trueNightTheme);
 
         final MaterialDialog.Builder dialog = getBaseThemedDialog(activity)
                 .title(R.string.theme_dialog_title)
-                .adapter(adapter, new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                        String theme = adapter.getItem(which).getContent().toString();
-                        dialog.dismiss();
+                .adapter(adapter, (dialog1, itemView, which, text) -> {
+                    String theme = adapter.getItem(which).getContent().toString();
+                    dialog1.dismiss();
 
-                        new Settings(activity).setTheme(theme);
-                        if (!theme.equals(CURRENT_THEME)) {
-                            activity.recreate();
-                        }
+                    new Settings(activity).setTheme(theme);
+                    if (!theme.equals(CURRENT_THEME)) {
+                        activity.recreate();
                     }
                 });
 
         return dialog.build();
     }
 
-    private static MaterialSimpleListItem getThemeDialogAdapterItem(@StringRes int title, @DrawableRes int icon, String currentTheme, Activity activity) {
+    private static MaterialSimpleListItem getThemeDialogAdapterItem(@StringRes int title, @DrawableRes int icon, Activity activity) {
         MaterialSimpleListItem.Builder builder = new MaterialSimpleListItem.Builder(activity)
                 .content(title)
                 .icon(icon);
@@ -84,12 +79,7 @@ public class DialogService {
                 .itemsCallbackSingleChoice(indexOfPage, listCallbackSingleChoice)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        dialog.dismiss();
-                    }
-                })
+                .onNegative((dialog, which) -> dialog.dismiss())
                 .build();
     }
 

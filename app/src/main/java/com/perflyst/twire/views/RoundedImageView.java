@@ -14,12 +14,13 @@ import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.VectorDrawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+
+import androidx.appcompat.widget.AppCompatImageView;
 
 /**
  * Created by Sebastian Rask on 17-04-2016.
  */
-public class RoundedImageView extends ImageView {
+public class RoundedImageView extends AppCompatImageView {
 
     public RoundedImageView(Context context) {
         super(context);

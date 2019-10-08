@@ -32,7 +32,8 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
     private String title;
     private int priority; // Variable only used for featured streams
 
-    public StreamInfo(ChannelInfo channelInfo, String game, int currentViewers, String[] previews, long startedAt, String title) {
+    public StreamInfo(ChannelInfo channelInfo, String game, int currentViewers,
+                      String[] previews, long startedAt, String title) {
         this.channelInfo = channelInfo;
         this.game = game;
         this.currentViewers = currentViewers;

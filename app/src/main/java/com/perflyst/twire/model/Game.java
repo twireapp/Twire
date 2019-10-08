@@ -104,7 +104,7 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         this.gameStreamers = gameStreamers;
     }
 
-    public String getGamePreviewSmallURL() {
+    private String getGamePreviewSmallURL() {
         return gamePreviewSmallURL;
     }
 
@@ -112,7 +112,7 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         this.gamePreviewSmallURL = gamePreviewSmallURL;
     }
 
-    public String getGamePreviewMediumURL() {
+    private String getGamePreviewMediumURL() {
         return gamePreviewMediumURL;
     }
 
@@ -120,7 +120,7 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         this.gamePreviewMediumURL = gamePreviewMediumURL;
     }
 
-    public String getGamePreviewLargeURL() {
+    private String getGamePreviewLargeURL() {
         return gamePreviewLargeURL;
     }
 

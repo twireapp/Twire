@@ -37,9 +37,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
     private View mIconCircle;
     private TextView mIconText;
 
-    private ValueAnimator mShowToolbarAnimation;
     private ValueAnimator mFadeToolbarAnimation;
-    private ValueAnimator mIconTextToOriginalPos;
 
     private Animation mShowShadowAnimation;
     private Animation mFadeShadowAnimation;
@@ -247,41 +245,22 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
             // Animations for showing and hiding the toolbar.
             // The animation changes the color of the toolbar from a transparent blue to the full blue.
             // Currently only the fade animation is being used.
-            Integer colorTo = Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, mActivity);
+            int colorTo = Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, mActivity);
             Integer colorFrom = Color.argb(0, Color.red(colorTo), Color.green(colorTo), Color.blue(colorTo));
 
             // Show Animation
-            mShowToolbarAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
-            mShowToolbarAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-                @Override
-                public void onAnimationUpdate(ValueAnimator animator) {
-                    mMainToolbar.setBackgroundColor((Integer) animator.getAnimatedValue());
-                }
-
-            });
+            ValueAnimator mShowToolbarAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+            mShowToolbarAnimation.addUpdateListener(animator -> mMainToolbar.setBackgroundColor((Integer) animator.getAnimatedValue()));
             mShowToolbarAnimation.setDuration(SHOW_DURATION);
 
             // Fade Animation
             mFadeToolbarAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorTo, colorFrom);
-            mFadeToolbarAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
-                @Override
-                public void onAnimationUpdate(ValueAnimator animator) {
-                    mMainToolbar.setBackgroundColor((Integer) animator.getAnimatedValue());
-                }
-
-            });
+            mFadeToolbarAnimation.addUpdateListener(animator -> mMainToolbar.setBackgroundColor((Integer) animator.getAnimatedValue()));
             mFadeToolbarAnimation.setDuration(FADE_DURATION);
 
             final float ICON_TEXT_ORIGINAL_POS = mIconText.getTranslationX();
-            mIconTextToOriginalPos = ValueAnimator.ofObject(new FloatEvaluator(), -175, ICON_TEXT_ORIGINAL_POS);
-            mIconTextToOriginalPos.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator animation) {
-                    mIconText.setTranslationX((Float) animation.getAnimatedValue());
-                }
-            });
+            ValueAnimator mIconTextToOriginalPos = ValueAnimator.ofObject(new FloatEvaluator(), -175, ICON_TEXT_ORIGINAL_POS);
+            mIconTextToOriginalPos.addUpdateListener(animation -> mIconText.setTranslationX((Float) animation.getAnimatedValue()));
             mIconTextToOriginalPos.setDuration(1000);
 
 

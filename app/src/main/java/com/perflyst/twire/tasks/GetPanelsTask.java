@@ -17,14 +17,6 @@ import java.util.List;
  */
 
 public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
-    private final String DISPLAY_ORDER_INT_KEY = "display_order";
-    private final String USER_ID_INT_KEY = "user_id";
-    private final String HTML_DESCRIPTION_STRING_KEY = "html_description";
-    private final String DATA_OBJECT_KEY = "data";
-    private final String LINK_STRING_KEY = "link";
-    private final String IMAGE_URL_STRING_KEY = "image";
-    private final String DESCRIPTION_STRING_KEY = "description";
-    private final String TITLE_STRING_KEY = "title";
 
     private String mStreamerName;
     private Delegate mDelegate;
@@ -43,17 +35,25 @@ public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
             JSONArray json = new JSONArray(jsonString);
             for (int i = 0; i < json.length(); i++) {
                 JSONObject panelObject = json.getJSONObject(i);
+                String DATA_OBJECT_KEY = "data";
                 JSONObject dataObject = panelObject.getJSONObject(DATA_OBJECT_KEY);
 
                 if (dataObject.length() == 0)
                     continue;
 
+                String DISPLAY_ORDER_INT_KEY = "display_order";
                 int order = panelObject.getInt(DISPLAY_ORDER_INT_KEY);
+                String USER_ID_INT_KEY = "user_id";
                 int userId = panelObject.getInt(USER_ID_INT_KEY);
+                String HTML_DESCRIPTION_STRING_KEY = "html_description";
                 String html = panelObject.has(HTML_DESCRIPTION_STRING_KEY) ? panelObject.getString(HTML_DESCRIPTION_STRING_KEY) : "";
+                String LINK_STRING_KEY = "link";
                 String link = dataObject.has(LINK_STRING_KEY) ? dataObject.getString(LINK_STRING_KEY) : null;
+                String IMAGE_URL_STRING_KEY = "image";
                 String imageUrl = dataObject.getString(IMAGE_URL_STRING_KEY);
+                String DESCRIPTION_STRING_KEY = "description";
                 String description = dataObject.has(DESCRIPTION_STRING_KEY) ? dataObject.getString(DESCRIPTION_STRING_KEY) : "";
+                String TITLE_STRING_KEY = "title";
                 String title = dataObject.has(TITLE_STRING_KEY) ? dataObject.getString(TITLE_STRING_KEY) : "";
 
                 Panel panel = new Panel(mStreamerName, userId, order, description, imageUrl, link, title, html);

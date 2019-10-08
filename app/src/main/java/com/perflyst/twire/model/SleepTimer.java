@@ -6,10 +6,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
@@ -63,28 +59,22 @@ public class SleepTimer {
             minuteToShow = sleepTimerProgressMinutes % 60;
         }
 
-        DialogService.getSleepTimerDialog(activity, isRunning, new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        View customView = dialog.getCustomView();
-                        MaterialNumberPicker hourPicker = customView.findViewById(R.id.hourPicker);
-                        MaterialNumberPicker minPicker = customView.findViewById(R.id.minutePicker);
+        DialogService.getSleepTimerDialog(activity, isRunning, (dialog, which) -> {
+                    View customView = dialog.getCustomView();
+                    MaterialNumberPicker hourPicker = customView.findViewById(R.id.hourPicker);
+                    MaterialNumberPicker minPicker = customView.findViewById(R.id.minutePicker);
 
-                        int hour = hourPicker.getValue(), minute = minPicker.getValue();
+                    int hour = hourPicker.getValue(), minute = minPicker.getValue();
 
-                        if (isRunning) {
-                            sleepTimerProgressMinutes = hour * 60 + minute;
-                        } else {
-                            start(hour, minute);
-                        }
+                    if (isRunning) {
+                        sleepTimerProgressMinutes = hour * 60 + minute;
+                    } else {
+                        start(hour, minute);
                     }
                 },
-                new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (isRunning) {
-                            stop();
-                        }
+                (dialog, which) -> {
+                    if (isRunning) {
+                        stop();
                     }
                 },
                 hourToShow,

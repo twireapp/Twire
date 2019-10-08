@@ -45,7 +45,6 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
     private boolean hasTransitioned = false;
     private SupportAnimator transitionAnimationWhite = null;
     private SupportAnimator transitionAnimationBlue = null;
-    private RelativeLayout mWelcomeText;
     private TextView mWelcomeTextLineOne,
             mWelcomeTextLineTwo,
             mWelcomeTextLineThree;
@@ -63,7 +62,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        mWelcomeText = findViewById(R.id.welcome_text);
+        RelativeLayout mWelcomeText = findViewById(R.id.welcome_text);
         mWelcomeTextLineOne = findViewById(R.id.welcome_text_line_one);
         mWelcomeTextLineTwo = findViewById(R.id.welcome_text_line_two);
         mWelcomeTextLineThree = findViewById(R.id.welcome_text_line_three);
@@ -98,146 +97,137 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
 
         // Start the animations. Make sure the animations that in the correct order,
         // by adding Animation Listeners that start the next animation on animation end.
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startLogoContainerAnimations().setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        mLogoContainer.setVisibility(View.VISIBLE);
-                    }
+        new Handler().postDelayed(() -> {
+            startLogoContainerAnimations().setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    mLogoContainer.setVisibility(View.VISIBLE);
+                }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
+                @Override
+                public void onAnimationEnd(Animation animation) {
 
-                    }
+                }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
+                @Override
+                public void onAnimationRepeat(Animation animation) {
 
-                    }
-                });
-                startLogoOuterAnimations().setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
+                }
+            });
+            startLogoOuterAnimations().setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
 
-                    }
+                }
 
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        startWelcomeTextLineAnimations(mWelcomeTextLineOne, 1);
-                        startWelcomeTextLineAnimations(mWelcomeTextLineTwo, 2);
-                        startWelcomeTextLineAnimations(mWelcomeTextLineThree, 3).setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    startWelcomeTextLineAnimations(mWelcomeTextLineOne, 1);
+                    startWelcomeTextLineAnimations(mWelcomeTextLineTwo, 2);
+                    startWelcomeTextLineAnimations(mWelcomeTextLineThree, 3).setAnimationListener(new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
 
-                            }
+                        }
 
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                startContinueFABAnimations();
-                            }
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            startContinueFABAnimations();
+                        }
 
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
 
-                            }
-                        });
-                    }
+                        }
+                    });
+                }
 
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
+                @Override
+                public void onAnimationRepeat(Animation animation) {
 
-                    }
-                });
-            }
+                }
+            });
         }, ANIMATIONS_START_DELAY);
 
 
-        mContinueFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the center for the FAB
-                int cx = (int) mContinueFAB.getX() + mContinueFAB.getMeasuredHeight() / 2;
-                int cy = (int) mContinueFAB.getY() + mContinueFAB.getMeasuredWidth() / 2;
+        mContinueFAB.setOnClickListener(v -> {
+            // Get the center for the FAB
+            int cx = (int) mContinueFAB.getX() + mContinueFAB.getMeasuredHeight() / 2;
+            int cy = (int) mContinueFAB.getY() + mContinueFAB.getMeasuredWidth() / 2;
 
-                // get the final radius for the clipping circle
-                int dx = Math.max(cx, mTransitionViewWhite.getWidth() - cx);
-                int dy = Math.max(cy, mTransitionViewWhite.getHeight() - cy);
-                float finalRadius = (float) Math.hypot(dx, dy);
+            // get the final radius for the clipping circle
+            int dx = Math.max(cx, mTransitionViewWhite.getWidth() - cx);
+            int dy = Math.max(cy, mTransitionViewWhite.getHeight() - cy);
+            float finalRadius = (float) Math.hypot(dx, dy);
 
-                final SupportAnimator whiteTransitionAnimation =
-                        ViewAnimationUtils.createCircularReveal(mTransitionViewWhite, cx, cy, 0, finalRadius);
-                whiteTransitionAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-                whiteTransitionAnimation.setDuration(REVEAL_ANIMATION_DURATION);
-                whiteTransitionAnimation.addListener(new SupportAnimator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart() {
-                        mTransitionViewWhite.bringToFront();
-                        mTransitionViewWhite.setVisibility(View.VISIBLE);
-                        mContinueFAB.setClickable(false);
-                        startHideContinueIconAnimations();
-                    }
+            final SupportAnimator whiteTransitionAnimation =
+                    ViewAnimationUtils.createCircularReveal(mTransitionViewWhite, cx, cy, 0, finalRadius);
+            whiteTransitionAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+            whiteTransitionAnimation.setDuration(REVEAL_ANIMATION_DURATION);
+            whiteTransitionAnimation.addListener(new SupportAnimator.AnimatorListener() {
+                @Override
+                public void onAnimationStart() {
+                    mTransitionViewWhite.bringToFront();
+                    mTransitionViewWhite.setVisibility(View.VISIBLE);
+                    mContinueFAB.setClickable(false);
+                    startHideContinueIconAnimations();
+                }
 
-                    @Override
-                    public void onAnimationEnd() {
-                        transitionAnimationWhite = whiteTransitionAnimation;
-                    }
+                @Override
+                public void onAnimationEnd() {
+                    transitionAnimationWhite = whiteTransitionAnimation;
+                }
 
-                    @Override
-                    public void onAnimationCancel() {
-                        onAnimationEnd();
-                    }
+                @Override
+                public void onAnimationCancel() {
+                    onAnimationEnd();
+                }
 
-                    @Override
-                    public void onAnimationRepeat() {
+                @Override
+                public void onAnimationRepeat() {
 
-                    }
-                });
+                }
+            });
 
 
-                final SupportAnimator blueTransitionAnimation =
-                        ViewAnimationUtils.createCircularReveal(mTransitionViewBlue, cx, cy, 0, finalRadius);
-                blueTransitionAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-                blueTransitionAnimation.setDuration(REVEAL_ANIMATION_DURATION);
-                blueTransitionAnimation.addListener(new SupportAnimator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart() {
-                        mTransitionViewBlue.setVisibility(View.VISIBLE);
-                        mTransitionViewBlue.bringToFront();
-                        mContinueFABShadow.bringToFront();
-                        mContinueFAB.bringToFront();
-                    }
+            final SupportAnimator blueTransitionAnimation =
+                    ViewAnimationUtils.createCircularReveal(mTransitionViewBlue, cx, cy, 0, finalRadius);
+            blueTransitionAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+            blueTransitionAnimation.setDuration(REVEAL_ANIMATION_DURATION);
+            blueTransitionAnimation.addListener(new SupportAnimator.AnimatorListener() {
+                @Override
+                public void onAnimationStart() {
+                    mTransitionViewBlue.setVisibility(View.VISIBLE);
+                    mTransitionViewBlue.bringToFront();
+                    mContinueFABShadow.bringToFront();
+                    mContinueFAB.bringToFront();
+                }
 
-                    @Override
-                    public void onAnimationEnd() {
-                        transitionAnimationBlue = blueTransitionAnimation;
-                    }
+                @Override
+                public void onAnimationEnd() {
+                    transitionAnimationBlue = blueTransitionAnimation;
+                }
 
-                    @Override
-                    public void onAnimationCancel() {
-                        onAnimationEnd();
-                    }
+                @Override
+                public void onAnimationCancel() {
+                    onAnimationEnd();
+                }
 
-                    @Override
-                    public void onAnimationRepeat() {
+                @Override
+                public void onAnimationRepeat() {
 
-                    }
-                });
+                }
+            });
 
-                whiteTransitionAnimation.start();
-                blueTransitionAnimation.setStartDelay(REVEAL_ANIMATION_DELAY_DURATION);
-                blueTransitionAnimation.start();
+            whiteTransitionAnimation.start();
+            blueTransitionAnimation.setStartDelay(REVEAL_ANIMATION_DELAY_DURATION);
+            blueTransitionAnimation.start();
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.d(LOG_TAG, "Navigating To Login Activity");
-                        navigateToLoginActivity();
-                    }
-                }, REVEAL_ANIMATION_DELAY_DURATION + REVEAL_ANIMATION_DURATION);
+            new Handler().postDelayed(() -> {
+                Log.d(LOG_TAG, "Navigating To Login Activity");
+                navigateToLoginActivity();
+            }, REVEAL_ANIMATION_DELAY_DURATION + REVEAL_ANIMATION_DURATION);
 
-            }
         });
     }
 
@@ -302,12 +292,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
                 }
             });
             whiteReversed.setDuration(REVEAL_ANIMATION_DURATION);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    whiteReversed.start();
-                }
-            }, REVEAL_ANIMATION_DELAY_DURATION);
+            new Handler().postDelayed(whiteReversed::start, REVEAL_ANIMATION_DELAY_DURATION);
             hasTransitioned = false;
         }
     }
@@ -422,12 +407,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
             }
         });
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mLogo.startAnimation(mLogoAnimations);
-            }
-        }, LOGO_Container_ANIMATION_DURATION - LOGO_ANIMATION_DURATION);
+        new Handler().postDelayed(() -> mLogo.startAnimation(mLogoAnimations), LOGO_Container_ANIMATION_DURATION - LOGO_ANIMATION_DURATION);
 
         return mLogoAnimations;
     }
@@ -477,18 +457,12 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         int delay = (lineNumber < 3)
                 ? WELCOME_TEXT_ANIMATION_BASE_DELAY * lineNumber
                 : WELCOME_TEXT_ANIMATION_BASE_DELAY * (lineNumber * 2);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mWelcomeTextLine.startAnimation(mWelcomeTextAnimations);
-
-            }
-        }, delay);
+        new Handler().postDelayed(() -> mWelcomeTextLine.startAnimation(mWelcomeTextAnimations), delay);
 
         return mWelcomeTextAnimations;
     }
 
-    private AnimationSet startContinueFABAnimations() {
+    private void startContinueFABAnimations() {
         mContinueFAB.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         mContinueFABShadow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
@@ -505,12 +479,9 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
             public void onAnimationStart(Animation animation) {
                 // Start running the show animation for the FAB icon a third into this animation
                 mContinueFAB.setVisibility(View.VISIBLE);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mContinueIcon.setVisibility(View.VISIBLE);
-                        startShowContinueIconAnimations();
-                    }
+                new Handler().postDelayed(() -> {
+                    mContinueIcon.setVisibility(View.VISIBLE);
+                    startShowContinueIconAnimations();
                 }, CONTINUE_FAB_ANIMATION_DURATION / 3);
             }
 
@@ -528,10 +499,9 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
 
         mContinueFAB.startAnimation(mContinueFABAnimations);
         mContinueFABShadow.startAnimation(mContinueFABAnimations);
-        return mContinueFABAnimations;
     }
 
-    private AnimationSet startShowContinueIconAnimations() {
+    private void startShowContinueIconAnimations() {
         Animation mScaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         Animation mRotateAnimation = new RotateAnimation(
                 0, 360,
@@ -548,10 +518,9 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         mAnimations.addAnimation(mRotateAnimation);
 
         mContinueIcon.startAnimation(mAnimations);
-        return mAnimations;
     }
 
-    private AnimationSet startHideContinueIconAnimations() {
+    private void startHideContinueIconAnimations() {
         Animation mScaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         Animation mRotateAnimation = new RotateAnimation(
                 0, 360,
@@ -568,7 +537,6 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         mAnimations.addAnimation(mRotateAnimation);
 
         mContinueIcon.startAnimation(mAnimations);
-        return mAnimations;
     }
 
 

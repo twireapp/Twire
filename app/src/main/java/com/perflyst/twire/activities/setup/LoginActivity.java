@@ -51,22 +51,12 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
             Service.getApplicationClientID() +
             "&redirect_uri=http%3A%2F%2Flocalhost/oauth_authorizing" +
             "&scope=user_read+chat:read+chat:edit+user_follows_edit+user_subscriptions";
-    private final int LOGO_ROTATION_SPEED = 15 * 1000; // The time it takes for the icon to rotate 360 degrees. The Higher the slower.
-    private final int SNACKBAR_DURATION = 8 * 1000;
     private final int SHOW_WEBVIEW_ANIMATION_DURATION = 900;
-    private final int SHOW_LOGO_ANIMATION_DURATION = 600;
-    private final int SHOW_TEXT_ANIMATION_DURATION = 600;
-    private final int HIDE_VIEW_ANIMATION_DURATION = 550;
     private final int SHOW_SUCCESS_ICON_DURATION = 800;
     private final int SHOW_CONTINUE_ICON_DURATION = 650;
     private final int REVEAL_ANIMATION_DURATION = 650;
-    private final int HIDE_INSTRUCTIONS_DURATION = 500;
     private final int REVEAL_ANIMATION_DELAY = 200;
-    private final int SHOW_TEXT_ANIMATION_BASE_DELAY = 105;
-    private final int SHOW_TEXT_ANIMATION_DELAY = 105;
     private final int SHOW_SNACKBAR_DELAY = 200;
-    private final int SHOW_CONTINUE_ICON_DELAY = 600;
-    private final int TRANSITION_DELAY = 2000;
     private String LOG_TAG = "LoginActivity";
     private boolean isWebViewShown = false,
             isWebViewHiding = false,
@@ -161,6 +151,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         showTextLineAnimations(mSkipText, 2);
 
         AnimationSet animationSet = getContinueIconAnimations(270);
+        int SHOW_CONTINUE_ICON_DELAY = 600;
         animationSet.setStartOffset(SHOW_CONTINUE_ICON_DELAY);
         animationSet.start();
     }
@@ -176,9 +167,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
      * initiates the skip view.
      */
     private void initSkipView() {
-        mSkipText.setOnClickListener(v -> {
-            showSkippingAnimation();
-        });
+        mSkipText.setOnClickListener(v -> showSkippingAnimation());
     }
 
     /**
@@ -237,6 +226,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 
         toTransition = true;
         showSuccessAnimation();
+        int TRANSITION_DELAY = 2000;
         new Handler().postDelayed(() -> {
             if (toTransition) {
                 showTransitionAnimation();
@@ -271,27 +261,20 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 
         mContinueFABContainer.setClickable(false);
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSnackbar
-                        .duration(0)
-                        .text(getResources().getString(R.string.login_user_no_internet))
-                        .actionText(getResources().getString(R.string.login_user_no_internet_action))
-                        .actionClickListener(new SnackBar.OnActionClickListener() {
-                            @Override
-                            public void onActionClick(SnackBar sb, int actionId) {
-                                mContinueFABContainer.setClickable(true);
-                                loginWebView.loadUrl(LOGIN_URL);
-                                sb.dismiss();
-                            }
-                        })
-                        .show(LoginActivity.this);
-            }
-        }, SHOW_SNACKBAR_DELAY);
+        new Handler().postDelayed(() -> mSnackbar
+                .duration(0)
+                .text(getResources().getString(R.string.login_user_no_internet))
+                .actionText(getResources().getString(R.string.login_user_no_internet_action))
+                .actionClickListener((sb, actionId) -> {
+                    mContinueFABContainer.setClickable(true);
+                    loginWebView.loadUrl(LOGIN_URL);
+                    sb.dismiss();
+                })
+                .show(LoginActivity.this), SHOW_SNACKBAR_DELAY);
     }
 
     private void handleUserCancel() {
+        int SNACKBAR_DURATION = 8 * 1000;
         mSnackbar
                 .duration(SNACKBAR_DURATION)
                 .text(getResources().getString(R.string.login_user_cancel))
@@ -308,12 +291,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 loginWebView.loadUrl(LOGIN_URL);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mSnackbar.show(LoginActivity.this);
-                    }
-                }, SHOW_SNACKBAR_DELAY);
+                new Handler().postDelayed(() -> mSnackbar.show(LoginActivity.this), SHOW_SNACKBAR_DELAY);
             }
 
             @Override
@@ -331,12 +309,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 
     private AnimationSet hideLoginView() {
         showFABAnimation();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                getContinueIconAnimations(270);
-            }
-        }, SHOW_WEBVIEW_ANIMATION_DURATION - 400);
+        new Handler().postDelayed(() -> getContinueIconAnimations(270), SHOW_WEBVIEW_ANIMATION_DURATION - 400);
         return hideWebViewAnimation();
     }
 
@@ -419,10 +392,8 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
                             handleUserCancel();
                             return true;
                         } else if (!isPartOfSetup && url.contains("passport")) {
-														 /*
-														 Log.d(LOG_TAG, "CONTAINING PASSWORD");
-														 view.loadUrl(url);
-														 */
+                            /*Log.d(LOG_TAG, "CONTAINING PASSWORD");
+                            view.loadUrl(url);*/
                         }
 
                         return false;
@@ -443,6 +414,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         if (mContinueIcon.getVisibility() == View.VISIBLE) {
             hideContinueIconAnimations();
         }
+        int HIDE_VIEW_ANIMATION_DURATION = 550;
         hideViewAnimation(mGearIcon, HIDE_VIEW_ANIMATION_DURATION);
         hideViewAnimation(mLoginTextLineOne, HIDE_VIEW_ANIMATION_DURATION);
         if (mSuccessMessage.getVisibility() != View.INVISIBLE) {
@@ -614,12 +586,9 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         blueTransitionAnimation.setStartDelay(REVEAL_ANIMATION_DELAY);
         blueTransitionAnimation.start();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(LOG_TAG, "Navigating to NotificationActivity");
-                navigateToNotificationActivity();
-            }
+        new Handler().postDelayed(() -> {
+            Log.d(LOG_TAG, "Navigating to NotificationActivity");
+            navigateToNotificationActivity();
         }, REVEAL_ANIMATION_DELAY + REVEAL_ANIMATION_DURATION);
     }
 
@@ -673,12 +642,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
                 mTransitionViewWhite.setLayerType(View.LAYER_TYPE_NONE, null);
                 mTransitionViewWhite.setVisibility(View.INVISIBLE);
                 mContinueFABContainer.setClickable(true);
-                mContinueFABContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showTransitionAnimation();
-                    }
-                });
+                mContinueFABContainer.setOnClickListener(v -> showTransitionAnimation());
 
                 mContinueIcon.bringToFront();
                 mContinueIcon.setVisibility(View.VISIBLE);
@@ -696,16 +660,11 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
             }
         });
         whiteReversed.setDuration(REVEAL_ANIMATION_DURATION);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                whiteReversed.start();
-            }
-        }, REVEAL_ANIMATION_DELAY);
+        new Handler().postDelayed(whiteReversed::start, REVEAL_ANIMATION_DELAY);
         hasTransitioned = false;
     }
 
-    private AnimationSet showSuccessAnimation() {
+    private void showSuccessAnimation() {
         Log.d(LOG_TAG, "Showing Success Animation");
         mSuccessMessage.setText(
                 getResources().getString(R.string.login_on_success_message, new Settings(getBaseContext()).getGeneralTwitchDisplayName())
@@ -714,20 +673,16 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         final AnimationSet mCircleAnimations = getSuccessCircleAnimation();
         final AnimationSet mIconAnimations = getSuccessIconAnimation();
 
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mSuccessCircleShadow.startAnimation(mCircleShadowAnimations);
-                mSuccessIcon.startAnimation(mIconAnimations);
-                showTextLineAnimations(mSuccessMessage, 1);
-            }
+        new Handler().postDelayed(() -> {
+            mSuccessCircleShadow.startAnimation(mCircleShadowAnimations);
+            mSuccessIcon.startAnimation(mIconAnimations);
+            showTextLineAnimations(mSuccessMessage, 1);
         }, 150);
         mSuccessCircle.startAnimation(mCircleAnimations);
         hideContinueIconAnimations();
+        int HIDE_INSTRUCTIONS_DURATION = 500;
         hideViewAnimation(mLoginTextContainer, HIDE_INSTRUCTIONS_DURATION);
 
-        return mCircleAnimations;
     }
 
     private AnimationSet hideViewAnimation(final View view, final int DURATION) {
@@ -826,7 +781,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         return mAnimations;
     }
 
-    private AnimationSet hideContinueIconAnimations() {
+    private void hideContinueIconAnimations() {
         Animation mScaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         Animation mRotateAnimation = new RotateAnimation(
                 mContinueIcon.getRotation(), 360 - mContinueIcon.getRotation(),
@@ -859,10 +814,9 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 
         mContinueIcon.startAnimation(mAnimations);
 
-        return mAnimations;
     }
 
-    private AnimationSet showTextLineAnimations(final TextView mTextLine, int lineNumber) {
+    private void showTextLineAnimations(final TextView mTextLine, int lineNumber) {
         mTextLine.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         int travelDistance = (lineNumber < 3)
@@ -896,6 +850,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         });
 
         final AnimationSet mWelcomeTextAnimations = new AnimationSet(false);
+        int SHOW_TEXT_ANIMATION_DURATION = 600;
         mWelcomeTextAnimations.setDuration(SHOW_TEXT_ANIMATION_DURATION);
         mWelcomeTextAnimations.setInterpolator(new AccelerateDecelerateInterpolator());
         mWelcomeTextAnimations.setFillBefore(true);
@@ -903,18 +858,13 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         mWelcomeTextAnimations.addAnimation(mAlphaAnimation);
         mWelcomeTextAnimations.addAnimation(mTranslationAnimation);
 
+        int SHOW_TEXT_ANIMATION_BASE_DELAY = 105;
         int delay = (lineNumber < 3)
                 ? SHOW_TEXT_ANIMATION_BASE_DELAY * lineNumber
                 : SHOW_TEXT_ANIMATION_BASE_DELAY * (lineNumber * 2);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mTextLine.startAnimation(mWelcomeTextAnimations);
+        int SHOW_TEXT_ANIMATION_DELAY = 105;
+        new Handler().postDelayed(() -> mTextLine.startAnimation(mWelcomeTextAnimations), delay + SHOW_TEXT_ANIMATION_DELAY);
 
-            }
-        }, delay + SHOW_TEXT_ANIMATION_DELAY);
-
-        return mWelcomeTextAnimations;
     }
 
     private AnimationSet getSuccessShadowAnimation() {
@@ -1081,10 +1031,11 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         return mLogoAnimations;
     }
 
-    private AnimationSet showLogoAnimations() {
+    private void showLogoAnimations() {
         mGearIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         Animation mScaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        int SHOW_LOGO_ANIMATION_DURATION = 600;
         mScaleAnimation.setDuration(SHOW_LOGO_ANIMATION_DURATION);
         mScaleAnimation.setInterpolator(new OvershootInterpolator(0.7f));
 
@@ -1114,6 +1065,8 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
         mRotateAnimation.setInterpolator(new LinearInterpolator());
+        // The time it takes for the icon to rotate 360 degrees. The Higher the slower.
+        int LOGO_ROTATION_SPEED = 15 * 1000;
         mRotateAnimation.setDuration(LOGO_ROTATION_SPEED);
         mRotateAnimation.setRepeatCount(Animation.INFINITE);
 
@@ -1144,10 +1097,9 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
 
 
         mGearIcon.startAnimation(mLogoAnimations);
-        return mLogoAnimations;
     }
 
-    private AnimationSet showWebViewAnimation() {
+    private void showWebViewAnimation() {
         loginWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         isWebViewShown = true;
@@ -1186,7 +1138,6 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         });
 
         mWebViewContainer.startAnimation(mAnimations);
-        return mAnimations;
     }
 
     private AnimationSet hideWebViewAnimation() {
@@ -1229,7 +1180,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         return mAnimations;
     }
 
-    private AnimationSet hideFABAnimation() {
+    private void hideFABAnimation() {
         mContinueFAB.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         mContinueFABShadow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
@@ -1261,10 +1212,9 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         });
 
         mContinueFABContainer.startAnimation(mAnimations);
-        return mAnimations;
     }
 
-    private AnimationSet showFABAnimation() {
+    private void showFABAnimation() {
         mContinueFAB.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         mContinueFABShadow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
@@ -1297,7 +1247,6 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         });
 
         mContinueFABContainer.startAnimation(mAnimations);
-        return mAnimations;
     }
 
 }

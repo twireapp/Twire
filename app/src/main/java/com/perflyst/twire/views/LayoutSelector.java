@@ -68,12 +68,7 @@ public class LayoutSelector {
             radioButton.setText(layoutTitle);
 
             final int finalI = i;
-            radioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    selectCallback.onSelected(layoutTitle, finalI, inflated);
-                }
-            });
+            radioButton.setOnClickListener(v -> selectCallback.onSelected(layoutTitle, finalI, inflated));
 
             if (textColor != -1) {
                 radioButton.setTextColor(Service.getColorAttribute(textColor, R.color.black_text, activity));

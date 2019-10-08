@@ -6,16 +6,13 @@ import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
-import com.rey.material.widget.Slider;
 
 public class SettingsTwitchChatActivity extends ThemeActivity {
     private String LOG_TAG = getClass().getSimpleName();
@@ -83,26 +80,22 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
     }
 
     public void onClickEmoteSize(View v) {
-        MaterialDialog dialog = DialogService.getChooseChatSizeDialog(this, R.string.chat_emote_size, R.array.ChatSize, settings.getEmoteSize(), new MaterialDialog.ListCallbackSingleChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                settings.setEmoteSize(which + 1);
-                updateSummaries();
-                return true;
-            }
-        });
+        MaterialDialog dialog = DialogService.getChooseChatSizeDialog
+                (this, R.string.chat_emote_size, R.array.ChatSize, settings.getEmoteSize(), (dialog1, itemView, which, text) -> {
+                    settings.setEmoteSize(which + 1);
+                    updateSummaries();
+                    return true;
+                });
         dialog.show();
     }
 
     public void onClickMessageSize(View v) {
-        MaterialDialog dialog = DialogService.getChooseChatSizeDialog(this, R.string.chat_message_size, R.array.ChatSize, settings.getMessageSize(), new MaterialDialog.ListCallbackSingleChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, View itemView, int which, CharSequence text) {
-                settings.setMessageSize(which + 1);
-                updateSummaries();
-                return true;
-            }
-        });
+        MaterialDialog dialog = DialogService.getChooseChatSizeDialog
+                (this, R.string.chat_message_size, R.array.ChatSize, settings.getMessageSize(), (dialog1, itemView, which, text) -> {
+                    settings.setMessageSize(which + 1);
+                    updateSummaries();
+                    return true;
+                });
         dialog.show();
     }
 
@@ -121,19 +114,13 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 
         DialogService.getSliderDialog(
                 this,
-                new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        settings.setChatLandscapeWidth(landscapeWidth);
-                        updateSummaries();
-                    }
+                (dialog, which) -> {
+                    settings.setChatLandscapeWidth(landscapeWidth);
+                    updateSummaries();
                 },
-                new Slider.OnPositionChangeListener() {
-                    @Override
-                    public void onPositionChanged(Slider view, boolean fromUser, float oldPos, float newPos, int oldValue, int newValue) {
-                        settings.setChatLandscapeWidth(newValue);
-                        updateSummaries();
-                    }
+                (view, fromUser, oldPos, newPos, oldValue, newValue) -> {
+                    settings.setChatLandscapeWidth(newValue);
+                    updateSummaries();
                 },
                 landscapeWidth,
                 25,

@@ -41,18 +41,15 @@ public class StartUpActivity extends ThemeActivity {
     }
 
     private void validateToken() {
-        ValidateOauthTokenTask validateTask = new ValidateOauthTokenTask(new ValidateOauthTokenTask.ValidationDelegate() {
-            @Override
-            public void onFinished(ValidateOauthTokenTask.TokenValidation validation) {
-                if (validation != null && !validation.isTokenValid()) {
-                    Log.e(LOG_TAG, "Token invalid");
-                    Intent loginIntent = new Intent(getBaseContext(), LoginActivity.class);
-                    loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    loginIntent.putExtra(getString(R.string.login_intent_part_of_setup), false);
-                    loginIntent.putExtra(getString(R.string.login_intent_token_not_valid), true);
+        ValidateOauthTokenTask validateTask = new ValidateOauthTokenTask(validation -> {
+            if (validation != null && !validation.isTokenValid()) {
+                Log.e(LOG_TAG, "Token invalid");
+                Intent loginIntent = new Intent(getBaseContext(), LoginActivity.class);
+                loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                loginIntent.putExtra(getString(R.string.login_intent_part_of_setup), false);
+                loginIntent.putExtra(getString(R.string.login_intent_token_not_valid), true);
 
-                    getBaseContext().startActivity(loginIntent);
-                }
+                getBaseContext().startActivity(loginIntent);
             }
         }, new Settings(getBaseContext()).getGeneralTwitchAccessToken(), getBaseContext());
         validateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

@@ -52,7 +52,6 @@ public class LiveStreamActivity extends StreamActivity {
 
     @Override
     protected Bundle getStreamArguments() {
-        boolean autoPlay = true;
 
         Intent intent = getIntent();
         ChannelInfo mChannelInfo = intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
@@ -61,7 +60,7 @@ public class LiveStreamActivity extends StreamActivity {
         Bundle args = new Bundle();
         args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mChannelInfo);
         args.putInt(getString(R.string.stream_fragment_viewers), currentViewers);
-        args.putBoolean(getString(R.string.stream_fragment_autoplay), autoPlay);
+        args.putBoolean(getString(R.string.stream_fragment_autoplay), true);
         return args;
     }
 
@@ -88,7 +87,7 @@ public class LiveStreamActivity extends StreamActivity {
 
     @Override
     public void onBackPressed() {
-        setMentionSuggestions(new ArrayList<String>(), null);
+        setMentionSuggestions(new ArrayList<>(), null);
     }
 
     @Override
@@ -123,16 +122,16 @@ public class LiveStreamActivity extends StreamActivity {
                 float maxHeight = getResources().getDimension(R.dimen.chat_mention_suggestions_max_height);
                 float currentHeight = mMentionContainer.getHeight();
 
-				/*
-				if (maxHeight < currentHeight) {
-					mMentionContainer.setLayoutParams(new RelativeLayout.LayoutParams(
-							mMentionContainer.getLayoutParams().width,
-							(int) maxHeight
-					));
+/*
+                if (maxHeight < currentHeight) {
+                    mMentionContainer.setLayoutParams(new RelativeLayout.LayoutParams(
+                            mMentionContainer.getLayoutParams().width,
+                            (int) maxHeight
+                    ));
 
-					currentHeight = maxHeight;
-				}
-				*/
+                    currentHeight = maxHeight;
+                }
+*/
 
                 mMentionContainer.setY(inputRect.top - inputRect.height() - (int) currentHeight);
             }
@@ -140,16 +139,13 @@ public class LiveStreamActivity extends StreamActivity {
     }
 
     private void setupMentionSuggestionRecyclerView() {
-        mMentionAdapter = new MentionAdapter(new MentionAdapter.MentionAdapterDelegate() {
-            @Override
-            public void onSuggestionClick(String suggestion) {
-                LiveStreamActivity.this.setMentionSuggestions(new ArrayList<String>(), null);
-                if (mChatFragment == null) {
-                    return;
-                }
-
-                mChatFragment.insertMentionSuggestion(suggestion);
+        mMentionAdapter = new MentionAdapter(suggestion -> {
+            LiveStreamActivity.this.setMentionSuggestions(new ArrayList<>(), null);
+            if (mChatFragment == null) {
+                return;
             }
+
+            mChatFragment.insertMentionSuggestion(suggestion);
         });
         mMentionRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMentionRecyclerView.setAdapter(mMentionAdapter);

@@ -23,7 +23,6 @@ import java.util.GregorianCalendar;
  * Created by Sebastian Rask on 25-04-2016.
  */
 public class JSONService {
-    private static String LOG_TAG = "JSONService";
 
     public static VideoOnDemand getVod(JSONObject vodObject) throws JSONException {
         final String TITLE_STRING = "title";
@@ -72,6 +71,7 @@ public class JSONService {
         if (!JSONChannel.isNull(CHANNEL_STATUS_STRING)) {
             title = JSONChannel.getString(CHANNEL_STATUS_STRING);
         } else {
+            String LOG_TAG = "JSONService";
             Log.i(LOG_TAG, "Status/title for " + mChannelInfo.getDisplayName() + " is null");
         }
 
@@ -135,16 +135,13 @@ public class JSONService {
         // Load the user's description.
         final String descriptionURL = "https://api.twitch.tv/kraken/users/" + userId;
         if (!loadDescriptionOnSameThread) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        JSONObject JSONStringTwo = new JSONObject(Service.urlToJSONString(descriptionURL));
-                        String asyncDescription = JSONStringTwo.isNull(BIO_STRING) ? "" : JSONStringTwo.getString(BIO_STRING);
-                        channelInfo.setStreamDescription(asyncDescription);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+            new Thread(() -> {
+                try {
+                    JSONObject JSONStringTwo = new JSONObject(Service.urlToJSONString(descriptionURL));
+                    String asyncDescription = JSONStringTwo.isNull(BIO_STRING) ? "" : JSONStringTwo.getString(BIO_STRING);
+                    channelInfo.setStreamDescription(asyncDescription);
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }).start();
         } else {

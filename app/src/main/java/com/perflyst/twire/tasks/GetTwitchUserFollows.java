@@ -27,20 +27,18 @@ import java.util.concurrent.TimeUnit;
 
 public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
     private final String LOG_TAG = getClass().getSimpleName();
-    private final int MAXIMUM_FOLLOWS_FOR_QUERY = 20;
-    private final String TOTAL_FOLLOWS_INTEGER_KEY = "_total";
-    private final String FOLLOWS_ARRAY_KEY = "follows";
-    private final String CHANNEL_OBJECT_KEY = "channel";
     private final String NAME_STRING_KEY = "name";
     private long timerStart = System.currentTimeMillis();
     private Context baseContext;
 
     private ArrayList<Integer> getFollowIdsFromJSONObject(JSONObject mJSON) throws JSONException {
+        String FOLLOWS_ARRAY_KEY = "follows";
         JSONArray followsArray = mJSON.getJSONArray(FOLLOWS_ARRAY_KEY);
         ArrayList<Integer> followIds = new ArrayList<>();
 
         // For every JSON object (follow) in the array, add it to the list of followed streamers
         for (int j = 0; j < followsArray.length(); j++) {
+            String CHANNEL_OBJECT_KEY = "channel";
             JSONObject channelObject = followsArray.getJSONObject(j).getJSONObject(CHANNEL_OBJECT_KEY);
             try {
                 ChannelInfo mChannelInfo = JSONService.getStreamerInfo(channelObject, false);
@@ -65,6 +63,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         Settings mSettings = new Settings(baseContext);
         int userId = mSettings.getGeneralTwitchUserID();
 
+        int MAXIMUM_FOLLOWS_FOR_QUERY = 20;
         final String BASE_URL = "https://api.twitch.tv/kraken/users/"
                 + userId
                 + "/follows/channels?direction=DESC&limit="
@@ -76,6 +75,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         try {
             // First create a JSON string to get the total amount of follows. Then create a similar JSON string with a limit of the total amount of follows
             JSONObject JSONStringFull = new JSONObject(Service.urlToJSONString(BASE_URL));
+            String TOTAL_FOLLOWS_INTEGER_KEY = "_total";
             int total = JSONStringFull.getInt(TOTAL_FOLLOWS_INTEGER_KEY);
             int roundedTotal = ((total + (MAXIMUM_FOLLOWS_FOR_QUERY - 1)) / MAXIMUM_FOLLOWS_FOR_QUERY) * MAXIMUM_FOLLOWS_FOR_QUERY;// Round up the nearest MAXIMUM
 
@@ -204,7 +204,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         ArrayList<Integer> mFollowIds = new ArrayList<>();
         private String URL;
 
-        public FollowIdsFromURLThread(String URL) {
+        FollowIdsFromURLThread(String URL) {
             this.URL = URL;
         }
 
@@ -218,7 +218,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
             }
         }
 
-        public ArrayList<Integer> getFollowIds() {
+        ArrayList<Integer> getFollowIds() {
             return mFollowIds;
         }
     }
@@ -227,7 +227,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         private ArrayList<Integer> userIds;
         private ArrayList<ChannelInfo> streamers = new ArrayList<>();
 
-        public StreamerInfoFromIdsThread(ArrayList<Integer> ids) {
+        StreamerInfoFromIdsThread(ArrayList<Integer> ids) {
             this.userIds = ids;
         }
 

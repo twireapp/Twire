@@ -22,16 +22,16 @@ public class OnSwipeTouchListener implements OnTouchListener {
         return gestureDetector.onTouchEvent(event);
     }
 
-    public void onSwipeRight() {
+    private void onSwipeRight() {
     }
 
-    public void onSwipeLeft() {
+    private void onSwipeLeft() {
     }
 
-    public void onSwipeTop() {
+    private void onSwipeTop() {
     }
 
-    public void onSwipeBottom() {
+    private void onSwipeBottom() {
     }
 
     private final class GestureListener extends SimpleOnGestureListener {

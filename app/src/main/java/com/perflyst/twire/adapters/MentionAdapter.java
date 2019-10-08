@@ -37,12 +37,7 @@ public class MentionAdapter extends RecyclerView.Adapter<MentionAdapter.Suggesti
     @Override
     public void onBindViewHolder(final SuggestionViewHolder holder, int position) {
         holder.mName.setText(mentionSuggestions.get(position));
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mDelegate.onSuggestionClick(holder.mName.getText().toString());
-            }
-        });
+        holder.itemView.setOnClickListener(view -> mDelegate.onSuggestionClick(holder.mName.getText().toString()));
     }
 
     @Override

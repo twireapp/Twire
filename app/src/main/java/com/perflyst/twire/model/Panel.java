@@ -14,7 +14,8 @@ public class Panel {
     private String mTitle;
     private String mHtml;
 
-    public Panel(String mStreamerName, int mUserId, int mOrder, String mDescription, String mImageUrl, String mLinkUrl, String mTitle, String mHtml) {
+    public Panel(String mStreamerName, int mUserId, int mOrder, String mDescription,
+                 String mImageUrl, String mLinkUrl, String mTitle, String mHtml) {
         this.mStreamerName = mStreamerName;
         this.mUserId = mUserId;
         this.mOrder = mOrder;

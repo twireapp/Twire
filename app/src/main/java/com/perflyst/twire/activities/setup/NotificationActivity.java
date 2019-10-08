@@ -42,15 +42,9 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
     private final int EXPAND_DURATION = 500;
     private final int REVEAL_ANIMATION_DURATION = 650;
     private final int REVEAL_ANIMATION_DELAY = 200;
-    private final int HIDE_VIEW_ANIMATION_DURATION = 550;
-    private final int SHOW_LOGO_ANIMATION_DURATION = 600;
-    private final int SHOW_TEXT_ANIMATION_DURATION = 600;
-    private final int SHOW_TEXT_ANIMATION_BASE_DELAY = 105;
-    private final int SHOW_TEXT_ANIMATION_DELAY = 105;
     private final int SHOW_CONTINUE_ICON_DURATION = 650;
     private final int SHOW_CONTINUE_ICON_DELAY = 600;
     private final int SHOW_CUSTOMIZE_TEXT_DURATION = 300;
-    private final int SHOW_CUSTOMIZE_TEXT_DELAY = 200;
     private SupportAnimator transitionAnimationWhite = null;
     private SupportAnimator transitionAnimationBlue = null;
     private int mFABWidth = 0;
@@ -66,8 +60,7 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
     private TextView mLoginTextLineOne,
             mCustomizeText,
             mSkipText;
-    private RelativeLayout mLoginTextContainer,
-            mLayout;
+    private RelativeLayout mLayout;
     private FrameLayout mContinueFABContainer;
 
     @Override
@@ -76,7 +69,7 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
         setContentView(R.layout.activity_notification);
 
         mLayout = findViewById(R.id.layout);
-        mLoginTextContainer = findViewById(R.id.notification_text_container);
+        RelativeLayout mLoginTextContainer = findViewById(R.id.notification_text_container);
         mContinueFABContainer = findViewById(R.id.notification_continue_circle_container);
         mGearIcon = findViewById(R.id.notification_icon);
         mContinueIcon = findViewById(R.id.forward_arrow);
@@ -121,103 +114,92 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
             }
         });
 
-        mSkipText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final SupportAnimator.AnimatorListener navigateToNextActivityListener = new SupportAnimator.AnimatorListener() {
+        mSkipText.setOnClickListener(v -> {
+            final SupportAnimator.AnimatorListener navigateToNextActivityListener = new SupportAnimator.AnimatorListener() {
 
+                @Override
+                public void onAnimationStart() {
+
+                }
+
+                @Override
+                public void onAnimationEnd() {
+                    navigateToNextActivity();
+                }
+
+                @Override
+                public void onAnimationCancel() {
+
+                }
+
+                @Override
+                public void onAnimationRepeat() {
+
+                }
+            };
+            Animation.AnimationListener transitionAnimationListener;
+
+            if (LoginActivity.hasLoadedFollows()) {
+                hasSingleTransition = true;
+                transitionAnimationListener = new Animation.AnimationListener() {
                     @Override
-                    public void onAnimationStart() {
+                    public void onAnimationStart(Animation animation) {
 
                     }
 
                     @Override
-                    public void onAnimationEnd() {
-                        navigateToNextActivity();
+                    public void onAnimationEnd(Animation animation) {
+                        showSingleTransitionAnimation().addListener(navigateToNextActivityListener);
                     }
 
                     @Override
-                    public void onAnimationCancel() {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat() {
+                    public void onAnimationRepeat(Animation animation) {
 
                     }
                 };
-                Animation.AnimationListener transitionAnimationListener = null;
+            } else {
+                hasSingleTransition = false;
+                transitionAnimationListener = new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-                if (LoginActivity.hasLoadedFollows()) {
-                    hasSingleTransition = true;
-                    transitionAnimationListener = new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
+                    }
 
-                        }
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        showTransitionAnimation().addListener(navigateToNextActivityListener);
+                    }
 
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            showSingleTransitionAnimation().addListener(navigateToNextActivityListener);
-                        }
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
 
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    };
-                } else {
-                    hasSingleTransition = false;
-                    transitionAnimationListener = new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
-
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            showTransitionAnimation().addListener(navigateToNextActivityListener);
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
-                    };
-                }
-
-                collapseContinueButtonAnimations().setAnimationListener(transitionAnimationListener);
+                    }
+                };
             }
+
+            collapseContinueButtonAnimations().setAnimationListener(transitionAnimationListener);
         });
 
-        mContinueFABContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(LOG_TAG, hasTransitioned + "");
-                if (!hasTransitioned) {
-                    hasCustomized = true;
-                    Intent intent = new Intent(getBaseContext(), SettingsNotificationsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mContinueFABContainer.setOnClickListener(v -> {
+            Log.i(LOG_TAG, hasTransitioned + "");
+            if (!hasTransitioned) {
+                hasCustomized = true;
+                Intent intent = new Intent(getBaseContext(), SettingsNotificationsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    ActivityOptionsCompat settingsAnim = ActivityOptionsCompat.makeCustomAnimation(NotificationActivity.this, R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim);
-                    ActivityCompat.startActivity(NotificationActivity.this, intent, settingsAnim.toBundle());
-                } else {
-                    mSkipText.performClick();
-                }
-
+                ActivityOptionsCompat settingsAnim = ActivityOptionsCompat.makeCustomAnimation(NotificationActivity.this, R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim);
+                ActivityCompat.startActivity(NotificationActivity.this, intent, settingsAnim.toBundle());
+            } else {
+                mSkipText.performClick();
             }
+
         });
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus && hasCustomized) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mSkipText.performClick();
-                }
-            }, 50);
+            new Handler().postDelayed(() -> mSkipText.performClick(), 50);
         }
     }
 
@@ -331,7 +313,7 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
         return whiteTransitionAnimation;
     }
 
-    private SupportAnimator showSingleReverseTransitionAnimation() {
+    private void showSingleReverseTransitionAnimation() {
         mTransitionViewWhite.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         final SupportAnimator whiteReversed = transitionAnimationWhite.reverse();
@@ -352,7 +334,7 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
 
                 mContinueIcon.bringToFront();
                 mContinueIcon.setVisibility(View.VISIBLE);
-                showContinueIconAnimations(360);
+                showContinueIconAnimations();
             }
 
             @Override
@@ -366,13 +348,7 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
             }
         });
         whiteReversed.setDuration(REVEAL_ANIMATION_DURATION);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                whiteReversed.start();
-            }
-        }, REVEAL_ANIMATION_DELAY);
-        return whiteReversed;
+        new Handler().postDelayed(whiteReversed::start, REVEAL_ANIMATION_DELAY);
     }
 
     private SupportAnimator showTransitionAnimation() {
@@ -458,7 +434,7 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
         return blueTransitionAnimation;
     }
 
-    private SupportAnimator showReverseTransitionAnimation() {
+    private void showReverseTransitionAnimation() {
         mTransitionViewBlue.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         mTransitionViewWhite.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
@@ -509,7 +485,7 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
 
                 mContinueIcon.bringToFront();
                 mContinueIcon.setVisibility(View.VISIBLE);
-                showContinueIconAnimations(360);
+                showContinueIconAnimations();
             }
 
             @Override
@@ -526,13 +502,13 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
         whiteReversed.setStartDelay(REVEAL_ANIMATION_DELAY);
         whiteReversed.start();
 
-        return whiteReversed;
     }
 
     private AnimationSet hideAllViews() {
         if (mContinueIcon.getVisibility() == View.VISIBLE) {
             hideContinueIconAnimations();
         }
+        int HIDE_VIEW_ANIMATION_DURATION = 550;
         hideViewAnimation(mGearIcon, HIDE_VIEW_ANIMATION_DURATION);
         hideViewAnimation(mLoginTextLineOne, HIDE_VIEW_ANIMATION_DURATION);
 
@@ -596,10 +572,11 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
         return mViewAnimations;
     }
 
-    private AnimationSet showLogoAnimations() {
+    private void showLogoAnimations() {
         mGearIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         Animation mScaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        int SHOW_LOGO_ANIMATION_DURATION = 600;
         mScaleAnimation.setDuration(SHOW_LOGO_ANIMATION_DURATION);
         mScaleAnimation.setInterpolator(new OvershootInterpolator(0.7f));
 
@@ -649,14 +626,13 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
 
 
         mGearIcon.startAnimation(mLogoAnimations);
-        return mLogoAnimations;
     }
 
-    private AnimationSet showContinueIconAnimations(int toDegree) {
+    private void showContinueIconAnimations() {
         mContinueIcon.setVisibility(View.VISIBLE);
         Animation mScaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         Animation mRotateAnimation = new RotateAnimation(
-                toDegree - 360, toDegree,
+                0, 360,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
@@ -688,10 +664,9 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
         mContinueIcon.startAnimation(mAnimations);
 
 
-        return mAnimations;
     }
 
-    private AnimationSet hideContinueIconAnimations() {
+    private void hideContinueIconAnimations() {
         Animation mScaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         Animation mRotateAnimation = new RotateAnimation(
                 mContinueIcon.getRotation(), 360 - mContinueIcon.getRotation(),
@@ -724,10 +699,9 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
 
         mContinueIcon.startAnimation(mAnimations);
 
-        return mAnimations;
     }
 
-    private AnimationSet showTextLineAnimations(final TextView mTextLine, int lineNumber) {
+    private void showTextLineAnimations(final TextView mTextLine, int lineNumber) {
         mTextLine.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         int travelDistance = (lineNumber < 3)
@@ -761,6 +735,7 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
         });
 
         final AnimationSet mWelcomeTextAnimations = new AnimationSet(false);
+        int SHOW_TEXT_ANIMATION_DURATION = 600;
         mWelcomeTextAnimations.setDuration(SHOW_TEXT_ANIMATION_DURATION);
         mWelcomeTextAnimations.setInterpolator(new AccelerateDecelerateInterpolator());
         mWelcomeTextAnimations.setFillBefore(true);
@@ -768,21 +743,16 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
         mWelcomeTextAnimations.addAnimation(mAlphaAnimation);
         mWelcomeTextAnimations.addAnimation(mTranslationAnimation);
 
+        int SHOW_TEXT_ANIMATION_BASE_DELAY = 105;
         int delay = (lineNumber < 3)
                 ? SHOW_TEXT_ANIMATION_BASE_DELAY * lineNumber
                 : SHOW_TEXT_ANIMATION_BASE_DELAY * (lineNumber * 2);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mTextLine.startAnimation(mWelcomeTextAnimations);
+        int SHOW_TEXT_ANIMATION_DELAY = 105;
+        new Handler().postDelayed(() -> mTextLine.startAnimation(mWelcomeTextAnimations), delay + SHOW_TEXT_ANIMATION_DELAY);
 
-            }
-        }, delay + SHOW_TEXT_ANIMATION_DELAY);
-
-        return mWelcomeTextAnimations;
     }
 
-    private Animation expandContinueButtonAnimations() {
+    private void expandContinueButtonAnimations() {
         Animation resizeAnimation = new ResizeWidthAnimation(mContinueFABContainer, (int) getResources().getDimension(R.dimen.notification_customize_width));
         resizeAnimation.setDuration(EXPAND_DURATION);
         mContinueFABContainer.startAnimation(resizeAnimation);
@@ -806,14 +776,9 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
 
             }
         });
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mCustomizeText.startAnimation(mAlphaAnimation);
-            }
-        }, SHOW_CUSTOMIZE_TEXT_DELAY);
+        int SHOW_CUSTOMIZE_TEXT_DELAY = 200;
+        new Handler().postDelayed(() -> mCustomizeText.startAnimation(mAlphaAnimation), SHOW_CUSTOMIZE_TEXT_DELAY);
 
-        return resizeAnimation;
     }
 
     private Animation collapseContinueButtonAnimations() {

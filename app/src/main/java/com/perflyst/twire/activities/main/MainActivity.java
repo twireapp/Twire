@@ -313,12 +313,10 @@ public abstract class MainActivity extends ThemeActivity {
                         if (!mTooltip.isTooltipShown()) {
                             final View anchor = Service.getNavButtonView(mMainToolbar);
                             if (anchor != null) {
-                                anchor.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                                    @Override
-                                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                                        mTooltip.showToolTip(anchor, getString(R.string.tip_navigate));
-                                    }
-                                });
+                                anchor.addOnLayoutChangeListener(
+                                        (v1, left1, top1, right1, bottom1,
+                                         oldLeft1, oldTop1, oldRight1, oldBottom1) ->
+                                                mTooltip.showToolTip(anchor, getString(R.string.tip_navigate)));
                             }
                         }
                     }

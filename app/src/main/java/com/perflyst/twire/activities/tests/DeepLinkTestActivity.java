@@ -51,30 +51,13 @@ public class DeepLinkTestActivity extends ThemeActivity {
                     }
                     break;
                 case "past-broadcasts":
-                    if (params.get(0).equals("directory")) {
-                        //ToDo: Not supported. Fix when it is
-                        intent = new Intent(getBaseContext(), StartUpActivity.class);
-                    } else {
-
-                    }
-                    break;
                 case "highlights":
                     if (params.get(0).equals("directory")) {
                         //ToDo: Not supported. Fix when it is
                         intent = new Intent(getBaseContext(), StartUpActivity.class);
-                    } else {
-
                     }
                     break;
                 case "following":
-                    // My Streams
-                    intent = new Intent(
-                            getBaseContext(),
-                            settings.isLoggedIn()
-                                    ? MyStreamsActivity.class
-                                    : StartUpActivity.class
-                    );
-                    break;
                 case "live":
                     // My Streams
                     intent = new Intent(

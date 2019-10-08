@@ -10,7 +10,6 @@ import java.net.URL;
  * Created by Sebastian Rask on 19-04-2016.
  */
 public class CheckFollowingTask extends AsyncTask<String, Void, Boolean> {
-    private final int USER_NOT_FOLLOWING_CODE = 404;
     private String LOG_TAG = getClass().getSimpleName();
     private TaskCallBack callBack;
 
@@ -20,7 +19,7 @@ public class CheckFollowingTask extends AsyncTask<String, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(String... params) {
-        URL url = null;
+        URL url;
         try {
             String urlString = params[0];
             url = new URL(urlString);
@@ -30,6 +29,7 @@ public class CheckFollowingTask extends AsyncTask<String, Void, Boolean> {
 
             int response = httpCon.getResponseCode();
 
+            int USER_NOT_FOLLOWING_CODE = 404;
             return response != USER_NOT_FOLLOWING_CODE;
         } catch (IOException e) {
             e.printStackTrace();

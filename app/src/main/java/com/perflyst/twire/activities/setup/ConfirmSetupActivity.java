@@ -31,15 +31,9 @@ import io.codetail.animation.ViewAnimationUtils;
 
 public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
     private final String LOG_TAG = getClass().getSimpleName();
-    private final int LOGO_ROTATION_SPEED = 15 * 1000; // The time it takes for the icon to rotate 360 degrees. The Higher the slower.
-    private final int SHOW_LOGO_ANIMATION_DURATION = 600;
-    private final int SHOW_TEXT_ANIMATION_DURATION = 600;
-    private final int HIDE_VIEW_ANIMATION_DURATION = 550;
     private final int SHOW_CONTINUE_ICON_DURATION = 650;
     private final int REVEAL_ANIMATION_DURATION = 650;
     private final int REVEAL_ANIMATION_DELAY = 200;
-    private final int SHOW_TEXT_ANIMATION_BASE_DELAY = 105;
-    private final int SHOW_TEXT_ANIMATION_DELAY = 105;
     private boolean hasTransitioned = false;
     private SupportAnimator transitionAnimationWhite = null;
     private ImageView mGearIcon,
@@ -51,14 +45,13 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
             mContinueFABShadow,
             mTransitionViewWhite;
     private FrameLayout mContinueFABContainer;
-    private RelativeLayout mLoginTextContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_setup);
 
-        mLoginTextContainer = findViewById(R.id.login_text_container);
+        RelativeLayout mLoginTextContainer = findViewById(R.id.login_text_container);
         mSetupProgress = findViewById(R.id.SetupProgress);
         mContinueFABContainer = findViewById(R.id.login_continue_circle_container);
         mGearIcon = findViewById(R.id.login_icon);
@@ -136,6 +129,7 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
         if (mContinueIcon.getVisibility() == View.VISIBLE) {
             hideContinueIconAnimations();
         }
+        int HIDE_VIEW_ANIMATION_DURATION = 550;
         hideViewAnimation(mGearIcon, HIDE_VIEW_ANIMATION_DURATION);
         hideViewAnimation(mLoginTextLineOne, HIDE_VIEW_ANIMATION_DURATION);
         hideViewAnimation(mLoginTextLineTwo, HIDE_VIEW_ANIMATION_DURATION);
@@ -201,7 +195,7 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
         return mViewAnimations;
     }
 
-    private AnimationSet showTextLineAnimations(final TextView mTextLine, int lineNumber) {
+    private void showTextLineAnimations(final TextView mTextLine, int lineNumber) {
         mTextLine.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         int travelDistance = (lineNumber < 3)
@@ -235,6 +229,7 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
         });
 
         final AnimationSet mWelcomeTextAnimations = new AnimationSet(false);
+        int SHOW_TEXT_ANIMATION_DURATION = 600;
         mWelcomeTextAnimations.setDuration(SHOW_TEXT_ANIMATION_DURATION);
         mWelcomeTextAnimations.setInterpolator(new AccelerateDecelerateInterpolator());
         mWelcomeTextAnimations.setFillBefore(true);
@@ -242,24 +237,20 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
         mWelcomeTextAnimations.addAnimation(mAlphaAnimation);
         mWelcomeTextAnimations.addAnimation(mTranslationAnimation);
 
+        int SHOW_TEXT_ANIMATION_BASE_DELAY = 105;
         int delay = (lineNumber < 3)
                 ? SHOW_TEXT_ANIMATION_BASE_DELAY * lineNumber
                 : SHOW_TEXT_ANIMATION_BASE_DELAY * (lineNumber * 2);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mTextLine.startAnimation(mWelcomeTextAnimations);
+        int SHOW_TEXT_ANIMATION_DELAY = 105;
+        new Handler().postDelayed(() -> mTextLine.startAnimation(mWelcomeTextAnimations), delay + SHOW_TEXT_ANIMATION_DELAY);
 
-            }
-        }, delay + SHOW_TEXT_ANIMATION_DELAY);
-
-        return mWelcomeTextAnimations;
     }
 
-    private AnimationSet showLogoAnimations() {
+    private void showLogoAnimations() {
         mGearIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         Animation mScaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        int SHOW_LOGO_ANIMATION_DURATION = 600;
         mScaleAnimation.setDuration(SHOW_LOGO_ANIMATION_DURATION);
         mScaleAnimation.setInterpolator(new OvershootInterpolator(0.7f));
 
@@ -289,6 +280,8 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
         mRotateAnimation.setInterpolator(new LinearInterpolator());
+        // The time it takes for the icon to rotate 360 degrees. The Higher the slower.
+        int LOGO_ROTATION_SPEED = 15 * 1000;
         mRotateAnimation.setDuration(LOGO_ROTATION_SPEED);
         mRotateAnimation.setRepeatCount(Animation.INFINITE);
 
@@ -319,7 +312,6 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
 
 
         mGearIcon.startAnimation(mLogoAnimations);
-        return mLogoAnimations;
     }
 
     private SupportAnimator showTransitionAnimation() {
@@ -332,7 +324,8 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
         int dy = Math.max(cy, mTransitionViewWhite.getHeight() - cy);
         float finalRadius = (float) Math.hypot(dx, dy);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mTransitionViewWhite.isAttachedToWindow()) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            mTransitionViewWhite.isAttachedToWindow();
         }
 
         final SupportAnimator blueTransitionAnimation =
@@ -365,17 +358,12 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
             }
         });
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                blueTransitionAnimation.start();
-            }
-        }, REVEAL_ANIMATION_DELAY);
+        new Handler().postDelayed(blueTransitionAnimation::start, REVEAL_ANIMATION_DELAY);
 
         return blueTransitionAnimation;
     }
 
-    private SupportAnimator showReverseTransitionAnimation() {
+    private void showReverseTransitionAnimation() {
         mTransitionViewWhite.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         final SupportAnimator whiteReversed = transitionAnimationWhite.reverse();
@@ -397,7 +385,7 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
 
                 mContinueIcon.bringToFront();
                 mContinueIcon.setVisibility(View.VISIBLE);
-                showContinueIconAnimations(360);
+                showContinueIconAnimations();
             }
 
             @Override
@@ -411,22 +399,16 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
             }
         });
         whiteReversed.setDuration(REVEAL_ANIMATION_DURATION);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                whiteReversed.start();
-            }
-        }, REVEAL_ANIMATION_DELAY);
+        new Handler().postDelayed(whiteReversed::start, REVEAL_ANIMATION_DELAY);
         hasTransitioned = false;
 
-        return whiteReversed;
     }
 
-    private AnimationSet showContinueIconAnimations(int toDegree) {
+    private void showContinueIconAnimations() {
         mContinueIcon.setVisibility(View.VISIBLE);
         Animation mScaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         Animation mRotateAnimation = new RotateAnimation(
-                toDegree - 360, toDegree,
+                0, 360,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
@@ -458,10 +440,9 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
         mContinueIcon.startAnimation(mAnimations);
 
 
-        return mAnimations;
     }
 
-    private AnimationSet hideContinueIconAnimations() {
+    private void hideContinueIconAnimations() {
         Animation mScaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         Animation mRotateAnimation = new RotateAnimation(
                 mContinueIcon.getRotation(), 360 - mContinueIcon.getRotation(),
@@ -494,7 +475,6 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
 
         mContinueIcon.startAnimation(mAnimations);
 
-        return mAnimations;
     }
 
     private class CheckDataFetchingTask extends AsyncTask<Void, Void, Void> {

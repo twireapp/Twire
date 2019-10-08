@@ -13,9 +13,6 @@ import java.util.ArrayList;
  * Helper for creating and maintaining our database for StreamerInfo objects
  */
 public class SubscriptionsDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 7;
-    public static final String DATABASE_NAME = "SubscriptionsDb_09.db";
-
     public static final String TABLE_NAME = "Subscriptions";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_STREAMER_NAME = "streamerName";
@@ -26,10 +23,9 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LOGO_URL = "logoURL";
     public static final String COLUMN_VIDEO_BANNER_URL = "videoBannerURL";
     public static final String COLUMN_PROFILE_BANNER_URL = "profileBannerURL";
-
     public static final String COLUMN_NOTIFY_WHEN_LIVE = "notifityWhenLive";
-
-
+    static final int DATABASE_VERSION = 7;
+    private static final String DATABASE_NAME = "SubscriptionsDb_09.db";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY, " +

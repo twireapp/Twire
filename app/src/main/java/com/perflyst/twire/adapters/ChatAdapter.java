@@ -45,17 +45,11 @@ import java.util.regex.Pattern;
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHolder> implements Drawable.Callback {
     private final String LOG_TAG = getClass().getSimpleName();
-    private final int MAX_MESSAGES = 500;
-    private final String WHITE_TEXT = "#FFFFFF";
-    private final String BLACK_TEXT = "#000000";
-    private final String EMPTY_MESSAGE = "";
-    private final String PREMESSAGE = ": ";
     private List<ChatMessage> messages;
     private ChatRecyclerView mRecyclerView;
     private Activity context;
     private Settings settings;
     private Pattern linkPattern;
-    private Matcher linkMatcher;
     private VerticalImageSpan imageMod;
     private VerticalImageSpan imageTurbo;
     private VerticalImageSpan imageSub;
@@ -68,7 +62,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         context = aContext;
         mCallback = aCallback;
         settings = new Settings(context);
-        linkPattern = Pattern.compile("((http|https|ftp)\\:\\/\\/[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?\\/?([a-zA-Z0\u200C123456789\\-\\._\\?\\,\\'\\/\\\\\\+&amp;%\\$#\\=~])*[^\\.\\,\\)\\(\\s])");
+        linkPattern = Pattern.compile("((http|https|ftp)://[a-zA-Z0-9\\-.]+\\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0\u200C123456789\\-._?,'/\\\\+&amp;%$#=~])*[^.,)(\\s])");
 
         imageMod = new VerticalImageSpan(context, R.drawable.ic_moderator);
         imageTurbo = new VerticalImageSpan(context, R.drawable.ic_twitch_turbo);
@@ -84,7 +78,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         return new ContactViewHolder(itemView);
     }
 
-    SpannableStringBuilder AppendSpan(SpannableStringBuilder builder, CharSequence charSequence, Object... whats) {
+    private SpannableStringBuilder AppendSpan(SpannableStringBuilder builder, CharSequence charSequence, Object... whats) {
         int preLength = builder.length();
         builder.append(charSequence);
 
@@ -132,6 +126,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             AppendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
 
             int preLength = builder.length();
+            String PREMESSAGE = ": ";
             String messageWithPre = PREMESSAGE + message.getMessage();
             AppendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
 
@@ -188,7 +183,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     private void checkForLink(String message, SpannableStringBuilder spanbuilder) {
-        linkMatcher = linkPattern.matcher(message);
+        Matcher linkMatcher = linkPattern.matcher(message);
         while (linkMatcher.find()) {
             final String url = linkMatcher.group(1);
 
@@ -228,6 +223,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     private int getNameColor(String colorFromAPI) {
+        String BLACK_TEXT = "#000000";
+        String EMPTY_MESSAGE = "";
         if (colorFromAPI.equals(EMPTY_MESSAGE) || colorFromAPI.equals(BLACK_TEXT)) {
             if (isNightTheme) {
                 return ContextCompat.getColor(context, R.color.blue_500);
@@ -236,6 +233,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             }
         }
 
+        String WHITE_TEXT = "#FFFFFF";
         if (colorFromAPI.equals(WHITE_TEXT) && !isNightTheme) {
             return ContextCompat.getColor(context, R.color.blue_700);
         }
@@ -276,6 +274,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
      * Notifies observers that item has been removed
      */
     private void checkSize() {
+        int MAX_MESSAGES = 500;
         if (messages.size() > MAX_MESSAGES) {
             int messagesOverLimit = messages.size() - MAX_MESSAGES;
             for (int i = 0; i < messagesOverLimit; i++) {
@@ -288,13 +287,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     @Override
     public void invalidateDrawable(Drawable drawable) {
         Log.d(LOG_TAG, "Invalidate drawable");
-		/*
-		if (drawable instanceof GifDrawable) {
-			GifDrawable gifDrawable = (GifDrawable) drawable;
-			gifDrawable.stop();
-			Log.d(LOG_TAG, "Stopping drawable");
-		}
-		*/
+/*
+        if (drawable instanceof GifDrawable) {
+            GifDrawable gifDrawable = (GifDrawable) drawable;
+            gifDrawable.stop();
+            Log.d(LOG_TAG, "Stopping drawable");
+        }
+*/
     }
 
     @Override
@@ -312,10 +311,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         void onMessageClicked(SpannableStringBuilder formattedString, String userName, String message);
     }
 
-    public class ContactViewHolder extends RecyclerView.ViewHolder {
+    class ContactViewHolder extends RecyclerView.ViewHolder {
         private TextView message;
 
-        public ContactViewHolder(View itemView) {
+        ContactViewHolder(View itemView) {
             super(itemView);
             message = itemView.findViewById(R.id.txt_message);
         }

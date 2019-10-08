@@ -14,7 +14,7 @@ public abstract class PreviewTarget implements Target {
         return preview;
     }
 
-    public void setPreview(Bitmap preview) {
+    protected void setPreview(Bitmap preview) {
         this.preview = preview;
     }
 }

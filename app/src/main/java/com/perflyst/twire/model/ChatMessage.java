@@ -8,7 +8,7 @@ import java.util.List;
 public class ChatMessage {
     private String message;
     private String name;
-    private String color = "";
+    private String color;
     private boolean mod;
     private boolean turbo;
     private boolean subscriber;
@@ -16,7 +16,8 @@ public class ChatMessage {
     private Bitmap subscriberIcon;
     private boolean highlight;
 
-    public ChatMessage(String message, String name, String color, boolean mod, boolean turbo, boolean subscriber, List<ChatEmote> emotes, Bitmap subscriberIcon, boolean highlight) {
+    public ChatMessage(String message, String name, String color, boolean mod, boolean turbo,
+                       boolean subscriber, List<ChatEmote> emotes, Bitmap subscriberIcon, boolean highlight) {
         this.message = message;
         this.name = name;
         this.color = color;

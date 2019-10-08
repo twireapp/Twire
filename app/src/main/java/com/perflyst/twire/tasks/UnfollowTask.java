@@ -13,7 +13,6 @@ import java.net.URL;
  * Created by Sebastian Rask on 18-04-2016.
  */
 public class UnfollowTask extends AsyncTask<String, Void, Boolean> {
-    private final int UNFOLLOW_SUCCESS = 204;
     private String LOG_TAG = getClass().getSimpleName();
     private UnFollowResult callback;
 
@@ -23,7 +22,7 @@ public class UnfollowTask extends AsyncTask<String, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(String... params) {
-        URL url = null;
+        URL url;
         try {
             url = new URL(params[0]);
             HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
@@ -37,6 +36,7 @@ public class UnfollowTask extends AsyncTask<String, Void, Boolean> {
 
             Log.d(LOG_TAG, "Unfollow response: " + code);
 
+            int UNFOLLOW_SUCCESS = 204;
             return code == UNFOLLOW_SUCCESS;
         } catch (IOException e) {
             e.printStackTrace();

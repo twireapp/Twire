@@ -16,7 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
     }
 
     @Override
-    public List<Game> getVisualElements() throws JSONException, MalformedURLException {
+    public List<Game> getVisualElements() throws JSONException {
         List<Game> resultList = new ArrayList<>();
 
         //Indentation is meant to mimic the structure of the JSON code

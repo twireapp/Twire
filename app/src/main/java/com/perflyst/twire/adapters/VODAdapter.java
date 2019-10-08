@@ -32,13 +32,13 @@ import java.util.Locale;
  */
 
 class VODViewHolder extends MainActivityAdapter.ElementsViewHolder {
-    protected CardView vCard;
-    protected ImageView vPreviewImage;
-    protected TextView vDisplayName, vTitle, vGame, vTimeStamp;
     protected View sharedPadding;
-    protected SeekBar vProgressBar;
+    ImageView vPreviewImage;
+    TextView vDisplayName, vTitle, vGame, vTimeStamp;
+    SeekBar vProgressBar;
+    private CardView vCard;
 
-    public VODViewHolder(View v) {
+    VODViewHolder(View v) {
         super(v);
         vCard = v.findViewById(R.id.card_view_vod_stream);
         vPreviewImage = v.findViewById(R.id.image_stream_preview);
@@ -244,29 +244,29 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
 
     @Override
     protected void setExpandedStyle(VODViewHolder viewHolder) {
-		/*
-		viewHolder.vTitle.setVisibility(View.VISIBLE);
-		viewHolder.vGame.setVisibility(View.VISIBLE);
-		viewHolder.sharedPadding.setVisibility(View.VISIBLE);
-		*/
+/*
+        viewHolder.vTitle.setVisibility(View.VISIBLE);
+        viewHolder.vGame.setVisibility(View.VISIBLE);
+        viewHolder.sharedPadding.setVisibility(View.VISIBLE);
+*/
     }
 
     @Override
     protected void setNormalStyle(VODViewHolder viewHolder) {
-		/*
-		viewHolder.vTitle.setVisibility(View.GONE);
-		viewHolder.vGame.setVisibility(View.VISIBLE);
-		viewHolder.sharedPadding.setVisibility(View.VISIBLE);
-		*/
+/*
+        viewHolder.vTitle.setVisibility(View.GONE);
+        viewHolder.vGame.setVisibility(View.VISIBLE);
+        viewHolder.sharedPadding.setVisibility(View.VISIBLE);
+*/
     }
 
     @Override
     protected void setCollapsedStyle(VODViewHolder viewHolder) {
-		/*
-		viewHolder.vTitle.setVisibility(View.GONE);
-		viewHolder.vGame.setVisibility(View.GONE);
-		viewHolder.sharedPadding.setVisibility(View.GONE);
-		*/
+/*
+        viewHolder.vTitle.setVisibility(View.GONE);
+        viewHolder.vGame.setVisibility(View.GONE);
+        viewHolder.sharedPadding.setVisibility(View.GONE);
+*/
     }
 
     public boolean isShowName() {

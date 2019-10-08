@@ -39,7 +39,7 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
         baseContext = params[0];
         final boolean INCLUDE_THUMBNAILS = false;
 
-        Map<String, ChannelInfo> resultList = Service.getStreamerInfoFromDB(LOG_TAG, baseContext, INCLUDE_THUMBNAILS);
+        Map<String, ChannelInfo> resultList = Service.getStreamerInfoFromDB(baseContext, INCLUDE_THUMBNAILS);
         Log.d(LOG_TAG, resultList.size() + " streamers fetched from database");
         Log.d(LOG_TAG, resultList.toString());
 

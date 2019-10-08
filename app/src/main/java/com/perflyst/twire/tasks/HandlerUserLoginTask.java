@@ -15,19 +15,6 @@ import org.json.JSONObject;
  * Created by SebastianRask on 03-11-2015.
  */
 public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
-    private final String BASE_USER_INFO_URL = "https://api.twitch.tv/kraken/user?oauth_token=";
-    private final String LOG_TAG = "HandleUserLoginTask";
-    // This is the keys to get information from the JSONObject
-    private final String USER_DISPLAY_NAME_STRING = "display_name";
-    private final String USER_ID_INT = "_id";
-    private final String USER_NAME_STRING = "name";
-    private final String USER_TYPE_STRING = "type";
-    private final String USER_BIO_STRING = "bio";
-    private final String USER_LOGO_URL_STRING = "logo";
-    private final String USER_CREATION_DATE_STRING = "created_at";
-    private final String USER_UPDATED_DATE_STRING = "updated_at";
-    private final String USER_EMAIL_ADDRESS_STRING = "email";
-    private final String USER_IS_PARTNERED_BOOLEAN = "partnered";
     private Context mContext;
     private String token;
     private LoginActivity mLoginActivity;
@@ -43,23 +30,36 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
         token = (String) params[1];
         mLoginActivity = (LoginActivity) params[2];
 
+        String LOG_TAG = "HandleUserLoginTask";
         try {
+            String BASE_USER_INFO_URL = "https://api.twitch.tv/kraken/user?oauth_token=";
             String jsonString = Service.urlToJSONString(BASE_USER_INFO_URL + token);
             Log.d(LOG_TAG, "JSON: " + jsonString);
 
             JSONObject baseJSON = new JSONObject(jsonString);
+            // This is the keys to get information from the JSONObject
+            String USER_DISPLAY_NAME_STRING = "display_name";
             String mDisplayName = baseJSON.getString(USER_DISPLAY_NAME_STRING);
+            String USER_NAME_STRING = "name";
             String mUserName = baseJSON.getString(USER_NAME_STRING);
+            String USER_BIO_STRING = "bio";
             String mUserBio = baseJSON.getString(USER_BIO_STRING);
+            String USER_LOGO_URL_STRING = "logo";
             String mLogoURL = baseJSON.getString(USER_LOGO_URL_STRING);
+            String USER_EMAIL_ADDRESS_STRING = "email";
             String mEmail = baseJSON.getString(USER_EMAIL_ADDRESS_STRING);
+            String USER_CREATION_DATE_STRING = "created_at";
             String mCreatedAtDate = baseJSON.getString(USER_CREATION_DATE_STRING);
+            String USER_UPDATED_DATE_STRING = "updated_at";
             String mUpdateAtDate = baseJSON.getString(USER_UPDATED_DATE_STRING);
+            String USER_TYPE_STRING = "type";
             String mUserType = baseJSON.getString(USER_TYPE_STRING);
+            String USER_IS_PARTNERED_BOOLEAN = "partnered";
             boolean isPartner = baseJSON.getBoolean(USER_IS_PARTNERED_BOOLEAN);
+            String USER_ID_INT = "_id";
             int mID = baseJSON.getInt(USER_ID_INT);
 
-            Object[] resultArray = {
+            return new Object[]{
                     mDisplayName,
                     mUserName,
                     mUserBio,
@@ -71,8 +71,6 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
                     isPartner,
                     mID
             };
-
-            return resultArray;
 
         } catch (JSONException e) {
             Log.e(LOG_TAG, "CAUGHT EXCEPTION " + e.getMessage() + " WHILE HANDLING USER LOGIN");

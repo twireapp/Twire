@@ -32,11 +32,11 @@ import java.util.List;
  */
 
 class StreamerInfoViewHolder extends MainActivityAdapter.ElementsViewHolder {
-    protected TextView vViews, vFollowers, vDisplayName;
-    protected ImageView vProfileLogoImage;
-    protected CardView vCard;
+    TextView vDisplayName;
+    private ImageView vProfileLogoImage;
+    private CardView vCard;
 
-    public StreamerInfoViewHolder(View v) {
+    StreamerInfoViewHolder(View v) {
         super(v);
         vDisplayName = v.findViewById(R.id.displayName);
         vDisplayName = v.findViewById(R.id.displayName);

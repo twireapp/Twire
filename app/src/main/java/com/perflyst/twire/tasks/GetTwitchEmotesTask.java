@@ -22,11 +22,7 @@ import java.util.List;
  */
 public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
     private final String LOG_TAG = getClass().getSimpleName();
-    private final String url = "https://twitchemotes.com/api_cache/v3/global.json";
 
-    private final String SETS_KEY = "emoticon_sets";
-    private final String ID_KEY_INT = "id";
-    private final String WORD_KEY_STRING = "code";
     private Context context;
     private Delegate delegate;
     private List<Emote> twitchEmotes = new ArrayList<>();
@@ -43,6 +39,7 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
             Settings settings = new Settings(context);
             String newUrl = "https://api.twitch.tv/kraken/users/" + settings.getGeneralTwitchUserID() + "/emotes?oauth_token=" + settings.getGeneralTwitchAccessToken();
             JSONObject top = new JSONObject(Service.urlToJSONString(newUrl));
+            String SETS_KEY = "emoticon_sets";
             JSONObject sets = top.getJSONObject(SETS_KEY);
             Iterator<?> setKeys = sets.keys();
 
@@ -54,7 +51,9 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                     for (int i = 0; i < set.length(); i++) {
                         JSONObject emoteObject = set.getJSONObject(i);
 
+                        String ID_KEY_INT = "id";
                         String id = emoteObject.getInt(ID_KEY_INT) + "";
+                        String WORD_KEY_STRING = "code";
                         String word = emoteObject.getString(WORD_KEY_STRING);
                         Emote emote = new Emote(id, word, false);
                         emote.setSubscriberEmote(true);
@@ -65,6 +64,7 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
             Log.d(LOG_TAG, newUrl);
 
 
+            String url = "https://twitchemotes.com/api_cache/v3/global.json";
             JSONObject emotesObject = new JSONObject(Service.urlToJSONString(url));
             Iterator<?> keys = emotesObject.keys();
 

@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +21,7 @@ import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
+import com.rey.material.app.TimePickerDialog;
 
 
 public class SettingsNotificationsActivity extends ThemeActivity {
@@ -240,16 +240,13 @@ public class SettingsNotificationsActivity extends ThemeActivity {
         if (vibrateView != null) {
             vibrateView.setChecked(settings.getNotificationsVibrations());
 
-            vibrateView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (vibrateView.isChecked()) {
-                        vibrateView.setChecked(false);
-                        settings.setNotificationsVibration(false);
-                    } else {
-                        vibrateView.setChecked(true);
-                        settings.setNotificationsVibration(true);
-                    }
+            vibrateView.setOnClickListener(v -> {
+                if (vibrateView.isChecked()) {
+                    vibrateView.setChecked(false);
+                    settings.setNotificationsVibration(false);
+                } else {
+                    vibrateView.setChecked(true);
+                    settings.setNotificationsVibration(true);
                 }
             });
         }
@@ -258,16 +255,13 @@ public class SettingsNotificationsActivity extends ThemeActivity {
         if (screenWakeView != null) {
             screenWakeView.setChecked(settings.getNotificationsScreenWake());
 
-            screenWakeView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (screenWakeView.isChecked()) {
-                        screenWakeView.setChecked(false);
-                        settings.setNotificationsScreenWake(false);
-                    } else {
-                        screenWakeView.setChecked(true);
-                        settings.setNotificationsScreenWake(true);
-                    }
+            screenWakeView.setOnClickListener(v -> {
+                if (screenWakeView.isChecked()) {
+                    screenWakeView.setChecked(false);
+                    settings.setNotificationsScreenWake(false);
+                } else {
+                    screenWakeView.setChecked(true);
+                    settings.setNotificationsScreenWake(true);
                 }
             });
         }
@@ -276,16 +270,13 @@ public class SettingsNotificationsActivity extends ThemeActivity {
         if (soundView != null) {
             soundView.setChecked(settings.getNotificationsSound());
 
-            soundView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (soundView.isChecked()) {
-                        soundView.setChecked(false);
-                        settings.setNotificationsSound(false);
-                    } else {
-                        soundView.setChecked(true);
-                        settings.setNotificationsSound(true);
-                    }
+            soundView.setOnClickListener(v -> {
+                if (soundView.isChecked()) {
+                    soundView.setChecked(false);
+                    settings.setNotificationsSound(false);
+                } else {
+                    soundView.setChecked(true);
+                    settings.setNotificationsSound(true);
                 }
             });
         }
@@ -294,16 +285,13 @@ public class SettingsNotificationsActivity extends ThemeActivity {
         if (ledView != null) {
             ledView.setChecked(settings.getNotificationsLED());
 
-            ledView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (ledView.isChecked()) {
-                        ledView.setChecked(false);
-                        settings.setNotificationsLED(false);
-                    } else {
-                        ledView.setChecked(true);
-                        settings.setNotificationsLED(true);
-                    }
+            ledView.setOnClickListener(v -> {
+                if (ledView.isChecked()) {
+                    ledView.setChecked(false);
+                    settings.setNotificationsLED(false);
+                } else {
+                    ledView.setChecked(true);
+                    settings.setNotificationsLED(true);
                 }
             });
         }
@@ -318,35 +306,29 @@ public class SettingsNotificationsActivity extends ThemeActivity {
 
 
         if (quietHoursView != null) {
-            quietHoursView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (quietHoursView.isChecked()) {
-                        quietHoursView.setChecked(false);
-                        settings.setNotificationsQuietHours(false);
-                        enableQuietHours(false, activity);
+            quietHoursView.setOnClickListener(v -> {
+                if (quietHoursView.isChecked()) {
+                    quietHoursView.setChecked(false);
+                    settings.setNotificationsQuietHours(false);
+                    enableQuietHours(false, activity);
 
-                    } else {
-                        quietHoursView.setChecked(true);
-                        settings.setNotificationsQuietHours(true);
-                        enableQuietHours(true, activity);
-                    }
+                } else {
+                    quietHoursView.setChecked(true);
+                    settings.setNotificationsQuietHours(true);
+                    enableQuietHours(true, activity);
                 }
             });
         }
 
         final CheckedTextView showNotificationsDuringQuietHoursView = findViewById(R.id.notifications_show_in_quiet_hours);
         showNotificationsDuringQuietHoursView.setChecked(settings.isNotificationsShowInQuietHours());
-        showNotificationsDuringQuietHoursView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (showNotificationsDuringQuietHoursView.isChecked()) {
-                    showNotificationsDuringQuietHoursView.setChecked(false);
-                    settings.setNotificationsShowInQuietHours(false);
-                } else {
-                    showNotificationsDuringQuietHoursView.setChecked(true);
-                    settings.setNotificationsShowInQuietHours(true);
-                }
+        showNotificationsDuringQuietHoursView.setOnClickListener(view -> {
+            if (showNotificationsDuringQuietHoursView.isChecked()) {
+                showNotificationsDuringQuietHoursView.setChecked(false);
+                settings.setNotificationsShowInQuietHours(false);
+            } else {
+                showNotificationsDuringQuietHoursView.setChecked(true);
+                settings.setNotificationsShowInQuietHours(true);
             }
         });
 
@@ -398,35 +380,27 @@ public class SettingsNotificationsActivity extends ThemeActivity {
     public void setQuietHoursStart(View v) {
         final Settings settings = new Settings(getBaseContext());
 
-        final com.rey.material.app.TimePickerDialog dialog = new com.rey.material.app.TimePickerDialog(this);
+        final TimePickerDialog dialog = new TimePickerDialog(this);
         dialog
                 .hour(settings.getNotificationsQuietStartHour())
                 .minute(settings.getNotificationsQuietStartMinute())
                 .positiveAction(getResources().getString(R.string.ok))
-                .positiveActionClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int hour = dialog.getHour();
-                        int minute = dialog.getMinute();
-                        Log.d(LOG_TAG, "Quiet Hours Start Time has changed to- " + hour + ":" + minute);
-                        settings.setNotificationsQuietStartHour(hour);
-                        settings.setNotificationsQuietStartMinute(minute);
+                .positiveActionClickListener(v12 -> {
+                    int hour = dialog.getHour();
+                    int minute = dialog.getMinute();
+                    Log.d(LOG_TAG, "Quiet Hours Start Time has changed to- " + hour + ":" + minute);
+                    settings.setNotificationsQuietStartHour(hour);
+                    settings.setNotificationsQuietStartMinute(minute);
 
-                        final TextView quietHourStartView = findViewById(R.id.notifications_quiet_hours_start);
-                        String timeOfDay = getResources().getString(R.string.notifications_time_of_day, formatTimeOfDay(hour), formatTimeOfDay(minute));
-                        if (quietHourStartView != null) {
-                            quietHourStartView.setText(timeOfDay);
-                        }
-                        dialog.dismiss();
+                    final TextView quietHourStartView = findViewById(R.id.notifications_quiet_hours_start);
+                    String timeOfDay = getResources().getString(R.string.notifications_time_of_day, formatTimeOfDay(hour), formatTimeOfDay(minute));
+                    if (quietHourStartView != null) {
+                        quietHourStartView.setText(timeOfDay);
                     }
+                    dialog.dismiss();
                 })
                 .negativeAction(getResources().getString(R.string.cancel))
-                .negativeActionClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.cancel();
-                    }
-                })
+                .negativeActionClickListener(v1 -> dialog.cancel())
                 .cancelable(true)
                 .show();
     }
@@ -434,35 +408,27 @@ public class SettingsNotificationsActivity extends ThemeActivity {
     public void setQuietHoursEnd(View v) {
         final Settings settings = new Settings(getBaseContext());
 
-        final com.rey.material.app.TimePickerDialog dialog = new com.rey.material.app.TimePickerDialog(this);
+        final TimePickerDialog dialog = new TimePickerDialog(this);
         dialog
                 .hour(settings.getNotificationsQuietEndHour())
                 .minute(settings.getNotificationsQuietEndMinute())
                 .positiveAction(getResources().getString(R.string.ok))
-                .positiveActionClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        int hour = dialog.getHour();
-                        int minute = dialog.getMinute();
-                        Log.d(LOG_TAG, "Quiet Hours End Time has changed to- " + hour + ":" + minute);
-                        settings.setNotificationsQuietEndHour(hour);
-                        settings.setNotificationsQuietEndMinute(minute);
+                .positiveActionClickListener(v12 -> {
+                    int hour = dialog.getHour();
+                    int minute = dialog.getMinute();
+                    Log.d(LOG_TAG, "Quiet Hours End Time has changed to- " + hour + ":" + minute);
+                    settings.setNotificationsQuietEndHour(hour);
+                    settings.setNotificationsQuietEndMinute(minute);
 
-                        final TextView quietHourEndView = findViewById(R.id.notifications_quiet_hours_end);
-                        String timeOfDay = getResources().getString(R.string.notifications_time_of_day, formatTimeOfDay(hour), formatTimeOfDay(minute));
-                        if (quietHourEndView != null) {
-                            quietHourEndView.setText(timeOfDay);
-                        }
-                        dialog.dismiss();
+                    final TextView quietHourEndView = findViewById(R.id.notifications_quiet_hours_end);
+                    String timeOfDay = getResources().getString(R.string.notifications_time_of_day, formatTimeOfDay(hour), formatTimeOfDay(minute));
+                    if (quietHourEndView != null) {
+                        quietHourEndView.setText(timeOfDay);
                     }
+                    dialog.dismiss();
                 })
                 .negativeAction(getResources().getString(R.string.cancel))
-                .negativeActionClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.cancel();
-                    }
-                })
+                .negativeActionClickListener(v1 -> dialog.cancel())
                 .cancelable(true)
                 .show();
     }
@@ -503,19 +469,9 @@ public class SettingsNotificationsActivity extends ThemeActivity {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.notifications_check_interval)
                     .setSingleChoiceItems(R.array.checkIntervals, positionOfInterval,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
+                            (dialog, which) -> dialog.dismiss())
 
-                    .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
+                    .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
 
             return builder.create();
         }

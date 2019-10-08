@@ -29,7 +29,7 @@ public class TestPreferenceActivity extends android.preference.PreferenceActivit
     @Override
     public void onBuildHeaders(List<Header> target) {
         super.onBuildHeaders(target);
-//		loadHeadersFromResource(R.xml.preference_test, target);
+        //loadHeadersFromResource(R.xml.preference_test, target);
     }
 
     @Override

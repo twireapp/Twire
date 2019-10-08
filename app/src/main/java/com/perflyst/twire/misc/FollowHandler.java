@@ -49,16 +49,13 @@ public class FollowHandler {
     public void followStreamer() {
         String urlString = getBaseFollowString();
 
-        FollowTask followTask = new FollowTask(new FollowTask.FollowResult() {
-            @Override
-            public void onTaskDone(Boolean result) {
-                isStreamerFollowed = result;
-                if (result) {
-                    Service.insertStreamerInfoToDB(mContext, mChannelInfo);
-                    mDelegate.followSuccess();
-                } else {
-                    mDelegate.followFailure();
-                }
+        FollowTask followTask = new FollowTask(result -> {
+            isStreamerFollowed = result;
+            if (result) {
+                Service.insertStreamerInfoToDB(mContext, mChannelInfo);
+                mDelegate.followSuccess();
+            } else {
+                mDelegate.followFailure();
             }
         });
         followTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, urlString);
@@ -67,17 +64,14 @@ public class FollowHandler {
     public void unfollowStreamer() {
         String url = getBaseFollowString();
 
-        UnfollowTask unfollowTask = new UnfollowTask(new UnfollowTask.UnFollowResult() {
-            @Override
-            public void onTaskDone(Boolean result) {
-                isStreamerFollowed = !result;
+        UnfollowTask unfollowTask = new UnfollowTask(result -> {
+            isStreamerFollowed = !result;
 
-                if (result) {
-                    Service.deleteStreamerInfoFromDB(mContext, mChannelInfo.getUserId());
-                    mDelegate.unfollowSuccess();
-                } else {
-                    mDelegate.unfollowFailure();
-                }
+            if (result) {
+                Service.deleteStreamerInfoFromDB(mContext, mChannelInfo.getUserId());
+                mDelegate.unfollowSuccess();
+            } else {
+                mDelegate.unfollowFailure();
             }
         });
         unfollowTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, url);

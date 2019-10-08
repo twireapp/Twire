@@ -77,7 +77,8 @@ public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCa
     }
 
     private List<SettingsCategory> constructSettingsCategories() {
-        return new ArrayList<>(Arrays.asList(new SettingsCategory(
+        return new ArrayList<>(Arrays.asList(
+                new SettingsCategory(
                         R.string.settings_general_name,
                         R.string.settings_general_name_summary,
                         R.drawable.ic_settings_black_24dp,
@@ -101,12 +102,12 @@ public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCa
                         R.drawable.ic_color_lens_black_48dp,
                         constructCategoryIntent(SettingsAppearanceActivity.class)
                 )/*,
-				new SettingsCategory(
-						R.string.settings_notifications_name,
-						R.string.settings_notifications_summary,
-						R.drawable.ic_notifications_active_black_48dp,
-						constructCategoryIntent(SettingsNotificationsActivity.class)
-				)*/));
+                new SettingsCategory(
+                        R.string.settings_notifications_name,
+                        R.string.settings_notifications_summary,
+                        R.drawable.ic_notifications_active_black_48dp,
+                        constructCategoryIntent(SettingsNotificationsActivity.class)
+                )*/));
     }
 
     private Intent constructCategoryIntent(final Class toActivity) {

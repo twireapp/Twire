@@ -234,24 +234,22 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // Call the super method as we also want the user to go all the way back to last mActivity if the user is in full screen mode
-                if (mStreamFragment != null) {
-                    if (!mStreamFragment.isVideoInterfaceShowing()) {
-                        return false;
-                    }
-
-                    if (mStreamFragment.chatOnlyViewVisible) {
-                        finish();
-                    } else {
-                        super.onBackPressed();
-                        mStreamFragment.backPressed();
-                    }
-                    overrideTransition();
+        if (item.getItemId() == android.R.id.home) {// Call the super method as we also want the user to go all the way back to last mActivity if the user is in full screen mode
+            if (mStreamFragment != null) {
+                if (!mStreamFragment.isVideoInterfaceShowing()) {
+                    return false;
                 }
 
-                return true;
+                if (mStreamFragment.chatOnlyViewVisible) {
+                    finish();
+                } else {
+                    super.onBackPressed();
+                    mStreamFragment.backPressed();
+                }
+                overrideTransition();
+            }
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

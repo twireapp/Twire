@@ -6,10 +6,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.perflyst.twire.R;
@@ -81,23 +79,17 @@ public class SettingsGeneralActivity extends ThemeActivity {
     public void onClickTwitchName(View v) {
         if (settings.isLoggedIn()) {
             MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialig(this, settings.getGeneralTwitchDisplayName());
-            dialog.getBuilder().onPositive(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    dialog.dismiss();
-                    Service.clearStreamerInfoDb(getBaseContext());
-                    navigateToLogin();
-                }
+            dialog.getBuilder().onPositive((dialog1, which) -> {
+                dialog1.dismiss();
+                Service.clearStreamerInfoDb(getBaseContext());
+                navigateToLogin();
             });
 
-            dialog.getBuilder().onNegative(new MaterialDialog.SingleButtonCallback() {
-                @Override
-                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    settings.setLogin(false);
-                    initTwitchDisplayName();
-                    initStartPageText();
-                    dialog.dismiss();
-                }
+            dialog.getBuilder().onNegative((dialog12, which) -> {
+                settings.setLogin(false);
+                initTwitchDisplayName();
+                initStartPageText();
+                dialog12.dismiss();
             });
 
             dialog.show();
@@ -107,14 +99,12 @@ public class SettingsGeneralActivity extends ThemeActivity {
     }
 
     public void onClickStartPage(View v) {
-        MaterialDialog dialog = DialogService.getChooseStartUpPageDialog(this, startPageSubText.getText().toString(), new MaterialDialog.ListCallbackSingleChoice() {
-            @Override
-            public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                settings.setStartPage(text.toString());
-                startPageSubText.setText(text.toString());
-                return true;
-            }
-        });
+        MaterialDialog dialog = DialogService.getChooseStartUpPageDialog
+                (this, startPageSubText.getText().toString(), (dialog1, view, which, text) -> {
+                    settings.setStartPage(text.toString());
+                    startPageSubText.setText(text.toString());
+                    return true;
+                });
 
         dialog.show();
     }

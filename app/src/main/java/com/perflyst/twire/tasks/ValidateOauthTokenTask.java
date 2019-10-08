@@ -56,7 +56,7 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
         }
 
         if (Service.isNetworkConnectedThreadOnly(context)) {
-            return new TokenValidation("", true, new ArrayList<String>());
+            return new TokenValidation("", true, new ArrayList<>());
         } else {
             return null;
         }
@@ -83,7 +83,7 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
         private boolean tokenValid;
         private List<String> scopes;
 
-        public TokenValidation(String twitchName, boolean tokenValid, List<String> scopes) {
+        TokenValidation(String twitchName, boolean tokenValid, List<String> scopes) {
             this.twitchName = twitchName;
             this.tokenValid = tokenValid;
             this.scopes = scopes;
