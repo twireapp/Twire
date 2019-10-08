@@ -24,9 +24,7 @@
         android:id="@+id/notification_text_container"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/notification_text_container_height"
-        android:layout_centerHorizontal="true"
-
-        >
+        android:layout_centerHorizontal="true">
 
         <TextView
             android:id="@+id/notification_text_line_one"
@@ -106,8 +104,10 @@
         android:id="@+id/skip_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginEnd="32dp"
         android:layout_marginRight="32dp"
         android:layout_marginBottom="@dimen/welcome_continue_circle_margin_bottom"
         android:color="@color/colorSetupSecond"
@@ -118,7 +118,7 @@
 
 
     <!-- RevealsFrames for the Transition to the next activity -->
-    <io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <io.codetail.widget.RevealFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -126,10 +126,10 @@
             android:id="@+id/transition_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorSetupSecond"></View>
+            android:background="@color/colorSetupSecond" />
     </io.codetail.widget.RevealFrameLayout>
 
-    <io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <io.codetail.widget.RevealFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -137,7 +137,7 @@
             android:id="@+id/transition_view_blue"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorSetupMain"></View>
+            android:background="@color/colorSetupMain" />
     </io.codetail.widget.RevealFrameLayout>
 
 </RelativeLayout>

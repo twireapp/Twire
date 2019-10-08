@@ -53,9 +53,7 @@
                     android:layout_height="@dimen/streamerInfo_logo_width"
                     android:layout_centerHorizontal="true"
                     android:contentDescription="@string/content_desc_twitchProfileBanner_imageView"
-                    android:src="@drawable/ic_profile_template_300p"
-
-                    />
+                    android:src="@drawable/ic_profile_template_300p" />
 
                 <TextView
                     android:id="@+id/twitch_name"
@@ -74,6 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/additional_toolbar"
+                android:baselineAligned="false"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:padding="@dimen/streamerInfo_additional_info_padding">
@@ -153,9 +152,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-    </androidx.viewpager.widget.ViewPager>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <RelativeLayout
         android:layout_width="match_parent"

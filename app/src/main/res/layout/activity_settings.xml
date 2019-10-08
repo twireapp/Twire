@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:background="?attr/settingsBackgroundColor"
     android:orientation="vertical"
-    tools:context="com.perflyst.twire.activities.settings.SettingsActivity"
-    tools:ignore="MergeRootFrame">
+    tools:context="com.perflyst.twire.activities.settings.SettingsActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_toolbar"

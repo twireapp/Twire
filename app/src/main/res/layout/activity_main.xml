@@ -6,17 +6,14 @@
     android:layout_height="fill_parent">
 
     <!-- Main Content -->
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:id="@+id/main_content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/android:colorBackground"
-        tools:ignore="MergeRootFrame">
+        android:background="?attr/android:colorBackground">
 
 
-        <androidx.appcompat.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/main_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,12 +29,12 @@
             android:layout_below="@id/main_toolbar"
             android:background="@drawable/toolbar_dropshadow" />
 
-        <io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <io.codetail.widget.RevealFrameLayout
             android:id="@+id/reveal_frame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/main_decorative_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,25 +79,24 @@
             android:layout_marginTop="10dp"
             android:textAppearance="@style/text_style_activity_icon" />
 
-        <!--<com.google.android.libraries.cast.companionlibrary.widgets.MiniController-->
-        <!--android:id="@+id/mini_controller"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--app:auto_setup="true"-->
-        <!--android:background="@drawable/mini_bg_shadow"-->
-        <!--android:visibility="gone">-->
-        <!--</com.google.android.libraries.cast.companionlibrary.widgets.MiniController>-->
+        <!--com.google.android.libraries.cast.companionlibrary.widgets.MiniController
+            android:id="@+id/mini_controller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/mini_bg_shadow"
+            android:visibility="gone"
+            app:auto_setup="true" /-->
 
-        <!--<fragment-->
-        <!--android:id="@+id/cast_mini_controller"-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:visibility="gone"-->
-        <!--class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"-->
-        <!--app:castTitleTextAppearance="@style/cardPrimaryText"-->
-        <!--app:castButtonColor="?attr/textColor"/>-->
+        <!--fragment
+            android:id="@+id/cast_mini_controller"
+            class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            app:castButtonColor="?attr/textColor"
+            app:castTitleTextAppearance="@style/cardPrimaryText" /-->
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_container"

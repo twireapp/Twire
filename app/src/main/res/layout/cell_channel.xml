@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.perflyst.twire.views.DynamicImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <com.perflyst.twire.views.DynamicImageView
             android:id="@+id/profileLogoImageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,26 +33,22 @@
             android:text="@string/subscription_card_displayName"
             android:textAppearance="@style/cardPrimaryText" />
 
-        <!--
-        <TextView
+
+        <!--TextView
             android:id="@+id/txtFollowers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Followers"
-            android:textSize="12sp"
             android:layout_below="@id/displayName"
-            />
+            android:text="Followers"
+            android:textSize="12sp" /-->
 
-        <TextView
+        <!--TextView
             android:id="@+id/txtStreamViews"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
-            android:text="Views"
-
             android:layout_below="@id/displayName"
-            />
-            -->
+            android:text="Views"
+            android:textSize="12sp" /-->
 
     </RelativeLayout>
 

@@ -5,12 +5,13 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.stream.LiveStreamActivity">
+    tools:context="com.perflyst.twire.activities.stream.LiveStreamActivity">
 
     <FrameLayout
         android:id="@+id/chat_landscape_fragment"
         android:layout_width="@dimen/chat_landscape_width"
         android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true" />
 
     <FrameLayout

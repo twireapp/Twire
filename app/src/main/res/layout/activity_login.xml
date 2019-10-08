@@ -111,6 +111,7 @@
             android:id="@+id/skip_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:padding="@dimen/login_skip_text_margin"
@@ -130,7 +131,6 @@
                 android:id="@+id/login_webview"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_alignParentBottom="true"
                 android:layout_gravity="center"
                 android:gravity="center">
 
@@ -150,7 +150,7 @@
         </FrameLayout>
 
         <!-- RevealsFrames for the Transition to the next activity -->
-        <io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <io.codetail.widget.RevealFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -158,10 +158,10 @@
                 android:id="@+id/transition_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/white"></View>
+                android:background="@android:color/white" />
         </io.codetail.widget.RevealFrameLayout>
 
-        <io.codetail.widget.RevealFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <io.codetail.widget.RevealFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -169,7 +169,7 @@
                 android:id="@+id/transition_view_blue"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/colorSetupMain"></View>
+                android:background="@color/colorSetupMain" />
         </io.codetail.widget.RevealFrameLayout>
 
         <!-- Container for the Continue FAB -->

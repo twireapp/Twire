@@ -1,4 +1,2 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.perflyst.twire.activities.ChannelActivity">
-
-</menu>
+    tools:context="com.perflyst.twire.activities.ChannelActivity" />

@@ -22,8 +22,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="@dimen/layout_selector_radiogroup_padding">
-
-    </RadioGroup>
+        android:paddingTop="@dimen/layout_selector_radiogroup_padding" />
 
 </LinearLayout>

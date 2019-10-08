@@ -82,6 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:clickable="true"
+                android:focusable="true"
                 android:padding="@dimen/search_icon_padding"
                 android:tint="?attr/searchActivityUpIconColor"
                 app:srcCompat="@drawable/ic_search_black_24dp" />

@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/navigation_drawer_icon_left_margin"
         android:layout_marginLeft="@dimen/navigation_drawer_icon_left_margin" />
 
     <TextView
@@ -18,6 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/navigation_drawer_text_left_margin"
         android:layout_marginLeft="@dimen/navigation_drawer_text_left_margin"
         android:background="@android:color/holo_green_light"
         android:gravity="center_vertical" />

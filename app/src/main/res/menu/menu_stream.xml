@@ -19,11 +19,11 @@
         android:title="@string/menu_sleep"
         app:showAsAction="ifRoom" />
 
-    <!--<item-->
-    <!--android:id="@+id/media_route_menu_item"-->
-    <!--android:title="@string/ccl_media_route_menu_title"-->
-    <!--app:actionProviderClass="androidx.mediarouter.app.MediaRouteActionProvider"-->
-    <!--app:showAsAction="always" />-->
+    <!--item
+        android:id="@+id/media_route_menu_item"
+        android:title="@string/ccl_media_route_menu_title"
+        app:actionProviderClass="androidx.mediarouter.app.MediaRouteActionProvider"
+        app:showAsAction="always" /-->
 
     <item
         android:id="@+id/menu_item_external"

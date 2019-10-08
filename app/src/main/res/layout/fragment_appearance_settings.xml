@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/settingsBackgroundColor"
-    tools:context=".fragments.AppearanceSettingsFragment">
+    tools:context="com.perflyst.twire.fragments.AppearanceSettingsFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -26,6 +26,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical">
 
                     <ImageView
@@ -87,6 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -126,6 +128,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -170,6 +173,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -209,6 +213,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -253,6 +258,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 
@@ -292,6 +298,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:orientation="vertical">
 

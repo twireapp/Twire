@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/navigationDrawerBackground"
     android:clickable="true"
+    android:focusable="true"
     tools:context="com.perflyst.twire.fragments.NavigationDrawerFragment">
 
     <ScrollView

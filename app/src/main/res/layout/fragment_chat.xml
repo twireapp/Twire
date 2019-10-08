@@ -25,7 +25,9 @@
                 android:id="@+id/tabs"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/backspace_divider"
                 android:layout_toLeftOf="@+id/backspace_divider"
                 app:tabGravity="center"
                 app:tabMaxWidth="@dimen/chat_emote_tab_max_width"
@@ -58,6 +60,7 @@
                 android:id="@+id/backspace_divider"
                 android:layout_width="@dimen/chat_emote_divider"
                 android:layout_height="match_parent"
+                android:layout_alignStart="@+id/emote_backspace"
                 android:layout_alignLeft="@+id/emote_backspace"
                 android:background="?attr/chatStatusBarColor" />
 
@@ -65,6 +68,7 @@
                 android:id="@+id/emote_backspace"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/chat_emote_backspace_padding"
                 android:tint="?attr/chatInputTextColor"
@@ -80,7 +84,7 @@
             android:id="@+id/tabs_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/chatInputBackgroundColor"></androidx.viewpager.widget.ViewPager>
+            android:background="?attr/chatInputBackgroundColor" />
 
     </LinearLayout>
 

@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/settingsBackgroundColor"
-    tools:context="com.perflyst.twire.activities.settings.SettingsGeneralActivity"
-    tools:ignore="MergeRootFrame">
+    tools:context="com.perflyst.twire.activities.settings.SettingsGeneralActivity">
 
-    <androidx.appcompat.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_general_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,6 +36,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:onClick="onClickTwitchName">
 
@@ -74,6 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:onClick="onClickStartPage">
 
@@ -116,6 +117,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:onClick="onClickResetTips">
 

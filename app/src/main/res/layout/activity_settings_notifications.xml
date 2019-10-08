@@ -5,10 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/settingsBackgroundColor"
-    tools:context="com.perflyst.twire.activities.settings.SettingsNotificationsActivity"
-    tools:ignore="MergeRootFrame">
+    tools:context="com.perflyst.twire.activities.settings.SettingsNotificationsActivity">
 
-    <androidx.appcompat.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_notifications_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,37 +17,36 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 
-    <!--
-    <RelativeLayout
+    <!--RelativeLayout
         android:id="@+id/container_settings_notifications_vibrate"
-        android:layout_below="@id/settings_notifications_toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/settings_item_height"
-        tools:context="com.perflyst.twire.Settings.SettingsGeneralActivity"
-        tools:ignore="MergeRootFrame">
+        android:layout_below="@id/settings_notifications_toolbar"
+        tools:context="com.perflyst.twire.Settings.SettingsGeneralActivity">
 
         <TextView
-            android:gravity="center_vertical"
-            android:layout_centerVertical="true"
+            android:id="@+id/notifications_vibrate_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/settings_text_left_margin"
             android:layout_marginLeft="@dimen/settings_text_left_margin"
-            android:textAppearance="@style/text_title"
+            android:gravity="center_vertical"
             android:text="@string/vibrate_activity_settings_notifications"
-            android:id="@+id/notifications_vibrate_textview"
-            />
+            android:textAppearance="@style/text_title" />
 
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/settings_text_left_margin"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            />
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/settings_text_left_margin"
+            android:layout_marginRight="@dimen/settings_text_left_margin"
+            android:gravity="center_vertical" />
 
-    </RelativeLayout>
-    -->
+    </RelativeLayout-->
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -69,6 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:onClick="setCheckInterval">
 
@@ -122,6 +121,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
+                    android:focusable="true"
                     android:gravity="center_vertical"
                     android:onClick="chooseStreamers">
 
@@ -152,7 +152,7 @@
                         android:layout_marginEnd="@dimen/settings_text_right_margin"
                         android:layout_marginRight="@dimen/settings_text_right_margin"
                         android:ellipsize="marquee"
-                        android:maxLines="1"
+                        android:singleLine="true"
                         android:text="@string/choose_who_summary_activity_settings_notifications"
                         android:textAppearance="@style/sub_text_settings" />
 
@@ -316,6 +316,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/notifications_quiet_hours_divider"
+                android:baselineAligned="false"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
@@ -331,6 +332,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/settings_small_item_height"
                         android:clickable="true"
+                        android:focusable="true"
                         android:onClick="setQuietHoursStart">
 
                         <TextView
@@ -360,13 +362,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-
                     app:mrl_rippleDelayClick="false">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/settings_small_item_height"
                         android:clickable="true"
+                        android:focusable="true"
                         android:onClick="setQuietHoursEnd">
 
                         <TextView
