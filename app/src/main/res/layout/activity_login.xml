@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorSetupMain"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorSetupMain"
     tools:context="com.perflyst.twire.activities.setup.LoginActivity">
 
     <RelativeLayout
@@ -16,172 +15,161 @@
         <!-- Setup icon -->
         <ImageView
             android:id="@+id/login_icon"
-            android:src="@drawable/ic_gear_256px"
-            android:tint="@color/colorSetupSecond"
-            android:layout_marginTop="@dimen/login_icon_margin_top"
             android:layout_width="@dimen/login_icon_size"
             android:layout_height="@dimen/login_icon_size"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            />
+            android:layout_marginTop="@dimen/login_icon_margin_top"
+            android:src="@drawable/ic_gear_256px"
+            android:tint="@color/colorSetupSecond" />
 
         <!-- Next Three are for the success icon animation -->
         <ImageView
             android:id="@+id/login_success_shadow"
-            android:src="@drawable/circle_for_login"
-            android:tint="@color/green_600"
-            android:layout_marginTop="@dimen/login_icon_margin_top"
             android:layout_width="@dimen/login_icon_size"
             android:layout_height="@dimen/login_icon_size"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            />
+            android:layout_marginTop="@dimen/login_icon_margin_top"
+            android:src="@drawable/circle_for_login"
+            android:tint="@color/green_600" />
 
         <ImageView
             android:id="@+id/login_success_circle"
-            android:src="@drawable/circle_login_success"
-            android:tint="@color/green_500"
-            android:layout_marginTop="@dimen/login_icon_margin_top"
             android:layout_width="@dimen/login_icon_size"
             android:layout_height="@dimen/login_icon_size"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            />
+            android:layout_marginTop="@dimen/login_icon_margin_top"
+            android:src="@drawable/circle_login_success"
+            android:tint="@color/green_500" />
 
         <ImageView
             android:id="@+id/login_icon_done"
-            android:src="@drawable/ic_done_white_256dp_1x"
-            android:tint="@color/colorSetupSecond"
-            android:padding="@dimen/login_icon_success_padding"
-            android:layout_marginTop="@dimen/login_icon_margin_top"
             android:layout_width="@dimen/login_icon_size"
             android:layout_height="@dimen/login_icon_size"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            />
+            android:layout_marginTop="@dimen/login_icon_margin_top"
+            android:padding="@dimen/login_icon_success_padding"
+            android:src="@drawable/ic_done_white_256dp_1x"
+            android:tint="@color/colorSetupSecond" />
 
         <!-- Container for the Login instructions -->
         <RelativeLayout
             android:id="@+id/login_text_container"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/login_text_container_height"
-            android:layout_centerHorizontal="true"
-            >
+            android:layout_centerHorizontal="true">
+
             <TextView
                 android:id="@+id/login_text_line_one"
-                android:text="@string/login_text_line_one"
-                android:textSize="@dimen/login_text_line_one_size"
-                android:textAppearance="@style/text_setup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="@dimen/login_text_line_one_margin_bottom"
                 android:gravity="center"
-                />
+                android:text="@string/login_text_line_one"
+                android:textAppearance="@style/text_setup"
+                android:textSize="@dimen/login_text_line_one_size" />
 
             <TextView
                 android:id="@+id/login_text_line_two"
-                android:text="@string/login_text_line_two"
-                android:textSize="@dimen/login_text_line_two_size"
-                android:textAppearance="@style/text_setup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@id/login_text_line_one"
+                android:layout_centerHorizontal="true"
                 android:gravity="center"
-                />
+                android:text="@string/login_text_line_two"
+                android:textAppearance="@style/text_setup"
+                android:textSize="@dimen/login_text_line_two_size" />
         </RelativeLayout>
 
         <!-- Text for the on success message -->
         <TextView
             android:id="@+id/login_success_message"
-            android:textSize="@dimen/login_success_message_size"
-            android:textAppearance="@style/text_setup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            />
+            android:textAppearance="@style/text_setup"
+            android:textSize="@dimen/login_success_message_size" />
 
         <!-- Shadow for the continue FAB -->
         <View
             android:id="@+id/login_continue_circle_shadow"
-            android:src="@drawable/circle_for_login"
-            android:tint="@color/colorSetupFABShadow"
             android:layout_width="@dimen/welcome_continue_circle_shadow_diameter"
             android:layout_height="@dimen/welcome_continue_circle_shadow_diameter"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/welcome_continue_circle_shadow_margin_bottom"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            />
-
+            android:layout_marginBottom="@dimen/welcome_continue_circle_shadow_margin_bottom"
+            android:src="@drawable/circle_for_login"
+            android:tint="@color/colorSetupFABShadow" />
 
 
         <TextView
+            android:id="@+id/skip_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:padding="@dimen/login_skip_text_margin"
             android:singleLine="true"
             android:text="@string/skip_text"
-            android:textSize="@dimen/notification_skip"
             android:textAppearance="@style/text_button"
-            android:id="@+id/skip_text"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:padding="@dimen/login_skip_text_margin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:textSize="@dimen/notification_skip" />
 
         <!-- WebView and ProgressView for the Login -->
         <FrameLayout
             android:id="@+id/webview_container"
-            android:layout_gravity="center"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:layout_gravity="center">
+
             <WebView
                 android:id="@+id/login_webview"
-                android:layout_alignParentBottom="true"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
-                android:gravity="center"
-                >
+                android:gravity="center">
 
             </WebView>
+
             <com.rey.material.widget.ProgressView
                 android:id="@+id/SetupProgress"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
                 android:gravity="center"
+                app:cpd_transformDuration="1000"
                 app:pv_autostart="true"
                 app:pv_circular="true"
-                app:pv_progressStyle="@style/Material.Drawable.CircularProgress"
                 app:pv_progressMode="indeterminate"
-                app:cpd_transformDuration="1000"
-                />
+                app:pv_progressStyle="@style/Material.Drawable.CircularProgress" />
         </FrameLayout>
 
         <!-- RevealsFrames for the Transition to the next activity -->
         <io.codetail.widget.RevealFrameLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <View
                 android:id="@+id/transition_view"
-                android:background="@android:color/white"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </View>
+                android:layout_height="match_parent"
+                android:background="@android:color/white" />
         </io.codetail.widget.RevealFrameLayout>
 
         <io.codetail.widget.RevealFrameLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <View
                 android:id="@+id/transition_view_blue"
-                android:background="@color/colorSetupMain"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </View>
+                android:layout_height="match_parent"
+                android:background="@color/colorSetupMain" />
         </io.codetail.widget.RevealFrameLayout>
 
         <!-- Container for the Continue FAB -->
@@ -190,39 +178,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/welcome_continue_circle_margin_bottom"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/circle_for_welcome"
             android:layout_gravity="center"
-            >
+            android:layout_marginBottom="@dimen/welcome_continue_circle_margin_bottom"
+            android:background="@drawable/circle_for_welcome">
 
             <ImageView
                 android:id="@+id/login_continue_circle"
-                app:srcCompat="@drawable/circle_for_login"
-                android:tint="@color/colorSetupSecond"
                 android:layout_width="@dimen/welcome_continue_circle_diameter"
                 android:layout_height="@dimen/welcome_continue_circle_diameter"
                 android:layout_gravity="center"
-                />
+                android:tint="@color/colorSetupSecond"
+                app:srcCompat="@drawable/circle_for_login" />
 
             <ImageView
                 android:id="@+id/forward_arrow"
-                android:src="@drawable/ic_arrow_forward"
-                android:tint="@color/colorSetupMain"
                 android:layout_width="@dimen/welcome_continue_arrow_diameter"
                 android:layout_height="@dimen/welcome_continue_arrow_diameter"
                 android:layout_gravity="center"
-                />
+                android:src="@drawable/ic_arrow_forward"
+                android:tint="@color/colorSetupMain" />
         </FrameLayout>
     </RelativeLayout>
 
 
     <Button
         android:id="@+id/btn_prelaunch_login"
-        android:visibility="invisible"
         android:layout_width="1dp"
         android:layout_height="1dp"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
+        android:visibility="invisible" />
 </RelativeLayout>

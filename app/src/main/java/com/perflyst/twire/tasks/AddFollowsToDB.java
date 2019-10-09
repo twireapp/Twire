@@ -24,9 +24,9 @@ import java.util.TreeMap;
 public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
     private String LOG_TAG = getClass().getSimpleName();
 
-    protected ArrayList<ChannelInfo> doInBackground(Object... params){
+    protected ArrayList<ChannelInfo> doInBackground(Object... params) {
         @SuppressWarnings({"unchecked"})
-        ArrayList<ChannelInfo> subsToAdd = (ArrayList<ChannelInfo>) params[0] ;
+        ArrayList<ChannelInfo> subsToAdd = (ArrayList<ChannelInfo>) params[0];
         ArrayList<ChannelInfo> subsAdded = new ArrayList<>();
         Map<String, ChannelInfo> subsToCheck = new TreeMap<>();
 
@@ -41,13 +41,13 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
 
         Log.d(LOG_TAG, TempStorage.getLoadedStreamers().toString());
         // Loop over the provided list of StreamerInfo objects
-        for(ChannelInfo subToAdd : subsToAdd) {
-            if(subToAdd == null) {
+        for (ChannelInfo subToAdd : subsToAdd) {
+            if (subToAdd == null) {
                 Log.d(LOG_TAG, "StreamerInfo fed was null");
                 continue;
             }
             // Make sure the streamer is not already in the database
-            if(TempStorage.containsLoadedStreamer(subToAdd)) {
+            if (TempStorage.containsLoadedStreamer(subToAdd)) {
                 Log.d(LOG_TAG, "Streamer (" + subToAdd.getStreamerName() + ") already in database");
                 continue;
             }
@@ -57,23 +57,23 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
 
             // Create a new map of values where column names are the keys
             ContentValues values = new ContentValues();
-            values.put(SubscriptionsDbHelper.COLUMN_ID,             subToAdd.getUserId());
-            values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME,  subToAdd.getStreamerName());
-            values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME,   subToAdd.getDisplayName());
-            values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION,    subToAdd.getStreamDescription());
-            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS,      subToAdd.getFollowers());
-            values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS,   subToAdd.getViews());
-            values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE,   subToAdd.isNotifyWhenLive() && !disableForStreamer ? 1 : 0);
+            values.put(SubscriptionsDbHelper.COLUMN_ID, subToAdd.getUserId());
+            values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, subToAdd.getStreamerName());
+            values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, subToAdd.getDisplayName());
+            values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, subToAdd.getStreamDescription());
+            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, subToAdd.getFollowers());
+            values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, subToAdd.getViews());
+            values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, subToAdd.isNotifyWhenLive() && !disableForStreamer ? 1 : 0);
 
 
             // Test if the URL strings are null, to make sure we don't call toString on a null.
-            if(subToAdd.getLogoURL() != null)
+            if (subToAdd.getLogoURL() != null)
                 values.put(SubscriptionsDbHelper.COLUMN_LOGO_URL, subToAdd.getLogoURL().toString());
 
-            if(subToAdd.getVideoBannerURL() != null)
+            if (subToAdd.getVideoBannerURL() != null)
                 values.put(SubscriptionsDbHelper.COLUMN_VIDEO_BANNER_URL, subToAdd.getVideoBannerURL().toString());
 
-            if(subToAdd.getProfileBannerURL() != null)
+            if (subToAdd.getProfileBannerURL() != null)
                 values.put(SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL, subToAdd.getProfileBannerURL().toString());
 
 
@@ -99,7 +99,7 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
     }
 
     protected void onPostExecute(ArrayList<ChannelInfo> result) {
-        if(result != null) {
+        if (result != null) {
             TempStorage.addLoadedStreamer(result);
             Log.d(LOG_TAG, "Count of streamers added: " + result.size());
             Log.d(LOG_TAG, "Streamers (" + result.toString() + ") added to database");

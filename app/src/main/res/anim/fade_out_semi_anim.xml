@@ -2,7 +2,8 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <alpha android:fromAlpha="1"
-        android:toAlpha="0.5"
-        android:duration="@android:integer/config_mediumAnimTime"/>
+    <alpha
+        android:duration="@android:integer/config_mediumAnimTime"
+        android:fromAlpha="1"
+        android:toAlpha="0.5" />
 </set>

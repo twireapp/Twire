@@ -10,13 +10,13 @@ import com.perflyst.twire.service.Settings;
  */
 
 public class ChannelAutoSpanBehaviour implements AutoSpanBehaviour {
-	@Override
-	public String getElementSizeName(Settings settings) {
-		return settings.getAppearanceChannelSize();
-	}
+    @Override
+    public String getElementSizeName(Settings settings) {
+        return settings.getAppearanceChannelSize();
+    }
 
-	@Override
-	public int getElementWidth(Context context) {
-		return (int) context.getResources().getDimension(R.dimen.subscription_card_width) + (int) context.getResources().getDimension(R.dimen.subscription_card_margin);
-	}
+    @Override
+    public int getElementWidth(Context context) {
+        return (int) context.getResources().getDimension(R.dimen.subscription_card_width) + (int) context.getResources().getDimension(R.dimen.subscription_card_margin);
+    }
 }

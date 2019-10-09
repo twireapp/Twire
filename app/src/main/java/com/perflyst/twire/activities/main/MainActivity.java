@@ -12,7 +12,14 @@ import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.rey.material.widget.ProgressView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.adapters.MainActivityAdapter;
@@ -26,14 +33,8 @@ import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.ScrollToStartPositionTask;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
+import com.rey.material.widget.ProgressView;
 
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -76,18 +77,16 @@ public abstract class MainActivity extends ThemeActivity {
 
     @BindView(R.id.main_decorative_toolbar)
     protected Toolbar mDecorativeToolbar;
-
-    // The position of the toolbars for the activity that started the transition to this activity
-    private float fromToolbarPosition,
-            fromMainToolbarPosition;
-    private boolean isTransitioned = false;
-
     protected String LOG_TAG;
     protected MainActivityAdapter mAdapter;
     protected NavigationDrawerFragment mDrawerFragment;
     protected UniversalOnScrollListener mScrollListener;
     protected Settings settings;
     protected TooltipWindow mTooltip;
+    // The position of the toolbars for the activity that started the transition to this activity
+    private float fromToolbarPosition,
+            fromMainToolbarPosition;
+    private boolean isTransitioned = false;
 
     /**
      * Refreshes the content of the activity
@@ -146,7 +145,7 @@ public abstract class MainActivity extends ThemeActivity {
         mTitleView.bringToFront();
 
         // Setup Drawer Fragment
-        mDrawerFragment.setUp((DrawerLayout) findViewById(R.id.followed_channels_drawer_layout), mMainToolbar);
+        mDrawerFragment.setUp(findViewById(R.id.followed_channels_drawer_layout), mMainToolbar);
 
         // Set up the RecyclerView
         mRecyclerView.setBehaviour(constructSpanBehaviour());
@@ -314,12 +313,10 @@ public abstract class MainActivity extends ThemeActivity {
                         if (!mTooltip.isTooltipShown()) {
                             final View anchor = Service.getNavButtonView(mMainToolbar);
                             if (anchor != null) {
-                                anchor.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                                    @Override
-                                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                                        mTooltip.showToolTip(anchor, getString(R.string.tip_navigate));
-                                    }
-                                });
+                                anchor.addOnLayoutChangeListener(
+                                        (v1, left1, top1, right1, bottom1,
+                                         oldLeft1, oldTop1, oldRight1, oldBottom1) ->
+                                                mTooltip.showToolTip(anchor, getString(R.string.tip_navigate)));
                             }
                         }
                     }

@@ -5,8 +5,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.activities.FollowingFetcher;
-import com.perflyst.twire.service.Service;
 import com.perflyst.twire.model.ChannelInfo;
+import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.service.TempStorage;
 
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, ChannelInfo>> {
     private long timerStart = System.currentTimeMillis();
-    private String LOG_TAG	= getClass().getSimpleName();
+    private String LOG_TAG = getClass().getSimpleName();
     private Context baseContext;
     private GetTwitchUserFollows twitchUserFollows;
     private FollowingFetcher mFollowingFetcher;
@@ -31,15 +31,15 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
 
     public GetFollowsFromDB(FollowingFetcher aActivity) {
         mFollowingFetcher = aActivity;
-		twitchUserFollows = new GetTwitchUserFollows();
+        twitchUserFollows = new GetTwitchUserFollows();
     }
 
-    protected Map<String, ChannelInfo> doInBackground(Context... params){
+    protected Map<String, ChannelInfo> doInBackground(Context... params) {
         Log.d(LOG_TAG, "Entered GetSubscriptionsFromDB");
         baseContext = params[0];
         final boolean INCLUDE_THUMBNAILS = false;
 
-        Map<String, ChannelInfo> resultList = Service.getStreamerInfoFromDB(LOG_TAG, baseContext, INCLUDE_THUMBNAILS);
+        Map<String, ChannelInfo> resultList = Service.getStreamerInfoFromDB(baseContext, INCLUDE_THUMBNAILS);
         Log.d(LOG_TAG, resultList.size() + " streamers fetched from database");
         Log.d(LOG_TAG, resultList.toString());
 
@@ -47,10 +47,10 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
     }
 
     protected void onPostExecute(Map<String, ChannelInfo> subscriptions) {
-        if(subscriptions != null && subscriptions.size() > 0) {
-            for(Map.Entry<String,ChannelInfo> entry : subscriptions.entrySet()) {
+        if (subscriptions != null && subscriptions.size() > 0) {
+            for (Map.Entry<String, ChannelInfo> entry : subscriptions.entrySet()) {
                 TempStorage.addLoadedStreamer(entry.getValue()); // Add the streamers to the static list field to ensure we don't waste time and resources getting the streamers from the database again.
-                if(mFollowingFetcher != null) {
+                if (mFollowingFetcher != null) {
                     mFollowingFetcher.addStreamer(entry.getValue());
                 }
             }
@@ -71,6 +71,7 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
 
     /**
      * Returns the boolean status of the task this AsyncTask starts at the end of onPostExecute
+     *
      * @return
      */
     public boolean isFinished() {

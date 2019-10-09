@@ -1,210 +1,214 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/chat_fragment_wrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.perflyst.twire.fragments.ChatFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.perflyst.twire.fragments.ChatFragment">
+
     <LinearLayout
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_alignParentBottom="true"
         android:id="@+id/emote_keyboard_container"
         android:layout_width="match_parent"
-        android:layout_height="250dp">
+        android:layout_height="250dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <RelativeLayout
-            android:orientation="horizontal"
-            android:background="?attr/chatInputBackgroundColor"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/chat_emote_tabs_layout_height">
+            android:layout_height="@dimen/chat_emote_tabs_layout_height"
+            android:background="?attr/chatInputBackgroundColor"
+            android:orientation="horizontal">
+
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
+                android:layout_toStartOf="@+id/backspace_divider"
                 android:layout_toLeftOf="@+id/backspace_divider"
-                app:tabMode="scrollable"
                 app:tabGravity="center"
                 app:tabMaxWidth="@dimen/chat_emote_tab_max_width"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                app:tabMode="scrollable">
 
                 <com.google.android.material.tabs.TabItem
                     android:id="@+id/recenttab"
-                    android:layout_height="@dimen/chat_emote_tab_icon_size"
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_clock_black_24dp"/>
+                    android:layout_height="@dimen/chat_emote_tab_icon_size"
+                    android:icon="@drawable/ic_clock_black_24dp" />
 
                 <com.google.android.material.tabs.TabItem
-                    android:layout_height="@dimen/chat_emote_tab_icon_size"
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_twitch_500px"/>
+                    android:layout_height="@dimen/chat_emote_tab_icon_size"
+                    android:icon="@drawable/ic_twitch_500px" />
 
                 <com.google.android.material.tabs.TabItem
-                    android:layout_height="@dimen/chat_emote_tab_icon_size"
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_betterttv_500px"/>
+                    android:layout_height="@dimen/chat_emote_tab_icon_size"
+                    android:icon="@drawable/ic_betterttv_500px" />
 
                 <com.google.android.material.tabs.TabItem
-                    android:layout_height="@dimen/chat_emote_tab_icon_size"
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_mood_black_24dp"/>
+                    android:layout_height="@dimen/chat_emote_tab_icon_size"
+                    android:icon="@drawable/ic_mood_black_24dp" />
 
             </com.google.android.material.tabs.TabLayout>
 
             <View
                 android:id="@+id/backspace_divider"
-                android:layout_alignLeft="@+id/emote_backspace"
-                android:background="?attr/chatStatusBarColor"
                 android:layout_width="@dimen/chat_emote_divider"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_alignStart="@+id/emote_backspace"
+                android:layout_alignLeft="@+id/emote_backspace"
+                android:background="?attr/chatStatusBarColor" />
 
             <ImageView
-                android:layout_alignParentRight="true"
                 android:id="@+id/emote_backspace"
-                android:tint="?attr/chatInputTextColor"
-                app:srcCompat="@drawable/ic_backspace_black_24dp"
-                android:padding="@dimen/chat_emote_backspace_padding"
                 android:layout_width="48dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/chat_emote_backspace_padding"
+                android:tint="?attr/chatInputTextColor"
+                app:srcCompat="@drawable/ic_backspace_black_24dp" />
         </RelativeLayout>
 
         <View
-            android:background="?attr/chatStatusBarColor"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/chat_emote_divider"
-            android:layout_width="match_parent"/>
+            android:background="?attr/chatStatusBarColor" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/tabs_viewpager"
-            android:background="?attr/chatInputBackgroundColor"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </androidx.viewpager.widget.ViewPager>
+            android:layout_height="match_parent"
+            android:background="?attr/chatInputBackgroundColor" />
 
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/chat_input"
-        android:background="?attr/chatInputBackgroundColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/chat_input_height"
-        android:maxHeight="@dimen/chat_input_height_max"
         android:layout_alignWithParentIfMissing="true"
         android:layout_above="@+id/emote_keyboard_container"
+        android:background="?attr/chatInputBackgroundColor"
+        android:maxHeight="@dimen/chat_input_height_max"
+        android:minHeight="@dimen/chat_input_height"
         android:paddingLeft="@dimen/chat_input_padding"
-        android:paddingRight="@dimen/chat_input_padding"
-        >
+        android:paddingRight="@dimen/chat_input_padding">
 
         <ImageView
-            android:layout_centerVertical="true"
+            android:id="@+id/chat_send_ic"
+            android:layout_width="@dimen/chat_send_ic_size"
+            android:layout_height="@dimen/chat_send_ic_size"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:clickable="false"
-            android:id="@+id/chat_send_ic"
             android:tint="?attr/chatSendIconColor"
-            app:srcCompat="@drawable/ic_send_black_24dp"
-            android:layout_width="@dimen/chat_send_ic_size"
-            android:layout_height="@dimen/chat_send_ic_size"/>
+            app:srcCompat="@drawable/ic_send_black_24dp" />
 
         <ImageView
+            android:id="@+id/chat_emote_keyboard_ic"
+            android:layout_width="@dimen/chat_send_ic_size"
+            android:layout_height="@dimen/chat_send_ic_size"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/chat_emote_icon_margin_right"
             android:layout_marginRight="@dimen/chat_emote_icon_margin_right"
             android:layout_toStartOf="@+id/chat_send_ic"
             android:layout_toLeftOf="@+id/chat_send_ic"
-            android:id="@+id/chat_emote_keyboard_ic"
             android:tint="?attr/chatSendIconColor"
-            android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_mood_black_24dp"
-            android:layout_width="@dimen/chat_send_ic_size"
-            android:layout_height="@dimen/chat_send_ic_size"/>
+            app:srcCompat="@drawable/ic_mood_black_24dp" />
 
         <com.perflyst.twire.views.EditTextBackEvent
             android:id="@+id/send_message_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toStartOf="@id/chat_emote_keyboard_ic"
             android:layout_toLeftOf="@id/chat_emote_keyboard_ic"
-            android:layout_centerVertical="true"
-            android:textColor="?attr/chatInputTextColor"
-            android:hint="@string/chat_send_message_hint"
-            android:textColorHint="?attr/chatInputHintColor"
             android:background="@android:color/transparent"
+            android:hint="@string/chat_send_message_hint"
+            android:imeOptions="actionSend"
             android:inputType="textImeMultiLine"
             android:maxHeight="@dimen/chat_input_height_max"
             android:maxLength="150"
-            android:imeOptions="actionSend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:textColor="?attr/chatInputTextColor"
+            android:textColorHint="?attr/chatInputHintColor" />
     </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/chat_status_bar"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="@dimen/chat_status_bar_height"
-        android:background="?attr/chatStatusBarColor"
-        >
+        android:layout_alignParentTop="true"
+        android:background="?attr/chatStatusBarColor">
+
         <TextView
-            android:textColor="?attr/chatStatusBarTextColor"
             android:id="@+id/chat_status_text"
-            android:text="@string/chat_status_connecting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:text="@string/chat_status_connecting"
+            android:textColor="?attr/chatStatusBarTextColor" />
+
         <RelativeLayout
-            android:layout_gravity="end"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_gravity="end">
 
             <ImageView
-                android:visibility="gone"
-                android:layout_centerVertical="true"
+                android:id="@+id/slowmode_ic"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:id="@+id/slowmode_ic"
+                android:layout_centerVertical="true"
                 android:tint="?attr/chatRoomstateIconColor"
-                app:srcCompat="@drawable/ic_roomstate_slowmode_26dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
-            <ImageView
                 android:visibility="gone"
+                app:srcCompat="@drawable/ic_roomstate_slowmode_26dp" />
+
+            <ImageView
+                android:id="@+id/r9k_ic"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/slowmode_ic"
                 android:layout_toLeftOf="@id/slowmode_ic"
-                android:id="@+id/r9k_ic"
                 android:tint="?attr/chatRoomstateIconColor"
-                app:srcCompat="@drawable/ic_roomstate_r9k_26dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
-            <ImageView
                 android:visibility="gone"
+                app:srcCompat="@drawable/ic_roomstate_r9k_26dp" />
+
+            <ImageView
+                android:id="@+id/subsonly_ic"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/r9k_ic"
                 android:layout_toLeftOf="@id/r9k_ic"
-                android:id="@+id/subsonly_ic"
                 android:tint="?attr/chatRoomstateIconColor"
-                app:srcCompat="@drawable/ic_roomstate_subsonly_26dp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_roomstate_subsonly_26dp" />
         </RelativeLayout>
     </FrameLayout>
 
     <FrameLayout
         android:id="@+id/chat_input_divider"
-        android:background="?attr/chatStatusBarColor"
-        android:layout_above="@id/chat_input"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/chat_input_divider_height"/>
+        android:layout_height="@dimen/chat_input_divider_height"
+        android:layout_above="@id/chat_input"
+        android:background="?attr/chatStatusBarColor" />
 
     <com.perflyst.twire.views.recyclerviews.ChatRecyclerView
-        android:overScrollMode="never"
-        android:background="?attr/chatBackgroundColor"
         android:id="@+id/ChatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/chat_status_bar"
         android:layout_above="@id/chat_input_divider"
-        />
+        android:layout_below="@id/chat_status_bar"
+        android:background="?attr/chatBackgroundColor"
+        android:overScrollMode="never" />
 
 </RelativeLayout>

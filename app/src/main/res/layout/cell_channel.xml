@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="wrap_content"
@@ -11,55 +10,47 @@
     app:cardPreventCornerOverlap="false"
     app:cardUseCompatPadding="true">
 
-        <RelativeLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.perflyst.twire.views.DynamicImageView
+            android:id="@+id/profileLogoImageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/content_desc_twitchLogo_imageView" />
 
-            <com.perflyst.twire.views.DynamicImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/profileLogoImageView"
-                android:contentDescription="@string/content_desc_twitchLogo_imageView"
-                 />
+        <TextView
+            android:id="@+id/displayName"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/subscription_card_name_height"
+            android:layout_below="@id/profileLogoImageView"
+            android:background="?attr/mainCardBackgroundColor"
+            android:fontFamily="@string/font_roboto_light"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/subscription_card_displayName"
+            android:textAppearance="@style/cardPrimaryText" />
 
-            <TextView
-                android:id="@+id/displayName"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/subscription_card_name_height"
-                android:gravity="center"
-                android:layout_below="@id/profileLogoImageView"
-                android:textAppearance="@style/cardPrimaryText"
-                android:maxLines="1"
-                android:text="@string/subscription_card_displayName"
-                android:fontFamily="@string/font_roboto_light"
-                android:background="?attr/mainCardBackgroundColor"
-                />
 
-            <!--
-            <TextView
-                android:id="@+id/txtFollowers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Followers"
-                android:textSize="12sp"
-                android:layout_below="@id/displayName"
-                />
+        <!--TextView
+            android:id="@+id/txtFollowers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/displayName"
+            android:text="Followers"
+            android:textSize="12sp" /-->
 
-            <TextView
-                android:id="@+id/txtStreamViews"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="Views"
+        <!--TextView
+            android:id="@+id/txtStreamViews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/displayName"
+            android:text="Views"
+            android:textSize="12sp" /-->
 
-                android:layout_below="@id/displayName"
-                />
-                -->
+    </RelativeLayout>
 
-        </RelativeLayout>
-
-    </androidx.cardview.widget.CardView>
+</androidx.cardview.widget.CardView>
 

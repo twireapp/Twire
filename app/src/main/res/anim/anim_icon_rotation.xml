@@ -6,6 +6,5 @@
         android:interpolator="@android:anim/bounce_interpolator"
         android:pivotX="50%"
         android:pivotY="50%"
-        android:toDegrees="359"
-        />
+        android:toDegrees="359" />
 </set>

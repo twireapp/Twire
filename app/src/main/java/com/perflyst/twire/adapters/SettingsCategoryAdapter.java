@@ -19,41 +19,36 @@ import butterknife.ButterKnife;
 
 public class SettingsCategoryAdapter extends SRJAdapter<SettingsCategory, SettingsCategoryAdapter.SettingsCategoryViewHolder> {
 
-	@Override
-	protected int getLayoutResource(int viewType) {
-		return R.layout.cell_settings_category;
-	}
+    @Override
+    protected int getLayoutResource(int viewType) {
+        return R.layout.cell_settings_category;
+    }
 
-	@Override
-	protected ViewHolderFactory<SettingsCategoryViewHolder> getViewHolderCreator(int i) {
-		return new ViewHolderFactory<SettingsCategoryViewHolder>() {
-			@Override
-			public SettingsCategoryViewHolder create(View view) {
-				return new SettingsCategoryViewHolder(view);
-			}
-		};
-	}
+    @Override
+    protected ViewHolderFactory<SettingsCategoryViewHolder> getViewHolderCreator(int i) {
+        return SettingsCategoryViewHolder::new;
+    }
 
-	public class SettingsCategoryViewHolder extends SRJViewHolder<SettingsCategory> {
-		@BindView(R.id.txt_category_title)
-		protected TextView mTitleView;
+    public class SettingsCategoryViewHolder extends SRJViewHolder<SettingsCategory> {
+        @BindView(R.id.txt_category_title)
+        protected TextView mTitleView;
 
-		@BindView(R.id.txt_category_summary)
-		protected TextView mSummaryView;
+        @BindView(R.id.txt_category_summary)
+        protected TextView mSummaryView;
 
-		@BindView(R.id.img_category_icon)
-		protected ImageView mCategoryIconView;
+        @BindView(R.id.img_category_icon)
+        protected ImageView mCategoryIconView;
 
-		public SettingsCategoryViewHolder(View itemView) {
-			super(itemView);
-			ButterKnife.bind(this, itemView);
-		}
+        SettingsCategoryViewHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
 
-		@Override
-		protected void onDataBinded(SettingsCategory settingsCategory) {
-			mTitleView.setText(settingsCategory.getTitleRes());
-			mSummaryView.setText(settingsCategory.getSummaryRes());
-			mCategoryIconView.setImageResource(settingsCategory.getIconRes());
-		}
-	}
+        @Override
+        protected void onDataBinded(SettingsCategory settingsCategory) {
+            mTitleView.setText(settingsCategory.getTitleRes());
+            mSummaryView.setText(settingsCategory.getSummaryRes());
+            mCategoryIconView.setImageResource(settingsCategory.getIconRes());
+        }
+    }
 }

@@ -8,29 +8,29 @@ import android.view.animation.Transformation;
  * Created by SebastianRask on 24-01-2016.
  */
 public class ResizeHeightAnimation extends Animation {
-	final int startHeight;
-	final int targetHeight;
-	View view;
+    private final int startHeight;
+    private final int targetHeight;
+    private View view;
 
-	public ResizeHeightAnimation(View view, int targetHeight) {
-		this.view = view;
-		this.targetHeight = targetHeight;
-		this.startHeight = view.getHeight();
-	}
+    public ResizeHeightAnimation(View view, int targetHeight) {
+        this.view = view;
+        this.targetHeight = targetHeight;
+        this.startHeight = view.getHeight();
+    }
 
-	@Override
-	protected void applyTransformation(float interpolatedTime, Transformation t) {
-		view.getLayoutParams().height = (int) (startHeight + (targetHeight - startHeight) * interpolatedTime);
-		view.requestLayout();
-	}
+    @Override
+    protected void applyTransformation(float interpolatedTime, Transformation t) {
+        view.getLayoutParams().height = (int) (startHeight + (targetHeight - startHeight) * interpolatedTime);
+        view.requestLayout();
+    }
 
-	@Override
-	public void initialize(int width, int height, int parentWidth, int parentHeight) {
-		super.initialize(width, height, parentWidth, parentHeight);
-	}
+    @Override
+    public void initialize(int width, int height, int parentWidth, int parentHeight) {
+        super.initialize(width, height, parentWidth, parentHeight);
+    }
 
-	@Override
-	public boolean willChangeBounds() {
-		return true;
-	}
+    @Override
+    public boolean willChangeBounds() {
+        return true;
+    }
 }

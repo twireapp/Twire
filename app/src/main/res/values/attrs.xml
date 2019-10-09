@@ -4,7 +4,7 @@
     <!-- ============== -->
     <!--      Misc     -->
     <!-- ============== -->
-    <attr name="dividerColor" format="color"/>
+    <attr name="dividerColor" format="color" />
     <attr name="textColor" format="color" />
     <attr name="secondaryTextColor" format="color" />
     <attr name="disabledTextColor" format="color" />
@@ -18,7 +18,7 @@
     <!-- ============== -->
     <!--      Chat     -->
     <!-- ============== -->
-    <attr name="chatSendRippleColor" format="color"/>
+    <attr name="chatSendRippleColor" format="color" />
     <attr name="chatInputBackgroundColor" format="color" />
     <attr name="chatInputTextColor" format="color" />
     <attr name="chatInputHintColor" format="color" />
@@ -31,28 +31,28 @@
     <!-- ================ -->
     <!--Settings Activity -->
     <!-- ================ -->
-    <attr name="settingsBackgroundColor" format="color"/>
-    <attr name="settingsTextColor" format="color"/>
+    <attr name="settingsBackgroundColor" format="color" />
+    <attr name="settingsTextColor" format="color" />
     <attr name="settingsSecondaryTextColor" format="color" />
-    <attr name="settingsDisabledTextColor" format="color"/>
+    <attr name="settingsDisabledTextColor" format="color" />
 
     <!-- ============== -->
     <!--   MainActivity -->
     <!-- ============== -->
-    <attr name="mainActivityIconColor" format="color"/>
-    <attr name="mainActivityIconTextColor" format="color"/>
+    <attr name="mainActivityIconColor" format="color" />
+    <attr name="mainActivityIconTextColor" format="color" />
 
     <!-- ============== -->
     <!--   Search Activity -->
     <!-- ============== -->
     <attr name="searchActivityUpIconColor" format="color" />
     <attr name="searchActivityCardColor" format="color" />
-    
+
     <!-- ============== -->
     <!--      Cards     -->
     <!-- ============== -->
     <attr name="mainCardBackgroundColor" format="color" />
-    <attr name="cardTextColor" format="color"/>
+    <attr name="cardTextColor" format="color" />
 
     <!-- ================= -->
     <!-- Navigation drawer -->

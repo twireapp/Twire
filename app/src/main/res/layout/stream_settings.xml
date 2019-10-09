@@ -1,116 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:paddingTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="?attr/backgroundColor"
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:paddingTop="8dp">
 
             <TextView
                 android:id="@+id/options_text"
-                android:visibility="gone"
                 style="@style/stream_settings_item"
+                android:text="@string/options"
                 android:textColor="?attr/secondaryTextColor"
-                android:text="@string/options" />
+                android:visibility="gone" />
 
             <CheckedTextView
-                android:visibility="gone"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-                android:text="@string/audio_only"
                 android:id="@+id/audio_only_selector"
-                style="@style/stream_settings_item"/>
+                style="@style/stream_settings_item"
+                android:background="?attr/selectableItemBackground"
+                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center_vertical"
+                android:text="@string/audio_only"
+                android:visibility="gone" />
 
             <CheckedTextView
-                android:visibility="gone"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-                android:text="@string/chat_only"
                 android:id="@+id/chat_only_selector"
-                style="@style/stream_settings_item"/>
+                style="@style/stream_settings_item"
+                android:background="?attr/selectableItemBackground"
+                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center_vertical"
+                android:text="@string/chat_only"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/quality_wrapper"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <TextView
                     style="@style/stream_settings_item"
-                    android:textColor="?attr/secondaryTextColor"
-                    android:text="@string/available_qualities" />
+                    android:text="@string/available_qualities"
+                    android:textColor="?attr/secondaryTextColor" />
 
                 <com.balysv.materialripple.MaterialRippleLayout
-                    app:mrl_rippleDelayClick="false"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleDelayClick="false">
+
                     <TextView
                         android:id="@+id/auto"
                         style="@style/stream_settings_item"
-                        android:text="@string/quality_auto"/>
+                        android:text="@string/quality_auto" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout
-                    app:mrl_rippleDelayClick="false"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleDelayClick="false">
+
                     <TextView
                         android:id="@+id/source"
                         style="@style/stream_settings_item"
-                        android:text="@string/quality_source"/>
+                        android:text="@string/quality_source" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout
-                    app:mrl_rippleDelayClick="false"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleDelayClick="false">
+
                     <TextView
                         android:id="@+id/high"
                         style="@style/stream_settings_item"
-                        android:text="@string/quality_high"/>
+                        android:text="@string/quality_high" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout
-                    app:mrl_rippleDelayClick="false"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleDelayClick="false">
+
                     <TextView
                         android:id="@+id/medium"
-                        android:text="@string/quality_medium"
-                        style="@style/stream_settings_item"/>
+                        style="@style/stream_settings_item"
+                        android:text="@string/quality_medium" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout
-                    app:mrl_rippleDelayClick="false"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleDelayClick="false">
+
                     <TextView
                         android:id="@+id/low"
-                        android:text="@string/quality_low"
-                        style="@style/stream_settings_item"/>
+                        style="@style/stream_settings_item"
+                        android:text="@string/quality_low" />
                 </com.balysv.materialripple.MaterialRippleLayout>
 
                 <com.balysv.materialripple.MaterialRippleLayout
-                    app:mrl_rippleDelayClick="false"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:mrl_rippleDelayClick="false">
+
                     <TextView
                         android:id="@+id/mobile"
-                        android:text="@string/quality_mobile"
-                        style="@style/stream_settings_item"/>
+                        style="@style/stream_settings_item"
+                        android:text="@string/quality_mobile" />
                 </com.balysv.materialripple.MaterialRippleLayout>
             </LinearLayout>
         </LinearLayout>

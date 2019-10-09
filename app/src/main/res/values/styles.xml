@@ -1,6 +1,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="AppTheme.Base"/>
+    <style name="AppTheme" parent="AppTheme.Base" />
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
@@ -247,9 +247,9 @@
         <item name="android:paddingBottom">@dimen/emote_error_padding_bottom</item>
     </style>
 
-    <style name="snack_bar_style_mobile" parent="Material.Widget.SnackBar.Mobile.MultiLine"/>
+    <style name="snack_bar_style_mobile" parent="Material.Widget.SnackBar.Mobile.MultiLine" />
 
-    <style name="snack_bar_style_tablet" parent="Material.Widget.SnackBar.Tablet.MultiLine"/>
+    <style name="snack_bar_style_tablet" parent="Material.Widget.SnackBar.Tablet.MultiLine" />
 
     <!-- Title Regular Black 87%-->
     <style name="text_title">
@@ -385,13 +385,12 @@
 
     <bool name="isTablet">false</bool>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="WhiteBackgroundTheme.AppBarOverlay"
-           parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="WhiteBackgroundTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="WhiteBackgroundTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="WhiteBackgroundTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

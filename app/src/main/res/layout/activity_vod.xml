@@ -7,26 +7,27 @@
 
     <FrameLayout
         android:id="@+id/chat_landscape_fragment"
-        android:layout_alignParentRight="true"
         android:layout_width="@dimen/chat_landscape_width"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
 
     <FrameLayout
         android:id="@+id/chat_fragment"
-        android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true" />
 
     <FrameLayout
         android:id="@+id/video_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <FrameLayout
         android:id="@+id/chat_placement_wrapper"
-        android:layout_below="@id/video_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layout_below="@id/video_fragment_container" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -74,7 +75,3 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </RelativeLayout>
-
-
-
-

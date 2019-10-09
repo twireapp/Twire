@@ -34,8 +34,8 @@ public class RoundedTopTransformation implements Transformation {
         Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
         paint.setAntiAlias(true);
         paint.setShader(shader);
-        RectF rec = new RectF(0, 0, w, h - (h/3));
-        c.drawRect(new RectF(0, (h/3), w, h), paint);
+        RectF rec = new RectF(0, 0, w, h - (h / 3));
+        c.drawRect(new RectF(0, (h / 3), w, h), paint);
         c.drawRoundRect(rec, cornerRadius, cornerRadius, paint);
         source.recycle();
         return bmp;

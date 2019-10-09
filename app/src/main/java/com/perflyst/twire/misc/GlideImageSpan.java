@@ -19,7 +19,6 @@ import com.rey.material.drawable.BlankDrawable;
 
 public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callback {
     private TextView textView;
-    private SpannableStringBuilder builder;
 
     private Drawable mDrawable;
     private Animatable animatable;
@@ -29,7 +28,6 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
 
         this.textView = textView;
         this.textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-        this.builder = builder;
         final GlideImageSpan instance = this;
 
         final Drawable placeHolderDrawable = new ColorDrawable(Color.LTGRAY);
@@ -108,7 +106,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
         return this.mDrawable != null ? this.mDrawable : super.getDrawable();
     }
 
-    /*
+/*
     @Override
     public void chooseHeight(CharSequence text, int start, int end, int spanstartv, int lineHeight, Paint.FontMetricsInt fm) {
         if (end == ((Spanned) text).getSpanEnd(this)) {

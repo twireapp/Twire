@@ -3,8 +3,8 @@
 
     <item>
         <shape
-            android:tint="?attr/cardBackgroundColor"
-            android:shape="rectangle" >
+            android:shape="rectangle"
+            android:tint="?attr/cardBackgroundColor">
 
             <size
                 android:width="@dimen/stream_template_width"

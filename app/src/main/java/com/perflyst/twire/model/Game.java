@@ -9,170 +9,168 @@ import com.perflyst.twire.R;
 /**
  * Created by Sebastian Rask Jepsen on 11-08-2015.
  */
-public class Game implements Comparable<Game>, MainElement, Parcelable{
-	private String  gameTitle;
-	private int     gameViewers;
-	private int     gameStreamers;
+public class Game implements Comparable<Game>, MainElement, Parcelable {
+    public static final Parcelable.Creator<Game> CREATOR = new ClassLoaderCreator<Game>() {
+        @Override
+        public Game createFromParcel(Parcel source) {
+            return new Game(source);
+        }
 
-	private String  gamePreviewSmallURL;
-	private String  gamePreviewMediumURL;
-	private String  gamePreviewLargeURL;
+        @Override
+        public Game createFromParcel(Parcel source, ClassLoader loader) {
+            return new Game(source);
+        }
 
-	public Game(String gameTitle, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
-		this(gameTitle, -1, -1, gamePreviewSmallURL, gamePreviewMediumURL, gamePreviewLargeURL);
-	}
+        @Override
+        public Game[] newArray(int size) {
+            return new Game[size];
+        }
 
-	public Game(String gameTitle, int gameViewers, int gameStreamers, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
-		this.gameTitle = gameTitle;
-		this.gameViewers = gameViewers;
-		this.gameStreamers = gameStreamers;
-		this.gamePreviewSmallURL = gamePreviewSmallURL;
-		this.gamePreviewMediumURL = gamePreviewMediumURL;
-		this.gamePreviewLargeURL = gamePreviewLargeURL;
-	}
+    };
+    private String gameTitle;
+    private int gameViewers;
+    private int gameStreamers;
+    private String gamePreviewSmallURL;
+    private String gamePreviewMediumURL;
+    private String gamePreviewLargeURL;
 
-	public Game(Parcel parcel) {
-		String[] stringData = new String[4];
-		int[] intData = new int[2];
-		parcel.readStringArray(stringData);
-		parcel.readIntArray(intData);
+    public Game(String gameTitle, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
+        this(gameTitle, -1, -1, gamePreviewSmallURL, gamePreviewMediumURL, gamePreviewLargeURL);
+    }
 
-		gameTitle = stringData[0];
-		gameViewers = intData[0];
-		gameStreamers = intData[1];
+    public Game(String gameTitle, int gameViewers, int gameStreamers, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
+        this.gameTitle = gameTitle;
+        this.gameViewers = gameViewers;
+        this.gameStreamers = gameStreamers;
+        this.gamePreviewSmallURL = gamePreviewSmallURL;
+        this.gamePreviewMediumURL = gamePreviewMediumURL;
+        this.gamePreviewLargeURL = gamePreviewLargeURL;
+    }
 
-		gamePreviewSmallURL = stringData[1];
-		gamePreviewMediumURL = stringData[2];
-		gamePreviewLargeURL = stringData[3];
-	}
+    public Game(Parcel parcel) {
+        String[] stringData = new String[4];
+        int[] intData = new int[2];
+        parcel.readStringArray(stringData);
+        parcel.readIntArray(intData);
 
-	@Override
-	public void writeToParcel(Parcel dest, int flags) {
-		String[] toSend = new String[] {
-			gameTitle,
-			gamePreviewSmallURL,
-			gamePreviewMediumURL,
-			gamePreviewLargeURL
-		};
+        gameTitle = stringData[0];
+        gameViewers = intData[0];
+        gameStreamers = intData[1];
 
-		int[] integers = new int[] {
-				gameViewers,
-				gameStreamers
-		};
+        gamePreviewSmallURL = stringData[1];
+        gamePreviewMediumURL = stringData[2];
+        gamePreviewLargeURL = stringData[3];
+    }
 
-		dest.writeStringArray(toSend);
-		dest.writeIntArray(integers);
-	}
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        String[] toSend = new String[]{
+                gameTitle,
+                gamePreviewSmallURL,
+                gamePreviewMediumURL,
+                gamePreviewLargeURL
+        };
 
-	public String getGameTitle() {
-		return gameTitle;
-	}
+        int[] integers = new int[]{
+                gameViewers,
+                gameStreamers
+        };
 
-	public void setGameTitle(String gameTitle) {
-		this.gameTitle = gameTitle;
-	}
+        dest.writeStringArray(toSend);
+        dest.writeIntArray(integers);
+    }
 
-	public int getGameViewers() {
-		return gameViewers;
-	}
+    public String getGameTitle() {
+        return gameTitle;
+    }
 
-	public void setGameViewers(int gameViewers) {
-		this.gameViewers = gameViewers;
-	}
+    public void setGameTitle(String gameTitle) {
+        this.gameTitle = gameTitle;
+    }
 
-	public int getGameStreamers() {
-		return gameStreamers;
-	}
+    public int getGameViewers() {
+        return gameViewers;
+    }
 
-	public void setGameStreamers(int gameStreamers) {
-		this.gameStreamers = gameStreamers;
-	}
+    public void setGameViewers(int gameViewers) {
+        this.gameViewers = gameViewers;
+    }
 
-	public String getGamePreviewSmallURL() {
-		return gamePreviewSmallURL;
-	}
+    public int getGameStreamers() {
+        return gameStreamers;
+    }
 
-	public void setGamePreviewSmallURL(String gamePreviewSmallURL) {
-		this.gamePreviewSmallURL = gamePreviewSmallURL;
-	}
+    public void setGameStreamers(int gameStreamers) {
+        this.gameStreamers = gameStreamers;
+    }
 
-	public String getGamePreviewMediumURL() {
-		return gamePreviewMediumURL;
-	}
+    private String getGamePreviewSmallURL() {
+        return gamePreviewSmallURL;
+    }
 
-	public void setGamePreviewMediumURL(String gamePreviewMediumURL) {
-		this.gamePreviewMediumURL = gamePreviewMediumURL;
-	}
+    public void setGamePreviewSmallURL(String gamePreviewSmallURL) {
+        this.gamePreviewSmallURL = gamePreviewSmallURL;
+    }
 
-	public String getGamePreviewLargeURL() {
-		return gamePreviewLargeURL;
-	}
+    private String getGamePreviewMediumURL() {
+        return gamePreviewMediumURL;
+    }
 
-	public void setGamePreviewLargeURL(String gamePreviewLargeURL) {
-		this.gamePreviewLargeURL = gamePreviewLargeURL;
-	}
+    public void setGamePreviewMediumURL(String gamePreviewMediumURL) {
+        this.gamePreviewMediumURL = gamePreviewMediumURL;
+    }
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+    private String getGamePreviewLargeURL() {
+        return gamePreviewLargeURL;
+    }
 
-		Game game = (Game) o;
+    public void setGamePreviewLargeURL(String gamePreviewLargeURL) {
+        this.gamePreviewLargeURL = gamePreviewLargeURL;
+    }
 
-		return !(gameTitle != null ? !gameTitle.equals(game.gameTitle) : game.gameTitle != null);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-	}
+        Game game = (Game) o;
 
-	@Override
-	public int hashCode() {
-		return gameTitle != null ? gameTitle.hashCode() : 0;
-	}
+        return !(gameTitle != null ? !gameTitle.equals(game.gameTitle) : game.gameTitle != null);
 
-	@Override
-	public int compareTo(Game aGame) {
-		return this.getGameViewers() - aGame.getGameViewers();
-	}
+    }
 
-	@Override
-	public String getHighPreview() {
-		return getGamePreviewLargeURL();
-	}
+    @Override
+    public int hashCode() {
+        return gameTitle != null ? gameTitle.hashCode() : 0;
+    }
 
-	@Override
-	public String getMediumPreview() {
-		return getGamePreviewMediumURL();
-	}
+    @Override
+    public int compareTo(Game aGame) {
+        return this.getGameViewers() - aGame.getGameViewers();
+    }
 
-	@Override
-	public String getLowPreview() {
-		return getGamePreviewSmallURL();
-	}
+    @Override
+    public String getHighPreview() {
+        return getGamePreviewLargeURL();
+    }
 
-	@Override
-	public int getPlaceHolder(Context context) {
-		return R.drawable.template_game;
-	}
+    @Override
+    public String getMediumPreview() {
+        return getGamePreviewMediumURL();
+    }
 
-	public static final Parcelable.Creator<Game> CREATOR = new ClassLoaderCreator<Game>(){
-		@Override
-		public Game createFromParcel(Parcel source) {
-			return new Game(source);
-		}
+    @Override
+    public String getLowPreview() {
+        return getGamePreviewSmallURL();
+    }
 
-		@Override
-		public Game createFromParcel(Parcel source, ClassLoader loader) {
-			return new Game(source);
-		}
+    @Override
+    public int getPlaceHolder(Context context) {
+        return R.drawable.template_game;
+    }
 
-		@Override
-		public Game[] newArray(int size) {
-			return new Game[size];
-		}
-
-	};
-
-	@Override
-	public int describeContents() {
-		return 0;
-	}
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 }

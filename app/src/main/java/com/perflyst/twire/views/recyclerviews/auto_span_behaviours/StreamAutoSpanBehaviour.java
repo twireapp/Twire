@@ -10,13 +10,13 @@ import com.perflyst.twire.service.Settings;
  */
 
 public class StreamAutoSpanBehaviour implements AutoSpanBehaviour {
-	@Override
-	public String getElementSizeName(Settings settings) {
-		return settings.getAppearanceStreamSize();
-	}
+    @Override
+    public String getElementSizeName(Settings settings) {
+        return settings.getAppearanceStreamSize();
+    }
 
-	@Override
-	public int getElementWidth(Context context) {
-		return (int) context.getResources().getDimension(R.dimen.stream_card_min_width) + (int) context.getResources().getDimension(R.dimen.stream_card_left_margin);
-	}
+    @Override
+    public int getElementWidth(Context context) {
+        return (int) context.getResources().getDimension(R.dimen.stream_card_min_width) + (int) context.getResources().getDimension(R.dimen.stream_card_left_margin);
+    }
 }

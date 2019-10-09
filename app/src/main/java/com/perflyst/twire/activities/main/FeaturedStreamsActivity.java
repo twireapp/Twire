@@ -22,70 +22,70 @@ import java.util.List;
 
 public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
 
-	@Override
-	protected int getActivityIconRes() {
-		return R.drawable.ic_featured_streams;
-	}
+    @Override
+    protected int getActivityIconRes() {
+        return R.drawable.ic_featured_streams;
+    }
 
-	@Override
-	protected int getActivityTitleRes() {
-		return R.string.featured_activity_title;
-	}
+    @Override
+    protected int getActivityTitleRes() {
+        return R.string.featured_activity_title;
+    }
 
-	@Override
-	protected AutoSpanBehaviour constructSpanBehaviour() {
-		return new StreamAutoSpanBehaviour();
-	}
+    @Override
+    protected AutoSpanBehaviour constructSpanBehaviour() {
+        return new StreamAutoSpanBehaviour();
+    }
 
-	@Override
-	protected void customizeActivity() {
-		super.customizeActivity();
-		setLimit(10);
-		setMaxElementsToFetch(200);
-		((StreamsAdapter) mAdapter).setConsiderPriority(true); // Make sure the adapter takes into account the streams' priority when comparing streams
-	}
+    @Override
+    protected void customizeActivity() {
+        super.customizeActivity();
+        setLimit(10);
+        setMaxElementsToFetch(200);
+        ((StreamsAdapter) mAdapter).setConsiderPriority(true); // Make sure the adapter takes into account the streams' priority when comparing streams
+    }
 
-	@Override
-	protected MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView) {
-		return new StreamsAdapter(recyclerView, this);
-	}
+    @Override
+    protected MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView) {
+        return new StreamsAdapter(recyclerView, this);
+    }
 
-	@Override
-	public void addToAdapter(List<StreamInfo> aObjectList) {
-		mOnScrollListener.checkForNewElements(mRecyclerView);
-		mAdapter.addList(aObjectList);
-		Log.i(LOG_TAG, "Adding Featured Streams: " + aObjectList.size());
-	}
+    @Override
+    public void addToAdapter(List<StreamInfo> aObjectList) {
+        mOnScrollListener.checkForNewElements(mRecyclerView);
+        mAdapter.addList(aObjectList);
+        Log.i(LOG_TAG, "Adding Featured Streams: " + aObjectList.size());
+    }
 
-	/**
-	 * Methods for functionality and for controlling the SwipeRefreshLayout
-	 */
+    /**
+     * Methods for functionality and for controlling the SwipeRefreshLayout
+     */
 
-	@Override
-	public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException{
-		List<StreamInfo> resultList = new ArrayList<>();
+    @Override
+    public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
+        List<StreamInfo> resultList = new ArrayList<>();
 
-		//Indentation is meant to mimic the structure of the JSON code
-		final String URL = "https://api.twitch.tv/kraken/streams/featured?limit="+ getLimit() + "&offset=" + getCurrentOffset();
-		final String FEATURED_ARRAY_KEY = "featured";
-			final String STREAM_PRIORITY_INTEGER_KEY = "priority";
-			final String STREAM_OBJECT_KEY = "stream";
+        //Indentation is meant to mimic the structure of the JSON code
+        final String URL = "https://api.twitch.tv/kraken/streams/featured?limit=" + getLimit() + "&offset=" + getCurrentOffset();
+        final String FEATURED_ARRAY_KEY = "featured";
+        final String STREAM_PRIORITY_INTEGER_KEY = "priority";
+        final String STREAM_OBJECT_KEY = "stream";
 
-		String jsonString = Service.urlToJSONString(URL);
-		JSONObject fullDataObject = new JSONObject(jsonString);
-		JSONArray topFeaturedArray = fullDataObject.getJSONArray(FEATURED_ARRAY_KEY);
+        String jsonString = Service.urlToJSONString(URL);
+        JSONObject fullDataObject = new JSONObject(jsonString);
+        JSONArray topFeaturedArray = fullDataObject.getJSONArray(FEATURED_ARRAY_KEY);
 
-		for (int i = 0; i < topFeaturedArray.length(); i++) {
-			// Get all the JSON objects we need to get all the required data.
-			JSONObject topObject = topFeaturedArray.getJSONObject(i);
-			JSONObject streamObject = topObject.getJSONObject(STREAM_OBJECT_KEY);
+        for (int i = 0; i < topFeaturedArray.length(); i++) {
+            // Get all the JSON objects we need to get all the required data.
+            JSONObject topObject = topFeaturedArray.getJSONObject(i);
+            JSONObject streamObject = topObject.getJSONObject(STREAM_OBJECT_KEY);
 
-			int streamPriority = topObject.getInt(STREAM_PRIORITY_INTEGER_KEY);
-			StreamInfo mStreamInfo = JSONService.getStreamInfo(getBaseContext(), streamObject, null, false);
-			mStreamInfo.setPriority(streamPriority);
-			resultList.add(mStreamInfo);
-		}
+            int streamPriority = topObject.getInt(STREAM_PRIORITY_INTEGER_KEY);
+            StreamInfo mStreamInfo = JSONService.getStreamInfo(getBaseContext(), streamObject, null, false);
+            mStreamInfo.setPriority(streamPriority);
+            resultList.add(mStreamInfo);
+        }
 
-		return resultList;
-	}
+        return resultList;
+    }
 }

@@ -14,40 +14,41 @@ import java.util.ArrayList;
  */
 
 public class GetStreamChattersTask extends AsyncTask<Void, Void, ArrayList<String>> {
-	private GetStreamChattersTaskDelegate delegate;
-	private String mStreamTwitchName;
+    private GetStreamChattersTaskDelegate delegate;
+    private String mStreamTwitchName;
 
-	public GetStreamChattersTask(GetStreamChattersTaskDelegate delegate, String mStreamTwitchName) {
-		this.delegate = delegate;
-		this.mStreamTwitchName = mStreamTwitchName;
-	}
+    public GetStreamChattersTask(GetStreamChattersTaskDelegate delegate, String mStreamTwitchName) {
+        this.delegate = delegate;
+        this.mStreamTwitchName = mStreamTwitchName;
+    }
 
-	@Override
-	protected ArrayList<String> doInBackground(Void... voids) {
-		try {
-			final String BASE_URL = "https://tmi.twitch.tv/group/user/" + mStreamTwitchName + "/chatters";
+    @Override
+    protected ArrayList<String> doInBackground(Void... voids) {
+        try {
+            final String BASE_URL = "https://tmi.twitch.tv/group/user/" + mStreamTwitchName + "/chatters";
 
-			JSONObject topObject = new JSONObject(Service.urlToJSONString(BASE_URL));
+            JSONObject topObject = new JSONObject(Service.urlToJSONString(BASE_URL));
 
-			return null;
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+            return null;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-	@Override
-	protected void onPostExecute(ArrayList<String> chatters) {
-		super.onPostExecute(chatters);
-		if (chatters != null) {
-			delegate.onChattersFetched(chatters);
-		} else {
-			delegate.onChattersFetchFailed();
-		}
-	}
+    @Override
+    protected void onPostExecute(ArrayList<String> chatters) {
+        super.onPostExecute(chatters);
+        if (chatters != null) {
+            delegate.onChattersFetched(chatters);
+        } else {
+            delegate.onChattersFetchFailed();
+        }
+    }
 
-	public interface GetStreamChattersTaskDelegate {
-		void onChattersFetched(ArrayList<String> chatters);
-		void onChattersFetchFailed();
-	}
+    public interface GetStreamChattersTaskDelegate {
+        void onChattersFetched(ArrayList<String> chatters);
+
+        void onChattersFetchFailed();
+    }
 }

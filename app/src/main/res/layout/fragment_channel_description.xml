@@ -1,41 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.perflyst.twire.views.FlingingNestedScrollView
-    android:overScrollMode="never"
+<com.perflyst.twire.views.FlingingNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:overScrollMode="never">
 
     <LinearLayout
-        android:descendantFocusability="blocksDescendants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
+
         <com.perflyst.twire.views.FontFitTextView
             android:id="@+id/emote_error_view"
-            style="@style/style_emote_error"/>
+            style="@style/style_emote_error" />
 
         <TextView
-            android:text="@string/streamerInfo_description"
             android:id="@+id/error_view"
             style="@style/style_no_elements_found"
-            />
+            android:text="@string/streamerInfo_description" />
 
         <TextView
-            android:padding="@dimen/activity_horizontal_margin"
             android:id="@+id/description"
-            android:lineSpacingMultiplier="1.3"
-            android:gravity="center"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
             style="@style/text_title"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.3"
+            android:padding="@dimen/activity_horizontal_margin" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/panel_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </com.perflyst.twire.views.FlingingNestedScrollView>

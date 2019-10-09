@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:textColor="@color/black"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/txt_message"
-    android:paddingRight="@dimen/chat_recyclerview_padding"
-    android:paddingLeft="@dimen/chat_recyclerview_padding"
-    android:textSize="@dimen/chat_message_text_sie"
-    android:clickable="false"
-    android:scrollHorizontally="false"
-    android:scrollbars="none"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:breakStrategy="simple"/>
+    android:breakStrategy="simple"
+    android:clickable="false"
+    android:paddingLeft="@dimen/chat_recyclerview_padding"
+    android:paddingRight="@dimen/chat_recyclerview_padding"
+    android:scrollbars="none"
+    android:scrollHorizontally="false"
+    android:textColor="@color/black"
+    android:textSize="@dimen/chat_message_text_sie" />

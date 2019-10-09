@@ -1,18 +1,16 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.perflyst.twire.activities.main.MainActivity">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.perflyst.twire.activities.main.MainActivity">
 
-    <!--<item-->
-        <!--android:id="@+id/search_menu_item"-->
-        <!--android:title="@string/menu_action_search"-->
-        <!--android:icon="@drawable/ic_search_white_24dp"-->
-        <!--app:showAsAction="never" />-->
+    <!--item
+        android:id="@+id/search_menu_item"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/menu_action_search"
+        app:showAsAction="never" /-->
 
-    <!--<item-->
-        <!--android:id="@+id/media_route_menu_item"-->
-        <!--android:title="@string/ccl_media_route_menu_title"-->
-        <!--app:actionProviderClass="androidx.mediarouter.app.MediaRouteActionProvider"-->
-        <!--app:showAsAction="always" />-->
+    <!--item
+        android:id="@+id/media_route_menu_item"
+        android:title="@string/ccl_media_route_menu_title"
+        app:actionProviderClass="androidx.mediarouter.app.MediaRouteActionProvider"
+        app:showAsAction="always" /-->
 
 </menu>

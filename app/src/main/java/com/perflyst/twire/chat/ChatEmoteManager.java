@@ -39,11 +39,21 @@ public class ChatEmoteManager {
     private int channelId;
     private String channelName;
 
-    public ChatEmoteManager(int channelId, String channelName, Context context) {
+    ChatEmoteManager(int channelId, String channelName, Context context) {
         this.context = context;
         this.channelId = channelId;
         this.channelName = channelName;
         this.settings = new Settings(context);
+    }
+
+    private static String getEmoteUrl(boolean isEmoteBttv, String emoteId, int size) {
+        return isEmoteBttv
+                ? "https://cdn.betterttv.net/emote/" + emoteId + "/" + size + "x"
+                : "https://static-cdn.jtvnw.net/emoticons/v1/" + emoteId + "/" + size + ".0";
+    }
+
+    public static String getEmoteUrl(Emote emote, int size) {
+        return getEmoteUrl(emote.isBetterTTVEmote(), emote.getEmoteId(), size);
     }
 
     /**
@@ -51,9 +61,9 @@ public class ChatEmoteManager {
      * Fetches and maps the emote keywords and id's
      * This must not be called on main UI thread
      */
-    protected void loadBttvEmotes(EmoteFetchCallback callback) {
+    void loadBttvEmotes(EmoteFetchCallback callback) {
         Map<String, String> result = new HashMap<>();
-        String emotesPattern = "";
+        StringBuilder emotesPattern = new StringBuilder();
 
         final String BASE_GLOBAL_URL = "https://api.betterttv.net/2/emotes";
         final String BASE_CHANNEL_URL = "https://api.betterttv.net/2/channels/" + channelName;
@@ -66,9 +76,8 @@ public class ChatEmoteManager {
             JSONArray globalEmotes = topObject.getJSONArray(EMOTE_ARRAY);
 
             for (int i = 0; i < globalEmotes.length(); i++) {
-                JSONArray arrayWithEmote = globalEmotes;
 
-                JSONObject emoteObject = arrayWithEmote.getJSONObject(i);
+                JSONObject emoteObject = globalEmotes.getJSONObject(i);
                 String emoteKeyword = emoteObject.getString(EMOTE_WORD);
                 String emoteId = emoteObject.getString(EMOTE_ID);
                 result.put(emoteKeyword, emoteId);
@@ -76,19 +85,18 @@ public class ChatEmoteManager {
                 Emote emote = new Emote(emoteId, emoteKeyword, true);
                 bttvGlobal.add(emote);
 
-                if (emotesPattern.equals("")) {
-                    emotesPattern = Pattern.quote(emoteKeyword);
+                if (emotesPattern.toString().equals("")) {
+                    emotesPattern = new StringBuilder(Pattern.quote(emoteKeyword));
                 } else {
-                    emotesPattern += "|" + Pattern.quote(emoteKeyword);
+                    emotesPattern.append("|").append(Pattern.quote(emoteKeyword));
                 }
             }
 
             JSONObject topChannelEmotes = new JSONObject(Service.urlToJSONString(BASE_CHANNEL_URL));
             JSONArray channelEmotes = topChannelEmotes.getJSONArray(EMOTE_ARRAY);
             for (int i = 0; i < channelEmotes.length(); i++) {
-                JSONArray arrayWithEmote = channelEmotes;
 
-                JSONObject emoteObject = arrayWithEmote.getJSONObject(i);
+                JSONObject emoteObject = channelEmotes.getJSONObject(i);
                 String emoteKeyword = emoteObject.getString(EMOTE_WORD);
                 String emoteId = emoteObject.getString(EMOTE_ID);
                 result.put(emoteKeyword, emoteId);
@@ -97,10 +105,10 @@ public class ChatEmoteManager {
                 emote.setBetterTTVChannelEmote(true);
                 bttvChannel.add(emote);
 
-                if (emotesPattern.equals("")) {
-                    emotesPattern = Pattern.quote(emoteKeyword);
+                if (emotesPattern.toString().equals("")) {
+                    emotesPattern = new StringBuilder(Pattern.quote(emoteKeyword));
                 } else {
-                    emotesPattern += "|" + Pattern.quote(emoteKeyword);
+                    emotesPattern.append("|").append(Pattern.quote(emoteKeyword));
                 }
             }
 
@@ -122,6 +130,7 @@ public class ChatEmoteManager {
     /**
      * Connects to Twitch API to get the URL for the channels subscriber emote
      * This must not be executed on main UI Thread
+     *
      * @return
      */
     Bitmap getSubscriberEmote() {
@@ -142,7 +151,7 @@ public class ChatEmoteManager {
             e.printStackTrace();
         }
 
-        if(emote != null) {
+        if (emote != null) {
             return emote;
         } else {
             return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_missing_emote);
@@ -151,10 +160,11 @@ public class ChatEmoteManager {
 
     /**
      * Finds and creates Better Twitch Tv emotes in a message and returns them.
+     *
      * @param message The message to find emotes in
      * @return The List of emotes in the message
      */
-    protected List<ChatEmote> findBttvEmotes(String message) {
+    List<ChatEmote> findBttvEmotes(String message) {
         List<ChatEmote> emotes = new ArrayList<>();
         Matcher bttvEmoteMatcher = bttvEmotesPattern.matcher(message);
 
@@ -162,7 +172,7 @@ public class ChatEmoteManager {
             String emoteKeyword = bttvEmoteMatcher.group();
             String emoteId = bttvEmotesToId.get(emoteKeyword);
 
-            String[] positions = new String[] {bttvEmoteMatcher.start() + "-" + (bttvEmoteMatcher.end() - 1)};
+            String[] positions = new String[]{bttvEmoteMatcher.start() + "-" + (bttvEmoteMatcher.end() - 1)};
             String emoteUrl = getEmoteFromId(emoteId, true);
             if (emoteUrl != null) {
                 final ChatEmote chatEmote = new ChatEmote(positions, emoteUrl);
@@ -175,14 +185,15 @@ public class ChatEmoteManager {
 
     /**
      * Finds and creates Twitch emotes in an unsplit irc line.
+     *
      * @param message The line to find emotes in
      * @return The list of emotes from the line
      */
-    protected List<ChatEmote> findTwitchEmotes(String message) {
+    List<ChatEmote> findTwitchEmotes(String message) {
         List<ChatEmote> emotes = new ArrayList<>();
         Matcher emoteMatcher = emotePattern.matcher(message);
 
-        while(emoteMatcher.find()) {
+        while (emoteMatcher.find()) {
             String emoteId = emoteMatcher.group(1);
             String[] positions = emoteMatcher.group(2).split(",");
             emotes.add(new ChatEmote(positions, getEmoteFromId(emoteId, false)));
@@ -197,37 +208,25 @@ public class ChatEmoteManager {
      * connects to the twitchemotes.com API to get the emote image.
      * The image is cached and converted to a bitmap which is returned.
      */
-    protected String getEmoteFromId(String emoteId, boolean isBttvEmote) {
+    String getEmoteFromId(String emoteId, boolean isBttvEmote) {
         int settingsSize = getApiEmoteSizeFromSettingsSize(settings.getEmoteSize());
-        String emoteUrl = getEmoteUrl(isBttvEmote, emoteId, settingsSize);
 
-        return emoteUrl;
+        return getEmoteUrl(isBttvEmote, emoteId, settingsSize);
     }
 
     private int getApiEmoteSizeFromSettingsSize(int settingsSize) {
         return settingsSize == 1 ? 2 : settingsSize;
     }
 
-
-    public List<Emote> getGlobalBttvEmotes() {
+    List<Emote> getGlobalBttvEmotes() {
         return bttvGlobal;
     }
 
-    public List<Emote> getChanncelBttvEmotes() {
+    List<Emote> getChanncelBttvEmotes() {
         return bttvChannel;
     }
 
     public interface EmoteFetchCallback {
         void onEmoteFetched();
-    }
-
-    public static String getEmoteUrl(boolean isEmoteBttv, String emoteId, int size) {
-        return isEmoteBttv
-                ? "https://cdn.betterttv.net/emote/" + emoteId + "/" + size + "x"
-                : "https://static-cdn.jtvnw.net/emoticons/v1/" + emoteId + "/" + size + ".0";
-    }
-
-    public static String getEmoteUrl(Emote emote, int size) {
-        return getEmoteUrl(emote.isBetterTTVEmote(), emote.getEmoteId(), size);
     }
 }

@@ -5,8 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Build;
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
+
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
@@ -15,9 +14,8 @@ import androidx.multidex.MultiDexApplication;
  */
 @SuppressLint("StaticFieldLeak") // It is alright to store application context statically
 public class TwireApplication extends MultiDexApplication {
-    private static Context mContext;
-
     public static boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
+    private static Context mContext;
 
     @Override
     public void onCreate() {

@@ -1,69 +1,86 @@
 apply plugin: "com.android.application"
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion 28
+
     defaultConfig {
         applicationId "com.perflyst.twire"
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 506
         versionName "1.9.6"
+
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
         debug {
-            minifyEnabled false
             applicationIdSuffix '.debug'
             versionNameSuffix '-DEBUG'
         }
     }
+
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
     }
+
     compileOptions {
+        encoding = 'UTF-8'
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation fileTree(include: ["*.jar"], dir: "libs")
-
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "androidx.browser:browser:1.0.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
     implementation "androidx.multidex:multidex:2.0.1"
+    implementation "androidx.palette:palette:1.0.0"
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+    implementation "androidx.transition:transition:1.1.0"
+    implementation "com.google.android.material:material:1.0.0"
 
-    implementation "androidx.recyclerview:recyclerview:$androidXVersion"
-    implementation "androidx.cardview:cardview:$androidXVersion"
-    implementation "androidx.legacy:legacy-support-v4:$androidXVersion"
-    implementation "com.google.android.material:material:$androidXVersion"
-    implementation "androidx.palette:palette:$androidXVersion"
-    implementation "androidx.appcompat:appcompat:$androidXVersion"
-    implementation "androidx.browser:browser:$androidXVersion"
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    //https://github.com/bumptech/glide/releases
+    implementation "com.github.bumptech.glide:glide:4.10.0"
+    annotationProcessor "com.github.bumptech.glide:compiler:4.10.0"
 
-    implementation "com.github.bumptech.glide:glide:4.9.0"
-    implementation "com.github.bumptech.glide:annotations:4.9.0"
-    annotationProcessor "com.github.bumptech.glide:compiler:4.9.0"
+    //https://github.com/square/picasso/blob/master/CHANGELOG.md
+    implementation "com.squareup.picasso:picasso:2.5.2"
 
-    implementation "com.squareup.picasso:picasso:2.4.0"
+    //https://github.com/balysv/material-ripple/blob/master/CHANGELOG.md
     implementation "com.balysv:material-ripple:1.0.2"
-    implementation "com.github.traex.rippleeffect:library:1.3"
-    implementation "com.github.rey5137:material:1.2.1"
-    implementation "com.andkulikov:transitionseverywhere:1.7.6"
-    implementation "com.github.perflyst:srjneeds:85306c8"
-    implementation "biz.kasual:materialnumberpicker:1.2.1"
-    implementation "commons-codec:commons-codec:1.10"
-    implementation "com.google.guava:guava:24.1-jre"
-    implementation "com.google.code.gson:gson:2.8.2"
-    implementation "com.jakewharton:butterknife:10.0.0"
-    annotationProcessor "com.jakewharton:butterknife-compiler:10.0.0"
 
+    //https://github.com/rey5137/material/releases
+    implementation "com.github.rey5137:material:1.3.0"
+
+    //https://github.com/Perflyst/SRJNeeds
+    implementation "com.github.perflyst:srjneeds:85306c8"
+
+    //https://github.com/KasualBusiness/MaterialNumberPicker/releases
+    implementation "biz.kasual:materialnumberpicker:1.2.1"
+
+    //https://github.com/google/guava/releases
+    implementation "com.google.guava:guava:28.1-jre"
+
+    //https://github.com/google/gson/blob/master/CHANGELOG.md
+    implementation "com.google.code.gson:gson:2.8.6"
+
+    //https://github.com/JakeWharton/butterknife/blob/master/CHANGELOG.md
+    implementation "com.jakewharton:butterknife:10.2.0"
+    annotationProcessor "com.jakewharton:butterknife-compiler:10.2.0"
+
+    //https://github.com/ozodrukh/CircularReveal/releases
     implementation("com.github.ozodrukh:CircularReveal:1.3.1@aar") { transitive = true }
-    implementation("com.github.afollestad.material-dialogs:core:0.8.5.8@aar")
-    implementation("com.github.afollestad.material-dialogs:commons:0.8.5.8@aar")
+
+    //https://github.com/afollestad/material-dialogs/releases?after=2.0.0-alpha01
+    implementation "com.github.afollestad.material-dialogs:core:0.8.6.0@aar"
+    implementation "com.github.afollestad.material-dialogs:commons:0.8.6.0@aar"
 }

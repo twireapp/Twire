@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello_world">Bonjour tout le monde</string>
-    <string name="app_name">Twire</string>
     <string name="app_slogan"> </string>
-    <string name="app_id">com.perflyst.twire</string>
 
     <string name="ok">OK</string>
     <string name="done">FAIT</string>
@@ -390,7 +388,7 @@
     <string name="chat_message_option_block">Bloquer</string>
     <string name="action_got_it">Compris</string>
     <string name="action_share">Partager</string>
-    <string name="stream_external_play_using">Regarder en utilisant...</string>
+    <string name="stream_external_play_using">Regarder en utilisant…</string>
     <string name="live_streamer_notification_id">liveStreamerNotificationId</string>
     <string name="stream_cast_notification_id">streamCastNotificationId</string>
 
