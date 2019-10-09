@@ -49,6 +49,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.transition.Fade;
+import androidx.transition.TransitionManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -79,7 +81,6 @@ import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
-import com.transitionseverywhere.TransitionManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -100,15 +101,15 @@ public class StreamFragment extends Fragment {
             fetchViewCountHandler = new Handler(),
             fetchChattersHandler = new Handler();
     public OnSeekListener onSeekCallback;
-    private boolean isFullscreen = false;
-    private ChannelInfo mChannelInfo;
-    private String vodId;
-    public boolean castingViewVisible = false,
+    public boolean chatOnlyViewVisible = false;
+    private boolean castingViewVisible = false,
             audioViewVisible = false,
-            chatOnlyViewVisible = false,
             autoPlay = true,
             hasPaused = false,
-            seeking = false;
+            seeking = false,
+            isFullscreen = false;
+    private ChannelInfo mChannelInfo;
+    private String vodId;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
     private Settings settings;
     private SleepTimer sleepTimer;
@@ -927,7 +928,7 @@ public class StreamFragment extends Fragment {
                 public void onTransitionEnd(Transition transition) {
                     TransitionManager.beginDelayedTransition(
                             mVideoWrapper,
-                            new com.transitionseverywhere.Fade()
+                            new Fade()
                                     .setDuration(340)
                                     .excludeTarget(mVideoView, true)
                                     .excludeTarget(mPreview, true)
