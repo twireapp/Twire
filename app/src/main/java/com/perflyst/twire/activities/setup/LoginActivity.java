@@ -331,7 +331,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
     }
 
     private void initSnackbar() {
-        mSnackbar = new SnackBar(this)
+        new SnackBar(this)
                 .applyStyle(R.style.snack_bar_style_mobile);
     }
 

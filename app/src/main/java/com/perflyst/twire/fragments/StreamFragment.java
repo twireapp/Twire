@@ -102,12 +102,12 @@ public class StreamFragment extends Fragment {
             fetchChattersHandler = new Handler();
     public OnSeekListener onSeekCallback;
     public boolean chatOnlyViewVisible = false;
+    public boolean isFullscreen = false;
     private boolean castingViewVisible = false,
             audioViewVisible = false,
             autoPlay = true,
             hasPaused = false,
-            seeking = false,
-            isFullscreen = false;
+            seeking = false;
     private ChannelInfo mChannelInfo;
     private String vodId;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
