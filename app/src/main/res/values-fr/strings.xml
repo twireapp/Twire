@@ -4,11 +4,11 @@
     <string name="app_slogan"> </string>
 
     <string name="ok">OK</string>
-    <string name="done">FAIT</string>
-    <string name="start">LANCER</string>
-    <string name="stop">STOP</string>
-    <string name="cancel">EFFACER</string>
-    <string name="resume">REPRENDRE</string>
+    <string name="done">APPLIQUER</string>
+    <string name="start">DÉMARRER</string>
+    <string name="stop">ARRÊTER</string>
+    <string name="cancel">ANNULER</string>
+    <string name="resume">RELANCER</string>
     <string name="undo">ANNULER</string>
     <string name="yes">Oui</string>
     <string name="no">Non</string>
@@ -47,7 +47,7 @@
     <string name="streamerInfo_followers_title">Followers</string>
     <string name="streamerInfo_views_title">Vues</string>
     <string name="streamerInfo_desc_tab">Description</string>
-    <string name="streamerInfo_broadcasts_tab">Diffusions</string>
+    <string name="streamerInfo_broadcasts_tab">Rediffusions</string>
     <string name="streamerInfo_highlights_tab">Temps forts</string>
     <string name="streamerInfo_transition">streamerInfoPicTrans</string>
     <string name="streamerInfo_description">Aucune description trouvée !</string>
@@ -59,12 +59,12 @@
     <!-- LiveStreamActivity -->
     <string name="menu_external">Utiliser un lecteur externe</string>
     <string name="menu_profile">Profil</string>
-    <string name="menu_sleep">Mise en veille</string>
+    <string name="menu_sleep">Minuterie d\'arrêt programmée</string>
     <string name="menu_options">Options</string>
     <string name="options">Options</string>
     <string name="audio_only">Audio uniquement</string>
     <string name="chat_only">Chat uniquement</string>
-    <string name="available_qualities">Réglages de la qualité</string>
+    <string name="available_qualities">Réglage de la qualité</string>
     <string name="quality_auto">Auto</string>
     <string name="quality_audio">Audio uniquement</string>
     <string name="quality_source">Source</string>
@@ -74,9 +74,9 @@
     <string name="quality_mobile">Mobile</string>
 
     <!-- StreamFragment -->
-    <string name="stream_sleep_timer_stopped">Le minuteur de mise en veille est stoppé.</string>
-    <string name="stream_sleep_timer_started">Le minuteur de mise en veille a démarré. Le stream sera interrompu dans %1$d heures et %2$d minutes.</string>
-    <string name="stream_sleep_timer_started_minutes_only">Le minuteur a démarré. Le stream sera interrompu dans %d minutes.</string>
+    <string name="stream_sleep_timer_stopped">La minuterie d\'arrêt est interrompue.</string>
+    <string name="stream_sleep_timer_started">La minuterie d\'arrêt a démarré. Le stream sera interrompu dans %1$d heures et %2$d minutes.</string>
+    <string name="stream_sleep_timer_started_minutes_only">La minuterie d\'arrêt a démarré. Le stream sera interrompu dans %d minutes.</string>
 
     <string name="stream_fragment_tag">StreamFragmentTag</string>
     <string name="stream_fragment_streamerInfo">streamerInfoForIntent</string>
@@ -94,7 +94,7 @@
     <string name="stream_shared_transition">stream_has_shared_transition</string>
     <string name="stream_preview_alpha">stream_image_alpha</string>
     <string name="stream_preview_vod">stream_remove_black_bars</string>
-    <string name="stream_sleep_timer_title">Mise en veille</string>
+    <string name="stream_sleep_timer_title">Minuterie d\'arrêt programmée</string>
     <string name="stream_chromecast_playing">Diffusé sur %s</string>
     <string name="stream_chromecast_failed">Un problème est survenu en diffusant sur %s</string>
     <string name="stream_chromecast_no_vod">Désolé, la lecture des rediffusions par Chromecast  n\'est actuellement pas pris en charge</string>
@@ -105,7 +105,7 @@
 
     <!-- VOD activity -->
     <string name="vod_playback_failed">Échec de la lecture de la vidéo. Essayez une autre qualité</string>
-    <string name="title_activity_vod">Redifusion</string>
+    <string name="title_activity_vod">Rediffusion</string>
     <string name="intent_vod">intent_vod</string>
     <string name="vod_views">%d vues</string>
     <string name="vod_streams_card_stream_views">%s vues</string>
@@ -121,7 +121,7 @@
     <!-- Cards -->
     <string name="card_style_minimal">Réduit</string>
     <string name="card_style_normal">Normal</string>
-    <string name="card_style_expanded">Étandu</string>
+    <string name="card_style_expanded">Étendu</string>
     <string name="card_size_small">Petit</string>
     <string name="card_size_normal">Normal</string>
     <string name="card_size_large">Grand</string>
@@ -144,7 +144,7 @@
     <!--Errors -->
     <string name="error_external_playback_failed">Échec de l\'envoi de l\'URL au lecteur externe</string>
     <string name="error_nothing_found">Il n\'y a rien ici</string>
-    <string name="no_server_response_message">Oups. Les serveurs de Twitch ne semblent pas répondre. Rafraichir ?</string>
+    <string name="no_server_response_message">Oups, les serveurs de Twitch ne semblent pas répondre. Rafraîchir ?</string>
     <string name="no_server_response_action">OK</string>
 
     <!-- My Games Activity -->
@@ -154,11 +154,11 @@
     <!-- My Channels activity -->
     <string name="my_channels_error_none_found">Aucun follower trouvé</string>
     <string name="my_channels_activity_title">@string/navigation_drawer_follows_title</string>
-    <string name="my_channels_activity_label">Chaines suivies</string>
+    <string name="my_channels_activity_label">Followers</string>
 
     <!-- Live Stream Activity -->
     <string name="stream_no_chromecast_quality_supported">Désolé, ce stream n\'existe pas </string>
-    <string name="stream_playback_failed">Le stream n\'est plus en direct</string>
+    <string name="stream_playback_failed">Le stream est désormais terminé</string>
     <string name="title_activity_live_stream">Stream en direct</string>
     <string name="chat_send_message_hint">Écrire un message</string>
     <string name="chat_status_connecting">Connexion au chat</string>
@@ -177,7 +177,7 @@
     <string name="my_streams_error">Aucun stream trouvé</string>
     <string name="my_streams_activity_title">@string/navigation_drawer_my_streams_title</string>
     <string name="my_streams_preview_image">Aperçu du direct</string>
-    <string name="my_streams_cell_current_viewers">%d vues</string>
+    <string name="my_streams_cell_current_viewers">%d spectateurs</string>
     <string name="my_streams_cell_online_since">Démarré il y a x minutes</string>
 
     <!-- Top Streams Activity -->
@@ -189,9 +189,9 @@
 
     <!-- Online Streams Status -->
     <string name="enum_ready_message"> </string>
-    <string name="enum_no_internet_message">Vous ne semblez pas avoir une connexion internet.</string>
+    <string name="enum_no_internet_message">Vous ne semblez pas avoir de connexion internet.</string>
     <string name="enum_twitch_fuckup_message">Les serveurs de Twitch semblent indisponibles.</string>
-    <string name="enum_no_online_streams">Aucun de vos streams suivis n\'est actuellement en ligne.</string>
+    <string name="enum_no_online_streams">Aucun des streameurs que vous suivez n\'est actuellement en direct.</string>
 
     <!-- OnlineStreamCardAdapter-->
     <string name="intent_key_streamer_info">StreamerInfoIntent</string>
@@ -230,7 +230,7 @@
 
     <!-- Confirm Setup Activity -->
     <string name="confirm_text_line_one">Ne bougez pas !</string>
-    <string name="confirm_text_line_two">Nous avons juste besoin de récupérer les chaines que vous suivez sur Twitch</string>
+    <string name="confirm_text_line_two">Nous avons juste besoin de récupérer la liste des streameurs que vous suivez sur Twitch</string>
 
     <!-- Settings -->
     <string name="settings_general_name">Général</string>
@@ -248,7 +248,7 @@
 
     <!-- General settings -->
     <string name="gen_not_logged_in">Cliquez pour vous connecter</string>
-    <string name="gen_dialog_login_or_out_content">Voulez-vous vous connecter à un nouveau compte ou vous déconnecter en tant que %s</string>
+    <string name="gen_dialog_login_or_out_content">Voulez-vous vous connecter à un nouveau compte ou vous déconnecter en tant que %s ?</string>
     <string name="gen_dialog_login_or_out_login_action">CONNEXION</string>
     <string name="gen_dialog_login_or_out_logout_action">DECONNEXION</string>
     <string name="gen_twitch_name">Identifiant Twitch</string>
@@ -259,7 +259,7 @@
     <!-- Chat Settings -->
     <string name="chat_emote_size">Taille des émotes</string>
     <string name="chat_message_size">Taille des messages</string>
-    <string name="chat_emote_storage">Sauvegarder les émotes localement</string>
+    <string name="chat_emote_storage">Sauvegarder localement les émotes</string>
     <string name="chat_landscape_enable">Chat en paysage</string>
     <string name="chat_landscape_swipe">Glisser pour afficher le chat en paysage</string>
     <string name="chat_landscape_width">Largeur du chat en paysage</string>
@@ -270,8 +270,8 @@
 
     <!-- Stream Player Settings -->
     <string name="player_show_viewercount">Afficher le nombre de spectateurs</string>
-    <string name="player_show_navigation">Afficher la barre de navigation lors d\'un clic</string>
-    <string name="player_auto_player">Poursuivre la lecture en arrière plan lors d\'un retour en arrière</string>
+    <string name="player_show_navigation">Afficher la barre de navigation sur un clic</string>
+    <string name="player_auto_player">Poursuivre la Lecture en arrière plan</string>
 
     <!-- Appearance settings -->
     <string name="appearance_theme_color_title">Thème</string>
@@ -383,7 +383,7 @@
     </string-array>
 
     <string name="title_activity_deep_link_test">@string/app_name</string>
-    <string name="chat_message_option_mention">Mention</string>
+    <string name="chat_message_option_mention">Mentionner</string>
     <string name="chat_message_option_duplicate">Dupliquer le message</string>
     <string name="chat_message_option_block">Bloquer</string>
     <string name="action_got_it">Compris</string>
