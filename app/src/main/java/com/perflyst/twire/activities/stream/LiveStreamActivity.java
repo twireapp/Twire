@@ -88,6 +88,7 @@ public class LiveStreamActivity extends StreamActivity {
     @Override
     public void onBackPressed() {
         setMentionSuggestions(new ArrayList<>(), null);
+        super.onBackPressed();
     }
 
     @Override
