@@ -3,7 +3,6 @@ package com.perflyst.twire.activities.stream;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -81,10 +80,5 @@ public class VODActivity extends StreamActivity {
         mVod = videoOnDemand;
         setVodData();
         resetStream();
-    }
-
-    @Override
-    public View getMainContentLayout() {
-        return findViewById(R.id.main_content);
     }
 }
