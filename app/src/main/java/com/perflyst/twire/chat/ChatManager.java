@@ -5,7 +5,6 @@ package com.perflyst.twire.chat;
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -29,6 +28,7 @@ import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -40,14 +40,13 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private static String cursor = "";
     private static boolean seek = false;
     private final String LOG_TAG = getClass().getSimpleName();
-    private Pattern roomstatePattern = Pattern.compile("@broadcaster-lang=(.*);r9k=([01]);slow=(0|\\d+);subs-only=([01])"),
-            userStatePattern = Pattern.compile("color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod=([01]);subscriber=([01]);(turbo=([01])|user)"),
-            stdVarPattern = Pattern.compile("color=(#?\\w*);display-name=(\\w+).*;mod=([01]);room-id=\\d+;.*subscriber=([01]);.*turbo=([01]);.* PRIVMSG #\\S* :(.*)"),
-            noticePattern = Pattern.compile("@msg-id=(\\w*)");
+    private Pattern roomstatePattern = Pattern.compile("@.*r9k=(0|1);.*slow=(0|\\d+);subs-only=(0|1)"),
+            userStatePattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod="),
+            stdVarPattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(\\w+).* PRIVMSG #\\S* :(.*)"),
+            noticePattern = Pattern.compile("@.*msg-id=(\\w*)");
     // Default Twitch Chat connect IP/domain and port
     private String twitchChatServer = "irc.twitch.tv";
     private int twitchChatPort = 6667;
-    private Bitmap subscriberIcon;
     private BufferedWriter writer;
     private Handler callbackHandler;
     private boolean isStopping;
@@ -55,27 +54,30 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private String oauth_key;
     private String channelName;
     private String hashChannel;
+    private int channelUserId;
     private String vodId;
     private ChatCallback callback;
     // Data about the user and how to display his/hers message
     private String userDisplayName;
     private String userColor;
-    private boolean userIsMod;
-    private boolean userIsSubscriber;
-    private boolean userIsTurbo;
+    private Map<String, String> userBadges;
     // Data about room state
     private boolean chatIsR9kmode;
     private boolean chatIsSlowmode;
     private boolean chatIsSubsonlymode;
     private ChatEmoteManager mEmoteManager;
 
+    private Map<String, Map<String, String>> globalBadges = new HashMap<>();
+    private Map<String, Map<String, String>> channelBadges = new HashMap<>();
+
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
-        mEmoteManager = new ChatEmoteManager(aChannelUserId, aChannel, aContext);
+        mEmoteManager = new ChatEmoteManager(aChannel, aContext);
         Settings appSettings = new Settings(aContext);
         user = appSettings.getGeneralTwitchName();
         oauth_key = "oauth:" + appSettings.getGeneralTwitchAccessToken();
         hashChannel = "#" + aChannel;
         channelName = aChannel;
+        channelUserId = aChannelUserId;
         vodId = aVodId;
         callback = aCallback;
 
@@ -96,8 +98,10 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     @Override
     protected Void doInBackground(Void... params) {
         Log.d(LOG_TAG, "Trying to start chat " + hashChannel + " for user " + user);
-        subscriberIcon = mEmoteManager.getSubscriberEmote();
         mEmoteManager.loadBttvEmotes(() -> onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_BTTV_FETCHED)));
+
+        readBadges("https://badges.twitch.tv/v1/badges/global/display", globalBadges);
+        readBadges("https://badges.twitch.tv/v1/badges/channels/" + channelUserId + "/display", channelBadges);
 
         if (vodId == null) {
             ChatProperties properties = fetchChatProperties();
@@ -277,20 +281,17 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                         JSONObject commenter = comment.getJSONObject("commenter");
                         JSONObject message = comment.getJSONObject("message");
 
-                        Map<String, Integer> badges = new HashMap<>();
+                        Map<String, String> badges = new HashMap<>();
                         if (message.has("user_badges")) {
                             JSONArray userBadgesArray = message.getJSONArray("user_badges");
                             for (int j = 0; j < userBadgesArray.length(); j++) {
                                 JSONObject userBadge = userBadgesArray.getJSONObject(j);
-                                badges.put(userBadge.getString("_id"), userBadge.getInt("version"));
+                                badges.put(userBadge.getString("_id"), userBadge.getString("version"));
                             }
                         }
 
                         String color = message.has("user_color") ? message.getString("user_color") : "";
                         String displayName = commenter.getString("display_name");
-                        boolean isMod = badges.containsKey("moderator");
-                        boolean isSubscriber = badges.containsKey("subscriber");
-                        boolean isTurbo = badges.containsKey("turbo");
                         String body = message.getString("body");
 
                         List<ChatEmote> emotes = new ArrayList<>();
@@ -305,7 +306,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
                         //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
-                        ChatMessage chatMessage = new ChatMessage(body, displayName, color, isMod, isTurbo, isSubscriber, emotes, subscriberIcon, false);
+                        ChatMessage chatMessage = new ChatMessage(body, displayName, color, getBadgeUrls(badges), emotes, false);
                         publishProgress(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
 
                         downloadedComments.remove(i);
@@ -360,10 +361,9 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private void handleRoomstate(String line) {
         Matcher roomstateMatcher = roomstatePattern.matcher(line);
         if (roomstateMatcher.find()) {
-            String broadcastlanguage = roomstateMatcher.group(1);
-            boolean newR9k = roomstateMatcher.group(2).equals("1");
-            boolean newSlow = !roomstateMatcher.group(3).equals("0");
-            boolean newSub = roomstateMatcher.group(4).equals("1");
+            boolean newR9k = roomstateMatcher.group(1).equals("1");
+            boolean newSlow = !roomstateMatcher.group(2).equals("0");
+            boolean newSub = roomstateMatcher.group(3).equals("1");
             // If the one of the roomstate types have changed notify the chatfragment
             if (chatIsR9kmode != newR9k || chatIsSlowmode != newSlow || chatIsSubsonlymode != newSub) {
                 chatIsR9kmode = newR9k;
@@ -385,15 +385,17 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private void handleUserstate(String line) {
         Matcher userstateMatcher = userStatePattern.matcher(line);
         if (userstateMatcher.find()) {
-            userColor = userstateMatcher.group(1);
-            userDisplayName = userstateMatcher.group(2);
-            String emoteSets = userstateMatcher.group(3);
-            userIsMod = userstateMatcher.group(4).equals("1");
-            userIsSubscriber = userstateMatcher.group(5).equals("1");
-            if (userstateMatcher.groupCount() > 7) {
-                userIsTurbo = userstateMatcher.group(7).equals("1");
+            userBadges = new HashMap<>();
+            if (!userstateMatcher.group(1).isEmpty()) {
+                for (String badge : userstateMatcher.group(1).split(",")) {
+                    String[] parts = badge.split("/");
+                    userBadges.put(parts[0], parts[1]);
+                }
             }
 
+            userColor = userstateMatcher.group(2);
+            userDisplayName = userstateMatcher.group(3);
+            String emoteSets = userstateMatcher.group(4);
         } else {
             Log.e(LOG_TAG, "Failed to find userstate pattern in: \n" + line);
         }
@@ -410,16 +412,20 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         List<ChatEmote> emotes = new ArrayList<>(mEmoteManager.findTwitchEmotes(line));
 
         if (stdVarMatcher.find()) {
-            String color = stdVarMatcher.group(1);
-            String displayName = stdVarMatcher.group(2);
-            boolean isMod = stdVarMatcher.group(3).equals("1");
-            boolean isSubscriber = stdVarMatcher.group(4).equals("1");
-            boolean isTurbo = stdVarMatcher.group(5).equals("1");
-            String message = stdVarMatcher.group(6);
+            Map<String, String> badges = new HashMap<>();
+            if (!stdVarMatcher.group(1).isEmpty()) {
+                for (String badge : stdVarMatcher.group(1).split(",")) {
+                    String[] parts = badge.split("/");
+                    badges.put(parts[0], parts[1]);
+                }
+            }
+            String color = stdVarMatcher.group(2);
+            String displayName = stdVarMatcher.group(3);
+            String message = stdVarMatcher.group(4);
             emotes.addAll(mEmoteManager.findBttvEmotes(message));
             //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
-            ChatMessage chatMessage = new ChatMessage(message, displayName, color, isMod, isTurbo, isSubscriber, emotes, subscriberIcon, false);
+            ChatMessage chatMessage = new ChatMessage(message, displayName, color, getBadgeUrls(badges), emotes, false);
             publishProgress(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
         } else {
             Log.e(LOG_TAG, "Failed to find message pattern in: \n" + line);
@@ -524,6 +530,27 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         return null;
     }
 
+    void readBadges(String url, Map<String, Map<String, String>> badgeMap) {
+        try {
+            JSONObject globalBadgeSets = new JSONObject(Service.urlToJSONString(url)).getJSONObject("badge_sets");
+            for (Iterator<String> it = globalBadgeSets.keys(); it.hasNext(); ) {
+                String badgeSet = it.next();
+                Map<String, String> versionMap = new HashMap<>();
+
+                badgeMap.put(badgeSet, versionMap);
+
+                JSONObject versions = globalBadgeSets.getJSONObject(badgeSet).getJSONObject("versions");
+                for (Iterator<String> iter = versions.keys(); iter.hasNext(); ) {
+                    String version = iter.next();
+
+                    versionMap.put(version, versions.getJSONObject(version).getString("image_url_2x"));
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getUserDisplayName() {
         return userDisplayName;
     }
@@ -532,20 +559,29 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         return userColor;
     }
 
-    public boolean isUserMod() {
-        return userIsMod;
+    public Map<String, String> getUserBadges() {
+        return userBadges;
     }
 
-    public boolean isUserSubscriber() {
-        return userIsSubscriber;
+    public String getBadge(String badgeSet, String version) {
+        Map<String, String> channelSet = channelBadges.get(badgeSet);
+        if (channelSet != null && channelSet.get(version) != null)
+            return channelSet.get(version);
+
+        Map<String, String> globalSet = globalBadges.get(badgeSet);
+        if (globalSet != null && globalSet.get(version) != null)
+            return globalSet.get(version);
+
+        return null;
     }
 
-    public boolean isUserTurbo() {
-        return userIsTurbo;
-    }
+    public List<String> getBadgeUrls(Map<String, String> badges) {
+        List<String> badgeUrls = new ArrayList<>();
+        for (String badgeSet : badges.keySet()) {
+            badgeUrls.add(getBadge(badgeSet, badges.get(badgeSet)));
+        }
 
-    public Bitmap getSubscriberIcon() {
-        return subscriberIcon;
+        return badgeUrls;
     }
 
     public interface ChatCallback {

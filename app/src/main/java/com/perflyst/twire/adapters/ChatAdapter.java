@@ -1,7 +1,6 @@
 package com.perflyst.twire.adapters;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -27,7 +26,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.GlideImageSpan;
-import com.perflyst.twire.misc.VerticalImageSpan;
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.service.Service;
@@ -50,9 +48,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     private Activity context;
     private Settings settings;
     private Pattern linkPattern;
-    private VerticalImageSpan imageMod;
-    private VerticalImageSpan imageTurbo;
-    private VerticalImageSpan imageSub;
     private ChatAdapterCallback mCallback;
     private boolean isNightTheme;
 
@@ -64,8 +59,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         settings = new Settings(context);
         linkPattern = Pattern.compile("((http|https|ftp)://[a-zA-Z0-9\\-.]+\\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0\u200C123456789\\-._?,'/\\\\+&amp;%$#=~])*[^.,)(\\s])");
 
-        imageMod = new VerticalImageSpan(context, R.drawable.ic_moderator);
-        imageTurbo = new VerticalImageSpan(context, R.drawable.ic_twitch_turbo);
         isNightTheme = settings.getTheme().equals(context.getString(R.string.night_theme_name)) || settings.getTheme().equals(context.getString(R.string.true_night_theme_name));
     }
 
@@ -97,25 +90,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                 Log.d(LOG_TAG, "Binding Message for user");
                 Log.d(LOG_TAG, "Message: " + message.toString());
             }
-            if (imageSub == null) {
-                Bitmap resizedSubscriberEmote = Service.getResizedBitmap(message.getSubscriberIcon(),
-                        imageMod.getDrawable().getIntrinsicWidth(),
-                        imageMod.getDrawable().getIntrinsicHeight());
-                imageSub = new VerticalImageSpan(context, resizedSubscriberEmote);
-            }
-
 
             final SpannableStringBuilder builder = new SpannableStringBuilder();
-            if (message.isMod()) {
-                AppendSpan(builder, "  ", imageMod).append(" ");
-            }
-
-            if (message.isSubscriber()) {
-                AppendSpan(builder, "  ", imageSub).append(" ");
-            }
-
-            if (message.isTurbo()) {
-                AppendSpan(builder, "  ", imageTurbo).append(" ");
+            for (String badgeUrl : message.getBadges()) {
+                final GlideImageSpan badgeSpan = new GlideImageSpan(context, badgeUrl, holder.message, builder, 36);
+                AppendSpan(builder, "  ", badgeSpan).append(" ");
             }
 
             if (message.getName() == null) {

@@ -1,10 +1,7 @@
 package com.perflyst.twire.chat;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
-import com.perflyst.twire.R;
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
@@ -35,13 +32,9 @@ public class ChatEmoteManager {
     private Pattern emotePattern = Pattern.compile("(\\d+):((?:\\d+-\\d+,?)+)");
 
     private Settings settings;
-    private Context context;
-    private int channelId;
     private String channelName;
 
-    ChatEmoteManager(int channelId, String channelName, Context context) {
-        this.context = context;
-        this.channelId = channelId;
+    ChatEmoteManager(String channelName, Context context) {
         this.channelName = channelName;
         this.settings = new Settings(context);
     }
@@ -124,37 +117,6 @@ public class ChatEmoteManager {
             callback.onEmoteFetched();
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     * Connects to Twitch API to get the URL for the channels subscriber emote
-     * This must not be executed on main UI Thread
-     *
-     * @return
-     */
-    Bitmap getSubscriberEmote() {
-        Bitmap emote = null;
-
-        final String URL = "https://api.twitch.tv/kraken/chat/" + channelId + "/badges";
-        final String SUBSCRIBER_OBJECT = "subscriber";
-        final String SUBSCRIBER_IMAGE_STRING = "image";
-
-        try {
-            JSONObject dataObject = new JSONObject(Service.urlToJSONString(URL));
-            JSONObject subscriberObject = dataObject.getJSONObject(SUBSCRIBER_OBJECT);
-            String imageUrl = subscriberObject.getString(SUBSCRIBER_IMAGE_STRING);
-
-            emote = Service.getBitmapFromUrl(imageUrl);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if (emote != null) {
-            return emote;
-        } else {
-            return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_missing_emote);
         }
     }
 

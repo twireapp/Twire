@@ -1,36 +1,23 @@
 package com.perflyst.twire.model;
 
 
-import android.graphics.Bitmap;
-
 import java.util.List;
 
 public class ChatMessage {
     private String message;
     private String name;
     private String color;
-    private boolean mod;
-    private boolean turbo;
-    private boolean subscriber;
+    private List<String> badgeUrls;
     private List<ChatEmote> emotes;
-    private Bitmap subscriberIcon;
     private boolean highlight;
 
-    public ChatMessage(String message, String name, String color, boolean mod, boolean turbo,
-                       boolean subscriber, List<ChatEmote> emotes, Bitmap subscriberIcon, boolean highlight) {
+    public ChatMessage(String message, String name, String color, List<String> badgeUrls, List<ChatEmote> emotes, boolean highlight) {
         this.message = message;
         this.name = name;
         this.color = color;
-        this.mod = mod;
-        this.turbo = turbo;
-        this.subscriber = subscriber;
+        this.badgeUrls = badgeUrls;
         this.emotes = emotes;
-        this.subscriberIcon = subscriberIcon;
         this.highlight = highlight;
-    }
-
-    public Bitmap getSubscriberIcon() {
-        return subscriberIcon;
     }
 
     public String getMessage() {
@@ -45,16 +32,8 @@ public class ChatMessage {
         return color;
     }
 
-    public boolean isMod() {
-        return mod;
-    }
-
-    public boolean isTurbo() {
-        return turbo;
-    }
-
-    public boolean isSubscriber() {
-        return subscriber;
+    public List<String> getBadges() {
+        return badgeUrls;
     }
 
     public List<ChatEmote> getEmotes() {
@@ -75,11 +54,8 @@ public class ChatMessage {
                 "message='" + message + '\'' +
                 ", name='" + name + '\'' +
                 ", color='" + color + '\'' +
-                ", mod=" + mod +
-                ", turbo=" + turbo +
-                ", subscriber=" + subscriber +
+                ", badges=" + badgeUrls +
                 ", emotes=" + emotes +
-                ", subscriberIcon=" + subscriberIcon +
                 '}';
     }
 }
