@@ -45,6 +45,7 @@ import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -1028,18 +1029,39 @@ public class StreamFragment extends Fragment {
     }
 
     private void setVideoViewLayout() {
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        int width = displaymetrics.widthPixels;
         ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
         if (isLandscape) {
             layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_PARENT : getScreenWidth(getActivity()) - getLandscapeChatTargetWidth();
-            layoutWrapper.height = ConstraintLayout.LayoutParams.MATCH_PARENT;
         } else {
-            layoutWrapper.width = ConstraintLayout.LayoutParams.WRAP_CONTENT;
-            layoutWrapper.height = ConstraintLayout.LayoutParams.MATCH_PARENT;
+            layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
         }
         mVideoWrapper.setLayoutParams(layoutWrapper);
+
+        // Set the video's aspect ratio
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        Point size = new Point();
+        int width, height;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && getActivity().isInMultiWindowMode()) {
+                display.getMetrics(metrics);
+            } else {
+                display.getRealMetrics(metrics);
+            }
+
+            width = metrics.widthPixels;
+            height = metrics.heightPixels;
+        } else {
+            display.getSize(size);
+            width = size.x;
+            height = size.y;
+        }
+
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(mVideoWrapper);
+        constraintSet.setDimensionRatio(R.id.VideoView, ((float) Math.max(width, height) / (float) Math.min(width, height)) + "");
+        constraintSet.applyTo(mVideoWrapper);
     }
 
     /**
