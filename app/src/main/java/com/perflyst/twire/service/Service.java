@@ -104,6 +104,15 @@ public class Service {
         return SecretKeys.TWITCH_CLIENT_ID;
     }
 
+    /**
+     * Returns the Twitch Client ID
+     *
+     * @return The ID
+     */
+    public static String getTwitchWebClientID() {
+        return SecretKeys.TWITCH_WEB_CLIENT_ID;
+    }
+
     public static String getErrorEmote() {
         String[] emotes = {"('.')", "('x')", "(>_<)", "(>.<)", "(;-;)", "\\(o_o)/", "(O_o)", "(o_0)", "(≥o≤)", "(≥o≤)", "(·.·)", "(·_·)"};
         Random rnd = new Random();
@@ -578,6 +587,39 @@ public class Service {
     }
 
     public static String urlToJSONString(String urlToRead) {
+        // Alright, so sometimes Twitch decides that our client ID should be blocked. Currently only happens for the hidden /api endpoints.
+        // IF we are being blocked, then retry the request with Twitch web ClientID. They are typically not blocking this.
+        String result = urlToJSONString(urlToRead, true); // "{\"error\":\"Gone\",\"status\":410,\"message\":\"this API has been removed.\"}";
+        try {
+            boolean retryWithWebClientId = false;
+            if (result.isEmpty()) {
+                retryWithWebClientId = true;
+            } else {
+                JSONObject resultJson = new JSONObject(result);
+                int status = resultJson.getInt("status");
+                String error = resultJson.getString("error");
+                retryWithWebClientId = status == 410 || error.equals("Gone");
+            }
+
+            if (retryWithWebClientId) {
+                result = urlToJSONString(urlToRead, false);
+            }
+
+        } catch (Exception exc) {
+
+        }
+
+        return result;
+    }
+
+    public static String urlToJSONString(String urlToRead, Boolean useOurClientId) {
+        String clientId;
+        if (useOurClientId) {
+            clientId = Service.getApplicationClientID();
+        } else {
+            clientId = Service.getTwitchWebClientID();
+        }
+
         URL url;
         HttpURLConnection conn = null;
         Scanner in = null;
@@ -590,7 +632,7 @@ public class Service {
 
             conn.setReadTimeout(5000);
             conn.setConnectTimeout(3000);
-            conn.setRequestProperty("Client-ID", Service.getApplicationClientID());
+            conn.setRequestProperty("Client-ID", clientId);
             conn.setRequestProperty("Accept", "application/vnd.twitchtv.v5+json");
             conn.setRequestMethod("GET");
             in = new Scanner(new InputStreamReader(conn.getInputStream()));
