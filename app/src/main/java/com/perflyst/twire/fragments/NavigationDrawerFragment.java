@@ -37,8 +37,10 @@ import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.main.TopGamesActivity;
 import com.perflyst.twire.activities.main.TopStreamsActivity;
 import com.perflyst.twire.activities.settings.SettingsActivity;
+import com.perflyst.twire.activities.setup.LoginActivity;
 import com.perflyst.twire.misc.TooltipWindow;
 import com.perflyst.twire.service.DialogService;
+import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetStreamsCountTask;
 
@@ -49,6 +51,8 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public class NavigationDrawerFragment extends Fragment {
+
+
     @BindView(R.id.streams_count)
     protected TextView mStreamsCount;
     @BindView(R.id.streams_count_wrapper)
@@ -263,8 +267,33 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void initHeaderImage(final ImageView headerImageView) {
         headerImageView.setImageResource(R.drawable.nav_top);
+        headerImageView.setOnClickListener(v ->{
 
-        final MaterialDialog themeChooserDialog = DialogService.getThemeDialog(getActivity());
-        headerImageView.setOnClickListener(v -> themeChooserDialog.show());
+            if (mSettings.isLoggedIn()) {
+                MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialig(getActivity(), mSettings.getGeneralTwitchDisplayName());
+                dialog.getBuilder().onPositive((dialog1, which) -> {
+                    dialog1.dismiss();
+                    Service.clearStreamerInfoDb(getContext());
+                    navigateToLogin();
+                });
+
+                dialog.getBuilder().onNegative((dialog12, which) -> {
+                    mSettings.setLogin(false);
+                    checkUserLogin();
+                    dialog12.dismiss();
+                });
+
+                dialog.show();
+            }else{
+                navigateToLogin();
+            }
+        });
     }
+
+    private void navigateToLogin() {
+        Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+        loginIntent.putExtra(getString(R.string.login_intent_part_of_setup), false);
+        startActivity(loginIntent);
+    }
+
 }
