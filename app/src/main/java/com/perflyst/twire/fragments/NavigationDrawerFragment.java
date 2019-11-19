@@ -26,7 +26,6 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.SearchActivity;
 import com.perflyst.twire.activities.main.FeaturedStreamsActivity;
@@ -37,10 +36,9 @@ import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.main.TopGamesActivity;
 import com.perflyst.twire.activities.main.TopStreamsActivity;
 import com.perflyst.twire.activities.settings.SettingsActivity;
+import com.perflyst.twire.activities.settings.SettingsGeneralActivity;
 import com.perflyst.twire.activities.setup.LoginActivity;
 import com.perflyst.twire.misc.TooltipWindow;
-import com.perflyst.twire.service.DialogService;
-import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetStreamsCountTask;
 
@@ -270,25 +268,18 @@ public class NavigationDrawerFragment extends Fragment {
         headerImageView.setOnClickListener(v ->{
 
             if (mSettings.isLoggedIn()) {
-                MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialig(getActivity(), mSettings.getGeneralTwitchDisplayName());
-                dialog.getBuilder().onPositive((dialog1, which) -> {
-                    dialog1.dismiss();
-                    Service.clearStreamerInfoDb(getContext());
-                    navigateToLogin();
-                });
-
-                dialog.getBuilder().onNegative((dialog12, which) -> {
-                    mSettings.setLogin(false);
-                    checkUserLogin();
-                    dialog12.dismiss();
-                });
-
-                dialog.show();
+                navigateToAccountManagement();
             }else{
                 navigateToLogin();
             }
         });
     }
+
+    private void navigateToAccountManagement() {
+        Intent settingsGeneralActivity = new Intent(getContext(), SettingsGeneralActivity.class);
+        startActivity(settingsGeneralActivity);
+    }
+
 
     private void navigateToLogin() {
         Intent loginIntent = new Intent(getContext(), LoginActivity.class);
