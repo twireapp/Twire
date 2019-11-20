@@ -356,7 +356,6 @@
 
     <!-- Tooltips -->
     <string name="tip_navigate">Clicca per navigare</string>
-    <string name="tip_theme">Clicca per cambiare tema</string>
 
     <!--Twitch language Code -->
     <string-array name="twitch_language_codes">

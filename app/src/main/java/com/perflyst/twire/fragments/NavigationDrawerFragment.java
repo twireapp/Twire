@@ -26,7 +26,6 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.SearchActivity;
 import com.perflyst.twire.activities.main.FeaturedStreamsActivity;
@@ -37,8 +36,9 @@ import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.main.TopGamesActivity;
 import com.perflyst.twire.activities.main.TopStreamsActivity;
 import com.perflyst.twire.activities.settings.SettingsActivity;
+import com.perflyst.twire.activities.settings.SettingsGeneralActivity;
+import com.perflyst.twire.activities.setup.LoginActivity;
 import com.perflyst.twire.misc.TooltipWindow;
-import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetStreamsCountTask;
 
@@ -49,6 +49,8 @@ import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public class NavigationDrawerFragment extends Fragment {
+
+
     @BindView(R.id.streams_count)
     protected TextView mStreamsCount;
     @BindView(R.id.streams_count_wrapper)
@@ -137,7 +139,6 @@ public class NavigationDrawerFragment extends Fragment {
                 }
                 super.onDrawerOpened(drawerView);
                 mAppIcon.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_icon_rotation));
-                checkForTip(mSettings, mAppTitleView);
             }
 
             @Override
@@ -249,22 +250,29 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
-    private void checkForTip(Settings settings, View Anchor) {
-        try {
-            themeTip = new TooltipWindow(getContext(), TooltipWindow.POSITION_BOTTOM);
-            if (!themeTip.isTooltipShown() && !settings.isTipsShown()) {
-                themeTip.showToolTip(Anchor, getContext().getString(R.string.tip_theme));
-                settings.setTipsShown(true);
-            }
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Failed to show NavigationDrawer ToolTip");
-        }
-    }
 
     private void initHeaderImage(final ImageView headerImageView) {
         headerImageView.setImageResource(R.drawable.nav_top);
+        headerImageView.setOnClickListener(v ->{
 
-        final MaterialDialog themeChooserDialog = DialogService.getThemeDialog(getActivity());
-        headerImageView.setOnClickListener(v -> themeChooserDialog.show());
+            if (mSettings.isLoggedIn()) {
+                navigateToAccountManagement();
+            }else{
+                navigateToLogin();
+            }
+        });
     }
+
+    private void navigateToAccountManagement() {
+        Intent settingsGeneralActivity = new Intent(getContext(), SettingsGeneralActivity.class);
+        startActivity(settingsGeneralActivity);
+    }
+
+
+    private void navigateToLogin() {
+        Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+        loginIntent.putExtra(getString(R.string.login_intent_part_of_setup), false);
+        startActivity(loginIntent);
+    }
+
 }
