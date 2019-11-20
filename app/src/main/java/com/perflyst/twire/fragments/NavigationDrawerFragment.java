@@ -139,7 +139,6 @@ public class NavigationDrawerFragment extends Fragment {
                 }
                 super.onDrawerOpened(drawerView);
                 mAppIcon.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_icon_rotation));
-                checkForTip(mSettings, mAppTitleView);
             }
 
             @Override
@@ -251,17 +250,6 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
-    private void checkForTip(Settings settings, View Anchor) {
-        try {
-            themeTip = new TooltipWindow(getContext(), TooltipWindow.POSITION_BOTTOM);
-            if (!themeTip.isTooltipShown() && !settings.isTipsShown()) {
-                themeTip.showToolTip(Anchor, getContext().getString(R.string.tip_theme));
-                settings.setTipsShown(true);
-            }
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Failed to show NavigationDrawer ToolTip");
-        }
-    }
 
     private void initHeaderImage(final ImageView headerImageView) {
         headerImageView.setImageResource(R.drawable.nav_top);
