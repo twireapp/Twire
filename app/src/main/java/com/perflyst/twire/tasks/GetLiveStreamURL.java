@@ -80,7 +80,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
         String resultString = Service.urlToJSONString("https://api.twitch.tv/api/channels/" + streamerName + "/access_token");
         try {
             JSONObject resultJSON = new JSONObject(resultString);
-            tokenString = URLEncoder.encode(resultJSON.getString("token")); // URL Encode token
+            tokenString = resultJSON.getString("token");
             sig = resultJSON.getString("sig");
 
             Log.d("ACCESS_TOKEN_STRING", tokenString);
@@ -180,7 +180,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
         return resultList;
     }
 
-    private String safeEncode(String s) {
+    protected String safeEncode(String s) {
         try {
             return URLEncoder.encode(s, "utf-8");
         } catch (UnsupportedEncodingException ignore) {
