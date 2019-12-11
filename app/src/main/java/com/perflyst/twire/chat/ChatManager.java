@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -51,7 +52,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private Handler callbackHandler;
     private boolean isStopping;
     private String user;
-    private String oauth_key;
+    private String password;
     private String channelName;
     private String hashChannel;
     private int channelUserId;
@@ -73,8 +74,23 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
         mEmoteManager = new ChatEmoteManager(aChannel, aContext);
         Settings appSettings = new Settings(aContext);
-        user = appSettings.getGeneralTwitchName();
-        oauth_key = "oauth:" + appSettings.getGeneralTwitchAccessToken();
+
+        if(appSettings.isLoggedIn()) { // if user is logged in ...
+            // ... use their credentials
+            Log.d(LOG_TAG, "Using user credentials for chat login.");
+
+            user = appSettings.getGeneralTwitchName();
+            password = "oauth:" + appSettings.getGeneralTwitchAccessToken();
+        }
+        else
+        {
+            // ... else: use anonymous credentials
+            Log.d(LOG_TAG, "Using anonymous credentials for chat login.");
+
+            user = "justinfan" + getRandomNumber(10000, 99999);
+            password = "SCHMOOPIIE";
+        }
+
         hashChannel = "#" + aChannel;
         channelName = aChannel;
         channelUserId = aChannelUserId;
@@ -175,7 +191,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-            writer.write("PASS " + oauth_key + "\r\n");
+            writer.write("PASS " + password + "\r\n");
             writer.write("NICK " + user + "\r\n");
             writer.write("USER " + user + " \r\n");
             writer.flush();
@@ -641,5 +657,9 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             ON_ROOMSTATE_CHANGE,
             ON_BTTV_FETCHED
         }
+    }
+
+    private int getRandomNumber(int min,int max) {
+        return (new Random()).nextInt((max - min) + 1) + min;
     }
 }
