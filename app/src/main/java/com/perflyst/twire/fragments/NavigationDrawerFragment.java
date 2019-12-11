@@ -138,6 +138,12 @@ public class NavigationDrawerFragment extends Fragment {
                     return;
                 }
                 super.onDrawerOpened(drawerView);
+
+                if (!mSettings.isTipsShown()) {
+                    // Disable tips as soon as drawer is opened the first time
+                    mSettings.setTipsShown(true);
+                }
+
                 mAppIcon.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_icon_rotation));
             }
 
