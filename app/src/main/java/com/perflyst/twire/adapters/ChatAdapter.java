@@ -14,6 +14,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by SebastianRask on 03-03-2016.
@@ -47,7 +47,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     private ChatRecyclerView mRecyclerView;
     private Activity context;
     private Settings settings;
-    private Pattern linkPattern;
     private ChatAdapterCallback mCallback;
     private boolean isNightTheme;
 
@@ -57,7 +56,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         context = aContext;
         mCallback = aCallback;
         settings = new Settings(context);
-        linkPattern = Pattern.compile("((http|https|ftp)://[a-zA-Z0-9\\-.]+\\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0\u200C123456789\\-._?,'/\\\\+&amp;%$#=~])*[^.,)(\\s])");
 
         isNightTheme = settings.getTheme().equals(context.getString(R.string.night_theme_name)) || settings.getTheme().equals(context.getString(R.string.true_night_theme_name));
     }
@@ -162,7 +160,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     private void checkForLink(String message, SpannableStringBuilder spanbuilder) {
-        Matcher linkMatcher = linkPattern.matcher(message);
+        Matcher linkMatcher = Patterns.WEB_URL.matcher(message);
         while (linkMatcher.find()) {
             final String url = linkMatcher.group(1);
 
