@@ -1,5 +1,7 @@
 package com.perflyst.twire.model;
 
+import android.util.SparseArray;
+
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
@@ -8,13 +10,14 @@ import java.io.Serializable;
  * Created by Sebastian Rask Jepsen on 28/07/16.
  */
 public class Emote implements Comparable<Emote>, Serializable {
-    private String emoteId, emoteKeyword;
-    private boolean isBetterTTVEmote, isTextEmote, isSubscriberEmote, isBetterTTVChannelEmote;
+    private String emoteKeyword;
+    private GetEmoteURL getEmoteUrl;
+    private GetBestAvailableSize getBestAvailableSize = size -> size;
+    private boolean isTextEmote, isSubscriberEmote, isCustomChannelEmote;
 
-    public Emote(String emoteId, String emoteKeyword, boolean isBetterTTVEmote) {
-        this.emoteId = emoteId;
+    public Emote(String emoteKeyword, GetEmoteURL getEmoteUrl) {
         this.emoteKeyword = emoteKeyword;
-        this.isBetterTTVEmote = isBetterTTVEmote;
+        this.getEmoteUrl = getEmoteUrl;
         this.isTextEmote = false;
     }
 
@@ -23,12 +26,12 @@ public class Emote implements Comparable<Emote>, Serializable {
         isTextEmote = true;
     }
 
-    public boolean isBetterTTVChannelEmote() {
-        return isBetterTTVChannelEmote;
+    public boolean isCustomChannelEmote() {
+        return isCustomChannelEmote;
     }
 
-    public void setBetterTTVChannelEmote(boolean betterTTVChannelEmote) {
-        isBetterTTVChannelEmote = betterTTVChannelEmote;
+    public void setCustomChannelEmote(boolean customChannelEmote) {
+        isCustomChannelEmote = customChannelEmote;
     }
 
     public boolean isSubscriberEmote() {
@@ -39,39 +42,71 @@ public class Emote implements Comparable<Emote>, Serializable {
         isSubscriberEmote = subscriberEmote;
     }
 
-    public String getEmoteId() {
-        return emoteId;
+    public String getEmoteUrl(int size) {
+        return getEmoteUrl.execute(size);
     }
-
-    public void setEmoteId(String emoteId) {
-        this.emoteId = emoteId;
-    }
-
-    public boolean isBetterTTVEmote() {
-        return isBetterTTVEmote;
-    }
-
-    public void setBetterTTVEmote(boolean betterTTVEmote) {
-        isBetterTTVEmote = betterTTVEmote;
+    public int getBestAvailableSize(int size) {
+        return getBestAvailableSize.execute(size);
     }
 
     public boolean isTextEmote() {
         return isTextEmote;
     }
 
-    public void setTextEmote(boolean textEmote) {
-        isTextEmote = textEmote;
-    }
-
     public String getKeyword() {
         return emoteKeyword;
     }
 
+    public interface GetEmoteURL
+    {
+        String execute(int size);
+    }
+
+    public interface GetBestAvailableSize
+    {
+        int execute(int size);
+    }
+
+    public static Emote Twitch(String keyword, String id)
+    {
+        return new Emote(keyword, size -> "https://static-cdn.jtvnw.net/emoticons/v1/" + id + "/" + size + ".0");
+    }
+
+    public static Emote BTTV(String keyword, String id)
+    {
+        return new Emote(keyword, size -> "https://cdn.betterttv.net/emote/" + id + "/" + size + "x");
+    }
+
+    public static Emote FFZ(String keyword, SparseArray<String> urlMap)
+    {
+        Emote emote = new Emote(keyword, size -> {
+            for (int i = size; i >= 1; i--) {
+                if (urlMap.indexOfKey(i) >= 0) {
+                    return urlMap.get(i);
+                }
+            }
+
+            return null;
+        });
+
+        emote.getBestAvailableSize = size -> {
+            for (int i = size; i >= 1; i--) {
+                if (urlMap.indexOfKey(i) >= 0) {
+                    return i;
+                }
+            }
+
+            return 1;
+        };
+
+        return emote;
+    }
+
     @Override
     public int compareTo(@NonNull Emote emote) {
-        if (this.isBetterTTVChannelEmote() && !emote.isBetterTTVChannelEmote()) {
+        if (this.isCustomChannelEmote() && !emote.isCustomChannelEmote()) {
             return -1;
-        } else if (emote.isBetterTTVChannelEmote() && !this.isBetterTTVChannelEmote()) {
+        } else if (emote.isCustomChannelEmote() && !this.isCustomChannelEmote()) {
             return 1;
         } else {
             return this.emoteKeyword.compareTo(emote.emoteKeyword);
@@ -84,18 +119,18 @@ public class Emote implements Comparable<Emote>, Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         Emote emote = (Emote) o;
+        String emoteUrl = getEmoteUrl(1);
 
-        if (isBetterTTVEmote != emote.isBetterTTVEmote) return false;
         if (isTextEmote != emote.isTextEmote) return false;
-        if (emoteId != null ? !emoteId.equals(emote.emoteId) : emote.emoteId != null) return false;
+        if (emoteUrl != null ? !emoteUrl.equals(emote.getEmoteUrl(1)) : emote.getEmoteUrl(1) != null) return false;
         return emoteKeyword != null ? emoteKeyword.equals(emote.emoteKeyword) : emote.emoteKeyword == null;
     }
 
     @Override
     public int hashCode() {
-        int result = emoteId != null ? emoteId.hashCode() : 0;
+        String emoteUrl = getEmoteUrl(1);
+        int result = emoteUrl != null ? emoteUrl.hashCode() : 0;
         result = 31 * result + (emoteKeyword != null ? emoteKeyword.hashCode() : 0);
-        result = 31 * result + (isBetterTTVEmote ? 1 : 0);
         result = 31 * result + (isTextEmote ? 1 : 0);
         return result;
     }

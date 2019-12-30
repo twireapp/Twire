@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.TextView;
@@ -19,22 +20,38 @@ import com.rey.material.drawable.BlankDrawable;
 
 public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callback {
     private TextView textView;
+    private LayerDrawable layerDrawable;
 
     private Drawable mDrawable;
     private Animatable animatable;
 
-    public GlideImageSpan(Context context, String url, TextView textView, SpannableStringBuilder builder, int assumedSize) {
+    public GlideImageSpan(Context context, String url, TextView textView, SpannableStringBuilder builder, int assumedSize, float scale, String backgroundColor) {
+        this(context, url, textView, builder, assumedSize, scale);
+
+        if (backgroundColor == null)
+            return;
+
+        ColorDrawable backgroundDrawable = new ColorDrawable(Color.parseColor(backgroundColor));
+
+        this.layerDrawable = new LayerDrawable(new Drawable[] { backgroundDrawable, new BlankDrawable() });
+        layerDrawable.setId(0, 0);
+        layerDrawable.setId(1, 1);
+    }
+
+    public GlideImageSpan(Context context, String url, TextView textView, SpannableStringBuilder builder, int assumedSize, float scale) {
         super(new BlankDrawable());
 
         this.textView = textView;
         this.textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         final GlideImageSpan instance = this;
 
+        int scaledAssumedSize = Math.round(assumedSize / scale);
+
         final Drawable placeHolderDrawable = new ColorDrawable(Color.LTGRAY);
-        placeHolderDrawable.setBounds(0, 0, assumedSize, assumedSize);
+        placeHolderDrawable.setBounds(0, 0, scaledAssumedSize, scaledAssumedSize);
 
         final Drawable errorDrawable = new ColorDrawable(0xFFFFCCCC); // Reddish light gray
-        errorDrawable.setBounds(0, 0, assumedSize, assumedSize);
+        errorDrawable.setBounds(0, 0, scaledAssumedSize, scaledAssumedSize);
 
         Glide
                 .with(context)
@@ -50,7 +67,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
 
                     @Override
                     public void onResourceReady(@NonNull Drawable resource, @Nullable Transition<? super Drawable> transition) {
-                        resource.setBounds(0, 0, resource.getIntrinsicWidth(), resource.getIntrinsicHeight());
+                        resource.setBounds(0, 0, Math.round(resource.getIntrinsicWidth() / scale), Math.round(resource.getIntrinsicHeight() / scale));
 
                         if (resource instanceof Animatable) {
                             animatable = (Animatable) resource;
@@ -103,7 +120,17 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
 
     @Override
     public Drawable getDrawable() {
-        return this.mDrawable != null ? this.mDrawable : super.getDrawable();
+        Drawable drawable = this.mDrawable != null ? this.mDrawable : super.getDrawable();
+
+        if (layerDrawable != null) {
+            layerDrawable.getDrawable(0).setBounds(drawable.getBounds());
+            layerDrawable.setBounds(drawable.getBounds());
+            layerDrawable.setDrawableByLayerId(1, drawable);
+
+            return layerDrawable;
+        }
+
+        return drawable;
     }
 
 /*

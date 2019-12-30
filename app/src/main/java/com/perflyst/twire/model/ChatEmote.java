@@ -4,31 +4,17 @@ package com.perflyst.twire.model;
  * Created by SebastianRask on 03-03-2016.
  */
 public class ChatEmote {
-    private String[] emotePositions;
-    private String emoteUrl;
+    private Emote emote;
+    private int[] positions;
 
-    private boolean isGif = false;
-
-    public ChatEmote(String[] emotePositions, String emoteUrl) {
-        this.emotePositions = emotePositions;
-        this.emoteUrl = emoteUrl;
+    public ChatEmote(Emote emote, int[] positions) {
+        this.emote = emote;
+        this.positions = positions;
     }
 
-    public String getEmoteUrl() {
-        return emoteUrl;
+    public Emote getEmote() {
+        return emote;
     }
 
-    public String[] getEmotePositions() {
-        return emotePositions;
-    }
-
-    public boolean isGif() {
-        return isGif;
-    }
-
-    public void setGif(boolean gif) {
-        isGif = gif;
-    }
-
-
+    public int[] getPositions() { return positions; }
 }

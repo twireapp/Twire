@@ -46,7 +46,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.adapters.ChatAdapter;
-import com.perflyst.twire.chat.ChatEmoteManager;
 import com.perflyst.twire.chat.ChatManager;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
 import com.perflyst.twire.model.ChannelInfo;
@@ -88,7 +87,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             0x1F640, 0x1F641, 0x1F642, 0x1F643, 0x1F644, 0x1F645, 0x1F646, 0x1F647, 0x1F648, 0x1F649, 0x1F64A, 0x1F64B, 0x1F64C, 0x1F64D, 0x1F64E, 0x1F64F
     };
 
-    private static ArrayList<Emote> supportedTextEmotes, bttvEmotes, bttvChannelEmotes, twitchEmotes, subscriberEmotes;
+    private static ArrayList<Emote> supportedTextEmotes, customEmotes, customChannelEmotes, twitchEmotes, subscriberEmotes;
     private static ArrayList<Emote> recentEmotes, emotesToHide;
 
     private final String LOG_TAG = getClass().getSimpleName();
@@ -114,7 +113,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private FrameLayout mChatStatusBar;
 
     //Emote Keyboard
-    private EmoteGridFragment textEmotesFragment, recentEmotesFragment, twitchEmotesFragment, bttvEmotesFragment, subscriberEmotesFragment;
+    private EmoteGridFragment textEmotesFragment, recentEmotesFragment, twitchEmotesFragment, customEmotesFragment, subscriberEmotesFragment;
     private ImageView mEmoteKeyboardButton, mEmoteChatBackspace;
     private ViewGroup emoteKeyboardContainer;
     private boolean isEmoteKeyboardOpen = false;
@@ -265,10 +264,10 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             }
 
             @Override
-            public void onBttvEmoteIdFetched(List<Emote> bttvChannel, List<Emote> bttvGlobal) {
+            public void onCustomEmoteIdFetched(List<Emote> channel, List<Emote> global) {
                 try {
                     if (isFragmentActive()) {
-                        bttvEmoteInfoLoaded(bttvChannel, bttvGlobal);
+                        customEmoteInfoLoaded(channel, global);
                     }
                 } catch (IllegalAccessError e) {
                     e.printStackTrace();
@@ -415,7 +414,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             for (Emote emote : recentEmotes) {
                 if (subscriberEmotes != null && emote.isSubscriberEmote() && !subscriberEmotes.contains(emote)) {
                     emotesToRemove.add(emote);
-                } else if (bttvChannelEmotes != null && emote.isBetterTTVChannelEmote() && !bttvChannelEmotes.contains(emote)) {
+                } else if (customChannelEmotes != null && emote.isCustomChannelEmote() && !customChannelEmotes.contains(emote)) {
                     emotesToHide.add(emote);
                 }
             }
@@ -483,19 +482,19 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     }
 
     /**
-     * Notifies the ChatFragment that the bttvEmotes have been loaded from the API.
+     * Notifies the ChatFragment that the custom emotes have been loaded from the API.
      * Emotes are made and added to the EmoteKeyboard;
      */
-    private void bttvEmoteInfoLoaded(List<Emote> bttvChannel, List<Emote> bttvGlobal) {
-        Log.d(LOG_TAG, "Bttv Emotes loaded: " + bttvGlobal.size());
-        bttvChannelEmotes = new ArrayList<>(bttvChannel);
-        bttvEmotes = new ArrayList<>(bttvGlobal);
-        bttvEmotes.addAll(bttvChannel);
-        Collections.sort(bttvEmotes);
+    private void customEmoteInfoLoaded(List<Emote> channel, List<Emote> global) {
+        Log.d(LOG_TAG, "Custom Emotes loaded: " + global.size());
+        customChannelEmotes = new ArrayList<>(channel);
+        customEmotes = new ArrayList<>(global);
+        customEmotes.addAll(channel);
+        Collections.sort(customEmotes);
 
         checkRecentEmotes();
-        if (settings.isLoggedIn() && bttvEmotesFragment != null) {
-            bttvEmotesFragment.addBttvEmotes();
+        if (settings.isLoggedIn() && customEmotesFragment != null) {
+            customEmotesFragment.addCustomEmotes();
         }
     }
 
@@ -821,7 +820,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                         }
                     }
                 },
-                bttvEmotes,
+                customEmotes,
                 twitchEmotes,
                 subscriberEmotes,
                 chatManager,
@@ -914,7 +913,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
     protected enum EmoteFragmentType {
         UNICODE,
-        BTTV,
+        CUSTOM,
         TWITCH,
         SUBSCRIBER,
         ALL
@@ -976,8 +975,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     case TWITCH:
                         addTwitchEmotes();
                         break;
-                    case BTTV:
-                        addBttvEmotes();
+                    case CUSTOM:
+                        addCustomEmotes();
                         break;
                     case SUBSCRIBER:
                         addSubscriberEmotes();
@@ -1001,9 +1000,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             }
         }
 
-        private void addBttvEmotes() {
-            if (bttvEmotes != null && mAdapter != null && mAdapter.getItemCount() == 0) {
-                mAdapter.addEmotes(bttvEmotes);
+        private void addCustomEmotes() {
+            if (customEmotes != null && mAdapter != null && mAdapter.getItemCount() == 0) {
+                mAdapter.addEmotes(customEmotes);
             }
         }
 
@@ -1082,7 +1081,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     holder.mTextEmote.setText(emoteAtPosition.getKeyword());
                 } else {
                     int EMOTE_SIZE = 2;
-                    String emoteUrl = ChatEmoteManager.getEmoteUrl(emoteAtPosition, EMOTE_SIZE);
+                    String emoteUrl = emoteAtPosition.getEmoteUrl(EMOTE_SIZE);
 
                     Picasso.with(getContext()).load(emoteUrl).into(holder.mImageEmote);
                 }
@@ -1154,7 +1153,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         final int RECENT_POSITION = 0,
                 TWITCH_POSITION = 1,
                 SUBSCRIBE_POSITION = 2,
-                BTTV_POSITION = 3,
+                CUSTOM_POSITION = 3,
                 EMOJI_POSITION = 4;
         boolean showSubscriberEmote = false;
 
@@ -1166,7 +1165,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             recentEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.ALL, delegate);
             twitchEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.TWITCH, delegate);
             subscriberEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.SUBSCRIBER, delegate);
-            bttvEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.BTTV, delegate);
+            customEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.CUSTOM, delegate);
         }
 
         @Override
@@ -1182,8 +1181,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     return twitchEmotesFragment;
                 case SUBSCRIBE_POSITION:
                     return subscriberEmotesFragment;
-                case BTTV_POSITION:
-                    return bttvEmotesFragment;
+                case CUSTOM_POSITION:
+                    return customEmotesFragment;
                 case EMOJI_POSITION:
                     return textEmotesFragment;
                 default:

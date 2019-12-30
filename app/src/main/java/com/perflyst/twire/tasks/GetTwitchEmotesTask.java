@@ -55,7 +55,7 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                         String id = emoteObject.getInt(ID_KEY_INT) + "";
                         String WORD_KEY_STRING = "code";
                         String word = emoteObject.getString(WORD_KEY_STRING);
-                        Emote emote = new Emote(id, word, false);
+                        Emote emote = Emote.Twitch(word, id);
                         emote.setSubscriberEmote(true);
                         subscriberEmotes.add(emote);
                     }
@@ -74,7 +74,7 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                     JSONObject emoteObject = emotesObject.getJSONObject(key);
 
                     String emoteId = "" + emoteObject.getInt("id");
-                    twitchEmotes.add(new Emote(emoteId, key, false));
+                    twitchEmotes.add(Emote.Twitch(key, emoteId));
                 }
             }
         } catch (JSONException e) {
