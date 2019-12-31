@@ -54,11 +54,10 @@ import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
 
 import com.afollestad.materialdialogs.DialogAction;
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.StreamActivity;
@@ -68,6 +67,7 @@ import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
 import com.perflyst.twire.misc.ResizeWidthAnimation;
 import com.perflyst.twire.model.ChannelInfo;
+import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.model.SleepTimer;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Service;
@@ -86,9 +86,9 @@ import com.squareup.picasso.Target;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
@@ -114,8 +114,7 @@ public class StreamFragment extends Fragment {
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
     private Settings settings;
     private SleepTimer sleepTimer;
-    private HashMap<String, String> qualityURLs;
-    private BiMap<String, String> supportedQualities;
+    private LinkedHashMap<String, Quality> qualityURLs;
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
     private View mVideoBackground;
@@ -133,7 +132,8 @@ public class StreamFragment extends Fragment {
             mForward,
             mBackward;
     private SeekBar mProgressBar;
-    private TextView mCurrentProgressView, source, high, medium, low, mobile, auto, castingTextView, mCurrentViewersView;
+    private TextView mCurrentProgressView, castingTextView, mCurrentViewersView;
+    private HashMap<String, TextView> QualityOptions = new HashMap<>();
     private AppCompatActivity mActivity;
     private Snackbar snackbar;
     private ProgressView mBufferingView;
@@ -843,7 +843,7 @@ public class StreamFragment extends Fragment {
 
     private void initCastingView() {
         castingViewVisible = true;
-        auto.setVisibility(View.GONE); // Auto does not work on chromecast
+        //auto.setVisibility(View.GONE); // Auto does not work on chromecast
         mVideoView.setVisibility(View.INVISIBLE);
         mBufferingView.setVisibility(View.GONE);
         previewInbackGround = false;
@@ -854,7 +854,7 @@ public class StreamFragment extends Fragment {
 
     private void disableCastingView() {
         castingViewVisible = false;
-        auto.setVisibility(View.VISIBLE);
+        //auto.setVisibility(View.VISIBLE);
         mVideoView.setVisibility(View.VISIBLE);
         Service.bringToBack(mPreview);
         mBufferingView.setVisibility(View.VISIBLE);
@@ -863,7 +863,7 @@ public class StreamFragment extends Fragment {
         showVideoInterface();
     }
 
-    private String getBestCastQuality(Map<String, String> castQualities, String quality, Integer numberOfTries) {
+    private String getBestCastQuality(Map<String, Quality> castQualities, String quality, Integer numberOfTries) {
         if (numberOfTries > GetLiveStreamURL.CAST_QUALITIES.length - 1) {
             return null;
         }
@@ -1216,7 +1216,7 @@ public class StreamFragment extends Fragment {
     }
 
     /**
-     * Goes forward to live and starts plackback of the VideoView
+     * Goes forward to live and starts playback of the VideoView
      */
     private void resumeStream() {
         showPauseIcon();
@@ -1249,7 +1249,7 @@ public class StreamFragment extends Fragment {
                     return;
                 }
 
-                playUrl(qualityURLs.get(quality));
+                playUrl(qualityURLs.get(quality).URL);
                 showQualities();
                 updateSelectedQuality(quality);
                 showPauseIcon();
@@ -1272,7 +1272,7 @@ public class StreamFragment extends Fragment {
         GetLiveStreamURL.AsyncResponse callback = url -> {
             try {
                 if (!url.isEmpty()) {
-                    updateQualitySelections(url.keySet());
+                    updateQualitySelections(url);
                     qualityURLs = url;
 
                     if (!checkForAudioOnlyMode()) {
@@ -1303,7 +1303,7 @@ public class StreamFragment extends Fragment {
         GetLiveStreamURL.AsyncResponse delegate = url -> {
             try {
                 if (!url.isEmpty()) {
-                    updateQualitySelections(url.keySet());
+                    updateQualitySelections(url);
                     qualityURLs = url;
                 }
             } catch (IllegalStateException | NullPointerException e) {
@@ -1351,11 +1351,11 @@ public class StreamFragment extends Fragment {
     }
 
     private void tryNextBestQuality(String quality) {
-        if (triesForNextBest < GetLiveStreamURL.QUALITIES.length - 1) { // Subtract 1 as we don't count AUDIO ONLY as a quality
+        if (triesForNextBest < qualityURLs.size() - 1) { // Subtract 1 as we don't count AUDIO ONLY as a quality
             triesForNextBest++;
-            List<String> qualityList = Arrays.asList(GetLiveStreamURL.QUALITIES);
-            int next = qualityList.indexOf(quality) - 1;
-            if (next < 0) {
+            List<String> qualityList = new ArrayList<>(qualityURLs.keySet());
+            int next = qualityList.indexOf(quality) + 1;
+            if (next >= qualityList.size() - 1) {
                 startStreamWithQuality(GetLiveStreamURL.QUALITY_SOURCE);
             } else {
                 startStreamWithQuality(qualityList.get(next));
@@ -1390,7 +1390,7 @@ public class StreamFragment extends Fragment {
         }
 
         updateSelectedQuality(castQuality);
-        String url = qualityURLs.get(castQuality);
+        String url = qualityURLs.get(castQuality).URL;
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.parse(url), "video/*");
@@ -1404,26 +1404,6 @@ public class StreamFragment extends Fragment {
     }
 
     private void registerAudioOnlyDelegate() {
-    }
-
-    private String getLowestQualityUrl() {
-        if (qualityURLs == null) {
-            return null;
-        }
-
-        if (qualityURLs.containsKey(GetLiveStreamURL.QUALITY_MOBILE)) {
-            return qualityURLs.get(GetLiveStreamURL.QUALITY_MOBILE);
-        } else if (qualityURLs.containsKey(GetLiveStreamURL.QUALITY_LOW)) {
-            return qualityURLs.get(GetLiveStreamURL.QUALITY_LOW);
-        } else if (qualityURLs.containsKey(GetLiveStreamURL.QUALITY_MEDIUM)) {
-            return qualityURLs.get(GetLiveStreamURL.QUALITY_MEDIUM);
-        } else if (qualityURLs.containsKey(GetLiveStreamURL.QUALITY_HIGH)) {
-            return qualityURLs.get(GetLiveStreamURL.QUALITY_HIGH);
-        } else if (qualityURLs.containsKey(GetLiveStreamURL.QUALITY_SOURCE)) {
-            return qualityURLs.get(GetLiveStreamURL.QUALITY_SOURCE);
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -1444,18 +1424,8 @@ public class StreamFragment extends Fragment {
         //TODO: Bad design
         if (quality == null) {
             resetQualityViewBackground(null);
-        } else if (quality.equals(GetLiveStreamURL.QUALITY_AUTO)) {
-            resetQualityViewBackground(auto);
-        } else if (quality.equals(GetLiveStreamURL.QUALITY_SOURCE)) {
-            resetQualityViewBackground(source);
-        } else if (quality.equals(GetLiveStreamURL.QUALITY_HIGH)) {
-            resetQualityViewBackground(high);
-        } else if (quality.equals(GetLiveStreamURL.QUALITY_MEDIUM)) {
-            resetQualityViewBackground(medium);
-        } else if (quality.equals(GetLiveStreamURL.QUALITY_LOW)) {
-            resetQualityViewBackground(low);
-        } else if (quality.equals(GetLiveStreamURL.QUALITY_MOBILE)) {
-            resetQualityViewBackground(mobile);
+        } else {
+            resetQualityViewBackground(QualityOptions.get(quality));
         }
     }
 
@@ -1463,8 +1433,7 @@ public class StreamFragment extends Fragment {
      * Resets the background color of all the select quality views in the bottom dialog
      */
     private void resetQualityViewBackground(TextView selected) {
-        TextView[] textViews = {auto, source, high, medium, low, mobile};
-        for (TextView v : textViews) {
+        for (TextView v : QualityOptions.values()) {
             if (v.equals(selected)) {
                 v.setBackgroundColor(Service.getColorAttribute(R.attr.navigationDrawerHighlighted, R.color.grey_300, getContext()));
             } else {
@@ -1478,28 +1447,24 @@ public class StreamFragment extends Fragment {
      *
      * @param availableQualities
      */
-    private void updateQualitySelections(Set<String> availableQualities) {
-        setupViewQuality(auto, GetLiveStreamURL.QUALITY_AUTO, availableQualities);
-        setupViewQuality(source, GetLiveStreamURL.QUALITY_SOURCE, availableQualities);
-        setupViewQuality(high, GetLiveStreamURL.QUALITY_HIGH, availableQualities);
-        setupViewQuality(medium, GetLiveStreamURL.QUALITY_MEDIUM, availableQualities);
-        setupViewQuality(low, GetLiveStreamURL.QUALITY_LOW, availableQualities);
-        setupViewQuality(mobile, GetLiveStreamURL.QUALITY_MOBILE, availableQualities);
-    }
+    private void updateQualitySelections(LinkedHashMap<String, Quality> availableQualities) {
+        for (TextView view : QualityOptions.values()) {
+            mQualityWrapper.removeView((MaterialRippleLayout) view.getParent());
+        }
 
-    /**
-     * Sets up a select quality view in the bottom dialog. If the quality doesn't exist in the availableQualities the view is hidden.
-     * If it exists an onClick listener is set
-     *
-     * @param view               The select quality view
-     * @param quality            The quality name corresponding to the view
-     * @param availableQualities Set of available qualities
-     */
-    private void setupViewQuality(TextView view, String quality, Set<String> availableQualities) {
-        if (!availableQualities.contains(quality)) {
-            view.setVisibility(View.GONE);
-        } else {
-            setQualityOnClick(view);
+        for (Map.Entry<String, Quality> entry : availableQualities.entrySet()) {
+            Quality quality = entry.getValue();
+            String qualityKey = entry.getKey();
+            if (qualityKey.equals("audio_only"))
+                continue;
+
+            MaterialRippleLayout layout = (MaterialRippleLayout) LayoutInflater.from(getContext()).inflate(R.layout.quality_item, null);
+            TextView textView = ((TextView) layout.getChildAt(0));
+            textView.setText(quality.Name);
+
+            setQualityOnClick(textView, qualityKey);
+            QualityOptions.put(qualityKey, textView);
+            mQualityWrapper.addView(layout);
         }
     }
 
@@ -1509,9 +1474,8 @@ public class StreamFragment extends Fragment {
      *
      * @param qualityView
      */
-    private void setQualityOnClick(final TextView qualityView) {
+    private void setQualityOnClick(final TextView qualityView, String quality) {
         qualityView.setOnClickListener(v -> {
-            String quality = supportedQualities.get(qualityView.getText());
             settings.setPrefStreamQuality(quality);
             startStreamWithQuality(quality);
             resetQualityViewBackground(qualityView);
@@ -1638,14 +1602,6 @@ public class StreamFragment extends Fragment {
      * Automatically hides the text of the selected Quality
      */
     private void setupSpinner() {
-        supportedQualities = HashBiMap.create();
-        supportedQualities.put(getResources().getString(R.string.quality_auto), GetLiveStreamURL.QUALITY_AUTO);
-        supportedQualities.put(getResources().getString(R.string.quality_source), GetLiveStreamURL.QUALITY_SOURCE);
-        supportedQualities.put(getResources().getString(R.string.quality_high), GetLiveStreamURL.QUALITY_HIGH);
-        supportedQualities.put(getResources().getString(R.string.quality_medium), GetLiveStreamURL.QUALITY_MEDIUM);
-        supportedQualities.put(getResources().getString(R.string.quality_low), GetLiveStreamURL.QUALITY_LOW);
-        supportedQualities.put(getResources().getString(R.string.quality_mobile), GetLiveStreamURL.QUALITY_MOBILE);
-
         mQualityButton.setOnClickListener(v -> mQualityBottomSheet.show());
 
         View v = LayoutInflater.from(getContext()).inflate(R.layout.stream_settings, null);
@@ -1655,13 +1611,6 @@ public class StreamFragment extends Fragment {
         final BottomSheetBehavior behavior = getDefaultBottomSheetBehaviour(v);
 
         mQualityBottomSheet.setOnDismissListener(dialogInterface -> behavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
-
-        auto = mQualityBottomSheet.findViewById(R.id.auto);
-        source = mQualityBottomSheet.findViewById(R.id.source);
-        high = mQualityBottomSheet.findViewById(R.id.high);
-        medium = mQualityBottomSheet.findViewById(R.id.medium);
-        low = mQualityBottomSheet.findViewById(R.id.low);
-        mobile = mQualityBottomSheet.findViewById(R.id.mobile);
 
         mQualityWrapper = mQualityBottomSheet.findViewById(R.id.quality_wrapper);
         mAudioOnlySelector = mQualityBottomSheet.findViewById(R.id.audio_only_selector);
@@ -1676,11 +1625,16 @@ public class StreamFragment extends Fragment {
             mChatOnlySelector.setVisibility(View.VISIBLE);
         }
 
+        // Audio Only is currently broken, so let's not show it
+        mAudioOnlySelector.setVisibility(View.GONE);
+        /*
         mAudioOnlySelector.setVisibility(View.VISIBLE);
         mAudioOnlySelector.setOnClickListener(view -> {
             mQualityBottomSheet.dismiss();
             audioOnlyClicked();
         });
+        */
+
         mChatOnlySelector.setOnClickListener(view -> {
             mQualityBottomSheet.dismiss();
             chatOnlyClicked();

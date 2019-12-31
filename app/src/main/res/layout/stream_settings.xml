@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -51,72 +50,6 @@
                     style="@style/stream_settings_item"
                     android:text="@string/available_qualities"
                     android:textColor="?attr/secondaryTextColor" />
-
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleDelayClick="false">
-
-                    <TextView
-                        android:id="@+id/auto"
-                        style="@style/stream_settings_item"
-                        android:text="@string/quality_auto" />
-                </com.balysv.materialripple.MaterialRippleLayout>
-
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleDelayClick="false">
-
-                    <TextView
-                        android:id="@+id/source"
-                        style="@style/stream_settings_item"
-                        android:text="@string/quality_source" />
-                </com.balysv.materialripple.MaterialRippleLayout>
-
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleDelayClick="false">
-
-                    <TextView
-                        android:id="@+id/high"
-                        style="@style/stream_settings_item"
-                        android:text="@string/quality_high" />
-                </com.balysv.materialripple.MaterialRippleLayout>
-
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleDelayClick="false">
-
-                    <TextView
-                        android:id="@+id/medium"
-                        style="@style/stream_settings_item"
-                        android:text="@string/quality_medium" />
-                </com.balysv.materialripple.MaterialRippleLayout>
-
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleDelayClick="false">
-
-                    <TextView
-                        android:id="@+id/low"
-                        style="@style/stream_settings_item"
-                        android:text="@string/quality_low" />
-                </com.balysv.materialripple.MaterialRippleLayout>
-
-                <com.balysv.materialripple.MaterialRippleLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mrl_rippleDelayClick="false">
-
-                    <TextView
-                        android:id="@+id/mobile"
-                        style="@style/stream_settings_item"
-                        android:text="@string/quality_mobile" />
-                </com.balysv.materialripple.MaterialRippleLayout>
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

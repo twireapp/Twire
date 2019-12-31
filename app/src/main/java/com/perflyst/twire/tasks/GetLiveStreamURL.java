@@ -3,6 +3,7 @@ package com.perflyst.twire.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.service.Service;
 
 import org.json.JSONException;
@@ -15,9 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -27,7 +26,7 @@ import java.util.regex.Pattern;
  * Async task. Gets the required access token for a specific streamer. Then starts the streamers live stream.
  * Requires to be executed with the username of the streamer and a reference to the videoview
  */
-public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, String>> {
+public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<String, Quality>> {
     public static final String QUALITY_MOBILE = "mobile";
     public static final String QUALITY_LOW = "low";
     public static final String QUALITY_MEDIUM = "medium";
@@ -35,34 +34,12 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
     public static final String QUALITY_SOURCE = "chunked";
     public static final String QUALITY_AUTO = "auto";
     public static final String QUALITY_AUDIO_ONLY = "audio_only";
-    public static final String QUALITY_540p30 = "540p30";
-    public static final String QUALITY_360p30 = "360p30";
-    public static final String QUALITY_144p30 = "144p30";
-    public static final String[] QUALITIES = {
-            QUALITY_MOBILE,
-            QUALITY_LOW,
-            QUALITY_MEDIUM,
-            QUALITY_HIGH,
-            QUALITY_SOURCE,
-            QUALITY_AUTO,
-            QUALITY_AUDIO_ONLY
-    };
     public static final String[] CAST_QUALITIES = {
             QUALITY_MOBILE,
             QUALITY_LOW,
             QUALITY_MEDIUM,
             QUALITY_HIGH,
             QUALITY_SOURCE
-    };
-    private static final String QUALITY_720p60 = "720p60";
-    private static final String QUALITY_720p30 = "720p30";
-    private static final String QUALITY_480p30 = "480p30";
-    private static final String QUALITY_240p30 = "240p30";
-    private final String[] NEW_QUALITIES = {
-            QUALITY_240p30,
-            QUALITY_480p30,
-            QUALITY_720p30,
-            QUALITY_720p60
     };
     private String LOG_TAG = getClass().getSimpleName();
     private AsyncResponse callback;
@@ -72,7 +49,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
     }
 
     @Override
-    protected HashMap<String, String> doInBackground(String... params) {
+    protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String streamerName = params[0];
         String sig = "";
         String tokenString = "";
@@ -102,11 +79,11 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
     }
 
     @Override
-    protected void onPostExecute(HashMap<String, String> result) {
+    protected void onPostExecute(LinkedHashMap<String, Quality> result) {
         callback.finished(result);
     }
 
-    HashMap<String, String> parseM3U8(String urlToRead) {
+    LinkedHashMap<String, Quality> parseM3U8(String urlToRead) {
         URL url;
         HttpURLConnection conn = null;
         Scanner in = null;
@@ -147,40 +124,20 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
                 conn.disconnect();
         }
 
-        HashMap<String, String> resultList = new HashMap<>();
+        LinkedHashMap<String, Quality> resultList = new LinkedHashMap<>();
+        resultList.put(QUALITY_AUTO, new Quality("Auto", urlToRead));
 
-        ArrayList<String> qualitiesAvailable = new ArrayList<>(Arrays.asList(QUALITIES));
-        qualitiesAvailable.addAll(new ArrayList<>(Arrays.asList(NEW_QUALITIES)));
-        for (String quality : qualitiesAvailable) {
-            Pattern p = Pattern.compile("VIDEO=\"" + quality + "\"\\n(http://\\S+)");
-            Matcher m = p.matcher(result.toString());
+        Pattern p = Pattern.compile("GROUP-ID=\"(.+)\",NAME=\"(.+)\".+\\n.+\\n(http://\\S+)");
+        Matcher m = p.matcher(result.toString());
 
-            if (m.find()) {
-                String resultQualityName = quality;
-                switch (quality) {
-                    case QUALITY_720p60:
-                        resultQualityName = QUALITY_HIGH;
-                        break;
-                    case QUALITY_720p30:
-                        resultQualityName = QUALITY_MEDIUM;
-                        break;
-                    case QUALITY_480p30:
-                        resultQualityName = QUALITY_LOW;
-                        break;
-                    case QUALITY_240p30:
-                        resultQualityName = QUALITY_MOBILE;
-                        break;
-                }
-
-                resultList.put(resultQualityName, m.group(1));
-            }
+        while (m.find()) {
+            resultList.put(m.group(1), new Quality(m.group(2), m.group(3)));
         }
-        resultList.put(QUALITY_AUTO, urlToRead);
 
         return resultList;
     }
 
-    protected String safeEncode(String s) {
+    String safeEncode(String s) {
         try {
             return URLEncoder.encode(s, "utf-8");
         } catch (UnsupportedEncodingException ignore) {
@@ -189,6 +146,6 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, HashMap<String, St
     }
 
     public interface AsyncResponse {
-        void finished(HashMap<String, String> url);
+        void finished(LinkedHashMap<String, Quality> url);
     }
 }

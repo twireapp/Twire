@@ -2,12 +2,13 @@ package com.perflyst.twire.tasks;
 
 import android.util.Log;
 
+import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.service.Service;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /**
  * Created by Sebastian Rask on 18-06-2016.
@@ -20,7 +21,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
     }
 
     @Override
-    protected HashMap<String, String> doInBackground(String... params) {
+    protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String vodId = params[0];
         String sig = "";
         String token = "";
