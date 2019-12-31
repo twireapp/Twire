@@ -167,7 +167,7 @@
 
     <!-- Live Stream Activity -->
     <string name="stream_no_chromecast_quality_supported">Sorry, this stream doesn\'t support </string>
-    <string name="stream_playback_failed">Stream is no longer live</string>
+    <string name="stream_playback_failed">Failed to play stream. Try another quality.</string>
     <string name="title_activity_live_stream">Live stream</string>
     <string name="chat_send_message_hint">Type message</string>
     <string name="chat_status_connecting">Connecting to chat…</string>
@@ -399,5 +399,4 @@
     <string name="stream_external_play_using">Play using…</string>
     <string name="live_streamer_notification_id">liveStreamerNotificationId</string>
     <string name="stream_cast_notification_id">streamCastNotificationId</string>
-
 </resources>
