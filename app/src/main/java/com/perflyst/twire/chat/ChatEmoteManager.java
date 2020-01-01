@@ -51,11 +51,10 @@ public class ChatEmoteManager {
         final String EMOTE_ARRAY = "emotes";
 
         try {
-            JSONObject topObject = new JSONObject(Service.urlToJSONString(BTTV_GLOBAL_URL));
-            JSONArray globalEmotes = topObject.getJSONArray(EMOTE_ARRAY);
+            JSONArray topObject = new JSONArray(Service.urlToJSONString(BTTV_GLOBAL_URL));
 
-            for (int i = 0; i < globalEmotes.length(); i++) {
-                Emote emote = ToBTTV(globalEmotes.getJSONObject(i));
+            for (int i = 0; i < topObject.length(); i++) {
+                Emote emote = ToBTTV(topObject.getJSONObject(i));
                 customGlobal.add(emote);
                 result.put(emote.getKeyword(), emote);
             }
