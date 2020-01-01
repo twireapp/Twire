@@ -35,7 +35,7 @@ import com.perflyst.twire.service.Settings;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-public abstract class StreamActivity extends ThemeActivity implements SensorEventListener, StreamFragment.OnSeekListener {
+public abstract class StreamActivity extends ThemeActivity implements SensorEventListener, StreamFragment.StreamFragmentListener {
     private static final int SENSOR_DELAY = 500 * 1000; // 500ms
     private static final int FROM_RADS_TO_DEGS = -57;
     public StreamFragment mStreamFragment;
@@ -259,7 +259,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     public void onAttachFragment(Fragment fragment) {
         if (fragment instanceof StreamFragment) {
             StreamFragment streamFragment = (StreamFragment) fragment;
-            streamFragment.onSeekCallback = this;
+            streamFragment.streamFragmentCallback = this;
         }
 
         if (mChatFragment == null && fragment instanceof ChatFragment)
@@ -274,6 +274,11 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         mChatFragment.clearMessages();
     }
 
+    @Override
+    public void refreshLayout() {
+        updateOrientation();
+    }
+
     public View getMainContentLayout() {
         return findViewById(R.id.main_content);
     }
@@ -283,7 +288,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         View chat = findViewById(R.id.chat_fragment);
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) findViewById(R.id.chat_landscape_fragment).getLayoutParams();
-            lp.width = (int) (StreamFragment.getScreenWidth(this) * (settings.getChatLandscapeWidth() / 100.0));
+            lp.width = (int) (StreamFragment.getScreenRect(this).height() * (settings.getChatLandscapeWidth() / 100.0));
             Log.d(LOG_TAG, "TARGET WIDTH: " + lp.width);
             chat.setLayoutParams(lp);
         } else {

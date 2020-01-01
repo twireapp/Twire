@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.DisplayCutout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,6 +30,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
@@ -41,10 +44,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -108,7 +111,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             progressHandler = new Handler(),
             fetchViewCountHandler = new Handler(),
             fetchChattersHandler = new Handler();
-    public OnSeekListener onSeekCallback;
+    public StreamFragmentListener streamFragmentCallback;
     public boolean chatOnlyViewVisible = false;
     public boolean isFullscreen = false;
     private boolean castingViewVisible = false,
@@ -182,6 +185,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             fetchChattersDelay = 1000 * 60; // 30 seco... Nah just kidding. Also a minute.
     private Integer triesForNextBest = 0;
 
+    private static int totalVerticalInset;
+
     public static StreamFragment newInstance(Bundle args) {
         StreamFragment fragment = new StreamFragment();
         fragment.setArguments(args);
@@ -189,11 +194,11 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     /**
-     * Finds and returns the TRUE width of the screen
+     * Gets a Rect representing the usable area of the screen
      *
-     * @return
+     * @return A Rect representing the usable area of the screen
      */
-    public static int getScreenWidth(Activity activity) {
+    public static Rect getScreenRect(Activity activity) {
         if (activity != null) {
             Display display = activity.getWindowManager().getDefaultDisplay();
             DisplayMetrics metrics = new DisplayMetrics();
@@ -215,10 +220,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 height = size.y;
             }
 
-            return Math.max(width, height);
+            return new Rect(0, 0, Math.min(width, height), Math.max(width, height) - totalVerticalInset);
         }
 
-        return 0;
+        return new Rect();
     }
 
     @Override
@@ -386,7 +391,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 seeking = true;
                 mProgressBar.setProgress(currentProgress - 10000);
                 seeking = false;
-                onSeekCallback.onSeek();
+                streamFragmentCallback.onSeek();
                 ChatManager.updateVodProgress(currentProgress, true);
             });
 
@@ -432,7 +437,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
                     if (vodId != null) {
                         ChatManager.updateVodProgress(currentProgress, true);
-                        onSeekCallback.onSeek();
+                        streamFragmentCallback.onSeek();
                     }
                 }
             });
@@ -451,7 +456,44 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             getActivity().registerReceiver(headsetIntentReceiver, new IntentFilter(AudioManager.ACTION_HEADSET_PLUG));
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            mRootView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View v) {
+                    DisplayCutout displayCutout = getDisplayCutout();
+                    if (displayCutout != null) {
+                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                            totalVerticalInset = displayCutout.getSafeInsetLeft() + displayCutout.getSafeInsetRight();
+                        } else {
+                            totalVerticalInset = displayCutout.getSafeInsetTop() + displayCutout.getSafeInsetBottom();
+                        }
+
+                        setVideoViewLayout();
+                        setupLandscapeChat();
+                        streamFragmentCallback.refreshLayout();
+                    }
+                }
+
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+                }
+            });
+        }
+
         return mRootView;
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    private DisplayCutout getDisplayCutout() {
+        Activity activity = getActivity();
+        if (activity != null) {
+            WindowInsets windowInsets = activity.getWindow().getDecorView().getRootWindowInsets();
+            if (windowInsets != null) {
+                return windowInsets.getDisplayCutout();
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -715,7 +757,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                     seeking = true;
                     mProgressBar.setProgress((hourPicker.getValue() * 3600 + minutePicker.getValue() * 60 + secondPicker.getValue()) * 1000);
                     seeking = false;
-                    onSeekCallback.onSeek();
+                    streamFragmentCallback.onSeek();
                     ChatManager.updateVodProgress(currentProgress, true);
                 },
                 currentProgress / 1000,
@@ -760,7 +802,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     private void setupLandscapeChat() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && settings.isChatLandscapeSwipable() && settings.isChatInLandscapeEnabled()) {
-            final int width = getScreenWidth(getActivity());
+            final int width = getScreenRect(getActivity()).height();
 
             View.OnTouchListener touchListener = new View.OnTouchListener() {
                 private int downPosition = width;
@@ -824,7 +866,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
      * The ShowChatButton is also rotated
      */
     private void showLandscapeChat() {
-        int width = getScreenWidth(getActivity());
+        int width = getScreenRect(getActivity()).height();
         ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, (width - getLandscapeChatTargetWidth()));
         resizeWidthAnimation.setDuration(250);
         mVideoWrapper.startAnimation(resizeWidthAnimation);
@@ -836,7 +878,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
      * The ShowChatButton is also rotated
      */
     private void hideLandscapeChat() {
-        int width = getScreenWidth(getActivity());
+        int width = getScreenRect(getActivity()).height();
         ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, width);
         resizeWidthAnimation.setDuration(250);
         mVideoWrapper.startAnimation(resizeWidthAnimation);
@@ -844,7 +886,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private int getLandscapeChatTargetWidth() {
-        return (int) (getScreenWidth(getActivity()) * (settings.getChatLandscapeWidth() / 100.0));
+        return (int) (getScreenRect(getActivity()).height() * (settings.getChatLandscapeWidth() / 100.0));
     }
 
     private void initCastingView() {
@@ -1037,37 +1079,11 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private void setVideoViewLayout() {
         ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
         if (isLandscape) {
-            layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_PARENT : getScreenWidth(getActivity()) - getLandscapeChatTargetWidth();
+            layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_PARENT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
         } else {
             layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
         }
         mVideoWrapper.setLayoutParams(layoutWrapper);
-
-        // Set the video's aspect ratio
-        Display display = getActivity().getWindowManager().getDefaultDisplay();
-        DisplayMetrics metrics = new DisplayMetrics();
-        Point size = new Point();
-        int width, height;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && getActivity().isInMultiWindowMode()) {
-                display.getMetrics(metrics);
-            } else {
-                display.getRealMetrics(metrics);
-            }
-
-            width = metrics.widthPixels;
-            height = metrics.heightPixels;
-        } else {
-            display.getSize(size);
-            width = size.x;
-            height = size.y;
-        }
-
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(mVideoWrapper);
-        constraintSet.setDimensionRatio(R.id.VideoView, ((float) Math.max(width, height) / (float) Math.min(width, height)) + "");
-        constraintSet.applyTo(mVideoWrapper);
     }
 
     /**
@@ -1835,8 +1851,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         mQualityWrapper.setVisibility(View.GONE);
     }
 
-    public interface OnSeekListener {
+    public interface StreamFragmentListener {
         void onSeek();
+        void refreshLayout();
     }
 
     /**
