@@ -83,4 +83,9 @@ dependencies {
     //https://github.com/afollestad/material-dialogs/releases?after=2.0.0-alpha01
     implementation "com.github.afollestad.material-dialogs:core:0.8.6.0@aar"
     implementation "com.github.afollestad.material-dialogs:commons:0.8.6.0@aar"
+
+    //https://github.com/google/ExoPlayer
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.1'
+    implementation 'com.google.android.exoplayer:exoplayer-hls:2.11.1'
+    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.1'
 }

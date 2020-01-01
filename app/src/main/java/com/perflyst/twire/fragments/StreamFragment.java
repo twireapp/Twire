@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -55,6 +54,15 @@ import androidx.transition.TransitionManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -77,7 +85,6 @@ import com.perflyst.twire.tasks.GetPanelsTask;
 import com.perflyst.twire.tasks.GetStreamChattersTask;
 import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
-import com.perflyst.twire.views.VideoViewSimple;
 import com.rey.material.widget.ProgressView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -92,7 +99,7 @@ import java.util.Map;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
-public class StreamFragment extends Fragment {
+public class StreamFragment extends Fragment implements Player.EventListener {
     private final int HIDE_ANIMATION_DELAY = 3000;
     private final int SNACKBAR_SHOW_DURATION = 4000;
 
@@ -118,7 +125,8 @@ public class StreamFragment extends Fragment {
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
     private View mVideoBackground;
-    private VideoViewSimple mVideoView;
+    private PlayerView mVideoView;
+    private ExoPlayer player;
     private Toolbar mToolbar;
     private RelativeLayout mControlToolbar;
     private ConstraintLayout mVideoWrapper;
@@ -150,9 +158,9 @@ public class StreamFragment extends Fragment {
     private final Runnable progressRunnable = new Runnable() {
         @Override
         public void run() {
-            if (mVideoView.isPlaying()) {
-                if (currentProgress != mVideoView.getCurrentPosition())
-                    mProgressBar.setProgress(mVideoView.getCurrentPosition());
+            if (player.isPlaying()) {
+                if (currentProgress != player.getCurrentPosition())
+                    mProgressBar.setProgress((int) player.getCurrentPosition());
 
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                     mBufferingView.stop();
@@ -281,12 +289,14 @@ public class StreamFragment extends Fragment {
         mClickIntercepter = mRootView.findViewById(R.id.click_intercepter);
         View mCurrentViewersWrapper = mRootView.findViewById(R.id.viewers_wrapper);
 
-        setPreviewAndCheckForSharedTransition();
         setupToolbar();
         setupSpinner();
         setupProfileBottomSheet();
         setupLandscapeChat();
         setupShowChatButton();
+
+        if (savedInstanceState == null)
+            setPreviewAndCheckForSharedTransition();
 
         mFullScreenButton.setOnClickListener(v -> toggleFullscreen());
         mPlayPauseWrapper.setOnClickListener(v -> {
@@ -295,9 +305,9 @@ public class StreamFragment extends Fragment {
             }
 
             try {
-                if (mVideoView.isPlaying()) {
+                if (player.isPlaying()) {
                     pauseStream();
-                } else if (!mVideoView.isPlaying()) {
+                } else if (!player.isPlaying()) {
                     resumeStream();
                 }
             } catch (Exception e) {
@@ -323,7 +333,7 @@ public class StreamFragment extends Fragment {
                             | View.SYSTEM_UI_FLAG_IMMERSIVE);
                 }
 
-                if (mVideoView.isPlaying()) {
+                if (player.isPlaying()) {
                     delayHiding();
                 }
 
@@ -332,40 +342,9 @@ public class StreamFragment extends Fragment {
             }
         });
 
-        mVideoView.setOnErrorListener((mp, what, extra) -> {
-            Log.e(LOG_TAG, "Something went wrong playing the stream for " + mChannelInfo.getDisplayName() + " - What: " + what + " - Extra: " + extra);
-
-            playbackFailed();
-            return true;
-        });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            mVideoView.setOnInfoListener((mp, what, extra) -> {
-                Log.d(LOG_TAG, "" + what);
-                if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START || what == MediaPlayer.MEDIA_INFO_BUFFERING_END) {
-                    mBufferingView.stop();
-                    hideVideoInterface();
-                    delayHiding();
-
-                    Log.d(LOG_TAG, "Render Start");
-                    if (!previewInbackGround) {
-                        hidePreview();
-                    }
-                }
-
-                if (what == MediaPlayer.MEDIA_INFO_BUFFERING_START) {
-                    mBufferingView.start();
-                    delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
-                    showVideoInterface();
-
-                    Log.d(LOG_TAG, "Render stop. Buffering start");
-                }
-
-                return true;
-            });
-        } else {
-            // ToDo: Find a way to see buffering on API level 16
-        }
+        player = new SimpleExoPlayer.Builder(getContext()).build();
+        player.addListener(this);
+        mVideoView.setPlayer(player);
 
         mRootView.setOnSystemUiVisibilityChangeListener(
                 visibility -> {
@@ -430,7 +409,7 @@ public class StreamFragment extends Fragment {
                     }
 
                     if ((fromUser || seeking) && !audioViewVisible) {
-                        mVideoView.seekTo(progress);
+                        player.seekTo(progress);
                         showVideoInterface();
 
                         if (progress > 0) {
@@ -473,6 +452,33 @@ public class StreamFragment extends Fragment {
         }
 
         return mRootView;
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, @Player.State int playbackState) {
+        if (playbackState == Player.STATE_READY) {
+            mBufferingView.stop();
+            hideVideoInterface();
+            delayHiding();
+
+            Log.d(LOG_TAG, "Render Start");
+            if (!previewInbackGround) {
+                hidePreview();
+            }
+        } else if (playbackState == Player.STATE_BUFFERING) {
+            mBufferingView.start();
+            delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
+            showVideoInterface();
+
+            Log.d(LOG_TAG, "Render stop. Buffering start");
+        }
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException exception) {
+        Log.e(LOG_TAG, "Something went wrong playing the stream for " + mChannelInfo.getDisplayName() + " - Exception: " + exception);
+
+        playbackFailed();
     }
 
     /**
@@ -966,11 +972,11 @@ public class StreamFragment extends Fragment {
             if (currentProgress == 0) {
                 currentProgress = settings.getVodProgress(vodId) * 1000;
                 ChatManager.updateVodProgress(currentProgress, true);
-                mVideoView.seekTo(currentProgress);
+                player.seekTo(currentProgress);
                 Log.d(LOG_TAG, "Current progress: " + currentProgress);
             } else {
                 ChatManager.updateVodProgress(currentProgress, true);
-                mVideoView.seekTo(currentProgress);
+                player.seekTo(currentProgress);
                 Log.d(LOG_TAG, "Seeking to " + currentProgress);
             }
         }
@@ -1210,7 +1216,7 @@ public class StreamFragment extends Fragment {
         if (isAudioOnlyModeEnabled()) {
             Log.d(LOG_TAG, "Pausing audio");
         } else {
-            mVideoView.pause();
+            player.setPlayWhenReady(false);
         }
         releaseScreenOn();
     }
@@ -1224,10 +1230,10 @@ public class StreamFragment extends Fragment {
         if (isAudioOnlyModeEnabled()) {
         } else {
             if (vodId == null) {
-                mVideoView.resume(); // Go forward to  live
+                player.seekToDefaultPosition(); // Go forward to live
             }
 
-            mVideoView.start();
+            player.setPlayWhenReady(true);
         }
 
         keepScreenOn();
@@ -1253,7 +1259,6 @@ public class StreamFragment extends Fragment {
                 showQualities();
                 updateSelectedQuality(quality);
                 showPauseIcon();
-                mBufferingView.start();
                 Log.d(LOG_TAG, "Starting Stream With a quality on " + quality + " for " + mChannelInfo.getDisplayName());
                 Log.d(LOG_TAG, "URLS: " + qualityURLs.keySet().toString());
             } else if (!qualityURLs.isEmpty()) {
@@ -1371,7 +1376,10 @@ public class StreamFragment extends Fragment {
      * @param url
      */
     private void playUrl(String url) {
-        mVideoView.setVideoPath(url);
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), getString(R.string.app_name));
+        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(url));
+        player.prepare(mediaSource);
+
         checkVodProgress();
         resumeStream();
     }
@@ -1733,7 +1741,7 @@ public class StreamFragment extends Fragment {
             mControlToolbar.setVisibility(View.GONE);
             mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, getContext()));
 
-            mVideoView.stopPlayback();
+            player.release();
             optionsMenuItem.setVisible(true);
 
             showVideoInterface();
@@ -1841,7 +1849,7 @@ public class StreamFragment extends Fragment {
                 int state = intent.getIntExtra("state", -1);
                 switch (state) {
                     case 0:
-                        if (mVideoView.isPlaying()) {
+                        if (player.isPlaying()) {
                             Log.d(LOG_TAG, "Chat, pausing from headsetPlug");
                             showVideoInterface();
                             pauseStream();

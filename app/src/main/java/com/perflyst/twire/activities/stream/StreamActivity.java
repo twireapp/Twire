@@ -261,6 +261,12 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
             StreamFragment streamFragment = (StreamFragment) fragment;
             streamFragment.onSeekCallback = this;
         }
+
+        if (mChatFragment == null && fragment instanceof ChatFragment)
+            mChatFragment = (ChatFragment) fragment;
+
+        if (mStreamFragment == null && fragment instanceof StreamFragment)
+            mStreamFragment = (StreamFragment) fragment;
     }
 
     @Override
