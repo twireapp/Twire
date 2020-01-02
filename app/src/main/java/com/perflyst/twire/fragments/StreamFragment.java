@@ -63,6 +63,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -1084,6 +1085,13 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
         }
         mVideoWrapper.setLayoutParams(layoutWrapper);
+
+        AspectRatioFrameLayout contentFrame = mVideoWrapper.findViewById(R.id.exo_content_frame);
+        if (isLandscape) {
+            contentFrame.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
+        } else {
+            contentFrame.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+        }
     }
 
     /**
