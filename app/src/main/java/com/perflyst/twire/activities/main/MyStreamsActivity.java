@@ -61,14 +61,18 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
         JSONObject fullDataObject = new JSONObject(jsonString);
         JSONArray topStreamsArray = fullDataObject.getJSONArray(ARRAY_KEY);
 
-        Log.d(LOG_TAG, "Total elements: " + fullDataObject.getInt(TOTAL_STREAMS_INT));
-        setMaxElementsToFetch(fullDataObject.getInt(TOTAL_STREAMS_INT));
-        shouldShowErrorView();
-
         for (int i = 0; i < topStreamsArray.length(); i++) {
             JSONObject streamObject = topStreamsArray.getJSONObject(i);
             mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
         }
+
+		int elementsToFetch = mAdapter.getItemCount() + mResultList.size();
+		if (!mResultList.isEmpty()) {
+			elementsToFetch += 1;
+		}
+		setMaxElementsToFetch(elementsToFetch);
+
+		shouldShowErrorView();
 
         return mResultList;
     }
