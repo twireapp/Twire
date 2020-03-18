@@ -346,10 +346,11 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         ws.setSavePassword(false);
 
         loginWebView.clearCache(true);
-        loginWebView.getSettings().setSaveFormData(false);
-        loginWebView.getSettings().setJavaScriptEnabled(true);
-        loginWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        loginWebView.getSettings().setSupportZoom(true);
+        ws.setSaveFormData(false);
+        ws.setJavaScriptEnabled(true);
+        ws.setJavaScriptCanOpenWindowsAutomatically(true);
+        ws.setSupportZoom(true);
+        ws.setUserAgentString(ws.getUserAgentString().replaceFirst("Mobile Safari", "Safari").replaceFirst("\\(.+?\\)", "(X11; Linux x86_64)"));
 
         loginWebView.setWebViewClient(
                 new WebViewClient() {
