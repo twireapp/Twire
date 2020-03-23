@@ -1078,6 +1078,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setVideoViewLayout() {
+        ViewGroup.LayoutParams layoutParams = rootView.getLayoutParams();
+        layoutParams.height = isLandscape ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT;
+
         ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
         if (isLandscape) {
             layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_PARENT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
