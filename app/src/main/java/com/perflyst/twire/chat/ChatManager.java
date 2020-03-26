@@ -320,7 +320,12 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                             for (int j = 0; j < emoticonsArray.length(); j++) {
                                 JSONObject emoticon = emoticonsArray.getJSONObject(j);
                                 int begin = emoticon.getInt("begin");
-                                String keyword = body.substring(begin, emoticon.getInt("end") + 1);
+                                int end = emoticon.getInt("end") + 1;
+                                // In some cases, Twitch gets the indexes of emotes wrong so we have to ignore any emotes that go over the length of the message.
+                                if (end > body.length())
+                                    continue;
+
+                                String keyword = body.substring(begin, end);
                                 emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[] { begin }));
                             }
                         }
