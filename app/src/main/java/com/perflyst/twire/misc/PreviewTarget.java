@@ -2,12 +2,12 @@ package com.perflyst.twire.misc;
 
 import android.graphics.Bitmap;
 
-import com.squareup.picasso.Target;
+import com.bumptech.glide.request.target.CustomTarget;
 
 /**
  * Created by Sebastian Rask on 09-05-2016.
  */
-public abstract class PreviewTarget implements Target {
+public abstract class PreviewTarget extends CustomTarget<Bitmap> {
     private Bitmap preview;
 
     public Bitmap getPreview() {

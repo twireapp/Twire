@@ -40,6 +40,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
@@ -60,8 +62,6 @@ import com.perflyst.twire.views.EditTextBackEvent;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.ChatRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.EmoteAutoSpanBehaviour;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -1031,7 +1031,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         public class EmoteAdapter extends RecyclerView.Adapter<EmoteAdapter.EmoteViewHolder> {
             private ArrayList<Emote> emotes;
             private Settings settings;
-            private HashMap<String, Target> picassoTargets;
+            private HashMap<String, Target> imageTargets;
 
             private View.OnClickListener emoteClickListener = new View.OnClickListener() {
                 @Override
@@ -1059,7 +1059,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             EmoteAdapter() {
                 emotes = new ArrayList<>();
                 settings = new Settings(getContext());
-                picassoTargets = new HashMap<>();
+                imageTargets = new HashMap<>();
             }
 
             @Override
@@ -1083,7 +1083,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     int EMOTE_SIZE = 2;
                     String emoteUrl = emoteAtPosition.getEmoteUrl(EMOTE_SIZE);
 
-                    Picasso.with(getContext()).load(emoteUrl).into(holder.mImageEmote);
+                    Glide.with(getContext()).load(emoteUrl).into(holder.mImageEmote);
                 }
             }
 

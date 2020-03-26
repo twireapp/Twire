@@ -15,19 +15,21 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.request.transition.Transition;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.PreviewTarget;
 import com.perflyst.twire.misc.RoundedTopTransformation;
 import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.service.AnimationService;
-import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,7 +40,7 @@ import java.util.List;
  */
 public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         T extends MainActivityAdapter.ElementsViewHolder> extends RecyclerView.Adapter<T> {
-    private boolean isBelowLollipop, removeBlackbars;
+    private boolean isBelowLollipop;
     private String LOG_TAG,
             elementStyle;
     private List<E> mElements;
@@ -143,13 +145,14 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
                 previewURL = previewURL.replace("https", "http");
             }
 
-            RequestCreator creator =
-                    Picasso.with(context)
+            RequestBuilder creator =
+                    Glide.with(context)
+                            .asBitmap()
                             .load(previewURL)
                             .placeholder(ContextCompat.getDrawable(context, element.getPlaceHolder(getContext())));
 
             if (isBelowLollipop) {
-                creator.transform(new RoundedTopTransformation(context.getResources().getDimension(getCornerRadiusRessource())));
+                creator = (RequestBuilder) creator.transform(new RoundedTopTransformation(context.getResources().getDimension(getCornerRadiusRessource())));
             }
 
             if (mTargets.get(viewHolder.getTargetsKey()) != null) {
@@ -159,13 +162,9 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
                     private boolean loaded = false;
 
                     @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition transition) {
                         if (!loaded) {
                             loaded = true;
-
-                            if (removeBlackbars) {
-                                bitmap = Service.removeBlackBars(bitmap);
-                            }
 
                             AnimationService.setPicassoShowImageAnimationTwo(viewHolder.getPreviewView(), bitmap, context);
                             setPreview(bitmap);
@@ -173,13 +172,13 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
                     }
 
                     @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-
+                    public void onLoadStarted(@Nullable Drawable placeHolderDrawable) {
+                        viewHolder.getPreviewView().setImageDrawable(placeHolderDrawable);
                     }
 
                     @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        viewHolder.getPreviewView().setImageDrawable(placeHolderDrawable);
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
                     }
                 };
 

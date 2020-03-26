@@ -169,11 +169,6 @@ public class Service {
         }
     }
 
-    public static Bitmap removeBlackBars(Bitmap bitmap) {
-        final int BLACKBARS_SIZE_PX = 30;
-        return Bitmap.createBitmap(bitmap, 0, BLACKBARS_SIZE_PX, bitmap.getWidth(), bitmap.getHeight() - BLACKBARS_SIZE_PX * 2);
-    }
-
     /**
      * Creates a bitmap with rounded corners.
      *
