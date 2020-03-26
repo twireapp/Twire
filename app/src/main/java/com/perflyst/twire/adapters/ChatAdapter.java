@@ -164,22 +164,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     private void checkForLink(String message, SpannableStringBuilder spanbuilder) {
         Matcher linkMatcher = Patterns.WEB_URL.matcher(message);
         while (linkMatcher.find()) {
-            final String url = linkMatcher.group(1);
+            String url = linkMatcher.group(0);
 
+            if (!url.matches("^https?://.+"))
+                url = "http://" + url;
+
+            final String finalUrl = url;
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View view) {
                     CustomTabsIntent.Builder mTabs = new CustomTabsIntent.Builder();
                     mTabs.setStartAnimations(context, R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim);
                     mTabs.setExitAnimations(context, R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim);
-                    mTabs.build().launchUrl(context, Uri.parse(url));
+                    mTabs.build().launchUrl(context, Uri.parse(finalUrl));
 
                     mRecyclerView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 }
             };
 
-            int start = message.indexOf(url);
-            spanbuilder.setSpan(clickableSpan, start, start + url.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spanbuilder.setSpan(clickableSpan, linkMatcher.start(), linkMatcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 
