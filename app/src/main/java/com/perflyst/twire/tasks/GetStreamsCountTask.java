@@ -24,12 +24,12 @@ public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
     protected Integer doInBackground(Void... params) {
         try {
             final String URL = "https://api.twitch.tv/kraken/streams/followed?oauth_token=" + new Settings(context).getGeneralTwitchAccessToken() + "&offset=0&stream_type=live";
-            final String TOTAL_STREAMS_INT = "_total";
+            final String STREAMS_ARRAY = "streams";
 
             String jsonString = Service.urlToJSONString(URL);
             JSONObject fullDataObject = new JSONObject(jsonString);
 
-            return fullDataObject.getInt(TOTAL_STREAMS_INT);
+            return fullDataObject.getJSONArray(STREAMS_ARRAY).length();
         } catch (Exception e) {
             e.printStackTrace();
         }
