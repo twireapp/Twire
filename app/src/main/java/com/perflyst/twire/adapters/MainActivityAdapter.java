@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.transition.Transition;
+import com.bumptech.glide.signature.ObjectKey;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.PreviewTarget;
 import com.perflyst.twire.misc.RoundedTopTransformation;
@@ -34,6 +35,7 @@ import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Sebastian Rask on 03-04-2016.
@@ -141,14 +143,11 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
 
     private void loadImagePreview(String previewURL, E element, final ElementsViewHolder viewHolder) {
         if (previewURL != null && !previewURL.isEmpty()) {
-            if (previewURL.contains("https")) {
-                previewURL = previewURL.replace("https", "http");
-            }
-
             RequestBuilder creator =
                     Glide.with(context)
                             .asBitmap()
                             .load(previewURL)
+                            .signature(new ObjectKey(System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(5))) // Refresh preview images every 5 minutes
                             .placeholder(ContextCompat.getDrawable(context, element.getPlaceHolder(getContext())));
 
             if (isBelowLollipop) {
