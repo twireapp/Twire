@@ -1,7 +1,5 @@
 package com.perflyst.twire.chat;
 
-import android.util.SparseArray;
-
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
@@ -133,7 +131,7 @@ public class ChatEmoteManager {
         final String EMOTE_URLS = "urls";
 
         JSONObject urls = emoteObject.getJSONObject(EMOTE_URLS);
-        SparseArray<String> urlMap = new SparseArray<>();
+        HashMap<Integer, String> urlMap = new HashMap<>();
         for (Iterator<String> iterator = urls.keys(); iterator.hasNext();) {
             String key = iterator.next();
             urlMap.put(Integer.parseInt(key), "https:" + urls.getString(key));

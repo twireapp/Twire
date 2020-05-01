@@ -1,23 +1,29 @@
 package com.perflyst.twire.model;
 
-import android.util.SparseArray;
-
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
+import java.text.MessageFormat;
+import java.util.HashMap;
 
 /**
  * Created by Sebastian Rask Jepsen on 28/07/16.
  */
 public class Emote implements Comparable<Emote>, Serializable {
     private String emoteKeyword;
-    private GetEmoteURL getEmoteUrl;
-    private GetBestAvailableSize getBestAvailableSize = size -> size;
+    private String urlTemplate;
+    private HashMap<Integer, String> urlMap;
     private boolean isTextEmote, isSubscriberEmote, isCustomChannelEmote;
 
-    public Emote(String emoteKeyword, GetEmoteURL getEmoteUrl) {
+    public Emote(String emoteKeyword, String urlTemplate) {
         this.emoteKeyword = emoteKeyword;
-        this.getEmoteUrl = getEmoteUrl;
+        this.urlTemplate = urlTemplate;
+        this.isTextEmote = false;
+    }
+
+    public Emote(String emoteKeyword, HashMap<Integer, String> urlMap) {
+        this.emoteKeyword = emoteKeyword;
+        this.urlMap = urlMap;
         this.isTextEmote = false;
     }
 
@@ -43,10 +49,31 @@ public class Emote implements Comparable<Emote>, Serializable {
     }
 
     public String getEmoteUrl(int size) {
-        return getEmoteUrl.execute(size);
+        if (urlMap != null) {
+            for (int i = size; i >= 1; i--) {
+                if (urlMap.containsKey(i)) {
+                    return urlMap.get(i);
+                }
+            }
+
+            return null;
+        }
+
+        return urlTemplate == null ? null : MessageFormat.format(urlTemplate, size);
     }
+
     public int getBestAvailableSize(int size) {
-        return getBestAvailableSize.execute(size);
+        if (urlMap != null) {
+            for (int i = size; i >= 1; i--) {
+                if (urlMap.containsKey(i)) {
+                    return i;
+                }
+            }
+
+            return 1;
+        }
+
+        return size;
     }
 
     public boolean isTextEmote() {
@@ -57,49 +84,19 @@ public class Emote implements Comparable<Emote>, Serializable {
         return emoteKeyword;
     }
 
-    public interface GetEmoteURL
-    {
-        String execute(int size);
-    }
-
-    public interface GetBestAvailableSize
-    {
-        int execute(int size);
-    }
-
     public static Emote Twitch(String keyword, String id)
     {
-        return new Emote(keyword, size -> "https://static-cdn.jtvnw.net/emoticons/v1/" + id + "/" + size + ".0");
+        return new Emote(keyword, "https://static-cdn.jtvnw.net/emoticons/v1/" + id + "/{0}.0");
     }
 
     public static Emote BTTV(String keyword, String id)
     {
-        return new Emote(keyword, size -> "https://cdn.betterttv.net/emote/" + id + "/" + size + "x");
+        return new Emote(keyword, "https://cdn.betterttv.net/emote/" + id + "/{0}x");
     }
 
-    public static Emote FFZ(String keyword, SparseArray<String> urlMap)
+    public static Emote FFZ(String keyword, HashMap<Integer, String> urlMap)
     {
-        Emote emote = new Emote(keyword, size -> {
-            for (int i = size; i >= 1; i--) {
-                if (urlMap.indexOfKey(i) >= 0) {
-                    return urlMap.get(i);
-                }
-            }
-
-            return null;
-        });
-
-        emote.getBestAvailableSize = size -> {
-            for (int i = size; i >= 1; i--) {
-                if (urlMap.indexOfKey(i) >= 0) {
-                    return i;
-                }
-            }
-
-            return 1;
-        };
-
-        return emote;
+        return new Emote(keyword, urlMap);
     }
 
     @Override
