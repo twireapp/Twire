@@ -22,7 +22,7 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
 
     public LazyFetchingOnScrollListener(AppCompatActivity mActivity, Toolbar mMainToolbar, Toolbar mDecorativeToolbar, View mToolbarShadow, View mIconCircle, TextView mIconText, String LOG_TAG, LazyFetchingActivity<T> aLazyFetchingActivity, boolean isMainActivity) {
         super(mActivity, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mIconCircle, mIconText, LOG_TAG, isMainActivity);
-        this.getElementsTask = new GetVisualElementsTask<>();
+        this.getElementsTask = new GetVisualElementsTask<>(aLazyFetchingActivity);
         this.mLazyFetchingActivity = aLazyFetchingActivity;
     }
 
@@ -45,7 +45,7 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
     public void resetAndFetch(RecyclerView recyclerView) {
         getElementsTask.setCancelled(true);
         getElementsTask.cancel(true);
-        getElementsTask = new GetVisualElementsTask<>();
+        getElementsTask = new GetVisualElementsTask<>(mLazyFetchingActivity);
         checkForNewElements(recyclerView);
     }
 
@@ -55,7 +55,7 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
 
         // If the task has already been run, make a new task as a task can only be run once.
         if (getElementsTask.getStatus() == AsyncTask.Status.FINISHED) {
-            getElementsTask = new GetVisualElementsTask<>();
+            getElementsTask = new GetVisualElementsTask<>(mLazyFetchingActivity);
         }
 
         // Only bother to check if we need to fetch more game objects if we are not already in the process of doing so.
@@ -75,7 +75,7 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
 
             // If the Second to last or the last row is visible, then fetch more game objects.
             if (LAST_ROW_VISIBLE >= NUMBER_OF_ROWS - FETCH_WHEN_BELOW_FIVE) {
-                getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mLazyFetchingActivity);
+                getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 mLazyFetchingActivity.startProgress();
             }
         }

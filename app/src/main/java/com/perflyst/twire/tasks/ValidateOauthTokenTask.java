@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,15 +17,14 @@ import java.util.List;
  * Created by Sebastian Rask on 10-05-2016.
  */
 public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthTokenTask.TokenValidation> {
-    private String LOG_TAG = getClass().getSimpleName();
     private ValidationDelegate delegate;
     private String oauthToken;
-    private Context context;
+    private WeakReference<Context> context;
 
     public ValidateOauthTokenTask(ValidationDelegate delegate, String oauthToken, Context context) {
         this.delegate = delegate;
         this.oauthToken = oauthToken;
-        this.context = context;
+        this.context = new WeakReference<>(context);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
             e.printStackTrace();
         }
 
-        if (Service.isNetworkConnectedThreadOnly(context)) {
+        if (Service.isNetworkConnectedThreadOnly(context.get())) {
             return new TokenValidation("", true, new ArrayList<>());
         } else {
             return null;

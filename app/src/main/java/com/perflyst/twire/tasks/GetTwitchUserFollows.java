@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -22,14 +23,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * Connects to Twitch to retrieve a list of streamers that a specified user follow.
  *
- * @return An ArrayList of streamnames
+ * Returns an ArrayList of streamnames
  */
 
 public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
     private final String LOG_TAG = getClass().getSimpleName();
-    private final String NAME_STRING_KEY = "name";
     private long timerStart = System.currentTimeMillis();
-    private Context baseContext;
+    private WeakReference<Context> baseContext;
 
     private ArrayList<Integer> getFollowIdsFromJSONObject(JSONObject mJSON) throws JSONException {
         String FOLLOWS_ARRAY_KEY = "follows";
@@ -42,7 +42,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
             JSONObject channelObject = followsArray.getJSONObject(j).getJSONObject(CHANNEL_OBJECT_KEY);
             try {
                 ChannelInfo mChannelInfo = JSONService.getStreamerInfo(channelObject, false);
-                Service.updateStreamerInfoDb(mChannelInfo, baseContext); // Update the current database object
+                Service.updateStreamerInfoDb(mChannelInfo, baseContext.get()); // Update the current database object
                 followIds.add(mChannelInfo.getUserId());
             } catch (MalformedURLException e) {
                 e.printStackTrace();
@@ -57,10 +57,9 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         ArrayList<Integer> userSubs = new ArrayList<>();
 
         int currentOffset = 0;
-        String userName = (String) params[0];
-        baseContext = (Context) params[1];
+        baseContext = new WeakReference<>((Context) params[1]);
 
-        Settings mSettings = new Settings(baseContext);
+        Settings mSettings = new Settings(baseContext.get());
         int userId = mSettings.getGeneralTwitchUserID();
 
         int MAXIMUM_FOLLOWS_FOR_QUERY = 20;
@@ -128,7 +127,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         // If a retrieved follow is not in the loaded streamers - Then add it to the database.
         for (Integer si : loadedStreamerIds) {
             if (!userSubs.contains(si)) {
-                boolean result = Service.deleteStreamerInfoFromDB(baseContext, si);
+                boolean result = Service.deleteStreamerInfoFromDB(baseContext.get(), si);
                 try {
                     for (ChannelInfo info : TempStorage.getLoadedStreamers()) {
                         if (si.equals(info.getUserId()))

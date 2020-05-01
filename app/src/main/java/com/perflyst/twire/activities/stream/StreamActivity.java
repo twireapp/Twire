@@ -151,16 +151,6 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
-            Log.d(LOG_TAG, "Orientations is reverse portrait");
-        }
-
-        Log.d(LOG_TAG, "Current orientation: " + getResources().getConfiguration().orientation);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
     }
@@ -284,9 +274,10 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     void updateOrientation() {
-        int orientation = getResources().getConfiguration().orientation;
+        boolean landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
         View chat = findViewById(R.id.chat_fragment);
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (landscape) {
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) findViewById(R.id.chat_landscape_fragment).getLayoutParams();
             lp.width = (int) (StreamFragment.getScreenRect(this).height() * (settings.getChatLandscapeWidth() / 100.0));
             Log.d(LOG_TAG, "TARGET WIDTH: " + lp.width);
@@ -296,6 +287,6 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         }
 
         ViewGroup.LayoutParams layoutParams = findViewById(getVideoContainerResource()).getLayoutParams();
-        layoutParams.height = orientation == Configuration.ORIENTATION_LANDSCAPE ? MATCH_PARENT : WRAP_CONTENT;
+        layoutParams.height = landscape ? MATCH_PARENT : WRAP_CONTENT;
     }
 }

@@ -155,7 +155,6 @@ public abstract class MainActivity extends ThemeActivity {
         mRecyclerView.setHasFixedSize(true);
         mScrollListener = new UniversalOnScrollListener(this, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mCircleIconWrapper, mTitleView, LOG_TAG, true);
         mRecyclerView.addOnScrollListener(mScrollListener);
-        mRecyclerView.setHasTransientState(false);
 
         // Only animate when the view is first started, not when screen rotates
         if (savedInstance == null) {

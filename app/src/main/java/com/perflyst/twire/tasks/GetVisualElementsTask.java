@@ -8,20 +8,21 @@ import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetVisualElementsTask<T> extends AsyncTask<LazyFetchingActivity, Void, List<T>> {
-    private LazyFetchingActivity mLazyActivity;
+public class GetVisualElementsTask<T> extends AsyncTask<Void, Void, List<T>> {
+    private LazyFetchingActivity<T> mLazyActivity;
     private String LOG_TAG = getClass().getSimpleName();
-    private long timerStart = System.currentTimeMillis();
     private boolean isCancelled = false;
-    private int total_json_response = 0,
-            offset,
+    private int offset,
             limit;
 
+    public GetVisualElementsTask(LazyFetchingActivity<T> mLazyActivity) {
+        this.mLazyActivity = mLazyActivity;
+    }
+
     @Override
-    protected List<T> doInBackground(LazyFetchingActivity... params) {
+    protected final List<T> doInBackground(Void... params) {
         List<T> resultList = new ArrayList<>();
 
-        mLazyActivity = params[0];
         offset = mLazyActivity.getCurrentOffset();
         limit = mLazyActivity.getLimit();
 
@@ -51,11 +52,6 @@ public class GetVisualElementsTask<T> extends AsyncTask<LazyFetchingActivity, Vo
         mLazyActivity.addToAdapter(mVisualElements);
         mLazyActivity.stopProgress();
         mLazyActivity.stopRefreshing();
-        long duration = System.currentTimeMillis() - timerStart;
-    }
-
-    public boolean getCancelled() {
-        return isCancelled;
     }
 
     public void setCancelled(boolean cancelled) {

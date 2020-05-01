@@ -12,18 +12,18 @@ import org.json.JSONObject;
  * Created by Sebastian Rask on 26-06-2016.
  */
 public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
-    private Context context;
+    private Settings settings;
     private Delegate delegate;
 
     public GetStreamsCountTask(Context context, Delegate delegate) {
-        this.context = context;
+        this.settings = new Settings(context);
         this.delegate = delegate;
     }
 
     @Override
     protected Integer doInBackground(Void... params) {
         try {
-            final String URL = "https://api.twitch.tv/kraken/streams/followed?oauth_token=" + new Settings(context).getGeneralTwitchAccessToken() + "&offset=0&stream_type=live";
+            final String URL = "https://api.twitch.tv/kraken/streams/followed?oauth_token=" + settings.getGeneralTwitchAccessToken() + "&offset=0&stream_type=live";
             final String STREAMS_ARRAY = "streams";
 
             String jsonString = Service.urlToJSONString(URL);

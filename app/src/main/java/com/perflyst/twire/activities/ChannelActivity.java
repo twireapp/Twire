@@ -20,7 +20,6 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
@@ -69,11 +68,9 @@ public class ChannelActivity extends ThemeActivity {
     private static final String fragmentStreamerInfoArg = "streamerInfoArg",
             fragmentVodsBroadCastsOnlyArg = "vodsBroadcastsOnlyArg",
             fragmentVodsStreamerInfoArg = "streamerNameArg";
-    private final String LOG_TAG = getClass().getSimpleName();
     private final int SHOW_FAB_DELAY = 300;
     private ChannelInfo info;
     private ImageView streamerImage;
-    private LinearLayout additionalInfoLayout;
     private Toolbar toolbar,
             additionalToolbar;
     private ViewPager mViewPager;
@@ -81,7 +78,6 @@ public class ChannelActivity extends ThemeActivity {
     private AppBarLayout mAppBar;
     private FloatingActionButton mFab;
     private int COLOR_FADE_DURATION = 0;
-    private Target mLoadingTarget;
     private ChannelFragment mDescriptionFragment, mBroadcastsFragment, mHighlightsFragment;
     private FollowHandler mFollowHandler;
 
@@ -92,7 +88,6 @@ public class ChannelActivity extends ThemeActivity {
 
         // Get the various handles of view and layouts that is part of this view
         streamerImage = findViewById(R.id.profileImageView);
-        additionalInfoLayout = findViewById(R.id.additional_info_wrapper);
         TextView streamerInfoName = findViewById(R.id.twitch_name);
         TextView streamerViewers = findViewById(R.id.txt_viewers);
         TextView streamerFollowers = findViewById(R.id.txt_followers);
@@ -163,7 +158,7 @@ public class ChannelActivity extends ThemeActivity {
         assert mTabs != null;
         mTabs.setupWithViewPager(mViewPager);
 
-        mTabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getText() != null &&
@@ -187,20 +182,19 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private void initStreamerImageAndColors() {
-        Target mTarget = getNightThemeTarget();
+        Target<Bitmap> mTarget = getNightThemeTarget();
         String theme = new Settings(this).getTheme();
         if (!theme.equals(getString(R.string.night_theme_name)) && !theme.equals(getString(R.string.true_night_theme_name))) {
             mTarget = getLightThemeTarget();
         }
 
-        mLoadingTarget = mTarget;
         Glide.with(getBaseContext())
                 .asBitmap()
                 .load(info.getMediumPreview())
                 .into(mTarget);
     }
 
-    private Target getNightThemeTarget() {
+    private Target<Bitmap> getNightThemeTarget() {
         return new CustomTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition)  {
@@ -214,7 +208,7 @@ public class ChannelActivity extends ThemeActivity {
         };
     }
 
-    private Target getLightThemeTarget() {
+    private Target<Bitmap> getLightThemeTarget() {
         return new CustomTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
@@ -230,7 +224,6 @@ public class ChannelActivity extends ThemeActivity {
 
                 int muted = palette.getMutedColor(defaultColor);
                 int mutedDark = palette.getDarkMutedColor(defaultColor);
-                int mutedLight = palette.getLightMutedColor(defaultColor);
 
                 Palette.Swatch swatch;
 
@@ -297,7 +290,7 @@ public class ChannelActivity extends ThemeActivity {
 
                     @Override
                     public void userIsNotLoggedIn() {
-                        mFab.setVisibility(View.GONE);
+                        mFab.hide();
                     }
 
                     @Override
@@ -383,15 +376,6 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     /**
-     * Returns the URL string we need to connect to.
-     * Both if the user wants to follow AND unfollow the current streamer
-     */
-    private String getBaseFollowString() {
-        Settings settings = new Settings(getBaseContext());
-        return "https://api.twitch.tv/kraken/users/" + settings.getGeneralTwitchUserID() + "/follows/channels/" + info.getUserId() + "?oauth_token=" + settings.getGeneralTwitchAccessToken();
-    }
-
-    /**
      * Make an int more readable by separating every third number by a space.
      * Example: 1000000 becomes "1 000 000"
      */
@@ -428,7 +412,6 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     public static class InfoFragment extends ChannelFragment {
-        private final String LOG_TAG = getClass().getSimpleName();
         private ChannelInfo info;
 
         private RecyclerView mPanelsRecyclerView;
@@ -451,7 +434,9 @@ public class ChannelActivity extends ThemeActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_channel_description, container, false);
 
-            info = getArguments().getParcelable(fragmentStreamerInfoArg);
+            if (getArguments() != null) {
+                info = getArguments().getParcelable(fragmentStreamerInfoArg);
+            }
 
             mPanelsRecyclerView = rootView.findViewById(R.id.panel_recyclerview);
             TextView mDescription = rootView.findViewById(R.id.description);
@@ -471,7 +456,6 @@ public class ChannelActivity extends ThemeActivity {
         private void setupPanels() {
             final PanelAdapter mPanelsAdapter = new PanelAdapter(getActivity());
             LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            llm.setAutoMeasureEnabled(true);
             mPanelsRecyclerView.setAdapter(mPanelsAdapter);
             mPanelsRecyclerView.setLayoutManager(llm);
 
@@ -483,7 +467,6 @@ public class ChannelActivity extends ThemeActivity {
     public static class VodFragment extends ChannelFragment implements LazyFetchingActivity<VideoOnDemand> {
         protected AutoSpanRecyclerView mRecyclerView;
         protected VODAdapter mAdapter;
-        private String LOG_TAG = getClass().getSimpleName();
         private ChannelInfo channelInfo;
         private boolean broadcasts, showError;
         private int limit = 10,
@@ -517,8 +500,10 @@ public class ChannelActivity extends ThemeActivity {
             View rootView = inflater.inflate(R.layout.fragment_channel_vods, container, false);
 
             Bundle args = getArguments();
-            channelInfo = args.getParcelable(fragmentVodsStreamerInfoArg);
-            broadcasts = args.getBoolean(fragmentVodsBroadCastsOnlyArg);
+            if (args != null) {
+                channelInfo = args.getParcelable(fragmentVodsStreamerInfoArg);
+                broadcasts = args.getBoolean(fragmentVodsBroadCastsOnlyArg);
+            }
 
             mRecyclerView = rootView.findViewById(R.id.recyclerview_vods);
             progressView = rootView.findViewById(R.id.circle_progress);
@@ -552,12 +537,6 @@ public class ChannelActivity extends ThemeActivity {
         private String getUrl() {
             String type = broadcasts ? "archive" : "highlight";
             return "https://api.twitch.tv/kraken/channels/" + channelInfo.getUserId() + "/videos?hls=true&limit=" + getLimit() + "&offset=" + getCurrentOffset() + "&broadcast_type=" + type;
-        }
-
-        public void setShownames(boolean shownames) {
-            if (mAdapter != null) {
-                mAdapter.setShowName(false);
-            }
         }
 
         @Override
@@ -636,7 +615,7 @@ public class ChannelActivity extends ThemeActivity {
                 result.add(vod);
             }
 
-            if (vodsTopObject.getInt(TOTAL_VODS_INT) <= 0) {
+            if (vodsTopObject.getInt(TOTAL_VODS_INT) <= 0 && getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     if (mErrorEmote != null && mErrorText != null) {
                         showError();

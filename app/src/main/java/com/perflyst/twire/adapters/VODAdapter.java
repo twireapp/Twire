@@ -32,7 +32,6 @@ import java.util.Locale;
  */
 
 class VODViewHolder extends MainActivityAdapter.ElementsViewHolder {
-    protected View sharedPadding;
     ImageView vPreviewImage;
     TextView vDisplayName, vTitle, vGame, vTimeStamp;
     SeekBar vProgressBar;
@@ -47,7 +46,6 @@ class VODViewHolder extends MainActivityAdapter.ElementsViewHolder {
         vGame = v.findViewById(R.id.stream_game_and_viewers);
         vTimeStamp = v.findViewById(R.id.timestamp);
         vProgressBar = v.findViewById(R.id.progressBar);
-        sharedPadding = v.findViewById(R.id.shared_padding);
     }
 
     @Override
@@ -68,7 +66,6 @@ class VODViewHolder extends MainActivityAdapter.ElementsViewHolder {
 
 public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder> {
     private final float VOD_WATCHED_IMAGE_ALPHA = 0.5f;
-    private String LOG_TAG = getClass().getSimpleName();
     private int rightMargin, leftMargin, topMargin, bottomMargin;
     private Activity activity;
     private boolean showName;
@@ -267,10 +264,6 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         viewHolder.vGame.setVisibility(View.GONE);
         viewHolder.sharedPadding.setVisibility(View.GONE);
 */
-    }
-
-    public boolean isShowName() {
-        return showName;
     }
 
     public void setShowName(boolean showName) {

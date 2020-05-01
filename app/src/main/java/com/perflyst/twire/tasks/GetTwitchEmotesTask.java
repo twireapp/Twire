@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -24,20 +25,20 @@ import java.util.List;
 public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
     private final String LOG_TAG = getClass().getSimpleName();
 
-    private Context context;
+    private WeakReference<Context> context;
     private Delegate delegate;
     private List<Emote> twitchEmotes = new ArrayList<>();
     private List<Emote> subscriberEmotes = new ArrayList<>();
 
     public GetTwitchEmotesTask(Delegate delegate, Context context) {
         this.delegate = delegate;
-        this.context = context;
+        this.context = new WeakReference<>(context);
     }
 
     @Override
     protected Void doInBackground(Void... voids) {
         try {
-            Settings settings = new Settings(context);
+            Settings settings = new Settings(context.get());
             String newUrl = "https://api.twitch.tv/kraken/users/" + settings.getGeneralTwitchUserID() + "/emotes?oauth_token=" + settings.getGeneralTwitchAccessToken();
             JSONObject top = new JSONObject(Service.urlToJSONString(newUrl));
             String SETS_KEY = "emoticon_sets";
@@ -75,7 +76,7 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                 // code is a escaped regex, so we need to convert it to any valid match for that regex
                 code = Html.fromHtml(code.replaceAll("\\\\", "")).toString()
                         .replaceAll("(.)\\?", "")
-                        .replaceAll("\\[(.).*?\\]", "$1")
+                        .replaceAll("\\[(.).*?]", "$1")
                         .replaceAll("\\((.+)\\|.+\\)", "$1");
 
                 String emoteId = "" + emoteObject.getInt("id");

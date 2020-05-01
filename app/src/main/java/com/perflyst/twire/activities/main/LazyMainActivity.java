@@ -7,7 +7,6 @@ import android.os.Handler;
 import com.google.android.material.snackbar.Snackbar;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
-import com.perflyst.twire.model.Game;
 import com.perflyst.twire.tasks.GetVisualElementsTask;
 
 /**
@@ -35,8 +34,8 @@ public abstract class LazyMainActivity<T> extends MainActivity implements LazyFe
         new Handler().postDelayed(() -> {
             setCurrentOffset(0);
             getRecyclerView().scrollToPosition(0);
-            GetVisualElementsTask<Game> getTopGamesTask = new GetVisualElementsTask<>();
-            getTopGamesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LazyMainActivity.this);
+            GetVisualElementsTask<T> getTopGamesTask = new GetVisualElementsTask<>(LazyMainActivity.this);
+            getTopGamesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }, duration);
     }
 
@@ -58,8 +57,8 @@ public abstract class LazyMainActivity<T> extends MainActivity implements LazyFe
         mScrollListener = mOnScrollListener;
         mRecyclerView.addOnScrollListener(mScrollListener);
 
-        GetVisualElementsTask<T> getElementsTask = new GetVisualElementsTask<>();
-        getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
+        GetVisualElementsTask<T> getElementsTask = new GetVisualElementsTask<>(this);
+        getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override

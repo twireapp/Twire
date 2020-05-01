@@ -13,7 +13,6 @@ import java.net.URL;
  * Created by Sebastian Rask on 18-04-2016.
  */
 public class FollowTask extends AsyncTask<String, Void, Boolean> {
-    private String LOG_TAG = getClass().getSimpleName();
     private FollowResult callback;
 
     public FollowTask(FollowResult callback) {

@@ -11,13 +11,15 @@ import com.perflyst.twire.service.Settings;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by SebastianRask on 03-11-2015.
  */
 public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
-    private Context mContext;
+    private Settings mSettings;
     private String token;
-    private LoginActivity mLoginActivity;
+    private WeakReference<LoginActivity> mLoginActivity;
 
     @Override
     protected void onPreExecute() {
@@ -26,9 +28,9 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
 
     @Override
     protected Object[] doInBackground(Object... params) {
-        mContext = (Context) params[0];
+        mSettings = new Settings((Context) params[0]);
         token = (String) params[1];
-        mLoginActivity = (LoginActivity) params[2];
+        mLoginActivity = new WeakReference<>((LoginActivity) params[2]);
 
         String LOG_TAG = "HandleUserLoginTask";
         try {
@@ -81,7 +83,6 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
 
     @Override
     protected void onPostExecute(Object[] mUserInfo) {
-        Settings mSettings = new Settings(mContext);
         if (mUserInfo != null) {
             mSettings.setGeneralTwitchAccessToken(token);
             mSettings.setGeneralTwitchDisplayName((String) mUserInfo[0]);
@@ -101,9 +102,9 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
             if (mUserInfo[6] != null)
                 mSettings.setGeneralTwitchUserUpdatedDate((String) mUserInfo[6]);
 
-            mLoginActivity.handleLoginSuccess();
+            mLoginActivity.get().handleLoginSuccess();
         } else {
-            mLoginActivity.handleLoginFailure();
+            mLoginActivity.get().handleLoginFailure();
         }
     }
 }

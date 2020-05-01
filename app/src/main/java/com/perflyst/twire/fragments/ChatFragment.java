@@ -125,6 +125,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             isSoftKeyboardOpen = false;
     private ColorFilter defaultBackgroundColor;
     private Vibrator vibe;
+    private BottomSheetDialog bottomSheetDialog;
 
     public static ChatFragment getInstance(Bundle args) {
         ChatFragment fragment = new ChatFragment();
@@ -298,6 +299,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     public void onPause() {
         super.onPause();
         saveRecentEmotes();
+
+        if (bottomSheetDialog != null)
+            bottomSheetDialog.dismiss();
     }
 
     @Override
@@ -878,7 +882,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     @Override
     public void onMessageClicked(SpannableStringBuilder formattedMessage, final String userName, final String message) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.chat_message_options, null);
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        bottomSheetDialog = new BottomSheetDialog(getContext());
         bottomSheetDialog.setContentView(v);
         final BottomSheetBehavior behavior = BottomSheetBehavior.from((View) v.getParent());
         behavior.setPeekHeight(getContext().getResources().getDisplayMetrics().heightPixels / 3);
