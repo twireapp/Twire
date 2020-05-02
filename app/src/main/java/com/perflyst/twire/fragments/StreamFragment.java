@@ -124,7 +124,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private LinkedHashMap<String, Quality> qualityURLs;
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
-    private View mVideoBackground;
+    private View mVideoBackgroundTop, mVideoBackgroundBottom;
     private PlayerView mVideoView;
     private ExoPlayer player;
     private Toolbar mToolbar;
@@ -272,7 +272,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         mControlToolbar = mRootView.findViewById(R.id.control_toolbar_wrapper);
         mVideoWrapper = mRootView.findViewById(R.id.video_wrapper);
         mVideoView = mRootView.findViewById(R.id.VideoView);
-        mVideoBackground = mRootView.findViewById(R.id.video_background);
+        mVideoBackgroundTop = mRootView.findViewById(R.id.video_background_top);
+        mVideoBackgroundBottom = mRootView.findViewById(R.id.video_background_bottom);
         mPlayPauseWrapper = mRootView.findViewById(R.id.play_pause_wrapper);
         mPlayIcon = mRootView.findViewById(R.id.ic_play);
         mPauseIcon = mRootView.findViewById(R.id.ic_pause);
@@ -524,7 +525,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
      * Hides the preview image and updates the state
      */
     private void hidePreview() {
-        Service.bringToBack(mPreview);
+        mPreview.setVisibility(View.INVISIBLE);
         previewInbackGround = true;
     }
 
@@ -950,7 +951,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && intent.getBooleanExtra(getString(R.string.stream_shared_transition), false)) {
             mPreview.setTransitionName(getString(R.string.stream_preview_transition));
 
-            final View[] viewsToHide = {mVideoView, mToolbar, mControlToolbar, mVideoBackground};
+            final View[] viewsToHide = {mVideoView, mToolbar, mControlToolbar, mVideoBackgroundTop, mVideoBackgroundBottom};
             for (View view : viewsToHide) {
                 view.setVisibility(View.INVISIBLE);
             }

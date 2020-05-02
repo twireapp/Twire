@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="?attr/android:colorBackground"
     tools:context="com.perflyst.twire.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
