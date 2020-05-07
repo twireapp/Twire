@@ -206,8 +206,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
     private int getNameColor(String colorFromAPI) {
         String BLACK_TEXT = "#000000";
-        String EMPTY_MESSAGE = "";
-        if (colorFromAPI.equals(EMPTY_MESSAGE) || colorFromAPI.equals(BLACK_TEXT)) {
+        if (colorFromAPI == null || colorFromAPI.equals(BLACK_TEXT)) {
             if (isNightTheme) {
                 return ContextCompat.getColor(context, R.color.blue_500);
             } else {

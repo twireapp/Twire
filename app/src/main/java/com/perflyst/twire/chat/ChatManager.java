@@ -45,7 +45,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private final String LOG_TAG = getClass().getSimpleName();
     private Pattern roomstatePattern = Pattern.compile("@.*r9k=(0|1);.*slow=(0|\\d+);subs-only=(0|1)"),
             userStatePattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod="),
-            stdVarPattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(\\w+).* PRIVMSG #\\S* :(.*)"),
+            stdVarPattern = Pattern.compile("@(.+) :.+ PRIVMSG #\\S* :(.*)"),
+            tagPattern = Pattern.compile("([^=]+)=?(.+)?"),
             noticePattern = Pattern.compile("@.*msg-id=(\\w*)");
     // Default Twitch Chat connect IP/domain and port
     private String twitchChatServer = "irc.twitch.tv";
@@ -310,7 +311,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                             }
                         }
 
-                        String color = message.has("user_color") ? message.getString("user_color") : "";
+                        String color = message.has("user_color") ? message.getString("user_color") : null;
                         String displayName = commenter.getString("display_name");
                         String body = message.getString("body");
 
@@ -438,16 +439,29 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         Matcher stdVarMatcher = stdVarPattern.matcher(line);
 
         if (stdVarMatcher.find()) {
+            Map<String, String> tags = new HashMap<>();
+            for (String tag : stdVarMatcher.group(1).split(";")) {
+                Matcher tagMatcher =  tagPattern.matcher(tag);
+                if (tagMatcher.find()) {
+                    String value = tagMatcher.group(2);
+                    if (value == null)
+                        continue;
+
+                    tags.put(tagMatcher.group(1), value);
+                }
+            }
+
             Map<String, String> badges = new HashMap<>();
-            if (!stdVarMatcher.group(1).isEmpty()) {
-                for (String badge : stdVarMatcher.group(1).split(",")) {
+            String badgesString = tags.get("badges");
+            if (badgesString != null) {
+                for (String badge : badgesString.split(",")) {
                     String[] parts = badge.split("/");
                     badges.put(parts[0], parts[1]);
                 }
             }
-            String color = stdVarMatcher.group(2);
-            String displayName = stdVarMatcher.group(3);
-            String message = stdVarMatcher.group(4);
+            String color = tags.get("color");
+            String displayName = tags.get("display-name");
+            String message = stdVarMatcher.group(2);
             List<ChatEmote> emotes = new ArrayList<>(mEmoteManager.findTwitchEmotes(line, message));
             emotes.addAll(mEmoteManager.findCustomEmotes(message));
             //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
