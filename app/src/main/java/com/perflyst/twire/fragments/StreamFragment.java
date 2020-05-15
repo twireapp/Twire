@@ -124,7 +124,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private LinkedHashMap<String, Quality> qualityURLs;
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
-    private View mVideoBackgroundTop, mVideoBackgroundBottom;
     private PlayerView mVideoView;
     private ExoPlayer player;
     private Toolbar mToolbar;
@@ -272,8 +271,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         mControlToolbar = mRootView.findViewById(R.id.control_toolbar_wrapper);
         mVideoWrapper = mRootView.findViewById(R.id.video_wrapper);
         mVideoView = mRootView.findViewById(R.id.VideoView);
-        mVideoBackgroundTop = mRootView.findViewById(R.id.video_background_top);
-        mVideoBackgroundBottom = mRootView.findViewById(R.id.video_background_bottom);
         mPlayPauseWrapper = mRootView.findViewById(R.id.play_pause_wrapper);
         mPlayIcon = mRootView.findViewById(R.id.ic_play);
         mPauseIcon = mRootView.findViewById(R.id.ic_pause);
@@ -951,7 +948,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && intent.getBooleanExtra(getString(R.string.stream_shared_transition), false)) {
             mPreview.setTransitionName(getString(R.string.stream_preview_transition));
 
-            final View[] viewsToHide = {mVideoView, mToolbar, mControlToolbar, mVideoBackgroundTop, mVideoBackgroundBottom};
+            final View[] viewsToHide = {mVideoView, mToolbar, mControlToolbar};
             for (View view : viewsToHide) {
                 view.setVisibility(View.INVISIBLE);
             }
