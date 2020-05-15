@@ -436,7 +436,11 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                     }
                 }
             });
+            seeking = true;
             mProgressBar.setMax(vodLength * 1000);
+            seeking = false;
+
+            checkVodProgress();
         }
         progressHandler.postDelayed(progressRunnable, 1000);
 
@@ -566,7 +570,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             updateUI();
         }
 
-        checkVodProgress();
+        player.seekTo(currentProgress);
     }
 
     @Override
@@ -575,6 +579,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         Log.d(LOG_TAG, "Stream Fragment paused");
         hasPaused = true;
+
+        ChatManager.setPreviousProgress();
     }
 
     @Override
@@ -999,7 +1005,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 player.seekTo(currentProgress);
                 Log.d(LOG_TAG, "Current progress: " + currentProgress);
             } else {
-                ChatManager.updateVodProgress(currentProgress, true);
+                ChatManager.updateVodProgress(currentProgress, false);
                 player.seekTo(currentProgress);
                 Log.d(LOG_TAG, "Seeking to " + currentProgress);
             }

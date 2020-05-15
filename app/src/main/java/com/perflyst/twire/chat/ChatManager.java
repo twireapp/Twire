@@ -42,6 +42,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private static double currentProgress;
     private static String cursor = "";
     private static boolean seek = false;
+    private static double previousProgress;
     private final String LOG_TAG = getClass().getSimpleName();
     private Pattern roomstatePattern = Pattern.compile("@.*r9k=(0|1);.*slow=(0|\\d+);subs-only=(0|1)"),
             userStatePattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod="),
@@ -105,8 +106,13 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     }
 
     public static void updateVodProgress(int aCurrentProgress, boolean aSeek) {
-        currentProgress = aCurrentProgress / 1000;
-        seek = aSeek;
+        currentProgress = aCurrentProgress / 1000f;
+        seek |= aSeek;
+    }
+
+    public static void setPreviousProgress() {
+        previousProgress = currentProgress;
+        cursor = "";
     }
 
     @Override
@@ -257,6 +263,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                     seek = false;
                     cursor = "";
                     downloadedComments.clear();
+                    previousProgress = 0;
                 }
 
                 if (downloadedComments.size() == 0) {
@@ -277,6 +284,9 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
                     for (int i = 0; i < comments.length(); i++) {
                         JSONObject comment = comments.getJSONObject(i);
+                        if (comment.getDouble("content_offset_seconds") < previousProgress)
+                            continue;
+
                         downloadedComments.add(comment);
                     }
 
@@ -293,6 +303,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                     seek = false;
                     cursor = "";
                     downloadedComments.clear();
+                    previousProgress = 0;
                     continue;
                 }
 
