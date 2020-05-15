@@ -244,7 +244,11 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
         } catch (IOException e) {
             e.printStackTrace();
+
             onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTION_FAILED));
+            SystemClock.sleep(2500);
+            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
+            connect(address, port);
         }
     }
 
@@ -355,7 +359,11 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             }
         } catch (Exception e) {
             e.printStackTrace();
+
             onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTION_FAILED));
+            SystemClock.sleep(2500);
+            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
+            processVodChat();
         }
     }
 
