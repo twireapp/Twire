@@ -58,6 +58,7 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.PlaybackPreparer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -66,6 +67,7 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -99,7 +101,7 @@ import java.util.Map;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
-public class StreamFragment extends Fragment implements Player.EventListener {
+public class StreamFragment extends Fragment implements Player.EventListener, PlaybackPreparer {
     private final int HIDE_ANIMATION_DELAY = 3000;
     private final int SNACKBAR_SHOW_DURATION = 4000;
 
@@ -126,6 +128,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private Runnable fetchViewCountRunnable;
     private PlayerView mVideoView;
     private ExoPlayer player;
+    private MediaSource currentMediaSource;
     private Toolbar mToolbar;
     private RelativeLayout mControlToolbar;
     private ConstraintLayout mVideoWrapper;
@@ -157,6 +160,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private final Runnable progressRunnable = new Runnable() {
         @Override
         public void run() {
+            if (player == null)
+                return;
+
             if (player.isPlaying()) {
                 if (currentProgress != player.getCurrentPosition())
                     mProgressBar.setProgress((int) player.getCurrentPosition());
@@ -342,9 +348,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             }
         });
 
-        player = new SimpleExoPlayer.Builder(getContext()).build();
-        player.addListener(this);
-        mVideoView.setPlayer(player);
+        initializePlayer();
 
         mRootView.setOnSystemUiVisibilityChangeListener(
                 visibility -> {
@@ -442,7 +446,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             checkVodProgress();
         }
-        progressHandler.postDelayed(progressRunnable, 1000);
 
         keepScreenOn();
 
@@ -493,6 +496,32 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         }
 
         return null;
+    }
+
+    private void initializePlayer() {
+        if (player == null) {
+            player = new SimpleExoPlayer.Builder(getContext()).build();
+            player.addListener(this);
+            mVideoView.setPlayer(player);
+            mVideoView.setPlaybackPreparer(this);
+
+            if (currentMediaSource != null)
+                player.prepare(currentMediaSource);
+
+            progressHandler.postDelayed(progressRunnable, 1000);
+        }
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            player.release();
+            player = null;
+        }
+    }
+
+    @Override
+    public void preparePlayback() {
+        player.retry();
     }
 
     @Override
@@ -550,8 +579,20 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+
+        if (Util.SDK_INT <= 23 || player == null) {
+            initializePlayer();
+        }
 
         originalMainToolbarPadding = mToolbar.getPaddingRight();
         originalCtrlToolbarPadding = mControlToolbar.getPaddingRight();
@@ -580,6 +621,16 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         Log.d(LOG_TAG, "Stream Fragment paused");
         hasPaused = true;
 
+        if (mQualityBottomSheet != null)
+            mQualityBottomSheet.dismiss();
+
+        if (mProfileBottomSheet != null)
+            mProfileBottomSheet.dismiss();
+
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+
         ChatManager.setPreviousProgress();
     }
 
@@ -600,6 +651,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             Log.d(LOG_TAG, "Saving Current progress: " + currentProgress);
         }
 
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 
     @Override
@@ -1042,8 +1096,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         View decorView = getActivity().getWindow().getDecorView();
         if (isLandscape || isFullscreen) {
-            Log.d(LOG_TAG, "Hiding navigation");
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide navigation bar
@@ -1059,7 +1111,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             }
 
         } else {
-            Log.d(LOG_TAG, "Showing navigation");
             decorView.setSystemUiVisibility(0); // Remove all flags.
         }
     }
@@ -1229,7 +1280,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         if (isAudioOnlyModeEnabled()) {
             Log.d(LOG_TAG, "Pausing audio");
-        } else {
+        } else if (player != null) {
             player.setPlayWhenReady(false);
         }
         releaseScreenOn();
@@ -1392,6 +1443,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private void playUrl(String url) {
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), getString(R.string.app_name));
         MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(url));
+        currentMediaSource = mediaSource;
         player.prepare(mediaSource);
 
         checkVodProgress();
@@ -1755,7 +1807,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             mControlToolbar.setVisibility(View.GONE);
             mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, getContext()));
 
-            player.release();
+            releasePlayer();
             optionsMenuItem.setVisible(true);
 
             showVideoInterface();
