@@ -56,6 +56,7 @@ import androidx.transition.TransitionManager;
 import com.afollestad.materialdialogs.DialogAction;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackPreparer;
@@ -98,6 +99,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
@@ -1002,7 +1004,11 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
                 return;
             }
 
-            Glide.with(getContext()).asBitmap().load(imageUrl).into(mPreview);
+            Glide.with(getContext())
+                    .asBitmap()
+                    .load(imageUrl)
+                    .signature(new ObjectKey(System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(5))) // Refresh preview images every 5 minutes
+                    .into(mPreview);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && intent.getBooleanExtra(getString(R.string.stream_shared_transition), false)) {
