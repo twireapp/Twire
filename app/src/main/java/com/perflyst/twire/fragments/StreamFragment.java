@@ -190,6 +190,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
     private Integer triesForNextBest = 0;
 
     private static int totalVerticalInset;
+    private boolean pictureInPictureEnabled;
 
     public static StreamFragment newInstance(Bundle args) {
         StreamFragment fragment = new StreamFragment();
@@ -621,6 +622,9 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         super.onPause();
 
         Log.d(LOG_TAG, "Stream Fragment paused");
+        if (pictureInPictureEnabled)
+            return;
+
         hasPaused = true;
 
         if (mQualityBottomSheet != null)
@@ -766,7 +770,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
      * If the screen is in landscape it is show, else it is shown
      */
     private void checkShowChatButtonVisibility() {
-        if (isLandscape && settings.isChatInLandscapeEnabled()) {
+        if (isLandscape && settings.isChatInLandscapeEnabled() && !pictureInPictureEnabled) {
             mShowChatButton.setVisibility(View.VISIBLE);
         } else {
             mShowChatButton.setVisibility(View.GONE);
@@ -1126,7 +1130,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         layoutParams.height = isLandscape ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT;
 
         ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
-        if (isLandscape) {
+        if (isLandscape && !pictureInPictureEnabled) {
             layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_PARENT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
         } else {
             layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
@@ -1845,6 +1849,25 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
             showVideoInterface();
         }
+    }
+
+    public void prePictureInPicture() {
+        pictureInPictureEnabled = true;
+
+        int width = getScreenRect(getActivity()).height();
+        ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, width);
+        resizeWidthAnimation.setDuration(250);
+        mVideoWrapper.startAnimation(resizeWidthAnimation);
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean enabled) {
+        View[] views = new View[] {  mToolbar, mControlToolbar, mPlayPauseWrapper, mShowChatButton, mForward, mBackward };
+        for (View view : views) {
+            view.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
+        }
+
+        pictureInPictureEnabled = enabled;
     }
 
     /**

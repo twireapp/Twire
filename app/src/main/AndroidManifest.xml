@@ -52,12 +52,16 @@
             android:name=".activities.stream.LiveStreamActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:label="@string/title_activity_live_stream"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:supportsPictureInPicture="true"
+            tools:targetApi="n" />
         <activity
             android:name=".activities.stream.VODActivity"
-            android:configChanges="screenSize|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:label="@string/title_activity_vod"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:supportsPictureInPicture="true"
+            tools:targetApi="n" />
         <activity
             android:name=".activities.main.MyChannelsActivity"
             android:label="@string/my_channels_activity_label"

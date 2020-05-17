@@ -1,5 +1,8 @@
 package com.perflyst.twire.activities.stream;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
@@ -31,6 +34,11 @@ import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.fragments.ChatFragment;
 import com.perflyst.twire.fragments.StreamFragment;
 import com.perflyst.twire.service.Settings;
+
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -101,7 +109,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         updateOrientation();
     }
 
-    @Override
+	@Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do nothing :)
     }
@@ -183,6 +191,12 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         }
     }
 
+	@Override
+	@RequiresApi(24)
+	public void onUserLeaveHint() {
+        mStreamFragment.prePictureInPicture();
+		enterPictureInPictureMode();
+	}
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private TransitionSet constructTransitions() {
@@ -288,5 +302,28 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 
         ViewGroup.LayoutParams layoutParams = findViewById(getVideoContainerResource()).getLayoutParams();
         layoutParams.height = landscape ? MATCH_PARENT : WRAP_CONTENT;
+    }
+
+    @Override
+    public void finish() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            navToLauncherTask(getApplicationContext());
+        }
+        super.finish();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void navToLauncherTask(@Nonnull Context appContext) {
+        ActivityManager activityManager = (ActivityManager) appContext.getSystemService(Context.ACTIVITY_SERVICE);
+        // iterate app tasks available and navigate to launcher task (browse task)
+        final List<ActivityManager.AppTask> appTasks = activityManager.getAppTasks();
+        for (ActivityManager.AppTask task : appTasks) {
+            final Intent baseIntent = task.getTaskInfo().baseIntent;
+            final Set<String> categories = baseIntent.getCategories();
+            if (categories != null && categories.contains(Intent.CATEGORY_LAUNCHER)) {
+                task.moveToFront();
+                return;
+            }
+        }
     }
 }
