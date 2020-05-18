@@ -88,7 +88,7 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
         }
     }
 
-    class PanelViewHolder extends RecyclerView.ViewHolder {
+    static class PanelViewHolder extends RecyclerView.ViewHolder {
         ImageView mImageView;
         TextView mHtmlText;
 

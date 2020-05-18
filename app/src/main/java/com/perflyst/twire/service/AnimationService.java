@@ -115,7 +115,7 @@ public class AnimationService {
 
             aMainToolbar.startAnimation(moveMainToolbarAnimation);
         }
-        float fromTranslationY = (fromToolbarPosition < DECORATIVE_TOOLBAR_HEIGHT) ? DECORATIVE_TOOLBAR_HEIGHT : fromToolbarPosition;
+        float fromTranslationY = Math.max(fromToolbarPosition, DECORATIVE_TOOLBAR_HEIGHT);
 
         Animation moveToolbarAnimation = new TranslateAnimation(0, 0, fromTranslationY, 0);
         moveToolbarAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -125,11 +125,11 @@ public class AnimationService {
     }
 
     public static void setActivityToolbarPosition(int duration, Toolbar aMainToolbar, Toolbar aDecorativeToolbar, Activity aActivity, float fromToolbarPosition, float toToolbarPosition, float fromMainToolbarPosition, float toMainToolbarPosition) {
-        duration = duration < 0 ? 0 : duration;
+        duration = Math.max(duration, 0);
 
         float distanceToMoveY = toToolbarPosition - fromToolbarPosition;
         float DECORATIVE_TOOLBAR_HEIGHT = -1 * aActivity.getResources().getDimension(R.dimen.additional_toolbar_height);
-        float toTranslationY = (distanceToMoveY < DECORATIVE_TOOLBAR_HEIGHT) ? DECORATIVE_TOOLBAR_HEIGHT : distanceToMoveY;
+        float toTranslationY = Math.max(distanceToMoveY, DECORATIVE_TOOLBAR_HEIGHT);
 
         // We want to make sure the toolbar is as close to the final position as possible without being visible.
         // This ensures that the animation is only running when the toolbar is visible to the user.

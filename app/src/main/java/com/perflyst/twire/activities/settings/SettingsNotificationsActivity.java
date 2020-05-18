@@ -465,7 +465,6 @@ public class SettingsNotificationsActivity extends ThemeActivity {
                     positionOfInterval = 4;
                     break;
             }
-            final int finalPosition = positionOfInterval;
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle(R.string.notifications_check_interval)
                     .setSingleChoiceItems(R.array.checkIntervals, positionOfInterval,

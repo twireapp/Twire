@@ -61,6 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/twitch_name"
                     android:layout_alignBottom="@id/additional_toolbar"
+                    android:baselineAligned="false"
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:padding="@dimen/streamerInfo_additional_info_padding">

@@ -292,7 +292,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         void onMessageClicked(SpannableStringBuilder formattedString, String userName, String message);
     }
 
-    class ContactViewHolder extends RecyclerView.ViewHolder {
+    static class ContactViewHolder extends RecyclerView.ViewHolder {
         private TextView message;
 
         ContactViewHolder(View itemView) {

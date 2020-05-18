@@ -29,7 +29,7 @@ public class SettingsCategoryAdapter extends SRJAdapter<SettingsCategory, Settin
         return SettingsCategoryViewHolder::new;
     }
 
-    public class SettingsCategoryViewHolder extends SRJViewHolder<SettingsCategory> {
+    public static class SettingsCategoryViewHolder extends SRJViewHolder<SettingsCategory> {
         @BindView(R.id.txt_category_title)
         protected TextView mTitleView;
 

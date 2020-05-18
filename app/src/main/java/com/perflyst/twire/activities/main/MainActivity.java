@@ -344,12 +344,9 @@ public abstract class MainActivity extends ThemeActivity {
         }
     }
 
-    public boolean checkElementSizeChange() {
+    public void checkElementSizeChange() {
         if (mRecyclerView.hasSizedChanged()) {
             scrollToTopAndRefresh();
-            return true;
-        } else {
-            return false;
         }
     }
 

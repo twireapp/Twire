@@ -44,7 +44,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private static boolean seek = false;
     private static double previousProgress;
     private final String LOG_TAG = getClass().getSimpleName();
-    private Pattern roomstatePattern = Pattern.compile("@.*r9k=(0|1);.*slow=(0|\\d+);subs-only=(0|1)"),
+    private Pattern roomstatePattern = Pattern.compile("@.*r9k=([01]);.*slow=(0|\\d+);subs-only=([01])"),
             userStatePattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod="),
             stdVarPattern = Pattern.compile("@(.+) :.+ PRIVMSG #\\S* :(.*)"),
             tagPattern = Pattern.compile("([^=]+)=?(.+)?"),
@@ -582,7 +582,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         return null;
     }
 
-    void readBadges(String url, Map<String, Map<String, Badge>> badgeMap) {
+    private void readBadges(String url, Map<String, Map<String, Badge>> badgeMap) {
         try {
             JSONObject globalBadgeSets = new JSONObject(Service.urlToJSONString(url)).getJSONObject("badge_sets");
             for (Iterator<String> it = globalBadgeSets.keys(); it.hasNext(); ) {
@@ -608,7 +608,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         }
     }
 
-    void readFFZBadges() {
+    private void readFFZBadges() {
         ffzBadges.clear();
 
         try {
@@ -650,7 +650,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         return userBadges;
     }
 
-    public Badge getBadge(String badgeSet, String version) {
+    private Badge getBadge(String badgeSet, String version) {
         Map<String, Badge> channelSet = channelBadges.get(badgeSet);
         if (channelSet != null && channelSet.get(version) != null)
             return channelSet.get(version);

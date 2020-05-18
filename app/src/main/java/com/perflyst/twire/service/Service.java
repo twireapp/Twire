@@ -586,7 +586,7 @@ public class Service {
         // IF we are being blocked, then retry the request with Twitch web ClientID. They are typically not blocking this.
         String result = urlToJSONString(urlToRead, true); // "{\"error\":\"Gone\",\"status\":410,\"message\":\"this API has been removed.\"}";
         try {
-            boolean retryWithWebClientId = false;
+            boolean retryWithWebClientId;
             if (result.isEmpty()) {
                 retryWithWebClientId = true;
             } else {
@@ -600,7 +600,7 @@ public class Service {
                 result = urlToJSONString(urlToRead, false);
             }
 
-        } catch (Exception exc) {
+        } catch (Exception ignored) {
 
         }
 

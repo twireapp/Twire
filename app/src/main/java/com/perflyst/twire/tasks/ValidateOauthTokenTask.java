@@ -78,7 +78,7 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
         void onFinished(TokenValidation validation);
     }
 
-    public class TokenValidation {
+    public static class TokenValidation {
         private String twitchName;
         private boolean tokenValid;
         private List<String> scopes;

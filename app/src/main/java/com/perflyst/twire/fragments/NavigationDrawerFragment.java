@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,7 +65,7 @@ public class NavigationDrawerFragment extends Fragment {
     @BindView(R.id.img_drawer_banner)
     protected ImageView mTopImage;
     @BindViews({R.id.my_games_container, R.id.my_streams_container, R.id.my_channels_container})
-    protected List<View> mUserRequiredViews;
+    List<View> mUserRequiredViews;
     private String LOG_TAG = getClass().getSimpleName();
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;

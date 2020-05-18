@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
  * Created by sebastian on 26/07/2017.
  */
 
-public class ChatEmoteManager {
+class ChatEmoteManager {
     private static Map<String, Emote> emoteKeywordToEmote;
 
     private final List<Emote> customGlobal = new ArrayList<>();
@@ -119,14 +119,14 @@ public class ChatEmoteManager {
         }
     }
 
-    Emote ToBTTV(JSONObject emoteObject) throws JSONException {
+    private Emote ToBTTV(JSONObject emoteObject) throws JSONException {
         final String EMOTE_ID = "id";
         final String EMOTE_WORD = "code";
 
         return Emote.BTTV(emoteObject.getString(EMOTE_WORD), emoteObject.getString(EMOTE_ID));
     }
 
-    Emote ToFFZ(JSONObject emoteObject) throws JSONException {
+    private Emote ToFFZ(JSONObject emoteObject) throws JSONException {
         final String EMOTE_NAME = "name";
         final String EMOTE_URLS = "urls";
 

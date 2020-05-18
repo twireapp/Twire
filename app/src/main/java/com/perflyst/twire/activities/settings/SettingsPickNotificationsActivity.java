@@ -145,7 +145,7 @@ public class SettingsPickNotificationsActivity extends ThemeActivity implements 
         }
     }
 
-    private class PickStreamerViewHolder extends RecyclerView.ViewHolder {
+    private static class PickStreamerViewHolder extends RecyclerView.ViewHolder {
         private CheckedTextView checkedTextView;
 
         PickStreamerViewHolder(View itemView) {

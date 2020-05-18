@@ -109,7 +109,7 @@ public class NotificationActivity extends UsageTrackingAppCompatActivity {
                 mFABWidth = mContinueFABContainer.getMeasuredWidth();
                 expandContinueButtonAnimations();
                 ViewTreeObserver obs = mLayout.getViewTreeObserver();
-                obs.removeGlobalOnLayoutListener(this);
+                obs.removeOnGlobalLayoutListener(this);
 
             }
         });

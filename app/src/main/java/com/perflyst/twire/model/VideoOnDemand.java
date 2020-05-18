@@ -72,9 +72,9 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         this.channelName = data[4];
         this.displayName = data[5];
         this.recordedAtString = data[6];
-        this.views = Integer.valueOf(data[7]);
-        this.length = Integer.valueOf(data[8]);
-        this.isBroadcast = Boolean.valueOf(data[9]);
+        this.views = Integer.parseInt(data[7]);
+        this.length = Integer.parseInt(data[8]);
+        this.isBroadcast = Boolean.parseBoolean(data[9]);
         this.channelInfo = in.readParcelable(ChannelInfo.class.getClassLoader());
 
         setRecordedAtDate(this.recordedAtString);
