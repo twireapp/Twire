@@ -151,29 +151,6 @@
             android:label="@string/title_activity_search" />
         <activity android:name=".activities.settings.SettingsStreamPlayerActivity" />
         <activity android:name=".activities.settings.SettingsPickNotificationsActivity" />
-        <activity
-            android:name=".activities.tests.DeepLinkTestActivity"
-            android:exported="true"
-            android:label="@string/title_activity_deep_link_test"
-            android:theme="@style/WhiteBackgroundTheme">
-
-            <!--intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="*.twitch.tv"
-                    android:scheme="https" />
-                <data
-                    android:host="*.twitch.tv"
-                    android:scheme="http" />
-            </intent-filter-->
-
-        </activity>
-
-        <activity android:name=".activities.tests.TestPreferenceActivity" />
 
     </application>
 </manifest>
