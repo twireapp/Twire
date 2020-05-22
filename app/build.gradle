@@ -85,4 +85,5 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-core:2.11.4'
     implementation 'com.google.android.exoplayer:exoplayer-hls:2.11.4'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.4'
+    implementation 'com.google.android.exoplayer:extension-mediasession:2.11.4'
 }

@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -51,6 +52,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     private String LOG_TAG = getClass().getSimpleName();
     private Sensor mRotationSensor;
     private Settings settings;
+    private boolean mBackstackLost;
 
     protected abstract int getLayoutResource();
 
@@ -194,8 +196,12 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 	@Override
 	@RequiresApi(24)
 	public void onUserLeaveHint() {
-        mStreamFragment.prePictureInPicture();
-		enterPictureInPictureMode();
+        super.onUserLeaveHint();
+
+        if (getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            mStreamFragment.prePictureInPicture();
+            enterPictureInPictureMode();
+        }
 	}
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -304,12 +310,37 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         layoutParams.height = landscape ? MATCH_PARENT : WRAP_CONTENT;
     }
 
+    private boolean onStopCalled;
     @Override
-    public void finish() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            navToLauncherTask(getApplicationContext());
+    public void onStop() {
+        super.onStop();
+        onStopCalled = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onStopCalled = false;
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean enabled, Configuration newConfig) {
+        super.onPictureInPictureModeChanged(enabled, newConfig);
+        mBackstackLost |= enabled;
+
+        if (!enabled && onStopCalled) {
+            finish();
         }
-        super.finish();
+    }
+
+    @Override
+    public void finish () {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mBackstackLost) {
+            navToLauncherTask(getApplicationContext());
+            finishAndRemoveTask();
+        } else {
+            super.finish();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)

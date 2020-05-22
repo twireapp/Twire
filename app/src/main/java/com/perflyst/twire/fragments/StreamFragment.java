@@ -16,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -62,6 +63,7 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.PlaybackPreparer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
@@ -191,6 +193,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
     private static int totalVerticalInset;
     private boolean pictureInPictureEnabled;
+    private MediaSessionCompat mediaSession;
 
     public static StreamFragment newInstance(Bundle args) {
         StreamFragment fragment = new StreamFragment();
@@ -511,12 +514,19 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             if (currentMediaSource != null)
                 player.prepare(currentMediaSource);
 
+            mediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
+            MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
+            mediaSessionConnector.setPlayer(player);
+            mediaSession.setActive(true);
+
             progressHandler.postDelayed(progressRunnable, 1000);
         }
     }
 
     private void releasePlayer() {
         if (player != null) {
+            mediaSession.release();
+
             player.release();
             player = null;
         }
