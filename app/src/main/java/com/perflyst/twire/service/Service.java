@@ -584,30 +584,44 @@ public class Service {
     public static String urlToJSONString(String urlToRead) {
         // Alright, so sometimes Twitch decides that our client ID should be blocked. Currently only happens for the hidden /api endpoints.
         // IF we are being blocked, then retry the request with Twitch web ClientID. They are typically not blocking this.
-        String result = urlToJSONString(urlToRead, true); // "{\"error\":\"Gone\",\"status\":410,\"message\":\"this API has been removed.\"}";
+        String result = "";
+        Exception exception = null;
         try {
-            boolean retryWithWebClientId;
+            result = urlToJSONString(urlToRead, true); // "{\"error\":\"Gone\",\"status\":410,\"message\":\"this API has been removed.\"}";
+        } catch (Exception exc) {
+            exception = exc;
+        } finally {
+            boolean retryWithWebClientId = false;
             if (result.isEmpty()) {
                 retryWithWebClientId = true;
             } else {
-                JSONObject resultJson = new JSONObject(result);
-                int status = resultJson.getInt("status");
-                String error = resultJson.getString("error");
-                retryWithWebClientId = status == 410 || error.equals("Gone");
+                try {
+                    JSONObject resultJson = new JSONObject(result);
+                    int status = resultJson.getInt("status");
+                    String error = resultJson.getString("error");
+                    retryWithWebClientId = status == 410 || error.equals("Gone");
+                } catch (Exception exc) {
+
+                }
             }
 
             if (retryWithWebClientId) {
-                result = urlToJSONString(urlToRead, false);
+                exception = null;
+                try {
+                    result = urlToJSONString(urlToRead, false);
+                } catch (Exception exc) {
+                    exception = exc;
+                }
             }
-
-        } catch (Exception ignored) {
-
         }
+
+        if (exception != null)
+            exception.printStackTrace();
 
         return result;
     }
 
-    public static String urlToJSONString(String urlToRead, Boolean useOurClientId) {
+    private static String urlToJSONString(String urlToRead, Boolean useOurClientId) throws Exception {
         String clientId;
         if (useOurClientId) {
             clientId = Service.getApplicationClientID();
@@ -615,38 +629,37 @@ public class Service {
             clientId = Service.getTwitchWebClientID();
         }
 
-        URL url;
-        HttpURLConnection conn = null;
-        Scanner in = null;
+        return urlToJSONString(urlToRead, connection -> {
+            connection.setRequestProperty("Client-ID", clientId);
+            connection.setRequestProperty("Accept", "application/vnd.twitchtv.v5+json");
+        });
+    }
+
+    public interface SendInterface {
+        void beforeSend(HttpURLConnection connection);
+    }
+
+    public static String urlToJSONString(String urlToRead, SendInterface sendInterface) throws Exception {
         StringBuilder result = new StringBuilder();
 
-        try {
-            url = new URL(urlToRead);
+        URL url = new URL(urlToRead);
 
-            conn = openConnection(url);
+        HttpURLConnection conn = openConnection(url);
 
-            conn.setReadTimeout(5000);
-            conn.setConnectTimeout(3000);
-            conn.setRequestProperty("Client-ID", clientId);
-            conn.setRequestProperty("Accept", "application/vnd.twitchtv.v5+json");
-            conn.setRequestMethod("GET");
-            in = new Scanner(new InputStreamReader(conn.getInputStream()));
+        conn.setReadTimeout(5000);
+        conn.setConnectTimeout(3000);
+        conn.setRequestMethod("GET");
+        sendInterface.beforeSend(conn);
+        Scanner in = new Scanner(new InputStreamReader(conn.getInputStream()));
 
-            while (in.hasNextLine()) {
-                String line = in.nextLine();
-                result.append(line);
-            }
 
-            in.close();
-            conn.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (in != null)
-                in.close();
-            if (conn != null)
-                conn.disconnect();
+        while (in.hasNextLine()) {
+            String line = in.nextLine();
+            result.append(line);
         }
+
+        in.close();
+        conn.disconnect();
 
         if (result.length() == 0 || (result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[')) {
             Log.v("URL TO JSON STRING", urlToRead + " did not successfully get read");
