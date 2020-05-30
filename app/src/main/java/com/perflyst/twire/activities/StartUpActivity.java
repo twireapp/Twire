@@ -26,7 +26,7 @@ public class StartUpActivity extends ThemeActivity {
         if (isSetup) {
             intent = Service.getNotLoggedInIntent(getBaseContext());
             if (settings.isLoggedIn()) {
-                //validateToken();
+                validateToken();
                 intent = Service.getLoggedInIntent(getBaseContext());
             }
 

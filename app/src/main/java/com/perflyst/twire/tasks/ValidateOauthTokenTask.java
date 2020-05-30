@@ -29,34 +29,39 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
 
     @Override
     protected TokenValidation doInBackground(Void... params) {
-        String baseUrl = "https://api.twitch.tv/kraken?oauth_token=";
+        String url = "https://id.twitch.tv/oauth2/validate";
 
         try {
-            final String TOKEN_OBJECT = "token";
-            final String TWITCHNAME_STRING = "user_name";
-            final String IS_TOKEN_VALID_BOOLEAN = "valid";
-            final String AUTHORIZATION_OBJECT = "authorization";
+            final String USER_ID_STRING = "user_id";
             final String SCOPES_STRING_ARRAY = "scopes";
 
-            JSONObject topObject = new JSONObject(Service.urlToJSONString(baseUrl + oauthToken));
-            JSONObject tokenObject = topObject.getJSONObject(TOKEN_OBJECT);
-            JSONArray scopeArray = tokenObject.getJSONObject(AUTHORIZATION_OBJECT).getJSONArray(SCOPES_STRING_ARRAY);
-
-            String username = tokenObject.getString(TWITCHNAME_STRING);
-            boolean isTokenValid = tokenObject.getBoolean(IS_TOKEN_VALID_BOOLEAN);
-            ArrayList<String> scopes = new ArrayList<>();
-            for (int i = 0; i < scopeArray.length(); i++) {
-                scopes.add(scopeArray.getString(i));
+            String result;
+            try {
+                result = Service.urlToJSONString(url, connection -> connection.setRequestProperty("Authorization", "OAuth " + oauthToken));
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                return null;
             }
 
-            return new TokenValidation(username, isTokenValid, scopes);
+            JSONObject topObject = new JSONObject(result);
+            String user_id = topObject.has(USER_ID_STRING) ? topObject.getString(USER_ID_STRING) : null;
+
+            ArrayList<String> scopes = new ArrayList<>();
+            if (topObject.has(SCOPES_STRING_ARRAY)) {
+                JSONArray scopeArray = topObject.getJSONArray(SCOPES_STRING_ARRAY);
+                for (int i = 0; i < scopeArray.length(); i++) {
+                    scopes.add(scopeArray.getString(i));
+                }
+            }
+
+            return new TokenValidation(user_id, scopes);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         if (Service.isNetworkConnectedThreadOnly(context.get())) {
-            return new TokenValidation("", true, new ArrayList<>());
+            return new TokenValidation("", new ArrayList<>());
         } else {
             return null;
         }
@@ -79,30 +84,24 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
     }
 
     public static class TokenValidation {
-        private String twitchName;
-        private boolean tokenValid;
+        private String userID;
         private List<String> scopes;
 
-        TokenValidation(String twitchName, boolean tokenValid, List<String> scopes) {
-            this.twitchName = twitchName;
-            this.tokenValid = tokenValid;
+        TokenValidation(String userID, List<String> scopes) {
+            this.userID = userID;
             this.scopes = scopes;
         }
 
-        public String getTwitchName() {
-            return twitchName;
+        public String getUserID() {
+            return userID;
         }
 
-        public void setTwitchName(String twitchName) {
-            this.twitchName = twitchName;
+        public void setUserID(String userID) {
+            this.userID = userID;
         }
 
         public boolean isTokenValid() {
-            return tokenValid;
-        }
-
-        public void setTokenValid(boolean tokenValid) {
-            this.tokenValid = tokenValid;
+            return userID != null;
         }
 
         public List<String> getScopes() {

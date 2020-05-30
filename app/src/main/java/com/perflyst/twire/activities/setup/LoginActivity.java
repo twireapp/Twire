@@ -47,7 +47,7 @@ import io.codetail.animation.ViewAnimationUtils;
 public class LoginActivity extends UsageTrackingAppCompatActivity {
     private static GetFollowsFromDB subscriptionsTask;
     private static boolean toTransition = false, isPartOfSetup = true;
-    private final String LOGIN_URL = "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=" +
+    private final String LOGIN_URL = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=" +
             Service.getApplicationClientID() +
             "&redirect_uri=http%3A%2F%2Flocalhost/oauth_authorizing" +
             "&scope=user_read+chat:read+chat:edit+user_follows_edit+user_subscriptions";
