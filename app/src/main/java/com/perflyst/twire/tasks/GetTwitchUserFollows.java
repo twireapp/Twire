@@ -188,7 +188,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         // If there are any streamers to add to the DB - Create a task and do so.
         if (streamersToAddToDB.size() > 0) {
             Log.d(LOG_TAG, "Starting task to add " + streamersToAddToDB.size() + " to the db");
-            Object[] arrayTemp = {streamersToAddToDB, baseContext};
+            Object[] arrayTemp = {streamersToAddToDB, baseContext.get()};
             AddFollowsToDB addFollowsToDBTask = new AddFollowsToDB();
             addFollowsToDBTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, arrayTemp);
         } else {
