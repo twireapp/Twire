@@ -1,9 +1,5 @@
 package com.perflyst.twire.activities.main;
 
-import org.json.JSONException;
-
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -35,6 +31,6 @@ public interface LazyFetchingActivity<T> {
 
     void notifyUserNoElementsAdded();
 
-    List<T> getVisualElements() throws JSONException, MalformedURLException, UnsupportedEncodingException;
+    List<T> getVisualElements() throws Exception;
 
 }

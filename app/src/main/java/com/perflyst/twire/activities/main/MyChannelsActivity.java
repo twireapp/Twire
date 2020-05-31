@@ -3,7 +3,6 @@ package com.perflyst.twire.activities.main;
 import android.os.AsyncTask;
 
 import com.perflyst.twire.R;
-import com.perflyst.twire.activities.FollowingFetcher;
 import com.perflyst.twire.adapters.ChannelsAdapter;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.model.ChannelInfo;
@@ -15,18 +14,13 @@ import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.ChannelAutoSp
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Activity that shows the user's Twitch Follows.
  * If there are no follows in TempStorage when the activity is created, then the activity initiates an AsyncTask that connects to Twitch, that loads and adds the follows to this activity
  */
-public class MyChannelsActivity extends MainActivity implements FollowingFetcher {
-
-    @Override
-    public void refreshElements() {
-        mRecyclerView.smoothScrollToPosition(0);
-    }
-
+public class MyChannelsActivity extends LazyMainActivity<ChannelInfo> {
     @Override
     protected MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView) {
         return new ChannelsAdapter(mRecyclerView, getBaseContext(), this);
@@ -48,44 +42,19 @@ public class MyChannelsActivity extends MainActivity implements FollowingFetcher
     }
 
     @Override
-    protected void customizeActivity() {
-        super.customizeActivity();
+    public void addToAdapter(List<ChannelInfo> aObjectList) {
+        mAdapter.addList(aObjectList);
+    }
 
-        if (!TempStorage.hasLoadedStreamers()) {
-            // Get all the subscriptions from internal database. This will also create and set an adaptor on the recyclerview
-            GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB(this);
-            subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
-        } else {
-            // Get all the subscriptions from the static list, and set them as the adaptor for the recyclerview
-            mAdapter.clearNoAnimation();
-            mAdapter.addList(new ArrayList<>(TempStorage.getLoadedStreamers()));
-            if (mAdapter.getItemCount() == 0) {
-                showErrorView();
-            }
+    @Override
+    public List<ChannelInfo> getVisualElements() throws ExecutionException, InterruptedException {
+        if (TempStorage.hasLoadedStreamers()) {
+            return new ArrayList<>(TempStorage.getLoadedStreamers());
         }
-    }
 
-    public ChannelsAdapter getAdapter() {
-        return ((ChannelsAdapter) mAdapter);
-    }
+        GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
+        subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
 
-    // FollowingFetcher
-    @Override
-    public void addStreamer(ChannelInfo streamer) {
-        mAdapter.add(streamer);
-    }
-
-    @Override
-    public void addStreamers(List<ChannelInfo> streamers) {
-        mAdapter.addList(streamers);
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return mAdapter.getItemCount() == 0;
-    }
-
-    @Override
-    public void notifyFinishedAdding() {
+        return new ArrayList<>(subscriptionsTask.get().values());
     }
 }
