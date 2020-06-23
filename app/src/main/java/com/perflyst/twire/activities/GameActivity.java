@@ -24,6 +24,8 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.perflyst.twire.misc.Utils.getSystemLanguage;
+
 public class GameActivity extends LazyMainActivity<StreamInfo> {
     private Game game;
 
@@ -68,7 +70,8 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException, UnsupportedEncodingException {
         String gameTitleEncoded = URLEncoder.encode(game.getGameTitle(), "UTF-8");
-        String url = "https://api.twitch.tv/kraken/streams?game=" + gameTitleEncoded + "&limit=" + getLimit() + "&offset=" + getCurrentOffset();
+        String url = "https://api.twitch.tv/kraken/streams?game=" + gameTitleEncoded + "&limit="
+                + getLimit() + "&offset=" + getCurrentOffset() + "&language=" + getSystemLanguage();
         final String GAMES_ARRAY_KEY = "streams";
 
         List<StreamInfo> mResultList = new ArrayList<>();
