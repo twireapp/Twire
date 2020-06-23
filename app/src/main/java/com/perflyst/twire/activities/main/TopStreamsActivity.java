@@ -20,6 +20,8 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.perflyst.twire.misc.Utils.getSystemLanguage;
+
 public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
@@ -51,7 +53,8 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
-        final String URL = "https://api.twitch.tv/kraken/streams?limit=" + getLimit() + "&offset=" + getCurrentOffset();
+        final String URL = "https://api.twitch.tv/kraken/streams?limit=" + getLimit() + "&offset="
+                + getCurrentOffset() + "&language=" + getSystemLanguage();
         final String GAMES_ARRAY_KEY = "streams";
 
         List<StreamInfo> mResultList = new ArrayList<>();
