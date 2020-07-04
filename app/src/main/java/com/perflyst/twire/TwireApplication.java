@@ -11,6 +11,10 @@ import androidx.multidex.MultiDexApplication;
 
 import com.perflyst.twire.utils.TLSSocketFactoryCompat;
 
+import java.security.Security;
+
+import org.conscrypt.Conscrypt;
+
 /**
  * Created by SebastianRask on 20-02-2016.
  */
@@ -24,12 +28,13 @@ public class TwireApplication extends MultiDexApplication {
         super.onCreate();
         mContext = this.getApplicationContext();
 
+        // Twitch API requires TLS 1.2, which may be unavailable/not enabled on Android 4.1 - 4.4.
+        // Install modern TLS protocols using a security provider, and enable them by default in a
+        // custom SSLSocketFactory.
+        Security.insertProviderAt(Conscrypt.newProvider(), 1);
+        TLSSocketFactoryCompat.setAsDefault();
+
         initNotificationChannels();
-        // Twitch requires TLS 1.2, which may be available on Android 4.1 - 4.4, but will not be
-        // enabled by default. Try to enable it, if it is available.
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
-            TLSSocketFactoryCompat.setAsDefault();
-        }
     }
 
     @Override
