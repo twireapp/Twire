@@ -1,1 +1,2 @@
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
+-dontobfuscate

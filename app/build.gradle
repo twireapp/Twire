@@ -16,7 +16,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
         debug {
@@ -86,4 +86,7 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-hls:2.11.4'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.4'
     implementation 'com.google.android.exoplayer:extension-mediasession:2.11.4'
+
+    // https://github.com/google/conscrypt/releases
+    implementation 'org.conscrypt:conscrypt-android:2.4.0'
 }

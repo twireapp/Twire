@@ -2,6 +2,7 @@ package com.perflyst.twire.fragments;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -53,6 +54,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
+import androidx.media.session.MediaButtonReceiver;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -514,7 +516,13 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             if (currentMediaSource != null)
                 player.prepare(currentMediaSource);
 
-            mediaSession = new MediaSessionCompat(getContext(), getContext().getPackageName());
+            ComponentName mediaButtonReceiver = new ComponentName(
+                    getContext(), MediaButtonReceiver.class);
+            mediaSession = new MediaSessionCompat(
+                    getContext(),
+                    getContext().getPackageName(),
+                    mediaButtonReceiver,
+                    null);
             MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
             mediaSessionConnector.setPlayer(player);
             mediaSession.setActive(true);
