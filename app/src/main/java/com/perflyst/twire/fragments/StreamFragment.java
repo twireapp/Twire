@@ -1830,6 +1830,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.streamToolbarColor, R.color.black_transparent, getContext()));
 
             if (!castingViewVisible) {
+                initializePlayer();
                 startStreamWithQuality(settings.getPrefStreamQuality());
             }
 
