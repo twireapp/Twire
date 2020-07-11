@@ -27,6 +27,7 @@ import com.perflyst.twire.adapters.StreamsAdapter;
 import com.perflyst.twire.fragments.NavigationDrawerFragment;
 import com.perflyst.twire.misc.TooltipWindow;
 import com.perflyst.twire.misc.UniversalOnScrollListener;
+import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.service.AnimationService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -39,7 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public abstract class MainActivity extends ThemeActivity {
+public abstract class MainActivity<E extends Comparable<E> & MainElement> extends ThemeActivity {
     private static final String FIRST_VISIBLE_ELEMENT_POSITION = "firstVisibleElementPosition";
 
     @BindView(R.id.followed_channels_drawer_layout)
@@ -78,7 +79,7 @@ public abstract class MainActivity extends ThemeActivity {
     @BindView(R.id.main_decorative_toolbar)
     protected Toolbar mDecorativeToolbar;
     protected String LOG_TAG;
-    protected MainActivityAdapter mAdapter;
+    protected MainActivityAdapter<E, ?> mAdapter;
     protected NavigationDrawerFragment mDrawerFragment;
     protected UniversalOnScrollListener mScrollListener;
     protected Settings settings;
@@ -96,7 +97,7 @@ public abstract class MainActivity extends ThemeActivity {
     /**
      * Construct the adapter used for this activity's list
      */
-    protected abstract MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView);
+    protected abstract MainActivityAdapter<E, ?> constructAdapter(AutoSpanRecyclerView recyclerView);
 
     /**
      * Get the drawable ressource int used to represent this activity

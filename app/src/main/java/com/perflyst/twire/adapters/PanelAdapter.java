@@ -3,7 +3,6 @@ package com.perflyst.twire.adapters;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -83,7 +83,7 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
             holder.mHtmlText.setVisibility(View.GONE);
         } else {
             holder.mHtmlText.setVisibility(View.VISIBLE);
-            holder.mHtmlText.setText(Html.fromHtml(mPanel.getmHtml()));
+            holder.mHtmlText.setText(HtmlCompat.fromHtml(mPanel.getmHtml(), HtmlCompat.FROM_HTML_MODE_LEGACY));
             holder.mHtmlText.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }

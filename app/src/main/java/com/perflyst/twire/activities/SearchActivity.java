@@ -26,6 +26,7 @@ import com.perflyst.twire.adapters.StreamsAdapter;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.Game;
+import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.service.JSONService;
 import com.perflyst.twire.service.Service;
@@ -136,7 +137,7 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public MainActivityAdapter constructAdapter() {
+        public MainActivityAdapter<Game, ?> constructAdapter() {
             return new GamesAdapter(mRecyclerView, getContext(), getActivity());
         }
 
@@ -180,7 +181,7 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public MainActivityAdapter constructAdapter() {
+        public MainActivityAdapter<StreamInfo, ?> constructAdapter() {
             StreamsAdapter adapter = new StreamsAdapter(mRecyclerView, getActivity());
             adapter.setConsiderPriority(false);
             return adapter;
@@ -235,7 +236,7 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public MainActivityAdapter constructAdapter() {
+        public MainActivityAdapter<ChannelInfo, ?> constructAdapter() {
             return new ChannelsAdapter(mRecyclerView, getContext(), getActivity());
         }
 
@@ -264,15 +265,15 @@ public class SearchActivity extends ThemeActivity {
         }
     }
 
-    public static abstract class SearchFragment<T> extends Fragment implements LazyFetchingActivity<T> {
-        protected MainActivityAdapter mAdapter;
+    public static abstract class SearchFragment<E extends Comparable<E> & MainElement> extends Fragment implements LazyFetchingActivity<E> {
+        protected MainActivityAdapter<E, ?> mAdapter;
         @BindView(R.id.span_recyclerview)
         protected AutoSpanRecyclerView mRecyclerView;
         @BindView(R.id.circle_progress)
         protected ProgressView mProgressView;
         String query = null;
         private String LOG_TAG = getClass().getSimpleName();
-        private LazyFetchingOnScrollListener<T> lazyFetchingOnScrollListener;
+        private LazyFetchingOnScrollListener<E> lazyFetchingOnScrollListener;
         private int limit = 10,
                 offset = 0,
                 maxElementsToFetch = 500;
@@ -303,7 +304,7 @@ public class SearchActivity extends ThemeActivity {
 
         private void setupRecyclerViewAndAdapter() {
             mRecyclerView.setBehaviour(constructBehaviour());
-            mRecyclerView.setOnScrollListener(lazyFetchingOnScrollListener);
+            mRecyclerView.addOnScrollListener(lazyFetchingOnScrollListener);
             mRecyclerView.setItemAnimator(null);
             mRecyclerView.setHasFixedSize(true);
 
@@ -378,7 +379,7 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public void addToAdapter(List<T> aObjectList) {
+        public void addToAdapter(List<E> aObjectList) {
             mAdapter.addList(aObjectList);
         }
 
@@ -396,7 +397,7 @@ public class SearchActivity extends ThemeActivity {
 
         public abstract AutoSpanBehaviour constructBehaviour();
 
-        public abstract MainActivityAdapter constructAdapter();
+        public abstract MainActivityAdapter<E, ?> constructAdapter();
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -406,7 +407,7 @@ public class SearchActivity extends ThemeActivity {
 
 
         SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             mStreamsFragment = SearchStreamsFragment.newInstance();
             mChannelsFragment = SearchChannelsFragment.newInstance();
             mGamesFragment = SearchGamesFragment.newInstance();

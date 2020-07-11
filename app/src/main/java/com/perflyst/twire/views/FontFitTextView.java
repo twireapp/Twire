@@ -1,6 +1,7 @@
 package com.perflyst.twire.views;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
@@ -237,7 +238,7 @@ public class FontFitTextView extends AppCompatTextView {
             // modified: use a copy of TextPaint for measuring
             TextPaint paint = new TextPaint(textPaint);
             // Draw using a static layout
-            StaticLayout layout = new StaticLayout(text, paint, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, false);
+            StaticLayout layout = getStaticLayout(text, paint, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, false);
             // Check that we have a least one line of rendered text
             if (layout.getLineCount() > 0) {
                 // Since the line at the specific vertical position would be cut off,
@@ -286,7 +287,7 @@ public class FontFitTextView extends AppCompatTextView {
         // Update the text paint object
         paintCopy.setTextSize(textSize);
         // Measure using a static layout
-        StaticLayout layout = new StaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, true);
+        StaticLayout layout = getStaticLayout(source, paintCopy, width, Layout.Alignment.ALIGN_NORMAL, mSpacingMult, mSpacingAdd, true);
         return layout.getHeight();
     }
 
@@ -295,6 +296,18 @@ public class FontFitTextView extends AppCompatTextView {
         void onTextResize(TextView textView, float oldSize, float newSize);
     }
 
+    @SuppressWarnings("deprecation")
+    private StaticLayout getStaticLayout(CharSequence source, android.text.TextPaint paint, int width, android.text.Layout.Alignment align, float spacingmult, float spacingadd, boolean includepad) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            StaticLayout.Builder builder = StaticLayout.Builder.obtain(source, 0, source.length(), paint, width);
+            builder.setAlignment(align);
+            builder.setLineSpacing(spacingadd, spacingmult);
+            builder.setIncludePad(includepad);
+            return builder.build();
+        } else {
+            return new StaticLayout(source, paint, width, align, spacingmult, spacingadd, includepad);
+        }
+    }
 }
 
 

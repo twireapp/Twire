@@ -143,7 +143,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
 
     private void loadImagePreview(String previewURL, E element, final ElementsViewHolder viewHolder) {
         if (previewURL != null && !previewURL.isEmpty()) {
-            RequestBuilder creator =
+            RequestBuilder<Bitmap> creator =
                     Glide.with(context)
                             .asBitmap()
                             .load(previewURL)
@@ -151,7 +151,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
                             .placeholder(ContextCompat.getDrawable(context, element.getPlaceHolder(getContext())));
 
             if (isBelowLollipop) {
-                creator = (RequestBuilder) creator.transform(new RoundedTopTransformation(context.getResources().getDimension(getCornerRadiusRessource())));
+                creator = creator.transform(new RoundedTopTransformation(context.getResources().getDimension(getCornerRadiusRessource())));
             }
 
             if (mTargets.get(viewHolder.getTargetsKey()) != null) {

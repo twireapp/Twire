@@ -635,7 +635,7 @@ public class ChannelActivity extends ThemeActivity {
 
 
         SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             mDescriptionFragment = InfoFragment.newInstance(info);
             mBroadcastsFragment = VodFragment.newInstance(true, info);
             mHighlightsFragment = VodFragment.newInstance(false, info);

@@ -3,7 +3,6 @@ package com.perflyst.twire.activities.settings;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.google.android.material.snackbar.Snackbar;
@@ -435,7 +435,7 @@ public class SettingsNotificationsActivity extends ThemeActivity {
 
     public void setCheckInterval(View v) {
         CheckIntervalFragment timePickerFragment = new CheckIntervalFragment();
-        timePickerFragment.show(getFragmentManager(), "checkIntervalPicker");
+        timePickerFragment.show(getSupportFragmentManager(), "checkIntervalPicker");
     }
 
     /**

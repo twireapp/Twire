@@ -1162,7 +1162,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         boolean showSubscriberEmote = false;
 
         EmotesPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             EmoteKeyboardDelegate delegate = ChatFragment.this;
 
             textEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.UNICODE, delegate);

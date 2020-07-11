@@ -2,8 +2,9 @@ package com.perflyst.twire.tasks;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.Html;
 import android.util.Log;
+
+import androidx.core.text.HtmlCompat;
 
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
@@ -74,7 +75,7 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                 String code = emoteObject.getString("code");
 
                 // code is a escaped regex, so we need to convert it to any valid match for that regex
-                code = Html.fromHtml(code.replaceAll("\\\\", "")).toString()
+                code = HtmlCompat.fromHtml(code.replaceAll("\\\\", ""), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
                         .replaceAll("(.)\\?", "")
                         .replaceAll("\\[(.).*?]", "$1")
                         .replaceAll("\\((.+)\\|.+\\)", "$1");

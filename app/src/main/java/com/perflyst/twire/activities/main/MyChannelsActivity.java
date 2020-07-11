@@ -22,7 +22,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class MyChannelsActivity extends LazyMainActivity<ChannelInfo> {
     @Override
-    protected MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView) {
+    protected MainActivityAdapter<ChannelInfo, ?> constructAdapter(AutoSpanRecyclerView recyclerView) {
         return new ChannelsAdapter(mRecyclerView, getBaseContext(), this);
     }
 

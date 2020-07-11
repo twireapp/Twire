@@ -54,7 +54,7 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
     }
 
     @Override
-    protected MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView) {
+    protected MainActivityAdapter<Game, ?> constructAdapter(AutoSpanRecyclerView recyclerView) {
         return new GamesAdapter(recyclerView, getBaseContext(), this);
     }
 
