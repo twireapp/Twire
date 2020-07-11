@@ -151,7 +151,11 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
                             .placeholder(ContextCompat.getDrawable(context, element.getPlaceHolder(getContext())));
 
             if (isBelowLollipop) {
-                creator = creator.transform(new RoundedTopTransformation(context.getResources().getDimension(getCornerRadiusRessource())));
+                /* On platforms before Lollipop the CardView that holds the preview image does not
+                 * clip its children that intersect with rounded corners. Round the image corners so
+                 * the rounded corners still appear. */
+                creator = creator.transform(new RoundedTopTransformation(
+                        context.getResources().getDimension(getCornerRadiusRessource())));
             }
 
             if (mTargets.get(viewHolder.getTargetsKey()) != null) {

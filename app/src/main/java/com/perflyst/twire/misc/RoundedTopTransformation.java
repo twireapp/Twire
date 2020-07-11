@@ -31,7 +31,8 @@ public class RoundedTopTransformation extends BitmapTransformation {
     }
 
     @Override
-    protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
+    protected Bitmap transform(
+            @NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
         int w = toTransform.getWidth();
         int h = toTransform.getHeight();
         Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
@@ -45,7 +46,6 @@ public class RoundedTopTransformation extends BitmapTransformation {
         RectF rec = new RectF(0, 0, w, h - (h / 3));
         c.drawRect(new RectF(0, (h / 3), w, h), paint);
         c.drawRoundRect(rec, cornerRadius, cornerRadius, paint);
-        toTransform.recycle();
         return bmp;
     }
 
