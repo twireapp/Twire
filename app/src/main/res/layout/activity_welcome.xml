@@ -57,17 +57,6 @@
             android:text="@string/welcome_text_line_two"
             android:textAppearance="@style/text_setup"
             android:textSize="@dimen/welcome_text_line_two_size" />
-
-        <TextView
-            android:id="@+id/welcome_text_line_three"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/welcome_text_line_two"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:text="@string/welcome_text_line_three"
-            android:textAppearance="@style/text_setup"
-            android:textSize="@dimen/welcome_text_line_three_size" />
     </RelativeLayout>
 
     <View

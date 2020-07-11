@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello_world">Bonjour tout le monde</string>
-    <string name="app_slogan"> </string>
 
     <string name="ok">OK</string>
     <string name="done">APPLIQUER</string>
@@ -204,7 +202,6 @@
     <string name="title_activity_welcome">Configuration de Twire</string>
     <string name="welcome_text_line_one">Bienvenue sur</string>
     <string name="welcome_text_line_two">Twire</string>
-    <string name="welcome_text_line_three">@string/app_slogan</string>
 
     <!-- Login Activity-->
     <string name="title_activity_login">@string/title_activity_welcome</string>

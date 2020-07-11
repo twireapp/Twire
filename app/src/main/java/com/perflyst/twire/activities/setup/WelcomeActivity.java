@@ -46,8 +46,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
     private SupportAnimator transitionAnimationWhite = null;
     private SupportAnimator transitionAnimationBlue = null;
     private TextView mWelcomeTextLineOne,
-            mWelcomeTextLineTwo,
-            mWelcomeTextLineThree;
+            mWelcomeTextLineTwo;
     private ImageView mLogo,
             mContinueIcon;
     private View mLogoCenter,
@@ -65,7 +64,6 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         RelativeLayout mWelcomeText = findViewById(R.id.welcome_text);
         mWelcomeTextLineOne = findViewById(R.id.welcome_text_line_one);
         mWelcomeTextLineTwo = findViewById(R.id.welcome_text_line_two);
-        mWelcomeTextLineThree = findViewById(R.id.welcome_text_line_three);
 
         mLogo = findViewById(R.id.welcome_icon);
         mContinueIcon = findViewById(R.id.forward_arrow);
@@ -80,7 +78,6 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         mTransitionViewWhite.setVisibility(View.INVISIBLE);
         mWelcomeTextLineOne.setVisibility(View.INVISIBLE);
         mWelcomeTextLineTwo.setVisibility(View.INVISIBLE);
-        mWelcomeTextLineThree.setVisibility(View.INVISIBLE);
         mLogo.setVisibility(View.INVISIBLE);
         mLogoContainer.setVisibility(View.INVISIBLE);
         mContinueFAB.setVisibility(View.INVISIBLE);
@@ -123,8 +120,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     startWelcomeTextLineAnimations(mWelcomeTextLineOne, 1);
-                    startWelcomeTextLineAnimations(mWelcomeTextLineTwo, 2);
-                    startWelcomeTextLineAnimations(mWelcomeTextLineThree, 3).setAnimationListener(new Animation.AnimationListener() {
+                    startWelcomeTextLineAnimations(mWelcomeTextLineTwo, 2).setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
 

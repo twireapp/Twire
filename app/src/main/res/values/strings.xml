@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello_world">Hello world</string>
     <string name="app_name" translatable="false">Twire</string>
-    <string name="app_slogan"> </string>
     <string name="app_id" translatable="false">com.perflyst.twire</string>
 
     <string name="ok">OK</string>
@@ -213,7 +211,6 @@
     <string name="title_activity_welcome">Twire setup</string>
     <string name="welcome_text_line_one">Welcome to</string>
     <string name="welcome_text_line_two">Twire</string>
-    <string name="welcome_text_line_three">@string/app_slogan</string>
 
     <!-- Login Activity-->
     <string name="title_activity_login">@string/title_activity_welcome</string>
@@ -320,7 +317,7 @@
     <string name="notifications_disabled_key">Never</string>
     <string name="notifications_not_logged_in">Notifications will only be shown if you are logged into a Twitch account.</string>
 
-    <!-- Game Activitiy -->
+    <!-- Game Activity -->
     <string name="game_intent_key">GAME_OBJECT</string>
     <string name="game_intent_image_key">GAME_INTENT_IMAGE</string>
 
