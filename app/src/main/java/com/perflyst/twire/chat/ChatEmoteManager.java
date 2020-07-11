@@ -49,25 +49,29 @@ class ChatEmoteManager {
         final String EMOTE_ARRAY = "emotes";
 
         try {
-            JSONObject topObject = new JSONObject(Service.urlToJSONString(BTTV_GLOBAL_URL));
-            JSONArray globalEmotes = topObject.getJSONArray(EMOTE_ARRAY);
+            String bttvResponse = Service.urlToJSONString(BTTV_GLOBAL_URL);
+            if (bttvResponse != null) {
+                JSONObject topObject = new JSONObject();
+                JSONArray globalEmotes = topObject.getJSONArray(EMOTE_ARRAY);
 
-            for (int i = 0; i < globalEmotes.length(); i++) {
-                Emote emote = ToBTTV(globalEmotes.getJSONObject(i));
-                customGlobal.add(emote);
-                result.put(emote.getKeyword(), emote);
+                for (int i = 0; i < globalEmotes.length(); i++) {
+                    Emote emote = ToBTTV(globalEmotes.getJSONObject(i));
+                    customGlobal.add(emote);
+                    result.put(emote.getKeyword(), emote);
+                }
             }
 
-            JSONObject topChannelEmotes = new JSONObject(Service.urlToJSONString(BTTV_CHANNEL_URL));
-            JSONArray channelEmotes = topChannelEmotes.getJSONArray(EMOTE_ARRAY);
-            for (int i = 0; i < channelEmotes.length(); i++) {
-                Emote emote = ToBTTV(channelEmotes.getJSONObject(i));
-                emote.setCustomChannelEmote(true);
-                customChannel.add(emote);
-                result.put(emote.getKeyword(), emote);
+            String bttvChannelResponse = Service.urlToJSONString(BTTV_CHANNEL_URL);
+            if (bttvChannelResponse != null) {
+                JSONObject topChannelEmotes = new JSONObject(bttvChannelResponse);
+                JSONArray channelEmotes = topChannelEmotes.getJSONArray(EMOTE_ARRAY);
+                for (int i = 0; i < channelEmotes.length(); i++) {
+                    Emote emote = ToBTTV(channelEmotes.getJSONObject(i));
+                    emote.setCustomChannelEmote(true);
+                    customChannel.add(emote);
+                    result.put(emote.getKeyword(), emote);
+                }
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -93,19 +97,20 @@ class ChatEmoteManager {
                 }
             }
 
-            JSONObject channelTopObject = new JSONObject(Service.urlToJSONString(FFZ_CHANNEL_URL));
-            JSONObject channelSets = channelTopObject.getJSONObject(SETS);
-            for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext();) {
-                JSONArray emoticons = channelSets.getJSONObject(iterator.next()).getJSONArray(EMOTICONS);
-                for (int emoteIndex = 0; emoteIndex < emoticons.length(); emoteIndex++) {
-                    Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
-                    emote.setCustomChannelEmote(true);
-                    customChannel.add(emote);
-                    result.put(emote.getKeyword(), emote);
+            String ffzResponse = Service.urlToJSONString(FFZ_CHANNEL_URL);
+            if (ffzResponse != null) {
+                JSONObject channelTopObject = new JSONObject(ffzResponse);
+                JSONObject channelSets = channelTopObject.getJSONObject(SETS);
+                for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext();) {
+                    JSONArray emoticons = channelSets.getJSONObject(iterator.next()).getJSONArray(EMOTICONS);
+                    for (int emoteIndex = 0; emoteIndex < emoticons.length(); emoteIndex++) {
+                        Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
+                        emote.setCustomChannelEmote(true);
+                        customChannel.add(emote);
+                        result.put(emote.getKeyword(), emote);
+                    }
                 }
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
