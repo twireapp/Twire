@@ -50,11 +50,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.media.session.MediaButtonReceiver;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
-import androidx.media.session.MediaButtonReceiver;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -98,7 +98,6 @@ import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.rey.material.widget.ProgressView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -990,30 +989,6 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         showVideoInterface();
     }
 
-    private String getBestCastQuality(Map<String, Quality> castQualities, String quality, Integer numberOfTries) {
-        if (numberOfTries > GetLiveStreamURL.CAST_QUALITIES.length - 1) {
-            return null;
-        }
-
-        if (quality.equals(GetLiveStreamURL.QUALITY_AUTO) || quality.equals(GetLiveStreamURL.QUALITY_AUDIO_ONLY)) {
-            quality = GetLiveStreamURL.QUALITY_MEDIUM;
-        }
-
-        if (castQualities.containsKey(quality)) {
-            return quality;
-        } else {
-            numberOfTries++;
-            List<String> qualityList = Arrays.asList(GetLiveStreamURL.CAST_QUALITIES);
-            int next = qualityList.indexOf(quality) - 1;
-            if (next < 0) {
-                quality = GetLiveStreamURL.QUALITY_SOURCE;
-            } else {
-                quality = qualityList.get(next);
-            }
-            return getBestCastQuality(castQualities, quality, numberOfTries);
-        }
-    }
-
     /**
      * Checks if the activity was started with a shared view in high API levels.
      */
@@ -1485,12 +1460,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             return;
         }
 
-        String castQuality = getBestCastQuality(qualityURLs, settings.getPrefStreamQuality(), 0);
-        if (castQuality == null) {
-            errorToast.show();
-            return;
-        }
-
+        String castQuality = GetLiveStreamURL.QUALITY_AUTO;
         updateSelectedQuality(castQuality);
         String url = qualityURLs.get(castQuality).URL;
 

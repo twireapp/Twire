@@ -27,20 +27,8 @@ import java.util.regex.Pattern;
  * Requires to be executed with the username of the streamer and a reference to the videoview
  */
 public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<String, Quality>> {
-    public static final String QUALITY_MOBILE = "mobile";
-    public static final String QUALITY_LOW = "low";
-    public static final String QUALITY_MEDIUM = "medium";
-    public static final String QUALITY_HIGH = "high";
     public static final String QUALITY_SOURCE = "chunked";
     public static final String QUALITY_AUTO = "auto";
-    public static final String QUALITY_AUDIO_ONLY = "audio_only";
-    public static final String[] CAST_QUALITIES = {
-            QUALITY_MOBILE,
-            QUALITY_LOW,
-            QUALITY_MEDIUM,
-            QUALITY_HIGH,
-            QUALITY_SOURCE
-    };
     private String LOG_TAG = getClass().getSimpleName();
     private AsyncResponse callback;
 
