@@ -55,7 +55,7 @@
     <string name="main_toolbar_position_y">MainToolbarTranslationY</string>
 
     <!-- LiveStreamActivity -->
-    <string name="menu_external">Usar peproductor externor</string>
+    <string name="menu_external">Usar reproductor externo</string>
     <string name="menu_profile">Perfil</string>
     <string name="menu_sleep">Temporizador</string>
     <string name="menu_options">Opciones</string>
@@ -232,7 +232,7 @@
     <!-- Settings -->
     <string name="settings_general_name">General</string>
     <string name="settings_general_name_summary">Cuenta de Twitch, página de inicio</string>
-    <string name="settings_stream_player_name">Reproductor de transmisiones</string>
+    <string name="settings_stream_player_name">Reproducir transmisiones</string>
     <string name="settings_stream_player_summary">Conteo del visor actual, Comportamiento del reproductor</string>
     <string name="settings_appearance_name">Apariencia</string>
     <string name="settings_appearance_summary">Tema, estilo y tamaño de carta</string>
@@ -258,8 +258,8 @@
     <string name="chat_message_size">Tamaño del mensaje</string>
     <string name="chat_emote_storage">Guarda los emotes en el almacenamiento local</string>
     <string name="chat_landscape_enable">Chat en horizontal</string>
-    <string name="chat_landscape_swipe">Arrastra para mostrar el chat en horizontal</string>
-    <string name="chat_landscape_width">Tamaño de chay en horizontal</string>
+    <string name="chat_landscape_swipe">Arrastrar para ver chat horizontal</string>
+    <string name="chat_landscape_width">Tamaño de chat horizontal</string>
     <string name="chat_landscape_width_dialog">Tamaño de chat</string>
     <string name="chat_size_small">Pequeño</string>
     <string name="chat_size_medium">Medio</string>
@@ -267,8 +267,8 @@
 
     <!-- Stream Player Settings -->
     <string name="player_show_viewercount">Mostrar contador de visitas</string>
-    <string name="player_show_navigation">Revelar la barra de navegación al tocar</string>
-    <string name="player_auto_player">Continuar la reproducción al regresar</string>
+    <string name="player_show_navigation">Mostrar barra de nav. al tocar</string>
+    <string name="player_auto_player">Volver a reproducir</string>
 
     <!-- Appearance settings -->
     <string name="appearance_theme_color_title">Tema</string>
@@ -382,7 +382,7 @@
     <string name="chat_message_option_mention">Mención</string>
     <string name="chat_message_option_duplicate">Mensaje duplicado</string>
     <string name="chat_message_option_block">Bloquear</string>
-    <string name="action_got_it">Está bien</string>
+    <string name="action_got_it">Entendido</string>
     <string name="action_share">Comparitir</string>
     <string name="stream_external_play_using">Reproducir usando…</string>
     <string name="live_streamer_notification_id">liveStreamerNotificationId</string>
