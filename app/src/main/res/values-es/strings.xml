@@ -62,9 +62,9 @@
     <string name="options">Opciones</string>
     <string name="audio_only">Sólo audio</string>
     <string name="chat_only">Sólo chat</string>
-    <string name="available_qualities">Configuración de la calidad</string>
+    <string name="available_qualities">Definir calidad</string>
     <string name="quality_auto">Auto</string>
-    <string name="quality_audio">Sólo Audio</string>
+    <string name="quality_audio">Sólo audio</string>
     <string name="quality_source">Fuente</string>
     <string name="quality_high">Alto</string>
     <string name="quality_medium">Medio</string>
@@ -142,7 +142,7 @@
     <!--Errors -->
     <string name="error_external_playback_failed">Error al enviar URL al reproductor externo</string>
     <string name="error_nothing_found">No hay nada aquí</string>
-    <string name="no_server_response_message">Vaya. Los servidores de Twitch no responder. ¿Actualizar?</string>
+    <string name="no_server_response_message">Vaya. Los servidores de Twitch no responden. ¿Actualizar?</string>
     <string name="no_server_response_action">Aceptar</string>
 
     <!-- My Games Activity -->
@@ -174,9 +174,9 @@
     <!-- My Streams activity -->
     <string name="my_streams_error">Sin transmisiones encontradas</string>
     <string name="my_streams_activity_title">@string/navigation_drawer_my_streams_title</string>
-    <string name="my_streams_preview_image">Previsualización del Canal en Vivo</string>
+    <string name="my_streams_preview_image">Previsualización del canal en vivo</string>
     <string name="my_streams_cell_current_viewers">%d vistos</string>
-    <string name="my_streams_cell_online_since">Inicio Hace x Minutos</string>
+    <string name="my_streams_cell_online_since">Inició hace x minutos</string>
 
     <!-- Top Streams Activity -->
     <string name="top_streams_activity_title">@string/navigation_drawer_top_streams_title</string>
@@ -187,7 +187,7 @@
 
     <!-- Online Streams Status -->
     <string name="enum_ready_message"> </string>
-    <string name="enum_no_internet_message">No parece que tengas una conexión a Internet.</string>
+    <string name="enum_no_internet_message">No parece que tienes conexión a Internet.</string>
     <string name="enum_twitch_fuckup_message">Los servidores de Twitch parecen no estar disponibles.</string>
     <string name="enum_no_online_streams">Ninguno de tus seguidores de transmisión están actualmente en línea.</string>
 
