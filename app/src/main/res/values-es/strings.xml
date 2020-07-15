@@ -156,7 +156,7 @@
 
     <!-- Live Stream Activity -->
     <string name="stream_no_chromecast_quality_supported">Lo sentidos, esta transmisión no puede ser </string>
-    <string name="stream_playback_failed">La transmisión ya no está en vivo</string>
+    <string name="stream_playback_failed">Error en la transmisión. Prueba en otra calidad.</string>
     <string name="title_activity_live_stream">Transmisión en Vivo</string>
     <string name="chat_send_message_hint">Tipo de Mensaje</string>
     <string name="chat_status_connecting">Conectando a chat</string>
