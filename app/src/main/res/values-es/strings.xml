@@ -251,7 +251,7 @@
     <string name="gen_twitch_name">Nombre de usuario de Twitch</string>
     <string name="gen_start_page">Página de inicio</string>
     <string name="gen_reset_tips">Reiniciar Tutorial</string>
-    <string name="gen_tips_have_been_reset">Los consejos del tuturial han sido reajustados</string>
+    <string name="gen_tips_have_been_reset">Los consejos del tutorial han sido reajustados</string>
 
     <!-- Chat Settings -->
     <string name="chat_emote_size">Tamaño de emote</string>
