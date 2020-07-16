@@ -135,6 +135,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
     private ExoPlayer player;
     private MediaSource currentMediaSource;
     private Toolbar mToolbar;
+    private ConstraintLayout mVideoInterface;
     private RelativeLayout mControlToolbar;
     private ConstraintLayout mVideoWrapper;
     private ConstraintLayout mPlayPauseWrapper;
@@ -280,6 +281,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         }
 
         rootView = (ViewGroup) mRootView;
+        mVideoInterface = mRootView.findViewById(R.id.video_interface);
         mToolbar = mRootView.findViewById(R.id.main_toolbar);
         mControlToolbar = mRootView.findViewById(R.id.control_toolbar_wrapper);
         mVideoWrapper = mRootView.findViewById(R.id.video_wrapper);
@@ -1151,7 +1153,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
      * @return
      */
     public boolean isVideoInterfaceShowing() {
-        return mControlToolbar.getAlpha() == 1f;
+        return mVideoInterface.getAlpha() == 1f;
     }
 
     /**
@@ -1159,12 +1161,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
      */
     private void hideVideoInterface() {
         if (mToolbar != null && !audioViewVisible && !chatOnlyViewVisible) {
-            mToolbar.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mControlToolbar.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mPlayPauseWrapper.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mShowChatButton.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mForward.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mBackward.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+            mVideoInterface.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
             changeVideoControlClickablity(false);
         }
     }
@@ -1182,13 +1179,8 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         }
 
         mControlToolbar.setTranslationY(-CtrlToolbarY);
-        mControlToolbar.animate().alpha(1f).start();
         mToolbar.setTranslationY(MaintoolbarY);
-        mToolbar.animate().alpha(1f).start();
-        mPlayPauseWrapper.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-        mShowChatButton.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-        mForward.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-        mBackward.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+        mVideoInterface.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
         changeVideoControlClickablity(true);
     }
 
@@ -1851,11 +1843,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
     @Override
     public void onPictureInPictureModeChanged(boolean enabled) {
-        View[] views = new View[] {  mToolbar, mControlToolbar, mPlayPauseWrapper, mShowChatButton, mForward, mBackward };
-        for (View view : views) {
-            view.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
-        }
-
+        mVideoInterface.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
         pictureInPictureEnabled = enabled;
     }
 
