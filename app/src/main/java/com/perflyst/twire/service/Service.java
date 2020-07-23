@@ -29,6 +29,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.TrafficStats;
 import android.os.Build;
+import android.os.Process;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -78,11 +79,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.TreeMap;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import javax.net.ssl.*;
 
 /**
  * Created by Sebastian Rask on 12-02-2015.
@@ -714,6 +711,11 @@ public class Service {
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, trustAllCerts, new SecureRandom());
+            SSLSessionContext sslSessionContext = sc.getServerSessionContext();
+            int sessionCacheSize = sslSessionContext.getSessionCacheSize();
+            if (sessionCacheSize > 0) {
+                sslSessionContext.setSessionCacheSize(0);
+            }
             HttpsURLConnection
                     .setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
@@ -993,7 +995,7 @@ public class Service {
     }
 
     public static double getDataReceived() {
-        return (double) TrafficStats.getUidRxBytes(android.os.Process
+        return (double) TrafficStats.getUidRxBytes(Process
                 .myUid()) / (1024 * 1024);
     }
 
