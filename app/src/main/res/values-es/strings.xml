@@ -93,6 +93,7 @@
     <string name="stream_preview_alpha">stream_image_alpha</string>
     <string name="stream_preview_vod">stream_remove_black_bars</string>
     <string name="stream_sleep_timer_title">Temporizador</string>
+    <string name="stream_seek_dialog_title">Buscar a</string>
     <string name="stream_chromecast_playing">Jugando en %s</string>
     <string name="stream_chromecast_failed">Algo salió mal reproduciendo en %s</string>
     <string name="stream_chromecast_no_vod">Perdón, el Video On Demand no es actualmente compatible con el chromecasting</string>
@@ -101,6 +102,12 @@
     <string name="stream_no_audio_only">Lo sentimos, el solo audio no está disponible para este stream</string>
     <string name="stream_audio_only_active">Reproducir sólo audio</string>
 
+    <string name="stream_fullscreen">Pantalla completa</string>
+    <string name="stream_viewers">Visitas</string>
+    <string name="stream_show_chat">Ver chat</string>
+    <string name="stream_forward">Adelantar 10 segundos</string>
+    <string name="stream_backward">Retroceder 10 segundos</string>
+    
     <!-- VOD activity -->
     <string name="vod_playback_failed">Error al reproducir VOD. Prueba otra calidad</string>
     <string name="title_activity_vod">Video On Demand</string>
