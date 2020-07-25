@@ -258,6 +258,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
             List<JSONObject> downloadedComments = new ArrayList<>();
             boolean reconnecting = false;
+            boolean justSeeked = false;
             while (!isStopping) {
                 if (currentProgress == VOD_LOADING) {
                     continue;
@@ -268,6 +269,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                     cursor = "";
                     downloadedComments.clear();
                     previousProgress = 0;
+                    justSeeked = true;
                 }
 
                 if (downloadedComments.size() == 0) {
@@ -288,11 +290,15 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
                     for (int i = 0; i < comments.length(); i++) {
                         JSONObject comment = comments.getJSONObject(i);
-                        if (comment.getDouble("content_offset_seconds") < previousProgress)
+                        double contentOffset = comment.getDouble("content_offset_seconds");
+                        // Don't show previous comments and don't show comments that came before the current progress unless we just seeked.
+                        if (contentOffset < previousProgress || (contentOffset < currentProgress && !justSeeked))
                             continue;
 
                         downloadedComments.add(comment);
                     }
+
+                    justSeeked = false;
 
                     // Assumption: If the VOD has no comments and no previous or next comments, there are no comments on the VOD.
                     if (comments.length() == 0 && !commentsObject.has("_next") && !commentsObject.has("_prev")) {
@@ -308,6 +314,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                     cursor = "";
                     downloadedComments.clear();
                     previousProgress = 0;
+                    justSeeked = true;
                     continue;
                 }
 
