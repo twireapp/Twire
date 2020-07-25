@@ -77,7 +77,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     public static List<Badge> ffzBadges = new ArrayList<>();
 
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
-        mEmoteManager = new ChatEmoteManager(aChannel);
+        mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId);
         Settings appSettings = new Settings(aContext);
 
         if(appSettings.isLoggedIn()) { // if user is logged in ...

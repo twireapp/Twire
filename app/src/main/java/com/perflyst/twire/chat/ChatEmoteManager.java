@@ -29,9 +29,11 @@ class ChatEmoteManager {
     private Pattern emotePattern = Pattern.compile("([\\d_A-Z]+):((?:\\d+-\\d+,?)+)");
 
     private String channelName;
+    private int channelId;
 
-    ChatEmoteManager(String channelName) {
+    ChatEmoteManager(String channelName, int channelId) {
         this.channelName = channelName;
+        this.channelId = channelId;
     }
 
 
@@ -44,15 +46,15 @@ class ChatEmoteManager {
         Map<String, Emote> result = new HashMap<>();
 
         // BetterTTV emotes
-        final String BTTV_GLOBAL_URL = "https://api.betterttv.net/2/emotes";
-        final String BTTV_CHANNEL_URL = "https://api.betterttv.net/2/channels/" + channelName;
-        final String EMOTE_ARRAY = "emotes";
+        final String BTTV_GLOBAL_URL = "https://api.betterttv.net/3/cached/emotes/global";
+        final String BTTV_CHANNEL_URL = "https://api.betterttv.net/3/cached/users/twitch/" + channelId;
+        final String CHANNEL_EMOTE_ARRAY = "channelEmotes";
+        final String SHARED_EMOTE_ARRAY = "sharedEmotes";
 
         try {
             String bttvResponse = Service.urlToJSONString(BTTV_GLOBAL_URL);
             if (bttvResponse != null) {
-                JSONObject topObject = new JSONObject();
-                JSONArray globalEmotes = topObject.getJSONArray(EMOTE_ARRAY);
+                JSONArray globalEmotes = new JSONArray(bttvResponse);
 
                 for (int i = 0; i < globalEmotes.length(); i++) {
                     Emote emote = ToBTTV(globalEmotes.getJSONObject(i));
@@ -64,7 +66,15 @@ class ChatEmoteManager {
             String bttvChannelResponse = Service.urlToJSONString(BTTV_CHANNEL_URL);
             if (bttvChannelResponse != null) {
                 JSONObject topChannelEmotes = new JSONObject(bttvChannelResponse);
-                JSONArray channelEmotes = topChannelEmotes.getJSONArray(EMOTE_ARRAY);
+                JSONArray channelEmotes = topChannelEmotes.getJSONArray(CHANNEL_EMOTE_ARRAY);
+
+                // Append shared emotes
+                JSONArray sharedEmotes = topChannelEmotes.getJSONArray(SHARED_EMOTE_ARRAY);
+                for (int i = 0; i < sharedEmotes.length(); i++) {
+                    channelEmotes.put(sharedEmotes.get(i));
+                }
+
+                // Read all the emotes
                 for (int i = 0; i < channelEmotes.length(); i++) {
                     Emote emote = ToBTTV(channelEmotes.getJSONObject(i));
                     emote.setCustomChannelEmote(true);
