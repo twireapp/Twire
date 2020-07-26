@@ -51,12 +51,15 @@ public class RoundedTopTransformation extends BitmapTransformation {
 
     @Override
     public boolean equals(Object o) {
-        return o instanceof RoundedTopTransformation;
+        if (o instanceof RoundedTopTransformation) {
+            return cornerRadius == ((RoundedTopTransformation) o).cornerRadius;
+        }
+        return false;
     }
 
     @Override
     public int hashCode() {
-        return ID.hashCode();
+        return (int) cornerRadius * 31 + ID.hashCode();
     }
 
     @Override
