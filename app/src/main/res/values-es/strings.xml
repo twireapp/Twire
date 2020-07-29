@@ -107,7 +107,7 @@
     <string name="stream_show_chat">Ver chat</string>
     <string name="stream_forward">Adelantar 10 segundos</string>
     <string name="stream_backward">Retroceder 10 segundos</string>
-    
+
     <!-- VOD activity -->
     <string name="vod_playback_failed">Error al reproducir VOD. Prueba otra calidad</string>
     <string name="title_activity_vod">Video On Demand</string>

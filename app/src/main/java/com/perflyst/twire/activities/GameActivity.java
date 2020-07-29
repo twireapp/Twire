@@ -1,6 +1,7 @@
 package com.perflyst.twire.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.LazyMainActivity;
@@ -10,6 +11,7 @@ import com.perflyst.twire.model.Game;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.service.JSONService;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour;
@@ -70,8 +72,10 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException, UnsupportedEncodingException {
         String gameTitleEncoded = URLEncoder.encode(game.getGameTitle(), "UTF-8");
+        String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
+
         String url = "https://api.twitch.tv/kraken/streams?game=" + gameTitleEncoded + "&limit="
-                + getLimit() + "&offset=" + getCurrentOffset() + "&language=" + getSystemLanguage();
+                + getLimit() + "&offset=" + getCurrentOffset() + languageFilter;
         final String GAMES_ARRAY_KEY = "streams";
 
         List<StreamInfo> mResultList = new ArrayList<>();

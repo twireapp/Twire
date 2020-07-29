@@ -252,6 +252,7 @@
     <string name="gen_start_page">Page d\'accueil</string>
     <string name="gen_reset_tips">Redémarrer le didacticiel</string>
     <string name="gen_tips_have_been_reset">Le didacticiel a été réinitialisé</string>
+    <string name="gen_language_filter">Filtrer les top streams par langue</string>
 
     <!-- Chat Settings -->
     <string name="chat_emote_size">Taille des émotes</string>

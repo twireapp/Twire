@@ -252,6 +252,7 @@
     <string name="gen_start_page">Startup Page</string>
     <string name="gen_reset_tips">Reset Tutorial Tips</string>
     <string name="gen_tips_have_been_reset">Tutorial Tips have been reset</string>
+    <string name="gen_language_filter">Filter top streams by language</string>
 
     <!-- Chat Settings -->
     <string name="chat_emote_size">Emote size</string>

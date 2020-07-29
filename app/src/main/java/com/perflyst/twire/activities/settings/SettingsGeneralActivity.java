@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +25,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
     private String LOG_TAG = getClass().getSimpleName();
     private Settings settings;
     private TextView twitchNameView, startPageSubText;
+    private CheckedTextView filterTopStreamsByLanguageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,11 @@ public class SettingsGeneralActivity extends ThemeActivity {
         //Service.isTranslucentActionbar(LOG_TAG, getBaseContext(), toolbar, this);
         twitchNameView = findViewById(R.id.general_current_twitch_name);
         startPageSubText = findViewById(R.id.start_page_sub_text);
+        filterTopStreamsByLanguageView = findViewById(R.id.language_filter_title);
 
         initTwitchDisplayName();
         initStartPageText();
+        initFilterTopsStreamsByLanguage();
     }
 
     @Override
@@ -74,6 +78,10 @@ public class SettingsGeneralActivity extends ThemeActivity {
         } else {
             twitchNameView.setText(getString(R.string.gen_not_logged_in));
         }
+    }
+
+    private void initFilterTopsStreamsByLanguage() {
+        filterTopStreamsByLanguageView.setChecked(settings.getGeneralFilterTopStreamsByLanguage());
     }
 
     public void onClickTwitchName(View v) {
@@ -124,6 +132,11 @@ public class SettingsGeneralActivity extends ThemeActivity {
             }
         }
         settings.setTipsShown(false);
+    }
+
+    public void onClickFiltersStreamsByLanguageEnable(View v) {
+        settings.setGeneralFilterTopStreamsByLanguage(!settings.getGeneralFilterTopStreamsByLanguage());
+        initFilterTopsStreamsByLanguage();
     }
 
 }

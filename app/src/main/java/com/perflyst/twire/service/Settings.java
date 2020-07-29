@@ -34,6 +34,7 @@ public class Settings {
     private final String GENERAL_TWITCH_USER_TYPE = "genTwitchUserType";
     private final String GENERAL_TWITCH_USER_IS_PARTNER = "genTwitchUserIsPartner";
     private final String GENERAL_TWITCH_USER_ID = "genTwitchUserID";
+    private final String GENERAL_FILTER_TOP_STREAMS_LANGUAGE = "genFilterTopStreamLanguage";
     private final String NOTIFICATIONS_CHECK_INTERVAL_KEY = "notCheckInterval";
     private final String NOTIFICATIONS_VIBRATIONG_KEY = "notVibration";
     private final String NOTIFICATIONS_SOUND_KEY = "notSound";
@@ -677,6 +678,21 @@ public class Settings {
     public boolean getStreamPlayerShowViewerCount() {
         SharedPreferences preferences = getPreferences();
         return preferences.getBoolean(this.STREAM_PLAYER_SHOW_VIEWERCOUNT, true);
+    }
+
+    /**
+     * General - Filter top streams by language
+     */
+
+    public void setGeneralFilterTopStreamsByLanguage(boolean filterTopStreamsByLanguage) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.GENERAL_FILTER_TOP_STREAMS_LANGUAGE, filterTopStreamsByLanguage);
+        editor.commit();
+    }
+
+    public boolean getGeneralFilterTopStreamsByLanguage() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.GENERAL_FILTER_TOP_STREAMS_LANGUAGE, true);
     }
 
     /**

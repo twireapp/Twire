@@ -53,8 +53,9 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
+        final String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
         final String URL = "https://api.twitch.tv/kraken/streams?limit=" + getLimit() + "&offset="
-                + getCurrentOffset() + "&language=" + getSystemLanguage();
+                + getCurrentOffset() + languageFilter;
         final String GAMES_ARRAY_KEY = "streams";
 
         List<StreamInfo> mResultList = new ArrayList<>();
