@@ -22,6 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.bumptech.glide.request.transition.Transition;
 import com.bumptech.glide.signature.ObjectKey;
 import com.perflyst.twire.R;
@@ -141,57 +144,52 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         }
     }
 
-    private void loadImagePreview(String previewURL, E element, final ElementsViewHolder viewHolder) {
-        if (previewURL != null && !previewURL.isEmpty()) {
-            RequestBuilder<Bitmap> creator =
-                    Glide.with(context)
-                            .asBitmap()
-                            .load(previewURL)
-                            .signature(new ObjectKey(System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(5))) // Refresh preview images every 5 minutes
-                            .placeholder(ContextCompat.getDrawable(context, element.getPlaceHolder(getContext())));
-
-            if (isBelowLollipop) {
-                /* On platforms before Lollipop the CardView that holds the preview image does not
-                 * clip its children that intersect with rounded corners. Round the image corners so
-                 * the rounded corners still appear. */
-                creator = creator.transform(new RoundedTopTransformation(
-                        context.getResources().getDimension(getCornerRadiusRessource())));
-            }
-
-            if (mTargets.get(viewHolder.getTargetsKey()) != null) {
-                viewHolder.getPreviewView().setImageBitmap(mTargets.get(viewHolder.getTargetsKey()).getPreview());
-            } else {
-                PreviewTarget mTarget = new PreviewTarget() {
-                    private boolean loaded = false;
-
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition transition) {
-                        if (!loaded) {
-                            loaded = true;
-
-                            AnimationService.setPicassoShowImageAnimationTwo(viewHolder.getPreviewView(), bitmap, context);
-                            setPreview(bitmap);
-                        }
-                    }
-
-                    @Override
-                    public void onLoadStarted(@Nullable Drawable placeHolderDrawable) {
-                        viewHolder.getPreviewView().setImageDrawable(placeHolderDrawable);
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                };
-
-                creator.into(mTarget);
-                mTargets.put(viewHolder.getTargetsKey(), mTarget);
-            }
-
-        } else {
-            viewHolder.getPreviewView().setImageDrawable(ContextCompat.getDrawable(context, element.getPlaceHolder(getContext())));
+    private void loadImagePreview(String previewURL, E element,
+                                  final ElementsViewHolder viewHolder) {
+        RequestBuilder<Bitmap> creator = Glide.with(context)
+                .asBitmap()
+                .load(previewURL)
+                // Refresh preview images every 5 minutes
+                .signature(new ObjectKey(
+                        System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(5)))
+                // Image to show while loading, on failure, or if previewURL is null
+                .placeholder(
+                        ContextCompat.getDrawable(context, element.getPlaceHolder(getContext())))
+                // Fade from placeholder image to loaded image over 300ms with cross fade
+                .transition(BitmapTransitionOptions.withWrapped(new DrawableCrossFadeFactory
+                        .Builder(300).setCrossFadeEnabled(true).build()));
+        if (isBelowLollipop) {
+            /* On platforms before Lollipop the CardView that holds the preview image does not
+             * clip its children that intersect with rounded corners. Round the image corners so
+             * the rounded corners still appear. */
+            creator = creator.transform(new RoundedTopTransformation(
+                    context.getResources().getDimension(getCornerRadiusRessource())));
         }
+        PreviewTarget mTarget = new PreviewTarget() {
+            private boolean loaded = false;
+
+            @Override
+            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition transition) {
+                if (!loaded) {
+                    loaded = true;
+                    ImageView previewView = viewHolder.getPreviewView();
+                    boolean success = transition != null && transition.transition(bitmap, new BitmapImageViewTarget(previewView));
+                    if (!success) previewView.setImageBitmap(bitmap);
+                    setPreview(bitmap);
+                }
+            }
+
+            @Override
+            public void onLoadStarted(@Nullable Drawable placeHolderDrawable) {
+                viewHolder.getPreviewView().setImageDrawable(placeHolderDrawable);
+            }
+
+            @Override
+            public void onLoadCleared(@Nullable Drawable placeholder) {}
+        };
+
+        creator.into(mTarget);
+        mTargets.put(viewHolder.getTargetsKey(), mTarget);
     }
 
     private void animateInsert(int position, View viewToInsert) {

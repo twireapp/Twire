@@ -1,12 +1,6 @@
 package com.perflyst.twire.service;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -14,7 +8,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -272,40 +265,6 @@ public class AnimationService {
             if (aCard != null)
                 aCard.startAnimation(animationSet);
         }, delay);
-    }
-
-    /**
-     * Makes sure an ImageView is valid for creating a TransitionDrawable with @setPicassoShowImageAnimationTwo
-     *
-     * @param imageView
-     * @return
-     */
-    private static boolean isImageViewValidForTransition(ImageView imageView) {
-        return imageView.getDrawable() != null && !(imageView.getDrawable() instanceof TransitionDrawable);
-    }
-
-    public static void setPicassoShowImageAnimationTwo(final ImageView aImageView, final Bitmap toImage, Context context) {
-        if (toImage == null) {
-            return;
-        }
-
-        if (isImageViewValidForTransition(aImageView)) {
-            Bitmap newBitmap = Bitmap.createBitmap(toImage.getWidth(), toImage.getHeight(), toImage.getConfig()); //ToDo: Out of memory exception here
-            Canvas canvas = new Canvas(newBitmap);
-            canvas.drawColor(Service.getColorAttribute(R.attr.cardBackgroundColor, R.color.white, context));
-            canvas.drawBitmap(toImage, 0, 0, null);
-
-            // create the transition layers
-            Drawable[] layers = new Drawable[2];
-            layers[0] = aImageView.getDrawable();
-            layers[1] = new BitmapDrawable(context.getResources(), newBitmap);
-
-            TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
-            aImageView.setImageDrawable(transitionDrawable);
-            transitionDrawable.startTransition(300);
-        } else {
-            aImageView.setImageBitmap(toImage);
-        }
     }
 
     /**
