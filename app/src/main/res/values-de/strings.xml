@@ -17,10 +17,7 @@
     <string name="minutes">minutes</string>
     <string name="hours">hours</string>
     <string name="action_settings">Settings</string>
-    <string name="settings_test">Welcome to the settings activity</string>
     <string name="settings_activity_title">Settings</string>
-    <string name="title_activity_video_test">VideoTestActivity</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
     <string name="subscription_card_displayName">Name</string>
@@ -41,18 +38,14 @@
     <string name="yesterday">Yesterday</string>
 
     <!-- ChannelActivity -->
-    <string name="title_activity_streamer_info"> </string>
     <string name="streamerInfo_followers_title">Followers</string>
     <string name="streamerInfo_views_title">Views</string>
     <string name="streamerInfo_desc_tab">Description</string>
     <string name="streamerInfo_broadcasts_tab">Broadcasts</string>
     <string name="streamerInfo_highlights_tab">Highlights</string>
-    <string name="streamerInfo_transition">streamerInfoPicTrans</string>
     <string name="streamerInfo_description">No description found!</string>
 
     <!-- UniformMainActivity -->
-    <string name="decorative_toolbar_position_y">DecoToolbarTranslationY</string>
-    <string name="main_toolbar_position_y">MainToolbarTranslationY</string>
 
     <!-- LiveStreamActivity -->
     <string name="menu_external">Use External Player</string>
@@ -65,33 +58,12 @@
     <string name="available_qualities">Quality Settings</string>
     <string name="quality_auto">Auto</string>
     <string name="quality_audio">Audio Only</string>
-    <string name="quality_source">Source</string>
-    <string name="quality_high">High</string>
-    <string name="quality_medium">Medium</string>
-    <string name="quality_low">Low</string>
-    <string name="quality_mobile">Mobile</string>
 
     <!-- StreamFragment -->
     <string name="stream_sleep_timer_stopped">Sleep Timer stopped.</string>
     <string name="stream_sleep_timer_started">Sleep Timer started. Stream will be paused in %1$d hours and %2$d minutes.</string>
     <string name="stream_sleep_timer_started_minutes_only">Sleep Timer started. Stream will be paused in %d minutes.</string>
 
-    <string name="stream_fragment_tag">StreamFragmentTag</string>
-    <string name="stream_fragment_streamerInfo">streamerInfoForIntent</string>
-    <string name="stream_fragment_streamInfo">streamInfoForIntent</string>
-    <string name="stream_fragment_viewers">streamViewers</string>
-
-    <string name="stream_fragment_autoplay">streamAutoPlay</string>
-    <string name="stream_fragment_name">streamer_twitch_name</string>
-    <string name="stream_fragment_display_name">streamer_display_name</string>
-    <string name="stream_fragment_vod_id">stream_vod_id</string>
-    <string name="stream_fragment_vod_length">stream_vod_length</string>
-    <string name="stream_fragment_islivestream">stream_is_live_stream</string>
-    <string name="stream_preview_transition">SharedViewPreviewTransition</string>
-    <string name="stream_preview_url">stream_image_preview</string>
-    <string name="stream_shared_transition">stream_has_shared_transition</string>
-    <string name="stream_preview_alpha">stream_image_alpha</string>
-    <string name="stream_preview_vod">stream_remove_black_bars</string>
     <string name="stream_sleep_timer_title">Sleep Timer</string>
     <string name="stream_chromecast_playing">Playing on %s</string>
     <string name="stream_chromecast_failed">Something went wrong playing on %s</string>
@@ -104,17 +76,10 @@
     <!-- VOD activity -->
     <string name="vod_playback_failed">Failed to play VOD. Try another quality</string>
     <string name="title_activity_vod">Video On Demand</string>
-    <string name="intent_vod">intent_vod</string>
     <string name="vod_views">%d views</string>
     <string name="vod_streams_card_stream_views">%s views</string>
 
     <!-- Fonts -->
-    <string name="font_roboto_thin">sans-serif-thin</string>
-    <string name="font_roboto_regular">sans-serif</string>
-    <string name="font_roboto_mono">monospace</string>
-    <string name="font_roboto_medium">sans-serif-medium</string>
-    <string name="font_roboto_light">sans-serif-light</string>
-    <string name="font_roboto_condensed">sans-serif-condensed</string>
 
     <!-- Cards -->
     <string name="card_style_minimal">Collapsed</string>
@@ -167,7 +132,6 @@
     <string name="chat_message_size_title">Message Size</string>
 
     <!-- ChannelInfo activity -->
-    <string name="channel_info_intent_object">STREAMERINFO_INTENT_OBJECT</string>
     <string name="channel_info_name">John Doe</string>
     <string name="channel_info_bio">This user is apparently very private about the stream&#8230; Hmm, wonder why. </string>
 
@@ -192,10 +156,6 @@
     <string name="enum_no_online_streams">None of your followed streams are currently online.</string>
 
     <!-- OnlineStreamCardAdapter-->
-    <string name="intent_key_streamer_info">StreamerInfoIntent</string>
-    <string name="intent_key_stream_info">StreamInfoIntent</string>
-    <string name="intent_key_stream_viewers">StreamViewers</string>
-    <string name="intent_key_streamer_name">StreamerNameIntent</string>
     <string name="streams_adapter_viewers">viewers</string>
 
     <!-- Welcome Activity -->
@@ -212,8 +172,6 @@
     <string name="login_user_no_internet">You\'ll need an internet connection to setup Twire</string>
     <string name="login_user_no_internet_action">TRY AGAIN</string>
     <string name="login_on_success_message">Hello %s</string>
-    <string name="login_intent_part_of_setup">login_intent_part_of_setup</string>
-    <string name="login_intent_token_not_valid">login_intent_token_not_valid</string>
     <string name="login_unvalid_token_text_line_one">Unfortunately you </string>
     <string name="login_unvalid_token_text_line_two">have to login again</string>
 
@@ -309,8 +267,6 @@
     <string name="notifications_not_logged_in">Notifications will only be shown if you are logged into a Twitch account</string>
 
     <!-- Game Activitiy -->
-    <string name="game_intent_key">GAME_OBJECT</string>
-    <string name="game_intent_image_key">GAME_INTENT_IMAGE</string>
 
     <!-- Search Activity -->
     <string name="search_hint">Search</string>
@@ -344,12 +300,6 @@
     <string name="true_night_theme_name">True Night</string>
 
     <!-- Shared Preferences -->
-    <string name="pref_online_streams_error_key">pref_online_streams_error</string>
-    <string name="title_activity_game">GameActivity</string>
-    <string name="title_activity_conform_setup">ConformSetupActivity</string>
-    <string name="title_activity_start_up">StartUpActivity</string>
-    <string name="title_activity_search">SearchActivity</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- Tooltips -->
     <string name="tip_navigate">Click to navigate</string>
@@ -378,14 +328,11 @@
         <item>Hungarian|hu</item>
     </string-array>
 
-    <string name="title_activity_deep_link_test">@string/app_name</string>
     <string name="chat_message_option_mention">Mention</string>
     <string name="chat_message_option_duplicate">Duplicate Message</string>
     <string name="chat_message_option_block">Block</string>
     <string name="action_got_it">Got it</string>
     <string name="action_share">Share</string>
     <string name="stream_external_play_using">Play using…</string>
-    <string name="live_streamer_notification_id">liveStreamerNotificationId</string>
-    <string name="stream_cast_notification_id">streamCastNotificationId</string>
 
 </resources>
