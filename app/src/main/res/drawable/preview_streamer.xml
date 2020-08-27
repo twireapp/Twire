@@ -2,14 +2,11 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item>
-        <shape
-            android:shape="rectangle"
-            android:tint="@color/colorPreviewBackground">
-
+        <shape android:shape="rectangle">
+            <solid android:color="@color/colorPreviewBackground" />
             <size
                 android:width="@dimen/subscription_card_preview_width"
                 android:height="@dimen/subscription_card_preview_width" />
-
         </shape>
     </item>
 
