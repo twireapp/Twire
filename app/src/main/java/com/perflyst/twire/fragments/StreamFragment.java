@@ -632,8 +632,6 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             showVideoInterface();
             updateUI();
         }
-
-        player.seekTo(currentProgress);
     }
 
     @Override
