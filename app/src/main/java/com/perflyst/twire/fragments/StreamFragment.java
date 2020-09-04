@@ -195,6 +195,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
     private static int totalVerticalInset;
     private boolean pictureInPictureEnabled;
+    private static boolean pipDisabling;
     private MediaSessionCompat mediaSession;
 
     public static StreamFragment newInstance(Bundle args) {
@@ -216,7 +217,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             int width, height;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && activity.isInMultiWindowMode()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && activity.isInMultiWindowMode() && !activity.isInPictureInPictureMode() && !pipDisabling) {
                     display.getMetrics(metrics);
                 } else {
                     display.getRealMetrics(metrics);
@@ -611,6 +612,8 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
     @Override
     public void onResume() {
         super.onResume();
+
+        pipDisabling = false;
 
         if (Util.SDK_INT <= 23 || player == null) {
             initializePlayer();
@@ -1843,6 +1846,9 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
     public void onPictureInPictureModeChanged(boolean enabled) {
         mVideoInterface.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
         pictureInPictureEnabled = enabled;
+
+        if (!enabled)
+            pipDisabling = true;
     }
 
     /**
