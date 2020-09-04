@@ -28,12 +28,12 @@ import static com.perflyst.twire.service.Service.makeRequest;
 /**
  * Connects to Twitch to retrieve a list of streamers that a specified user follow.
  *
- * Returns an ArrayList of streamnames
+ * Returns an ArrayList of stream names
  */
 
 public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
     private final String LOG_TAG = getClass().getSimpleName();
-    private long timerStart = System.currentTimeMillis();
+    private final long timerStart = System.currentTimeMillis();
     private WeakReference<Context> baseContext;
 
     @Override
@@ -164,8 +164,8 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
     }
 
     private class StreamerInfoFromIdsThread extends Thread {
-        private ArrayList<Integer> userIds;
-        private ArrayList<ChannelInfo> streamers = new ArrayList<>();
+        private final ArrayList<Integer> userIds;
+        private final ArrayList<ChannelInfo> streamers = new ArrayList<>();
 
         StreamerInfoFromIdsThread(ArrayList<Integer> ids) {
             this.userIds = ids;

@@ -8,8 +8,8 @@ import com.perflyst.twire.chat.ChatManager;
  * Created by Sebastian Rask Jepsen on 21/07/16.
  */
 public class SendMessageTask extends AsyncTask<Void, Void, Void> {
-    private ChatManager mBot;
-    private String message;
+    private final ChatManager mBot;
+    private final String message;
 
     public SendMessageTask(ChatManager mBot, String message) {
         this.mBot = mBot;

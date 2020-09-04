@@ -13,7 +13,6 @@ import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.model.VideoOnDemand;
 
 public class VODActivity extends StreamActivity {
-    private final String LOG_TAG = getClass().getSimpleName();
     private VideoOnDemand mVod;
     private Fragment vodsFragments;
     private TextView mTitleView, mViewsView;

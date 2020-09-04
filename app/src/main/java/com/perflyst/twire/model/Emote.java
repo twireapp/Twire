@@ -10,10 +10,11 @@ import java.util.HashMap;
  * Created by Sebastian Rask Jepsen on 28/07/16.
  */
 public class Emote implements Comparable<Emote>, Serializable {
-    private String emoteKeyword;
+    private final String emoteKeyword;
     private String urlTemplate;
     private HashMap<Integer, String> urlMap;
-    private boolean isTextEmote, isSubscriberEmote, isCustomChannelEmote;
+    private final boolean isTextEmote;
+    private boolean isSubscriberEmote, isCustomChannelEmote;
 
     public Emote(String emoteKeyword, String urlTemplate) {
         this.emoteKeyword = emoteKeyword;

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.ActivityOptionsCompat;
@@ -34,8 +35,6 @@ public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCa
     @BindView(R.id.settings_toolbar)
     protected Toolbar mToolbar;
 
-    private String LOG_TAG = "SettingsActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +55,7 @@ public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCa
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Up/back is the only option available :)
         onBackPressed();
         return super.onOptionsItemSelected(item);

@@ -81,8 +81,8 @@
                     android:paddingTop="@dimen/toolbar_icon_padding"
                     android:paddingRight="@dimen/toolbar_icon_padding"
                     android:paddingBottom="@dimen/toolbar_icon_padding"
-                    android:tint="@android:color/white"
-                    app:srcCompat="@drawable/ic_settings" />
+                    app:srcCompat="@drawable/ic_settings"
+                    app:tint="@android:color/white" />
 
                 <ImageView
                     android:id="@+id/fullscreen_icon"
@@ -96,8 +96,8 @@
                     android:paddingTop="@dimen/toolbar_icon_padding"
                     android:paddingRight="@dimen/toolbar_icon_padding"
                     android:paddingBottom="@dimen/toolbar_icon_padding"
-                    android:tint="@android:color/white"
-                    app:srcCompat="@drawable/ic_fullscreen" />
+                    app:srcCompat="@drawable/ic_fullscreen"
+                    app:tint="@android:color/white" />
 
                 <LinearLayout
                     android:id="@+id/viewers_wrapper"
@@ -114,8 +114,8 @@
                         android:layout_marginStart="@dimen/viewers_icon_margin"
                         android:layout_marginLeft="@dimen/viewers_icon_margin"
                         android:contentDescription="@string/stream_viewers"
-                        android:tint="@color/white"
-                        app:srcCompat="@drawable/ic_group" />
+                        app:srcCompat="@drawable/ic_group"
+                        app:tint="@color/white" />
 
                     <TextView
                         android:id="@+id/txtViewViewers"
@@ -141,7 +141,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/currentProgess"
+                        android:id="@+id/currentProgress"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -218,8 +218,8 @@
                     android:layout_height="match_parent"
                     android:alpha="1"
                     android:contentDescription="@string/play"
-                    android:tint="@android:color/white"
-                    app:srcCompat="@drawable/ic_play_arrow" />
+                    app:srcCompat="@drawable/ic_play_arrow"
+                    app:tint="@android:color/white" />
 
                 <ImageView
                     android:id="@+id/ic_pause"
@@ -227,8 +227,8 @@
                     android:layout_height="match_parent"
                     android:alpha="0"
                     android:contentDescription="@string/pause"
-                    android:tint="@android:color/white"
-                    app:srcCompat="@drawable/ic_pause" />
+                    app:srcCompat="@drawable/ic_pause"
+                    app:tint="@android:color/white" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -256,7 +256,7 @@
             app:pv_progressStyle="@style/CircularProgress" />
 
         <View
-            android:id="@+id/click_intercepter"
+            android:id="@+id/click_interceptor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"

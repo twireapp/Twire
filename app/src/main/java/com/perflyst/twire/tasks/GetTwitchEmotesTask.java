@@ -26,10 +26,10 @@ import java.util.List;
 public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
     private final String LOG_TAG = getClass().getSimpleName();
 
-    private WeakReference<Context> context;
-    private Delegate delegate;
-    private List<Emote> twitchEmotes = new ArrayList<>();
-    private List<Emote> subscriberEmotes = new ArrayList<>();
+    private final WeakReference<Context> context;
+    private final Delegate delegate;
+    private final List<Emote> twitchEmotes = new ArrayList<>();
+    private final List<Emote> subscriberEmotes = new ArrayList<>();
 
     public GetTwitchEmotesTask(Delegate delegate, Context context) {
         this.delegate = delegate;

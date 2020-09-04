@@ -14,9 +14,9 @@ import com.perflyst.twire.tasks.UnfollowTask;
  */
 
 public class FollowHandler {
-    private ChannelInfo mChannelInfo;
-    private Context mContext;
-    private Delegate mDelegate;
+    private final ChannelInfo mChannelInfo;
+    private final Context mContext;
+    private final Delegate mDelegate;
     private boolean isStreamerFollowed;
 
     public FollowHandler(ChannelInfo mChannelInfo, Context mContext, Delegate mDelegate) {
@@ -34,10 +34,7 @@ public class FollowHandler {
         } else {
             boolean isUserFollowed = Service.isUserFollowingStreamer(mChannelInfo.getStreamerName(), mContext);
             if (isUserFollowed) {
-                mDelegate.streamerIsFollowed();
                 isStreamerFollowed = true;
-            } else {
-                mDelegate.streamerIsNotFollowed();
             }
         }
     }
@@ -53,9 +50,6 @@ public class FollowHandler {
             isStreamerFollowed = result;
             if (result) {
                 Service.insertStreamerInfoToDB(mContext, mChannelInfo);
-                mDelegate.followSuccess();
-            } else {
-                mDelegate.followFailure();
             }
         });
         followTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, urlString);
@@ -69,9 +63,6 @@ public class FollowHandler {
 
             if (result) {
                 Service.deleteStreamerInfoFromDB(mContext, mChannelInfo.getUserId());
-                mDelegate.unfollowSuccess();
-            } else {
-                mDelegate.unfollowFailure();
             }
         });
         unfollowTask.executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, url);
@@ -87,18 +78,8 @@ public class FollowHandler {
     }
 
     public interface Delegate {
-        void streamerIsFollowed();
-
-        void streamerIsNotFollowed();
 
         void userIsNotLoggedIn();
 
-        void followSuccess();
-
-        void followFailure();
-
-        void unfollowSuccess();
-
-        void unfollowFailure();
     }
 }

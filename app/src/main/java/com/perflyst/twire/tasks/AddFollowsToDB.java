@@ -22,7 +22,7 @@ import java.util.TreeMap;
  * The second should be the BaseContext
  */
 public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
-    private String LOG_TAG = getClass().getSimpleName();
+    private final String LOG_TAG = getClass().getSimpleName();
 
     protected ArrayList<ChannelInfo> doInBackground(Object... params) {
         @SuppressWarnings("unchecked")
@@ -78,8 +78,8 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
 
 
             // we return the rowId so we can return the row we inserted to a cursor
-            long rowId = db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
             /*
+            long rowId = db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
             Cursor cursor = db.query(SubscriptionsDbHelper.TABLE_NAME, allColumns, SubscriptionsDbHelper.COLUMN_ID + " = " + rowId, null, null, null, null);
             cursor.close();
             */
@@ -107,8 +107,8 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
     }
 
     @Override
-    protected void onCancelled(ArrayList<ChannelInfo> channelInfos) {
-        super.onCancelled(channelInfos);
+    protected void onCancelled(ArrayList<ChannelInfo> channelInfo) {
+        super.onCancelled(channelInfo);
         Log.e(LOG_TAG, "CANCELLED");
     }
 

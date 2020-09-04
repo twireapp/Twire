@@ -65,7 +65,7 @@ public class NavigationDrawerFragment extends Fragment {
     protected ImageView mTopImage;
     @BindViews({R.id.my_streams_container, R.id.my_channels_container})
     List<View> mUserRequiredViews;
-    private String LOG_TAG = getClass().getSimpleName();
+    private final String LOG_TAG = getClass().getSimpleName();
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private Intent mIntent;

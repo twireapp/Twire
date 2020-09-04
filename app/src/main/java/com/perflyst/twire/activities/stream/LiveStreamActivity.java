@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class LiveStreamActivity extends StreamActivity {
 
-    private String LOG_TAG = getClass().getSimpleName();
+    private final String LOG_TAG = getClass().getSimpleName();
     private RecyclerView mMentionRecyclerView;
     private MentionAdapter mMentionAdapter;
     private View mMentionContainer;

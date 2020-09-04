@@ -39,7 +39,6 @@
     <string name="gen_dialog_login_or_out_content">Beste kontu batekin saioa hasi nahi duzu\? edo besterik gabe %s kontutik irten\?</string>
     <string name="settings_appearance_summary">Gaia, txartelen estiloa, txartelen tamaina</string>
     <string name="my_streams_cell_current_viewers">%d ikusle</string>
-    <string name="my_channels_error_none_found">Ez da jarraitutako kanalik aurkitu</string>
     <string name="no_server_response_message">Badirudi Twitchen zerbitzariek ez dutela erantzuten. Berriro saiatu\?</string>
     <string name="preview_game_viewers">1337 ikusle</string>
     <string name="game_viewers">%s ikusle</string>
@@ -64,7 +63,6 @@
     <string name="navigation_drawer_not_logged_in">Saioa hasi gabe</string>
     <string name="navigation_drawer_settings_title">Ezarpenak</string>
     <string name="navigation_drawer_search_title">Bilatu</string>
-    <string name="navigation_drawer_my_games_title">Nire jokoak</string>
     <string name="games_tab">JOKOAK</string>
     <string name="search_hint">Bilatu</string>
     <string name="appearance_game_header">Jokoak</string>
@@ -89,8 +87,6 @@
     <string name="settings_appearance_name">Itxura</string>
     <string name="settings_general_name_summary">Twitch kontua, hasierako orrialdea</string>
     <string name="settings_general_name">Orokorra</string>
-    <string name="login_unvalid_token_text_line_two">berriro hasi behar duzu saioa</string>
-    <string name="login_unvalid_token_text_line_one">Zoritxarrez</string>
     <string name="login_on_success_message">Kaixo %s</string>
     <string name="login_user_no_internet_action">SAIATU BERRIRO</string>
     <string name="login_user_no_internet">Interneteko konexioa behar duzu Twire erabiltzeko.</string>
@@ -132,8 +128,6 @@
     <string name="stream_show_chat">Erakutsi txata</string>
     <string name="stream_viewers">Ikusleak</string>
     <string name="stream_fullscreen">Pantaila osoa</string>
-    <string name="stream_no_audio_only">Sentitzen dugu, audioa bakarrik entzutea ez dago erabilgarri zuzeneko honetarako</string>
-    <string name="quality_audio">Audioa bakarrik</string>
     <string name="quality_auto">Auto</string>
     <string name="available_qualities">Kalitate aukerak</string>
     <string name="chat_only">Txata bakarrik</string>
@@ -148,8 +142,6 @@
     <string name="title_activity_streamer_info">Kanala</string>
     <string name="yesterday">Atzo</string>
     <string name="today">Gaur</string>
-    <string name="enable_all">AKTIBATU DENAK</string>
-    <string name="disable_all">DESAKTIBATU DENAK</string>
     <string name="pause">Gelditu</string>
     <string name="play">Erreproduzitu</string>
     <string name="vods">Bideoak</string>

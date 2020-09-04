@@ -23,13 +23,13 @@ import okhttp3.RequestBody;
 
 /**
  * Async task. Gets the required access token for a specific streamer. Then starts the streamers live stream.
- * Requires to be executed with the username of the streamer and a reference to the videoview
+ * Requires to be executed with the username of the streamer and a reference to the VideoView
  */
 public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<String, Quality>> {
     public static final String QUALITY_SOURCE = "chunked";
     public static final String QUALITY_AUTO = "auto";
-    private String LOG_TAG = getClass().getSimpleName();
-    private AsyncResponse callback;
+    private final String LOG_TAG = getClass().getSimpleName();
+    private final AsyncResponse callback;
 
     public GetLiveStreamURL(AsyncResponse aCallback) {
         callback = aCallback;

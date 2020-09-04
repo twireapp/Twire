@@ -111,6 +111,7 @@ public class ChannelActivity extends ThemeActivity {
         // Get the StreamerInfo object sent with the intent to open this activity
         Intent intent = getIntent();
         info = intent.getParcelableExtra(getResources().getString(R.string.channel_info_intent_object));
+        assert info != null;
 
         streamerInfoName.setText(info.getDisplayName());
         streamerFollowers.setText(getReadableInt(info.getFollowers()));
@@ -145,7 +146,7 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
     }
@@ -293,36 +294,7 @@ public class ChannelActivity extends ThemeActivity {
         mFollowHandler = new FollowHandler(
                 info,
                 getBaseContext(),
-                new FollowHandler.Delegate() {
-                    @Override
-                    public void streamerIsFollowed() {
-                    }
-
-                    @Override
-                    public void streamerIsNotFollowed() {
-                    }
-
-                    @Override
-                    public void userIsNotLoggedIn() {
-                        mFab.hide();
-                    }
-
-                    @Override
-                    public void followSuccess() {
-                    }
-
-                    @Override
-                    public void followFailure() {
-                    }
-
-                    @Override
-                    public void unfollowSuccess() {
-                    }
-
-                    @Override
-                    public void unfollowFailure() {
-                    }
-                }
+                () -> mFab.hide()
         );
 
         mFab.setOnClickListener(v -> {

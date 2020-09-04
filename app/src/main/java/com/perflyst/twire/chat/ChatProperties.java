@@ -1,6 +1,6 @@
 package com.perflyst.twire.chat;
 
-/**
+/*
  * Created by sebastian on 26/07/2017.
  */
 
@@ -11,17 +11,15 @@ import java.util.Random;
  * Stores The properties of the chat. i.e. server ip's and port, if the stream is an event, if the chat is for subs only.
  */
 class ChatProperties {
-    private boolean hideLinks, requireVerifiedAccount, isSubsOnly, isEvent;
-    private String cluster;
-    private List<String> chatServers;
-    private Random random = new Random();
+    private final boolean hideLinks, requireVerifiedAccount, isSubsOnly, isEvent;
+    private final List<String> chatServers;
+    private final Random random = new Random();
 
-    ChatProperties(boolean hideLinks, boolean requireVerifiedAccount, boolean isSubsOnly, boolean isEvent, String cluster, List<String> chatServers) {
+    ChatProperties(boolean hideLinks, boolean requireVerifiedAccount, boolean isSubsOnly, boolean isEvent, List<String> chatServers) {
         this.hideLinks = hideLinks;
         this.requireVerifiedAccount = requireVerifiedAccount;
         this.isSubsOnly = isSubsOnly;
         this.isEvent = isEvent;
-        this.cluster = cluster;
         this.chatServers = chatServers;
     }
 
@@ -44,10 +42,6 @@ class ChatProperties {
 
     public boolean isEvent() {
         return isEvent;
-    }
-
-    public String getCluster() {
-        return cluster;
     }
 
     public List<String> getChatServers() {

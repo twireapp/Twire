@@ -34,10 +34,6 @@ public class TempStorage {
         getLoadedStreamers().remove(aStreamer);
     }
 
-    public static void clearLoadedStreamers() {
-        getLoadedStreamers().clear();
-    }
-
     public static boolean hasLoadedStreamers() {
         return getLoadedStreamers().size() > 0;
     }

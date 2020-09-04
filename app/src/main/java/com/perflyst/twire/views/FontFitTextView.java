@@ -72,8 +72,6 @@ public class FontFitTextView extends AppCompatTextView {
 
     /**
      * Register listener to receive resize notifications
-     *
-     * @param listener
      */
     public void setOnResizeListener(OnTextResizeListener listener) {
         mTextResizeListener = listener;
@@ -109,8 +107,6 @@ public class FontFitTextView extends AppCompatTextView {
 
     /**
      * Return upper text size limit
-     *
-     * @return
      */
     public float getMaxTextSize() {
         return mMaxTextSize;
@@ -118,8 +114,6 @@ public class FontFitTextView extends AppCompatTextView {
 
     /**
      * Set the upper text size limit and invalidate the view
-     *
-     * @param maxTextSize
      */
     public void setMaxTextSize(float maxTextSize) {
         mMaxTextSize = maxTextSize;
@@ -129,8 +123,6 @@ public class FontFitTextView extends AppCompatTextView {
 
     /**
      * Return lower text size limit
-     *
-     * @return
      */
     public float getMinTextSize() {
         return mMinTextSize;
@@ -138,8 +130,6 @@ public class FontFitTextView extends AppCompatTextView {
 
     /**
      * Set the lower text size limit and invalidate the view
-     *
-     * @param minTextSize
      */
     public void setMinTextSize(float minTextSize) {
         mMinTextSize = minTextSize;
@@ -149,8 +139,6 @@ public class FontFitTextView extends AppCompatTextView {
 
     /**
      * Return flag to add ellipsis to text that overflows at the smallest text size
-     *
-     * @return
      */
     public boolean getAddEllipsis() {
         return mAddEllipsis;
@@ -158,8 +146,6 @@ public class FontFitTextView extends AppCompatTextView {
 
     /**
      * Set flag to add ellipsis to text that overflows at the smallest text size
-     *
-     * @param addEllipsis
      */
     public void setAddEllipsis(boolean addEllipsis) {
         mAddEllipsis = addEllipsis;
@@ -200,9 +186,6 @@ public class FontFitTextView extends AppCompatTextView {
 
     /**
      * Resize the text size with specified width and height
-     *
-     * @param width
-     * @param height
      */
     public void resizeText(int width, int height) {
         CharSequence text = getText();

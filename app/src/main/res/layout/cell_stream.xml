@@ -33,7 +33,7 @@
                 android:layout_alignBottom="@id/image_stream_preview"
                 android:layout_marginStart="@dimen/stream_display_name_margin"
                 android:layout_marginLeft="@dimen/stream_display_name_margin"
-                android:layout_marginBottom="@dimen/stream_devider_height"
+                android:layout_marginBottom="@dimen/stream_divider_height"
                 android:maxLines="1"
                 android:text="@string/preview_stream_display_name"
                 android:textAppearance="@style/text_title_w_shadow"
@@ -61,7 +61,7 @@
         <View
             android:id="@+id/shared_padding"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/stream_devider_height" />
+            android:layout_height="@dimen/stream_divider_height" />
 
         <TextView
             android:id="@+id/stream_game_and_viewers"
@@ -69,10 +69,10 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal|bottom"
             android:gravity="center_horizontal|bottom"
-            android:paddingLeft="@dimen/stream_devider_height"
+            android:paddingLeft="@dimen/stream_divider_height"
             android:paddingTop="0dp"
-            android:paddingRight="@dimen/stream_devider_height"
-            android:paddingBottom="@dimen/stream_devider_height"
+            android:paddingRight="@dimen/stream_divider_height"
+            android:paddingBottom="@dimen/stream_divider_height"
             android:singleLine="true"
             android:text="@string/preview_stream_game_and_viewers"
             android:textAppearance="@style/cardSecondaryText" />

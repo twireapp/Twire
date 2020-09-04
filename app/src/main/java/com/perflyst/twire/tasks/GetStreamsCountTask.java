@@ -12,8 +12,8 @@ import org.json.JSONObject;
  * Created by Sebastian Rask on 26-06-2016.
  */
 public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
-    private Settings settings;
-    private Delegate delegate;
+    private final Settings settings;
+    private final Delegate delegate;
 
     public GetStreamsCountTask(Context context, Delegate delegate) {
         this.settings = new Settings(context);

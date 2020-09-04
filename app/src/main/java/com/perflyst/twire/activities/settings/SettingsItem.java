@@ -1,8 +1,8 @@
 package com.perflyst.twire.activities.settings;
 
 public class SettingsItem {
-    private String title;
-    private Class classForIntent;
+    private final String title;
+    private final Class classForIntent;
 
     public SettingsItem(String title, Class classForIntent) {
         this.title = title;
@@ -13,15 +13,7 @@ public class SettingsItem {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Class getClassForIntent() {
         return classForIntent;
-    }
-
-    public void setClassForIntent(Class classForIntent) {
-        this.classForIntent = classForIntent;
     }
 }

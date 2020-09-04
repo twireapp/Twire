@@ -11,8 +11,8 @@ import org.json.JSONObject;
  * Created by Sebastian Rask on 17-09-2016.
  */
 public class GetStreamViewersTask extends AsyncTask<Void, Void, Integer> {
-    private GetStreamViewersTaskDelegate delegate;
-    private int streamerUserId;
+    private final GetStreamViewersTaskDelegate delegate;
+    private final int streamerUserId;
 
 
     public GetStreamViewersTask(GetStreamViewersTaskDelegate delegate, int streamerUserId) {
@@ -42,14 +42,10 @@ public class GetStreamViewersTask extends AsyncTask<Void, Void, Integer> {
         super.onPostExecute(integer);
         if (integer > -1) {
             delegate.onViewersFetched(integer);
-        } else {
-            delegate.onViewersFetchFailed();
         }
     }
 
     public interface GetStreamViewersTaskDelegate {
         void onViewersFetched(Integer currentViewers);
-
-        void onViewersFetchFailed();
     }
 }

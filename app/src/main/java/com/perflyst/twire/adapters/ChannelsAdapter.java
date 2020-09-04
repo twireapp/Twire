@@ -32,9 +32,9 @@ import java.util.List;
  */
 
 class StreamerInfoViewHolder extends MainActivityAdapter.ElementsViewHolder {
-    TextView vDisplayName;
-    private ImageView vProfileLogoImage;
-    private CardView vCard;
+    final TextView vDisplayName;
+    private final ImageView vProfileLogoImage;
+    private final CardView vCard;
 
     StreamerInfoViewHolder(View v) {
         super(v);
@@ -60,8 +60,8 @@ class StreamerInfoViewHolder extends MainActivityAdapter.ElementsViewHolder {
 }
 
 public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerInfoViewHolder> {
-    private int regMargin;
-    private Activity activity;
+    private final int regMargin;
+    private final Activity activity;
 
     public ChannelsAdapter(AutoSpanRecyclerView recyclerView, Context aContext, Activity aActivity) {
         super(recyclerView, aContext);
@@ -119,11 +119,6 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
     }
 
     @Override
-    protected void handleElementOnLongClick(View v) {
-
-    }
-
-    @Override
     void setViewLayoutParams(View view, int position) {
         ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(view.getLayoutParams());
         int spanCount = getRecyclerView().getSpanCount();
@@ -152,17 +147,17 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
     }
 
     @Override
-    int getLayoutRessource() {
+    int getLayoutResource() {
         return R.layout.cell_channel;
     }
 
     @Override
-    int getCornerRadiusRessource() {
+    int getCornerRadiusResource() {
         return R.dimen.subscription_card_corner_radius;
     }
 
     @Override
-    int getTopMarginRessource() {
+    int getTopMarginResource() {
         return R.dimen.subscription_card_first_top_margin;
     }
 

@@ -11,12 +11,14 @@ import androidx.annotation.StringRes;
 
 public class SettingsCategory {
     @StringRes
-    private int mTitleRes, mSummaryRes;
+    private final int mTitleRes;
+    @StringRes
+    private final int mSummaryRes;
 
     @DrawableRes
-    private int iconRes;
+    private final int iconRes;
 
-    private Intent intent;
+    private final Intent intent;
 
     public SettingsCategory(int title, int summary, int icon, Intent clickIntent) {
         mTitleRes = title;

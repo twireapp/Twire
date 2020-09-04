@@ -1,7 +1,5 @@
 package com.perflyst.twire.misc;
 
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -11,20 +9,12 @@ import android.text.style.ImageSpan;
 import androidx.annotation.NonNull;
 
 public class VerticalImageSpan extends ImageSpan {
-    public VerticalImageSpan(Context context, int resourceId) {
-        super(context, resourceId);
-    }
-
-    public VerticalImageSpan(Context context, Bitmap bitmap) {
-        super(context, bitmap);
-    }
-
     VerticalImageSpan(Drawable drawable) {
         super(drawable);
     }
 
     @Override
-    public int getSize(Paint paint, CharSequence text,
+    public int getSize(@NonNull Paint paint, CharSequence text,
                        int start, int end,
                        Paint.FontMetricsInt fm) {
         Drawable d = getDrawable();

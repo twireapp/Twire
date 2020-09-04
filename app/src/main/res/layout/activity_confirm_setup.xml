@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/login_icon_margin_top"
             app:srcCompat="@drawable/ic_settings"
-            android:tint="@color/colorSetupSecond" />
+            app:tint="@color/colorSetupSecond" />
 
         <!-- Container for the Login instructions -->
         <RelativeLayout
@@ -64,7 +64,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/welcome_continue_circle_shadow_margin_bottom"
             android:src="@drawable/circle_for_login"
-            android:tint="@color/colorSetupFABShadow" />
+            app:tint="@color/colorSetupFABShadow" />
 
         <!-- Container for the Continue FAB -->
         <FrameLayout
@@ -83,7 +83,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:src="@drawable/circle_for_login"
-                android:tint="@color/colorSetupSecond" />
+                app:tint="@color/colorSetupSecond" />
 
             <ImageView
                 android:id="@+id/forward_arrow"
@@ -91,7 +91,7 @@
                 android:layout_height="@dimen/welcome_continue_arrow_diameter"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/ic_arrow_forward"
-                android:tint="@color/colorSetupMain" />
+                app:tint="@color/colorSetupMain" />
 
             <com.rey.material.widget.ProgressView
                 android:id="@+id/SetupProgress"

@@ -24,7 +24,7 @@ public class RoundedTopTransformation extends BitmapTransformation {
     private static final String ID = "com.perflyst.twire.misc.RoundedTopTransformation";
     private static final byte[] ID_BYTES = ID.getBytes(Charset.forName("UTF-8"));
 
-    private float cornerRadius;
+    private final float cornerRadius;
 
     public RoundedTopTransformation(float cornerRadius) {
         this.cornerRadius = cornerRadius;

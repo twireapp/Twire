@@ -3,6 +3,7 @@ package com.perflyst.twire.views.recyclerviews;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.R;
@@ -11,7 +12,6 @@ import com.perflyst.twire.R;
  * Created by Sebastian Rask on 30-03-2016.
  */
 public class ChatRecyclerView extends RecyclerView {
-    private String LOG_TAG = getClass().getSimpleName();
     private int amountScrolled = 0;
 
     public ChatRecyclerView(Context context) {
@@ -44,7 +44,7 @@ public class ChatRecyclerView extends RecyclerView {
         this.addOnScrollListener(new OnScrollListener() {
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 amountScrolled += dy;
             }

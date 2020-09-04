@@ -2,6 +2,8 @@ package com.perflyst.twire.activities;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.MainActivity;
 import com.perflyst.twire.service.Settings;
@@ -9,7 +11,7 @@ import com.perflyst.twire.service.Settings;
 /**
  * Created by Sebastian Rask on 30-04-2016.
  */
-public class ThemeActivity extends UsageTrackingAppCompatActivity {
+public class ThemeActivity extends AppCompatActivity {
     private String theme;
 
     @Override
@@ -21,9 +23,6 @@ public class ThemeActivity extends UsageTrackingAppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (!applyTheme()) {
-            return;
-        }
 
         String currentTheme = new Settings(this).getTheme();
         if (!currentTheme.equals(theme)) {
@@ -32,10 +31,6 @@ public class ThemeActivity extends UsageTrackingAppCompatActivity {
     }
 
     private void loadTheme() {
-        if (!applyTheme()) {
-            return;
-        }
-
         int themeRes = R.style.BlueTheme;
         theme = new Settings(this).getTheme();
         if (theme.equals(getString(R.string.purple_theme_name))) {
@@ -56,9 +51,5 @@ public class ThemeActivity extends UsageTrackingAppCompatActivity {
             ((MainActivity) this).getRecyclerView().scrollToPosition(0);
         }
         super.recreate();
-    }
-
-    public boolean applyTheme() {
-        return true;
     }
 }

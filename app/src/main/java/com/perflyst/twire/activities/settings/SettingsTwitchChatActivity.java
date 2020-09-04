@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -15,7 +16,6 @@ import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
 
 public class SettingsTwitchChatActivity extends ThemeActivity {
-    private String LOG_TAG = getClass().getSimpleName();
     private Settings settings;
     private TextView emoteSizeSummary, messageSizeSummary, chatLandscapeWidthSummary, chatLandscapeToggleSummary, chatLandscapeSwipeToShowSummary;
     private CheckedTextView chatLandscapeToggle, chatSwipeToShowToggle;
@@ -58,8 +58,8 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         }
 
         // Chat showable by swiping
-        chatSwipeToShowToggle.setChecked(settings.isChatLandscapeSwipable());
-        if (settings.isChatLandscapeSwipable()) {
+        chatSwipeToShowToggle.setChecked(settings.isChatLandscapeSwipeable());
+        if (settings.isChatLandscapeSwipeable()) {
             chatLandscapeSwipeToShowSummary.setText(getString(R.string.enabled));
         } else {
             chatLandscapeSwipeToShowSummary.setText(getString(R.string.disabled));
@@ -73,13 +73,13 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         onBackPressed();
         return super.onOptionsItemSelected(item);
     }
 
-    public void onClickEmoteSize(View v) {
+    public void onClickEmoteSize(View _view) {
         MaterialDialog dialog = DialogService.getChooseChatSizeDialog
                 (this, R.string.chat_emote_size, R.array.ChatSize, settings.getEmoteSize(), (dialog1, itemView, which, text) -> {
                     settings.setEmoteSize(which + 1);
@@ -89,7 +89,7 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         dialog.show();
     }
 
-    public void onClickMessageSize(View v) {
+    public void onClickMessageSize(View _view) {
         MaterialDialog dialog = DialogService.getChooseChatSizeDialog
                 (this, R.string.chat_message_size, R.array.ChatSize, settings.getMessageSize(), (dialog1, itemView, which, text) -> {
                     settings.setMessageSize(which + 1);
@@ -99,17 +99,17 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         dialog.show();
     }
 
-    public void onClickChatLandscapeEnable(View v) {
+    public void onClickChatLandscapeEnable(View _view) {
         settings.setShowChatInLandscape(!settings.isChatInLandscapeEnabled());
         updateSummaries();
     }
 
-    public void onClickChatLandscapeSwipeable(View v) {
-        settings.setChatLandscapeSwipable(!settings.isChatLandscapeSwipable());
+    public void onClickChatLandscapeSwipeable(View _view) {
+        settings.setChatLandscapeSwipeable(!settings.isChatLandscapeSwipeable());
         updateSummaries();
     }
 
-    public void onClickChatLandScapeWidth(View v) {
+    public void onClickChatLandScapeWidth(View _view) {
         final int landscapeWidth = settings.getChatLandscapeWidth();
 
         DialogService.getSliderDialog(

@@ -1,6 +1,6 @@
 package com.perflyst.twire.misc;
 
-/**
+/*
  * Created by Sebastian Rask on 10-05-2016.
  */
 
@@ -29,17 +29,18 @@ import io.codetail.animation.ViewAnimationUtils;
 public class TooltipWindow {
 
     private static final int MSG_DISMISS_TOOLTIP = 100;
-    public static int POSITION_TO_RIGHT = 0,
-            POSITION_BOTTOM = 1;
+    public static final int POSITION_TO_RIGHT = 0;
+    public static final int POSITION_BOTTOM = 1;
     private final int REVEAL_DURATION = 500;
-    private PopupWindow tipWindow;
-    private View contentView;
-    private TextView mTipText;
-    private ImageView mNavLeftArrow, mNavUpArrow;
-    private LinearLayout mainLayout;
+    private final PopupWindow tipWindow;
+    private final View contentView;
+    private final TextView mTipText;
+    private final ImageView mNavLeftArrow;
+    private final ImageView mNavUpArrow;
+    private final LinearLayout mainLayout;
     private SupportAnimator revealTransition;
 
-    private Handler handler = new Handler() {
+    private final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             if (msg.what == MSG_DISMISS_TOOLTIP) {
                 if (tipWindow != null && tipWindow.isShowing()) {
@@ -86,7 +87,7 @@ public class TooltipWindow {
             }
         }
     };
-    private int position;
+    private final int position;
 
     public TooltipWindow(Context ctx, int aPosition) {
         tipWindow = new PopupWindow(ctx);
@@ -173,8 +174,8 @@ public class TooltipWindow {
             revealTransition.start();
         });
 
-        int HIDEDELAY = 1000 * 5;
-        handler.sendEmptyMessageDelayed(MSG_DISMISS_TOOLTIP, HIDEDELAY);
+        int hideDelay = 1000 * 5;
+        handler.sendEmptyMessageDelayed(MSG_DISMISS_TOOLTIP, hideDelay);
     }
 
     public boolean isTooltipShown() {

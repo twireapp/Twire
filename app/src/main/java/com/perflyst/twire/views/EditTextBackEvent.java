@@ -7,7 +7,7 @@ import android.view.KeyEvent;
 import androidx.appcompat.widget.AppCompatEditText;
 
 /**
- * Created by Sebastian Rask JEpsen on 28/07/16.
+ * Created by Sebastian Rask Jepsen on 28/07/16.
  */
 public class EditTextBackEvent extends AppCompatEditText {
 

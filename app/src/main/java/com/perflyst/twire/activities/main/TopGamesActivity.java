@@ -64,7 +64,6 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
 
         //Indentation is meant to mimic the structure of the JSON code
         final String URL = "https://api.twitch.tv/kraken/games/top?limit=" + getLimit() + "&offset=" + getCurrentOffset();
-        final String TOTAL_NUMBER_OF_GAMES = "_total";
         final String GAMES_ARRAY_KEY = "top";
         final String VIEWERS_INTEGER_KEY = "viewers";
         final String CHANNELS_INTEGER_KEY = "channels";
@@ -74,7 +73,6 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
         String jsonString = Service.urlToJSONString(URL);
         JSONObject fullDataObject = new JSONObject(jsonString);
         JSONArray gamesArray = fullDataObject.getJSONArray(GAMES_ARRAY_KEY);
-        int total_json_response = fullDataObject.getInt(TOTAL_NUMBER_OF_GAMES);
 
         for (int i = 0; i < gamesArray.length(); i++) {
             // Get all the JSON objects we need to get all the required data.

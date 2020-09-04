@@ -17,13 +17,11 @@ import java.security.Security;
  */
 @SuppressLint("StaticFieldLeak") // It is alright to store application context statically
 public class TwireApplication extends MultiDexApplication {
-    public static boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
-    private static Context mContext;
+    public static final boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mContext = this.getApplicationContext();
 
         // Twitch API requires TLS 1.2, which may be unavailable/not enabled on Android 4.1 - 4.4.
         // Install modern TLS protocols using a security provider, and enable them by default in a

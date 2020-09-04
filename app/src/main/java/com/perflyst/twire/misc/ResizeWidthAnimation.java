@@ -10,7 +10,7 @@ import android.view.animation.Transformation;
 public class ResizeWidthAnimation extends Animation {
     private final int startWidth;
     private final int targetWidth;
-    private View view;
+    private final View view;
 
     public ResizeWidthAnimation(View view, int targetWidth) {
         this.view = view;

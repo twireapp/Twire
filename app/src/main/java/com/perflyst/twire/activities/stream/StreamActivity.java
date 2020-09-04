@@ -48,7 +48,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     private static final int FROM_RADS_TO_DEGS = -57;
     public StreamFragment mStreamFragment;
     public ChatFragment mChatFragment;
-    private String LOG_TAG = getClass().getSimpleName();
+    private final String LOG_TAG = getClass().getSimpleName();
     private Sensor mRotationSensor;
     private Settings settings;
     private boolean mBackstackLost;
@@ -107,7 +107,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateOrientation();
     }
@@ -267,7 +267,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     @Override
-    public void onAttachFragment(Fragment fragment) {
+    public void onAttachFragment(@NonNull Fragment fragment) {
         if (fragment instanceof StreamFragment) {
             StreamFragment streamFragment = (StreamFragment) fragment;
             streamFragment.streamFragmentCallback = this;

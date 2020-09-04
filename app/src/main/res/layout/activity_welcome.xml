@@ -89,7 +89,7 @@
             android:layout_width="@dimen/welcome_continue_arrow_diameter"
             android:layout_height="@dimen/welcome_continue_arrow_diameter"
             android:layout_gravity="center"
-            android:tint="@color/colorSetupMain"
+            app:tint="@color/colorSetupMain"
             app:srcCompat="@drawable/ic_arrow_forward" />
 
     </FrameLayout>

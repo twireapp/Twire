@@ -33,15 +33,15 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
             return new VideoOnDemand[size];
         }
     };
-    private String videoTitle,
-            gameTitle,
-            previewUrl,
-            videoId,
-            channelName,
-            displayName,
-            recordedAtString;
-    private int views,
-            length;
+    private final String videoTitle;
+    private final String gameTitle;
+    private final String previewUrl;
+    private final String videoId;
+    private final String channelName;
+    private final String displayName;
+    private final String recordedAtString;
+    private final int views;
+    private final int length;
     private boolean isBroadcast;
     private Calendar recordedAt;
     private ChannelInfo channelInfo;
@@ -134,72 +134,32 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         return displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
-    public String getStreamerName() {
-        return channelName;
-    }
-
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
-    }
-
     public String getVideoTitle() {
         return videoTitle;
-    }
-
-    public void setVideoTitle(String videoTitle) {
-        this.videoTitle = videoTitle;
     }
 
     public String getGameTitle() {
         return gameTitle;
     }
 
-    public void setGameTitle(String gameTitle) {
-        this.gameTitle = gameTitle;
-    }
-
     private String getPreviewUrl() {
         return previewUrl;
-    }
-
-    public void setPreviewUrl(String previewUrl) {
-        this.previewUrl = previewUrl;
     }
 
     public String getVideoId() {
         return videoId;
     }
 
-    public void setVideoId(String videoId) {
-        this.videoId = videoId;
-    }
-
     public int getViews() {
         return views;
-    }
-
-    public void setViews(int views) {
-        this.views = views;
     }
 
     public int getLength() {
         return length;
     }
 
-    public void setLength(int length) {
-        this.length = length;
-    }
-
     public Calendar getRecordedAt() {
         return recordedAt;
-    }
-
-    public void setRecordedAt(Calendar recordedAt) {
-        this.recordedAt = recordedAt;
     }
 
     @Override

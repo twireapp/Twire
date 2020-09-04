@@ -22,11 +22,11 @@ import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
  * Created by Sebastian Rask on 11-04-2016.
  */
 class GameViewHolder extends MainActivityAdapter.ElementsViewHolder {
-    View sharedPadding;
-    private TextView vGameViewers;
-    private TextView vGameTitle;
-    private ImageView vGamePreview;
-    private CardView vCard;
+    final View sharedPadding;
+    private final TextView vGameViewers;
+    private final TextView vGameTitle;
+    private final ImageView vGamePreview;
+    private final CardView vCard;
 
     GameViewHolder(View v) {
         super(v);
@@ -70,10 +70,10 @@ class GameViewHolder extends MainActivityAdapter.ElementsViewHolder {
 }
 
 public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
-    private String LOG_TAG = getClass().getSimpleName();
-    private int regMargin, bottomMargin;
-    private double previewAspectRatio;
-    private Activity mActivity;
+    private final int regMargin;
+    private final int bottomMargin;
+    private final double previewAspectRatio;
+    private final Activity mActivity;
 
     public GamesAdapter(AutoSpanRecyclerView recyclerView, Context aContext, @Nullable Activity aActivity) {
         super(recyclerView, aContext);
@@ -158,17 +158,17 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
     }
 
     @Override
-    int getLayoutRessource() {
+    int getLayoutResource() {
         return R.layout.cell_game;
     }
 
     @Override
-    int getCornerRadiusRessource() {
+    int getCornerRadiusResource() {
         return R.dimen.game_card_corner_radius;
     }
 
     @Override
-    int getTopMarginRessource() {
+    int getTopMarginResource() {
         return R.dimen.game_card_first_top_margin;
     }
 

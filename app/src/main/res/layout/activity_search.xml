@@ -51,8 +51,8 @@
                             android:paddingStart="@dimen/search_back_arrow_start_padding"
                             android:paddingLeft="@dimen/search_back_arrow_start_padding"
                             android:paddingRight="@dimen/search_back_arrow_start_padding"
-                            android:tint="?attr/searchActivityUpIconColor"
-                            app:srcCompat="@drawable/ic_arrow_back" />
+                            app:srcCompat="@drawable/ic_arrow_back"
+                            app:tint="?attr/searchActivityUpIconColor" />
 
                         <EditText
                             android:id="@+id/edit_text_search"
@@ -68,7 +68,8 @@
                             android:maxLines="1"
                             android:padding="@dimen/search_edittext_padding"
                             android:textColor="?attr/textColor"
-                            android:textColorHint="?attr/secondaryTextColor" />
+                            android:textColorHint="?attr/secondaryTextColor"
+                            android:importantForAutofill="no" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </io.codetail.widget.RevealFrameLayout>
@@ -80,8 +81,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="@dimen/search_icon_padding"
-                android:tint="?attr/searchActivityUpIconColor"
-                app:srcCompat="@drawable/ic_search" />
+                app:srcCompat="@drawable/ic_search"
+                app:tint="?attr/searchActivityUpIconColor" />
 
         </androidx.appcompat.widget.Toolbar>
 

@@ -19,7 +19,7 @@ import okhttp3.RequestBody;
  * Created by Sebastian Rask on 18-06-2016.
  */
 public class GetVODStreamURL extends GetLiveStreamURL {
-    private String LOG_TAG = getClass().getSimpleName();
+    private final String LOG_TAG = getClass().getSimpleName();
 
     public GetVODStreamURL(AsyncResponse aCallback) {
         super(aCallback);

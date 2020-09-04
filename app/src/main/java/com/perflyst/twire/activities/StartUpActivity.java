@@ -13,7 +13,7 @@ import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.ValidateOauthTokenTask;
 
 public class StartUpActivity extends ThemeActivity {
-    private String LOG_TAG = getClass().getSimpleName();
+    private final String LOG_TAG = getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

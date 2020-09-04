@@ -13,8 +13,8 @@ import java.net.URL;
  * Created by Sebastian Rask on 18-04-2016.
  */
 public class UnfollowTask extends AsyncTask<String, Void, Boolean> {
-    private String LOG_TAG = getClass().getSimpleName();
-    private UnFollowResult callback;
+    private final String LOG_TAG = getClass().getSimpleName();
+    private final UnFollowResult callback;
 
     public UnfollowTask(UnFollowResult callback) {
         this.callback = callback;

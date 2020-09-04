@@ -42,7 +42,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
-    private Context mContext;
+    private final Context mContext;
 
     public SubscriptionsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -68,15 +68,6 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
         //db.close();
-    }
-
-    public ArrayList<Integer> getUsersNotToNotify() {
-        try {
-            return getUsersNotToNotify(getReadableDatabase());
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
     }
 
     private ArrayList<Integer> getUsersNotToNotify(SQLiteDatabase db) throws SQLiteException {
