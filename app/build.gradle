@@ -91,4 +91,7 @@ dependencies {
 
     // https://github.com/google/conscrypt/releases
     implementation 'org.conscrypt:conscrypt-android:2.5.0'
+
+    // https://github.com/square/okhttp
+    implementation "com.squareup.okhttp3:okhttp:3.12.11"
 }

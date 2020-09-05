@@ -3,8 +3,6 @@ package com.perflyst.twire.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.perflyst.twire.service.Service;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,6 +10,12 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Request;
+
+import static com.perflyst.twire.service.Service.SimpleResponse;
+import static com.perflyst.twire.service.Service.isNetworkConnectedThreadOnly;
+import static com.perflyst.twire.service.Service.makeRequest;
 
 /**
  * Created by Sebastian Rask on 10-05-2016.
@@ -35,14 +39,19 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
             final String USER_ID_STRING = "user_id";
             final String SCOPES_STRING_ARRAY = "scopes";
 
-            String result;
-            try {
-                result = Service.urlToJSONString(url, connection -> connection.setRequestProperty("Authorization", "OAuth " + oauthToken));
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                return null;
-            }
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("Authorization", "OAuth " + oauthToken)
+                    .build();
 
+            SimpleResponse response = makeRequest(request);
+            if (response == null)
+                return null;
+
+            if (response.code == 401)
+                return new TokenValidation(null, null);
+
+            String result = response.body;
             JSONObject topObject = new JSONObject(result);
             String user_id = topObject.has(USER_ID_STRING) ? topObject.getString(USER_ID_STRING) : null;
 
@@ -55,12 +64,11 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
             }
 
             return new TokenValidation(user_id, scopes);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        if (Service.isNetworkConnectedThreadOnly(context.get())) {
+        if (isNetworkConnectedThreadOnly(context.get())) {
             return new TokenValidation("", new ArrayList<>());
         } else {
             return null;

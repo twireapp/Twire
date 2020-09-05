@@ -65,7 +65,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -76,10 +75,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.*;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSessionContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Sebastian Rask on 12-02-2015.
@@ -91,6 +99,11 @@ public class Service {
     // always verify the host - dont check for certificate
     public final static HostnameVerifier DO_NOT_VERIFY = (hostname, session) -> true;
     public static int NOTIFICATION_ALARM_ID = 754641782;
+
+    public static OkHttpClient client = new OkHttpClient.Builder()
+            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .build();
 
     /**
      * Returns the Twitch Client ID
@@ -581,44 +594,28 @@ public class Service {
     public static String urlToJSONString(String urlToRead) {
         // Alright, so sometimes Twitch decides that our client ID should be blocked. Currently only happens for the hidden /api endpoints.
         // IF we are being blocked, then retry the request with Twitch web ClientID. They are typically not blocking this.
-        String result = "";
-        Exception exception = null;
-        try {
-            result = urlToJSONString(urlToRead, true); // "{\"error\":\"Gone\",\"status\":410,\"message\":\"this API has been removed.\"}";
-        } catch (Exception exc) {
-            exception = exc;
-        } finally {
-            boolean retryWithWebClientId = false;
-            if (result.isEmpty()) {
-                retryWithWebClientId = true;
-            } else {
-                try {
-                    JSONObject resultJson = new JSONObject(result);
-                    int status = resultJson.getInt("status");
-                    String error = resultJson.getString("error");
-                    retryWithWebClientId = status == 410 || error.equals("Gone");
-                } catch (Exception exc) {
-
-                }
-            }
-
-            if (retryWithWebClientId) {
-                exception = null;
-                try {
-                    result = urlToJSONString(urlToRead, false);
-                } catch (Exception exc) {
-                    exception = exc;
-                }
+        String result = urlToJSONString(urlToRead, true); // "{\"error\":\"Gone\",\"status\":410,\"message\":\"this API has been removed.\"}";
+        boolean retryWithWebClientId = false;
+        if (result == null || result.isEmpty()) {
+            retryWithWebClientId = true;
+        } else {
+            try {
+                JSONObject resultJson = new JSONObject(result);
+                int status = resultJson.getInt("status");
+                String error = resultJson.getString("error");
+                retryWithWebClientId = status == 410 || error.equals("Gone");
+            } catch (Exception ignored) {
             }
         }
 
-        if (exception != null)
-            exception.printStackTrace();
+        if (retryWithWebClientId) {
+            result = urlToJSONString(urlToRead, false);
+        }
 
-        return result;
+        return result == null ? "" : result;
     }
 
-    private static String urlToJSONString(String urlToRead, Boolean useOurClientId) throws Exception {
+    private static String urlToJSONString(String urlToRead, Boolean useOurClientId) {
         String clientId;
         if (useOurClientId) {
             clientId = Service.getApplicationClientID();
@@ -626,44 +623,58 @@ public class Service {
             clientId = Service.getTwitchWebClientID();
         }
 
-        return urlToJSONString(urlToRead, connection -> {
-            connection.setRequestProperty("Client-ID", clientId);
-            connection.setRequestProperty("Accept", "application/vnd.twitchtv.v5+json");
-        });
+        Request request = new Request.Builder()
+                .url(urlToRead)
+                .header("Client-ID", clientId)
+                .header("Accept", "application/vnd.twitchtv.v5+json")
+                .build();
+
+        return urlToJSONString(request);
     }
 
-    public interface SendInterface {
-        void beforeSend(HttpURLConnection connection);
-    }
+    public static String urlToJSONString(Request request) {
+        SimpleResponse response = makeRequest(request);
+        if (response == null)
+            return null;
 
-    public static String urlToJSONString(String urlToRead, SendInterface sendInterface) throws Exception {
-        StringBuilder result = new StringBuilder();
-
-        URL url = new URL(urlToRead);
-
-        HttpURLConnection conn = openConnection(url);
-
-        conn.setReadTimeout(5000);
-        conn.setConnectTimeout(3000);
-        conn.setRequestMethod("GET");
-        sendInterface.beforeSend(conn);
-        Scanner in = new Scanner(new InputStreamReader(conn.getInputStream()));
-
-
-        while (in.hasNextLine()) {
-            String line = in.nextLine();
-            result.append(line);
-        }
-
-        in.close();
-        conn.disconnect();
+        String result = response.body;
 
         if (result.length() == 0 || (result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[')) {
-            Log.v("URL TO JSON STRING", urlToRead + " did not successfully get read");
+            Log.v("URL TO JSON STRING", request.url() + " did not successfully get read");
             Log.v("URL TO JSON STRING", "Result of reading - " + result);
         }
 
-        return result.toString();
+        return result;
+    }
+
+    public static class SimpleResponse
+    {
+        public int code;
+        public String body;
+        public Response response;
+
+        public SimpleResponse(Response response)
+        {
+            assert response.body() != null;
+
+            code = response.code();
+            this.response = response;
+
+            try {
+                body = response.body().string();
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
+    public static SimpleResponse makeRequest(Request request) {
+        Response response;
+        try {
+            response = client.newCall(request).execute();
+            return new SimpleResponse(response);
+        } catch (IOException exception) {
+            return null;
+        }
     }
 
     public static HttpURLConnection openConnection(URL url) throws IOException {
