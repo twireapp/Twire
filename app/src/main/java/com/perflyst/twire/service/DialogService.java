@@ -224,6 +224,14 @@ public class DialogService {
         return dialog;
     }
 
+    public static MaterialDialog getRouterErrorDialog(Activity activity, int errorMessage) {
+        return getBaseThemedDialog(activity)
+                .title(R.string.router_error_dialog_title)
+                .content(errorMessage)
+                .cancelListener(dialogInterface -> activity.finish())
+                .build();
+    }
+
     private static MaterialDialog.Builder getBaseThemedDialog(Activity activity) {
         return new MaterialDialog.Builder(activity)
                 .titleColorAttr(R.attr.navigationDrawerTextColor)

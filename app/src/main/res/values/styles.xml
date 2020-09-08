@@ -140,8 +140,11 @@
         <item name="chatBackgroundColor">@color/black</item>
     </style>
 
-    <style name="TransparentTheme" parent="WhiteBackgroundTheme">
-        <item name="android:windowBackground">@android:color/transparent</item>
+    <style name="DeepLinkTheme" parent="AppTheme.Base.Translucent">
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorAccent">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@null</item>
     </style>
 
     <style name="cardPrimaryText" parent="text_title_light">

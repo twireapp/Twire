@@ -92,7 +92,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         if (activity instanceof VODActivity) {
             ((VODActivity) activity).startNewVOD(item);
         } else {
-            Intent intent = VODActivity.createVODIntent(item, getContext());
+            Intent intent = VODActivity.createVODIntent(item, getContext(), true);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 intent.putExtra(getContext().getString(R.string.stream_preview_url), item.getMediumPreview());

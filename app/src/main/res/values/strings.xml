@@ -363,4 +363,12 @@
     <string name="stream_external_play_using">Play using…</string>
     <string name="live_streamer_notification_id" translatable="false">liveStreamerNotificationId</string>
     <string name="stream_cast_notification_id" translatable="false">streamCastNotificationId</string>
+
+    <!-- Router -->
+    <string name="router_activity_label">Router</string>
+    <string name="router_unknown_error">An unknown error occurred.</string>
+    <string name="router_error_dialog_title">URL Error</string>
+    <string name="router_vod_error">Failed to load the VOD.</string>
+    <string name="router_nonexistent_user">That user doesn\'t exist.</string>
+    <string name="router_channel_error">Failed to load the channel.</string>
 </resources>

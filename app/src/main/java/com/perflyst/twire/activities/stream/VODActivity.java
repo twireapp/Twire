@@ -18,10 +18,10 @@ public class VODActivity extends StreamActivity {
     private Fragment vodsFragments;
     private TextView mTitleView, mViewsView;
 
-    public static Intent createVODIntent(VideoOnDemand video, Context context) {
+    public static Intent createVODIntent(VideoOnDemand video, Context context, boolean transition) {
         Intent intent = new Intent(context, VODActivity.class);
         intent.putExtra(context.getResources().getString(R.string.intent_vod), video);
-        intent.putExtra(context.getString(R.string.stream_shared_transition), true);
+        intent.putExtra(context.getString(R.string.stream_shared_transition), transition);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         return intent;
