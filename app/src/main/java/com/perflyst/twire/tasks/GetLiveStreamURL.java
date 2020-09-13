@@ -42,7 +42,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         String sig = "";
         String tokenString = "";
 
-        String resultString = Service.urlToJSONString("https://api.twitch.tv/api/channels/" + streamerName + "/access_token");
+        String resultString = Service.urlToJSONString("https://api.twitch.tv/api/channels/" + streamerName + "/access_token?platform=_");
         try {
             JSONObject resultJSON = new JSONObject(resultString);
             tokenString = resultJSON.getString("token");
