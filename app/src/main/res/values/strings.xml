@@ -365,7 +365,7 @@
     <string name="stream_cast_notification_id" translatable="false">streamCastNotificationId</string>
 
     <!-- Router -->
-    <string name="router_activity_label">Router</string>
+    <string name="router_activity_label">Play with Twire</string>
     <string name="router_unknown_error">An unknown error occurred.</string>
     <string name="router_error_dialog_title">URL Error</string>
     <string name="router_vod_error">Failed to load the VOD.</string>
