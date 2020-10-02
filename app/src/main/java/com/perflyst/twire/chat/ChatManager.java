@@ -493,6 +493,12 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
             ChatMessage chatMessage = new ChatMessage(message, displayName, color, getBadges(badges), emotes, false);
+
+            if(message.contains("@" + getUserDisplayName())) {
+                Log.d(LOG_TAG, "Highlighting message with mention: " + message);
+                chatMessage.setHighlight(true);
+            }
+
             publishProgress(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
         } else {
             Log.e(LOG_TAG, "Failed to find message pattern in: \n" + line);
