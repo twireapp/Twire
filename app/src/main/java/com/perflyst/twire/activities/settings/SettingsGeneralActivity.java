@@ -17,6 +17,7 @@ import com.perflyst.twire.activities.main.MyChannelsActivity;
 import com.perflyst.twire.activities.main.MyGamesActivity;
 import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.setup.LoginActivity;
+import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -139,4 +140,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
         initFilterTopsStreamsByLanguage();
     }
 
+    public void onClickOpenChangelog(View v) {
+        new ChangelogDialogFragment().show(getSupportFragmentManager(), "ChangelogDialog");
+    }
 }

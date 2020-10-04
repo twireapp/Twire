@@ -77,6 +77,7 @@ public class Settings {
     private final String NOTIFY_LIVE = "notifyUserLive";
     private final String LAST_START_UP_VERSION_CODE = "lastStartUpVersionCode";
     private final String IS_UPDATED = "hasBeenUpdated";
+    private final String SHOW_CHANGELOGS = "showChangelogs";
     private Context context;
 
     public Settings(Context context) {
@@ -121,26 +122,23 @@ public class Settings {
         setValue(LAST_NOTIFICATIONS_CHECK_LIVESTREAMS, liveChannels);
     }
 
-    public boolean getIsUpdated() {
-        return getValue(IS_UPDATED, Boolean.class, false);
+    public int getLastVersionCode() {
+        return getValue(LAST_START_UP_VERSION_CODE, Integer.class, 0);
     }
 
     /***
-     * Get and set if the app has updated
+     * Get and set the version code for last startup
      */
-    public void setIsUpdated(boolean updated) {
-        setValue(IS_UPDATED, updated);
+    public void setLastVersionCode(int code) {
+        setValue(LAST_START_UP_VERSION_CODE, code);
     }
 
-    public String getLastVersionName() {
-        return getValue(LAST_START_UP_VERSION_CODE, String.class, "");
+    public Boolean getShowChangelogs() {
+        return getValue(SHOW_CHANGELOGS, Boolean.class, true);
     }
 
-    /***
-     * Get and set the versioncode for last startup
-     */
-    public void setLastVersionName(String name) {
-        setValue(LAST_START_UP_VERSION_CODE, name);
+    public void setShowChangelogs(boolean state) {
+        setValue(SHOW_CHANGELOGS, state);
     }
 
     public ArrayList<Integer> getUsersNotToNotifyWhenLive() {

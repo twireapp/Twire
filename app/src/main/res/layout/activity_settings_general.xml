@@ -102,11 +102,6 @@
                 android:layout_height="@dimen/settings_divider_height"
                 android:background="?attr/dividerColor" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_divider_height"
-                android:background="?attr/dividerColor" />
-
             <com.balysv.materialripple.MaterialRippleLayout
                 android:id="@+id/reset_tips_ripple"
                 android:layout_width="match_parent"
@@ -161,6 +156,35 @@
                         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
                         android:gravity="center_vertical"
                         android:text="@string/gen_language_filter"
+                        android:textAppearance="@style/text_settings_title" />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/changelog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:onClick="onClickOpenChangelog">
+
+                    <TextView
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gen_open_changelog"
                         android:textAppearance="@style/text_settings_title" />
 
                 </RelativeLayout>

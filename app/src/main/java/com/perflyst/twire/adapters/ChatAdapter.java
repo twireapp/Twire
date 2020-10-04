@@ -40,6 +40,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import static com.perflyst.twire.misc.Utils.appendSpan;
+
 /**
  * Created by SebastianRask on 03-03-2016.
  */
@@ -71,17 +73,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         return new ContactViewHolder(itemView);
     }
 
-    private SpannableStringBuilder AppendSpan(SpannableStringBuilder builder, CharSequence charSequence, Object... whats) {
-        int preLength = builder.length();
-        builder.append(charSequence);
-
-        for (Object what : whats) {
-            builder.setSpan(what, preLength, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        return builder;
-    }
-
     @Override
     public void onBindViewHolder(final ContactViewHolder holder, int position) {
         try {
@@ -98,16 +89,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             final SpannableStringBuilder builder = new SpannableStringBuilder();
             for (Badge badge : message.getBadges()) {
                 final GlideImageSpan badgeSpan = new GlideImageSpan(context, badge.getUrl(2), holder.message, builder, 36, 1, badge.color);
-                AppendSpan(builder, "  ", badgeSpan).append(" ");
+                appendSpan(builder, "  ", badgeSpan).append(" ");
             }
 
             int nameColor = getNameColor(message.getColor());
-            AppendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
+            appendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
 
             int preLength = builder.length();
             String PREMESSAGE = ": ";
             String messageWithPre = PREMESSAGE + message.getMessage();
-            AppendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
+            appendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
 
             checkForLink(builder.toString(), builder);
 

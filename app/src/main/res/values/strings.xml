@@ -254,6 +254,7 @@
     <string name="gen_reset_tips">Reset tutorial tips</string>
     <string name="gen_tips_have_been_reset">Tutorial tips have been reset</string>
     <string name="gen_language_filter">Filter top streams by language</string>
+    <string name="gen_open_changelog">Open changelog</string>
 
     <!-- Chat Settings -->
     <string name="chat_emote_size">Emote size</string>
@@ -371,4 +372,32 @@
     <string name="router_vod_error">Failed to load the VOD.</string>
     <string name="router_nonexistent_user">That user doesn\'t exist.</string>
     <string name="router_channel_error">Failed to load the channel.</string>
+
+    <!-- Changelog -->
+    <string name="changelog_title">Changelog</string>
+    <string name="changelog_show_after_update">Show changelog after an update</string>
+
+    <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
+    <string-array name="changelog_lines">
+        <item>V 2.520</item>
+        <item>A New setting to enable/disable filtering of top streams by language.</item>
+        <item>A Handle stream and VOD URLs.</item>
+        <item>A Messages that mention you will now be highlighted.</item>
+        <item>A Changelog for will be displayed on each new version.</item>
+        <item>C Attempt to remove ads from streams.</item>
+        <item>F Fix login token not being validated correctly. Twire will properly warn you if you need to login again.</item>
+        <item>F Fix the stream rewinding when opening the app from Picture in Picture mode.</item>
+        <item>F Fix the chat being the wrong size when opening the app from Picture in Picture mode.</item>
+        <item>F Fix emotes not being parsed correctly on your own messages.</item>
+        <item>F Fix thumbnails not displaying correctly on Android versions &lt; 21.</item>
+
+        <item>V 2.519</item>
+        <item>A The video now gets tinted to improve the visibility of controls.</item>
+        <item>F BTTV emotes should be working again.</item>
+        <item>A Top streams and games now only show streams in your system language.</item>
+        <item>F Chat messages won\'t glitch out at the end of a VOD.</item>
+        <item>F The app icon should be working for older version of Android.</item>
+        <item>C Improved Spanish translations.</item>
+        <item>C Caching improvements.</item>
+    </string-array>
 </resources>

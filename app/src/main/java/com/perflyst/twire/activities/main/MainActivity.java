@@ -20,10 +20,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.perflyst.twire.BuildConfig;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
+import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.fragments.NavigationDrawerFragment;
 import com.perflyst.twire.misc.TooltipWindow;
 import com.perflyst.twire.misc.UniversalOnScrollListener;
@@ -166,6 +168,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
         Service.increaseNavigationDrawerEdge(mDrawerLayout, getBaseContext());
 
         checkForTip();
+        checkForUpdate();
         customizeActivity();
     }
 
@@ -325,6 +328,14 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
                 Log.e(LOG_TAG, "Failed to Show ToolTip");
             }
 
+        }
+    }
+
+    private void checkForUpdate() {
+        int versionCode = BuildConfig.VERSION_CODE;
+
+        if (settings.getLastVersionCode() != versionCode && settings.getShowChangelogs()) {
+            new ChangelogDialogFragment().show(getSupportFragmentManager(), "ChangelogDialog");
         }
     }
 
