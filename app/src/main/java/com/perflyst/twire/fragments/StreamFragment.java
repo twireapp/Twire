@@ -194,8 +194,8 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
     private Integer triesForNextBest = 0;
 
     private static int totalVerticalInset;
-    private boolean pictureInPictureEnabled;
-    private static boolean pipDisabling;
+    private boolean pictureInPictureEnabled; // Tracks if PIP is enabled including the animation.
+    private static boolean pipDisabling; // Tracks the PIP disabling animation.
     private MediaSessionCompat mediaSession;
 
     public static StreamFragment newInstance(Bundle args) {
@@ -612,6 +612,11 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
     @Override
     public void onResume() {
         super.onResume();
+
+        // If the app was closed in the background we need to seek to currentProgress when resuming.
+        // Android also triggers onResume when coming out of PIP but we don't need to do it then.
+        if (!pipDisabling)
+            player.seekTo(currentProgress);
 
         pipDisabling = false;
 
