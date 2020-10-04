@@ -390,6 +390,7 @@
         <item>F Fix the chat being the wrong size when opening the app from Picture in Picture mode.</item>
         <item>F Fix emotes not being parsed correctly on your own messages.</item>
         <item>F Fix thumbnails not displaying correctly on Android versions &lt; 21.</item>
+        <item>F Fix some controls being hidden on Night and True Night themes.</item>
 
         <item>V 2.519</item>
         <item>A The video now gets tinted to improve the visibility of controls.</item>
