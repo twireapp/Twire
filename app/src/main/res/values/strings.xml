@@ -379,7 +379,7 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
-        <item>V 2.520</item>
+        <item>V 2.9.0</item>
         <item>A New setting to enable/disable filtering of top streams by language.</item>
         <item>A Handle stream and VOD URLs.</item>
         <item>A Messages that mention you will now be highlighted.</item>
@@ -391,6 +391,7 @@
         <item>F Fix emotes not being parsed correctly on your own messages.</item>
         <item>F Fix thumbnails not displaying correctly on Android versions &lt; 21.</item>
         <item>F Fix some controls being hidden on Night and True Night themes.</item>
+        <item>C Using semantic versioning again.</item>
 
         <item>V 2.519</item>
         <item>A The video now gets tinted to improve the visibility of controls.</item>
