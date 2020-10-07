@@ -103,7 +103,7 @@
     <string name="stream_backward">Backward 10 seconds</string>
 
     <!-- VOD activity -->
-    <string name="vod_playback_failed">Failed to play VOD. Try another quality.</string>
+    <string name="vod_playback_failed">Could not play VOD. Try changing the quality.</string>
     <string name="title_activity_vod">Video On Demand</string>
     <string name="intent_vod" translatable="false">intent_vod</string>
     <string name="vod_views">%d views</string>
@@ -141,54 +141,54 @@
     <string name="top_games_activity_title">@string/navigation_drawer_top_games_title</string>
 
     <!--Errors -->
-    <string name="error_external_playback_failed">Failed to send URL to external player</string>
+    <string name="error_external_playback_failed">Could not send URL to external player</string>
     <string name="error_nothing_found">There\'s nothing here</string>
-    <string name="no_server_response_message">Oops, Twitch\'s servers don\'t seem to be responding. Refresh?</string>
+    <string name="no_server_response_message">The Twitch servers are not responding. Try again?</string>
     <string name="no_server_response_action">OK</string>
 
     <!-- My Games Activity -->
     <string name="my_games__error_none_found">No games found</string>
-    <string name="my_games_activity_title">@string/navigation_drawer_my_games_title</string>
+    <string name="my_games_activity_title" translatable="false">@string/navigation_drawer_my_games_title</string>
 
     <!-- My Channels activity -->
     <string name="my_channels_error_none_found">No follows found</string>
-    <string name="my_channels_activity_title">@string/navigation_drawer_follows_title</string>
+    <string name="my_channels_activity_title" translatable="false">@string/navigation_drawer_follows_title</string>
     <string name="my_channels_activity_label">Following</string>
 
     <!-- Live Stream Activity -->
     <string name="stream_no_chromecast_quality_supported">Sorry, this stream doesn\'t support </string>
-    <string name="stream_playback_failed">Failed to play stream. Try another quality.</string>
+    <string name="stream_playback_failed">Could not play stream. Try changing the quality.</string>
     <string name="title_activity_live_stream">Live stream</string>
     <string name="chat_send_message_hint">Type message</string>
     <string name="chat_status_connecting">Connecting to chat…</string>
     <string name="chat_status_connected">Ready to Chat</string>
     <string name="chat_status_reconnecting">Reconnecting…</string>
-    <string name="chat_status_connection_failed">Connection Failed</string>
+    <string name="chat_status_connection_failed">Connection Dropped</string>
     <string name="chat_emote_size_title">Emote size</string>
     <string name="chat_message_size_title">Message size</string>
 
     <!-- ChannelInfo activity -->
     <string name="channel_info_intent_object" translatable="false">STREAMERINFO_INTENT_OBJECT</string>
     <string name="channel_info_name">John Doe</string>
-    <string name="channel_info_bio">This user is apparently very private about the stream…</string>
+    <string name="channel_info_bio">This user is restrictive about their stream…</string>
 
     <!-- My Streams activity -->
     <string name="my_streams_error">No streams found</string>
-    <string name="my_streams_activity_title">@string/navigation_drawer_my_streams_title</string>
+    <string name="my_streams_activity_title" translatable="false">@string/navigation_drawer_my_streams_title</string>
     <string name="my_streams_preview_image">Preview of the live channel</string>
     <string name="my_streams_cell_current_viewers">%d viewers</string>
     <string name="my_streams_cell_online_since">Started x minutes ago</string>
 
     <!-- Top Streams Activity -->
-    <string name="top_streams_activity_title">@string/navigation_drawer_top_streams_title</string>
+    <string name="top_streams_activity_title" translatable="false">@string/navigation_drawer_top_streams_title</string>
 
     <!-- Featured Streams Activity -->
-    <string name="featured_activity_title">@string/navigation_drawer_featured_title</string>
+    <string name="featured_activity_title" translatable="false">@string/navigation_drawer_featured_title</string>
     <string name="featured_error_no_more_streams">Twitch doesn\'t have any more featured streams right now</string>
 
     <!-- Online Streams Status -->
     <string name="enum_ready_message"> </string>
-    <string name="enum_no_internet_message">You don\'t seem to have an internet connection</string>
+    <string name="enum_no_internet_message">Not connected to the Internet</string>
     <string name="enum_twitch_fuckup_message">Twitch\'s servers seem to be unavailable</string>
     <string name="enum_no_online_streams">None of your followed streams are currently online</string>
 
@@ -205,7 +205,7 @@
     <string name="welcome_text_line_two">Twire</string>
 
     <!-- Login Activity-->
-    <string name="title_activity_login">@string/title_activity_welcome</string>
+    <string name="title_activity_login" translatable="false">@string/title_activity_welcome</string>
     <string name="login_text_line_one">Let\'s get you set up!</string>
     <string name="login_text_line_two">First, sign into Twitch.</string>
     <string name="login_user_cancel">You need to log in to use Twire, though…</string>
@@ -216,11 +216,11 @@
     <string name="login_intent_part_of_setup" translatable="false">login_intent_part_of_setup</string>
     <string name="login_intent_token_not_valid" translatable="false">login_intent_token_not_valid</string>
     <string name="login_unvalid_token_text_line_one">Unfortunately you </string>
-    <string name="login_unvalid_token_text_line_two">have to login again</string>
+    <string name="login_unvalid_token_text_line_two">have to log in again</string>
 
 
     <!-- Notification Activity -->
-    <string name="title_activity_notification">@string/title_activity_welcome</string>
+    <string name="title_activity_notification" translatable="false">@string/title_activity_welcome</string>
     <string name="notification_text_line_one">How do you like your notifications?</string>
     <string name="notification_text_line_two">First, sign into Twitch</string>
     <string name="notification_customize_button">CUSTOMIZE</string>
@@ -228,7 +228,7 @@
 
     <!-- Confirm Setup Activity -->
     <string name="confirm_text_line_one">Sit tight!</string>
-    <string name="confirm_text_line_two">We just need to get your follows from Twitch.</string>
+    <string name="confirm_text_line_two">Fetching your follows from Twitch…</string>
 
     <!-- Settings -->
     <string name="settings_general_name">General</string>
@@ -247,12 +247,12 @@
     <!-- General settings -->
     <string name="gen_not_logged_in">Click to log in</string>
     <string name="gen_dialog_login_or_out_content">Do you want to log into a new account or log out as %s?</string>
-    <string name="gen_dialog_login_or_out_login_action">LOGIN</string>
-    <string name="gen_dialog_login_or_out_logout_action">LOGOUT</string>
+    <string name="gen_dialog_login_or_out_login_action">LOG IN</string>
+    <string name="gen_dialog_login_or_out_logout_action">LOG OUT</string>
     <string name="gen_twitch_name">Twitch Username</string>
     <string name="gen_start_page">Startup Page</string>
     <string name="gen_reset_tips">Reset tutorial tips</string>
-    <string name="gen_tips_have_been_reset">Tutorial tips have been reset</string>
+    <string name="gen_tips_have_been_reset">Tutorial tips reset</string>
     <string name="gen_language_filter">Filter top streams by language</string>
     <string name="gen_open_changelog">Open changelog</string>
 
@@ -291,9 +291,9 @@
     <string name="choose_who_summary_activity_settings_notifications">Get notified when these streamers go live</string>
 
     <string name="vibrate_activity_settings_notifications">Vibrate</string>
-    <string name="screen_wake_activity_settings_notifications">Wakeup screen</string>
+    <string name="screen_wake_activity_settings_notifications">Turn on screen</string>
     <string name="sound_activity_settings_notifications">Play sound</string>
-    <string name="led_activity_settings_notifications">Light up LED</string>
+    <string name="led_activity_settings_notifications">Shine LED</string>
     <string name="quiet_hours_activity_settings_notifications">Quiet hours</string>
     <string name="quiet_hours_start_tag_activity_settings_notifications">Start</string>
     <string name="quiet_hours_end_tag_activity_settings_notifications">End</string>
@@ -369,13 +369,13 @@
     <string name="router_activity_label">Play with Twire</string>
     <string name="router_unknown_error">An unknown error occurred.</string>
     <string name="router_error_dialog_title">URL Error</string>
-    <string name="router_vod_error">Failed to load the VOD.</string>
+    <string name="router_vod_error">Could not load the VOD.</string>
     <string name="router_nonexistent_user">That user doesn\'t exist.</string>
-    <string name="router_channel_error">Failed to load the channel.</string>
+    <string name="router_channel_error">Could not load the channel.</string>
 
     <!-- Changelog -->
     <string name="changelog_title">Changelog</string>
-    <string name="changelog_show_after_update">Show changelog after an update</string>
+    <string name="changelog_show_after_update">Show changelog in new versions</string>
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
