@@ -163,7 +163,7 @@
     <string name="chat_status_connecting">Connecting to chat…</string>
     <string name="chat_status_connected">Ready to Chat</string>
     <string name="chat_status_reconnecting">Reconnecting…</string>
-    <string name="chat_status_connection_failed">Connection Dropped</string>
+    <string name="chat_status_connection_failed">Could not connect</string>
     <string name="chat_emote_size_title">Emote size</string>
     <string name="chat_message_size_title">Message size</string>
 
@@ -293,7 +293,7 @@
     <string name="vibrate_activity_settings_notifications">Vibrate</string>
     <string name="screen_wake_activity_settings_notifications">Turn on screen</string>
     <string name="sound_activity_settings_notifications">Play sound</string>
-    <string name="led_activity_settings_notifications">Shine LED</string>
+    <string name="led_activity_settings_notifications">Turn on LED</string>
     <string name="quiet_hours_activity_settings_notifications">Quiet hours</string>
     <string name="quiet_hours_start_tag_activity_settings_notifications">Start</string>
     <string name="quiet_hours_end_tag_activity_settings_notifications">End</string>
@@ -375,7 +375,7 @@
 
     <!-- Changelog -->
     <string name="changelog_title">Changelog</string>
-    <string name="changelog_show_after_update">Show changelog in new versions</string>
+    <string name="changelog_show_after_update">Show a summary of changes for new versions</string>
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
