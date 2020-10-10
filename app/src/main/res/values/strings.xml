@@ -163,7 +163,7 @@
     <string name="chat_status_connecting">Connecting to chat…</string>
     <string name="chat_status_connected">Ready to Chat</string>
     <string name="chat_status_reconnecting">Reconnecting…</string>
-    <string name="chat_status_connection_failed">Could not connect.</string>
+    <string name="chat_status_connection_failed">Could not establish or maintain connection.</string>
     <string name="chat_emote_size_title">Emote size</string>
     <string name="chat_message_size_title">Message size</string>
 
