@@ -141,13 +141,13 @@
     <string name="top_games_activity_title">@string/navigation_drawer_top_games_title</string>
 
     <!--Errors -->
-    <string name="error_external_playback_failed">Could not send URL to external player</string>
+    <string name="error_external_playback_failed">Could not send URL to external player.</string>
     <string name="error_nothing_found">There\'s nothing here</string>
     <string name="no_server_response_message">The Twitch servers are not responding. Try again?</string>
     <string name="no_server_response_action">OK</string>
 
     <!-- My Games Activity -->
-    <string name="my_games__error_none_found">No games found</string>
+    <string name="my_games__error_none_found">Could not find any games.</string>
     <string name="my_games_activity_title" translatable="false">@string/navigation_drawer_my_games_title</string>
 
     <!-- My Channels activity -->
@@ -188,7 +188,7 @@
 
     <!-- Online Streams Status -->
     <string name="enum_ready_message"> </string>
-    <string name="enum_no_internet_message">Not connected to the Internet</string>
+    <string name="enum_no_internet_message">Connect to the Internet first</string>
     <string name="enum_twitch_fuckup_message">Twitch\'s servers seem to be unavailable</string>
     <string name="enum_no_online_streams">None of your followed streams are currently online</string>
 
