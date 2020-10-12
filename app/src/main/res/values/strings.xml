@@ -163,7 +163,7 @@
     <string name="chat_status_connecting">Connecting to chat…</string>
     <string name="chat_status_connected">Ready to Chat</string>
     <string name="chat_status_reconnecting">Reconnecting…</string>
-    <string name="chat_status_connection_failed">Could not establish or maintain connection.</string>
+    <string name="chat_status_connection_failed">Connection failed.</string>
     <string name="chat_emote_size_title">Emote size</string>
     <string name="chat_message_size_title">Message size</string>
 
@@ -246,7 +246,7 @@
 
     <!-- General settings -->
     <string name="gen_not_logged_in">Click to log in</string>
-    <string name="gen_dialog_login_or_out_content">Do you want to log into a new account or log out as %s?</string>
+    <string name="gen_dialog_login_or_out_content">Log into a new account or log out as %s?</string>
     <string name="gen_dialog_login_or_out_login_action">LOG IN</string>
     <string name="gen_dialog_login_or_out_logout_action">LOG OUT</string>
     <string name="gen_twitch_name">Twitch Username</string>
@@ -288,7 +288,7 @@
     <!-- Notifications settings -->
     <string name="check_activity_settings_notifications">Check interval</string>
     <string name="choose_streamers_activity_settings_notifications_title">Streamers</string>
-    <string name="choose_who_summary_activity_settings_notifications">Get notified when these streamers go live</string>
+    <string name="choose_who_summary_activity_settings_notifications">Get notified of these streamers going live</string>
 
     <string name="vibrate_activity_settings_notifications">Vibrate</string>
     <string name="screen_wake_activity_settings_notifications">Turn on screen</string>
@@ -309,7 +309,7 @@
     <string name="notifications_minutes">%s minutes</string>
     <string name="notifications_hours">%s hours</string>
     <string name="notifications_disabled_key">Never</string>
-    <string name="notifications_not_logged_in">Notifications will only be shown if you are logged into a Twitch account.</string>
+    <string name="notifications_not_logged_in">Notifications are only shown when logged into Twitch.</string>
 
     <!-- Game Activity -->
     <string name="game_intent_key" translatable="false">GAME_OBJECT</string>
@@ -369,9 +369,9 @@
     <string name="router_activity_label">Play with Twire</string>
     <string name="router_unknown_error">An unknown error occurred.</string>
     <string name="router_error_dialog_title">URL Error</string>
-    <string name="router_vod_error">Could not load the VOD.</string>
+    <string name="router_vod_error">Could not load VOD.</string>
     <string name="router_nonexistent_user">That user doesn\'t exist.</string>
-    <string name="router_channel_error">Could not load the channel.</string>
+    <string name="router_channel_error">Could not load channel.</string>
 
     <!-- Changelog -->
     <string name="changelog_title">Changelog</string>
@@ -380,17 +380,17 @@
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
         <item>V 2.9.0</item>
-        <item>A New setting to enable/disable filtering of top streams by language.</item>
+        <item>A New setting to turn on or off filtering of top streams by language.</item>
         <item>A Handle stream and VOD URLs.</item>
-        <item>A Messages that mention you will now be highlighted.</item>
-        <item>A Changelog for will be displayed on each new version.</item>
+        <item>A Messages mentioning you will now be highlighted.</item>
+        <item>A Changelog displayed on each new version.</item>
         <item>C Attempt to remove ads from streams.</item>
-        <item>F Fix login token not being validated correctly. Twire will properly warn you if you need to login again.</item>
-        <item>F Fix the stream rewinding when opening the app from Picture in Picture mode.</item>
-        <item>F Fix the chat being the wrong size when opening the app from Picture in Picture mode.</item>
+        <item>F Fix login token not being validated correctly. Twire will properly warn you if you need to log in again.</item>
+        <item>F Fix the stream rewinding when opening the app from \"Picture in Picture\" mode.</item>
+        <item>F Fix the chat being the wrong size when opening the app from \"Picture in Picture\" mode.</item>
         <item>F Fix emotes not being parsed correctly on your own messages.</item>
         <item>F Fix thumbnails not displaying correctly on Android versions &lt; 21.</item>
-        <item>F Fix some controls being hidden on Night and True Night themes.</item>
+        <item>F Fix some controls being hidden on \"Night\" and \"True night\" themes.</item>
         <item>C Using semantic versioning again.</item>
 
         <item>V 2.519</item>
