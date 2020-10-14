@@ -375,7 +375,7 @@
 
     <!-- Changelog -->
     <string name="changelog_title">Changelog</string>
-    <string name="changelog_show_after_update">Show a summary of changes for new versions</string>
+    <string name="changelog_show_after_update">Show a summary of changes after installing a new version</string>
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
