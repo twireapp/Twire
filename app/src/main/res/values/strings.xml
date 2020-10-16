@@ -186,12 +186,6 @@
     <string name="login_intent_token_not_valid" translatable="false">login_intent_token_not_valid</string>
     <string name="login_unvalid_token_text_line_one">Unfortunately you </string>
     <string name="login_unvalid_token_text_line_two">have to log in again</string>
-
-
-    <!-- Notification Activity -->
-    <string name="title_activity_notification" translatable="false">@string/title_activity_welcome</string>
-    <string name="notification_text_line_one">How do you like your notifications?</string>
-    <string name="notification_customize_button">CUSTOMIZE</string>
     <string name="skip_text">SKIP</string>
 
     <!-- Confirm Setup Activity -->
@@ -205,8 +199,6 @@
     <string name="settings_stream_player_summary">Current viewer count, player behavior</string>
     <string name="settings_appearance_name">Appearance</string>
     <string name="settings_appearance_summary">Theme, card style, card size</string>
-    <string name="settings_notifications_name">Notifications</string>
-    <string name="settings_notifications_summary">Check interval, sound, vibration, etc.</string>
     <string name="settings_chat_name">Twitch Chat</string>
     <string name="settings_chat_name_summary">Emote size, message size</string>
 
@@ -249,31 +241,6 @@
     <string name="appearance_stream_header">Streams</string>
     <string name="appearance_streamer_header">Streamers</string>
     <string name="appearance_game_header">Games</string>
-
-    <!-- Notifications settings -->
-    <string name="check_activity_settings_notifications">Check interval</string>
-    <string name="choose_streamers_activity_settings_notifications_title">Streamers</string>
-    <string name="choose_who_summary_activity_settings_notifications">Get notified when these streamers go live</string>
-
-    <string name="vibrate_activity_settings_notifications">Vibrate</string>
-    <string name="screen_wake_activity_settings_notifications">Wakeup screen</string>
-    <string name="sound_activity_settings_notifications">Play sound</string>
-    <string name="led_activity_settings_notifications">Light up LED</string>
-    <string name="quiet_hours_activity_settings_notifications">Quiet hours</string>
-    <string name="quiet_hours_start_tag_activity_settings_notifications">Start</string>
-    <string name="quiet_hours_end_tag_activity_settings_notifications">End</string>
-    <string name="quiet_hours_show_notifications">Show notifications during quiet hours</string>
-    <string name="notifications_time_of_day">%1$s:%2$s</string>
-    <string name="notifications_check_interval">Check interval</string>
-    <string name="notifications_never">Never</string>
-    <string name="notifications_15">15 minutes</string>
-    <string name="notifications_30">30 minutes</string>
-    <string name="notifications_60">1 hours</string>
-    <string name="notifications_120">2 hours</string>
-    <string name="notifications_minutes">%s minutes</string>
-    <string name="notifications_hours">%s hours</string>
-    <string name="notifications_disabled_key" translatable="false">@string/notifications_never</string>
-    <string name="notifications_not_logged_in">Notifications will only be shown if you are logged into a Twitch account.</string>
 
     <!-- Game Activity -->
     <string name="game_intent_key" translatable="false">GAME_OBJECT</string>
@@ -319,8 +286,6 @@
     <string name="chat_message_option_duplicate">Duplicate message</string>
     <string name="chat_message_option_block">Block</string>
     <string name="stream_external_play_using">Play using…</string>
-    <string name="live_streamer_notification_id" translatable="false">liveStreamerNotificationId</string>
-    <string name="stream_cast_notification_id" translatable="false">streamCastNotificationId</string>
 
     <!-- Router -->
     <string name="router_activity_label">Play with Twire</string>

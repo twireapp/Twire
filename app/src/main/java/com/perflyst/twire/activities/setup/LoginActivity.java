@@ -29,8 +29,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
-
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.UsageTrackingAppCompatActivity;
@@ -434,19 +432,12 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
     private void navigateToNotificationActivity() {
         // Go to the login activity, with no transition.
         hasTransitioned = true;
-        if (!isPartOfSetup) {
-            if (!LoginActivity.hasLoadedFollows()) {
-                this.startActivity(new Intent(getBaseContext(), ConfirmSetupActivity.class));
-                this.overridePendingTransition(0, 0);
-            } else {
-                this.startActivity(Service.getLoggedInIntent(getBaseContext()));
-                this.overridePendingTransition(0, 0);
-            }
-
+        if (!LoginActivity.hasLoadedFollows()) {
+            this.startActivity(new Intent(getBaseContext(), ConfirmSetupActivity.class));
+            this.overridePendingTransition(0, 0);
         } else {
-            Intent loginActivityIntent = new Intent(getBaseContext(), NotificationActivity.class);
-            loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            ActivityCompat.startActivity(this, loginActivityIntent, null);
+            this.startActivity(Service.getLoggedInIntent(getBaseContext()));
+            this.overridePendingTransition(0, 0);
         }
     }
 
