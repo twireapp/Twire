@@ -39,7 +39,6 @@ class StreamerInfoViewHolder extends MainActivityAdapter.ElementsViewHolder {
     StreamerInfoViewHolder(View v) {
         super(v);
         vDisplayName = v.findViewById(R.id.displayName);
-        vDisplayName = v.findViewById(R.id.displayName);
         vProfileLogoImage = v.findViewById(R.id.profileLogoImageView);
         vCard = v.findViewById(R.id.card_view);
     }

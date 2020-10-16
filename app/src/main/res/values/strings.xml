@@ -9,15 +9,10 @@
     <string name="stop">STOP</string>
     <string name="cancel">CANCEL</string>
     <string name="resume">RESUME</string>
-    <string name="undo">UNDO</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
     <string name="enabled">Enabled</string>
     <string name="disabled">Disabled</string>
     <string name="minutes_short">m</string>
     <string name="hours_short">h</string>
-    <string name="minutes">minutes</string>
-    <string name="hours">hours</string>
     <string name="action_settings">Settings</string>
     <string name="settings_activity_title">Settings</string>
     <string name="drawer_open">Open</string>
@@ -25,12 +20,10 @@
     <string name="subscription_card_displayName">Name</string>
     <string name="content_desc_twitchProfileBanner_imageView">The user\'s specified profile banner</string>
     <string name="content_desc_twitchLogo_imageView">Picture of the streamer\'s Twitch logo</string>
-    <string name="description">Media controls</string>
     <string name="no_elements_added_notice">No %s could be found</string>
     <string name="vods">Videos</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
-    <string name="stop_lower">Stop</string>
     <string name="percent">%s %%</string>
     <string name="disable_all">DISABLE ALL</string>
     <string name="enable_all">ENABLE ALL</string>
@@ -41,8 +34,6 @@
 
     <!-- ChannelActivity -->
     <string name="title_activity_streamer_info">Channel</string>
-    <string name="streamerInfo_followers_title">Followers</string>
-    <string name="streamerInfo_views_title">Views</string>
     <string name="streamerInfo_desc_tab">Description</string>
     <string name="streamerInfo_broadcasts_tab">Broadcasts</string>
     <string name="streamerInfo_highlights_tab">Highlights</string>
@@ -88,11 +79,6 @@
     <string name="stream_preview_vod" translatable="false">stream_remove_black_bars</string>
     <string name="stream_sleep_timer_title">Sleep timer</string>
     <string name="stream_seek_dialog_title">Seek to</string>
-    <string name="stream_chromecast_playing">Playing on %s…</string>
-    <string name="stream_chromecast_failed">Something went wrong playing on %s</string>
-    <string name="stream_chromecast_no_vod">Sorry, video-on-demand is currently not supported for chromecasting</string>
-    <string name="stream_chromecast_connection_failed">Twire could not connect to %s</string>
-    <string name="stream_chromecast_connecting">Connecting…</string>
     <string name="stream_no_audio_only">Sorry, audio-only is not available for this stream</string>
     <string name="stream_audio_only_active">Playing audio only</string>
 
@@ -138,66 +124,49 @@
     <string name="preview_game_viewers">1337 viewers</string>
 
     <!-- Top Games Activity -->
-    <string name="top_games_activity_title">@string/navigation_drawer_top_games_title</string>
+    <string name="top_games_activity_title" translatable="false">@string/navigation_drawer_top_games_title</string>
 
     <!--Errors -->
     <string name="error_external_playback_failed">Failed to send URL to external player</string>
     <string name="error_nothing_found">There\'s nothing here</string>
     <string name="no_server_response_message">Oops, Twitch\'s servers don\'t seem to be responding. Refresh?</string>
-    <string name="no_server_response_action">OK</string>
 
     <!-- My Games Activity -->
-    <string name="my_games__error_none_found">No games found</string>
-    <string name="my_games_activity_title">@string/navigation_drawer_my_games_title</string>
+    <string name="my_games_activity_title" translatable="false">@string/navigation_drawer_my_games_title</string>
 
     <!-- My Channels activity -->
     <string name="my_channels_error_none_found">No follows found</string>
-    <string name="my_channels_activity_title">@string/navigation_drawer_follows_title</string>
+    <string name="my_channels_activity_title" translatable="false">@string/navigation_drawer_follows_title</string>
     <string name="my_channels_activity_label">Following</string>
 
     <!-- Live Stream Activity -->
-    <string name="stream_no_chromecast_quality_supported">Sorry, this stream doesn\'t support </string>
     <string name="stream_playback_failed">Failed to play stream. Try another quality.</string>
     <string name="title_activity_live_stream">Live stream</string>
     <string name="chat_send_message_hint">Type message</string>
-    <string name="chat_status_connecting">Connecting to chat…</string>
+    <string name="chat_status_connecting">Connecting to Chat…</string>
     <string name="chat_status_connected">Ready to Chat</string>
     <string name="chat_status_reconnecting">Reconnecting…</string>
     <string name="chat_status_connection_failed">Connection Failed</string>
-    <string name="chat_emote_size_title">Emote size</string>
-    <string name="chat_message_size_title">Message size</string>
 
     <!-- ChannelInfo activity -->
     <string name="channel_info_intent_object" translatable="false">STREAMERINFO_INTENT_OBJECT</string>
-    <string name="channel_info_name">John Doe</string>
-    <string name="channel_info_bio">This user is apparently very private about the stream…</string>
 
     <!-- My Streams activity -->
-    <string name="my_streams_error">No streams found</string>
-    <string name="my_streams_activity_title">@string/navigation_drawer_my_streams_title</string>
+    <string name="my_streams_activity_title" translatable="false">@string/navigation_drawer_my_streams_title</string>
     <string name="my_streams_preview_image">Preview of the live channel</string>
     <string name="my_streams_cell_current_viewers">%d viewers</string>
-    <string name="my_streams_cell_online_since">Started x minutes ago</string>
 
     <!-- Top Streams Activity -->
-    <string name="top_streams_activity_title">@string/navigation_drawer_top_streams_title</string>
+    <string name="top_streams_activity_title" translatable="false">@string/navigation_drawer_top_streams_title</string>
 
     <!-- Featured Streams Activity -->
-    <string name="featured_activity_title">@string/navigation_drawer_featured_title</string>
-    <string name="featured_error_no_more_streams">Twitch doesn\'t have any more featured streams right now</string>
-
-    <!-- Online Streams Status -->
-    <string name="enum_ready_message"> </string>
-    <string name="enum_no_internet_message">You don\'t seem to have an internet connection</string>
-    <string name="enum_twitch_fuckup_message">Twitch\'s servers seem to be unavailable</string>
-    <string name="enum_no_online_streams">None of your followed streams are currently online</string>
+    <string name="featured_activity_title" translatable="false">@string/navigation_drawer_featured_title</string>
 
     <!-- OnlineStreamCardAdapter-->
     <string name="intent_key_streamer_info" translatable="false">StreamerInfoIntent</string>
     <string name="intent_key_stream_info" translatable="false">StreamInfoIntent</string>
     <string name="intent_key_stream_viewers" translatable="false">StreamViewers</string>
     <string name="intent_key_streamer_name" translatable="false">StreamerNameIntent</string>
-    <string name="streams_adapter_viewers">viewers</string>
 
     <!-- Welcome Activity -->
     <string name="title_activity_welcome">Twire setup</string>
@@ -205,7 +174,7 @@
     <string name="welcome_text_line_two">Twire</string>
 
     <!-- Login Activity-->
-    <string name="title_activity_login">@string/title_activity_welcome</string>
+    <string name="title_activity_login" translatable="false">@string/title_activity_welcome</string>
     <string name="login_text_line_one">Let\'s get you set up!</string>
     <string name="login_text_line_two">First, sign into Twitch.</string>
     <string name="login_user_cancel">You need to log in to use Twire, though…</string>
@@ -216,13 +185,12 @@
     <string name="login_intent_part_of_setup" translatable="false">login_intent_part_of_setup</string>
     <string name="login_intent_token_not_valid" translatable="false">login_intent_token_not_valid</string>
     <string name="login_unvalid_token_text_line_one">Unfortunately you </string>
-    <string name="login_unvalid_token_text_line_two">have to login again</string>
+    <string name="login_unvalid_token_text_line_two">have to log in again</string>
 
 
     <!-- Notification Activity -->
-    <string name="title_activity_notification">@string/title_activity_welcome</string>
+    <string name="title_activity_notification" translatable="false">@string/title_activity_welcome</string>
     <string name="notification_text_line_one">How do you like your notifications?</string>
-    <string name="notification_text_line_two">First, sign into Twitch</string>
     <string name="notification_customize_button">CUSTOMIZE</string>
     <string name="skip_text">SKIP</string>
 
@@ -239,16 +207,14 @@
     <string name="settings_appearance_summary">Theme, card style, card size</string>
     <string name="settings_notifications_name">Notifications</string>
     <string name="settings_notifications_summary">Check interval, sound, vibration, etc.</string>
-    <string name="settings_rate_name">Rate App</string>
-    <string name="settings_rate_summary">Give Feedback</string>
     <string name="settings_chat_name">Twitch Chat</string>
     <string name="settings_chat_name_summary">Emote size, message size</string>
 
     <!-- General settings -->
     <string name="gen_not_logged_in">Click to log in</string>
     <string name="gen_dialog_login_or_out_content">Do you want to log into a new account or log out as %s?</string>
-    <string name="gen_dialog_login_or_out_login_action">LOGIN</string>
-    <string name="gen_dialog_login_or_out_logout_action">LOGOUT</string>
+    <string name="gen_dialog_login_or_out_login_action">LOG IN</string>
+    <string name="gen_dialog_login_or_out_logout_action">LOG OUT</string>
     <string name="gen_twitch_name">Twitch Username</string>
     <string name="gen_start_page">Startup Page</string>
     <string name="gen_reset_tips">Reset tutorial tips</string>
@@ -259,7 +225,6 @@
     <!-- Chat Settings -->
     <string name="chat_emote_size">Emote size</string>
     <string name="chat_message_size">Message size</string>
-    <string name="chat_emote_storage">Save emotes in local storage</string>
     <string name="chat_landscape_enable">Chat in landscape</string>
     <string name="chat_landscape_swipe">Drag to show chat in landscape</string>
     <string name="chat_landscape_width">Chat landscape width</string>
@@ -301,14 +266,13 @@
     <string name="notifications_time_of_day">%1$s:%2$s</string>
     <string name="notifications_check_interval">Check interval</string>
     <string name="notifications_never">Never</string>
-    <string name="notifications_5">5 minutes</string>
     <string name="notifications_15">15 minutes</string>
     <string name="notifications_30">30 minutes</string>
     <string name="notifications_60">1 hours</string>
     <string name="notifications_120">2 hours</string>
     <string name="notifications_minutes">%s minutes</string>
     <string name="notifications_hours">%s hours</string>
-    <string name="notifications_disabled_key">Never</string>
+    <string name="notifications_disabled_key" translatable="false">@string/notifications_never</string>
     <string name="notifications_not_logged_in">Notifications will only be shown if you are logged into a Twitch account.</string>
 
     <!-- Game Activity -->
@@ -333,11 +297,6 @@
     <string name="navigation_drawer_logged_in_textview">Logged in as %s</string>
     <string name="navigation_drawer_not_logged_in">Not logged in</string>
 
-    <!-- Menu Actions -->
-    <string name="menu_action_refresh">Refresh</string>
-    <string name="menu_action_search">Search</string>
-    <string name="ccl_media_route_menu_title">Play on…</string>
-
     <!-- Theme Dialog -->
     <string name="theme_dialog_title">Themes</string>
     <string name="blue_theme_name">Blue</string>
@@ -359,8 +318,6 @@
     <string name="chat_message_option_mention">Mention</string>
     <string name="chat_message_option_duplicate">Duplicate message</string>
     <string name="chat_message_option_block">Block</string>
-    <string name="action_got_it">Got it</string>
-    <string name="action_share">Share</string>
     <string name="stream_external_play_using">Play using…</string>
     <string name="live_streamer_notification_id" translatable="false">liveStreamerNotificationId</string>
     <string name="stream_cast_notification_id" translatable="false">streamCastNotificationId</string>
@@ -380,18 +337,18 @@
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
         <item>V 2.9.0</item>
-        <item>A New setting to enable/disable filtering of top streams by language.</item>
+        <item>A New setting to enable/disable filtering of the top streams by language.</item>
         <item>A Handle stream and VOD URLs.</item>
         <item>A Messages that mention you will now be highlighted.</item>
-        <item>A Changelog for will be displayed on each new version.</item>
+        <item>A Changelog will be displayed on each new version.</item>
         <item>C Attempt to remove ads from streams.</item>
-        <item>F Fix login token not being validated correctly. Twire will properly warn you if you need to login again.</item>
+        <item>F Fix login token not being validated correctly. Twire will properly warn you if you need to log in again.</item>
         <item>F Fix the stream rewinding when opening the app from Picture in Picture mode.</item>
         <item>F Fix the chat being the wrong size when opening the app from Picture in Picture mode.</item>
         <item>F Fix emotes not being parsed correctly on your own messages.</item>
-        <item>F Fix thumbnails not displaying correctly on Android versions &lt; 21.</item>
-        <item>F Fix some controls being hidden on Night and True Night themes.</item>
-        <item>C Using semantic versioning again.</item>
+        <item>F Fix thumbnails not displaying correctly before Android 5.0.</item>
+        <item>F Fix some controls being hidden on Night and True night themes.</item>
+        <item>C Use semantic versioning again.</item>
 
         <item>V 2.519</item>
         <item>A The video now gets tinted to improve the visibility of controls.</item>

@@ -78,7 +78,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
 
     private Snackbar setupSnackbar() {
         String responseMessage = getResources().getString(R.string.no_server_response_message);
-        String actionString = getResources().getString(R.string.no_server_response_action);
+        String actionString = getResources().getString(R.string.ok);
         Snackbar snackbar = Snackbar
                 .make(mRecyclerView, responseMessage, Snackbar.LENGTH_LONG);
         snackbar.setAction(actionString, v -> scrollToTopAndRefresh());
