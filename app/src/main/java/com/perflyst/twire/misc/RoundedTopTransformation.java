@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 /**
@@ -22,7 +23,7 @@ import java.security.MessageDigest;
  */
 public class RoundedTopTransformation extends BitmapTransformation {
     private static final String ID = "com.perflyst.twire.misc.RoundedTopTransformation";
-    private static final byte[] ID_BYTES = ID.getBytes(Charset.forName("UTF-8"));
+    private static final byte[] ID_BYTES = ID.getBytes(StandardCharsets.UTF_8);
 
     private float cornerRadius;
 
