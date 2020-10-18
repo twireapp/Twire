@@ -123,7 +123,7 @@
     <string name="stream_no_chromecast_quality_supported">Scusa, questo stream non esiste </string>
     <string name="stream_playback_failed">Lo stream non è più in diretta</string>
     <string name="title_activity_live_stream">Trasmissione in diretta</string>
-    <string name="chat_send_message_hint">Tipo Messaggio</string>
+    <string name="chat_send_message_hint">Scrivi Messaggio</string>
     <string name="chat_status_connecting">Connessione alla chat</string>
     <string name="chat_status_connected">Pronto per l\'uso della Chat</string>
     <string name="chat_status_reconnecting">Riconnessione</string>
