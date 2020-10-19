@@ -159,7 +159,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         viewHolder.vPreviewImage.getLayoutParams().width = (metrics.widthPixels);
 
         String gameAndViewers = getContext().getResources().getString(R.string.vod_streams_card_stream_views, String.valueOf(element.getViews()));
-        if (!element.getGameTitle().equals("")) {
+        if (!element.getGameTitle().isEmpty()) {
             gameAndViewers += " - " + element.getGameTitle();
         }
         viewHolder.vTitle.setText(element.getVideoTitle());

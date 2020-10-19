@@ -161,12 +161,8 @@ public class ChannelActivity extends ThemeActivity {
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText() != null &&
-                        tab.getText().equals(getResources().getString(R.string.streamerInfo_desc_tab))) {
-                    mAppBar.setExpanded(true, true);
-                } else {
-                    mAppBar.setExpanded(false, true);
-                }
+                mAppBar.setExpanded(tab.getText() != null &&
+                        tab.getText().equals(getResources().getString(R.string.streamerInfo_desc_tab)), true);
                 mViewPager.setCurrentItem(tab.getPosition(), true);
             }
 
@@ -243,9 +239,9 @@ public class ChannelActivity extends ThemeActivity {
 
                 if (swatch != null) {
                     float[] swatchValues = swatch.getHsl();
-                    float[] newSwatch = {swatchValues[0], (float) 0.85, (float) 0.85};
+                    float[] newSwatch = {swatchValues[0], 0.85f, 0.85f};
                     float[] newSwatchComposite = {(swatchValues[0] + 180) % 360, newSwatch[1], newSwatch[2]};
-                    float[] newSwatchDark = {newSwatch[0], newSwatch[1], (float) 0.6};
+                    float[] newSwatchDark = {newSwatch[0], newSwatch[1], 0.6f};
 
                     int newColorDark = Color.HSVToColor(newSwatchDark);
                     int newColor = Color.HSVToColor(newSwatch);
@@ -442,7 +438,7 @@ public class ChannelActivity extends ThemeActivity {
             TextView mDescription = rootView.findViewById(R.id.description);
             findErrorView(rootView);
 
-            if (info != null && info.getStreamDescription() != null && !info.getStreamDescription().equals("null") && !info.getStreamDescription().equals("")) {
+            if (info != null && info.getStreamDescription() != null && !info.getStreamDescription().equals("null") && !info.getStreamDescription().isEmpty()) {
                 mDescription.setText(info.getStreamDescription());
             } else {
                 showError();

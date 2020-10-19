@@ -77,9 +77,7 @@ public class ChangelogDialogFragment extends DialogFragment {
         MaterialDialog dialog = DialogService.getBaseThemedDialog(activity)
                 .title(R.string.changelog_title)
                 .customView(R.layout.dialog_changelog, false)
-                .dismissListener(dialogInterface -> {
-                    settings.setLastVersionCode(BuildConfig.VERSION_CODE);
-                })
+                .dismissListener(dialogInterface -> settings.setLastVersionCode(BuildConfig.VERSION_CODE))
                 .build();
 
         assert dialog.getCustomView() != null;

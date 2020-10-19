@@ -204,7 +204,7 @@ public class AnimationService {
      * @return The row position
      */
     public static int getRowPosFromIndex(int indexPosition, AutoSpanRecyclerView recyclerView) {
-        return (int) (Math.ceil((indexPosition + 1) / recyclerView.getSpanCount()) - 1);
+        return (int) (Math.ceil((indexPosition + 1.0f) / recyclerView.getSpanCount()) - 1);
     }
 
     public static void setAdapterInsertAnimation(final View aCard, int row, int height) {
@@ -287,7 +287,7 @@ public class AnimationService {
         mRevealAnimations.setFillAfter(true);
 
         if (includeTransition) {
-            final Animation mTransitionAnimation = new TranslateAnimation(0, 0, VIEW.getHeight() / 2, 0);
+            final Animation mTransitionAnimation = new TranslateAnimation(0, 0, VIEW.getHeight() / 2.0f, 0);
             mTransitionAnimation.setDuration(ANIMATION_DURATION);
             mTransitionAnimation.setFillAfter(false);
 
@@ -316,7 +316,7 @@ public class AnimationService {
         mHideAnimations.addAnimation(mAlphaAnimation);
 
         if (includeTransition) {
-            final Animation mTransitionAnimation = new TranslateAnimation(0, 0, 0, VIEW.getHeight() / 2);
+            final Animation mTransitionAnimation = new TranslateAnimation(0, 0, 0, VIEW.getHeight() / 2.0f);
             mTransitionAnimation.setDuration(ANIMATION_DURATION);
             mTransitionAnimation.setFillAfter(false);
 

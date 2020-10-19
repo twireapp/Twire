@@ -25,7 +25,7 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
     private String LOG_TAG = getClass().getSimpleName();
 
     protected ArrayList<ChannelInfo> doInBackground(Object... params) {
-        @SuppressWarnings({"unchecked"})
+        @SuppressWarnings("unchecked")
         ArrayList<ChannelInfo> subsToAdd = (ArrayList<ChannelInfo>) params[0];
         ArrayList<ChannelInfo> subsAdded = new ArrayList<>();
         Map<String, ChannelInfo> subsToCheck = new TreeMap<>();

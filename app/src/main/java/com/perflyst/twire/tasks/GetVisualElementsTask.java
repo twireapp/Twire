@@ -42,7 +42,7 @@ public class GetVisualElementsTask<T> extends AsyncTask<Void, Void, List<T>> {
             return;
         }
 
-        if (mVisualElements.size() == 0) {
+        if (mVisualElements.isEmpty()) {
             Log.i(LOG_TAG, "ADDING 0 VISUAL ELEMENTS");
             mLazyActivity.notifyUserNoElementsAdded();
         } else {

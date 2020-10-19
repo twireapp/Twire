@@ -113,7 +113,7 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        String[] toSend = new String[]{
+        String[] toSend = {
                 this.videoTitle,
                 this.gameTitle,
                 this.previewUrl,
