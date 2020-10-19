@@ -27,7 +27,7 @@ public class MyGamesActivity extends LazyMainActivity<Game> {
 
     @Override
     protected int getActivityIconRes() {
-        return R.drawable.ic_my_games;
+        return R.drawable.ic_star;
     }
 
     @Override

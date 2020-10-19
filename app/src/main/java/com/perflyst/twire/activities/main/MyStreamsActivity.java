@@ -25,7 +25,7 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     protected int getActivityIconRes() {
-        return R.drawable.ic_my_streams;
+        return R.drawable.ic_heart;
     }
 
     @Override

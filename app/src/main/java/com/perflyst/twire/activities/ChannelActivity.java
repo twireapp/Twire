@@ -326,8 +326,8 @@ public class ChannelActivity extends ThemeActivity {
 
     private void updateFABIcon(boolean isFollowing) {
         @DrawableRes int imageRes = isFollowing
-                ? R.drawable.ic_heart_broken_24dp
-                : R.drawable.ic_heart_24dp;
+                ? R.drawable.ic_heart_broken
+                : R.drawable.ic_heart;
         mFab.setImageResource(imageRes);
     }
 

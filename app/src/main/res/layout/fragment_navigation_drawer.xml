@@ -36,7 +36,7 @@
                 android:layout_marginStart="@dimen/navigation_drawer_icon_left_margin"
                 android:layout_marginLeft="@dimen/navigation_drawer_icon_left_margin"
                 android:layout_marginBottom="36dp"
-                android:src="@drawable/ic_notification_icon_refresh" />
+                app:srcCompat="@drawable/ic_launcher_foreground" />
 
             <TextView
                 android:id="@+id/txt_app_name"
@@ -74,7 +74,7 @@
 
                     <ImageView
                         style="@style/icon_navigation_drawer"
-                        android:src="@drawable/ic_featured_streams" />
+                        app:srcCompat="@drawable/ic_home" />
 
                     <TextView
                         style="@style/text_navigation_drawer"
@@ -87,7 +87,7 @@
 
                     <ImageView
                         style="@style/icon_navigation_drawer"
-                        android:src="@drawable/ic_channels" />
+                        app:srcCompat="@drawable/ic_person" />
 
                     <TextView
                         style="@style/text_navigation_drawer"
@@ -100,7 +100,7 @@
 
                     <ImageView
                         style="@style/icon_navigation_drawer"
-                        android:src="@drawable/ic_my_streams" />
+                        app:srcCompat="@drawable/ic_heart" />
 
                     <TextView
                         style="@style/text_navigation_drawer"
@@ -143,7 +143,7 @@
 
                     <ImageView
                         style="@style/icon_navigation_drawer"
-                        android:src="@drawable/ic_my_games" />
+                        app:srcCompat="@drawable/ic_star" />
 
                     <TextView
                         style="@style/text_navigation_drawer"
@@ -156,7 +156,7 @@
 
                     <ImageView
                         style="@style/icon_navigation_drawer"
-                        android:src="@drawable/ic_top_streams_one" />
+                        app:srcCompat="@drawable/ic_group" />
 
                     <TextView
                         style="@style/text_navigation_drawer"
@@ -169,7 +169,7 @@
 
                     <ImageView
                         style="@style/icon_navigation_drawer"
-                        android:src="@drawable/ic_top_games" />
+                        app:srcCompat="@drawable/ic_games" />
 
                     <TextView
                         style="@style/text_navigation_drawer"
@@ -182,7 +182,7 @@
 
                     <ImageView
                         style="@style/icon_navigation_drawer"
-                        android:src="@drawable/ic_search" />
+                        app:srcCompat="@drawable/ic_search" />
 
                     <TextView
                         style="@style/text_navigation_drawer"
@@ -205,7 +205,7 @@
 
             <ImageView
                 style="@style/icon_navigation_drawer"
-                app:srcCompat="@drawable/ic_settings_black_24dp" />
+                app:srcCompat="@drawable/ic_settings" />
 
             <TextView
                 style="@style/text_navigation_drawer"

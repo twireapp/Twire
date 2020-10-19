@@ -24,7 +24,7 @@ public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     protected int getActivityIconRes() {
-        return R.drawable.ic_featured_streams;
+        return R.drawable.ic_home;
     }
 
     @Override

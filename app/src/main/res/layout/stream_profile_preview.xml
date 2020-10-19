@@ -42,7 +42,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
                     android:tint="@color/white"
-                    app:srcCompat="@drawable/ic_vods_black_24dp" />
+                    app:srcCompat="@drawable/ic_vods" />
 
                 <ImageView
                     android:id="@+id/follow_unfollow_icon"
@@ -52,7 +52,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:tint="?attr/colorAccent"
-                    app:srcCompat="@drawable/ic_heart_24dp" />
+                    app:srcCompat="@drawable/ic_heart" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                                 android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                                 android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
                                 android:tint="@color/white"
-                                app:srcCompat="@drawable/ic_channels" />
+                                app:srcCompat="@drawable/ic_person" />
                         </LinearLayout>
                     </FrameLayout>
 
@@ -119,7 +119,7 @@
                                 android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                                 android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
                                 android:tint="@color/white"
-                                app:srcCompat="@drawable/ic_visibility_black_24dp" />
+                                app:srcCompat="@drawable/ic_visibility" />
                         </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>

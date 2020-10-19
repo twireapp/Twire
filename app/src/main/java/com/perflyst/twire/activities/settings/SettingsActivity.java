@@ -81,25 +81,25 @@ public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCa
                 new SettingsCategory(
                         R.string.settings_general_name,
                         R.string.settings_general_name_summary,
-                        R.drawable.ic_settings_black_24dp,
+                        R.drawable.ic_settings,
                         constructCategoryIntent(SettingsGeneralActivity.class)
                 ),
                 new SettingsCategory(
                         R.string.settings_chat_name,
                         R.string.settings_chat_name_summary,
-                        R.drawable.ic_chat_black_48dp,
+                        R.drawable.ic_chat,
                         constructCategoryIntent(SettingsTwitchChatActivity.class)
                 ),
                 new SettingsCategory(
                         R.string.settings_stream_player_name,
                         R.string.settings_stream_player_summary,
-                        R.drawable.ic_filmstrip_black_48dp,
+                        R.drawable.ic_filmstrip,
                         constructCategoryIntent(SettingsStreamPlayerActivity.class)
                 ),
                 new SettingsCategory(
                         R.string.settings_appearance_name,
                         R.string.settings_appearance_summary,
-                        R.drawable.ic_color_lens_black_48dp,
+                        R.drawable.ic_color_lens,
                         constructCategoryIntent(SettingsAppearanceActivity.class)
                 )/*,
                 new SettingsCategory(

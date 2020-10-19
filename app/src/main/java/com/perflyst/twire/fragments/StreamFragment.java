@@ -1267,9 +1267,9 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
      */
     private void updateFullscreenButtonState() {
         if (isFullscreen) {
-            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen_exit_24dp);
+            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen_exit);
         } else {
-            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen_24dp);
+            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen);
         }
     }
 
@@ -1661,8 +1661,8 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
     private void updateFollowIcon(ImageView imageView, boolean isFollowing) {
         @DrawableRes int imageRes = isFollowing
-                ? R.drawable.ic_heart_broken_24dp
-                : R.drawable.ic_heart_24dp;
+                ? R.drawable.ic_heart_broken
+                : R.drawable.ic_heart;
         imageView.setImageResource(imageRes);
     }
 
