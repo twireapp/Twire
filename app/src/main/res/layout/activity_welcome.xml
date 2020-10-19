@@ -79,7 +79,6 @@
         android:layout_marginBottom="@dimen/welcome_continue_circle_margin_bottom">
 
         <View
-            android:id="@+id/welcome_continue_circle"
             android:layout_width="@dimen/welcome_continue_circle_diameter"
             android:layout_height="@dimen/welcome_continue_circle_diameter"
             android:layout_gravity="center"

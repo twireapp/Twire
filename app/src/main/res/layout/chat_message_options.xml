@@ -4,7 +4,6 @@
     android:layout_height="wrap_content">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -35,7 +34,6 @@
                 android:text="@string/chat_message_option_duplicate" />
 
             <TextView
-                android:id="@+id/text_block_user"
                 style="@style/stream_settings_item"
                 android:background="?attr/selectableItemBackground"
                 android:text="@string/chat_message_option_block"

@@ -73,12 +73,10 @@
                     style="@style/navigation_drawer_item_container">
 
                     <ImageView
-                        android:id="@+id/navigation_drawer_home_icon"
                         style="@style/icon_navigation_drawer"
                         android:src="@drawable/ic_featured_streams" />
 
                     <TextView
-                        android:id="@+id/navigation_drawer_home_text"
                         style="@style/text_navigation_drawer"
                         android:text="@string/navigation_drawer_featured_title" />
                 </RelativeLayout>
@@ -88,12 +86,10 @@
                     style="@style/navigation_drawer_item_container">
 
                     <ImageView
-                        android:id="@+id/navigation_drawer_follows_icon"
                         style="@style/icon_navigation_drawer"
                         android:src="@drawable/ic_channels" />
 
                     <TextView
-                        android:id="@+id/navigation_drawer_follows_text"
                         style="@style/text_navigation_drawer"
                         android:text="@string/navigation_drawer_follows_title" />
                 </RelativeLayout>
@@ -103,12 +99,10 @@
                     style="@style/navigation_drawer_item_container">
 
                     <ImageView
-                        android:id="@+id/navigation_drawer_my_streams_icon"
                         style="@style/icon_navigation_drawer"
                         android:src="@drawable/ic_my_streams" />
 
                     <TextView
-                        android:id="@+id/navigation_drawer_my_streams_text"
                         style="@style/text_navigation_drawer"
                         android:text="@string/navigation_drawer_my_streams_title" />
 
@@ -124,7 +118,6 @@
                         android:visibility="invisible">
 
                         <ImageView
-                            android:id="@+id/streams_count_icon"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:tint="?attr/colorAccent"
@@ -149,12 +142,10 @@
                     style="@style/navigation_drawer_item_container">
 
                     <ImageView
-                        android:id="@+id/navigation_drawer_my_games_icon"
                         style="@style/icon_navigation_drawer"
                         android:src="@drawable/ic_my_games" />
 
                     <TextView
-                        android:id="@+id/navigation_drawer_my_games_text"
                         style="@style/text_navigation_drawer"
                         android:text="@string/navigation_drawer_my_games_title" />
                 </RelativeLayout>
@@ -164,12 +155,10 @@
                     style="@style/navigation_drawer_item_container">
 
                     <ImageView
-                        android:id="@+id/navigation_drawer_top_streams_icon"
                         style="@style/icon_navigation_drawer"
                         android:src="@drawable/ic_top_streams_one" />
 
                     <TextView
-                        android:id="@+id/navigation_drawer_top_streams_text"
                         style="@style/text_navigation_drawer"
                         android:text="@string/navigation_drawer_top_streams_title" />
                 </RelativeLayout>
@@ -179,12 +168,10 @@
                     style="@style/navigation_drawer_item_container">
 
                     <ImageView
-                        android:id="@+id/navigation_drawer_top_games_icon"
                         style="@style/icon_navigation_drawer"
                         android:src="@drawable/ic_top_games" />
 
                     <TextView
-                        android:id="@+id/navigation_drawer_top_games_text"
                         style="@style/text_navigation_drawer"
                         android:text="@string/navigation_drawer_top_games_title" />
                 </RelativeLayout>
@@ -194,12 +181,10 @@
                     style="@style/navigation_drawer_item_container">
 
                     <ImageView
-                        android:id="@+id/navigation_drawer_search_icon"
                         style="@style/icon_navigation_drawer"
                         android:src="@drawable/ic_search" />
 
                     <TextView
-                        android:id="@+id/navigation_drawer_search_text"
                         style="@style/text_navigation_drawer"
                         android:text="@string/navigation_drawer_search_title" />
                 </RelativeLayout>
@@ -219,12 +204,10 @@
             style="@style/navigation_drawer_item_container">
 
             <ImageView
-                android:id="@+id/navigation_drawer_settings_icon"
                 style="@style/icon_navigation_drawer"
                 app:srcCompat="@drawable/ic_settings_black_24dp" />
 
             <TextView
-                android:id="@+id/navigation_drawer_settings_text"
                 style="@style/text_navigation_drawer"
                 android:text="@string/navigation_drawer_settings_title" />
         </RelativeLayout>

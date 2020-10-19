@@ -15,7 +15,6 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <RelativeLayout
-            android:id="@+id/toolbar_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentInsetEnd="@dimen/search_toolbar_padding"
@@ -43,7 +42,6 @@
                 android:minHeight="@dimen/streamerInfo_additional_toolbar_height" />
 
             <RelativeLayout
-                android:id="@+id/profile_image_wrapper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true">
@@ -69,7 +67,6 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/additional_info_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/additional_toolbar"
