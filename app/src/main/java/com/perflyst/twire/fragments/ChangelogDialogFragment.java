@@ -3,6 +3,7 @@ package com.perflyst.twire.fragments;
 import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -63,7 +64,8 @@ public class ChangelogDialogFragment extends DialogFragment {
                 }};
 
                 Drawable drawable = ContextCompat.getDrawable(activity, drawableMap.get(prefix)).mutate();
-                drawable.setColorFilter(ContextCompat.getColor(activity, colorMap.get(prefix)), PorterDuff.Mode.SRC_IN);
+                drawable.setColorFilter(new PorterDuffColorFilter(
+                        ContextCompat.getColor(activity, colorMap.get(prefix)), PorterDuff.Mode.SRC_IN));
                 drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
                 Utils.appendSpan(builder, text, new DrawableBulletSpawn(15, drawable));

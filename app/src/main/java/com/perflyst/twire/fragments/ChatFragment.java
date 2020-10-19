@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -469,7 +470,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             Log.d(LOG_TAG, "Adding subscriber emotes: " + subscriberEmotesLoaded.size());
 
             Drawable icon = ContextCompat.getDrawable(getContext(), R.drawable.ic_usd_48dp);
-            icon.setColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN);
+            icon.setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
 
             TabLayout.Tab newTab = mEmoteTabs.newTab();
             newTab.setIcon(icon);
@@ -606,9 +607,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             if (icon != null) {
                 if (i == 0) {
-                    icon.setColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN);
+                    icon.setColorFilter(new PorterDuffColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN));
                 } else {
-                    icon.setColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN);
+                    icon.setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
                 }
             }
         }
@@ -642,14 +643,14 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                         super.onTabSelected(tab);
 
                         if (tab.getIcon() != null)
-                            tab.getIcon().setColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN);
+                            tab.getIcon().setColorFilter(new PorterDuffColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN));
                     }
 
                     @Override
                     public void onTabUnselected(TabLayout.Tab tab) {
                         super.onTabUnselected(tab);
                         if (tab.getIcon() != null)
-                            tab.getIcon().setColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN);
+                            tab.getIcon().setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
                     }
 
                     @Override
