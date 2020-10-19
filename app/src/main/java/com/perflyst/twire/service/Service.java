@@ -365,8 +365,10 @@ public class Service {
         // Check if no view has focus:
         View view = activity.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            InputMethodManager imm = ContextCompat.getSystemService(activity, InputMethodManager.class);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 
@@ -377,8 +379,10 @@ public class Service {
         // Check if no view has focus:
         View view = activity.getCurrentFocus();
         if (view != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInputFromWindow(view.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+            InputMethodManager inputMethodManager = ContextCompat.getSystemService(activity, InputMethodManager.class);
+            if (inputMethodManager != null) {
+                inputMethodManager.toggleSoftInputFromWindow(view.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+            }
         }
     }
 
@@ -469,8 +473,11 @@ public class Service {
      * Can only be called on a thread
      */
     public static boolean isNetworkConnectedThreadOnly(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        ConnectivityManager cm = ContextCompat.getSystemService(context, ConnectivityManager.class);
+        NetworkInfo networkInfo = null;
+        if (cm != null) {
+            networkInfo = cm.getActiveNetworkInfo();
+        }
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             try {
@@ -498,8 +505,11 @@ public class Service {
      * Can be called on the UI thread
      */
     public static boolean isNetWorkConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        ConnectivityManager cm = ContextCompat.getSystemService(context, ConnectivityManager.class);
+        NetworkInfo networkInfo = null;
+        if (cm != null) {
+            networkInfo = cm.getActiveNetworkInfo();
+        }
 
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
@@ -585,9 +595,11 @@ public class Service {
      * Returns the height of the device screen
      */
     public static int getScreenHeight(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = ContextCompat.getSystemService(context, WindowManager.class);
         final DisplayMetrics displayMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        if (wm != null) {
+            wm.getDefaultDisplay().getMetrics(displayMetrics);
+        }
         return displayMetrics.heightPixels;
     }
 

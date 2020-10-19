@@ -167,7 +167,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mEmoteViewPager = mRootView.findViewById(R.id.tabs_viewpager);
         selectedTabColorRes = Service.getColorAttribute(R.attr.textColor, R.color.black_text, getContext());
         unselectedTabColorRes = Service.getColorAttribute(R.attr.disabledTextColor, R.color.black_text_disabled, getContext());
-        vibe = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        vibe = ContextCompat.getSystemService(getContext(), Vibrator.class);
 
         defaultBackgroundColor = mSendButton.getColorFilter();
         mRecyclerView.setAdapter(mChatAdapter);
