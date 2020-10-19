@@ -62,6 +62,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackPreparer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -515,8 +516,10 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             mVideoView.setPlayer(player);
             mVideoView.setPlaybackPreparer(this);
 
-            if (currentMediaSource != null)
-                player.prepare(currentMediaSource);
+            if (currentMediaSource != null) {
+                player.setMediaSource(currentMediaSource);
+                player.prepare();
+            }
 
             ComponentName mediaButtonReceiver = new ComponentName(
                     getContext(), MediaButtonReceiver.class);
@@ -544,11 +547,11 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
     @Override
     public void preparePlayback() {
-        player.retry();
+        player.prepare();
     }
 
     @Override
-    public void onPlayerStateChanged(boolean playWhenReady, @Player.State int playbackState) {
+    public void onPlaybackStateChanged(@Player.State int playbackState) {
         if (playbackState == Player.STATE_READY) {
             mBufferingView.stop();
             hideVideoInterface();
@@ -1443,9 +1446,14 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
      */
     private void playUrl(String url) {
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), getString(R.string.app_name));
-        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(url));
+        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(
+                        new MediaItem.Builder()
+                                .setUri(Uri.parse(url))
+                                .build());
         currentMediaSource = mediaSource;
-        player.prepare(mediaSource);
+        player.setMediaSource(mediaSource);
+        player.prepare();
 
         checkVodProgress();
         resumeStream();
