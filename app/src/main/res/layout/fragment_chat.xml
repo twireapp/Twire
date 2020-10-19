@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chat_fragment_wrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -34,7 +33,6 @@
                 app:tabMode="scrollable">
 
                 <com.google.android.material.tabs.TabItem
-                    android:id="@+id/recenttab"
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
                     android:layout_height="@dimen/chat_emote_tab_icon_size"
                     android:icon="@drawable/ic_clock_black_24dp" />

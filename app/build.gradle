@@ -11,7 +11,7 @@ android {
         versionName "2.9.0"
 
         multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary true
     }
 
     buildTypes {
@@ -31,7 +31,7 @@ android {
     }
 
     compileOptions {
-        encoding = 'UTF-8'
+        encoding "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
