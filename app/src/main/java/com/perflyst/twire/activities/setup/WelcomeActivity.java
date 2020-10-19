@@ -453,9 +453,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         mWelcomeTextAnimations.addAnimation(mAlphaAnimation);
         mWelcomeTextAnimations.addAnimation(mTranslationAnimation);
 
-        int delay = (lineNumber < 3)
-                ? WELCOME_TEXT_ANIMATION_BASE_DELAY * lineNumber
-                : WELCOME_TEXT_ANIMATION_BASE_DELAY * (lineNumber * 2);
+        int delay = WELCOME_TEXT_ANIMATION_BASE_DELAY * (lineNumber < 3 ? lineNumber : lineNumber * 2);
         new Handler().postDelayed(() -> mWelcomeTextLine.startAnimation(mWelcomeTextAnimations), delay);
 
         return mWelcomeTextAnimations;

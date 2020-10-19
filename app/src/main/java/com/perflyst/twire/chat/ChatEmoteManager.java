@@ -169,7 +169,7 @@ class ChatEmoteManager {
             if (emoteKeywordToEmote.containsKey(part)) {
                 Emote emote = emoteKeywordToEmote.get(part);
 
-                int[] positions = new int[]{ position };
+                int[] positions = { position };
                 final ChatEmote chatEmote = new ChatEmote(emote, positions);
                 emotes.add(chatEmote);
             }

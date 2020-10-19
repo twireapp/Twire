@@ -53,9 +53,7 @@ public class DeepLinkActivity extends AppCompatActivity {
             }
 
             if (intent == null) {
-                runOnUiThread(() -> {
-                    DialogService.getRouterErrorDialog(this, errorMessage).show();
-                });
+                runOnUiThread(() -> DialogService.getRouterErrorDialog(this, errorMessage).show());
             } else {
                 startActivity(intent);
             }

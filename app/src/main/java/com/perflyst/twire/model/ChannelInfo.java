@@ -119,7 +119,7 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         // Create array with values to send with intent - I think
-        String[] toSend = new String[]{
+        String[] toSend = {
                 String.valueOf(this.userId),
                 this.streamerName,
                 this.displayName,
@@ -306,7 +306,7 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
 
         @Override
         protected ArrayList<Bitmap> doInBackground(URL... params) {
-            URL[] urls = new URL[]{params[0], params[1], params[2]};
+            URL[] urls = {params[0], params[1], params[2]};
             ArrayList<Bitmap> bitmaps = new ArrayList<>();
 
             for (URL url : urls) {

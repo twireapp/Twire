@@ -64,12 +64,12 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        String[] stringsToSend = new String[]{
+        String[] stringsToSend = {
                 game,
                 title
         };
 
-        int[] intsToSend = new int[]{
+        int[] intsToSend = {
                 currentViewers,
                 priority
         };

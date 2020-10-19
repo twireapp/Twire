@@ -438,11 +438,10 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         hasTransitioned = true;
         if (!LoginActivity.hasLoadedFollows()) {
             this.startActivity(new Intent(getBaseContext(), ConfirmSetupActivity.class));
-            this.overridePendingTransition(0, 0);
         } else {
             this.startActivity(Service.getLoggedInIntent(getBaseContext()));
-            this.overridePendingTransition(0, 0);
         }
+        this.overridePendingTransition(0, 0);
     }
 
     private void showSkippingAnimation() {
@@ -855,9 +854,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         mWelcomeTextAnimations.addAnimation(mTranslationAnimation);
 
         int SHOW_TEXT_ANIMATION_BASE_DELAY = 105;
-        int delay = (lineNumber < 3)
-                ? SHOW_TEXT_ANIMATION_BASE_DELAY * lineNumber
-                : SHOW_TEXT_ANIMATION_BASE_DELAY * (lineNumber * 2);
+        int delay = SHOW_TEXT_ANIMATION_BASE_DELAY * (lineNumber < 3 ? lineNumber : lineNumber * 2);
         int SHOW_TEXT_ANIMATION_DELAY = 105;
         new Handler().postDelayed(() -> mTextLine.startAnimation(mWelcomeTextAnimations), delay + SHOW_TEXT_ANIMATION_DELAY);
 

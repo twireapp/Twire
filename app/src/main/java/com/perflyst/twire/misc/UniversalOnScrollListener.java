@@ -75,11 +75,11 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
             // But don't run the animation if the amountScrolled amount is less that the toolbar height
             // Also animate the shadow the length and direction
             if (amountScrolled > mActivity.getResources().getDimension(R.dimen.additional_toolbar_height)) {
-                if (newState == 0 && toolbarTranslationY > -TOOLBAR_HEIGHT && toolbarTranslationY < -(TOOLBAR_HEIGHT / 2) && amountScrolled > TOOLBAR_HEIGHT) {
+                if (newState == 0 && toolbarTranslationY > -TOOLBAR_HEIGHT && toolbarTranslationY < -(TOOLBAR_HEIGHT / 2.0f) && amountScrolled > TOOLBAR_HEIGHT) {
                     // Hide animation
                     mToolbarShadow.animate().translationY(-TOOLBAR_HEIGHT).setInterpolator(new AccelerateInterpolator()).start();
                     mMainToolbar.animate().translationY(-TOOLBAR_HEIGHT).setInterpolator(new AccelerateInterpolator()).start();
-                } else if (newState == 0 && toolbarTranslationY > -(TOOLBAR_HEIGHT / 2) && toolbarTranslationY < 0 && amountScrolled > TOOLBAR_HEIGHT) {
+                } else if (newState == 0 && toolbarTranslationY > -(TOOLBAR_HEIGHT / 2.0f) && toolbarTranslationY < 0 && amountScrolled > TOOLBAR_HEIGHT) {
                     // Show animation
                     mToolbarShadow.animate().translationY(0).setInterpolator(new AccelerateInterpolator()).start();
                     mMainToolbar.animate().translationY(0).setInterpolator(new AccelerateInterpolator()).start();

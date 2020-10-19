@@ -1,7 +1,6 @@
 package com.perflyst.twire.activities;
 
 import android.content.Intent;
-import android.os.Bundle;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.LazyMainActivity;
@@ -11,7 +10,6 @@ import com.perflyst.twire.model.Game;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.service.JSONService;
 import com.perflyst.twire.service.Service;
-import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour;

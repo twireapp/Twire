@@ -272,7 +272,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                     justSeeked = true;
                 }
 
-                if (downloadedComments.size() == 0) {
+                if (downloadedComments.isEmpty()) {
                     String result = Service.urlToJSONString("https://api.twitch.tv/v5/videos/" + vodId.substring(1) + "/comments?cursor=" + cursor + "&content_offset_seconds=" + currentProgress);
 
                     if (result.isEmpty()) {
@@ -677,8 +677,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
     public List<Badge> getBadges(Map<String, String> badges) {
         List<Badge> badgeObjects = new ArrayList<>();
-        for (String badgeSet : badges.keySet()) {
-            badgeObjects.add(getBadge(badgeSet, badges.get(badgeSet)));
+        for (Map.Entry<String, String> entry : badges.entrySet()) {
+            badgeObjects.add(getBadge(entry.getKey(), entry.getValue()));
         }
 
         return badgeObjects;

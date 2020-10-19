@@ -148,14 +148,12 @@ public class Service {
      */
     public static String calculateTwitchVideoLength(int videoLengthInSeconds) {
         String result = "";
-        double hours = videoLengthInSeconds / 60.0 / 60.0,
-                minutes,
-                seconds;
+        double hours = videoLengthInSeconds / 60.0 / 60.0;
 
         double minutesAsDecimalHours = hours - Math.floor(hours);
-        minutes = 60.0 * minutesAsDecimalHours;
+        double minutes = 60.0 * minutesAsDecimalHours;
         double secondsAsDecimalMinutes = minutes - Math.floor(minutes);
-        seconds = 60.0 * secondsAsDecimalMinutes;
+        double seconds = 60.0 * secondsAsDecimalMinutes;
 
         if (hours >= 1) {
             result = ((int) Math.floor(hours)) + ":";
@@ -651,7 +649,7 @@ public class Service {
 
         String result = response.body;
 
-        if (result.length() == 0 || (result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[')) {
+        if (result.isEmpty() || (result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[')) {
             Log.v("URL TO JSON STRING", request.url() + " did not successfully get read");
             Log.v("URL TO JSON STRING", "Result of reading - " + result);
         }
@@ -712,7 +710,7 @@ public class Service {
      */
     public static void trustAllHosts() {
         // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[]{
+        TrustManager[] trustAllCerts = {
                 new X509TrustManager() {
                     @Override
                     public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
@@ -992,8 +990,8 @@ public class Service {
         Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
         paint.setAntiAlias(true);
         paint.setShader(shader);
-        RectF rec = new RectF(0, 0, w, h - (h / 3));
-        c.drawRect(new RectF(0, (h / 3), w, h), paint);
+        RectF rec = new RectF(0, 0, w, h - (h / 3.0f));
+        c.drawRect(new RectF(0, (h / 3.0f), w, h), paint);
         c.drawRoundRect(rec, cornerRadius, cornerRadius, paint);
         //v.setImageDrawable(new BitmapDrawable(context.getResources(), bmp));
         //v.setImageBitmap(new BitmapDrawable(context.getResources(), bmp).getBitmap());
