@@ -94,9 +94,11 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         }
 
         try {
-            SensorManager mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-            mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-            mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY);
+            SensorManager mSensorManager = ContextCompat.getSystemService(this, SensorManager.class);
+            if (mSensorManager != null) {
+                mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+                mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -345,15 +347,17 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void navToLauncherTask(@Nonnull Context appContext) {
-        ActivityManager activityManager = (ActivityManager) appContext.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager activityManager = ContextCompat.getSystemService(appContext, ActivityManager.class);
         // iterate app tasks available and navigate to launcher task (browse task)
-        final List<ActivityManager.AppTask> appTasks = activityManager.getAppTasks();
-        for (ActivityManager.AppTask task : appTasks) {
-            final Intent baseIntent = task.getTaskInfo().baseIntent;
-            final Set<String> categories = baseIntent.getCategories();
-            if (categories != null && categories.contains(Intent.CATEGORY_LAUNCHER)) {
-                task.moveToFront();
-                return;
+        if (activityManager != null) {
+            final List<ActivityManager.AppTask> appTasks = activityManager.getAppTasks();
+            for (ActivityManager.AppTask task : appTasks) {
+                final Intent baseIntent = task.getTaskInfo().baseIntent;
+                final Set<String> categories = baseIntent.getCategories();
+                if (categories != null && categories.contains(Intent.CATEGORY_LAUNCHER)) {
+                    task.moveToFront();
+                    return;
+                }
             }
         }
     }

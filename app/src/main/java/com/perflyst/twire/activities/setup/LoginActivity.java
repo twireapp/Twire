@@ -29,6 +29,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.UsageTrackingAppCompatActivity;
@@ -312,9 +314,11 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
     }
 
     private int getScreenHeight() {
-        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        WindowManager wm = ContextCompat.getSystemService(this, WindowManager.class);
         final DisplayMetrics displayMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        if (wm != null) {
+            wm.getDefaultDisplay().getMetrics(displayMetrics);
+        }
         return displayMetrics.heightPixels;
     }
 
