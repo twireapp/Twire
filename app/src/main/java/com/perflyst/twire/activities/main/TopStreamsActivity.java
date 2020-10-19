@@ -26,7 +26,7 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     protected int getActivityIconRes() {
-        return R.drawable.ic_top_streams_one;
+        return R.drawable.ic_group;
     }
 
     @Override

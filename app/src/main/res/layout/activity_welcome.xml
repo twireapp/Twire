@@ -26,7 +26,7 @@
             android:layout_width="@dimen/welcome_icon_center_size"
             android:layout_height="@dimen/welcome_icon_center_size"
             android:layout_gravity="center"
-            android:background="@drawable/center_for_welcome_icon" />
+            android:background="@drawable/circle_for_welcome" />
 
     </FrameLayout>
 

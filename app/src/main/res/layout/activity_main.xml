@@ -64,7 +64,7 @@
                 android:layout_height="@dimen/main_activity_icon_size"
                 android:layout_gravity="center"
                 android:tint="?attr/mainActivityIconColor"
-                app:srcCompat="@drawable/ic_channels" />
+                app:srcCompat="@drawable/ic_person" />
 
         </FrameLayout>
 

@@ -57,7 +57,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_navigate_before_white_48dp"
+                app:srcCompat="@drawable/ic_navigate_before"
                 tools:ignore="RtlHardcoded" />
 
             <RelativeLayout
@@ -82,7 +82,7 @@
                     android:paddingRight="@dimen/toolbar_icon_padding"
                     android:paddingBottom="@dimen/toolbar_icon_padding"
                     android:tint="@android:color/white"
-                    app:srcCompat="@drawable/ic_settings_white_24dp" />
+                    app:srcCompat="@drawable/ic_settings" />
 
                 <ImageView
                     android:id="@+id/fullscreen_icon"
@@ -97,7 +97,7 @@
                     android:paddingRight="@dimen/toolbar_icon_padding"
                     android:paddingBottom="@dimen/toolbar_icon_padding"
                     android:tint="@android:color/white"
-                    app:srcCompat="@drawable/ic_fullscreen_24dp" />
+                    app:srcCompat="@drawable/ic_fullscreen" />
 
                 <LinearLayout
                     android:id="@+id/viewers_wrapper"
@@ -115,7 +115,7 @@
                         android:layout_marginLeft="@dimen/viewers_icon_margin"
                         android:contentDescription="@string/stream_viewers"
                         android:tint="@color/white"
-                        app:srcCompat="@drawable/ic_group_black_24dp" />
+                        app:srcCompat="@drawable/ic_group" />
 
                     <TextView
                         android:id="@+id/txtViewViewers"
@@ -219,7 +219,7 @@
                     android:alpha="1"
                     android:contentDescription="@string/play"
                     android:tint="@android:color/white"
-                    app:srcCompat="@drawable/ic_play_arrow_96dp" />
+                    app:srcCompat="@drawable/ic_play_arrow" />
 
                 <ImageView
                     android:id="@+id/ic_pause"
@@ -228,7 +228,7 @@
                     android:alpha="0"
                     android:contentDescription="@string/pause"
                     android:tint="@android:color/white"
-                    app:srcCompat="@drawable/ic_pause_96dp" />
+                    app:srcCompat="@drawable/ic_pause" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

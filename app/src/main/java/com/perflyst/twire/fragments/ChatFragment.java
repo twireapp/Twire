@@ -468,7 +468,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         if (subscriberEmotesLoaded.size() > 0 && adapter != null && getContext() != null) {
             Log.d(LOG_TAG, "Adding subscriber emotes: " + subscriberEmotesLoaded.size());
 
-            Drawable icon = ContextCompat.getDrawable(getContext(), R.drawable.ic_usd_48dp);
+            Drawable icon = ContextCompat.getDrawable(getContext(), R.drawable.ic_money);
             icon.setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
 
             TabLayout.Tab newTab = mEmoteTabs.newTab();

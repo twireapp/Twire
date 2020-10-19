@@ -48,7 +48,7 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     protected int getActivityIconRes() {
-        return R.drawable.ic_game;
+        return R.drawable.ic_game_controller;
     }
 
     @Override

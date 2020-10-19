@@ -101,7 +101,7 @@
                             android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                             android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
                             android:tint="@color/white"
-                            app:srcCompat="@drawable/ic_channels" />
+                            app:srcCompat="@drawable/ic_person" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -130,7 +130,7 @@
                             android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                             android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
                             android:tint="@color/white"
-                            app:srcCompat="@drawable/ic_visibility_black_24dp" />
+                            app:srcCompat="@drawable/ic_visibility" />
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
@@ -165,7 +165,7 @@
             android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/streamerInfo_fab_margin"
             android:tint="@color/white"
-            app:srcCompat="@drawable/ic_heart_24dp" />
+            app:srcCompat="@drawable/ic_heart" />
     </RelativeLayout>
 
 

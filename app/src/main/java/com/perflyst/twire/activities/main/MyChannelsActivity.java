@@ -28,7 +28,7 @@ public class MyChannelsActivity extends LazyMainActivity<ChannelInfo> {
 
     @Override
     protected int getActivityIconRes() {
-        return R.drawable.ic_channels;
+        return R.drawable.ic_person;
     }
 
     @Override
