@@ -20,13 +20,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.afollestad.materialdialogs.internal.MDButton;
 import com.perflyst.twire.BuildConfig;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.DrawableBulletSpawn;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
+import com.rey.material.widget.Button;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -96,7 +96,7 @@ public class ChangelogDialogFragment extends DialogFragment {
             settings.setShowChangelogs(value);
         });
 
-        MDButton doneButton = customView.findViewById(R.id.done_button);
+        Button doneButton = customView.findViewById(R.id.done_button);
         doneButton.setOnClickListener(v -> dialog.dismiss());
 
         return dialog;

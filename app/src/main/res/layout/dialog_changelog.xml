@@ -67,17 +67,17 @@
             app:layout_constraintRight_toLeftOf="@id/done_button"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.afollestad.materialdialogs.internal.MDButton
+        <com.rey.material.widget.Button
             android:id="@+id/done_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:gravity="center_vertical"
             android:text="@string/done"
+            android:background="@color/transparent"
             app:layout_constraintLeft_toLeftOf="@id/notifications_choose_divider"
             app:layout_constraintRight_toRightOf="parent">
 
-        </com.afollestad.materialdialogs.internal.MDButton>
+        </com.rey.material.widget.Button>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
