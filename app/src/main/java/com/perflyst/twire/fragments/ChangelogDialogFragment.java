@@ -2,6 +2,7 @@ package com.perflyst.twire.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
@@ -19,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.afollestad.materialdialogs.internal.MDButton;
 import com.perflyst.twire.BuildConfig;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.DrawableBulletSpawn;
@@ -30,11 +32,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChangelogDialogFragment extends DialogFragment {
+    Settings settings;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Activity activity = getActivity();
-        final Settings settings = new Settings(activity);
+        settings = new Settings(activity);
 
         assert activity != null;
 
@@ -77,7 +81,6 @@ public class ChangelogDialogFragment extends DialogFragment {
         MaterialDialog dialog = DialogService.getBaseThemedDialog(activity)
                 .title(R.string.changelog_title)
                 .customView(R.layout.dialog_changelog, false)
-                .dismissListener(dialogInterface -> settings.setLastVersionCode(BuildConfig.VERSION_CODE))
                 .build();
 
         assert dialog.getCustomView() != null;
@@ -93,6 +96,16 @@ public class ChangelogDialogFragment extends DialogFragment {
             settings.setShowChangelogs(value);
         });
 
+        MDButton doneButton = customView.findViewById(R.id.done_button);
+        doneButton.setOnClickListener(v -> dialog.dismiss());
+
         return dialog;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+
+        settings.setLastVersionCode(BuildConfig.VERSION_CODE);
     }
 }
