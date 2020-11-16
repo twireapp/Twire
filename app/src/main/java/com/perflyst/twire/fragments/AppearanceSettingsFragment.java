@@ -110,7 +110,7 @@ public class AppearanceSettingsFragment extends Fragment {
             drawableRes = R.drawable.circle_theme_purple_chooser;
         } else if (themeTitle.equals(getString(R.string.black_theme_name))) {
             drawableRes = R.drawable.circle_theme_black_chooser;
-        } else if (themeTitle.equals(getString(R.string.night_theme_name))) {
+        } else if (themeTitle.equals(getString(R.string.night_theme_name)) || themeTitle.equals(getString(R.string.true_night_theme_name))) {
             drawableRes = R.drawable.circle_theme_night_chooser;
         }
 
