@@ -130,7 +130,7 @@
     <string name="stream_no_chromecast_quality_supported">Lo sentimos, no podemos transmitir esto</string>
     <string name="stream_playback_failed">Error en la transmisión. Prueba en otra calidad.</string>
     <string name="title_activity_live_stream">Transmisión en Vivo</string>
-    <string name="chat_send_message_hint">Tipo de Mensaje</string>
+    <string name="chat_send_message_hint">Escribe tu Mensaje</string>
     <string name="chat_status_connecting">Conectando a chat</string>
     <string name="chat_status_connected">Listo para charlar</string>
     <string name="chat_status_reconnecting">Reconectando</string>
