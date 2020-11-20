@@ -127,7 +127,7 @@
     <string name="my_channels_activity_label">Siguiendo</string>
 
     <!-- Live Stream Activity -->
-    <string name="stream_no_chromecast_quality_supported">Lo sentidos, esta transmisión no puede ser </string>
+    <string name="stream_no_chromecast_quality_supported">Lo sentimos, no podemos transmitir esto</string>
     <string name="stream_playback_failed">Error en la transmisión. Prueba en otra calidad.</string>
     <string name="title_activity_live_stream">Transmisión en Vivo</string>
     <string name="chat_send_message_hint">Tipo de Mensaje</string>
@@ -158,9 +158,9 @@
 
     <!-- Online Streams Status -->
     <string name="enum_ready_message"> </string>
-    <string name="enum_no_internet_message">No parece que tienes conexión a Internet.</string>
+    <string name="enum_no_internet_message">Parece que no tienes conexión a Internet.</string>
     <string name="enum_twitch_fuckup_message">Los servidores de Twitch parecen no estar disponibles.</string>
-    <string name="enum_no_online_streams">Ninguno de tus seguidores de transmisión están actualmente en línea.</string>
+    <string name="enum_no_online_streams">Ninguno de tus streamers favoritos están actualmente en línea.</string>
 
     <!-- OnlineStreamCardAdapter-->
     <string name="streams_adapter_viewers">visitas</string>
@@ -192,7 +192,7 @@
 
     <!-- Confirm Setup Activity -->
     <string name="confirm_text_line_one">¡Quédate tranquilo!</string>
-    <string name="confirm_text_line_two">Sólo necesitamos obtener sus seguimientos de Twitch</string>
+    <string name="confirm_text_line_two">Sólo necesitamos obtener sus datos de Twitch</string>
 
     <!-- Settings -->
     <string name="settings_general_name">General</string>
@@ -285,7 +285,7 @@
     <string name="navigation_drawer_featured_title">Trans. destacadas</string>
     <string name="navigation_drawer_my_streams_title">Mis transmisiones</string>
     <string name="navigation_drawer_top_streams_title">Trans. populares</string>
-    <string name="navigation_drawer_follows_title">Siguientes Streamers</string>
+    <string name="navigation_drawer_follows_title">Streamers Seguidos</string>
     <string name="navigation_drawer_my_games_title">Mis juegos</string>
     <string name="navigation_drawer_top_games_title">Juegos populares</string>
     <string name="navigation_drawer_search_title">Buscar</string>
@@ -300,16 +300,16 @@
 
     <!-- Theme Dialog -->
     <string name="theme_dialog_title">Temas</string>
-    <string name="blue_theme_name">Azul</string>
-    <string name="purple_theme_name">Púrpura</string>
-    <string name="black_theme_name">Negro</string>
-    <string name="night_theme_name">Noche</string>
-    <string name="true_night_theme_name">Muy nocturno</string>
+    <string name="blue_theme_name">Azul (Claro)</string>
+    <string name="purple_theme_name">Púrpura (Claro)</string>
+    <string name="black_theme_name">Negro (Oscuro)</string>
+    <string name="night_theme_name">Noche (Oscuro)</string>
+    <string name="true_night_theme_name">Muy nocturno (Oscuro)</string>
 
     <!-- Shared Preferences -->
 
     <!-- Tooltips -->
-    <string name="tip_navigate">Clic para navegar</string>
+    <string name="tip_navigate">Click para navegar</string>
 
     <!--Twitch language Code -->
     <string-array name="twitch_language_codes">
