@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="ok">OK</string>
     <string name="done">FATTO</string>
-    <string name="start">INIZIA</string>
-    <string name="stop">STOP</string>
-    <string name="cancel">CANCELLA</string>
+    <string name="start">AVVIA</string>
+    <string name="stop">FERMA</string>
+    <string name="cancel">ANNULLA</string>
     <string name="resume">RIPRENDI</string>
     <string name="undo">ANNULLA</string>
     <string name="yes">Si</string>
@@ -13,7 +12,7 @@
     <string name="enabled">Abilitato</string>
     <string name="disabled">Disabilitato</string>
     <string name="minutes_short">m</string>
-    <string name="hours_short">o</string>
+    <string name="hours_short">h</string>
     <string name="minutes">minuti</string>
     <string name="hours">ore</string>
     <string name="action_settings">Impoostazioni</string>
@@ -24,227 +23,193 @@
     <string name="content_desc_twitchProfileBanner_imageView">Il banner del profilo specificato dall\'utente</string>
     <string name="content_desc_twitchLogo_imageView">Immagine degli Streamers di Twitch logo</string>
     <string name="description">Controlli dei Media</string>
-    <string name="no_elements_added_notice">No %s non è stato trovato</string>
-    <string name="vods">video</string>
+    <string name="no_elements_added_notice">Nessun %s trovato</string>
+    <string name="vods">Video</string>
     <string name="play">Riproduci</string>
     <string name="pause">Pausa</string>
     <string name="stop_lower">Stop</string>
     <string name="percent">%s %%</string>
     <string name="disable_all">DISABILITA TUTTO</string>
     <string name="enable_all">ABILITA TUTTO</string>
-
     <!-- Time -->
     <string name="today">Oggi</string>
     <string name="yesterday">Ieri</string>
-
     <!-- ChannelActivity -->
     <string name="streamerInfo_followers_title">Follower</string>
     <string name="streamerInfo_views_title">Visualizzazioni</string>
     <string name="streamerInfo_desc_tab">Descrizione</string>
-    <string name="streamerInfo_broadcasts_tab">Broadcast</string>
-    <string name="streamerInfo_highlights_tab">Highlight</string>
-    <string name="streamerInfo_description">Nessuna descrizione trovata!</string>
-
+    <string name="streamerInfo_broadcasts_tab">Trasmissioni</string>
+    <string name="streamerInfo_highlights_tab">In Evidenza</string>
+    <string name="streamerInfo_description">Nessuna descrizione trovata</string>
     <!-- UniformMainActivity -->
-
     <!-- LiveStreamActivity -->
-    <string name="menu_external">Usa Player Esterno</string>
+    <string name="menu_external">Usa Riproduttore Esterno</string>
     <string name="menu_profile">Profilo</string>
-    <string name="menu_sleep">Sveglia</string>
+    <string name="menu_sleep">Timer Spegnimento</string>
     <string name="menu_options">Opzioni</string>
     <string name="options">Opzioni</string>
     <string name="audio_only">Solo Audio</string>
     <string name="chat_only">Solo Chat</string>
-    <string name="available_qualities">Qualità video</string>
+    <string name="available_qualities">Qualità</string>
     <string name="quality_auto">Auto</string>
     <string name="quality_audio">Solo Audio</string>
-
     <!-- StreamFragment -->
-    <string name="stream_sleep_timer_stopped">Sveglia fermata.</string>
-    <string name="stream_sleep_timer_started">Sveglia avviata. Lo Stream sarà messo in pausa tra %1$d ore e %2$d minuti.</string>
+    <string name="stream_sleep_timer_stopped">Timer fermato</string>
+    <string name="stream_sleep_timer_started">Timer avviato. Lo stream sarà messo in pausa tra %1$d ore e %2$d minuti.</string>
     <string name="stream_sleep_timer_started_minutes_only">Sveglia avviata. Lo Stream sarà fermato in %d minuti.</string>
-
-    <string name="stream_sleep_timer_title">Sveglia</string>
+    <string name="stream_sleep_timer_title">Timer Spegnimento</string>
     <string name="stream_chromecast_playing">Riproducendo %s</string>
     <string name="stream_chromecast_failed">Qualcosa è andato male riproducendo %s</string>
     <string name="stream_chromecast_no_vod">Scusa, il Video On Demand non attualmente supportato per il chromecasting</string>
     <string name="stream_chromecast_connection_failed">Twire non ha potuto connettersi a %s</string>
     <string name="stream_chromecast_connecting">Colleganamento…</string>
-    <string name="stream_no_audio_only">Scusa, è solamente disponibile l\'audio per questo stream</string>
+    <string name="stream_no_audio_only">La modalità Solo Audio non è disponibile per questo stream</string>
     <string name="stream_audio_only_active">Riproduzione Solo Audio</string>
-
     <!-- VOD activity -->
-    <string name="vod_playback_failed">Non è riuscito a riprodurre il VOD. Prova con un\'altra qualità</string>
+    <string name="vod_playback_failed">Impossibile riprodurre VOD. Prova con un\'altra qualità.</string>
     <string name="title_activity_vod">Video On Demand</string>
     <string name="vod_views">%d visualizzazioni</string>
     <string name="vod_streams_card_stream_views">%s visualizzazioni</string>
-
     <!-- Fonts -->
-
     <!-- Cards -->
     <string name="card_style_minimal">Ridotto</string>
     <string name="card_style_normal">Normale</string>
-    <string name="card_style_expanded">Espanso</string>
+    <string name="card_style_expanded">Esteso</string>
     <string name="card_size_small">Piccolo</string>
     <string name="card_size_normal">Normale</string>
-    <string name="card_size_large">Largo</string>
+    <string name="card_size_large">Grande</string>
     <string name="card_size_huge">MASSIMO</string>
-
     <!-- Stream Card -->
-    <string name="default_stream_title">%1$s playing %2$s</string>
+    <string name="default_stream_title">%1$s in riproduzione %2$s</string>
     <string name="preview_stream_title">Titolo Stream</string>
     <string name="preview_stream_display_name">Nome</string>
     <string name="preview_stream_game_and_viewers">1337 Spettatori - Titolo Gioco</string>
-
     <!-- Game Card -->
     <string name="game_viewers">%s spettatori</string>
     <string name="preview_game_title">Titolo Gioco</string>
     <string name="preview_game_viewers">1337 Spettatori</string>
-
     <!-- Top Games Activity -->
     <string name="top_games_activity_title">@string/navigation_drawer_top_games_title</string>
-
     <!--Errors -->
-    <string name="error_external_playback_failed">Fallimento dell\'URL mandato al player esterno</string>
+    <string name="error_external_playback_failed">Impossibile inviare l\'URL al riproduttore esterno</string>
     <string name="error_nothing_found">Qui non c\'è niente</string>
-    <string name="no_server_response_message">Oops. I server di Twitch non sembrano rispondere. Ricarica?</string>
+    <string name="no_server_response_message">Oops, i server di Twitch non sembrano rispondere. Ricaricare\?</string>
     <string name="no_server_response_action">OK</string>
-
     <!-- My Games Activity -->
     <string name="my_games__error_none_found">Nessun gioco trovato</string>
     <string name="my_games_activity_title">@string/navigation_drawer_my_games_title</string>
-
     <!-- My Channels activity -->
     <string name="my_channels_error_none_found">Nessun follow trovato</string>
     <string name="my_channels_activity_title">@string/navigation_drawer_follows_title</string>
     <string name="my_channels_activity_label">Seguito</string>
-
     <!-- Live Stream Activity -->
     <string name="stream_no_chromecast_quality_supported">Scusa, questo stream non esiste </string>
-    <string name="stream_playback_failed">Lo stream non è più in diretta</string>
-    <string name="title_activity_live_stream">Trasmissione in diretta</string>
-    <string name="chat_send_message_hint">Tipo Messaggio</string>
-    <string name="chat_status_connecting">Connessione alla chat</string>
+    <string name="stream_playback_failed">Errore di riproduzione. Prova con un altra qualità.</string>
+    <string name="title_activity_live_stream">Trasmissione in Diretta</string>
+    <string name="chat_send_message_hint">Scrivi Messaggio</string>
+    <string name="chat_status_connecting">Connessione alla Chat…</string>
     <string name="chat_status_connected">Pronto per l\'uso della Chat</string>
-    <string name="chat_status_reconnecting">Riconnessione</string>
+    <string name="chat_status_reconnecting">Riconnessione…</string>
     <string name="chat_status_connection_failed">Connessione Fallita</string>
     <string name="chat_emote_size_title">Dimensione Emote</string>
     <string name="chat_message_size_title">Dimensione Messaggio</string>
-
     <!-- ChannelInfo activity -->
     <string name="channel_info_name">John Doe</string>
-    <string name="channel_info_bio">Questo utente è apparentemente veramente riservato riguardo lo stream&#8230; Hmm, mi chiedo perché. </string>
-
+    <string name="channel_info_bio">Questo utente è apparentemente veramente riservato riguardo lo stream… Hmm, mi chiedo perché. </string>
     <!-- My Streams activity -->
     <string name="my_streams_error">Nessuno stream trovato</string>
     <string name="my_streams_activity_title">@string/navigation_drawer_my_streams_title</string>
     <string name="my_streams_preview_image">Anteprima del Canale Live</string>
     <string name="my_streams_cell_current_viewers">%d spettatori</string>
     <string name="my_streams_cell_online_since">Ha iniziato x Minuti Fa</string>
-
     <!-- Top Streams Activity -->
     <string name="top_streams_activity_title">@string/navigation_drawer_top_streams_title</string>
-
     <!-- Featured Streams Activity -->
     <string name="featured_activity_title">@string/navigation_drawer_featured_title</string>
     <string name="featured_error_no_more_streams">Twitch non ha più stream in primo piano al momento</string>
-
     <!-- Online Streams Status -->
     <string name="enum_ready_message"> </string>
     <string name="enum_no_internet_message">Sembri che non sei connesso a internet.</string>
     <string name="enum_twitch_fuckup_message">I server di Twitch sembraro non dispnibili.</string>
     <string name="enum_no_online_streams">Nessuno dei tuoi attuali stream sembrano in trasmissione.</string>
-
     <!-- OnlineStreamCardAdapter-->
     <string name="streams_adapter_viewers">spettatori</string>
-
     <!-- Welcome Activity -->
-    <string name="title_activity_welcome">Twire Set Up</string>
-    <string name="welcome_text_line_one">Benvenuto</string>
+    <string name="title_activity_welcome">Configurazione Twire</string>
+    <string name="welcome_text_line_one">Benvenuto in</string>
     <string name="welcome_text_line_two">Twire</string>
-
     <!-- Login Activity-->
     <string name="title_activity_login">@string/title_activity_welcome</string>
     <string name="login_text_line_one">Prepariamoci!</string>
-    <string name="login_text_line_two">Prima di tutto, accedi a Twitch</string>
-    <string name="login_user_cancel">Hai davvero bisogno di accedere per usare Twire</string>
+    <string name="login_text_line_two">Prima di tutto, accedi a Twitch.</string>
+    <string name="login_user_cancel">Hai bisogno di accedere per usare Twire…</string>
     <string name="login_user_cancel_action">CAPITO</string>
-    <string name="login_user_no_internet">Hai bisogno di una connessione a  internet per impostare Twire</string>
+    <string name="login_user_no_internet">Hai bisogno di una connessione a internet per configurare Twire.</string>
     <string name="login_user_no_internet_action">PROVA ANCORA</string>
-    <string name="login_on_success_message">Ciao %s</string>
-    <string name="login_unvalid_token_text_line_one">Sfortunatamente tu</string>
+    <string name="login_on_success_message">Ciao, %s</string>
+    <string name="login_unvalid_token_text_line_one">Sfortunatamente</string>
     <string name="login_unvalid_token_text_line_two">devi effettuare di nuovo l\'accesso</string>
-
-
     <!-- Notification Activity -->
     <string name="title_activity_notification">@string/title_activity_welcome</string>
     <string name="notification_text_line_one">Come le vuoi le notifiche?</string>
     <string name="notification_text_line_two">Prima, accedi a Twitch</string>
     <string name="notification_customize_button">PERSONALIZZA</string>
     <string name="skip_text">SALTA</string>
-
     <!-- Confirm Setup Activity -->
     <string name="confirm_text_line_one">Attendi!</string>
-    <string name="confirm_text_line_two">Abbiamo solo bisogno di prendere i tuoi seguiti su Twitch</string>
-
+    <string name="confirm_text_line_two">Da Twitch abbiamo solo bisogno di sapere chi segui.</string>
     <!-- Settings -->
     <string name="settings_general_name">Generale</string>
-    <string name="settings_general_name_summary">Profilo Twitch, Pagina d\'\Avvio</string>
+    <string name="settings_general_name_summary">Account Twitch, Pagina Principale</string>
     <string name="settings_stream_player_name">Riproduttore Stream</string>
-    <string name="settings_stream_player_summary">Contatore degli spettatori correnti, Comportamento Player</string>
+    <string name="settings_stream_player_summary">Numero Spettatori Correnti, Comportamento Riproduttore</string>
     <string name="settings_appearance_name">Aspetto</string>
-    <string name="settings_appearance_summary">Temi, Stile schede, Dimensione schede</string>
+    <string name="settings_appearance_summary">Temi, Stile Schede, Dimensione Schede</string>
     <string name="settings_notifications_name">Notifiche</string>
     <string name="settings_notifications_summary">Controllo Periodo, Suono, Vibrazione ecc</string>
     <string name="settings_rate_name">Valuta l\'\app</string>
     <string name="settings_rate_summary">Manda un feedback</string>
-    <string name="settings_chat_name">Twitch Chat</string>
-    <string name="settings_chat_name_summary">Dimensione Emote, Dimensione Messaggio</string>
-
+    <string name="settings_chat_name">Chat Twitch</string>
+    <string name="settings_chat_name_summary">Dimensione Emote, Dimensione Messaggi</string>
     <!-- General settings -->
-    <string name="gen_not_logged_in">Clicca per l\'accesso</string>
-    <string name="gen_dialog_login_or_out_content">Vuoi accedere a un nuovo profilo o disconnetterti come %s</string>
+    <string name="gen_not_logged_in">Premi per accedere</string>
+    <string name="gen_dialog_login_or_out_content">Vuoi accedere con un altro account o disconnetterti come %s\?</string>
     <string name="gen_dialog_login_or_out_login_action">ACCEDI</string>
     <string name="gen_dialog_login_or_out_logout_action">DISCONNETTI</string>
-    <string name="gen_twitch_name">Twitch Nome Utente</string>
-    <string name="gen_start_page">Pagina d\'avvio</string>
-    <string name="gen_reset_tips">Resetta i suggerimenti del Tutorial</string>
-    <string name="gen_tips_have_been_reset">I suggerimenti del Tutorial sono stati resettati </string>
-
+    <string name="gen_twitch_name">Nome Utente Twitch</string>
+    <string name="gen_start_page">Pagina Principale</string>
+    <string name="gen_reset_tips">Ripristina Tutorial Iniziale</string>
+    <string name="gen_tips_have_been_reset">Tutorial Iniziale ripristinato</string>
     <!-- Chat Settings -->
     <string name="chat_emote_size">Dimensione Emote</string>
-    <string name="chat_message_size">Dimensione Messaggio</string>
+    <string name="chat_message_size">Dimensione Messaggi</string>
     <string name="chat_emote_storage">Salva le emote nella memoria locale</string>
-    <string name="chat_landscape_enable">Chat in orizzontale</string>
-    <string name="chat_landscape_swipe">Trascina per mostrare la chat in orizzontale</string>
-    <string name="chat_landscape_width">Larghezza Chat Orizzontale</string>
+    <string name="chat_landscape_enable">Chat con Schermo Orizzontale</string>
+    <string name="chat_landscape_swipe">Trascina per Mostrare la Chat con Schermo Orizzontale</string>
+    <string name="chat_landscape_width">Larghezza Chat con Schermo Orizzontale</string>
     <string name="chat_landscape_width_dialog">Larghezza Chat</string>
     <string name="chat_size_small">Piccola</string>
     <string name="chat_size_medium">Media</string>
-    <string name="chat_size_high">Larga</string>
-
+    <string name="chat_size_high">Grande</string>
     <!-- Stream Player Settings -->
-    <string name="player_show_viewercount">Mostra il totale di spettatori</string>
-    <string name="player_show_navigation">Reveal Navigation Bar On Click</string>
-    <string name="player_auto_player">Continua la riproduzione quando rientri</string>
-
+    <string name="player_show_viewercount">Mostra Numero Spettatori</string>
+    <string name="player_show_navigation">Mostra Barra di Navigazione al Tocco</string>
+    <string name="player_auto_player">Riprendere Riproduzione quando si Ritorna</string>
     <!-- Appearance settings -->
     <string name="appearance_theme_color_title">Temi</string>
-    <string name="appearance_streams_style_title">Stile degli Stream</string>
-    <string name="appearance_game_style_title">Stile dei Giochi</string>
-    <string name="appearance_streamer_style_title">Stile degli Streamer</string>
-    <string name="appearance_streams_size_title">Dimensione degli Stream</string>
-    <string name="appearance_game_size_title">Dimesione Gioco</string>
-    <string name="appearance_streamer_size_title">Dimensione degli Streamer</string>
+    <string name="appearance_streams_style_title">Stile Stream</string>
+    <string name="appearance_game_style_title">Stile Giochi</string>
+    <string name="appearance_streamer_style_title">Stile Streamer</string>
+    <string name="appearance_streams_size_title">Dimensione Stream</string>
+    <string name="appearance_game_size_title">Dimesione Giochi</string>
+    <string name="appearance_streamer_size_title">Dimensione Streamer</string>
     <string name="appearance_stream_header">Stream</string>
-    <string name="appearance_streamer_header">Streamers</string>
+    <string name="appearance_streamer_header">Streamer</string>
     <string name="appearance_game_header">Giochi</string>
-
     <!-- Notifications settings -->
     <string name="check_activity_settings_notifications">Controlla periodo</string>
     <string name="choose_streamers_activity_settings_notifications_title">Gli Streamer</string>
     <string name="choose_who_summary_activity_settings_notifications">Vieni notificato quando questi streamer vanno in diretta</string>
-
     <string name="vibrate_activity_settings_notifications">Vibra</string>
     <string name="screen_wake_activity_settings_notifications">Attiva lo schermo</string>
     <string name="sound_activity_settings_notifications">Riproduci Suono</string>
@@ -264,46 +229,38 @@
     <string name="notifications_minutes">%s Minuti</string>
     <string name="notifications_hours">%s Ore</string>
     <string name="notifications_disabled_key">mai</string>
-    <string name="notifications_not_logged_in">Le notifiche verranno mostrate sei collegato con un profilo Twitch</string>
-
+    <string name="notifications_not_logged_in">Le notifiche verranno mostrate se sei collegato/a con un profilo Twitch.</string>
     <!-- Game Activitiy -->
-
     <!-- Search Activity -->
     <string name="search_hint">Cerca</string>
-    <string name="streams_tab">STREAMS</string>
+    <string name="streams_tab">STREAM</string>
     <string name="streamers_tab">STREAMER</string>
     <string name="games_tab">GIOCHI</string>
-
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_featured_title">Stream in primo piano</string>
+    <string name="navigation_drawer_featured_title">Stream in Primo Piano</string>
     <string name="navigation_drawer_my_streams_title">I Miei Stream</string>
-    <string name="navigation_drawer_top_streams_title">Top Stream</string>
+    <string name="navigation_drawer_top_streams_title">Migliori Stream</string>
     <string name="navigation_drawer_follows_title">Streamer Seguiti</string>
     <string name="navigation_drawer_my_games_title">I Miei Giochi</string>
-    <string name="navigation_drawer_top_games_title">Top Giochi</string>
+    <string name="navigation_drawer_top_games_title">Migliori Giochi</string>
     <string name="navigation_drawer_search_title">Cerca</string>
     <string name="navigation_drawer_settings_title">Impostazioni</string>
-    <string name="navigation_drawer_logged_in_textview">Collegato come %s</string>
+    <string name="navigation_drawer_logged_in_textview">Accesso effettuato come %s</string>
     <string name="navigation_drawer_not_logged_in">Accesso non effettuato</string>
-
     <!-- Menu Actions -->
     <string name="menu_action_refresh">Ricarica</string>
     <string name="menu_action_search">Cerca</string>
-    <string name="ccl_media_route_menu_title">Continua a riprodurre&#8230;</string>
-
+    <string name="ccl_media_route_menu_title">Continua a riprodurre…</string>
     <!-- Theme Dialog -->
     <string name="theme_dialog_title">Temi</string>
     <string name="blue_theme_name">Blu</string>
     <string name="purple_theme_name">Viola</string>
     <string name="black_theme_name">Nero</string>
     <string name="night_theme_name">Notte</string>
-    <string name="true_night_theme_name">Vera Notte</string>
-
+    <string name="true_night_theme_name">Notte Fonda</string>
     <!-- Shared Preferences -->
-
     <!-- Tooltips -->
-    <string name="tip_navigate">Clicca per navigare</string>
-
+    <string name="tip_navigate">Premi per Navigare</string>
     <!--Twitch language Code -->
     <string-array name="twitch_language_codes">
         <item>English|en</item>
@@ -327,12 +284,27 @@
         <item>Slovak|sk</item>
         <item>Hungarian|hu</item>
     </string-array>
-
     <string name="chat_message_option_mention">Menziona</string>
     <string name="chat_message_option_duplicate">Duplica Messaggio</string>
     <string name="chat_message_option_block">Blocco</string>
     <string name="action_got_it">Capito</string>
     <string name="action_share">Condividi</string>
-    <string name="stream_external_play_using">Riproduci usando…</string>
-
+    <string name="stream_external_play_using">Riproduci con…</string>
+    <string name="changelog_show_after_update">Mostra Ultime Modifiche dopo un Aggiornamento</string>
+    <string name="changelog_title">Ultime Modifiche</string>
+    <string name="router_channel_error">Impossibile caricare il canale.</string>
+    <string name="router_nonexistent_user">L\'utente non esiste.</string>
+    <string name="router_vod_error">Impossibile riprodurre VOD.</string>
+    <string name="router_error_dialog_title">Errore URL</string>
+    <string name="router_unknown_error">Si è verificato un errore sconosciuto.</string>
+    <string name="router_activity_label">Riproduci con Twire</string>
+    <string name="gen_open_changelog">Apri Ultime Modifiche</string>
+    <string name="gen_language_filter">Filtra Migliori Stream per Lingua</string>
+    <string name="stream_backward">Indietro 10 secondi</string>
+    <string name="stream_forward">Avanti 10 secondi</string>
+    <string name="stream_show_chat">Mostra Chat</string>
+    <string name="stream_viewers">Spettatori</string>
+    <string name="stream_fullscreen">Schermo Intero</string>
+    <string name="title_activity_streamer_info">Canale</string>
+    <string name="stream_seek_dialog_title">Vai a</string>
 </resources>
