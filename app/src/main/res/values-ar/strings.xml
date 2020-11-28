@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="start">شغِل</string>
+    <string name="resume">تابع</string>
+    <string name="cancel">ألغ</string>
+    <string name="stop">أوقف</string>
+    <string name="done">تم</string>
+    <string name="ok">موافق</string>
+</resources>
