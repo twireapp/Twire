@@ -71,8 +71,8 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -1445,7 +1445,12 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
      * @param url
      */
     private void playUrl(String url) {
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), getString(R.string.app_name));
+        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(getString(R.string.app_name));
+
+        HttpDataSource.RequestProperties properties = dataSourceFactory.getDefaultRequestProperties();
+        properties.set("Referer", "https://player.twitch.tv");
+        properties.set("Origin", "https://player.twitch.tv");
+
         MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(
                         new MediaItem.Builder()
