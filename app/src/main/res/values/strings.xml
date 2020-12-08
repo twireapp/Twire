@@ -301,6 +301,14 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.9.1</item>
+        <item>C Use the new embed ad blocking technique.</item>
+        <item>F Fix the changelog dialog popping up multiple times.</item>
+        <item>A Add Afrikaans, Arabic, Chinese (Traditional), Czech, Norwegian Bokmål, Portuguese (Brazil) and Russian translations.</item>
+        <item>C Update French, German, Italian and Spanish translations.</item>
+        <item>F Fix the changelog button not changing according to the theme.</item>
+        <item>F Fix the theme preview color for True night.</item>
+
         <item>V 2.9.0</item>
         <item>A New setting to enable/disable filtering of the top streams by language.</item>
         <item>A Handle stream and VOD URLs.</item>
