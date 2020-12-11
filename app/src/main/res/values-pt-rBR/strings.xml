@@ -193,10 +193,10 @@
     <string name="stream_chromecast_failed">Algo deu errado durante a reprodução em %s</string>
     <string name="stream_chromecast_playing">Reproduzindo em %s…</string>
     <string name="stream_seek_dialog_title">Ir para</string>
-    <string name="stream_sleep_timer_started_minutes_only">Temporizador iniciado. A Stream vai parar em %d minutos.</string>
+    <string name="stream_sleep_timer_started_minutes_only">Temporizador iniciado. A Stream vai parar em %d minuto(s).</string>
     <string name="stream_sleep_timer_title">Temporizador</string>
     <string name="stream_sleep_timer_stopped">Temporizador parado</string>
-    <string name="stream_sleep_timer_started">Temporizador iniciado. A Stream vai parar em %1$d horas e %2$d minutos.</string>
+    <string name="stream_sleep_timer_started">Temporizador iniciado. A Stream vai parar em %1$d hora(s) e %2$d minuto(s).</string>
     <string name="quality_audio">Apenas áudio</string>
     <string name="quality_auto">Auto</string>
     <string name="available_qualities">Definir qualidade</string>
@@ -220,8 +220,8 @@
     <string name="stop_lower">Parar</string>
     <string name="pause">Pausar</string>
     <string name="play">Reproduzir</string>
-    <string name="vods">Vídeos</string>
-    <string name="no_elements_added_notice">Nenhum %s foi encontrado</string>
+    <string name="vods">vídeo</string>
+    <string name="no_elements_added_notice">Nenhum %s pôde ser encontrado</string>
     <string name="description">Controles de mídia</string>
     <string name="content_desc_twitchLogo_imageView">Imagem do logo da Twitch do streamer</string>
     <string name="content_desc_twitchProfileBanner_imageView">Banner de perfil especificado pelo usuário</string>
