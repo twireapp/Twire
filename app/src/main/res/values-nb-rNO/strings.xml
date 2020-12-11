@@ -236,13 +236,13 @@
     <string name="chat_emote_size">Smilefjesstørrelse</string>
     <string name="settings_chat_name_summary">Smilefjesstørrelse, meldingsstørrelse</string>
     <string name="settings_stream_player_name">Strøm-spiller</string>
-    <string name="title_activity_notification">\@string/title_activity_welcome</string>
-    <string name="title_activity_login">\@string/title_activity_welcome</string>
-    <string name="featured_activity_title">\@string/navigation_drawer_featured_title</string>
-    <string name="top_streams_activity_title">\@string/navigation_drawer_top_streams_title</string>
-    <string name="my_streams_activity_title">\@string/navigation_drawer_my_streams_title</string>
+    <string name="title_activity_notification">@string/title_activity_welcome</string>
+    <string name="title_activity_login">@string/title_activity_welcome</string>
+    <string name="featured_activity_title">@string/navigation_drawer_featured_title</string>
+    <string name="top_streams_activity_title">@string/navigation_drawer_top_streams_title</string>
+    <string name="my_streams_activity_title">@string/navigation_drawer_my_streams_title</string>
     <string name="chat_emote_size_title">Smilefjesstørrelse</string>
-    <string name="my_channels_activity_title">\@string/navigation_drawer_follows_title</string>
-    <string name="my_games_activity_title">\@string/navigation_drawer_my_games_title</string>
-    <string name="top_games_activity_title">\@string/navigation_drawer_top_games_title</string>
+    <string name="my_channels_activity_title">@string/navigation_drawer_follows_title</string>
+    <string name="my_games_activity_title">@string/navigation_drawer_my_games_title</string>
+    <string name="top_games_activity_title">@string/navigation_drawer_top_games_title</string>
 </resources>
