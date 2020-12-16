@@ -112,7 +112,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         LinkedHashMap<String, Quality> resultList = new LinkedHashMap<>();
         resultList.put(QUALITY_AUTO, new Quality("Auto", urlToRead));
 
-        Pattern p = Pattern.compile("GROUP-ID=\"(.+)\",NAME=\"(.+)\".+\\n.+\\n(http://\\S+)");
+        Pattern p = Pattern.compile("GROUP-ID=\"(.+)\",NAME=\"(.+)\".+\\n.+\\n(https?://\\S+)");
         Matcher m = p.matcher(result);
 
         while (m.find()) {
