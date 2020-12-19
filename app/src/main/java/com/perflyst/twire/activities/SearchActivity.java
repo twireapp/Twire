@@ -10,13 +10,15 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.ChannelsAdapter;
@@ -50,8 +52,12 @@ import butterknife.ButterKnife;
 
 
 public class SearchActivity extends ThemeActivity {
+    private static final int POSITION_STREAMS = 0;
+    private static final int POSITION_CHANNELS = 1;
+    private static final int POSITION_GAMES = 2;
+    private static final int TOTAL_COUNT = 3;
     @BindView(R.id.container)
-    protected ViewPager mViewPager;
+    protected ViewPager2 mViewPager;
     @BindView(R.id.ic_back_arrow)
     protected ImageView mBackIcon;
     @BindView(R.id.edit_text_search)
@@ -100,14 +106,26 @@ public class SearchActivity extends ThemeActivity {
     private void setUpTabs() {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(this);
 
-        // Set up the ViewPager with the sections adapter.
+        // Set up the ViewPager2 with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = findViewById(R.id.tabs);
-        assert tabLayout != null;
-        tabLayout.setupWithViewPager(mViewPager);
+        new TabLayoutMediator(tabLayout, mViewPager, (tab, position) -> {
+            switch (position) {
+                default: // Deliberate fall-through to stream tab
+                case POSITION_STREAMS:
+                    tab.setText(R.string.streams_tab);
+                    break;
+                case POSITION_CHANNELS:
+                    tab.setText(R.string.streamers_tab);
+                    break;
+                case POSITION_GAMES:
+                    tab.setText(R.string.games_tab);
+                    break;
+            }
+        }).attach();
     }
 
     public String getQuery() {
@@ -400,49 +418,32 @@ public class SearchActivity extends ThemeActivity {
         public abstract MainActivityAdapter<E, ?> constructAdapter();
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private final int POSITION_STREAMS = 0;
-        private final int POSITION_CHANNELS = 1;
-        private final int POSITION_GAMES = 2;
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
 
-
-        SectionsPagerAdapter(FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        SectionsPagerAdapter(FragmentActivity fa) {
+            super(fa);
             mStreamsFragment = SearchStreamsFragment.newInstance();
             mChannelsFragment = SearchChannelsFragment.newInstance();
             mGamesFragment = SearchGamesFragment.newInstance();
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             switch (position) {
+                default: // Deliberate fall-through to stream tab
                 case POSITION_STREAMS:
                     return mStreamsFragment;
                 case POSITION_CHANNELS:
                     return mChannelsFragment;
                 case POSITION_GAMES:
                     return mGamesFragment;
-                default:
-                    return SearchStreamsFragment.newInstance();
             }
         }
 
         @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case POSITION_STREAMS:
-                    return getResources().getString(R.string.streams_tab);
-                case POSITION_CHANNELS:
-                    return getResources().getString(R.string.streamers_tab);
-                case POSITION_GAMES:
-                    return getResources().getString(R.string.games_tab);
-            }
-            return null;
+        public int getItemCount() {
+            return TOTAL_COUNT;
         }
     }
 }
