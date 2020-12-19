@@ -1285,7 +1285,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         if (isAudioOnlyModeEnabled()) {
             Log.d(LOG_TAG, "Pausing audio");
         } else if (player != null) {
-            player.setPlayWhenReady(false);
+            player.pause();
         }
         releaseScreenOn();
     }
@@ -1302,7 +1302,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
                 player.seekToDefaultPosition(); // Go forward to live
             }
 
-            player.setPlayWhenReady(true);
+            player.play();
         }
 
         keepScreenOn();
@@ -1452,10 +1452,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         properties.set("Origin", "https://player.twitch.tv");
 
         MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(
-                        new MediaItem.Builder()
-                                .setUri(Uri.parse(url))
-                                .build());
+                .createMediaSource(MediaItem.fromUri(Uri.parse(url)));
         currentMediaSource = mediaSource;
         player.setMediaSource(mediaSource);
         player.prepare();
