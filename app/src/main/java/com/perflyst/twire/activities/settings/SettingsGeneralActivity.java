@@ -14,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
-import com.perflyst.twire.activities.main.MyGamesActivity;
 import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.setup.LoginActivity;
 import com.perflyst.twire.fragments.ChangelogDialogFragment;
@@ -67,7 +66,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
     private void initStartPageText() {
         String startUpPageTitle = settings.getStartPage();
         Class startUpPageClass = Service.getClassFromStartPageTitle(this, startUpPageTitle);
-        if (!settings.isLoggedIn() && (startUpPageClass == MyStreamsActivity.class || startUpPageClass == MyGamesActivity.class || startUpPageClass == MyChannelsActivity.class)) {
+        if (!settings.isLoggedIn() && (startUpPageClass == MyStreamsActivity.class || startUpPageClass == MyChannelsActivity.class)) {
             startUpPageTitle = settings.getDefaultNotLoggedInStartUpPageTitle();
         }
         startPageSubText.setText(startUpPageTitle);

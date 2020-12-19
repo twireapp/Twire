@@ -138,19 +138,6 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/my_games_container"
-                    style="@style/navigation_drawer_item_container">
-
-                    <ImageView
-                        style="@style/icon_navigation_drawer"
-                        app:srcCompat="@drawable/ic_star" />
-
-                    <TextView
-                        style="@style/text_navigation_drawer"
-                        android:text="@string/navigation_drawer_my_games_title" />
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:id="@+id/top_streams_container"
                     style="@style/navigation_drawer_item_container">
 

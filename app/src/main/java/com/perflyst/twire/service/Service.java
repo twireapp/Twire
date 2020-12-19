@@ -50,7 +50,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.FeaturedStreamsActivity;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
-import com.perflyst.twire.activities.main.MyGamesActivity;
 import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.main.TopGamesActivity;
 import com.perflyst.twire.activities.main.TopStreamsActivity;
@@ -221,8 +220,6 @@ public class Service {
             result = FeaturedStreamsActivity.class;
         } else if (title.equals(context.getString(R.string.navigation_drawer_follows_title))) {
             result = MyChannelsActivity.class;
-        } else if (title.equals(context.getString(R.string.navigation_drawer_my_games_title))) {
-            result = MyGamesActivity.class;
         } else if (title.equals(context.getString(R.string.navigation_drawer_top_streams_title))) {
             result = TopStreamsActivity.class;
         } else if (title.equals(context.getString(R.string.navigation_drawer_top_games_title))) {
@@ -254,7 +251,6 @@ public class Service {
         Settings settings = new Settings(context);
         Class startPageClass = getClassFromStartPageTitle(context, settings.getStartPage());
         if (startPageClass == MyStreamsActivity.class ||
-                startPageClass == MyGamesActivity.class ||
                 startPageClass == MyChannelsActivity.class) {
             startPageClass = getClassFromStartPageTitle(context, settings.getDefaultNotLoggedInStartUpPageTitle());
         }

@@ -4,7 +4,6 @@
         <item>@string/navigation_drawer_featured_title</item>
         <item>@string/navigation_drawer_follows_title</item>
         <item>@string/navigation_drawer_my_streams_title</item>
-        <item>@string/navigation_drawer_my_games_title</item>
         <item>@string/navigation_drawer_top_streams_title</item>
         <item>@string/navigation_drawer_top_games_title</item>
     </string-array>

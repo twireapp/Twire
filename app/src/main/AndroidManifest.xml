@@ -129,10 +129,6 @@
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.main.MyGamesActivity"
-            android:label="@string/navigation_drawer_my_games_title"
-            android:launchMode="singleTop" />
 
         <activity
             android:name=".activities.SearchActivity"

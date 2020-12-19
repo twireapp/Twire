@@ -30,7 +30,6 @@ import com.perflyst.twire.activities.SearchActivity;
 import com.perflyst.twire.activities.main.FeaturedStreamsActivity;
 import com.perflyst.twire.activities.main.MainActivity;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
-import com.perflyst.twire.activities.main.MyGamesActivity;
 import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.main.TopGamesActivity;
 import com.perflyst.twire.activities.main.TopStreamsActivity;
@@ -64,7 +63,7 @@ public class NavigationDrawerFragment extends Fragment {
     protected ImageView mAppIcon;
     @BindView(R.id.img_drawer_banner)
     protected ImageView mTopImage;
-    @BindViews({R.id.my_games_container, R.id.my_streams_container, R.id.my_channels_container})
+    @BindViews({R.id.my_streams_container, R.id.my_channels_container})
     List<View> mUserRequiredViews;
     private String LOG_TAG = getClass().getSimpleName();
     private ActionBarDrawerToggle mDrawerToggle;
@@ -179,7 +178,6 @@ public class NavigationDrawerFragment extends Fragment {
         setOnClick(R.id.top_games_container, TopGamesActivity.class);
         setOnClick(R.id.my_channels_container, MyChannelsActivity.class);
         setOnClick(R.id.my_streams_container, MyStreamsActivity.class);
-        setOnClick(R.id.my_games_container, MyGamesActivity.class);
 
         setInstantOnClick(R.id.search_container, SearchActivity.class, R.anim.slide_in_bottom_anim);
         setInstantOnClick(R.id.settings_container, SettingsActivity.class, R.anim.slide_in_right_anim);
