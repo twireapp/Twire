@@ -27,12 +27,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentActivity;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -41,6 +41,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
@@ -69,11 +70,15 @@ public class ChannelActivity extends ThemeActivity {
             fragmentVodsBroadCastsOnlyArg = "vodsBroadcastsOnlyArg",
             fragmentVodsStreamerInfoArg = "streamerNameArg";
     private final int SHOW_FAB_DELAY = 300;
+    private final static int POSITION_DESC = 0;
+    private final static int POSITION_BROADCASTS = 1;
+    private final static int POSITION_HIGHLIGHTS = 2;
+    private final static int TOTAL_COUNT = 3;
     private ChannelInfo info;
     private ImageView streamerImage;
     private Toolbar toolbar,
             additionalToolbar;
-    private ViewPager mViewPager;
+    private ViewPager2 mViewPager;
     private TabLayout mTabs;
     private AppBarLayout mAppBar;
     private FloatingActionButton mFab;
@@ -153,10 +158,23 @@ public class ChannelActivity extends ThemeActivity {
 
     private void setUpTabs() {
         assert mViewPager != null;
-        mViewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+        mViewPager.setAdapter(new SectionsPagerAdapter(this));
 
         assert mTabs != null;
-        mTabs.setupWithViewPager(mViewPager);
+        new TabLayoutMediator(mTabs, mViewPager, (tab, position) -> {
+            switch (position) {
+                default: // Deliberate fall-through to description tab
+                case POSITION_DESC:
+                    tab.setText(R.string.streamerInfo_desc_tab);
+                    break;
+                case POSITION_BROADCASTS:
+                    tab.setText(R.string.streamerInfo_broadcasts_tab);
+                    break;
+                case POSITION_HIGHLIGHTS:
+                    tab.setText(R.string.streamerInfo_highlights_tab);
+                    break;
+            }
+        }).attach();
 
         mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -624,48 +642,32 @@ public class ChannelActivity extends ThemeActivity {
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private final int POSITION_DESC = 0;
-        private final int POSITION_BROADCASTS = 1;
-        private final int POSITION_HIGHLIGHTS = 2;
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
 
-
-        SectionsPagerAdapter(FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        SectionsPagerAdapter(FragmentActivity fa) {
+            super(fa);
             mDescriptionFragment = InfoFragment.newInstance(info);
             mBroadcastsFragment = VodFragment.newInstance(true, info);
             mHighlightsFragment = VodFragment.newInstance(false, info);
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
-            if (position == POSITION_DESC) {
-                return mDescriptionFragment;
-            } else if (position == POSITION_BROADCASTS) {
-                return mBroadcastsFragment;
-            } else if (position == POSITION_HIGHLIGHTS) {
-                return mHighlightsFragment;
-            } else {
-                return InfoFragment.newInstance(info);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
+        public Fragment createFragment(int position) {
             switch (position) {
-                case POSITION_DESC:
-                    return getResources().getString(R.string.streamerInfo_desc_tab);
+                default:
+                case POSITION_DESC: // Deliberate fall-through to description tab
+                    return mDescriptionFragment;
                 case POSITION_BROADCASTS:
-                    return getResources().getString(R.string.streamerInfo_broadcasts_tab);
+                    return mBroadcastsFragment;
                 case POSITION_HIGHLIGHTS:
-                    return getResources().getString(R.string.streamerInfo_highlights_tab);
+                    return mHighlightsFragment;
             }
-            return null;
+        }
+
+        @Override
+        public int getItemCount() {
+            return TOTAL_COUNT;
         }
     }
 }
