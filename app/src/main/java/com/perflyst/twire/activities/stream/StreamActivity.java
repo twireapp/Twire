@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -38,8 +39,6 @@ import com.perflyst.twire.service.Settings;
 
 import java.util.List;
 import java.util.Set;
-
-import javax.annotation.Nonnull;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -346,7 +345,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public void navToLauncherTask(@Nonnull Context appContext) {
+    public void navToLauncherTask(@NonNull Context appContext) {
         ActivityManager activityManager = ContextCompat.getSystemService(appContext, ActivityManager.class);
         // iterate app tasks available and navigate to launcher task (browse task)
         if (activityManager != null) {

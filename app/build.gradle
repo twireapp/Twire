@@ -39,7 +39,7 @@ android {
 
 dependencies {
     implementation "androidx.appcompat:appcompat:1.2.0"
-    implementation "androidx.browser:browser:1.2.0"
+    implementation "androidx.browser:browser:1.3.0"
     implementation "androidx.cardview:cardview:1.0.0"
     // Pinned to 1.1.3 as 2.0.0 seems to break the stream fragment.
     // Might be a bug with 2.0.0: https://issuetracker.google.com/issues/166486001
@@ -66,9 +66,6 @@ dependencies {
 
     //https://github.com/KasualBusiness/MaterialNumberPicker/releases
     implementation "biz.kasual:materialnumberpicker:1.2.1"
-
-    //https://github.com/google/guava/releases
-    implementation "com.google.guava:guava:29.0-jre"
 
     //https://github.com/google/gson/blob/master/CHANGELOG.md
     implementation "com.google.code.gson:gson:2.8.6"
