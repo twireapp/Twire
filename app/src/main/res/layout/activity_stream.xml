@@ -23,7 +23,7 @@
     <FrameLayout
         android:id="@+id/video_fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
     <FrameLayout
         android:id="@+id/chat_placement_wrapper"

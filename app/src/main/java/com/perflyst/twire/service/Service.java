@@ -29,6 +29,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.TrafficStats;
 import android.os.Build;
+import android.os.Process;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -49,7 +50,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.FeaturedStreamsActivity;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
-import com.perflyst.twire.activities.main.MyGamesActivity;
 import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.main.TopGamesActivity;
 import com.perflyst.twire.activities.main.TopStreamsActivity;
@@ -64,7 +64,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -75,14 +74,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSessionContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * Created by Sebastian Rask on 12-02-2015.
@@ -94,6 +98,11 @@ public class Service {
     // always verify the host - dont check for certificate
     public final static HostnameVerifier DO_NOT_VERIFY = (hostname, session) -> true;
     public static int NOTIFICATION_ALARM_ID = 754641782;
+
+    public static OkHttpClient client = new OkHttpClient.Builder()
+            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(3, TimeUnit.SECONDS)
+            .build();
 
     /**
      * Returns the Twitch Client ID
@@ -138,14 +147,12 @@ public class Service {
      */
     public static String calculateTwitchVideoLength(int videoLengthInSeconds) {
         String result = "";
-        double hours = videoLengthInSeconds / 60.0 / 60.0,
-                minutes,
-                seconds;
+        double hours = videoLengthInSeconds / 60.0 / 60.0;
 
         double minutesAsDecimalHours = hours - Math.floor(hours);
-        minutes = 60.0 * minutesAsDecimalHours;
+        double minutes = 60.0 * minutesAsDecimalHours;
         double secondsAsDecimalMinutes = minutes - Math.floor(minutes);
-        seconds = 60.0 * secondsAsDecimalMinutes;
+        double seconds = 60.0 * secondsAsDecimalMinutes;
 
         if (hours >= 1) {
             result = ((int) Math.floor(hours)) + ":";
@@ -167,11 +174,6 @@ public class Service {
         } else {
             return "" + timeInt;
         }
-    }
-
-    public static Bitmap removeBlackBars(Bitmap bitmap) {
-        final int BLACKBARS_SIZE_PX = 30;
-        return Bitmap.createBitmap(bitmap, 0, BLACKBARS_SIZE_PX, bitmap.getWidth(), bitmap.getHeight() - BLACKBARS_SIZE_PX * 2);
     }
 
     /**
@@ -218,8 +220,6 @@ public class Service {
             result = FeaturedStreamsActivity.class;
         } else if (title.equals(context.getString(R.string.navigation_drawer_follows_title))) {
             result = MyChannelsActivity.class;
-        } else if (title.equals(context.getString(R.string.navigation_drawer_my_games_title))) {
-            result = MyGamesActivity.class;
         } else if (title.equals(context.getString(R.string.navigation_drawer_top_streams_title))) {
             result = TopStreamsActivity.class;
         } else if (title.equals(context.getString(R.string.navigation_drawer_top_games_title))) {
@@ -251,7 +251,6 @@ public class Service {
         Settings settings = new Settings(context);
         Class startPageClass = getClassFromStartPageTitle(context, settings.getStartPage());
         if (startPageClass == MyStreamsActivity.class ||
-                startPageClass == MyGamesActivity.class ||
                 startPageClass == MyChannelsActivity.class) {
             startPageClass = getClassFromStartPageTitle(context, settings.getDefaultNotLoggedInStartUpPageTitle());
         }
@@ -360,8 +359,10 @@ public class Service {
         // Check if no view has focus:
         View view = activity.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            InputMethodManager imm = ContextCompat.getSystemService(activity, InputMethodManager.class);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 
@@ -372,8 +373,10 @@ public class Service {
         // Check if no view has focus:
         View view = activity.getCurrentFocus();
         if (view != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.toggleSoftInputFromWindow(view.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+            InputMethodManager inputMethodManager = ContextCompat.getSystemService(activity, InputMethodManager.class);
+            if (inputMethodManager != null) {
+                inputMethodManager.toggleSoftInputFromWindow(view.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+            }
         }
     }
 
@@ -464,8 +467,11 @@ public class Service {
      * Can only be called on a thread
      */
     public static boolean isNetworkConnectedThreadOnly(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        ConnectivityManager cm = ContextCompat.getSystemService(context, ConnectivityManager.class);
+        NetworkInfo networkInfo = null;
+        if (cm != null) {
+            networkInfo = cm.getActiveNetworkInfo();
+        }
 
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             try {
@@ -493,8 +499,11 @@ public class Service {
      * Can be called on the UI thread
      */
     public static boolean isNetWorkConnected(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        ConnectivityManager cm = ContextCompat.getSystemService(context, ConnectivityManager.class);
+        NetworkInfo networkInfo = null;
+        if (cm != null) {
+            networkInfo = cm.getActiveNetworkInfo();
+        }
 
         return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
@@ -580,9 +589,11 @@ public class Service {
      * Returns the height of the device screen
      */
     public static int getScreenHeight(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = ContextCompat.getSystemService(context, WindowManager.class);
         final DisplayMetrics displayMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        if (wm != null) {
+            wm.getDefaultDisplay().getMetrics(displayMetrics);
+        }
         return displayMetrics.heightPixels;
     }
 
@@ -590,29 +601,27 @@ public class Service {
         // Alright, so sometimes Twitch decides that our client ID should be blocked. Currently only happens for the hidden /api endpoints.
         // IF we are being blocked, then retry the request with Twitch web ClientID. They are typically not blocking this.
         String result = urlToJSONString(urlToRead, true); // "{\"error\":\"Gone\",\"status\":410,\"message\":\"this API has been removed.\"}";
-        try {
-            boolean retryWithWebClientId = false;
-            if (result.isEmpty()) {
-                retryWithWebClientId = true;
-            } else {
+        boolean retryWithWebClientId = false;
+        if (result == null || result.isEmpty()) {
+            retryWithWebClientId = true;
+        } else {
+            try {
                 JSONObject resultJson = new JSONObject(result);
                 int status = resultJson.getInt("status");
                 String error = resultJson.getString("error");
                 retryWithWebClientId = status == 410 || error.equals("Gone");
+            } catch (Exception ignored) {
             }
-
-            if (retryWithWebClientId) {
-                result = urlToJSONString(urlToRead, false);
-            }
-
-        } catch (Exception exc) {
-
         }
 
-        return result;
+        if (retryWithWebClientId) {
+            result = urlToJSONString(urlToRead, false);
+        }
+
+        return result == null ? "" : result;
     }
 
-    public static String urlToJSONString(String urlToRead, Boolean useOurClientId) {
+    private static String urlToJSONString(String urlToRead, Boolean useOurClientId) {
         String clientId;
         if (useOurClientId) {
             clientId = Service.getApplicationClientID();
@@ -620,45 +629,58 @@ public class Service {
             clientId = Service.getTwitchWebClientID();
         }
 
-        URL url;
-        HttpURLConnection conn = null;
-        Scanner in = null;
-        StringBuilder result = new StringBuilder();
+        Request request = new Request.Builder()
+                .url(urlToRead)
+                .header("Client-ID", clientId)
+                .header("Accept", "application/vnd.twitchtv.v5+json")
+                .build();
 
-        try {
-            url = new URL(urlToRead);
+        return urlToJSONString(request);
+    }
 
-            conn = openConnection(url);
+    public static String urlToJSONString(Request request) {
+        SimpleResponse response = makeRequest(request);
+        if (response == null)
+            return null;
 
-            conn.setReadTimeout(5000);
-            conn.setConnectTimeout(3000);
-            conn.setRequestProperty("Client-ID", clientId);
-            conn.setRequestProperty("Accept", "application/vnd.twitchtv.v5+json");
-            conn.setRequestMethod("GET");
-            in = new Scanner(new InputStreamReader(conn.getInputStream()));
+        String result = response.body;
 
-            while (in.hasNextLine()) {
-                String line = in.nextLine();
-                result.append(line);
-            }
-
-            in.close();
-            conn.disconnect();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (in != null)
-                in.close();
-            if (conn != null)
-                conn.disconnect();
-        }
-
-        if (result.length() == 0 || (result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[')) {
-            Log.v("URL TO JSON STRING", urlToRead + " did not successfully get read");
+        if (result.isEmpty() || (result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[')) {
+            Log.v("URL TO JSON STRING", request.url() + " did not successfully get read");
             Log.v("URL TO JSON STRING", "Result of reading - " + result);
         }
 
-        return result.toString();
+        return result;
+    }
+
+    public static class SimpleResponse
+    {
+        public int code;
+        public String body;
+        public Response response;
+
+        public SimpleResponse(Response response)
+        {
+            assert response.body() != null;
+
+            code = response.code();
+            this.response = response;
+
+            try {
+                body = response.body().string();
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
+    public static SimpleResponse makeRequest(Request request) {
+        Response response;
+        try {
+            response = client.newCall(request).execute();
+            return new SimpleResponse(response);
+        } catch (IOException exception) {
+            return null;
+        }
     }
 
     public static HttpURLConnection openConnection(URL url) throws IOException {
@@ -684,7 +706,7 @@ public class Service {
      */
     public static void trustAllHosts() {
         // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = new TrustManager[]{
+        TrustManager[] trustAllCerts = {
                 new X509TrustManager() {
                     @Override
                     public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
@@ -706,6 +728,11 @@ public class Service {
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, trustAllCerts, new SecureRandom());
+            SSLSessionContext sslSessionContext = sc.getServerSessionContext();
+            int sessionCacheSize = sslSessionContext.getSessionCacheSize();
+            if (sessionCacheSize > 0) {
+                sslSessionContext.setSessionCacheSize(0);
+            }
             HttpsURLConnection
                     .setDefaultSSLSocketFactory(sc.getSocketFactory());
         } catch (Exception e) {
@@ -959,8 +986,8 @@ public class Service {
         Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
         paint.setAntiAlias(true);
         paint.setShader(shader);
-        RectF rec = new RectF(0, 0, w, h - (h / 3));
-        c.drawRect(new RectF(0, (h / 3), w, h), paint);
+        RectF rec = new RectF(0, 0, w, h - (h / 3.0f));
+        c.drawRect(new RectF(0, (h / 3.0f), w, h), paint);
         c.drawRoundRect(rec, cornerRadius, cornerRadius, paint);
         //v.setImageDrawable(new BitmapDrawable(context.getResources(), bmp));
         //v.setImageBitmap(new BitmapDrawable(context.getResources(), bmp).getBitmap());
@@ -985,7 +1012,7 @@ public class Service {
     }
 
     public static double getDataReceived() {
-        return (double) TrafficStats.getUidRxBytes(android.os.Process
+        return (double) TrafficStats.getUidRxBytes(Process
                 .myUid()) / (1024 * 1024);
     }
 

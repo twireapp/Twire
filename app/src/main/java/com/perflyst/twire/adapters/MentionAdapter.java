@@ -54,7 +54,7 @@ public class MentionAdapter extends RecyclerView.Adapter<MentionAdapter.Suggesti
         void onSuggestionClick(String suggestion);
     }
 
-    class SuggestionViewHolder extends RecyclerView.ViewHolder {
+    static class SuggestionViewHolder extends RecyclerView.ViewHolder {
         TextView mName;
 
         SuggestionViewHolder(View itemView) {

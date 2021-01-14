@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="?attr/android:colorBackground"
     tools:context="com.perflyst.twire.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -14,7 +15,6 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <RelativeLayout
-            android:id="@+id/toolbar_wrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentInsetEnd="@dimen/search_toolbar_padding"
@@ -42,7 +42,6 @@
                 android:minHeight="@dimen/streamerInfo_additional_toolbar_height" />
 
             <RelativeLayout
-                android:id="@+id/profile_image_wrapper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true">
@@ -68,7 +67,6 @@
             </RelativeLayout>
 
             <LinearLayout
-                android:id="@+id/additional_info_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/additional_toolbar"
@@ -103,7 +101,7 @@
                             android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                             android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
                             android:tint="@color/white"
-                            app:srcCompat="@drawable/ic_channels" />
+                            app:srcCompat="@drawable/ic_person" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -132,7 +130,7 @@
                             android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                             android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
                             android:tint="@color/white"
-                            app:srcCompat="@drawable/ic_visibility_black_24dp" />
+                            app:srcCompat="@drawable/ic_visibility" />
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
@@ -147,7 +145,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -167,7 +165,7 @@
             android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/streamerInfo_fab_margin"
             android:tint="@color/white"
-            app:srcCompat="@drawable/ic_heart_24dp" />
+            app:srcCompat="@drawable/ic_heart" />
     </RelativeLayout>
 
 

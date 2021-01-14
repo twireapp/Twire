@@ -64,14 +64,14 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        String[] toSend = new String[]{
+        String[] toSend = {
                 gameTitle,
                 gamePreviewSmallURL,
                 gamePreviewMediumURL,
                 gamePreviewLargeURL
         };
 
-        int[] integers = new int[]{
+        int[] integers = {
                 gameViewers,
                 gameStreamers
         };

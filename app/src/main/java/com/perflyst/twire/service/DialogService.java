@@ -224,7 +224,15 @@ public class DialogService {
         return dialog;
     }
 
-    private static MaterialDialog.Builder getBaseThemedDialog(Activity activity) {
+    public static MaterialDialog getRouterErrorDialog(Activity activity, int errorMessage) {
+        return getBaseThemedDialog(activity)
+                .title(R.string.router_error_dialog_title)
+                .content(errorMessage)
+                .cancelListener(dialogInterface -> activity.finish())
+                .build();
+    }
+
+    public static MaterialDialog.Builder getBaseThemedDialog(Activity activity) {
         return new MaterialDialog.Builder(activity)
                 .titleColorAttr(R.attr.navigationDrawerTextColor)
                 .backgroundColorAttr(R.attr.navigationDrawerBackground)

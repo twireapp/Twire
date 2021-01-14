@@ -1,9 +1,9 @@
 package com.perflyst.twire.fragments;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -40,6 +40,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
@@ -60,8 +62,6 @@ import com.perflyst.twire.views.EditTextBackEvent;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.ChatRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.EmoteAutoSpanBehaviour;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,7 +79,7 @@ interface EmoteKeyboardDelegate {
 }
 
 public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, ChatAdapter.ChatAdapterCallback {
-    private static Integer[] supportedUnicodeEmotes = new Integer[]{
+    private static Integer[] supportedUnicodeEmotes = {
             0x1F600, 0x1F601, 0x1F602, 0x1F603, 0x1F604, 0x1F605, 0x1F606, 0x1F607, 0x1F608, 0x1F609, 0x1F60A, 0x1F60B, 0x1F60C, 0x1F60D, 0x1F60E, 0x1F60F,
             0x1F610, 0x1F611, 0x1F612, 0x1F613, 0x1F614, 0x1F615, 0x1F616, 0x1F617, 0x1F618, 0x1F619, 0x1F61A, 0x1F61B, 0x1F61C, 0x1F61D, 0x1F61E, 0x1F61F,
             0x1F620, 0x1F621, 0x1F622, 0x1F623, 0x1F624, 0x1F625, 0x1F626, 0x1F627, 0x1F628, 0x1F629, 0x1F62A, 0x1F62B, 0x1F62C, 0x1F62D, 0x1F62E, 0x1F62F,
@@ -125,6 +125,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             isSoftKeyboardOpen = false;
     private ColorFilter defaultBackgroundColor;
     private Vibrator vibe;
+    private BottomSheetDialog bottomSheetDialog;
 
     public static ChatFragment getInstance(Bundle args) {
         ChatFragment fragment = new ChatFragment();
@@ -165,7 +166,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mEmoteViewPager = mRootView.findViewById(R.id.tabs_viewpager);
         selectedTabColorRes = Service.getColorAttribute(R.attr.textColor, R.color.black_text, getContext());
         unselectedTabColorRes = Service.getColorAttribute(R.attr.disabledTextColor, R.color.black_text_disabled, getContext());
-        vibe = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        vibe = ContextCompat.getSystemService(getContext(), Vibrator.class);
 
         defaultBackgroundColor = mSendButton.getColorFilter();
         mRecyclerView.setAdapter(mChatAdapter);
@@ -298,6 +299,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     public void onPause() {
         super.onPause();
         saveRecentEmotes();
+
+        if (bottomSheetDialog != null)
+            bottomSheetDialog.dismiss();
     }
 
     @Override
@@ -464,8 +468,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         if (subscriberEmotesLoaded.size() > 0 && adapter != null && getContext() != null) {
             Log.d(LOG_TAG, "Adding subscriber emotes: " + subscriberEmotesLoaded.size());
 
-            Drawable icon = ContextCompat.getDrawable(getContext(), R.drawable.ic_usd_48dp);
-            icon.setColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN);
+            Drawable icon = ContextCompat.getDrawable(getContext(), R.drawable.ic_money);
+            icon.setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
 
             TabLayout.Tab newTab = mEmoteTabs.newTab();
             newTab.setIcon(icon);
@@ -602,9 +606,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             if (icon != null) {
                 if (i == 0) {
-                    icon.setColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN);
+                    icon.setColorFilter(new PorterDuffColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN));
                 } else {
-                    icon.setColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN);
+                    icon.setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
                 }
             }
         }
@@ -638,14 +642,14 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                         super.onTabSelected(tab);
 
                         if (tab.getIcon() != null)
-                            tab.getIcon().setColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN);
+                            tab.getIcon().setColorFilter(new PorterDuffColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN));
                     }
 
                     @Override
                     public void onTabUnselected(TabLayout.Tab tab) {
                         super.onTabUnselected(tab);
                         if (tab.getIcon() != null)
-                            tab.getIcon().setColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN);
+                            tab.getIcon().setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
                     }
 
                     @Override
@@ -878,7 +882,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     @Override
     public void onMessageClicked(SpannableStringBuilder formattedMessage, final String userName, final String message) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.chat_message_options, null);
-        final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        bottomSheetDialog = new BottomSheetDialog(getContext());
         bottomSheetDialog.setContentView(v);
         final BottomSheetBehavior behavior = BottomSheetBehavior.from((View) v.getParent());
         behavior.setPeekHeight(getContext().getResources().getDisplayMetrics().heightPixels / 3);
@@ -1031,7 +1035,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         public class EmoteAdapter extends RecyclerView.Adapter<EmoteAdapter.EmoteViewHolder> {
             private ArrayList<Emote> emotes;
             private Settings settings;
-            private HashMap<String, Target> picassoTargets;
+            private HashMap<String, Target> imageTargets;
 
             private View.OnClickListener emoteClickListener = new View.OnClickListener() {
                 @Override
@@ -1059,7 +1063,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             EmoteAdapter() {
                 emotes = new ArrayList<>();
                 settings = new Settings(getContext());
-                picassoTargets = new HashMap<>();
+                imageTargets = new HashMap<>();
             }
 
             @Override
@@ -1083,7 +1087,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     int EMOTE_SIZE = 2;
                     String emoteUrl = emoteAtPosition.getEmoteUrl(EMOTE_SIZE);
 
-                    Picasso.with(getContext()).load(emoteUrl).into(holder.mImageEmote);
+                    Glide.with(getContext()).load(emoteUrl).into(holder.mImageEmote);
                 }
             }
 
@@ -1158,7 +1162,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         boolean showSubscriberEmote = false;
 
         EmotesPagerAdapter(FragmentManager fm) {
-            super(fm);
+            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             EmoteKeyboardDelegate delegate = ChatFragment.this;
 
             textEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.UNICODE, delegate);

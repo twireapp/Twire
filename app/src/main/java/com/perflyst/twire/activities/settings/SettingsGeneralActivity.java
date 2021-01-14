@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckedTextView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -13,9 +14,9 @@ import com.google.android.material.snackbar.Snackbar;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
-import com.perflyst.twire.activities.main.MyGamesActivity;
 import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.setup.LoginActivity;
+import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -24,6 +25,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
     private String LOG_TAG = getClass().getSimpleName();
     private Settings settings;
     private TextView twitchNameView, startPageSubText;
+    private CheckedTextView filterTopStreamsByLanguageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,11 @@ public class SettingsGeneralActivity extends ThemeActivity {
         //Service.isTranslucentActionbar(LOG_TAG, getBaseContext(), toolbar, this);
         twitchNameView = findViewById(R.id.general_current_twitch_name);
         startPageSubText = findViewById(R.id.start_page_sub_text);
+        filterTopStreamsByLanguageView = findViewById(R.id.language_filter_title);
 
         initTwitchDisplayName();
         initStartPageText();
+        initFilterTopsStreamsByLanguage();
     }
 
     @Override
@@ -62,7 +66,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
     private void initStartPageText() {
         String startUpPageTitle = settings.getStartPage();
         Class startUpPageClass = Service.getClassFromStartPageTitle(this, startUpPageTitle);
-        if (!settings.isLoggedIn() && (startUpPageClass == MyStreamsActivity.class || startUpPageClass == MyGamesActivity.class || startUpPageClass == MyChannelsActivity.class)) {
+        if (!settings.isLoggedIn() && (startUpPageClass == MyStreamsActivity.class || startUpPageClass == MyChannelsActivity.class)) {
             startUpPageTitle = settings.getDefaultNotLoggedInStartUpPageTitle();
         }
         startPageSubText.setText(startUpPageTitle);
@@ -74,6 +78,10 @@ public class SettingsGeneralActivity extends ThemeActivity {
         } else {
             twitchNameView.setText(getString(R.string.gen_not_logged_in));
         }
+    }
+
+    private void initFilterTopsStreamsByLanguage() {
+        filterTopStreamsByLanguageView.setChecked(settings.getGeneralFilterTopStreamsByLanguage());
     }
 
     public void onClickTwitchName(View v) {
@@ -126,4 +134,12 @@ public class SettingsGeneralActivity extends ThemeActivity {
         settings.setTipsShown(false);
     }
 
+    public void onClickFiltersStreamsByLanguageEnable(View v) {
+        settings.setGeneralFilterTopStreamsByLanguage(!settings.getGeneralFilterTopStreamsByLanguage());
+        initFilterTopsStreamsByLanguage();
+    }
+
+    public void onClickOpenChangelog(View v) {
+        new ChangelogDialogFragment().show(getSupportFragmentManager(), "ChangelogDialog");
+    }
 }

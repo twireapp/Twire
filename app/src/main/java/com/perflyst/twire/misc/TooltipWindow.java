@@ -92,8 +92,7 @@ public class TooltipWindow {
         tipWindow = new PopupWindow(ctx);
         position = aPosition;
 
-        LayoutInflater inflater = (LayoutInflater) ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        contentView = inflater.inflate(R.layout.tooltip_layout, null);
+        contentView = LayoutInflater.from(ctx).inflate(R.layout.tooltip_layout, null);
         mTipText = contentView.findViewById(R.id.tooltip_text);
         mNavLeftArrow = contentView.findViewById(R.id.tooltip_nav_left);
         mNavUpArrow = contentView.findViewById(R.id.tooltip_nav_up);

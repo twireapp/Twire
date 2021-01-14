@@ -38,8 +38,8 @@ public class StreamsService {
      */
     public static List<StreamInfo> getOnlineStreams(Map<String, ChannelInfo> streamers, Context context) {
         List<String> streamerIds = new ArrayList<>();
-        for (String streamerName : streamers.keySet()) {
-            streamerIds.add(streamers.get(streamerName).getUserId() + "");
+        for (ChannelInfo channelInfo : streamers.values()) {
+            streamerIds.add(channelInfo.getUserId() + "");
         }
 
         return getOnlineStreams(streamers, getStreamURLS(streamerIds), context);

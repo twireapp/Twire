@@ -3,19 +3,19 @@
 
     <item
         android:id="@+id/menu_item_options"
-        android:icon="@drawable/ic_settings_white_24dp"
+        android:icon="@drawable/ic_settings"
         android:title="@string/menu_options"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/menu_item_profile"
-        android:icon="@drawable/ic_person_white_24dp"
+        android:icon="@drawable/ic_person"
         android:title="@string/menu_profile"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/menu_item_sleep"
-        android:icon="@drawable/ic_sleep_48dp"
+        android:icon="@drawable/ic_sleep"
         android:title="@string/menu_sleep"
         app:showAsAction="ifRoom" />
 
@@ -27,7 +27,7 @@
 
     <item
         android:id="@+id/menu_item_external"
-        android:icon="@drawable/ic_open_in_new_white_24dp"
+        android:icon="@drawable/ic_open_in_new"
         android:title="@string/menu_external"
         app:showAsAction="never" />
 

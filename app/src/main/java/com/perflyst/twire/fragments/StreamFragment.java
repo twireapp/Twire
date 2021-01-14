@@ -2,22 +2,22 @@ package com.perflyst.twire.fragments;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -50,6 +50,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.media.session.MediaButtonReceiver;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Fade;
@@ -57,16 +58,22 @@ import androidx.transition.TransitionManager;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.balysv.materialripple.MaterialRippleLayout;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackPreparer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -90,20 +97,17 @@ import com.perflyst.twire.tasks.GetStreamChattersTask;
 import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.rey.material.widget.ProgressView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
-import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
-public class StreamFragment extends Fragment implements Player.EventListener {
+public class StreamFragment extends Fragment implements Player.EventListener, PlaybackPreparer {
     private final int HIDE_ANIMATION_DELAY = 3000;
     private final int SNACKBAR_SHOW_DURATION = 4000;
 
@@ -128,10 +132,11 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private LinkedHashMap<String, Quality> qualityURLs;
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
-    private View mVideoBackground;
     private PlayerView mVideoView;
     private ExoPlayer player;
+    private MediaSource currentMediaSource;
     private Toolbar mToolbar;
+    private ConstraintLayout mVideoInterface;
     private RelativeLayout mControlToolbar;
     private ConstraintLayout mVideoWrapper;
     private ConstraintLayout mPlayPauseWrapper;
@@ -162,6 +167,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private final Runnable progressRunnable = new Runnable() {
         @Override
         public void run() {
+            if (player == null)
+                return;
+
             if (player.isPlaying()) {
                 if (currentProgress != player.getCurrentPosition())
                     mProgressBar.setProgress((int) player.getCurrentPosition());
@@ -187,6 +195,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private Integer triesForNextBest = 0;
 
     private static int totalVerticalInset;
+    private boolean pictureInPictureEnabled; // Tracks if PIP is enabled including the animation.
+    private static boolean pipDisabling; // Tracks the PIP disabling animation.
+    private MediaSessionCompat mediaSession;
 
     public static StreamFragment newInstance(Bundle args) {
         StreamFragment fragment = new StreamFragment();
@@ -207,7 +218,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             int width, height;
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && activity.isInMultiWindowMode()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && activity.isInMultiWindowMode() && !activity.isInPictureInPictureMode() && !pipDisabling) {
                     display.getMetrics(metrics);
                 } else {
                     display.getRealMetrics(metrics);
@@ -272,11 +283,11 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         }
 
         rootView = (ViewGroup) mRootView;
+        mVideoInterface = mRootView.findViewById(R.id.video_interface);
         mToolbar = mRootView.findViewById(R.id.main_toolbar);
         mControlToolbar = mRootView.findViewById(R.id.control_toolbar_wrapper);
         mVideoWrapper = mRootView.findViewById(R.id.video_wrapper);
         mVideoView = mRootView.findViewById(R.id.VideoView);
-        mVideoBackground = mRootView.findViewById(R.id.video_background);
         mPlayPauseWrapper = mRootView.findViewById(R.id.play_pause_wrapper);
         mPlayIcon = mRootView.findViewById(R.id.ic_play);
         mPauseIcon = mRootView.findViewById(R.id.ic_pause);
@@ -348,9 +359,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             }
         });
 
-        player = new SimpleExoPlayer.Builder(getContext()).build();
-        player.addListener(this);
-        mVideoView.setPlayer(player);
+        initializePlayer();
 
         mRootView.setOnSystemUiVisibilityChangeListener(
                 visibility -> {
@@ -442,9 +451,12 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                     }
                 }
             });
+            seeking = true;
             mProgressBar.setMax(vodLength * 1000);
+            seeking = false;
+
+            checkVodProgress();
         }
-        progressHandler.postDelayed(progressRunnable, 1000);
 
         keepScreenOn();
 
@@ -497,8 +509,49 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         return null;
     }
 
+    private void initializePlayer() {
+        if (player == null) {
+            player = new SimpleExoPlayer.Builder(getContext()).build();
+            player.addListener(this);
+            mVideoView.setPlayer(player);
+            mVideoView.setPlaybackPreparer(this);
+
+            if (currentMediaSource != null) {
+                player.setMediaSource(currentMediaSource);
+                player.prepare();
+            }
+
+            ComponentName mediaButtonReceiver = new ComponentName(
+                    getContext(), MediaButtonReceiver.class);
+            mediaSession = new MediaSessionCompat(
+                    getContext(),
+                    getContext().getPackageName(),
+                    mediaButtonReceiver,
+                    null);
+            MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
+            mediaSessionConnector.setPlayer(player);
+            mediaSession.setActive(true);
+
+            progressHandler.postDelayed(progressRunnable, 1000);
+        }
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            mediaSession.release();
+
+            player.release();
+            player = null;
+        }
+    }
+
     @Override
-    public void onPlayerStateChanged(boolean playWhenReady, @Player.State int playbackState) {
+    public void preparePlayback() {
+        player.prepare();
+    }
+
+    @Override
+    public void onPlaybackStateChanged(@Player.State int playbackState) {
         if (playbackState == Player.STATE_READY) {
             mBufferingView.stop();
             hideVideoInterface();
@@ -528,7 +581,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
      * Hides the preview image and updates the state
      */
     private void hidePreview() {
-        Service.bringToBack(mPreview);
+        mPreview.setVisibility(View.INVISIBLE);
         previewInbackGround = true;
     }
 
@@ -552,8 +605,27 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
+
+        // If the app was closed in the background we need to seek to currentProgress when resuming.
+        // Android also triggers onResume when coming out of PIP but we don't need to do it then.
+        if (!pipDisabling)
+            player.seekTo(currentProgress);
+
+        pipDisabling = false;
+
+        if (Util.SDK_INT <= 23 || player == null) {
+            initializePlayer();
+        }
 
         originalMainToolbarPadding = mToolbar.getPaddingRight();
         originalCtrlToolbarPadding = mControlToolbar.getPaddingRight();
@@ -571,8 +643,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             showVideoInterface();
             updateUI();
         }
-
-        checkVodProgress();
     }
 
     @Override
@@ -580,7 +650,22 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         super.onPause();
 
         Log.d(LOG_TAG, "Stream Fragment paused");
+        if (pictureInPictureEnabled)
+            return;
+
         hasPaused = true;
+
+        if (mQualityBottomSheet != null)
+            mQualityBottomSheet.dismiss();
+
+        if (mProfileBottomSheet != null)
+            mProfileBottomSheet.dismiss();
+
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+
+        ChatManager.setPreviousProgress();
     }
 
     @Override
@@ -600,6 +685,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             Log.d(LOG_TAG, "Saving Current progress: " + currentProgress);
         }
 
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 
     @Override
@@ -710,7 +798,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
      * If the screen is in landscape it is show, else it is shown
      */
     private void checkShowChatButtonVisibility() {
-        if (isLandscape && settings.isChatInLandscapeEnabled()) {
+        if (isLandscape && settings.isChatInLandscapeEnabled() && !pictureInPictureEnabled) {
             mShowChatButton.setVisibility(View.VISIBLE);
         } else {
             mShowChatButton.setVisibility(View.GONE);
@@ -912,30 +1000,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         showVideoInterface();
     }
 
-    private String getBestCastQuality(Map<String, Quality> castQualities, String quality, Integer numberOfTries) {
-        if (numberOfTries > GetLiveStreamURL.CAST_QUALITIES.length - 1) {
-            return null;
-        }
-
-        if (quality.equals(GetLiveStreamURL.QUALITY_AUTO) || quality.equals(GetLiveStreamURL.QUALITY_AUDIO_ONLY)) {
-            quality = GetLiveStreamURL.QUALITY_MEDIUM;
-        }
-
-        if (castQualities.containsKey(quality)) {
-            return quality;
-        } else {
-            numberOfTries++;
-            List<String> qualityList = Arrays.asList(GetLiveStreamURL.CAST_QUALITIES);
-            int next = qualityList.indexOf(quality) - 1;
-            if (next < 0) {
-                quality = GetLiveStreamURL.QUALITY_SOURCE;
-            } else {
-                quality = qualityList.get(next);
-            }
-            return getBestCastQuality(castQualities, quality, numberOfTries);
-        }
-    }
-
     /**
      * Checks if the activity was started with a shared view in high API levels.
      */
@@ -948,26 +1012,17 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 return;
             }
 
-            RequestCreator creator = Picasso.with(getContext()).load(imageUrl);
-            Target target = new Target() {
-                @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    mPreview.setImageBitmap(bitmap);
-                }
-
-                public void onBitmapFailed(Drawable errorDrawable) {
-                }
-
-                public void onPrepareLoad(Drawable placeHolderDrawable) {
-                }
-            };
-            creator.into(target);
+            Glide.with(getContext())
+                    .asBitmap()
+                    .load(imageUrl)
+                    .signature(new ObjectKey(System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(5))) // Refresh preview images every 5 minutes
+                    .into(mPreview);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && intent.getBooleanExtra(getString(R.string.stream_shared_transition), false)) {
             mPreview.setTransitionName(getString(R.string.stream_preview_transition));
 
-            final View[] viewsToHide = {mVideoView, mToolbar, mControlToolbar, mVideoBackground};
+            final View[] viewsToHide = {mVideoView, mToolbar, mControlToolbar};
             for (View view : viewsToHide) {
                 view.setVisibility(View.INVISIBLE);
             }
@@ -1018,7 +1073,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 player.seekTo(currentProgress);
                 Log.d(LOG_TAG, "Current progress: " + currentProgress);
             } else {
-                ChatManager.updateVodProgress(currentProgress, true);
+                ChatManager.updateVodProgress(currentProgress, false);
                 player.seekTo(currentProgress);
                 Log.d(LOG_TAG, "Seeking to " + currentProgress);
             }
@@ -1055,8 +1110,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         View decorView = getActivity().getWindow().getDecorView();
         if (isLandscape || isFullscreen) {
-            Log.d(LOG_TAG, "Hiding navigation");
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide navigation bar
@@ -1072,14 +1125,16 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             }
 
         } else {
-            Log.d(LOG_TAG, "Showing navigation");
             decorView.setSystemUiVisibility(0); // Remove all flags.
         }
     }
 
     private void setVideoViewLayout() {
+        ViewGroup.LayoutParams layoutParams = rootView.getLayoutParams();
+        layoutParams.height = isLandscape ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT;
+
         ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
-        if (isLandscape) {
+        if (isLandscape && !pictureInPictureEnabled) {
             layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_PARENT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
         } else {
             layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
@@ -1107,7 +1162,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
      * @return
      */
     public boolean isVideoInterfaceShowing() {
-        return mControlToolbar.getAlpha() == 1f;
+        return mVideoInterface.getAlpha() == 1f;
     }
 
     /**
@@ -1115,12 +1170,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
      */
     private void hideVideoInterface() {
         if (mToolbar != null && !audioViewVisible && !chatOnlyViewVisible) {
-            mToolbar.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mControlToolbar.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mPlayPauseWrapper.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mShowChatButton.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mForward.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            mBackward.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+            mVideoInterface.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
             changeVideoControlClickablity(false);
         }
     }
@@ -1138,13 +1188,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         }
 
         mControlToolbar.setTranslationY(-CtrlToolbarY);
-        mControlToolbar.animate().alpha(1f).start();
         mToolbar.setTranslationY(MaintoolbarY);
-        mToolbar.animate().alpha(1f).start();
-        mPlayPauseWrapper.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-        mShowChatButton.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-        mForward.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-        mBackward.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+        mVideoInterface.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
         changeVideoControlClickablity(true);
     }
 
@@ -1222,9 +1267,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
      */
     private void updateFullscreenButtonState() {
         if (isFullscreen) {
-            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen_exit_24dp);
+            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen_exit);
         } else {
-            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen_24dp);
+            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen);
         }
     }
 
@@ -1239,8 +1284,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         if (isAudioOnlyModeEnabled()) {
             Log.d(LOG_TAG, "Pausing audio");
-        } else {
-            player.setPlayWhenReady(false);
+        } else if (player != null) {
+            player.pause();
         }
         releaseScreenOn();
     }
@@ -1257,7 +1302,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 player.seekToDefaultPosition(); // Go forward to live
             }
 
-            player.setPlayWhenReady(true);
+            player.play();
         }
 
         keepScreenOn();
@@ -1400,9 +1445,17 @@ public class StreamFragment extends Fragment implements Player.EventListener {
      * @param url
      */
     private void playUrl(String url) {
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(getContext(), getString(R.string.app_name));
-        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(url));
-        player.prepare(mediaSource);
+        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(getString(R.string.app_name));
+
+        HttpDataSource.RequestProperties properties = dataSourceFactory.getDefaultRequestProperties();
+        properties.set("Referer", "https://player.twitch.tv");
+        properties.set("Origin", "https://player.twitch.tv");
+
+        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
+                .createMediaSource(MediaItem.fromUri(Uri.parse(url)));
+        currentMediaSource = mediaSource;
+        player.setMediaSource(mediaSource);
+        player.prepare();
 
         checkVodProgress();
         resumeStream();
@@ -1415,12 +1468,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             return;
         }
 
-        String castQuality = getBestCastQuality(qualityURLs, settings.getPrefStreamQuality(), 0);
-        if (castQuality == null) {
-            errorToast.show();
-            return;
-        }
-
+        String castQuality = GetLiveStreamURL.QUALITY_AUTO;
         updateSelectedQuality(castQuality);
         String url = qualityURLs.get(castQuality).URL;
 
@@ -1615,8 +1663,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     private void updateFollowIcon(ImageView imageView, boolean isFollowing) {
         @DrawableRes int imageRes = isFollowing
-                ? R.drawable.ic_heart_broken_24dp
-                : R.drawable.ic_heart_24dp;
+                ? R.drawable.ic_heart_broken
+                : R.drawable.ic_heart;
         imageView.setImageResource(imageRes);
     }
 
@@ -1765,7 +1813,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             mControlToolbar.setVisibility(View.GONE);
             mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, getContext()));
 
-            player.release();
+            releasePlayer();
             optionsMenuItem.setVisible(true);
 
             showVideoInterface();
@@ -1790,6 +1838,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.streamToolbarColor, R.color.black_transparent, getContext()));
 
             if (!castingViewVisible) {
+                initializePlayer();
                 startStreamWithQuality(settings.getPrefStreamQuality());
             }
 
@@ -1797,6 +1846,24 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             showVideoInterface();
         }
+    }
+
+    public void prePictureInPicture() {
+        pictureInPictureEnabled = true;
+
+        int width = getScreenRect(getActivity()).height();
+        ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, width);
+        resizeWidthAnimation.setDuration(250);
+        mVideoWrapper.startAnimation(resizeWidthAnimation);
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean enabled) {
+        mVideoInterface.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
+        pictureInPictureEnabled = enabled;
+
+        if (!enabled)
+            pipDisabling = true;
     }
 
     /**

@@ -1,7 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/chat_fragment_wrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -34,15 +33,14 @@
                 app:tabMode="scrollable">
 
                 <com.google.android.material.tabs.TabItem
-                    android:id="@+id/recenttab"
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
                     android:layout_height="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_clock_black_24dp" />
+                    android:icon="@drawable/ic_clock" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
                     android:layout_height="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_twitch_500px" />
+                    android:icon="@drawable/ic_twitch" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
@@ -52,7 +50,7 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
                     android:layout_height="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_mood_black_24dp" />
+                    android:icon="@drawable/ic_mood" />
 
             </com.google.android.material.tabs.TabLayout>
 
@@ -72,7 +70,7 @@
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/chat_emote_backspace_padding"
                 android:tint="?attr/chatInputTextColor"
-                app:srcCompat="@drawable/ic_backspace_black_24dp" />
+                app:srcCompat="@drawable/ic_backspace" />
         </RelativeLayout>
 
         <View
@@ -109,7 +107,7 @@
             android:layout_centerVertical="true"
             android:clickable="false"
             android:tint="?attr/chatSendIconColor"
-            app:srcCompat="@drawable/ic_send_black_24dp" />
+            app:srcCompat="@drawable/ic_send" />
 
         <ImageView
             android:id="@+id/chat_emote_keyboard_ic"
@@ -121,7 +119,7 @@
             android:layout_toStartOf="@+id/chat_send_ic"
             android:layout_toLeftOf="@+id/chat_send_ic"
             android:tint="?attr/chatSendIconColor"
-            app:srcCompat="@drawable/ic_mood_black_24dp" />
+            app:srcCompat="@drawable/ic_mood" />
 
         <com.perflyst.twire.views.EditTextBackEvent
             android:id="@+id/send_message_textview"

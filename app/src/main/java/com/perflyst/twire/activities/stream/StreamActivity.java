@@ -1,6 +1,10 @@
 package com.perflyst.twire.activities.stream;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -21,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -31,6 +36,9 @@ import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.fragments.ChatFragment;
 import com.perflyst.twire.fragments.StreamFragment;
 import com.perflyst.twire.service.Settings;
+
+import java.util.List;
+import java.util.Set;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -43,6 +51,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     private String LOG_TAG = getClass().getSimpleName();
     private Sensor mRotationSensor;
     private Settings settings;
+    private boolean mBackstackLost;
 
     protected abstract int getLayoutResource();
 
@@ -84,9 +93,11 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         }
 
         try {
-            SensorManager mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
-            mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-            mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY);
+            SensorManager mSensorManager = ContextCompat.getSystemService(this, SensorManager.class);
+            if (mSensorManager != null) {
+                mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
+                mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,7 +112,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         updateOrientation();
     }
 
-    @Override
+	@Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do nothing :)
     }
@@ -151,16 +162,6 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        if (getResources().getConfiguration().orientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
-            Log.d(LOG_TAG, "Orientations is reverse portrait");
-        }
-
-        Log.d(LOG_TAG, "Current orientation: " + getResources().getConfiguration().orientation);
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
     }
@@ -193,6 +194,16 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         }
     }
 
+	@Override
+	@RequiresApi(24)
+	public void onUserLeaveHint() {
+        super.onUserLeaveHint();
+
+        if (getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+            mStreamFragment.prePictureInPicture();
+            enterPictureInPictureMode();
+        }
+	}
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private TransitionSet constructTransitions() {
@@ -284,9 +295,10 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     void updateOrientation() {
-        int orientation = getResources().getConfiguration().orientation;
+        boolean landscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
         View chat = findViewById(R.id.chat_fragment);
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (landscape) {
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) findViewById(R.id.chat_landscape_fragment).getLayoutParams();
             lp.width = (int) (StreamFragment.getScreenRect(this).height() * (settings.getChatLandscapeWidth() / 100.0));
             Log.d(LOG_TAG, "TARGET WIDTH: " + lp.width);
@@ -296,6 +308,56 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         }
 
         ViewGroup.LayoutParams layoutParams = findViewById(getVideoContainerResource()).getLayoutParams();
-        layoutParams.height = orientation == Configuration.ORIENTATION_LANDSCAPE ? MATCH_PARENT : WRAP_CONTENT;
+        layoutParams.height = landscape ? MATCH_PARENT : WRAP_CONTENT;
+    }
+
+    private boolean onStopCalled;
+    @Override
+    public void onStop() {
+        super.onStop();
+        onStopCalled = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        onStopCalled = false;
+    }
+
+    @Override
+    public void onPictureInPictureModeChanged(boolean enabled, Configuration newConfig) {
+        super.onPictureInPictureModeChanged(enabled, newConfig);
+        mBackstackLost |= enabled;
+
+        if (!enabled && onStopCalled) {
+            finish();
+        }
+    }
+
+    @Override
+    public void finish () {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mBackstackLost) {
+            navToLauncherTask(getApplicationContext());
+            finishAndRemoveTask();
+        } else {
+            super.finish();
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void navToLauncherTask(@NonNull Context appContext) {
+        ActivityManager activityManager = ContextCompat.getSystemService(appContext, ActivityManager.class);
+        // iterate app tasks available and navigate to launcher task (browse task)
+        if (activityManager != null) {
+            final List<ActivityManager.AppTask> appTasks = activityManager.getAppTasks();
+            for (ActivityManager.AppTask task : appTasks) {
+                final Intent baseIntent = task.getTaskInfo().baseIntent;
+                final Set<String> categories = baseIntent.getCategories();
+                if (categories != null && categories.contains(Intent.CATEGORY_LAUNCHER)) {
+                    task.moveToFront();
+                    return;
+                }
+            }
+        }
     }
 }

@@ -1,7 +1,5 @@
 package com.perflyst.twire.chat;
 
-import android.util.SparseArray;
-
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
@@ -22,7 +20,7 @@ import java.util.regex.Pattern;
  * Created by sebastian on 26/07/2017.
  */
 
-public class ChatEmoteManager {
+class ChatEmoteManager {
     private static Map<String, Emote> emoteKeywordToEmote;
 
     private final List<Emote> customGlobal = new ArrayList<>();
@@ -31,9 +29,11 @@ public class ChatEmoteManager {
     private Pattern emotePattern = Pattern.compile("([\\d_A-Z]+):((?:\\d+-\\d+,?)+)");
 
     private String channelName;
+    private int channelId;
 
-    ChatEmoteManager(String channelName) {
+    ChatEmoteManager(String channelName, int channelId) {
         this.channelName = channelName;
+        this.channelId = channelId;
     }
 
 
@@ -46,30 +46,42 @@ public class ChatEmoteManager {
         Map<String, Emote> result = new HashMap<>();
 
         // BetterTTV emotes
-        final String BTTV_GLOBAL_URL = "https://api.betterttv.net/2/emotes";
-        final String BTTV_CHANNEL_URL = "https://api.betterttv.net/2/channels/" + channelName;
-        final String EMOTE_ARRAY = "emotes";
+        final String BTTV_GLOBAL_URL = "https://api.betterttv.net/3/cached/emotes/global";
+        final String BTTV_CHANNEL_URL = "https://api.betterttv.net/3/cached/users/twitch/" + channelId;
+        final String CHANNEL_EMOTE_ARRAY = "channelEmotes";
+        final String SHARED_EMOTE_ARRAY = "sharedEmotes";
 
         try {
-            JSONObject topObject = new JSONObject(Service.urlToJSONString(BTTV_GLOBAL_URL));
-            JSONArray globalEmotes = topObject.getJSONArray(EMOTE_ARRAY);
+            String bttvResponse = Service.urlToJSONString(BTTV_GLOBAL_URL);
+            if (bttvResponse != null) {
+                JSONArray globalEmotes = new JSONArray(bttvResponse);
 
-            for (int i = 0; i < globalEmotes.length(); i++) {
-                Emote emote = ToBTTV(globalEmotes.getJSONObject(i));
-                customGlobal.add(emote);
-                result.put(emote.getKeyword(), emote);
+                for (int i = 0; i < globalEmotes.length(); i++) {
+                    Emote emote = ToBTTV(globalEmotes.getJSONObject(i));
+                    customGlobal.add(emote);
+                    result.put(emote.getKeyword(), emote);
+                }
             }
 
-            JSONObject topChannelEmotes = new JSONObject(Service.urlToJSONString(BTTV_CHANNEL_URL));
-            JSONArray channelEmotes = topChannelEmotes.getJSONArray(EMOTE_ARRAY);
-            for (int i = 0; i < channelEmotes.length(); i++) {
-                Emote emote = ToBTTV(channelEmotes.getJSONObject(i));
-                emote.setCustomChannelEmote(true);
-                customChannel.add(emote);
-                result.put(emote.getKeyword(), emote);
+            String bttvChannelResponse = Service.urlToJSONString(BTTV_CHANNEL_URL);
+            if (bttvChannelResponse != null) {
+                JSONObject topChannelEmotes = new JSONObject(bttvChannelResponse);
+                JSONArray channelEmotes = topChannelEmotes.getJSONArray(CHANNEL_EMOTE_ARRAY);
+
+                // Append shared emotes
+                JSONArray sharedEmotes = topChannelEmotes.getJSONArray(SHARED_EMOTE_ARRAY);
+                for (int i = 0; i < sharedEmotes.length(); i++) {
+                    channelEmotes.put(sharedEmotes.get(i));
+                }
+
+                // Read all the emotes
+                for (int i = 0; i < channelEmotes.length(); i++) {
+                    Emote emote = ToBTTV(channelEmotes.getJSONObject(i));
+                    emote.setCustomChannelEmote(true);
+                    customChannel.add(emote);
+                    result.put(emote.getKeyword(), emote);
+                }
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -95,19 +107,20 @@ public class ChatEmoteManager {
                 }
             }
 
-            JSONObject channelTopObject = new JSONObject(Service.urlToJSONString(FFZ_CHANNEL_URL));
-            JSONObject channelSets = channelTopObject.getJSONObject(SETS);
-            for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext();) {
-                JSONArray emoticons = channelSets.getJSONObject(iterator.next()).getJSONArray(EMOTICONS);
-                for (int emoteIndex = 0; emoteIndex < emoticons.length(); emoteIndex++) {
-                    Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
-                    emote.setCustomChannelEmote(true);
-                    customChannel.add(emote);
-                    result.put(emote.getKeyword(), emote);
+            String ffzResponse = Service.urlToJSONString(FFZ_CHANNEL_URL);
+            if (ffzResponse != null) {
+                JSONObject channelTopObject = new JSONObject(ffzResponse);
+                JSONObject channelSets = channelTopObject.getJSONObject(SETS);
+                for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext();) {
+                    JSONArray emoticons = channelSets.getJSONObject(iterator.next()).getJSONArray(EMOTICONS);
+                    for (int emoteIndex = 0; emoteIndex < emoticons.length(); emoteIndex++) {
+                        Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
+                        emote.setCustomChannelEmote(true);
+                        customChannel.add(emote);
+                        result.put(emote.getKeyword(), emote);
+                    }
                 }
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -121,19 +134,19 @@ public class ChatEmoteManager {
         }
     }
 
-    Emote ToBTTV(JSONObject emoteObject) throws JSONException {
+    private Emote ToBTTV(JSONObject emoteObject) throws JSONException {
         final String EMOTE_ID = "id";
         final String EMOTE_WORD = "code";
 
         return Emote.BTTV(emoteObject.getString(EMOTE_WORD), emoteObject.getString(EMOTE_ID));
     }
 
-    Emote ToFFZ(JSONObject emoteObject) throws JSONException {
+    private Emote ToFFZ(JSONObject emoteObject) throws JSONException {
         final String EMOTE_NAME = "name";
         final String EMOTE_URLS = "urls";
 
         JSONObject urls = emoteObject.getJSONObject(EMOTE_URLS);
-        SparseArray<String> urlMap = new SparseArray<>();
+        HashMap<Integer, String> urlMap = new HashMap<>();
         for (Iterator<String> iterator = urls.keys(); iterator.hasNext();) {
             String key = iterator.next();
             urlMap.put(Integer.parseInt(key), "https:" + urls.getString(key));
@@ -156,7 +169,7 @@ public class ChatEmoteManager {
             if (emoteKeywordToEmote.containsKey(part)) {
                 Emote emote = emoteKeywordToEmote.get(part);
 
-                int[] positions = new int[]{ position };
+                int[] positions = { position };
                 final ChatEmote chatEmote = new ChatEmote(emote, positions);
                 emotes.add(chatEmote);
             }

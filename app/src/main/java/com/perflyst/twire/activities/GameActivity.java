@@ -24,11 +24,13 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.perflyst.twire.misc.Utils.getSystemLanguage;
+
 public class GameActivity extends LazyMainActivity<StreamInfo> {
     private Game game;
 
     @Override
-    protected MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView) {
+    protected MainActivityAdapter<StreamInfo, ?> constructAdapter(AutoSpanRecyclerView recyclerView) {
         return new StreamsAdapter(recyclerView, this);
     }
 
@@ -46,7 +48,7 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     protected int getActivityIconRes() {
-        return R.drawable.ic_game;
+        return R.drawable.ic_game_controller;
     }
 
     @Override
@@ -68,7 +70,10 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException, UnsupportedEncodingException {
         String gameTitleEncoded = URLEncoder.encode(game.getGameTitle(), "UTF-8");
-        String url = "https://api.twitch.tv/kraken/streams?game=" + gameTitleEncoded + "&limit=" + getLimit() + "&offset=" + getCurrentOffset();
+        String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
+
+        String url = "https://api.twitch.tv/kraken/streams?game=" + gameTitleEncoded + "&limit="
+                + getLimit() + "&offset=" + getCurrentOffset() + languageFilter;
         final String GAMES_ARRAY_KEY = "streams";
 
         List<StreamInfo> mResultList = new ArrayList<>();

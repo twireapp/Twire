@@ -40,6 +40,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import static com.perflyst.twire.misc.Utils.appendSpan;
+
 /**
  * Created by SebastianRask on 03-03-2016.
  */
@@ -71,17 +73,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         return new ContactViewHolder(itemView);
     }
 
-    private SpannableStringBuilder AppendSpan(SpannableStringBuilder builder, CharSequence charSequence, Object... whats) {
-        int preLength = builder.length();
-        builder.append(charSequence);
-
-        for (Object what : whats) {
-            builder.setSpan(what, preLength, builder.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
-        return builder;
-    }
-
     @Override
     public void onBindViewHolder(final ContactViewHolder holder, int position) {
         try {
@@ -98,16 +89,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             final SpannableStringBuilder builder = new SpannableStringBuilder();
             for (Badge badge : message.getBadges()) {
                 final GlideImageSpan badgeSpan = new GlideImageSpan(context, badge.getUrl(2), holder.message, builder, 36, 1, badge.color);
-                AppendSpan(builder, "  ", badgeSpan).append(" ");
+                appendSpan(builder, "  ", badgeSpan).append(" ");
             }
 
             int nameColor = getNameColor(message.getColor());
-            AppendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
+            appendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
 
             int preLength = builder.length();
             String PREMESSAGE = ": ";
             String messageWithPre = PREMESSAGE + message.getMessage();
-            AppendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
+            appendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
 
             checkForLink(builder.toString(), builder);
 
@@ -164,22 +155,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     private void checkForLink(String message, SpannableStringBuilder spanbuilder) {
         Matcher linkMatcher = Patterns.WEB_URL.matcher(message);
         while (linkMatcher.find()) {
-            final String url = linkMatcher.group(1);
+            String url = linkMatcher.group(0);
 
+            if (!url.matches("^https?://.+"))
+                url = "http://" + url;
+
+            final String finalUrl = url;
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
                 public void onClick(View view) {
                     CustomTabsIntent.Builder mTabs = new CustomTabsIntent.Builder();
                     mTabs.setStartAnimations(context, R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim);
                     mTabs.setExitAnimations(context, R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim);
-                    mTabs.build().launchUrl(context, Uri.parse(url));
+                    mTabs.build().launchUrl(context, Uri.parse(finalUrl));
 
                     mRecyclerView.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
                 }
             };
 
-            int start = message.indexOf(url);
-            spanbuilder.setSpan(clickableSpan, start, start + url.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spanbuilder.setSpan(clickableSpan, linkMatcher.start(), linkMatcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 
@@ -203,8 +197,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
     private int getNameColor(String colorFromAPI) {
         String BLACK_TEXT = "#000000";
-        String EMPTY_MESSAGE = "";
-        if (colorFromAPI.equals(EMPTY_MESSAGE) || colorFromAPI.equals(BLACK_TEXT)) {
+        if (colorFromAPI == null || colorFromAPI.equals(BLACK_TEXT)) {
             if (isNightTheme) {
                 return ContextCompat.getColor(context, R.color.blue_500);
             } else {
@@ -290,7 +283,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         void onMessageClicked(SpannableStringBuilder formattedString, String userName, String message);
     }
 
-    class ContactViewHolder extends RecyclerView.ViewHolder {
+    static class ContactViewHolder extends RecyclerView.ViewHolder {
         private TextView message;
 
         ContactViewHolder(View itemView) {

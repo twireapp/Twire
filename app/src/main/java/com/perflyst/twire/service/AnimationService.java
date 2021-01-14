@@ -1,12 +1,6 @@
 package com.perflyst.twire.service;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.TransitionDrawable;
 import android.os.Handler;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -14,7 +8,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
@@ -115,7 +108,7 @@ public class AnimationService {
 
             aMainToolbar.startAnimation(moveMainToolbarAnimation);
         }
-        float fromTranslationY = (fromToolbarPosition < DECORATIVE_TOOLBAR_HEIGHT) ? DECORATIVE_TOOLBAR_HEIGHT : fromToolbarPosition;
+        float fromTranslationY = Math.max(fromToolbarPosition, DECORATIVE_TOOLBAR_HEIGHT);
 
         Animation moveToolbarAnimation = new TranslateAnimation(0, 0, fromTranslationY, 0);
         moveToolbarAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -125,11 +118,11 @@ public class AnimationService {
     }
 
     public static void setActivityToolbarPosition(int duration, Toolbar aMainToolbar, Toolbar aDecorativeToolbar, Activity aActivity, float fromToolbarPosition, float toToolbarPosition, float fromMainToolbarPosition, float toMainToolbarPosition) {
-        duration = duration < 0 ? 0 : duration;
+        duration = Math.max(duration, 0);
 
         float distanceToMoveY = toToolbarPosition - fromToolbarPosition;
         float DECORATIVE_TOOLBAR_HEIGHT = -1 * aActivity.getResources().getDimension(R.dimen.additional_toolbar_height);
-        float toTranslationY = (distanceToMoveY < DECORATIVE_TOOLBAR_HEIGHT) ? DECORATIVE_TOOLBAR_HEIGHT : distanceToMoveY;
+        float toTranslationY = Math.max(distanceToMoveY, DECORATIVE_TOOLBAR_HEIGHT);
 
         // We want to make sure the toolbar is as close to the final position as possible without being visible.
         // This ensures that the animation is only running when the toolbar is visible to the user.
@@ -211,7 +204,7 @@ public class AnimationService {
      * @return The row position
      */
     public static int getRowPosFromIndex(int indexPosition, AutoSpanRecyclerView recyclerView) {
-        return (int) (Math.ceil((indexPosition + 1) / recyclerView.getSpanCount()) - 1);
+        return (int) (Math.ceil((indexPosition + 1.0f) / recyclerView.getSpanCount()) - 1);
     }
 
     public static void setAdapterInsertAnimation(final View aCard, int row, int height) {
@@ -275,40 +268,6 @@ public class AnimationService {
     }
 
     /**
-     * Makes sure an ImageView is valid for creating a TransitionDrawable with @setPicassoShowImageAnimationTwo
-     *
-     * @param imageView
-     * @return
-     */
-    private static boolean isImageViewValidForTransition(ImageView imageView) {
-        return imageView.getDrawable() != null && !(imageView.getDrawable() instanceof TransitionDrawable);
-    }
-
-    public static void setPicassoShowImageAnimationTwo(final ImageView aImageView, final Bitmap toImage, Context context) {
-        if (toImage == null) {
-            return;
-        }
-
-        if (isImageViewValidForTransition(aImageView)) {
-            Bitmap newBitmap = Bitmap.createBitmap(toImage.getWidth(), toImage.getHeight(), toImage.getConfig()); //ToDo: Out of memory exception here
-            Canvas canvas = new Canvas(newBitmap);
-            canvas.drawColor(Service.getColorAttribute(R.attr.cardBackgroundColor, R.color.white, context));
-            canvas.drawBitmap(toImage, 0, 0, null);
-
-            // create the transition layers
-            Drawable[] layers = new Drawable[2];
-            layers[0] = aImageView.getDrawable();
-            layers[1] = new BitmapDrawable(context.getResources(), newBitmap);
-
-            TransitionDrawable transitionDrawable = new TransitionDrawable(layers);
-            aImageView.setImageDrawable(transitionDrawable);
-            transitionDrawable.startTransition(300);
-        } else {
-            aImageView.setImageBitmap(toImage);
-        }
-    }
-
-    /**
      * Animations for fake clearing of a view in a recyclerview when transitioning to or back another MainActivity
      */
 
@@ -328,7 +287,7 @@ public class AnimationService {
         mRevealAnimations.setFillAfter(true);
 
         if (includeTransition) {
-            final Animation mTransitionAnimation = new TranslateAnimation(0, 0, VIEW.getHeight() / 2, 0);
+            final Animation mTransitionAnimation = new TranslateAnimation(0, 0, VIEW.getHeight() / 2.0f, 0);
             mTransitionAnimation.setDuration(ANIMATION_DURATION);
             mTransitionAnimation.setFillAfter(false);
 
@@ -357,7 +316,7 @@ public class AnimationService {
         mHideAnimations.addAnimation(mAlphaAnimation);
 
         if (includeTransition) {
-            final Animation mTransitionAnimation = new TranslateAnimation(0, 0, 0, VIEW.getHeight() / 2);
+            final Animation mTransitionAnimation = new TranslateAnimation(0, 0, 0, VIEW.getHeight() / 2.0f);
             mTransitionAnimation.setDuration(ANIMATION_DURATION);
             mTransitionAnimation.setFillAfter(false);
 

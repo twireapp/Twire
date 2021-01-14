@@ -3,7 +3,6 @@ package com.perflyst.twire.adapters;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
-import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.perflyst.twire.R;
 import com.perflyst.twire.model.Panel;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +59,7 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
 
         String imageUrl = mPanel.getmImageUrl();
         if (imageUrl != null && !imageUrl.isEmpty() && !imageUrl.equals("null")) {
-            Picasso.with(mActivity).load(mPanel.getmImageUrl()).into(holder.mImageView);
+            Glide.with(mActivity).load(mPanel.getmImageUrl()).into(holder.mImageView);
         }
 
         final String link = mPanel.getmLinkUrl();
@@ -83,12 +83,12 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
             holder.mHtmlText.setVisibility(View.GONE);
         } else {
             holder.mHtmlText.setVisibility(View.VISIBLE);
-            holder.mHtmlText.setText(Html.fromHtml(mPanel.getmHtml()));
+            holder.mHtmlText.setText(HtmlCompat.fromHtml(mPanel.getmHtml(), HtmlCompat.FROM_HTML_MODE_LEGACY));
             holder.mHtmlText.setMovementMethod(LinkMovementMethod.getInstance());
         }
     }
 
-    class PanelViewHolder extends RecyclerView.ViewHolder {
+    static class PanelViewHolder extends RecyclerView.ViewHolder {
         ImageView mImageView;
         TextView mHtmlText;
 

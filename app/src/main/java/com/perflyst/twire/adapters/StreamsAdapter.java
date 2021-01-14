@@ -231,7 +231,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         considerPriority = boo;
     }
 
-    private class StreamsWithPriorityComparator implements Comparator<StreamInfo> {
+    private static class StreamsWithPriorityComparator implements Comparator<StreamInfo> {
         @Override
         public int compare(StreamInfo lhs, StreamInfo rhs) {
             if (lhs.isFeaturedStream() && rhs.isFeaturedStream()) { // Both is featured
@@ -251,7 +251,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         }
     }
 
-    private class StreamsComparator implements Comparator<StreamInfo> {
+    private static class StreamsComparator implements Comparator<StreamInfo> {
         @Override
         public int compare(StreamInfo lhs, StreamInfo rhs) {
             return lhs.compareTo(rhs);

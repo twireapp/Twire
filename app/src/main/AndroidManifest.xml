@@ -17,7 +17,7 @@
         android:allowBackup="true"
         android:fullBackupContent="false"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -53,13 +53,15 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:label="@string/title_activity_live_stream"
             android:launchMode="singleTop"
-            android:screenOrientation="sensor" />
+            android:supportsPictureInPicture="true"
+            tools:targetApi="n" />
         <activity
             android:name=".activities.stream.VODActivity"
-            android:configChanges="screenSize|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:label="@string/title_activity_vod"
             android:launchMode="singleTop"
-            android:screenOrientation="fullSensor" />
+            android:supportsPictureInPicture="true"
+            tools:targetApi="n" />
         <activity
             android:name=".activities.main.MyChannelsActivity"
             android:label="@string/my_channels_activity_label"
@@ -70,9 +72,6 @@
         <activity
             android:name=".activities.ChannelActivity"
             android:label="@string/title_activity_streamer_info" />
-        <activity
-            android:name=".activities.settings.SettingsNotificationsActivity"
-            android:label="@string/settings_notifications_name" />
         <activity
             android:name=".activities.settings.SettingsGeneralActivity"
             android:label="@string/settings_general_name" />
@@ -115,15 +114,6 @@
                 android:value=".activities.setup.WelcomeActivity" />
         </activity>
         <activity
-            android:name=".activities.setup.NotificationActivity"
-            android:label="@string/title_activity_notification"
-            android:parentActivityName=".activities.setup.LoginActivity"
-            android:screenOrientation="portrait">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.setup.LoginActivity" />
-        </activity>
-        <activity
             android:name=".activities.setup.ConfirmSetupActivity"
             android:label="@string/title_activity_welcome"
             android:screenOrientation="portrait" />
@@ -139,39 +129,38 @@
                 <category android:name="android.intent.category.MULTIWINDOW_LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activities.main.MyGamesActivity"
-            android:label="@string/navigation_drawer_my_games_title"
-            android:launchMode="singleTop" />
 
         <activity
             android:name=".activities.SearchActivity"
             android:label="@string/title_activity_search" />
         <activity android:name=".activities.settings.SettingsStreamPlayerActivity" />
-        <activity android:name=".activities.settings.SettingsPickNotificationsActivity" />
         <activity
-            android:name=".activities.tests.DeepLinkTestActivity"
-            android:exported="true"
-            android:label="@string/title_activity_deep_link_test"
-            android:theme="@style/WhiteBackgroundTheme">
+            android:name=".activities.DeepLinkActivity"
+            android:excludeFromRecents="true"
+            android:label="@string/router_activity_label"
+            android:taskAffinity=""
+            android:theme="@style/DeepLinkTheme">
 
-            <!--intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <data
-                    android:host="*.twitch.tv"
-                    android:scheme="https" />
-                <data
-                    android:host="*.twitch.tv"
-                    android:scheme="http" />
-            </intent-filter-->
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="twitch.tv" />
+                <data android:host="m.twitch.tv" />
+                <data android:host="www.twitch.tv" />
 
+                <data android:pathPattern="/videos/.*" />
+                <data android:pathPattern="/.*/video/.*" />
+                <data android:pathPattern="/.*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
         </activity>
-
-        <activity android:name=".activities.tests.TestPreferenceActivity" />
-
     </application>
 </manifest>

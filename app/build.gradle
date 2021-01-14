@@ -1,22 +1,22 @@
 apply plugin: "com.android.application"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         applicationId "com.perflyst.twire"
         minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 510
-        versionName "2.0.0"
+        targetSdkVersion 29
+        versionCode 522
+        versionName "2.9.2"
 
         multiDexEnabled true
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary true
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
         debug {
@@ -31,35 +31,35 @@ android {
     }
 
     compileOptions {
-        encoding = 'UTF-8'
+        encoding "UTF-8"
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "androidx.browser:browser:1.0.0"
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.browser:browser:1.3.0"
     implementation "androidx.cardview:cardview:1.0.0"
+    // Pinned to 1.1.3 as 2.0.0 seems to break the stream fragment.
+    // Might be a bug with 2.0.0: https://issuetracker.google.com/issues/166486001
     implementation "androidx.constraintlayout:constraintlayout:1.1.3"
     implementation "androidx.multidex:multidex:2.0.1"
     implementation "androidx.palette:palette:1.0.0"
-    implementation "androidx.recyclerview:recyclerview:1.0.0"
-    implementation "androidx.transition:transition:1.1.0"
-    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.preference:preference:1.1.1"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.transition:transition:1.3.1"
+    implementation "com.google.android.material:material:1.2.1"
 
     //https://github.com/bumptech/glide/releases
-    implementation "com.github.bumptech.glide:glide:4.10.0"
-    annotationProcessor "com.github.bumptech.glide:compiler:4.10.0"
-
-    //https://github.com/square/picasso/blob/master/CHANGELOG.md
-    implementation "com.squareup.picasso:picasso:2.5.2"
+    implementation "com.github.bumptech.glide:glide:4.11.0"
+    annotationProcessor "com.github.bumptech.glide:compiler:4.11.0"
 
     //https://github.com/balysv/material-ripple/blob/master/CHANGELOG.md
     implementation "com.balysv:material-ripple:1.0.2"
 
     //https://github.com/rey5137/material/releases
-    implementation "com.github.rey5137:material:1.3.0"
+    implementation "com.github.rey5137:material:1.3.1"
 
     //https://github.com/Perflyst/SRJNeeds
     implementation "com.github.perflyst:srjneeds:85306c8"
@@ -67,25 +67,30 @@ dependencies {
     //https://github.com/KasualBusiness/MaterialNumberPicker/releases
     implementation "biz.kasual:materialnumberpicker:1.2.1"
 
-    //https://github.com/google/guava/releases
-    implementation "com.google.guava:guava:28.1-jre"
-
     //https://github.com/google/gson/blob/master/CHANGELOG.md
     implementation "com.google.code.gson:gson:2.8.6"
 
     //https://github.com/JakeWharton/butterknife/blob/master/CHANGELOG.md
-    implementation "com.jakewharton:butterknife:10.2.0"
-    annotationProcessor "com.jakewharton:butterknife-compiler:10.2.0"
+    implementation "com.jakewharton:butterknife:10.2.3"
+    annotationProcessor "com.jakewharton:butterknife-compiler:10.2.3"
 
     //https://github.com/ozodrukh/CircularReveal/releases
     implementation("com.github.ozodrukh:CircularReveal:1.3.1@aar") { transitive = true }
 
     //https://github.com/afollestad/material-dialogs/releases?after=2.0.0-alpha01
-    implementation "com.github.afollestad.material-dialogs:core:0.8.6.0@aar"
-    implementation "com.github.afollestad.material-dialogs:commons:0.8.6.0@aar"
+    implementation "com.github.afollestad.material-dialogs:core:0.8.6.2@aar"
+    implementation "com.github.afollestad.material-dialogs:commons:0.8.6.2@aar"
 
-    //https://github.com/google/ExoPlayer
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.11.1'
-    implementation 'com.google.android.exoplayer:exoplayer-hls:2.11.1'
-    implementation 'com.google.android.exoplayer:exoplayer-ui:2.11.1'
+    //https://github.com/google/ExoPlayer/blob/release-v2/RELEASENOTES.md
+    def exoPlayer = "2.12.1"
+    implementation "com.google.android.exoplayer:exoplayer-core:$exoPlayer"
+    implementation "com.google.android.exoplayer:exoplayer-hls:$exoPlayer"
+    implementation "com.google.android.exoplayer:exoplayer-ui:$exoPlayer"
+    implementation "com.google.android.exoplayer:extension-mediasession:$exoPlayer"
+
+    // https://github.com/google/conscrypt/releases
+    implementation "org.conscrypt:conscrypt-android:2.5.1"
+
+    // https://github.com/square/okhttp
+    implementation "com.squareup.okhttp3:okhttp:3.12.12"
 }

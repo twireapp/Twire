@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.UsageTrackingAppCompatActivity;
@@ -46,8 +47,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
     private SupportAnimator transitionAnimationWhite = null;
     private SupportAnimator transitionAnimationBlue = null;
     private TextView mWelcomeTextLineOne,
-            mWelcomeTextLineTwo,
-            mWelcomeTextLineThree;
+            mWelcomeTextLineTwo;
     private ImageView mLogo,
             mContinueIcon;
     private View mLogoCenter,
@@ -65,7 +65,6 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         RelativeLayout mWelcomeText = findViewById(R.id.welcome_text);
         mWelcomeTextLineOne = findViewById(R.id.welcome_text_line_one);
         mWelcomeTextLineTwo = findViewById(R.id.welcome_text_line_two);
-        mWelcomeTextLineThree = findViewById(R.id.welcome_text_line_three);
 
         mLogo = findViewById(R.id.welcome_icon);
         mContinueIcon = findViewById(R.id.forward_arrow);
@@ -80,7 +79,6 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         mTransitionViewWhite.setVisibility(View.INVISIBLE);
         mWelcomeTextLineOne.setVisibility(View.INVISIBLE);
         mWelcomeTextLineTwo.setVisibility(View.INVISIBLE);
-        mWelcomeTextLineThree.setVisibility(View.INVISIBLE);
         mLogo.setVisibility(View.INVISIBLE);
         mLogoContainer.setVisibility(View.INVISIBLE);
         mContinueFAB.setVisibility(View.INVISIBLE);
@@ -123,8 +121,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     startWelcomeTextLineAnimations(mWelcomeTextLineOne, 1);
-                    startWelcomeTextLineAnimations(mWelcomeTextLineTwo, 2);
-                    startWelcomeTextLineAnimations(mWelcomeTextLineThree, 3).setAnimationListener(new Animation.AnimationListener() {
+                    startWelcomeTextLineAnimations(mWelcomeTextLineTwo, 2).setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
 
@@ -306,9 +303,11 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
     }
 
     private int getScreenHeight() {
-        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        WindowManager wm = ContextCompat.getSystemService(this, WindowManager.class);
         final DisplayMetrics displayMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        if (wm != null) {
+            wm.getDefaultDisplay().getMetrics(displayMetrics);
+        }
         return displayMetrics.heightPixels;
     }
 
@@ -454,9 +453,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         mWelcomeTextAnimations.addAnimation(mAlphaAnimation);
         mWelcomeTextAnimations.addAnimation(mTranslationAnimation);
 
-        int delay = (lineNumber < 3)
-                ? WELCOME_TEXT_ANIMATION_BASE_DELAY * lineNumber
-                : WELCOME_TEXT_ANIMATION_BASE_DELAY * (lineNumber * 2);
+        int delay = WELCOME_TEXT_ANIMATION_BASE_DELAY * (lineNumber < 3 ? lineNumber : lineNumber * 2);
         new Handler().postDelayed(() -> mWelcomeTextLine.startAnimation(mWelcomeTextAnimations), delay);
 
         return mWelcomeTextAnimations;

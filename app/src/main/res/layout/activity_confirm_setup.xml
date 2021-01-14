@@ -8,7 +8,6 @@
     tools:context="com.perflyst.twire.activities.setup.ConfirmSetupActivity">
 
     <RelativeLayout
-        android:id="@+id/login_activity_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,7 +19,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/login_icon_margin_top"
-            android:src="@drawable/ic_gear_256px"
+            app:srcCompat="@drawable/ic_settings"
             android:tint="@color/colorSetupSecond" />
 
         <!-- Container for the Login instructions -->
@@ -91,7 +90,7 @@
                 android:layout_width="@dimen/welcome_continue_arrow_diameter"
                 android:layout_height="@dimen/welcome_continue_arrow_diameter"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_arrow_forward"
+                app:srcCompat="@drawable/ic_arrow_forward"
                 android:tint="@color/colorSetupMain" />
 
             <com.rey.material.widget.ProgressView

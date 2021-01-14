@@ -20,11 +20,13 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.perflyst.twire.misc.Utils.getSystemLanguage;
+
 public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     protected int getActivityIconRes() {
-        return R.drawable.ic_top_streams_one;
+        return R.drawable.ic_group;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
     }
 
     @Override
-    protected MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView) {
+    protected MainActivityAdapter<StreamInfo, ?> constructAdapter(AutoSpanRecyclerView recyclerView) {
         return new StreamsAdapter(recyclerView, this);
     }
 
@@ -51,7 +53,9 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
-        final String URL = "https://api.twitch.tv/kraken/streams?limit=" + getLimit() + "&offset=" + getCurrentOffset();
+        final String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
+        final String URL = "https://api.twitch.tv/kraken/streams?limit=" + getLimit() + "&offset="
+                + getCurrentOffset() + languageFilter;
         final String GAMES_ARRAY_KEY = "streams";
 
         List<StreamInfo> mResultList = new ArrayList<>();

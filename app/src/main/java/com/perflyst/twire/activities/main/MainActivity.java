@@ -20,13 +20,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.perflyst.twire.BuildConfig;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
+import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.fragments.NavigationDrawerFragment;
 import com.perflyst.twire.misc.TooltipWindow;
 import com.perflyst.twire.misc.UniversalOnScrollListener;
+import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.service.AnimationService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -39,7 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public abstract class MainActivity extends ThemeActivity {
+public abstract class MainActivity<E extends Comparable<E> & MainElement> extends ThemeActivity {
     private static final String FIRST_VISIBLE_ELEMENT_POSITION = "firstVisibleElementPosition";
 
     @BindView(R.id.followed_channels_drawer_layout)
@@ -78,7 +81,7 @@ public abstract class MainActivity extends ThemeActivity {
     @BindView(R.id.main_decorative_toolbar)
     protected Toolbar mDecorativeToolbar;
     protected String LOG_TAG;
-    protected MainActivityAdapter mAdapter;
+    protected MainActivityAdapter<E, ?> mAdapter;
     protected NavigationDrawerFragment mDrawerFragment;
     protected UniversalOnScrollListener mScrollListener;
     protected Settings settings;
@@ -96,7 +99,7 @@ public abstract class MainActivity extends ThemeActivity {
     /**
      * Construct the adapter used for this activity's list
      */
-    protected abstract MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView);
+    protected abstract MainActivityAdapter<E, ?> constructAdapter(AutoSpanRecyclerView recyclerView);
 
     /**
      * Get the drawable ressource int used to represent this activity
@@ -155,7 +158,6 @@ public abstract class MainActivity extends ThemeActivity {
         mRecyclerView.setHasFixedSize(true);
         mScrollListener = new UniversalOnScrollListener(this, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mCircleIconWrapper, mTitleView, LOG_TAG, true);
         mRecyclerView.addOnScrollListener(mScrollListener);
-        mRecyclerView.setHasTransientState(false);
 
         // Only animate when the view is first started, not when screen rotates
         if (savedInstance == null) {
@@ -166,6 +168,7 @@ public abstract class MainActivity extends ThemeActivity {
         Service.increaseNavigationDrawerEdge(mDrawerLayout, getBaseContext());
 
         checkForTip();
+        checkForUpdate();
         customizeActivity();
     }
 
@@ -328,6 +331,14 @@ public abstract class MainActivity extends ThemeActivity {
         }
     }
 
+    private void checkForUpdate() {
+        int versionCode = BuildConfig.VERSION_CODE;
+
+        if (settings.getLastVersionCode() != versionCode && settings.getShowChangelogs()) {
+            new ChangelogDialogFragment().show(getSupportFragmentManager(), "ChangelogDialog");
+        }
+    }
+
     /**
      * Checks if the user has changed the element style of this adapter type.
      * If it has Update the adapter element style and refresh the elements.
@@ -345,12 +356,9 @@ public abstract class MainActivity extends ThemeActivity {
         }
     }
 
-    public boolean checkElementSizeChange() {
+    public void checkElementSizeChange() {
         if (mRecyclerView.hasSizedChanged()) {
             scrollToTopAndRefresh();
-            return true;
-        } else {
-            return false;
         }
     }
 

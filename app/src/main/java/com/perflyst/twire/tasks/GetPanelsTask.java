@@ -50,7 +50,7 @@ public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
                 String LINK_STRING_KEY = "link";
                 String link = dataObject.has(LINK_STRING_KEY) ? dataObject.getString(LINK_STRING_KEY) : null;
                 String IMAGE_URL_STRING_KEY = "image";
-                String imageUrl = dataObject.getString(IMAGE_URL_STRING_KEY);
+                String imageUrl = dataObject.has(IMAGE_URL_STRING_KEY) ? dataObject.getString(IMAGE_URL_STRING_KEY) : null;
                 String DESCRIPTION_STRING_KEY = "description";
                 String description = dataObject.has(DESCRIPTION_STRING_KEY) ? dataObject.getString(DESCRIPTION_STRING_KEY) : "";
                 String TITLE_STRING_KEY = "title";

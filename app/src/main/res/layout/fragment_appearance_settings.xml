@@ -16,7 +16,6 @@
             android:orientation="vertical">
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/appearance_theme_color_ripple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
@@ -48,7 +47,6 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/appearance_theme_color_title"
                             style="@style/text_settings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -78,7 +76,6 @@
                 android:textAppearance="@style/settings_header_text_style" />
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/appearance_streams_style_ripple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
@@ -93,7 +90,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/appearance_streams_style_title"
                         style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -118,7 +114,6 @@
                 android:background="?attr/dividerColor" />
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/appearance_streams_size_ripple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
@@ -133,7 +128,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/appearance_streams_size_title"
                         style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -163,7 +157,6 @@
                 android:textAppearance="@style/settings_header_text_style" />
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/appearance_game_style_ripple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
@@ -178,7 +171,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/appearance_game_style_title"
                         style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -203,7 +195,6 @@
                 android:background="?attr/dividerColor" />
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/appearance_game_size_ripple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
@@ -218,7 +209,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/appearance_game_size_title"
                         style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -248,7 +238,6 @@
                 android:textAppearance="@style/settings_header_text_style" />
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/appearance_streamer_style_ripple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
@@ -263,7 +252,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/appearance_streamer_style_title"
                         style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -288,7 +276,6 @@
                 android:background="?attr/dividerColor" />
 
             <com.balysv.materialripple.MaterialRippleLayout
-                android:id="@+id/appearance_streamer_size_ripple"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
@@ -303,7 +290,6 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/appearance_streamer_size_title"
                         style="@style/text_settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

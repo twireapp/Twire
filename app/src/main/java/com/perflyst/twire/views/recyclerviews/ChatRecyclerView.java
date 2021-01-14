@@ -41,7 +41,7 @@ public class ChatRecyclerView extends RecyclerView {
     }
 
     private void setScrolledListener() {
-        this.setOnScrollListener(new OnScrollListener() {
+        this.addOnScrollListener(new OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

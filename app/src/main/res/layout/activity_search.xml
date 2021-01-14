@@ -9,14 +9,12 @@
     tools:context="com.perflyst.twire.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
@@ -33,7 +31,6 @@
                 android:layout_height="match_parent">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/search_card"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/search_card_margin_right_left"
@@ -55,7 +52,7 @@
                             android:paddingLeft="@dimen/search_back_arrow_start_padding"
                             android:paddingRight="@dimen/search_back_arrow_start_padding"
                             android:tint="?attr/searchActivityUpIconColor"
-                            app:srcCompat="@drawable/ic_arrow_back_black_24dp" />
+                            app:srcCompat="@drawable/ic_arrow_back" />
 
                         <EditText
                             android:id="@+id/edit_text_search"
@@ -77,7 +74,6 @@
             </io.codetail.widget.RevealFrameLayout>
 
             <ImageView
-                android:id="@+id/ic_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
@@ -85,7 +81,7 @@
                 android:focusable="true"
                 android:padding="@dimen/search_icon_padding"
                 android:tint="?attr/searchActivityUpIconColor"
-                app:srcCompat="@drawable/ic_search_black_24dp" />
+                app:srcCompat="@drawable/ic_search" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -96,7 +92,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

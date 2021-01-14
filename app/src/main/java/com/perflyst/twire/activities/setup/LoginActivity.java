@@ -29,7 +29,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
@@ -47,7 +47,7 @@ import io.codetail.animation.ViewAnimationUtils;
 public class LoginActivity extends UsageTrackingAppCompatActivity {
     private static GetFollowsFromDB subscriptionsTask;
     private static boolean toTransition = false, isPartOfSetup = true;
-    private final String LOGIN_URL = "https://api.twitch.tv/kraken/oauth2/authorize?response_type=token&client_id=" +
+    private final String LOGIN_URL = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=" +
             Service.getApplicationClientID() +
             "&redirect_uri=http%3A%2F%2Flocalhost/oauth_authorizing" +
             "&scope=user_read+chat:read+chat:edit+user_follows_edit+user_subscriptions";
@@ -314,9 +314,11 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
     }
 
     private int getScreenHeight() {
-        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        WindowManager wm = ContextCompat.getSystemService(this, WindowManager.class);
         final DisplayMetrics displayMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(displayMetrics);
+        if (wm != null) {
+            wm.getDefaultDisplay().getMetrics(displayMetrics);
+        }
         return displayMetrics.heightPixels;
     }
 
@@ -346,10 +348,11 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         ws.setSavePassword(false);
 
         loginWebView.clearCache(true);
-        loginWebView.getSettings().setSaveFormData(false);
-        loginWebView.getSettings().setJavaScriptEnabled(true);
-        loginWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        loginWebView.getSettings().setSupportZoom(true);
+        ws.setSaveFormData(false);
+        ws.setJavaScriptEnabled(true);
+        ws.setJavaScriptCanOpenWindowsAutomatically(true);
+        ws.setSupportZoom(true);
+        ws.setUserAgentString(ws.getUserAgentString().replaceFirst("Mobile Safari", "Safari").replaceFirst("\\(.+?\\)", "(X11; Linux x86_64)"));
 
         loginWebView.setWebViewClient(
                 new WebViewClient() {
@@ -433,20 +436,12 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
     private void navigateToNotificationActivity() {
         // Go to the login activity, with no transition.
         hasTransitioned = true;
-        if (!isPartOfSetup) {
-            if (!LoginActivity.hasLoadedFollows()) {
-                this.startActivity(new Intent(getBaseContext(), ConfirmSetupActivity.class));
-                this.overridePendingTransition(0, 0);
-            } else {
-                this.startActivity(Service.getLoggedInIntent(getBaseContext()));
-                this.overridePendingTransition(0, 0);
-            }
-
+        if (!LoginActivity.hasLoadedFollows()) {
+            this.startActivity(new Intent(getBaseContext(), ConfirmSetupActivity.class));
         } else {
-            Intent loginActivityIntent = new Intent(getBaseContext(), NotificationActivity.class);
-            loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            ActivityCompat.startActivity(this, loginActivityIntent, null);
+            this.startActivity(Service.getLoggedInIntent(getBaseContext()));
         }
+        this.overridePendingTransition(0, 0);
     }
 
     private void showSkippingAnimation() {
@@ -859,9 +854,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         mWelcomeTextAnimations.addAnimation(mTranslationAnimation);
 
         int SHOW_TEXT_ANIMATION_BASE_DELAY = 105;
-        int delay = (lineNumber < 3)
-                ? SHOW_TEXT_ANIMATION_BASE_DELAY * lineNumber
-                : SHOW_TEXT_ANIMATION_BASE_DELAY * (lineNumber * 2);
+        int delay = SHOW_TEXT_ANIMATION_BASE_DELAY * (lineNumber < 3 ? lineNumber : lineNumber * 2);
         int SHOW_TEXT_ANIMATION_DELAY = 105;
         new Handler().postDelayed(() -> mTextLine.startAnimation(mWelcomeTextAnimations), delay + SHOW_TEXT_ANIMATION_DELAY);
 

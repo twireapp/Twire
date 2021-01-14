@@ -96,7 +96,7 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
 
     @Override
     void handleElementOnClick(View view) {
-        int itemPosition = getRecyclerView().getChildPosition(view);
+        int itemPosition = getRecyclerView().getChildAdapterPosition(view);
         Game gameClicked = getElements().get(itemPosition);
 
         Intent intent = new Intent(getContext(), GameActivity.class);

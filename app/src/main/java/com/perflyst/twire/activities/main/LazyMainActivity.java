@@ -7,13 +7,13 @@ import android.os.Handler;
 import com.google.android.material.snackbar.Snackbar;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
-import com.perflyst.twire.model.Game;
+import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.tasks.GetVisualElementsTask;
 
 /**
  * Main Activity that loads it's content only when it is needed.
  */
-public abstract class LazyMainActivity<T> extends MainActivity implements LazyFetchingActivity<T> {
+public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> extends MainActivity<T> implements LazyFetchingActivity<T> {
     protected LazyFetchingOnScrollListener<T> mOnScrollListener;
 
     protected Snackbar snackbar;
@@ -35,8 +35,8 @@ public abstract class LazyMainActivity<T> extends MainActivity implements LazyFe
         new Handler().postDelayed(() -> {
             setCurrentOffset(0);
             getRecyclerView().scrollToPosition(0);
-            GetVisualElementsTask<Game> getTopGamesTask = new GetVisualElementsTask<>();
-            getTopGamesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, LazyMainActivity.this);
+            GetVisualElementsTask<T> getTopGamesTask = new GetVisualElementsTask<>(LazyMainActivity.this);
+            getTopGamesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }, duration);
     }
 
@@ -58,8 +58,8 @@ public abstract class LazyMainActivity<T> extends MainActivity implements LazyFe
         mScrollListener = mOnScrollListener;
         mRecyclerView.addOnScrollListener(mScrollListener);
 
-        GetVisualElementsTask<T> getElementsTask = new GetVisualElementsTask<>();
-        getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this);
+        GetVisualElementsTask<T> getElementsTask = new GetVisualElementsTask<>(this);
+        getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @Override
@@ -78,7 +78,7 @@ public abstract class LazyMainActivity<T> extends MainActivity implements LazyFe
 
     private Snackbar setupSnackbar() {
         String responseMessage = getResources().getString(R.string.no_server_response_message);
-        String actionString = getResources().getString(R.string.no_server_response_action);
+        String actionString = getResources().getString(R.string.ok);
         Snackbar snackbar = Snackbar
                 .make(mRecyclerView, responseMessage, Snackbar.LENGTH_LONG);
         snackbar.setAction(actionString, v -> scrollToTopAndRefresh());

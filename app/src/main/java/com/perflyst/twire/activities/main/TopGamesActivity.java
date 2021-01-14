@@ -27,7 +27,7 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
 
     @Override
     protected int getActivityIconRes() {
-        return R.drawable.ic_top_games;
+        return R.drawable.ic_games;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
     }
 
     @Override
-    protected MainActivityAdapter constructAdapter(AutoSpanRecyclerView recyclerView) {
+    protected MainActivityAdapter<Game, ?> constructAdapter(AutoSpanRecyclerView recyclerView) {
         return new GamesAdapter(recyclerView, getBaseContext(), this);
     }
 

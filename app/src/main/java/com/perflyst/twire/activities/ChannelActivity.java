@@ -20,23 +20,28 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentActivity;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
@@ -52,8 +57,6 @@ import com.perflyst.twire.tasks.GetPanelsTask;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.VODAutoSpanBehaviour;
 import com.rey.material.widget.ProgressView;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,19 +69,20 @@ public class ChannelActivity extends ThemeActivity {
     private static final String fragmentStreamerInfoArg = "streamerInfoArg",
             fragmentVodsBroadCastsOnlyArg = "vodsBroadcastsOnlyArg",
             fragmentVodsStreamerInfoArg = "streamerNameArg";
-    private final String LOG_TAG = getClass().getSimpleName();
     private final int SHOW_FAB_DELAY = 300;
+    private final static int POSITION_DESC = 0;
+    private final static int POSITION_BROADCASTS = 1;
+    private final static int POSITION_HIGHLIGHTS = 2;
+    private final static int TOTAL_COUNT = 3;
     private ChannelInfo info;
     private ImageView streamerImage;
-    private LinearLayout additionalInfoLayout;
     private Toolbar toolbar,
             additionalToolbar;
-    private ViewPager mViewPager;
+    private ViewPager2 mViewPager;
     private TabLayout mTabs;
     private AppBarLayout mAppBar;
     private FloatingActionButton mFab;
     private int COLOR_FADE_DURATION = 0;
-    private Target mLoadingTarget;
     private ChannelFragment mDescriptionFragment, mBroadcastsFragment, mHighlightsFragment;
     private FollowHandler mFollowHandler;
 
@@ -89,7 +93,6 @@ public class ChannelActivity extends ThemeActivity {
 
         // Get the various handles of view and layouts that is part of this view
         streamerImage = findViewById(R.id.profileImageView);
-        additionalInfoLayout = findViewById(R.id.additional_info_wrapper);
         TextView streamerInfoName = findViewById(R.id.twitch_name);
         TextView streamerViewers = findViewById(R.id.txt_viewers);
         TextView streamerFollowers = findViewById(R.id.txt_followers);
@@ -155,20 +158,29 @@ public class ChannelActivity extends ThemeActivity {
 
     private void setUpTabs() {
         assert mViewPager != null;
-        mViewPager.setAdapter(new SectionsPagerAdapter(getSupportFragmentManager()));
+        mViewPager.setAdapter(new SectionsPagerAdapter(this));
 
         assert mTabs != null;
-        mTabs.setupWithViewPager(mViewPager);
+        new TabLayoutMediator(mTabs, mViewPager, (tab, position) -> {
+            switch (position) {
+                default: // Deliberate fall-through to description tab
+                case POSITION_DESC:
+                    tab.setText(R.string.streamerInfo_desc_tab);
+                    break;
+                case POSITION_BROADCASTS:
+                    tab.setText(R.string.streamerInfo_broadcasts_tab);
+                    break;
+                case POSITION_HIGHLIGHTS:
+                    tab.setText(R.string.streamerInfo_highlights_tab);
+                    break;
+            }
+        }).attach();
 
-        mTabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                if (tab.getText() != null &&
-                        tab.getText().equals(getResources().getString(R.string.streamerInfo_desc_tab))) {
-                    mAppBar.setExpanded(true, true);
-                } else {
-                    mAppBar.setExpanded(false, true);
-                }
+                mAppBar.setExpanded(tab.getText() != null &&
+                        tab.getText().equals(getResources().getString(R.string.streamerInfo_desc_tab)), true);
                 mViewPager.setCurrentItem(tab.getPosition(), true);
             }
 
@@ -184,41 +196,36 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private void initStreamerImageAndColors() {
-        Target mTarget = getNightThemeTarget();
+        Target<Bitmap> mTarget = getNightThemeTarget();
         String theme = new Settings(this).getTheme();
         if (!theme.equals(getString(R.string.night_theme_name)) && !theme.equals(getString(R.string.true_night_theme_name))) {
             mTarget = getLightThemeTarget();
         }
 
-        mLoadingTarget = mTarget;
-        Picasso.with(getBaseContext())
+        Glide.with(getBaseContext())
+                .asBitmap()
                 .load(info.getMediumPreview())
                 .into(mTarget);
     }
 
-    private Target getNightThemeTarget() {
-        return new Target() {
+    private Target<Bitmap> getNightThemeTarget() {
+        return new CustomTarget<Bitmap>() {
             @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition)  {
                 streamerImage.setImageBitmap(bitmap);
             }
 
             @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
+            public void onLoadCleared(@Nullable Drawable placeholder) {
 
             }
         };
     }
 
-    private Target getLightThemeTarget() {
-        return new Target() {
+    private Target<Bitmap> getLightThemeTarget() {
+        return new CustomTarget<Bitmap>() {
             @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
                 streamerImage.setImageBitmap(bitmap);
 
                 Palette palette = Palette.from(bitmap).generate();
@@ -231,7 +238,6 @@ public class ChannelActivity extends ThemeActivity {
 
                 int muted = palette.getMutedColor(defaultColor);
                 int mutedDark = palette.getDarkMutedColor(defaultColor);
-                int mutedLight = palette.getLightMutedColor(defaultColor);
 
                 Palette.Swatch swatch;
 
@@ -251,9 +257,9 @@ public class ChannelActivity extends ThemeActivity {
 
                 if (swatch != null) {
                     float[] swatchValues = swatch.getHsl();
-                    float[] newSwatch = {swatchValues[0], (float) 0.85, (float) 0.85};
+                    float[] newSwatch = {swatchValues[0], 0.85f, 0.85f};
                     float[] newSwatchComposite = {(swatchValues[0] + 180) % 360, newSwatch[1], newSwatch[2]};
-                    float[] newSwatchDark = {newSwatch[0], newSwatch[1], (float) 0.6};
+                    float[] newSwatchDark = {newSwatch[0], newSwatch[1], 0.6f};
 
                     int newColorDark = Color.HSVToColor(newSwatchDark);
                     int newColor = Color.HSVToColor(newSwatch);
@@ -277,11 +283,8 @@ public class ChannelActivity extends ThemeActivity {
             }
 
             @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-            }
+            public void onLoadCleared(@Nullable Drawable placeholder) {
 
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
             }
         };
     }
@@ -301,7 +304,7 @@ public class ChannelActivity extends ThemeActivity {
 
                     @Override
                     public void userIsNotLoggedIn() {
-                        mFab.setVisibility(View.GONE);
+                        mFab.hide();
                     }
 
                     @Override
@@ -341,8 +344,8 @@ public class ChannelActivity extends ThemeActivity {
 
     private void updateFABIcon(boolean isFollowing) {
         @DrawableRes int imageRes = isFollowing
-                ? R.drawable.ic_heart_broken_24dp
-                : R.drawable.ic_heart_24dp;
+                ? R.drawable.ic_heart_broken
+                : R.drawable.ic_heart;
         mFab.setImageResource(imageRes);
     }
 
@@ -387,15 +390,6 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     /**
-     * Returns the URL string we need to connect to.
-     * Both if the user wants to follow AND unfollow the current streamer
-     */
-    private String getBaseFollowString() {
-        Settings settings = new Settings(getBaseContext());
-        return "https://api.twitch.tv/kraken/users/" + settings.getGeneralTwitchUserID() + "/follows/channels/" + info.getUserId() + "?oauth_token=" + settings.getGeneralTwitchAccessToken();
-    }
-
-    /**
      * Make an int more readable by separating every third number by a space.
      * Example: 1000000 becomes "1 000 000"
      */
@@ -432,7 +426,6 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     public static class InfoFragment extends ChannelFragment {
-        private final String LOG_TAG = getClass().getSimpleName();
         private ChannelInfo info;
 
         private RecyclerView mPanelsRecyclerView;
@@ -455,13 +448,15 @@ public class ChannelActivity extends ThemeActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_channel_description, container, false);
 
-            info = getArguments().getParcelable(fragmentStreamerInfoArg);
+            if (getArguments() != null) {
+                info = getArguments().getParcelable(fragmentStreamerInfoArg);
+            }
 
             mPanelsRecyclerView = rootView.findViewById(R.id.panel_recyclerview);
             TextView mDescription = rootView.findViewById(R.id.description);
             findErrorView(rootView);
 
-            if (info != null && info.getStreamDescription() != null && !info.getStreamDescription().equals("null") && !info.getStreamDescription().equals("")) {
+            if (info != null && info.getStreamDescription() != null && !info.getStreamDescription().equals("null") && !info.getStreamDescription().isEmpty()) {
                 mDescription.setText(info.getStreamDescription());
             } else {
                 showError();
@@ -475,7 +470,6 @@ public class ChannelActivity extends ThemeActivity {
         private void setupPanels() {
             final PanelAdapter mPanelsAdapter = new PanelAdapter(getActivity());
             LinearLayoutManager llm = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-            llm.setAutoMeasureEnabled(true);
             mPanelsRecyclerView.setAdapter(mPanelsAdapter);
             mPanelsRecyclerView.setLayoutManager(llm);
 
@@ -487,7 +481,6 @@ public class ChannelActivity extends ThemeActivity {
     public static class VodFragment extends ChannelFragment implements LazyFetchingActivity<VideoOnDemand> {
         protected AutoSpanRecyclerView mRecyclerView;
         protected VODAdapter mAdapter;
-        private String LOG_TAG = getClass().getSimpleName();
         private ChannelInfo channelInfo;
         private boolean broadcasts, showError;
         private int limit = 10,
@@ -521,8 +514,10 @@ public class ChannelActivity extends ThemeActivity {
             View rootView = inflater.inflate(R.layout.fragment_channel_vods, container, false);
 
             Bundle args = getArguments();
-            channelInfo = args.getParcelable(fragmentVodsStreamerInfoArg);
-            broadcasts = args.getBoolean(fragmentVodsBroadCastsOnlyArg);
+            if (args != null) {
+                channelInfo = args.getParcelable(fragmentVodsStreamerInfoArg);
+                broadcasts = args.getBoolean(fragmentVodsBroadCastsOnlyArg);
+            }
 
             mRecyclerView = rootView.findViewById(R.id.recyclerview_vods);
             progressView = rootView.findViewById(R.id.circle_progress);
@@ -556,12 +551,6 @@ public class ChannelActivity extends ThemeActivity {
         private String getUrl() {
             String type = broadcasts ? "archive" : "highlight";
             return "https://api.twitch.tv/kraken/channels/" + channelInfo.getUserId() + "/videos?hls=true&limit=" + getLimit() + "&offset=" + getCurrentOffset() + "&broadcast_type=" + type;
-        }
-
-        public void setShownames(boolean shownames) {
-            if (mAdapter != null) {
-                mAdapter.setShowName(false);
-            }
         }
 
         @Override
@@ -640,7 +629,7 @@ public class ChannelActivity extends ThemeActivity {
                 result.add(vod);
             }
 
-            if (vodsTopObject.getInt(TOTAL_VODS_INT) <= 0) {
+            if (vodsTopObject.getInt(TOTAL_VODS_INT) <= 0 && getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     if (mErrorEmote != null && mErrorText != null) {
                         showError();
@@ -653,48 +642,32 @@ public class ChannelActivity extends ThemeActivity {
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private final int POSITION_DESC = 0;
-        private final int POSITION_BROADCASTS = 1;
-        private final int POSITION_HIGHLIGHTS = 2;
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
 
-
-        SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
+        SectionsPagerAdapter(FragmentActivity fa) {
+            super(fa);
             mDescriptionFragment = InfoFragment.newInstance(info);
             mBroadcastsFragment = VodFragment.newInstance(true, info);
             mHighlightsFragment = VodFragment.newInstance(false, info);
         }
 
+        @NonNull
         @Override
-        public Fragment getItem(int position) {
-            if (position == POSITION_DESC) {
-                return mDescriptionFragment;
-            } else if (position == POSITION_BROADCASTS) {
-                return mBroadcastsFragment;
-            } else if (position == POSITION_HIGHLIGHTS) {
-                return mHighlightsFragment;
-            } else {
-                return InfoFragment.newInstance(info);
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
+        public Fragment createFragment(int position) {
             switch (position) {
-                case POSITION_DESC:
-                    return getResources().getString(R.string.streamerInfo_desc_tab);
+                default:
+                case POSITION_DESC: // Deliberate fall-through to description tab
+                    return mDescriptionFragment;
                 case POSITION_BROADCASTS:
-                    return getResources().getString(R.string.streamerInfo_broadcasts_tab);
+                    return mBroadcastsFragment;
                 case POSITION_HIGHLIGHTS:
-                    return getResources().getString(R.string.streamerInfo_highlights_tab);
+                    return mHighlightsFragment;
             }
-            return null;
+        }
+
+        @Override
+        public int getItemCount() {
+            return TOTAL_COUNT;
         }
     }
 }

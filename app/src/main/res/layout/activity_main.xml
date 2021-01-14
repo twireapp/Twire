@@ -7,7 +7,6 @@
 
     <!-- Main Content -->
     <RelativeLayout
-        android:id="@+id/main_content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/android:colorBackground">
@@ -53,7 +52,6 @@
             android:layout_marginTop="60dp">
 
             <ImageView
-                android:id="@+id/img_icon_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -66,7 +64,7 @@
                 android:layout_height="@dimen/main_activity_icon_size"
                 android:layout_gravity="center"
                 android:tint="?attr/mainActivityIconColor"
-                app:srcCompat="@drawable/ic_channels" />
+                app:srcCompat="@drawable/ic_person" />
 
         </FrameLayout>
 

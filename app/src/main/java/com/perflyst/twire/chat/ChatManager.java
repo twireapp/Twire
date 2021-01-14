@@ -42,10 +42,12 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private static double currentProgress;
     private static String cursor = "";
     private static boolean seek = false;
+    private static double previousProgress;
     private final String LOG_TAG = getClass().getSimpleName();
-    private Pattern roomstatePattern = Pattern.compile("@.*r9k=(0|1);.*slow=(0|\\d+);subs-only=(0|1)"),
+    private Pattern roomstatePattern = Pattern.compile("@.*r9k=([01]);.*slow=(0|\\d+);subs-only=([01])"),
             userStatePattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod="),
-            stdVarPattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(\\w+).* PRIVMSG #\\S* :(.*)"),
+            stdVarPattern = Pattern.compile("@(.+) :.+ PRIVMSG #\\S* :(.*)"),
+            tagPattern = Pattern.compile("([^=]+)=?(.+)?"),
             noticePattern = Pattern.compile("@.*msg-id=(\\w*)");
     // Default Twitch Chat connect IP/domain and port
     private String twitchChatServer = "irc.twitch.tv";
@@ -75,7 +77,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     public static List<Badge> ffzBadges = new ArrayList<>();
 
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
-        mEmoteManager = new ChatEmoteManager(aChannel);
+        mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId);
         Settings appSettings = new Settings(aContext);
 
         if(appSettings.isLoggedIn()) { // if user is logged in ...
@@ -104,8 +106,13 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     }
 
     public static void updateVodProgress(int aCurrentProgress, boolean aSeek) {
-        currentProgress = aCurrentProgress / 1000;
-        seek = aSeek;
+        currentProgress = aCurrentProgress / 1000f;
+        seek |= aSeek;
+    }
+
+    public static void setPreviousProgress() {
+        previousProgress = currentProgress;
+        cursor = "";
     }
 
     @Override
@@ -237,7 +244,11 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
         } catch (IOException e) {
             e.printStackTrace();
+
             onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTION_FAILED));
+            SystemClock.sleep(2500);
+            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
+            connect(address, port);
         }
     }
 
@@ -247,6 +258,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
             List<JSONObject> downloadedComments = new ArrayList<>();
             boolean reconnecting = false;
+            boolean justSeeked = false;
             while (!isStopping) {
                 if (currentProgress == VOD_LOADING) {
                     continue;
@@ -256,9 +268,11 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                     seek = false;
                     cursor = "";
                     downloadedComments.clear();
+                    previousProgress = 0;
+                    justSeeked = true;
                 }
 
-                if (downloadedComments.size() == 0) {
+                if (downloadedComments.isEmpty()) {
                     String result = Service.urlToJSONString("https://api.twitch.tv/v5/videos/" + vodId.substring(1) + "/comments?cursor=" + cursor + "&content_offset_seconds=" + currentProgress);
 
                     if (result.isEmpty()) {
@@ -276,8 +290,15 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
                     for (int i = 0; i < comments.length(); i++) {
                         JSONObject comment = comments.getJSONObject(i);
+                        double contentOffset = comment.getDouble("content_offset_seconds");
+                        // Don't show previous comments and don't show comments that came before the current progress unless we just seeked.
+                        if (contentOffset < previousProgress || (contentOffset < currentProgress && !justSeeked))
+                            continue;
+
                         downloadedComments.add(comment);
                     }
+
+                    justSeeked = false;
 
                     // Assumption: If the VOD has no comments and no previous or next comments, there are no comments on the VOD.
                     if (comments.length() == 0 && !commentsObject.has("_next") && !commentsObject.has("_prev")) {
@@ -292,6 +313,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                     seek = false;
                     cursor = "";
                     downloadedComments.clear();
+                    previousProgress = 0;
+                    justSeeked = true;
                     continue;
                 }
 
@@ -310,7 +333,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                             }
                         }
 
-                        String color = message.has("user_color") ? message.getString("user_color") : "";
+                        String color = message.has("user_color") ? message.getString("user_color") : null;
                         String displayName = commenter.getString("display_name");
                         String body = message.getString("body");
 
@@ -320,7 +343,12 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                             for (int j = 0; j < emoticonsArray.length(); j++) {
                                 JSONObject emoticon = emoticonsArray.getJSONObject(j);
                                 int begin = emoticon.getInt("begin");
-                                String keyword = body.substring(begin, emoticon.getInt("end") + 1);
+                                int end = emoticon.getInt("end") + 1;
+                                // In some cases, Twitch gets the indexes of emotes wrong so we have to ignore any emotes that go over the length of the message.
+                                if (end > body.length())
+                                    continue;
+
+                                String keyword = body.substring(begin, end);
                                 emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[] { begin }));
                             }
                         }
@@ -338,7 +366,11 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             }
         } catch (Exception e) {
             e.printStackTrace();
+
             onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTION_FAILED));
+            SystemClock.sleep(2500);
+            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
+            processVodChat();
         }
     }
 
@@ -433,21 +465,40 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         Matcher stdVarMatcher = stdVarPattern.matcher(line);
 
         if (stdVarMatcher.find()) {
+            Map<String, String> tags = new HashMap<>();
+            for (String tag : stdVarMatcher.group(1).split(";")) {
+                Matcher tagMatcher =  tagPattern.matcher(tag);
+                if (tagMatcher.find()) {
+                    String value = tagMatcher.group(2);
+                    if (value == null)
+                        continue;
+
+                    tags.put(tagMatcher.group(1), value);
+                }
+            }
+
             Map<String, String> badges = new HashMap<>();
-            if (!stdVarMatcher.group(1).isEmpty()) {
-                for (String badge : stdVarMatcher.group(1).split(",")) {
+            String badgesString = tags.get("badges");
+            if (badgesString != null) {
+                for (String badge : badgesString.split(",")) {
                     String[] parts = badge.split("/");
                     badges.put(parts[0], parts[1]);
                 }
             }
-            String color = stdVarMatcher.group(2);
-            String displayName = stdVarMatcher.group(3);
-            String message = stdVarMatcher.group(4);
+            String color = tags.get("color");
+            String displayName = tags.get("display-name");
+            String message = stdVarMatcher.group(2);
             List<ChatEmote> emotes = new ArrayList<>(mEmoteManager.findTwitchEmotes(line, message));
             emotes.addAll(mEmoteManager.findCustomEmotes(message));
             //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
             ChatMessage chatMessage = new ChatMessage(message, displayName, color, getBadges(badges), emotes, false);
+
+            if(message.contains("@" + getUserDisplayName())) {
+                Log.d(LOG_TAG, "Highlighting message with mention: " + message);
+                chatMessage.setHighlight(true);
+            }
+
             publishProgress(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
         } else {
             Log.e(LOG_TAG, "Failed to find message pattern in: \n" + line);
@@ -544,7 +595,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         return null;
     }
 
-    void readBadges(String url, Map<String, Map<String, Badge>> badgeMap) {
+    private void readBadges(String url, Map<String, Map<String, Badge>> badgeMap) {
         try {
             JSONObject globalBadgeSets = new JSONObject(Service.urlToJSONString(url)).getJSONObject("badge_sets");
             for (Iterator<String> it = globalBadgeSets.keys(); it.hasNext(); ) {
@@ -570,7 +621,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         }
     }
 
-    void readFFZBadges() {
+    private void readFFZBadges() {
         ffzBadges.clear();
 
         try {
@@ -612,7 +663,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         return userBadges;
     }
 
-    public Badge getBadge(String badgeSet, String version) {
+    private Badge getBadge(String badgeSet, String version) {
         Map<String, Badge> channelSet = channelBadges.get(badgeSet);
         if (channelSet != null && channelSet.get(version) != null)
             return channelSet.get(version);
@@ -626,8 +677,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
     public List<Badge> getBadges(Map<String, String> badges) {
         List<Badge> badgeObjects = new ArrayList<>();
-        for (String badgeSet : badges.keySet()) {
-            badgeObjects.add(getBadge(badgeSet, badges.get(badgeSet)));
+        for (Map.Entry<String, String> entry : badges.entrySet()) {
+            badgeObjects.add(getBadge(entry.getKey(), entry.getValue()));
         }
 
         return badgeObjects;
