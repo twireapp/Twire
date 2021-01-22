@@ -58,8 +58,8 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     @Override
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String streamerName = params[0];
-        String sig = "";
-        String tokenString = "";
+        String signature = "";
+        String token = "";
 
         Request request = new Request.Builder()
                 .url("https://gql.twitch.tv/gql")
@@ -71,10 +71,10 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         try {
             JSONObject resultJSON = new JSONObject(resultString);
             JSONObject tokenJSON = resultJSON.getJSONObject("data").getJSONObject("streamPlaybackAccessToken");
-            tokenString = tokenJSON.getString("value");
-            sig = tokenJSON.getString("signature");
+            token = tokenJSON.getString("value");
+            signature = tokenJSON.getString("signature");
 
-            Log.d("ACCESS_TOKEN_STRING", tokenString);
+            Log.d("ACCESS_TOKEN_STRING", token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -86,7 +86,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
                 "&allow_audio_only=true" +
                 "&allow_source=true" +
                 "&type=any" +
-                "&p=%s", streamerName, safeEncode(tokenString), sig, "" + new Random().nextInt(6));
+                "&p=%s", streamerName, safeEncode(token), signature, "" + new Random().nextInt(6));
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
         return parseM3U8(streamUrl);
