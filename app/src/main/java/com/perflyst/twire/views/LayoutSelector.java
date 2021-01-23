@@ -27,11 +27,11 @@ public class LayoutSelector {
     private final String[] layoutTitles;
     private final OnLayoutSelected selectCallback;
     private final Activity activity;
+    @LayoutRes
+    private final int previewLayout;
     private View layoutSelectorView;
     @AttrRes
     private int textColor = -1;
-    @LayoutRes
-    private final int previewLayout;
     @DimenRes
     private int previewMaxHeightRes = -1;
     private int selectedLayoutIndex = -1;

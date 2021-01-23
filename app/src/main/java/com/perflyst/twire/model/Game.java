@@ -28,11 +28,11 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
 
     };
     private final String gameTitle;
-    private int gameViewers;
-    private int gameStreamers;
     private final String gamePreviewSmallURL;
     private final String gamePreviewMediumURL;
     private final String gamePreviewLargeURL;
+    private int gameViewers;
+    private int gameStreamers;
 
     public Game(String gameTitle, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
         this(gameTitle, -1, -1, gamePreviewSmallURL, gamePreviewMediumURL, gamePreviewLargeURL);

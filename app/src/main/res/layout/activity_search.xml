@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-
             app:contentInsetEnd="@dimen/search_toolbar_padding"
             app:contentInsetLeft="@dimen/search_toolbar_padding"
             app:contentInsetRight="@dimen/search_toolbar_padding"
@@ -64,12 +63,12 @@
                             android:hint="@string/search_hint"
                             android:imeActionLabel="Search"
                             android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
                             android:inputType="text"
                             android:maxLines="1"
                             android:padding="@dimen/search_edittext_padding"
                             android:textColor="?attr/textColor"
-                            android:textColorHint="?attr/secondaryTextColor"
-                            android:importantForAutofill="no" />
+                            android:textColorHint="?attr/secondaryTextColor" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
             </io.codetail.widget.RevealFrameLayout>
@@ -98,7 +97,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

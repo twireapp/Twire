@@ -4,8 +4,8 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:background="?android:attr/colorBackground"
+    android:fitsSystemWindows="true"
     tools:context="com.perflyst.twire.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -167,6 +167,5 @@
             android:tint="@color/white"
             app:srcCompat="@drawable/ic_heart" />
     </RelativeLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

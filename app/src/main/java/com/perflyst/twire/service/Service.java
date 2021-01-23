@@ -529,26 +529,6 @@ public class Service {
         return result;
     }
 
-    public static class SimpleResponse
-    {
-        public int code;
-        public String body;
-        public Response response;
-
-        public SimpleResponse(Response response)
-        {
-            assert response.body() != null;
-
-            code = response.code();
-            this.response = response;
-
-            try {
-                body = response.body().string();
-            } catch (IOException ignored) {
-            }
-        }
-    }
-
     public static SimpleResponse makeRequest(Request request) {
         Response response;
         try {
@@ -757,7 +737,6 @@ public class Service {
 
     }
 
-
     public static void clearStreamerInfoDb(Context context) {
         Log.i("SERVICE", "CLEARING STREAMERINFO DATABASE");
         TempStorage.getLoadedStreamers().clear();
@@ -768,6 +747,24 @@ public class Service {
     public static int dpToPixels(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
+    }
+
+    public static class SimpleResponse {
+        public int code;
+        public String body;
+        public Response response;
+
+        public SimpleResponse(Response response) {
+            assert response.body() != null;
+
+            code = response.code();
+            this.response = response;
+
+            try {
+                body = response.body().string();
+            } catch (IOException ignored) {
+            }
+        }
     }
 
 }

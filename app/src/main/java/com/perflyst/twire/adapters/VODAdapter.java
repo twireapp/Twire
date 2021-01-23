@@ -66,9 +66,9 @@ class VODViewHolder extends MainActivityAdapter.ElementsViewHolder {
 
 public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder> {
     private final float VOD_WATCHED_IMAGE_ALPHA = 0.5f;
-    private int rightMargin, leftMargin;
     private final int topMargin, bottomMargin;
     private final Activity activity;
+    private int rightMargin, leftMargin;
     private boolean showName;
 
     public VODAdapter(AutoSpanRecyclerView recyclerView, Activity aActivity) {

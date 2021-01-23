@@ -920,11 +920,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     }
 
     public static class EmoteGridFragment extends Fragment {
+        private final String LOG_TAG = getClass().getSimpleName();
         @BindView(R.id.emote_recyclerview)
         protected AutoSpanRecyclerView mEmoteRecyclerView;
         @BindView(R.id.promoted_emotes_recyclerview)
         protected AutoSpanRecyclerView mPromotedEmotesRecyclerView;
-        private final String LOG_TAG = getClass().getSimpleName();
         private EmoteFragmentType fragmentType;
         private EmoteAdapter mAdapter;
         private EmoteKeyboardDelegate callback;

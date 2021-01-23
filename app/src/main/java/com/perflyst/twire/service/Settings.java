@@ -646,12 +646,12 @@ public class Settings {
     }
 
     /**
-     * General - Filter top streams by language
+     * Stream Player -
      */
 
-    public void setGeneralFilterTopStreamsByLanguage(boolean filterTopStreamsByLanguage) {
+    public void setStreamPlayerShowViewerCount(boolean showViewCount) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.GENERAL_FILTER_TOP_STREAMS_LANGUAGE, filterTopStreamsByLanguage);
+        editor.putBoolean(this.STREAM_PLAYER_SHOW_VIEWERCOUNT, showViewCount);
         editor.commit();
     }
 
@@ -661,12 +661,12 @@ public class Settings {
     }
 
     /**
-     * Stream Player -
+     * General - Filter top streams by language
      */
 
-    public void setStreamPlayerShowViewerCount(boolean showViewCount) {
+    public void setGeneralFilterTopStreamsByLanguage(boolean filterTopStreamsByLanguage) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.STREAM_PLAYER_SHOW_VIEWERCOUNT, showViewCount);
+        editor.putBoolean(this.GENERAL_FILTER_TOP_STREAMS_LANGUAGE, filterTopStreamsByLanguage);
         editor.commit();
     }
 

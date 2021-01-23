@@ -39,6 +39,7 @@ import java.util.regex.Pattern;
 
 public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Void> {
     public static final int VOD_LOADING = -1;
+    public static final List<Badge> ffzBadges = new ArrayList<>();
     private static double currentProgress;
     private static String cursor = "";
     private static boolean seek = false;
@@ -49,12 +50,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             stdVarPattern = Pattern.compile("@(.+) :.+ PRIVMSG #\\S* :(.*)"),
             tagPattern = Pattern.compile("([^=]+)=?(.+)?"),
             noticePattern = Pattern.compile("@.*msg-id=(\\w*)");
-    // Default Twitch Chat connect IP/domain and port
-    private String twitchChatServer = "irc.twitch.tv";
-    private int twitchChatPort = 6667;
-    private BufferedWriter writer;
-    private Handler callbackHandler;
-    private boolean isStopping;
     private final String user;
     private final String password;
     private final String channelName;
@@ -62,6 +57,15 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private final int channelUserId;
     private final String vodId;
     private final ChatCallback callback;
+    private final ChatEmoteManager mEmoteManager;
+    private final Map<String, Map<String, Badge>> globalBadges = new HashMap<>();
+    private final Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
+    // Default Twitch Chat connect IP/domain and port
+    private String twitchChatServer = "irc.twitch.tv";
+    private int twitchChatPort = 6667;
+    private BufferedWriter writer;
+    private Handler callbackHandler;
+    private boolean isStopping;
     // Data about the user and how to display his/hers message
     private String userDisplayName;
     private String userColor;
@@ -70,25 +74,18 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private boolean chatIsR9kmode;
     private boolean chatIsSlowmode;
     private boolean chatIsSubsonlymode;
-    private final ChatEmoteManager mEmoteManager;
-
-    private final Map<String, Map<String, Badge>> globalBadges = new HashMap<>();
-    private final Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
-    public static final List<Badge> ffzBadges = new ArrayList<>();
 
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
         mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId);
         Settings appSettings = new Settings(aContext);
 
-        if(appSettings.isLoggedIn()) { // if user is logged in ...
+        if (appSettings.isLoggedIn()) { // if user is logged in ...
             // ... use their credentials
             Log.d(LOG_TAG, "Using user credentials for chat login.");
 
             user = appSettings.getGeneralTwitchName();
             password = "oauth:" + appSettings.getGeneralTwitchAccessToken();
-        }
-        else
-        {
+        } else {
             // ... else: use anonymous credentials
             Log.d(LOG_TAG, "Using anonymous credentials for chat login.");
 
@@ -349,7 +346,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                                     continue;
 
                                 String keyword = body.substring(begin, end);
-                                emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[] { begin }));
+                                emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[]{begin}));
                             }
                         }
                         emotes.addAll(mEmoteManager.findCustomEmotes(body));
@@ -460,7 +457,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         if (stdVarMatcher.find()) {
             Map<String, String> tags = new HashMap<>();
             for (String tag : stdVarMatcher.group(1).split(";")) {
-                Matcher tagMatcher =  tagPattern.matcher(tag);
+                Matcher tagMatcher = tagPattern.matcher(tag);
                 if (tagMatcher.find()) {
                     String value = tagMatcher.group(2);
                     if (value == null)
@@ -487,7 +484,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
             ChatMessage chatMessage = new ChatMessage(message, displayName, color, getBadges(badges), emotes, false);
 
-            if(message.contains("@" + getUserDisplayName())) {
+            if (message.contains("@" + getUserDisplayName())) {
                 Log.d(LOG_TAG, "Highlighting message with mention: " + message);
                 chatMessage.setHighlight(true);
             }
@@ -670,6 +667,10 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         return badgeObjects;
     }
 
+    private int getRandomNumber(int min, int max) {
+        return (new Random()).nextInt((max - min) + 1) + min;
+    }
+
     public interface ChatCallback {
         void onMessage(ChatMessage message);
 
@@ -719,10 +720,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             ON_ROOMSTATE_CHANGE,
             ON_CUSTOM_EMOTES_FETCHED
         }
-    }
-
-    private int getRandomNumber(int min,int max) {
-        return (new Random()).nextInt((max - min) + 1) + min;
     }
 }
 

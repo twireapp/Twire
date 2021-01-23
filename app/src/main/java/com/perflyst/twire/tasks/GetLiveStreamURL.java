@@ -35,8 +35,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         callback = aCallback;
     }
 
-    protected String formatQuery(boolean isLive, String channelOrVod)
-    {
+    protected String formatQuery(boolean isLive, String channelOrVod) {
         return "{\n" +
                 "    \"operationName\": \"PlaybackAccessToken\",\n" +
                 "    \"extensions\": {\n" +

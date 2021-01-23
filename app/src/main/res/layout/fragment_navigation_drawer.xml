@@ -120,8 +120,8 @@
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            app:tint="?attr/colorAccent"
-                            app:srcCompat="@drawable/navigation_drawer_count_background" />
+                            app:srcCompat="@drawable/navigation_drawer_count_background"
+                            app:tint="?attr/colorAccent" />
 
                         <TextView
                             android:id="@+id/streams_count"

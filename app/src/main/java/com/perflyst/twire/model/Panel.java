@@ -7,12 +7,12 @@ package com.perflyst.twire.model;
 public class Panel {
     private final String mStreamerName;
     private final int mUserId;
-    private int mOrder;
     private final String mDescription;
     private final String mImageUrl;
     private final String mLinkUrl;
     private final String mTitle;
     private final String mHtml;
+    private int mOrder;
 
     public Panel(String mStreamerName, int mUserId, int mOrder, String mDescription,
                  String mImageUrl, String mLinkUrl, String mTitle, String mHtml) {

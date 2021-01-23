@@ -17,8 +17,8 @@ import com.perflyst.twire.tasks.GetVisualElementsTask;
  * Created by Sebastian on 06-08-2015.
  */
 public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
-    private GetVisualElementsTask<T> getElementsTask;
     private final LazyFetchingActivity<T> mLazyFetchingActivity;
+    private GetVisualElementsTask<T> getElementsTask;
 
 
     public LazyFetchingOnScrollListener(AppCompatActivity mActivity, Toolbar mMainToolbar, Toolbar mDecorativeToolbar, View mToolbarShadow, View mIconCircle, TextView mIconText, String LOG_TAG, LazyFetchingActivity<T> aLazyFetchingActivity, boolean isMainActivity) {

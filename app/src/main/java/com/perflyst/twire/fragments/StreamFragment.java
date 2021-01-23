@@ -110,13 +110,17 @@ import java.util.concurrent.TimeUnit;
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
 public class StreamFragment extends Fragment implements Player.EventListener, PlaybackPreparer {
+    private static int totalVerticalInset;
+    private static boolean pipDisabling; // Tracks the PIP disabling animation.
     private final int HIDE_ANIMATION_DELAY = 3000;
-
     private final String LOG_TAG = getClass().getSimpleName();
     private final Handler delayAnimationHandler = new Handler(),
             progressHandler = new Handler(),
             fetchViewCountHandler = new Handler(),
             fetchChattersHandler = new Handler();
+    private final HashMap<String, TextView> QualityOptions = new HashMap<>();
+    private final int fetchViewCountDelay = 1000 * 60, // A minute
+            fetchChattersDelay = 1000 * 60; // 30 seco... Nah just kidding. Also a minute.
     public StreamFragmentListener streamFragmentCallback;
     public boolean chatOnlyViewVisible = false;
     public boolean isFullscreen = false;
@@ -149,7 +153,6 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             mShowChatButton;
     private SeekBar mProgressBar;
     private TextView mCurrentProgressView, castingTextView, mCurrentViewersView;
-    private final HashMap<String, TextView> QualityOptions = new HashMap<>();
     private AppCompatActivity mActivity;
     private Snackbar snackbar;
     private ProgressView mBufferingView;
@@ -189,13 +192,8 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             vodLength = 0,
             currentProgress = 0,
             videoHeightBeforeChatOnly;
-    private final int fetchViewCountDelay = 1000 * 60, // A minute
-            fetchChattersDelay = 1000 * 60; // 30 seco... Nah just kidding. Also a minute.
     private Integer triesForNextBest = 0;
-
-    private static int totalVerticalInset;
     private boolean pictureInPictureEnabled; // Tracks if PIP is enabled including the animation.
-    private static boolean pipDisabling; // Tracks the PIP disabling animation.
     private MediaSessionCompat mediaSession;
 
     public static StreamFragment newInstance(Bundle args) {
@@ -1881,6 +1879,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
     public interface StreamFragmentListener {
         void onSeek();
+
         void refreshLayout();
     }
 

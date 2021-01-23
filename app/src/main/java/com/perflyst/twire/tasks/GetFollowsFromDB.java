@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, ChannelInfo>> {
     private final long timerStart = System.currentTimeMillis();
     private final String LOG_TAG = getClass().getSimpleName();
-    private WeakReference<Context> baseContext;
     private final GetTwitchUserFollows twitchUserFollows;
+    private WeakReference<Context> baseContext;
     private FollowingFetcher mFollowingFetcher;
 
     public GetFollowsFromDB() {

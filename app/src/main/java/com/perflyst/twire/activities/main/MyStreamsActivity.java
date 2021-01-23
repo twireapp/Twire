@@ -65,15 +65,14 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
             mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
         }
 
-		int elementsToFetch = mAdapter.getItemCount() + mResultList.size();
-		if (!mResultList.isEmpty()) {
-			elementsToFetch += 1;
-		}
-		setMaxElementsToFetch(elementsToFetch);
+        int elementsToFetch = mAdapter.getItemCount() + mResultList.size();
+        if (!mResultList.isEmpty()) {
+            elementsToFetch += 1;
+        }
+        setMaxElementsToFetch(elementsToFetch);
 
-		shouldShowErrorView();
+        shouldShowErrorView();
 
         return mResultList;
     }
 }
-

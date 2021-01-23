@@ -274,11 +274,6 @@ public class FontFitTextView extends AppCompatTextView {
         return layout.getHeight();
     }
 
-    // Interface for resize notifications
-    public interface OnTextResizeListener {
-        void onTextResize(TextView textView, float oldSize, float newSize);
-    }
-
     @SuppressWarnings("deprecation")
     private StaticLayout getStaticLayout(CharSequence source, android.text.TextPaint paint, int width, android.text.Layout.Alignment align, float spacingmult, float spacingadd, boolean includepad) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -290,6 +285,11 @@ public class FontFitTextView extends AppCompatTextView {
         } else {
             return new StaticLayout(source, paint, width, align, spacingmult, spacingadd, includepad);
         }
+    }
+
+    // Interface for resize notifications
+    public interface OnTextResizeListener {
+        void onTextResize(TextView textView, float oldSize, float newSize);
     }
 }
 

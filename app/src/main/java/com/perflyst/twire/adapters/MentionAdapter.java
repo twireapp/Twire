@@ -18,8 +18,8 @@ import java.util.List;
  */
 
 public class MentionAdapter extends RecyclerView.Adapter<MentionAdapter.SuggestionViewHolder> {
-    private List<String> mentionSuggestions;
     private final MentionAdapterDelegate mDelegate;
+    private List<String> mentionSuggestions;
 
     public MentionAdapter(MentionAdapterDelegate aDelegate) {
         mDelegate = aDelegate;

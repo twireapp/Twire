@@ -34,8 +34,8 @@ public class ConfirmSetupActivity extends AppCompatActivity {
     private final int SHOW_CONTINUE_ICON_DURATION = 650;
     private final int REVEAL_ANIMATION_DURATION = 650;
     private final int REVEAL_ANIMATION_DELAY = 200;
-    private boolean hasTransitioned = false;
     private final SupportAnimator transitionAnimationWhite = null;
+    private boolean hasTransitioned = false;
     private ImageView mGearIcon,
             mContinueIcon;
     private ProgressView mSetupProgress;

@@ -69,11 +69,11 @@ public class ChannelActivity extends ThemeActivity {
     private static final String fragmentStreamerInfoArg = "streamerInfoArg",
             fragmentVodsBroadCastsOnlyArg = "vodsBroadcastsOnlyArg",
             fragmentVodsStreamerInfoArg = "streamerNameArg";
-    private final int SHOW_FAB_DELAY = 300;
     private final static int POSITION_DESC = 0;
     private final static int POSITION_BROADCASTS = 1;
     private final static int POSITION_HIGHLIGHTS = 2;
     private final static int TOTAL_COUNT = 3;
+    private final int SHOW_FAB_DELAY = 300;
     private ChannelInfo info;
     private ImageView streamerImage;
     private Toolbar toolbar,
@@ -212,7 +212,7 @@ public class ChannelActivity extends ThemeActivity {
     private Target<Bitmap> getNightThemeTarget() {
         return new CustomTarget<Bitmap>() {
             @Override
-            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition)  {
+            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
                 streamerImage.setImageBitmap(bitmap);
             }
 

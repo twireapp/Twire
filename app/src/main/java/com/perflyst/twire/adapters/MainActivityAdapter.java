@@ -46,18 +46,18 @@ import java.util.concurrent.TimeUnit;
 public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         T extends MainActivityAdapter.ElementsViewHolder> extends RecyclerView.Adapter<T> {
     private final boolean isBelowLollipop;
-    private String LOG_TAG,
-            elementStyle;
-    private List<E> mElements;
     private final HashMap<CharSequence, PreviewTarget> mTargets;
     private final AutoSpanRecyclerView mRecyclerView;
-    private boolean sortElements, animateInsert;
     private final int translateLength, cardWidth;
-    private int mLastPosition, topMargin;
-    private Context context;
     private final View.OnClickListener mOnClickListener;
     private final View.OnLongClickListener mOnLongClickListener;
     private final Settings mSettings;
+    private String LOG_TAG,
+            elementStyle;
+    private List<E> mElements;
+    private boolean sortElements, animateInsert;
+    private int mLastPosition, topMargin;
+    private Context context;
 
     public MainActivityAdapter(AutoSpanRecyclerView recyclerView, Context aContext) {
         mElements = new ArrayList<>();
@@ -182,7 +182,8 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
             }
 
             @Override
-            public void onLoadCleared(@Nullable Drawable placeholder) {}
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+            }
         };
 
         creator.into(mTarget);
