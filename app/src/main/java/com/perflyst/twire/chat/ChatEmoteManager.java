@@ -111,7 +111,7 @@ class ChatEmoteManager {
             if (!ffzResponse.isEmpty()) {
                 JSONObject channelTopObject = new JSONObject(ffzResponse);
                 JSONObject channelSets = channelTopObject.getJSONObject(SETS);
-                for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext();) {
+                for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext(); ) {
                     JSONArray emoticons = channelSets.getJSONObject(iterator.next()).getJSONArray(EMOTICONS);
                     for (int emoteIndex = 0; emoteIndex < emoticons.length(); emoteIndex++) {
                         Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
@@ -147,7 +147,7 @@ class ChatEmoteManager {
 
         JSONObject urls = emoteObject.getJSONObject(EMOTE_URLS);
         HashMap<Integer, String> urlMap = new HashMap<>();
-        for (Iterator<String> iterator = urls.keys(); iterator.hasNext();) {
+        for (Iterator<String> iterator = urls.keys(); iterator.hasNext(); ) {
             String key = iterator.next();
             urlMap.put(Integer.parseInt(key), "https:" + urls.getString(key));
         }
@@ -169,7 +169,7 @@ class ChatEmoteManager {
             if (emoteKeywordToEmote.containsKey(part)) {
                 Emote emote = emoteKeywordToEmote.get(part);
 
-                int[] positions = { position };
+                int[] positions = {position};
                 final ChatEmote chatEmote = new ChatEmote(emote, positions);
                 emotes.add(chatEmote);
             }

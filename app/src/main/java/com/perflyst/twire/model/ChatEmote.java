@@ -16,5 +16,7 @@ public class ChatEmote {
         return emote;
     }
 
-    public int[] getPositions() { return positions; }
+    public int[] getPositions() {
+        return positions;
+    }
 }

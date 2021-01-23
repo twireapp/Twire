@@ -25,20 +25,17 @@ import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
  */
 public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
     private final String LOG_TAG;
-    // variables to control main toolbar shadow
-    private float minAmountToScroll, minAmountToolbarHide;
-    private int amountScrolled;
-    private boolean isToolbarTransparent;
     private final boolean isMainActivity;
-
     private final AppCompatActivity mActivity;
     private final Toolbar mMainToolbar;
     private final Toolbar mDecorativeToolbar;
     private final View mToolbarShadow;
-
     private final View mIconCircle;
     private final TextView mIconText;
-
+    // variables to control main toolbar shadow
+    private float minAmountToScroll, minAmountToolbarHide;
+    private int amountScrolled;
+    private boolean isToolbarTransparent;
     private ValueAnimator mFadeToolbarAnimation;
 
     private Animation mShowShadowAnimation;

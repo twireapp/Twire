@@ -27,10 +27,10 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
         }
     };
     private final ChannelInfo channelInfo;
-    private String game;
-    private int currentViewers;
     private final String[] previews;
     private final long startedAt;
+    private String game;
+    private int currentViewers;
     private String title;
     private int priority; // Variable only used for featured streams
 

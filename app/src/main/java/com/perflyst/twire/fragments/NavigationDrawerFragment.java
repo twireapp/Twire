@@ -49,6 +49,7 @@ import butterknife.ButterKnife;
 public class NavigationDrawerFragment extends Fragment {
 
 
+    private final String LOG_TAG = getClass().getSimpleName();
     @BindView(R.id.streams_count)
     protected TextView mStreamsCount;
     @BindView(R.id.streams_count_wrapper)
@@ -65,7 +66,6 @@ public class NavigationDrawerFragment extends Fragment {
     protected ImageView mTopImage;
     @BindViews({R.id.my_streams_container, R.id.my_channels_container})
     List<View> mUserRequiredViews;
-    private final String LOG_TAG = getClass().getSimpleName();
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private Intent mIntent;
@@ -256,11 +256,11 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void initHeaderImage(final ImageView headerImageView) {
         headerImageView.setImageResource(R.drawable.nav_top);
-        headerImageView.setOnClickListener(v ->{
+        headerImageView.setOnClickListener(v -> {
 
             if (mSettings.isLoggedIn()) {
                 navigateToAccountManagement();
-            }else{
+            } else {
                 navigateToLogin();
             }
         });

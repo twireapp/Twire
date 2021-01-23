@@ -61,10 +61,10 @@ class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
 }
 
 public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHolder> {
-    private int rightMargin, leftMargin;
     private final int topMargin, bottomMargin;
-    private boolean considerPriority;
     private final Activity activity;
+    private int rightMargin, leftMargin;
+    private boolean considerPriority;
 
     public StreamsAdapter(AutoSpanRecyclerView recyclerView, Activity aActivity) {
         super(recyclerView, aActivity);

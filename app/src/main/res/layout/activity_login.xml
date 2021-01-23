@@ -187,8 +187,8 @@
                 android:layout_width="@dimen/welcome_continue_circle_diameter"
                 android:layout_height="@dimen/welcome_continue_circle_diameter"
                 android:layout_gravity="center"
-                app:tint="@color/colorSetupSecond"
-                app:srcCompat="@drawable/circle_for_login" />
+                app:srcCompat="@drawable/circle_for_login"
+                app:tint="@color/colorSetupSecond" />
 
             <ImageView
                 android:id="@+id/forward_arrow"

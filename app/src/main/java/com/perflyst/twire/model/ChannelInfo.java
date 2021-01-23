@@ -41,9 +41,9 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
     private final int userId;
     private final String streamerName;
     private final String displayName;
-    private String streamDescription;
     private final int followers;
     private final int views;
+    private String streamDescription;
     private URL logoURL;
     private URL videoBannerURL;
     private URL profileBannerURL;

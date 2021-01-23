@@ -17,12 +17,12 @@ import biz.kasual.materialnumberpicker.MaterialNumberPicker;
  */
 public class SleepTimer {
     private final String LOG_TAG = getClass().getSimpleName();
-    private int sleepTimerProgressMinutes;
     private final Handler sleepTimerHandler;
     private final Runnable sleepTimerRunnable;
     private final SleepTimerDelegate delegate;
     private final Settings settings;
     private final Context context;
+    private int sleepTimerProgressMinutes;
     private boolean isRunning;
 
     public SleepTimer(final SleepTimerDelegate delegate, Context context) {

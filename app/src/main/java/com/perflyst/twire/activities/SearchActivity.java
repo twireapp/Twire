@@ -56,13 +56,13 @@ public class SearchActivity extends ThemeActivity {
     private static final int POSITION_CHANNELS = 1;
     private static final int POSITION_GAMES = 2;
     private static final int TOTAL_COUNT = 3;
+    private final String LOG_TAG = getClass().getSimpleName();
     @BindView(R.id.container)
     protected ViewPager2 mViewPager;
     @BindView(R.id.ic_back_arrow)
     protected ImageView mBackIcon;
     @BindView(R.id.edit_text_search)
     protected EditText mSearchText;
-    private final String LOG_TAG = getClass().getSimpleName();
     private String query;
     private SearchFragment mStreamsFragment, mChannelsFragment, mGamesFragment;
 

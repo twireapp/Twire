@@ -28,9 +28,9 @@ import io.codetail.animation.ViewAnimationUtils;
 
 public class TooltipWindow {
 
-    private static final int MSG_DISMISS_TOOLTIP = 100;
     public static final int POSITION_TO_RIGHT = 0;
     public static final int POSITION_BOTTOM = 1;
+    private static final int MSG_DISMISS_TOOLTIP = 100;
     private final int REVEAL_DURATION = 500;
     private final PopupWindow tipWindow;
     private final View contentView;
@@ -38,8 +38,8 @@ public class TooltipWindow {
     private final ImageView mNavLeftArrow;
     private final ImageView mNavUpArrow;
     private final LinearLayout mainLayout;
+    private final int position;
     private SupportAnimator revealTransition;
-
     private final Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             if (msg.what == MSG_DISMISS_TOOLTIP) {
@@ -87,7 +87,6 @@ public class TooltipWindow {
             }
         }
     };
-    private final int position;
 
     public TooltipWindow(Context ctx, int aPosition) {
         tipWindow = new PopupWindow(ctx);

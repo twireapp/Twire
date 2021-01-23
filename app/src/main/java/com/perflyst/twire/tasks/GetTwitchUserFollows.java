@@ -27,7 +27,7 @@ import static com.perflyst.twire.service.Service.makeRequest;
 
 /**
  * Connects to Twitch to retrieve a list of streamers that a specified user follow.
- *
+ * <p>
  * Returns an ArrayList of stream names
  */
 

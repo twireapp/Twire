@@ -88,7 +88,7 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
 
                         wordOccurrences.put(word, wordIndex + word.length() - 1);
 
-                        result.add(new ChatEmote(emote, new int[] { wordIndex }));
+                        result.add(new ChatEmote(emote, new int[]{wordIndex}));
                     }
                 }
             }

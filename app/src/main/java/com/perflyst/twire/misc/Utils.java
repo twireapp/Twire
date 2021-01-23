@@ -27,18 +27,15 @@ public class Utils {
         return builder;
     }
 
-    public static void useContext(Fragment fragment, UseInterface<Context> useInterface)
-    {
+    public static void useContext(Fragment fragment, UseInterface<Context> useInterface) {
         useNullable(fragment.getContext(), useInterface);
     }
 
-    public static void useActivity(Fragment fragment, UseInterface<Activity> useInterface)
-    {
+    public static void useActivity(Fragment fragment, UseInterface<Activity> useInterface) {
         useNullable(fragment.getActivity(), useInterface);
     }
 
-    public static <T> void useNullable(@Nullable T value, UseInterface<T> useInterface)
-    {
+    public static <T> void useNullable(@Nullable T value, UseInterface<T> useInterface) {
         if (value != null)
             useInterface.use(value);
     }
