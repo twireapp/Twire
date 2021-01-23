@@ -434,6 +434,8 @@ public class LoginActivity extends AppCompatActivity {
     private void navigateToNotificationActivity() {
         // Go to the login activity, with no transition.
         hasTransitioned = true;
+        Settings settings = new Settings(getBaseContext());
+        settings.setSetup(true);
         if (LoginActivity.loadingFollows()) {
             this.startActivity(new Intent(getBaseContext(), ConfirmSetupActivity.class));
         } else {
