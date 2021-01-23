@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ok">OK</string>
-    <string name="done">DONE</string>
+    <string name="done">FERTIG</string>
     <string name="start">START</string>
     <string name="stop">STOP</string>
-    <string name="cancel">CANCEL</string>
-    <string name="resume">RESUME</string>
+    <string name="cancel">ABBRECHEN</string>
+    <string name="resume">FORTSETZEN</string>
     <string name="enabled">Aktiviert</string>
     <string name="disabled">Deaktiviert</string>
     <string name="minutes_short">m</string>
     <string name="hours_short">h</string>
     <string name="action_settings">Einstellungen</string>
     <string name="settings_activity_title">Einstellungen</string>
-    <string name="drawer_open">Open</string>
+    <string name="drawer_open">Öffnen</string>
     <string name="drawer_close">Schließen</string>
     <string name="subscription_card_displayName">Name</string>
     <string name="content_desc_twitchProfileBanner_imageView">The users specified profile banner</string>
     <string name="content_desc_twitchLogo_imageView">Picture of the Streamers Twitch logo</string>
     <string name="no_elements_added_notice">Es konnten keine %s gefunden werden</string>
-    <string name="vods">videos</string>
+    <string name="vods">Videos</string>
     <string name="play">Wiedergabe</string>
     <string name="pause">Pause</string>
     <string name="percent">%d %%</string>
@@ -32,19 +32,19 @@
     <string name="streamerInfo_description">Keine Beschreibung gefunden</string>
     <!-- UniformMainActivity -->
     <!-- LiveStreamActivity -->
-    <string name="menu_external">Use External Player</string>
+    <string name="menu_external">Externen Player verwenden</string>
     <string name="menu_profile">Profil</string>
     <string name="menu_sleep">Sleep Timer</string>
     <string name="menu_options">Options</string>
     <string name="options">Options</string>
-    <string name="audio_only">Audio Only</string>
-    <string name="chat_only">Chat Only</string>
-    <string name="available_qualities">Quality Settings</string>
+    <string name="audio_only">Nur Audio</string>
+    <string name="chat_only">Nur Chat</string>
+    <string name="available_qualities">Qualitätseinstellungen</string>
     <string name="quality_auto">Auto</string>
     <!-- StreamFragment -->
-    <string name="stream_sleep_timer_stopped">Schlaf-Timer gestoppt</string>
-    <string name="stream_sleep_timer_started">Sleep Timer started. Stream will be paused in %1$d hours and %2$d minutes.</string>
-    <string name="stream_sleep_timer_started_minutes_only">Sleep Timer started. Stream will be paused in %d minutes.</string>
+    <string name="stream_sleep_timer_stopped">Sleep Timer gestoppt</string>
+    <string name="stream_sleep_timer_started">Sleep Timer wurde gestartet. Der Stream wird in %1$d Stunden und %2$d Minuten angehalten.</string>
+    <string name="stream_sleep_timer_started_minutes_only">Sleep Timer wurde gestartet. Der Stream wird in %d Minuten angehalten.</string>
     <string name="stream_sleep_timer_title">Sleep Timer</string>
     <string name="stream_audio_only_active">Nur Audio wiedergeben</string>
     <!-- VOD activity -->
@@ -82,9 +82,9 @@
     <string name="stream_playback_failed">Stream konnte nicht abgespielt werden. Versuche es mit einer anderen Qualität.</string>
     <string name="title_activity_live_stream">Live Stream</string>
     <string name="chat_send_message_hint">Nachricht eingeben</string>
-    <string name="chat_status_connecting">Verbindung zum Chat herstellen …</string>
+    <string name="chat_status_connecting">Verbindung zum Chat herstellen…</string>
     <string name="chat_status_connected">Bereit zum Chat</string>
-    <string name="chat_status_reconnecting">Verbindung wiederherstellen …</string>
+    <string name="chat_status_reconnecting">Verbindung wiederherstellen…</string>
     <string name="chat_status_connection_failed">Verbindung fehlgeschlagen</string>
     <!-- ChannelInfo activity -->
     <!-- My Streams activity -->
@@ -101,7 +101,7 @@
     <!-- Login Activity-->
     <string name="login_text_line_one">Lass uns dich einrichten!</string>
     <string name="login_text_line_two">Melde dich zuerst bei Twitch an.</string>
-    <string name="login_user_cancel">Du solltest dich jedoch anmelden, um Twire nutzen zu können …</string>
+    <string name="login_user_cancel">Du solltest dich jedoch anmelden, um Twire nutzen zu können…</string>
     <string name="login_user_cancel_action">ICH HABS</string>
     <string name="login_user_no_internet">Du benötigst eine Internetverbindung, um Twire einzurichten.</string>
     <string name="login_user_no_internet_action">WIEDERHOLEN</string>
