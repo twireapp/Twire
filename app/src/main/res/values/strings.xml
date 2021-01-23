@@ -280,6 +280,13 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.9.3</item>
+        <item>F Fix VODs not loading.</item>
+        <item>F Fix only seeing 20 followed channels.</item>
+        <item>F Fix not staying logged in between relaunches.</item>
+        <item>A Add Chinese (Simplified) and Finnish translations.</item>
+        <item>C Update German translation.</item>
+
         <item>V 2.9.2</item>
         <item>F Fix only the Auto quality being available.</item>
         <item>F Fix page titles not being translated in some languages.</item>
