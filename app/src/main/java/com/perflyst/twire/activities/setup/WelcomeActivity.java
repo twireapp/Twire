@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.perflyst.twire.R;
@@ -299,7 +298,7 @@ public class WelcomeActivity extends AppCompatActivity {
         hasTransitioned = true;
         Intent loginActivityIntent = new Intent(getBaseContext(), LoginActivity.class);
         loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        ActivityCompat.startActivity(this, loginActivityIntent, null);
+        startActivity(loginActivityIntent, null);
     }
 
     private int getScreenHeight() {
