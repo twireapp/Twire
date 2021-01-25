@@ -2,6 +2,7 @@ package com.perflyst.twire.fragments;
 
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,8 +21,6 @@ import androidx.annotation.AnimRes;
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -154,7 +153,7 @@ public class NavigationDrawerFragment extends Fragment {
                         MainActivity fromActivity = (MainActivity) getActivity();
                         fromActivity.transitionToOtherMainActivity(mIntent);
                     } else if (getContext() != null) {
-                        ActivityCompat.startActivity(getContext(), mIntent, null);
+                        startActivity(mIntent, null);
                     }
                     mIntent = null;
                 }
@@ -188,8 +187,8 @@ public class NavigationDrawerFragment extends Fragment {
         view.setOnClickListener(view1 -> {
             Intent intent = new Intent(getActivity(), activityClass);
 
-            ActivityOptionsCompat searchAnim = ActivityOptionsCompat.makeCustomAnimation(getActivity(), inAnimation, R.anim.fade_out_semi_anim);
-            ActivityCompat.startActivity(getActivity(), intent, searchAnim.toBundle());
+            ActivityOptions searchAnim = ActivityOptions.makeCustomAnimation(getActivity(), inAnimation, R.anim.fade_out_semi_anim);
+            startActivity(intent, searchAnim.toBundle());
             mDrawerLayout.closeDrawer(containerView);
         });
     }

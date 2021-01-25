@@ -1,5 +1,6 @@
 package com.perflyst.twire.activities.settings;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -7,8 +8,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,8 +70,8 @@ public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCa
     public void onItemClicked(View view, SettingsCategoryAdapter.SettingsCategoryViewHolder settingsCategoryViewHolder) {
         SettingsCategory category = settingsCategoryViewHolder.getData();
 
-        ActivityOptionsCompat settingsAnim = ActivityOptionsCompat.makeCustomAnimation(this, R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim); // First animation is how the new activity enters - Second is how the current activity exits
-        ActivityCompat.startActivity(this, category.getIntent(), settingsAnim.toBundle());
+        ActivityOptions settingsAnim = ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim); // First animation is how the new activity enters - Second is how the current activity exits
+        startActivity(category.getIntent(), settingsAnim.toBundle());
     }
 
     private List<SettingsCategory> constructSettingsCategories() {

@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -414,7 +413,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
             @Override
             public void onAnimationEnd(Animation animation) {
                 isTransitioned = true;
-                ActivityCompat.startActivity(MainActivity.this, aIntent, null);
+                startActivity(aIntent, null);
             }
 
             public void onAnimationStart(Animation animation) {
