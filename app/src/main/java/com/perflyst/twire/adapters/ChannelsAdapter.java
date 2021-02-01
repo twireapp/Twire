@@ -124,12 +124,12 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
         int spanCount = getRecyclerView().getSpanCount();
 
         // If this card ISN'T the end of a row - Half the right margin
-        int rightMargin = ((position + 1) % spanCount != 0)
+        int rightMargin = (position + 1) % spanCount != 0
                 ? (int) getContext().getResources().getDimension(R.dimen.subscription_card_margin_half)
                 : regMargin;
 
         // If the previous card ISN'T the end of a row, this card ISN'T be the start of a row - Half the left margin
-        int leftMargin = ((position) % spanCount != 0)
+        int leftMargin = position % spanCount != 0
                 ? (int) getContext().getResources().getDimension(R.dimen.subscription_card_margin_half)
                 : regMargin;
 
@@ -164,7 +164,7 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
     @Override
     int calculateCardWidth() {
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        int screenWidth = (metrics.widthPixels);
+        int screenWidth = metrics.widthPixels;
         int spanCount = screenWidth / ((int) getContext().getResources().getDimension(R.dimen.subscription_card_width) + (int) getContext().getResources().getDimension(R.dimen.subscription_card_margin));
         return (int) (screenWidth / (double) spanCount) - (int) (getContext().getResources().getDimension(R.dimen.subscription_card_margin) * 2) - (int) (getContext().getResources().getDimension(R.dimen.subscription_card_elevation) * 2);
     }

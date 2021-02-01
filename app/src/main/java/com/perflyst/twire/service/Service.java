@@ -129,7 +129,7 @@ public class Service {
         double seconds = 60.0 * secondsAsDecimalMinutes;
 
         if (hours >= 1) {
-            result = ((int) Math.floor(hours)) + ":";
+            result = (int) Math.floor(hours) + ":";
         }
 
         result += numberToTime(minutes) + ":" + numberToTime(Math.round(seconds));
@@ -141,7 +141,7 @@ public class Service {
      * Converts Double to time. f.eks. 4.5 becomes "04"
      */
     private static String numberToTime(double time) {
-        int timeInt = ((int) Math.floor(time));
+        int timeInt = (int) Math.floor(time);
 
         if (timeInt < 10) {
             return "0" + timeInt;
@@ -392,14 +392,14 @@ public class Service {
         if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
             try {
                 HttpURLConnection urlc = (HttpURLConnection)
-                        (new URL("https://clients3.google.com/generate_204")
-                                .openConnection());
+                        new URL("https://clients3.google.com/generate_204")
+                                .openConnection();
                 urlc.setRequestProperty("User-Agent", "Android");
                 urlc.setRequestProperty("Connection", "close");
                 urlc.setConnectTimeout(1500);
                 urlc.connect();
-                return (urlc.getResponseCode() == 204 &&
-                        urlc.getContentLength() == 0);
+                return urlc.getResponseCode() == 204 &&
+                        urlc.getContentLength() == 0;
             } catch (IOException e) {
                 Log.e("SERVICE", "Error checking internet connection", e);
             }
@@ -422,7 +422,7 @@ public class Service {
             Window w = activity.getWindow(); // in Activity's onCreate() for instance
             //w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
             w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            toolbar.getLayoutParams().height = (int) (context.getResources().getDimension((R.dimen.main_toolbar_height)) + statusBarHeight);
+            toolbar.getLayoutParams().height = (int) (context.getResources().getDimension(R.dimen.main_toolbar_height) + statusBarHeight);
         }
     }
 
@@ -521,7 +521,7 @@ public class Service {
 
         String result = response.body;
 
-        if (result.isEmpty() || (result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[')) {
+        if (result.isEmpty() || result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[') {
             Log.v("URL TO JSON STRING", request.url() + " did not successfully get read");
             Log.v("URL TO JSON STRING", "Result of reading - " + result);
         }

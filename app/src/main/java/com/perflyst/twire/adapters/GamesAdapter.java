@@ -122,12 +122,12 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
         int spanCount = getRecyclerView().getSpanCount();
 
         // If this card ISN'T the end of a row - Half the right margin
-        int rightMargin = ((position + 1) % spanCount != 0)
+        int rightMargin = (position + 1) % spanCount != 0
                 ? (int) getContext().getResources().getDimension(R.dimen.game_card_margin_half)
                 : regMargin;
 
         // If the previous card ISN'T the end of a row, this card ISN'T be the start of a row - Half the left margin
-        int leftMargin = ((position) % spanCount != 0)
+        int leftMargin = position % spanCount != 0
                 ? (int) getContext().getResources().getDimension(R.dimen.game_card_margin_half)
                 : regMargin;
 

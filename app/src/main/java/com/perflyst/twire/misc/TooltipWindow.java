@@ -137,8 +137,8 @@ public class TooltipWindow {
             mNavLeftArrow.setVisibility(View.GONE);
             mTipText.forceLayout();
 
-            position_x = anchor_rect.centerX() - (contentView.getMeasuredWidth() / 2);//anchor_rect.centerX() - (contentView.getWidth() / 2);
-            position_y = anchor_rect.bottom - (anchor_rect.height() / 2);
+            position_x = anchor_rect.centerX() - contentView.getMeasuredWidth() / 2;//anchor_rect.centerX() - (contentView.getWidth() / 2);
+            position_y = anchor_rect.bottom - anchor_rect.height() / 2;
         }
 
         tipWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, position_x,

@@ -167,8 +167,8 @@ public class FontFitTextView extends AppCompatTextView {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         if (changed || mNeedsResize) {
-            int widthLimit = (right - left) - getCompoundPaddingLeft() - getCompoundPaddingRight();
-            int heightLimit = (bottom - top) - getCompoundPaddingBottom() - getCompoundPaddingTop();
+            int widthLimit = right - left - getCompoundPaddingLeft() - getCompoundPaddingRight();
+            int heightLimit = bottom - top - getCompoundPaddingBottom() - getCompoundPaddingTop();
             resizeText(widthLimit, heightLimit);
         }
         super.onLayout(changed, left, top, right, bottom);

@@ -297,7 +297,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         mProgressBar = mRootView.findViewById(R.id.progressBar);
         mBufferingView = mRootView.findViewById(R.id.circle_progress);
         mCurrentViewersView = mRootView.findViewById(R.id.txtViewViewers);
-        mActivity = ((AppCompatActivity) getActivity());
+        mActivity = (AppCompatActivity) getActivity();
         mClickInterceptor = mRootView.findViewById(R.id.click_interceptor);
         View mCurrentViewersWrapper = mRootView.findViewById(R.id.viewers_wrapper);
 
@@ -918,7 +918,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
                                 int newWidth;
 
                                 if (X > downPosition) { // Swiping right
-                                    newWidth = widthOnDown + (X - downPosition);
+                                    newWidth = widthOnDown + X - downPosition;
                                 } else { // Swiping left
                                     newWidth = widthOnDown - (downPosition - X);
                                 }
@@ -946,7 +946,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
      */
     private void showLandscapeChat() {
         int width = getScreenRect(getActivity()).height();
-        ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, (width - getLandscapeChatTargetWidth()));
+        ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, width - getLandscapeChatTargetWidth());
         resizeWidthAnimation.setDuration(250);
         mVideoWrapper.startAnimation(resizeWidthAnimation);
         mShowChatButton.animate().rotation(180f).start();
@@ -1518,7 +1518,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
                 continue;
 
             MaterialRippleLayout layout = (MaterialRippleLayout) LayoutInflater.from(getContext()).inflate(R.layout.quality_item, null);
-            TextView textView = ((TextView) layout.getChildAt(0));
+            TextView textView = (TextView) layout.getChildAt(0);
             textView.setText(quality.Name.equals("Auto") ? getString(R.string.quality_auto) : quality.Name);
 
             setQualityOnClick(textView, qualityKey);

@@ -128,12 +128,12 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         int spanCount = getRecyclerView().getSpanCount();
 
         // If this card ISN'T the end of a row - Half the right margin
-        rightMargin = ((position + 1) % spanCount != 0)
+        rightMargin = (position + 1) % spanCount != 0
                 ? (int) getContext().getResources().getDimension(R.dimen.stream_card_margin_half)
                 : (int) getContext().getResources().getDimension(R.dimen.stream_card_right_margin);
 
         // If the previous card ISN'T the end of a row, this card ISN'T be the start of a row - Half the left margin
-        leftMargin = ((position) % spanCount != 0)
+        leftMargin = position % spanCount != 0
                 ? (int) getContext().getResources().getDimension(R.dimen.stream_card_margin_half)
                 : (int) getContext().getResources().getDimension(R.dimen.stream_card_left_margin);
 
@@ -153,7 +153,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
     @Override
     void setViewData(VideoOnDemand element, VODViewHolder viewHolder) {
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        viewHolder.vPreviewImage.getLayoutParams().width = (metrics.widthPixels);
+        viewHolder.vPreviewImage.getLayoutParams().width = metrics.widthPixels;
 
         String gameAndViewers = getContext().getResources().getString(R.string.vod_streams_card_stream_views, String.valueOf(element.getViews()));
         if (!element.getGameTitle().isEmpty()) {
