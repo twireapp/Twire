@@ -98,7 +98,7 @@ public class LayoutSelector {
             rg.addView(radioButton, i);
 
 
-            if ((selectedLayoutIndex != -1 && selectedLayoutIndex == i) || (selectedLayoutTitle != null && selectedLayoutTitle.equals(layoutTitle))) {
+            if (selectedLayoutIndex != -1 && selectedLayoutIndex == i || selectedLayoutTitle != null && selectedLayoutTitle.equals(layoutTitle)) {
                 radioButton.performClick();
             }
         }

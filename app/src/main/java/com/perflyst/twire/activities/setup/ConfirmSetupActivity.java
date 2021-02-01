@@ -198,14 +198,14 @@ public class ConfirmSetupActivity extends AppCompatActivity {
     private void showTextLineAnimations(final TextView mTextLine, int lineNumber) {
         mTextLine.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
-        int travelDistance = (lineNumber < 3)
+        int travelDistance = lineNumber < 3
                 ? (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_SP,
                 getResources().getDimension(R.dimen.welcome_text_line_three_size),
                 getResources().getDisplayMetrics())
                 : 0;
 
-        float overshoot = (lineNumber == 1) ? 2f : 1f;
+        float overshoot = lineNumber == 1 ? 2f : 1f;
         final Animation mTranslationAnimation = new TranslateAnimation(0, 0, travelDistance, 0);
         mTranslationAnimation.setInterpolator(new OvershootInterpolator(overshoot));
 

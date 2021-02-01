@@ -289,7 +289,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                         JSONObject comment = comments.getJSONObject(i);
                         double contentOffset = comment.getDouble("content_offset_seconds");
                         // Don't show previous comments and don't show comments that came before the current progress unless we just seeked.
-                        if (contentOffset < previousProgress || (contentOffset < currentProgress && !justSeeked))
+                        if (contentOffset < previousProgress || contentOffset < currentProgress && !justSeeked)
                             continue;
 
                         downloadedComments.add(comment);
@@ -668,7 +668,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     }
 
     private int getRandomNumber(int min, int max) {
-        return (new Random()).nextInt((max - min) + 1) + min;
+        return new Random().nextInt(max - min + 1) + min;
     }
 
     public interface ChatCallback {

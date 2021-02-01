@@ -126,12 +126,12 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
     void setViewLayoutParams(View view, int position) {
         int spanCount = getRecyclerView().getSpanCount();
         // If this card ISN'T the end of a row - Half the right margin
-        rightMargin = ((position + 1) % spanCount != 0)
+        rightMargin = (position + 1) % spanCount != 0
                 ? (int) getContext().getResources().getDimension(R.dimen.stream_card_margin_half)
                 : (int) getContext().getResources().getDimension(R.dimen.stream_card_right_margin);
 
         // If the previous card ISN'T the end of a row, this card ISN'T be the start of a row - Half the left margin
-        leftMargin = ((position) % spanCount != 0)
+        leftMargin = position % spanCount != 0
                 ? (int) getContext().getResources().getDimension(R.dimen.stream_card_margin_half)
                 : (int) getContext().getResources().getDimension(R.dimen.stream_card_left_margin);
 
@@ -149,7 +149,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
 
     @Override
     protected void adapterSpecial(StreamViewHolder viewHolder) {
-        double previewImageWidth = (getContext().getResources().getDisplayMetrics().widthPixels / (double) getRecyclerView().getSpanCount()) - leftMargin - rightMargin;
+        double previewImageWidth = getContext().getResources().getDisplayMetrics().widthPixels / (double) getRecyclerView().getSpanCount() - leftMargin - rightMargin;
         double previewImageHeight = previewImageWidth / (16 / 9.0);
         viewHolder.vPreviewImage.setMinimumHeight((int) previewImageHeight);
     }
@@ -157,7 +157,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
     @Override
     void setViewData(StreamInfo element, StreamViewHolder viewHolder) {
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        viewHolder.vPreviewImage.getLayoutParams().width = (metrics.widthPixels);
+        viewHolder.vPreviewImage.getLayoutParams().width = metrics.widthPixels;
 
         String viewers = getContext().getResources().getString(R.string.my_streams_cell_current_viewers, element.getCurrentViewers());
         String gameAndViewers = viewers + " - " + element.getGame();

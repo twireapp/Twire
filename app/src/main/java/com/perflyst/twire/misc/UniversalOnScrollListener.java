@@ -109,14 +109,14 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
                 amountScrolled += dy;
 
                 // Always Scroll the decorate toolbar slower than the main one.
-                mDecorativeToolbar.setTranslationY(decoToolbarTranslationY - (dy * (float) SLOW_SCROLL_RATE));
+                mDecorativeToolbar.setTranslationY(decoToolbarTranslationY - dy * (float) SLOW_SCROLL_RATE);
                 mIconCircle.setTranslationY(iconViewTranslationY - dy);
                 mIconText.setTranslationY(iconTextViewTranslationY - dy);
 
                 if (amountScrolled < minAmountToScroll) {
                     // Update the transparency of the activity icon
                     if (mIconCircle.getAlpha() >= 0) {
-                        float newAlphaHex = 255 - (mIconCircle.getTranslationY() * -1);
+                        float newAlphaHex = 255 - mIconCircle.getTranslationY() * -1;
                         float newAlphaFloat = newAlphaHex / 255;
                         if (newAlphaFloat >= 0) {
                             mIconCircle.setAlpha(newAlphaFloat);
@@ -139,7 +139,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
                 amountScrolled += dy;
 
                 // Always scroll for these Views. But Scroll the decorative toolbar slower than the others
-                mDecorativeToolbar.setTranslationY(decoToolbarTranslationY - (dy * (float) SLOW_SCROLL_RATE));
+                mDecorativeToolbar.setTranslationY(decoToolbarTranslationY - dy * (float) SLOW_SCROLL_RATE);
                 mIconCircle.setTranslationY(iconViewTranslationY - dy);
                 mIconText.setTranslationY(iconTextViewTranslationY - dy);
 
@@ -168,7 +168,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
 
 
                     if (mIconCircle.getAlpha() >= 0) {
-                        float newAlphaHex = 255 - (mIconCircle.getTranslationY() * -1);
+                        float newAlphaHex = 255 - mIconCircle.getTranslationY() * -1;
                         float newAlphaFloat = newAlphaHex / 255;
                         if (newAlphaFloat >= 0) {
                             mIconCircle.setAlpha(newAlphaFloat);

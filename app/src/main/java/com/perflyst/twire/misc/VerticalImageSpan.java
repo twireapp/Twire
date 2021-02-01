@@ -24,7 +24,7 @@ public class VerticalImageSpan extends ImageSpan {
             Paint.FontMetricsInt pfm = paint.getFontMetricsInt();
 
             int ascent = pfm.ascent;
-            int middle = ascent + ((pfm.descent - ascent) / 2);
+            int middle = ascent + (pfm.descent - ascent) / 2;
             int halfHeight = rect.height() / 2;
 
             fm.ascent = middle - halfHeight;
@@ -46,8 +46,8 @@ public class VerticalImageSpan extends ImageSpan {
 
         Paint.FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
         int descent = fontMetricsInt.descent;
-        int transY = (y + descent) - ((descent - fontMetricsInt.ascent) / 2);
-        canvas.translate(x, (float) (transY - (bounds.height() / 2)));
+        int transY = y + descent - (descent - fontMetricsInt.ascent) / 2;
+        canvas.translate(x, (float) (transY - bounds.height() / 2));
 
         drawable.draw(canvas);
         canvas.restore();
