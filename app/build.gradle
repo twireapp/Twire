@@ -2,6 +2,8 @@ apply plugin: "com.android.application"
 
 android {
     compileSdkVersion 29
+    buildToolsVersion "30.0.3"
+    ndkVersion "22.0.7026061"
 
     defaultConfig {
         applicationId "com.perflyst.twire"
@@ -18,10 +20,12 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            resValue "string", "app_name", "Twire"
         }
         debug {
-            applicationIdSuffix '.debug'
-            versionNameSuffix '-DEBUG'
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-DEBUG"
+            resValue "string", "app_name", "Twire Debug"
         }
     }
 
