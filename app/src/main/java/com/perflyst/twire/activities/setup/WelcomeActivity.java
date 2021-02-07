@@ -20,8 +20,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.utils.AnimationListenerAdapter;
@@ -30,9 +28,9 @@ import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends SetupBaseActivity {
     final int REVEAL_ANIMATION_DURATION = 650;
-    final int REVEAL_ANIMATION_DELAY_DURATION = 200;
+    final int REVEAL_ANIMATION_DELAY = 200;
     final int ANIMATIONS_START_DELAY = 500;
     final int LOGO_ANIMATION_DURATION = 1000;
     final int LOGO_Container_ANIMATION_DURATION = 1750;
@@ -184,13 +182,13 @@ public class WelcomeActivity extends AppCompatActivity {
             });
 
             whiteTransitionAnimation.start();
-            blueTransitionAnimation.setStartDelay(REVEAL_ANIMATION_DELAY_DURATION);
+            blueTransitionAnimation.setStartDelay(REVEAL_ANIMATION_DELAY);
             blueTransitionAnimation.start();
 
             new Handler().postDelayed(() -> {
                 Log.d(LOG_TAG, "Navigating To Login Activity");
                 navigateToLoginActivity();
-            }, REVEAL_ANIMATION_DELAY_DURATION + REVEAL_ANIMATION_DURATION);
+            }, REVEAL_ANIMATION_DELAY + REVEAL_ANIMATION_DURATION);
 
         });
     }
@@ -200,7 +198,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onResume();
         // The user has returned from the login screen. Lol wtf?
         if (transitionAnimationWhite != null && hasTransitioned) {
-            SupportAnimator blueReversed = transitionAnimationBlue.reverse();
+            final SupportAnimator blueReversed = transitionAnimationBlue.reverse();
             blueReversed.setInterpolator(new AccelerateDecelerateInterpolator());
             blueReversed.addListener(new SupportAnimator.AnimatorListener() {
                 @Override
@@ -256,7 +254,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 }
             });
             whiteReversed.setDuration(REVEAL_ANIMATION_DURATION);
-            new Handler().postDelayed(whiteReversed::start, REVEAL_ANIMATION_DELAY_DURATION);
+            new Handler().postDelayed(whiteReversed::start, REVEAL_ANIMATION_DELAY);
             hasTransitioned = false;
         }
     }
@@ -417,34 +415,24 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void startShowContinueIconAnimations() {
-        Animation mScaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        Animation mRotateAnimation = new RotateAnimation(
-                0, 360,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-        );
-        mRotateAnimation.setRepeatCount(0);
-
-        AnimationSet mAnimations = new AnimationSet(true);
-        mAnimations.setDuration(REVEAL_ANIMATION_DURATION);
-        mAnimations.setFillAfter(true);
-        mAnimations.setInterpolator(new OvershootInterpolator(1.5f));
-        mAnimations.addAnimation(mScaleAnimation);
-        mAnimations.addAnimation(mRotateAnimation);
-
-        mContinueIcon.startAnimation(mAnimations);
+        final Animation mScaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        startContinueIconAnimations(mScaleAnimation);
     }
 
     private void startHideContinueIconAnimations() {
-        Animation mScaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        Animation mRotateAnimation = new RotateAnimation(
+        final Animation mScaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        startContinueIconAnimations(mScaleAnimation);
+    }
+
+    private void startContinueIconAnimations(final Animation mScaleAnimation) {
+        final Animation mRotateAnimation = new RotateAnimation(
                 0, 360,
                 Animation.RELATIVE_TO_SELF, 0.5f,
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
         mRotateAnimation.setRepeatCount(0);
 
-        AnimationSet mAnimations = new AnimationSet(true);
+        final AnimationSet mAnimations = new AnimationSet(true);
         mAnimations.setDuration(REVEAL_ANIMATION_DURATION);
         mAnimations.setFillAfter(true);
         mAnimations.setInterpolator(new OvershootInterpolator(1.5f));
@@ -453,6 +441,4 @@ public class WelcomeActivity extends AppCompatActivity {
 
         mContinueIcon.startAnimation(mAnimations);
     }
-
-
 }
