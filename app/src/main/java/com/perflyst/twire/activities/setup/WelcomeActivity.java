@@ -3,11 +3,9 @@ package com.perflyst.twire.activities.setup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -23,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.Service;
@@ -90,7 +87,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // Change the position of the WelcomeText. Doing it this way is more dynamic, instead of a fixed
         // DP length from the bottom
-        int yPosition = (int) (2.5 * (getScreenHeight() / 5));
+        int yPosition = (int) (2.5 * (Service.getScreenHeight(this) / 5));
         mWelcomeText.setY(yPosition);
 
         // Start the animations. Make sure the animations that in the correct order,
@@ -272,15 +269,6 @@ public class WelcomeActivity extends AppCompatActivity {
         startActivity(loginActivityIntent, null);
     }
 
-    private int getScreenHeight() {
-        WindowManager wm = ContextCompat.getSystemService(this, WindowManager.class);
-        final DisplayMetrics displayMetrics = new DisplayMetrics();
-        if (wm != null) {
-            wm.getDefaultDisplay().getMetrics(displayMetrics);
-        }
-        return displayMetrics.heightPixels;
-    }
-
     /**
      * Animations for the views in this activity
      */
@@ -288,7 +276,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private AnimationSet startLogoContainerAnimations() {
         mLogoCenter.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         AnimationSet mInitLogoAnimations = new AnimationSet(true);
-        TranslateAnimation trans = new TranslateAnimation(0, 0, getScreenHeight(), 0);
+        TranslateAnimation trans = new TranslateAnimation(0, 0, Service.getScreenHeight(this), 0);
 
         mInitLogoAnimations.setDuration(LOGO_Container_ANIMATION_DURATION);
         mInitLogoAnimations.setFillAfter(true);
