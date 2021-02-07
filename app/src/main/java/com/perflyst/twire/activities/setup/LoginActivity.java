@@ -5,11 +5,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -31,7 +29,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
@@ -128,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
 
         checkSetupType();
 
-        float textPosition = (int) (2.5 * (getScreenHeight() / 5));
+        float textPosition = (int) (2.5 * (Service.getScreenHeight(this) / 5));
         mLoginTextContainer.setY(textPosition);
         mSuccessMessage.setY(textPosition);
         mContinueFABContainer.setOnClickListener(v -> {
@@ -289,15 +286,6 @@ public class LoginActivity extends AppCompatActivity {
         showFABAnimation();
         new Handler().postDelayed(() -> getContinueIconAnimations(270), SHOW_WEBVIEW_ANIMATION_DURATION - 400);
         return hideWebViewAnimation();
-    }
-
-    private int getScreenHeight() {
-        WindowManager wm = ContextCompat.getSystemService(this, WindowManager.class);
-        final DisplayMetrics displayMetrics = new DisplayMetrics();
-        if (wm != null) {
-            wm.getDefaultDisplay().getMetrics(displayMetrics);
-        }
-        return displayMetrics.heightPixels;
     }
 
     private String getAccessTokenFromURL(String url) {
@@ -1023,7 +1011,7 @@ public class LoginActivity extends AppCompatActivity {
         mContinueFABShadow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
 
-        Animation mTranslationAnimation = new TranslateAnimation(0, 0, 0, getScreenHeight() * -1);
+        Animation mTranslationAnimation = new TranslateAnimation(0, 0, 0, Service.getScreenHeight(this) * -1);
         mTranslationAnimation.setFillAfter(true);
         mTranslationAnimation.setInterpolator(new OvershootInterpolator(1f));
 
@@ -1052,7 +1040,7 @@ public class LoginActivity extends AppCompatActivity {
         mContinueFABShadow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
 
-        Animation mTranslationAnimation = new TranslateAnimation(0, 0, -1 * getScreenHeight(), 0);
+        Animation mTranslationAnimation = new TranslateAnimation(0, 0, -1 * Service.getScreenHeight(this), 0);
         mTranslationAnimation.setFillAfter(true);
         mTranslationAnimation.setInterpolator(new OvershootInterpolator(0.7f));
 
