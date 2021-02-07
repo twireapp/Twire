@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.rey.material.widget.ProgressView;
 
 import io.codetail.animation.SupportAnimator;
@@ -95,20 +96,12 @@ public class ConfirmSetupActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        hideAllViews().setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
+        hideAllViews().setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 ConfirmSetupActivity.super.onBackPressed();
                 // We don't want a transition when going back. The activities handle the animation themselves.
                 overridePendingTransition(0, 0);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
             }
         });
 
@@ -148,20 +141,10 @@ public class ConfirmSetupActivity extends AppCompatActivity {
         Animation mAlphaAnimation = new AlphaAnimation(1f, 0f);
         mAlphaAnimation.setDuration(DURATION / 2);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 view.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -173,20 +156,10 @@ public class ConfirmSetupActivity extends AppCompatActivity {
         mViewAnimations.addAnimation(mScaleAnimation);
         mViewAnimations.addAnimation(mAlphaAnimation);
 
-        mViewAnimations.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mViewAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 view.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -211,7 +184,7 @@ public class ConfirmSetupActivity extends AppCompatActivity {
 
         final Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mTextLine.setVisibility(View.VISIBLE);
@@ -220,11 +193,6 @@ public class ConfirmSetupActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mTextLine.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -255,20 +223,10 @@ public class ConfirmSetupActivity extends AppCompatActivity {
         Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
         mAlphaAnimation.setDuration(SHOW_LOGO_ANIMATION_DURATION);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mGearIcon.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -291,20 +249,10 @@ public class ConfirmSetupActivity extends AppCompatActivity {
         mLogoAnimations.addAnimation(mRotateAnimation);
         mLogoAnimations.addAnimation(mAlphaAnimation);
 
-        mLogoAnimations.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mLogoAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mGearIcon.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -411,20 +359,10 @@ public class ConfirmSetupActivity extends AppCompatActivity {
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
         mRotateAnimation.setRepeatCount(0);
-        mScaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+        mScaleAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mContinueIcon.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -448,20 +386,10 @@ public class ConfirmSetupActivity extends AppCompatActivity {
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
         mRotateAnimation.setRepeatCount(0);
-        mRotateAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mRotateAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mContinueIcon.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
         AnimationSet mAnimations = new AnimationSet(true);

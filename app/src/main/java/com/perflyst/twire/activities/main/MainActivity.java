@@ -34,6 +34,7 @@ import com.perflyst.twire.service.AnimationService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.ScrollToStartPositionTask;
+import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.rey.material.widget.ProgressView;
@@ -409,17 +410,11 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
                 mMainToolbar.getTranslationY()
         );
 
-        Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+        Animation.AnimationListener animationListener = new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 isTransitioned = true;
                 startActivity(aIntent, null);
-            }
-
-            public void onAnimationStart(Animation animation) {
-            }
-
-            public void onAnimationRepeat(Animation animation) {
             }
         };
 
@@ -474,12 +469,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
      */
     public boolean handleBackPressed() {
         if (fromToolbarPosition != -1) {
-            Animation.AnimationListener animationListener = new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
+            Animation.AnimationListener animationListener = new AnimationListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     try {
@@ -488,11 +478,6 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
                     } catch (IllegalStateException e) {
                         e.printStackTrace();
                     }
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
                 }
             };
 
