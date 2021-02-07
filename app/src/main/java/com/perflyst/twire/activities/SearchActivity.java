@@ -57,8 +57,8 @@ public class SearchActivity extends ThemeActivity {
     private static final int POSITION_GAMES = 2;
     private static final int TOTAL_COUNT = 3;
     private final String LOG_TAG = getClass().getSimpleName();
-    @BindView(R.id.container)
-    protected ViewPager2 mViewPager;
+    @BindView(R.id.search_viewPager2)
+    protected ViewPager2 mViewPager2;
     @BindView(R.id.ic_back_arrow)
     protected ImageView mBackIcon;
     @BindView(R.id.edit_text_search)
@@ -104,15 +104,11 @@ public class SearchActivity extends ThemeActivity {
     }
 
     private void setUpTabs() {
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(this);
-
         // Set up the ViewPager2 with the sections adapter.
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager2.setAdapter(new SearchStateAdapter(this));
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
-        new TabLayoutMediator(tabLayout, mViewPager, (tab, position) -> {
+        TabLayout tabLayout = findViewById(R.id.search_tabLayout);
+        new TabLayoutMediator(tabLayout, mViewPager2, (tab, position) -> {
             switch (position) {
                 default: // Deliberate fall-through to stream tab
                 case POSITION_STREAMS:
@@ -402,9 +398,9 @@ public class SearchActivity extends ThemeActivity {
         public abstract MainActivityAdapter<E, ?> constructAdapter();
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class SearchStateAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentActivity fa) {
+        SearchStateAdapter(final FragmentActivity fa) {
             super(fa);
             mStreamsFragment = SearchStreamsFragment.newInstance();
             mChannelsFragment = SearchChannelsFragment.newInstance();

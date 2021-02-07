@@ -78,8 +78,8 @@ public class ChannelActivity extends ThemeActivity {
     private ImageView streamerImage;
     private Toolbar toolbar,
             additionalToolbar;
-    private ViewPager2 mViewPager;
-    private TabLayout mTabs;
+    private ViewPager2 mViewPager2;
+    private TabLayout mTabLayout;
     private AppBarLayout mAppBar;
     private FloatingActionButton mFab;
     private int COLOR_FADE_DURATION = 0;
@@ -98,8 +98,8 @@ public class ChannelActivity extends ThemeActivity {
         TextView streamerFollowers = findViewById(R.id.txt_followers);
         toolbar = findViewById(R.id.StreamerInfo_Toolbar);
         additionalToolbar = findViewById(R.id.additional_toolbar);
-        mViewPager = findViewById(R.id.container);
-        mTabs = findViewById(R.id.tabs);
+        mViewPager2 = findViewById(R.id.streamer_info_viewPager2);
+        mTabLayout = findViewById(R.id.streamer_info_tabLayout);
         mAppBar = findViewById(R.id.appbar);
         mFab = findViewById(R.id.fab);
 
@@ -158,11 +158,9 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private void setUpTabs() {
-        assert mViewPager != null;
-        mViewPager.setAdapter(new SectionsPagerAdapter(this));
+        mViewPager2.setAdapter(new ChannelStateAdapter(this));
 
-        assert mTabs != null;
-        new TabLayoutMediator(mTabs, mViewPager, (tab, position) -> {
+        new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> {
             switch (position) {
                 default: // Deliberate fall-through to description tab
                 case POSITION_DESC:
@@ -177,12 +175,12 @@ public class ChannelActivity extends ThemeActivity {
             }
         }).attach();
 
-        mTabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mAppBar.setExpanded(tab.getText() != null &&
                         tab.getText().equals(getResources().getString(R.string.streamerInfo_desc_tab)), true);
-                mViewPager.setCurrentItem(tab.getPosition(), true);
+                mViewPager2.setCurrentItem(tab.getPosition(), true);
             }
 
             @Override
@@ -267,13 +265,13 @@ public class ChannelActivity extends ThemeActivity {
                     int compositeNewColor = Color.HSVToColor(newSwatchComposite);
 
                     int primaryColor = Service.getBackgroundColorFromView(toolbar, defaultColor);
-                    int primaryColorDark = Service.getBackgroundColorFromView(mTabs, defaultDarkColor);
+                    int primaryColorDark = Service.getBackgroundColorFromView(mTabLayout, defaultDarkColor);
 
                     Service.animateBackgroundColorChange(toolbar, newColor, primaryColor, COLOR_FADE_DURATION);
                     Service.animateBackgroundColorChange(additionalToolbar, newColor, primaryColor, COLOR_FADE_DURATION);
-                    Service.animateBackgroundColorChange(mTabs, newColorDark, primaryColorDark, COLOR_FADE_DURATION);
+                    Service.animateBackgroundColorChange(mTabLayout, newColorDark, primaryColorDark, COLOR_FADE_DURATION);
                     mFab.setBackgroundTintList(ColorStateList.valueOf(compositeNewColor));
-                    mTabs.setSelectedTabIndicatorColor(compositeNewColor);
+                    mTabLayout.setSelectedTabIndicatorColor(compositeNewColor);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         Window window = getWindow();
@@ -614,9 +612,9 @@ public class ChannelActivity extends ThemeActivity {
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class ChannelStateAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentActivity fa) {
+        ChannelStateAdapter(final FragmentActivity fa) {
             super(fa);
             mDescriptionFragment = InfoFragment.newInstance(info);
             mBroadcastsFragment = VodFragment.newInstance(true, info);
@@ -627,8 +625,8 @@ public class ChannelActivity extends ThemeActivity {
         @Override
         public Fragment createFragment(int position) {
             switch (position) {
-                default:
-                case POSITION_DESC: // Deliberate fall-through to description tab
+                default: // Deliberate fall-through to description tab
+                case POSITION_DESC:
                     return mDescriptionFragment;
                 case POSITION_BROADCASTS:
                     return mBroadcastsFragment;
