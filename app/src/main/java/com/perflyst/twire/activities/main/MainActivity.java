@@ -45,6 +45,7 @@ import butterknife.ButterKnife;
 
 public abstract class MainActivity<E extends Comparable<E> & MainElement> extends ThemeActivity {
     private static final String FIRST_VISIBLE_ELEMENT_POSITION = "firstVisibleElementPosition";
+    protected final String LOG_TAG = getClass().getSimpleName();
 
     @BindView(R.id.followed_channels_drawer_layout)
     protected DrawerLayout mDrawerLayout;
@@ -81,7 +82,6 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
 
     @BindView(R.id.main_decorative_toolbar)
     protected Toolbar mDecorativeToolbar;
-    protected String LOG_TAG;
     protected MainActivityAdapter<E, ?> mAdapter;
     protected NavigationDrawerFragment mDrawerFragment;
     protected UniversalOnScrollListener mScrollListener;

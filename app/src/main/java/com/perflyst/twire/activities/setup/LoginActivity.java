@@ -51,7 +51,7 @@ public class LoginActivity extends SetupBaseActivity {
     private final int REVEAL_ANIMATION_DURATION = 650;
     private final int REVEAL_ANIMATION_DELAY = 200;
     private final int SHOW_SNACKBAR_DELAY = 200;
-    private final String LOG_TAG = "LoginActivity";
+    private final String LOG_TAG = getClass().getSimpleName();
     private boolean isWebViewShown = false,
             isWebViewHiding = false,
             hasTransitioned = false;

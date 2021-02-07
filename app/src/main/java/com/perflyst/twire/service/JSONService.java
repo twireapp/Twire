@@ -23,6 +23,7 @@ import java.util.GregorianCalendar;
  * Created by Sebastian Rask on 25-04-2016.
  */
 public class JSONService {
+    private static final String LOG_TAG = JSONService.class.getSimpleName();
 
     public static VideoOnDemand getVod(JSONObject vodObject) throws JSONException {
         final String TITLE_STRING = "title";
@@ -71,7 +72,6 @@ public class JSONService {
         if (!JSONChannel.isNull(CHANNEL_STATUS_STRING)) {
             title = JSONChannel.getString(CHANNEL_STATUS_STRING);
         } else {
-            String LOG_TAG = "JSONService";
             Log.i(LOG_TAG, "Status/title for " + mChannelInfo.getDisplayName() + " is null");
         }
 

@@ -17,6 +17,7 @@ import java.lang.ref.WeakReference;
  * Created by SebastianRask on 03-11-2015.
  */
 public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
+    private final String LOG_TAG = getClass().getSimpleName();
     private Settings mSettings;
     private String token;
     private WeakReference<LoginActivity> mLoginActivity;
@@ -32,7 +33,6 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
         token = (String) params[1];
         mLoginActivity = new WeakReference<>((LoginActivity) params[2]);
 
-        String LOG_TAG = "HandleUserLoginTask";
         try {
             String BASE_USER_INFO_URL = "https://api.twitch.tv/kraken/user?oauth_token=";
             String jsonString = Service.urlToJSONString(BASE_USER_INFO_URL + token);
