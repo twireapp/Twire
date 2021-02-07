@@ -39,6 +39,7 @@ import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetFollowsFromDB;
 import com.perflyst.twire.tasks.HandlerUserLoginTask;
+import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.rey.material.widget.ProgressView;
 import com.rey.material.widget.SnackBar;
 
@@ -201,22 +202,12 @@ public class LoginActivity extends AppCompatActivity {
             hideLoginView();
         } else {
             toTransition = false;
-            hideAllViews().setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
+            hideAllViews().setAnimationListener(new AnimationListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     LoginActivity.super.onBackPressed();
                     // We don't want a transition when going back. The activities handle the animation themselves.
                     overridePendingTransition(0, 0);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
                 }
             });
         }
@@ -279,21 +270,11 @@ public class LoginActivity extends AppCompatActivity {
                 .actionClickListener((sb, actionId) -> sb.dismiss());
 
 
-        hideLoginView().getAnimations().get(0).setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        hideLoginView().getAnimations().get(0).setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 loginWebView.loadUrl(LOGIN_URL);
                 new Handler().postDelayed(() -> mSnackbar.show(LoginActivity.this), SHOW_SNACKBAR_DELAY);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
     }
@@ -690,20 +671,10 @@ public class LoginActivity extends AppCompatActivity {
         Animation mAlphaAnimation = new AlphaAnimation(1f, 0f);
         mAlphaAnimation.setDuration(DURATION / 2);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 view.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -715,20 +686,10 @@ public class LoginActivity extends AppCompatActivity {
         mViewAnimations.addAnimation(mScaleAnimation);
         mViewAnimations.addAnimation(mAlphaAnimation);
 
-        mViewAnimations.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mViewAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 view.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -746,20 +707,10 @@ public class LoginActivity extends AppCompatActivity {
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
         mRotateAnimation.setRepeatCount(0);
-        mScaleAnimation.setAnimationListener(new Animation.AnimationListener() {
+        mScaleAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mContinueIcon.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -784,20 +735,10 @@ public class LoginActivity extends AppCompatActivity {
                 Animation.RELATIVE_TO_SELF, 0.5f
         );
         mRotateAnimation.setRepeatCount(0);
-        mRotateAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mRotateAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mContinueIcon.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
         AnimationSet mAnimations = new AnimationSet(true);
@@ -827,7 +768,7 @@ public class LoginActivity extends AppCompatActivity {
 
         final Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mTextLine.setVisibility(View.VISIBLE);
@@ -836,11 +777,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mTextLine.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -871,20 +807,10 @@ public class LoginActivity extends AppCompatActivity {
         Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
         mAlphaAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mSuccessCircleShadow.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -895,19 +821,10 @@ public class LoginActivity extends AppCompatActivity {
         mLogoAnimations.addAnimation(mScaleAnimation);
         mLogoAnimations.addAnimation(mAlphaAnimation);
 
-        mLogoAnimations.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
+        mLogoAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mSuccessCircleShadow.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -927,19 +844,10 @@ public class LoginActivity extends AppCompatActivity {
         Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
         mAlphaAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mSuccessCircle.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -950,19 +858,10 @@ public class LoginActivity extends AppCompatActivity {
         mLogoAnimations.addAnimation(mScaleAnimation);
         mLogoAnimations.addAnimation(mAlphaAnimation);
 
-        mLogoAnimations.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
+        mLogoAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mSuccessCircle.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -980,20 +879,10 @@ public class LoginActivity extends AppCompatActivity {
         Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
         mAlphaAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mSuccessIcon.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -1004,19 +893,10 @@ public class LoginActivity extends AppCompatActivity {
         mLogoAnimations.addAnimation(mScaleAnimation);
         mLogoAnimations.addAnimation(mAlphaAnimation);
 
-        mLogoAnimations.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
+        mLogoAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mSuccessIcon.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -1035,20 +915,10 @@ public class LoginActivity extends AppCompatActivity {
         Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
         mAlphaAnimation.setDuration(SHOW_LOGO_ANIMATION_DURATION);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new Animation.AnimationListener() {
+        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mGearIcon.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -1071,20 +941,10 @@ public class LoginActivity extends AppCompatActivity {
         mLogoAnimations.addAnimation(mRotateAnimation);
         mLogoAnimations.addAnimation(mAlphaAnimation);
 
-        mLogoAnimations.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mLogoAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mGearIcon.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -1113,20 +973,10 @@ public class LoginActivity extends AppCompatActivity {
         AnimationSet mAnimations = new AnimationSet(false);
         mAnimations.addAnimation(mTranslationAnimation);
         mAnimations.setDuration(SHOW_WEBVIEW_ANIMATION_DURATION);
-        mAnimations.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 loginWebView.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -1149,7 +999,7 @@ public class LoginActivity extends AppCompatActivity {
         AnimationSet mAnimations = new AnimationSet(false);
         mAnimations.addAnimation(mTranslationAnimation);
         mAnimations.setDuration(SHOW_WEBVIEW_ANIMATION_DURATION);
-        mAnimations.setAnimationListener(new Animation.AnimationListener() {
+        mAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 isWebViewHiding = true;
@@ -1162,11 +1012,6 @@ public class LoginActivity extends AppCompatActivity {
                 isWebViewShown = false;
                 loginWebView.setVisibility(View.INVISIBLE);
                 loginWebView.setTranslationY(1);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
         mWebViewContainer.startAnimation(mAnimations);
@@ -1186,7 +1031,7 @@ public class LoginActivity extends AppCompatActivity {
         mAnimations.setFillAfter(true);
         mAnimations.addAnimation(mTranslationAnimation);
         mAnimations.setDuration(SHOW_WEBVIEW_ANIMATION_DURATION);
-        mAnimations.setAnimationListener(new Animation.AnimationListener() {
+        mAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 mContinueFABContainer.setClickable(false);
@@ -1196,11 +1041,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onAnimationEnd(Animation animation) {
                 mContinueFAB.setLayerType(View.LAYER_TYPE_NONE, null);
                 mContinueFABShadow.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -1220,22 +1060,12 @@ public class LoginActivity extends AppCompatActivity {
         mAnimations.setFillAfter(true);
         mAnimations.addAnimation(mTranslationAnimation);
         mAnimations.setDuration(SHOW_WEBVIEW_ANIMATION_DURATION);
-        mAnimations.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        mAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 mContinueFAB.setLayerType(View.LAYER_TYPE_NONE, null);
                 mContinueFABShadow.setLayerType(View.LAYER_TYPE_NONE, null);
                 mContinueFABContainer.setClickable(true);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 

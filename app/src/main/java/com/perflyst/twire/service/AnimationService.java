@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.StreamsAdapter;
 import com.perflyst.twire.model.StreamInfo;
+import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 import io.codetail.animation.SupportAnimator;
@@ -48,7 +49,7 @@ public class AnimationService {
         animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animationSet.setFillAfter(true);
         animationSet.setFillBefore(true);
-        animationSet.setAnimationListener(new Animation.AnimationListener() {
+        animationSet.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
                 aIconTextView.setVisibility(View.VISIBLE);
@@ -63,11 +64,6 @@ public class AnimationService {
 
                 aIconTextView.setAlpha(1f);
                 aIconTextView.startAnimation(alphaAnimation);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 
@@ -241,22 +237,12 @@ public class AnimationService {
         animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animationSet.setFillAfter(true);
         animationSet.setFillBefore(false);
-        animationSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
+        animationSet.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
                 if (isActualClear) {
                     adapter.clearNoAnimation();
                 }
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
             }
         });
 

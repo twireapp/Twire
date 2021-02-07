@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 /**
@@ -264,35 +265,19 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
             // Be sure to use floats and the hard values 0-255 doesn't work as intended
             mShowShadowAnimation = new AlphaAnimation(0.0f, 1.0f);
             mShowShadowAnimation.setDuration(SHOW_DURATION);
-            mShowShadowAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
+            mShowShadowAnimation.setAnimationListener(new AnimationListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     mToolbarShadow.setAlpha(1f);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
                 }
             });
 
             mFadeShadowAnimation = new AlphaAnimation(1.0f, 0.0f);
             mFadeShadowAnimation.setDuration(SHADOW_FADE_DURATION);
-            mFadeShadowAnimation.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
+            mFadeShadowAnimation.setAnimationListener(new AnimationListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     mToolbarShadow.setAlpha(0f);
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
                 }
             });
         }
