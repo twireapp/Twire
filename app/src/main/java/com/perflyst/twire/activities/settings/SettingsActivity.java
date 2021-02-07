@@ -91,13 +91,13 @@ public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCa
                 new SettingsCategory(
                         R.string.settings_stream_player_name,
                         R.string.settings_stream_player_summary,
-                        R.drawable.ic_filmstrip,
+                        R.drawable.ic_theaters,
                         constructCategoryIntent(SettingsStreamPlayerActivity.class)
                 ),
                 new SettingsCategory(
                         R.string.settings_appearance_name,
                         R.string.settings_appearance_summary,
-                        R.drawable.ic_color_lens,
+                        R.drawable.ic_palette,
                         constructCategoryIntent(SettingsAppearanceActivity.class)
                 )/*,
                 new SettingsCategory(
