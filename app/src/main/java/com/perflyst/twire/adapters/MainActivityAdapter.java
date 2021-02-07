@@ -52,8 +52,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
     private final View.OnClickListener mOnClickListener;
     private final View.OnLongClickListener mOnLongClickListener;
     private final Settings mSettings;
-    private String LOG_TAG,
-            elementStyle;
+    private String elementStyle;
     private List<E> mElements;
     private boolean sortElements, animateInsert;
     private int mLastPosition, topMargin;
