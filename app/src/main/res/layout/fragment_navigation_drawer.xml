@@ -100,7 +100,7 @@
 
                     <ImageView
                         style="@style/icon_navigation_drawer"
-                        app:srcCompat="@drawable/ic_heart" />
+                        app:srcCompat="@drawable/ic_favorite" />
 
                     <TextView
                         style="@style/text_navigation_drawer"

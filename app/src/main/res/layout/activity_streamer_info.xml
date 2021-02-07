@@ -165,7 +165,7 @@
             android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/streamerInfo_fab_margin"
             android:tint="@color/white"
-            app:srcCompat="@drawable/ic_heart" />
+            app:srcCompat="@drawable/ic_favorite" />
     </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

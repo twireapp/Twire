@@ -35,7 +35,7 @@
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
                     android:layout_height="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_clock" />
+                    android:icon="@drawable/ic_schedule" />
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="@dimen/chat_emote_tab_icon_size"
@@ -166,7 +166,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_roomstate_slowmode_26dp"
+                app:srcCompat="@drawable/ic_roomstate_slowmode"
                 app:tint="?attr/chatRoomstateIconColor" />
 
             <ImageView
@@ -177,7 +177,7 @@
                 android:layout_toStartOf="@id/slowmode_ic"
                 android:layout_toLeftOf="@id/slowmode_ic"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_roomstate_r9k_26dp"
+                app:srcCompat="@drawable/ic_roomstate_r9k"
                 app:tint="?attr/chatRoomstateIconColor" />
 
             <ImageView
@@ -188,7 +188,7 @@
                 android:layout_toStartOf="@id/r9k_ic"
                 android:layout_toLeftOf="@id/r9k_ic"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_roomstate_subsonly_26dp"
+                app:srcCompat="@drawable/ic_roomstate_subsonly"
                 app:tint="?attr/chatRoomstateIconColor" />
         </RelativeLayout>
     </FrameLayout>

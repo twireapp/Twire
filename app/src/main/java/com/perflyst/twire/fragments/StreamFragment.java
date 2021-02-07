@@ -1614,7 +1614,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
     private void updateFollowIcon(ImageView imageView, boolean isFollowing) {
         @DrawableRes int imageRes = isFollowing
                 ? R.drawable.ic_heart_broken
-                : R.drawable.ic_heart;
+                : R.drawable.ic_favorite;
         imageView.setImageResource(imageRes);
     }
 
