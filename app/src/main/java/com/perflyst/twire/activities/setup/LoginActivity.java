@@ -6,14 +6,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
@@ -28,8 +26,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.service.Service;
@@ -43,7 +39,7 @@ import com.rey.material.widget.SnackBar;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends SetupBaseActivity {
     private static GetFollowsFromDB subscriptionsTask;
     private static boolean toTransition = false, isPartOfSetup = true;
     private final String LOGIN_URL = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=" +
@@ -52,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
             "&scope=user_read+chat:read+chat:edit+user_follows_edit+user_subscriptions";
     private final int SHOW_WEBVIEW_ANIMATION_DURATION = 900;
     private final int SHOW_SUCCESS_ICON_DURATION = 800;
-    private final int SHOW_CONTINUE_ICON_DURATION = 650;
     private final int REVEAL_ANIMATION_DURATION = 650;
     private final int REVEAL_ANIMATION_DELAY = 200;
     private final int SHOW_SNACKBAR_DELAY = 200;
@@ -144,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
         setupPrelaunchLogin();
         initSnackbar();
         initLoginView();
-        showLogoAnimations();
+        showLogoAnimations(mGearIcon);
         showTextLineAnimations(mLoginTextLineOne, 1);
         showTextLineAnimations(mLoginTextLineTwo, 2);
         showTextLineAnimations(mSkipText, 2);
@@ -279,7 +274,7 @@ public class LoginActivity extends AppCompatActivity {
     private void showLoginView() {
         showWebViewAnimation();
         hideFABAnimation();
-        hideContinueIconAnimations();
+        hideContinueIconAnimations(mContinueIcon);
     }
 
     private AnimationSet hideLoginView() {
@@ -382,7 +377,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private AnimationSet hideAllViews() {
         if (mContinueIcon.getVisibility() == View.VISIBLE) {
-            hideContinueIconAnimations();
+            hideContinueIconAnimations(mContinueIcon);
         }
         int HIDE_VIEW_ANIMATION_DURATION = 550;
         hideViewAnimation(mGearIcon, HIDE_VIEW_ANIMATION_DURATION);
@@ -437,7 +432,7 @@ public class LoginActivity extends AppCompatActivity {
                 mTransitionViewWhite.setVisibility(View.VISIBLE);
                 mContinueFABContainer.setClickable(false);
                 if (mContinueIcon.getVisibility() == View.VISIBLE) {
-                    hideContinueIconAnimations();
+                    hideContinueIconAnimations(mContinueIcon);
                 }
             }
 
@@ -494,7 +489,7 @@ public class LoginActivity extends AppCompatActivity {
                 mTransitionViewWhite.setVisibility(View.VISIBLE);
                 mContinueFABContainer.setClickable(false);
                 if (mContinueIcon.getVisibility() == View.VISIBLE) {
-                    hideContinueIconAnimations();
+                    hideContinueIconAnimations(mContinueIcon);
                 }
             }
 
@@ -633,9 +628,9 @@ public class LoginActivity extends AppCompatActivity {
         mSuccessMessage.setText(
                 getResources().getString(R.string.login_on_success_message, new Settings(getBaseContext()).getGeneralTwitchDisplayName())
         );
-        final AnimationSet mCircleShadowAnimations = getSuccessShadowAnimation();
-        final AnimationSet mCircleAnimations = getSuccessCircleAnimation();
-        final AnimationSet mIconAnimations = getSuccessIconAnimation();
+        final AnimationSet mCircleShadowAnimations = getSuccessAnimation(mSuccessCircleShadow);
+        final AnimationSet mIconAnimations = getSuccessAnimation(mSuccessIcon);
+        final AnimationSet mCircleAnimations = getSuccessAnimation(mSuccessCircle);
 
         new Handler().postDelayed(() -> {
             mSuccessCircleShadow.startAnimation(mCircleShadowAnimations);
@@ -643,47 +638,10 @@ public class LoginActivity extends AppCompatActivity {
             showTextLineAnimations(mSuccessMessage, 1);
         }, 150);
         mSuccessCircle.startAnimation(mCircleAnimations);
-        hideContinueIconAnimations();
+        hideContinueIconAnimations(mContinueIcon);
         int HIDE_INSTRUCTIONS_DURATION = 500;
         hideViewAnimation(mLoginTextContainer, HIDE_INSTRUCTIONS_DURATION);
 
-    }
-
-    private AnimationSet hideViewAnimation(final View view, final int DURATION) {
-        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
-        Animation mScaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        mScaleAnimation.setDuration(DURATION);
-        mScaleAnimation.setInterpolator(new OvershootInterpolator(0.7f));
-
-        Animation mAlphaAnimation = new AlphaAnimation(1f, 0f);
-        mAlphaAnimation.setDuration(DURATION / 2);
-        mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                view.setVisibility(View.INVISIBLE);
-            }
-        });
-
-
-        final AnimationSet mViewAnimations = new AnimationSet(false);
-        mViewAnimations.setInterpolator(new AccelerateDecelerateInterpolator());
-        mViewAnimations.setFillBefore(true);
-        mViewAnimations.setFillAfter(true);
-        mViewAnimations.addAnimation(mScaleAnimation);
-        mViewAnimations.addAnimation(mAlphaAnimation);
-
-        mViewAnimations.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                view.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
-
-
-        view.startAnimation(mViewAnimations);
-        return mViewAnimations;
     }
 
     private AnimationSet getContinueIconAnimations(int toDegree) {
@@ -715,90 +673,21 @@ public class LoginActivity extends AppCompatActivity {
         return mAnimations;
     }
 
-    private void hideContinueIconAnimations() {
-        Animation mScaleAnimation = new ScaleAnimation(1, 0, 1, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        Animation mRotateAnimation = new RotateAnimation(
-                mContinueIcon.getRotation(), 360 - mContinueIcon.getRotation(),
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-        );
-        mRotateAnimation.setRepeatCount(0);
-        mRotateAnimation.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mContinueIcon.setVisibility(View.INVISIBLE);
-            }
-        });
-        AnimationSet mAnimations = new AnimationSet(true);
-        mAnimations.setDuration(SHOW_CONTINUE_ICON_DURATION);
-        mAnimations.setFillAfter(true);
-        mAnimations.setInterpolator(new OvershootInterpolator(1.5f));
-        mAnimations.addAnimation(mScaleAnimation);
-        mAnimations.addAnimation(mRotateAnimation);
+    private AnimationSet getSuccessAnimation(final View view) {
+        view.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
-        mContinueIcon.startAnimation(mAnimations);
-
-    }
-
-    private void showTextLineAnimations(final TextView mTextLine, int lineNumber) {
-        mTextLine.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
-        int travelDistance = lineNumber < 3
-                ? (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP,
-                getResources().getDimension(R.dimen.welcome_text_line_three_size),
-                getResources().getDisplayMetrics())
-                : 0;
-
-        float overshoot = lineNumber == 1 ? 2f : 1f;
-        final Animation mTranslationAnimation = new TranslateAnimation(0, 0, travelDistance, 0);
-        mTranslationAnimation.setInterpolator(new OvershootInterpolator(overshoot));
+        float mEndScale = 1.1f;
+        final Animation mScaleAnimation = new ScaleAnimation(0, mEndScale, 0, mEndScale, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        mScaleAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
+        mScaleAnimation.setInterpolator(new OvershootInterpolator(3f));
 
         final Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
-        mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                mTextLine.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mTextLine.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
-
-        final AnimationSet mWelcomeTextAnimations = new AnimationSet(false);
-        int SHOW_TEXT_ANIMATION_DURATION = 600;
-        mWelcomeTextAnimations.setDuration(SHOW_TEXT_ANIMATION_DURATION);
-        mWelcomeTextAnimations.setInterpolator(new AccelerateDecelerateInterpolator());
-        mWelcomeTextAnimations.setFillBefore(true);
-        mWelcomeTextAnimations.setFillAfter(true);
-        mWelcomeTextAnimations.addAnimation(mAlphaAnimation);
-        mWelcomeTextAnimations.addAnimation(mTranslationAnimation);
-
-        int SHOW_TEXT_ANIMATION_BASE_DELAY = 105;
-        int delay = SHOW_TEXT_ANIMATION_BASE_DELAY * (lineNumber < 3 ? lineNumber : lineNumber * 2);
-        int SHOW_TEXT_ANIMATION_DELAY = 105;
-        new Handler().postDelayed(() -> mTextLine.startAnimation(mWelcomeTextAnimations), delay + SHOW_TEXT_ANIMATION_DELAY);
-
-    }
-
-    private AnimationSet getSuccessShadowAnimation() {
-        mSuccessCircleShadow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
-        float mEndScale = 1.1f;
-        Animation mScaleAnimation = new ScaleAnimation(0, mEndScale, 0, mEndScale, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        mScaleAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
-        mScaleAnimation.setInterpolator(new OvershootInterpolator(3f));
-
-        Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
         mAlphaAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
         mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
         mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationStart(Animation animation) {
-                mSuccessCircleShadow.setVisibility(View.VISIBLE);
+                view.setVisibility(View.VISIBLE);
             }
         });
 
@@ -808,136 +697,14 @@ public class LoginActivity extends AppCompatActivity {
         mLogoAnimations.setFillAfter(true);
         mLogoAnimations.addAnimation(mScaleAnimation);
         mLogoAnimations.addAnimation(mAlphaAnimation);
-
         mLogoAnimations.setAnimationListener(new AnimationListenerAdapter() {
             @Override
             public void onAnimationEnd(Animation animation) {
-                mSuccessCircleShadow.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
-
-
-        return mLogoAnimations;
-    }
-
-    private AnimationSet getSuccessCircleAnimation() {
-        mSuccessCircle.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
-        float mEndScale = 1.1f;
-        Animation mScaleAnimation = new ScaleAnimation(0, mEndScale, 0, mEndScale, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        mScaleAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
-        mScaleAnimation.setInterpolator(new OvershootInterpolator(3f));
-
-
-        Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
-        mAlphaAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
-        mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                mSuccessCircle.setVisibility(View.VISIBLE);
-            }
-        });
-
-        final AnimationSet mLogoAnimations = new AnimationSet(false);
-        mLogoAnimations.setInterpolator(new AccelerateDecelerateInterpolator());
-        mLogoAnimations.setFillBefore(true);
-        mLogoAnimations.setFillAfter(true);
-        mLogoAnimations.addAnimation(mScaleAnimation);
-        mLogoAnimations.addAnimation(mAlphaAnimation);
-
-        mLogoAnimations.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mSuccessCircle.setLayerType(View.LAYER_TYPE_NONE, null);
+                view.setLayerType(View.LAYER_TYPE_NONE, null);
             }
         });
 
         return mLogoAnimations;
-    }
-
-    private AnimationSet getSuccessIconAnimation() {
-        mSuccessIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
-        float mEndScale = 1.1f;
-        Animation mScaleAnimation = new ScaleAnimation(0, mEndScale, 0, mEndScale, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        mScaleAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
-        mScaleAnimation.setInterpolator(new OvershootInterpolator(3f));
-
-        Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
-        mAlphaAnimation.setDuration(SHOW_SUCCESS_ICON_DURATION);
-        mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                mSuccessIcon.setVisibility(View.VISIBLE);
-            }
-        });
-
-        final AnimationSet mLogoAnimations = new AnimationSet(false);
-        mLogoAnimations.setInterpolator(new AccelerateDecelerateInterpolator());
-        mLogoAnimations.setFillBefore(true);
-        mLogoAnimations.setFillAfter(true);
-        mLogoAnimations.addAnimation(mScaleAnimation);
-        mLogoAnimations.addAnimation(mAlphaAnimation);
-
-        mLogoAnimations.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mSuccessIcon.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
-
-
-        return mLogoAnimations;
-    }
-
-    private void showLogoAnimations() {
-        mGearIcon.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
-        Animation mScaleAnimation = new ScaleAnimation(0, 1, 0, 1, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        int SHOW_LOGO_ANIMATION_DURATION = 600;
-        mScaleAnimation.setDuration(SHOW_LOGO_ANIMATION_DURATION);
-        mScaleAnimation.setInterpolator(new OvershootInterpolator(0.7f));
-
-        Animation mAlphaAnimation = new AlphaAnimation(0f, 1f);
-        mAlphaAnimation.setDuration(SHOW_LOGO_ANIMATION_DURATION);
-        mAlphaAnimation.setInterpolator(new DecelerateInterpolator());
-        mAlphaAnimation.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                mGearIcon.setVisibility(View.VISIBLE);
-            }
-        });
-
-        RotateAnimation mRotateAnimation = new RotateAnimation(
-                0, 360,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-        );
-        mRotateAnimation.setInterpolator(new LinearInterpolator());
-        // The time it takes for the icon to rotate 360 degrees. The Higher the slower.
-        int LOGO_ROTATION_SPEED = 15 * 1000;
-        mRotateAnimation.setDuration(LOGO_ROTATION_SPEED);
-        mRotateAnimation.setRepeatCount(Animation.INFINITE);
-
-        final AnimationSet mLogoAnimations = new AnimationSet(false);
-        mLogoAnimations.setInterpolator(new AccelerateDecelerateInterpolator());
-        mLogoAnimations.setFillBefore(true);
-        mLogoAnimations.setFillAfter(true);
-        mLogoAnimations.addAnimation(mScaleAnimation);
-        mLogoAnimations.addAnimation(mRotateAnimation);
-        mLogoAnimations.addAnimation(mAlphaAnimation);
-
-        mLogoAnimations.setAnimationListener(new AnimationListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                mGearIcon.setLayerType(View.LAYER_TYPE_NONE, null);
-            }
-        });
-
-
-        mGearIcon.startAnimation(mLogoAnimations);
     }
 
     private void showWebViewAnimation() {
@@ -1009,7 +776,6 @@ public class LoginActivity extends AppCompatActivity {
     private void hideFABAnimation() {
         mContinueFAB.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         mContinueFABShadow.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-
 
         Animation mTranslationAnimation = new TranslateAnimation(0, 0, 0, Service.getScreenHeight(this) * -1);
         mTranslationAnimation.setFillAfter(true);
