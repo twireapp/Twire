@@ -24,8 +24,10 @@ import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Sebastian Rask on 16-06-2016.
@@ -196,18 +198,26 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         String time;
         Calendar now = Calendar.getInstance(), vodDate = vod.getRecordedAt();
 
-        if (Service.isCalendarSameDay(now, vodDate)) {
+        Calendar lastYear = new GregorianCalendar(now.get(Calendar.YEAR) - 1, 1, 1);
+        long daysAgo = TimeUnit.MILLISECONDS.toDays(now.getTimeInMillis() - vodDate.getTimeInMillis());
+
+        if (daysAgo <= 0) {
+            // today
             time = getContext().getString(R.string.today);
+        } else if (daysAgo == 1) {
+            // yesterday
+            time = getContext().getString(R.string.yesterday);
+        } else if (daysAgo <= 7) {
+            // a week ago -> show weekday only
+            time = new SimpleDateFormat("EEEE", Locale.getDefault()).format(vodDate.getTime());
+        } else if (daysAgo < lastYear.getActualMaximum(Calendar.DAY_OF_YEAR)) {
+            // if more than a week ago and less than a year -> show day and month only
+            time = new SimpleDateFormat("d. MMM", Locale.getDefault()).format(vodDate.getTime());
         } else {
-            now.add(Calendar.DAY_OF_YEAR, -1);
-            if (Service.isCalendarSameDay(now, vodDate)) {
-                time = getContext().getString(R.string.yesterday);
-            } else if (now.get(Calendar.DAY_OF_YEAR) - vodDate.get(Calendar.DAY_OF_YEAR) <= 6) {
-                time = new SimpleDateFormat("EEEE", Locale.getDefault()).format(vodDate.getTime());
-            } else {
-                time = new SimpleDateFormat("d. MMM.", Locale.getDefault()).format(vodDate.getTime());
-            }
+            // if over a year ago -> show full date
+            time = new SimpleDateFormat("d. MMM yy", Locale.getDefault()).format(vodDate.getTime());
         }
+
         return time + " " + Service.calculateTwitchVideoLength(vod.getLength());
     }
 
