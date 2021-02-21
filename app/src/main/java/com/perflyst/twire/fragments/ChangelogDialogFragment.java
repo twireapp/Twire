@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.CheckedTextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
@@ -67,7 +68,7 @@ public class ChangelogDialogFragment extends DialogFragment {
                     put('F', R.drawable.ic_bug_fix);
                 }};
 
-                Drawable drawable = ContextCompat.getDrawable(activity, drawableMap.get(prefix)).mutate();
+                Drawable drawable = AppCompatResources.getDrawable(activity, drawableMap.get(prefix)).mutate();
                 drawable.setColorFilter(new PorterDuffColorFilter(
                         ContextCompat.getColor(activity, colorMap.get(prefix)), PorterDuff.Mode.SRC_IN));
                 drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
