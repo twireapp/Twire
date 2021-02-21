@@ -19,7 +19,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.rey.material.drawable.BlankDrawable;
 
 public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callback {
-    private TextView textView;
+    private final TextView textView;
     private LayerDrawable layerDrawable;
 
     private Drawable mDrawable;
@@ -33,7 +33,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
 
         ColorDrawable backgroundDrawable = new ColorDrawable(Color.parseColor(backgroundColor));
 
-        this.layerDrawable = new LayerDrawable(new Drawable[] { backgroundDrawable, new BlankDrawable() });
+        this.layerDrawable = new LayerDrawable(new Drawable[]{backgroundDrawable, new BlankDrawable()});
         layerDrawable.setId(0, 0);
         layerDrawable.setId(1, 1);
     }
@@ -60,7 +60,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
                 .placeholder(placeHolderDrawable)
                 .into(new CustomTarget<Drawable>() {
                     @Override
-                    public void onLoadStarted(@NonNull Drawable resource) {
+                    public void onLoadStarted(Drawable resource) {
                         mDrawable = resource;
                         textView.invalidate();
                     }
@@ -86,7 +86,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
 
 
                     @Override
-                    public void onLoadFailed(@NonNull Drawable resource) {
+                    public void onLoadFailed(Drawable resource) {
                         mDrawable = resource;
                         textView.invalidate();
                     }
@@ -104,17 +104,17 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
     }
 
     @Override
-    public void invalidateDrawable(Drawable drawable) {
+    public void invalidateDrawable(@NonNull Drawable drawable) {
         textView.invalidate();
     }
 
     @Override
-    public void scheduleDrawable(Drawable who, Runnable what, long when) {
+    public void scheduleDrawable(@NonNull Drawable who, @NonNull Runnable what, long when) {
         textView.postDelayed(what, when);
     }
 
     @Override
-    public void unscheduleDrawable(Drawable who, Runnable what) {
+    public void unscheduleDrawable(@NonNull Drawable who, @NonNull Runnable what) {
         textView.removeCallbacks(what);
     }
 

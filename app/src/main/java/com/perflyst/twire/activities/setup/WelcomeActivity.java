@@ -22,18 +22,17 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.perflyst.twire.R;
-import com.perflyst.twire.activities.UsageTrackingAppCompatActivity;
 import com.perflyst.twire.service.Service;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
 
-public class WelcomeActivity extends UsageTrackingAppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity {
     final int REVEAL_ANIMATION_DURATION = 650;
     final int REVEAL_ANIMATION_DELAY_DURATION = 200;
     final int ANIMATIONS_START_DELAY = 500;
@@ -42,7 +41,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
     final int WELCOME_TEXT_ANIMATION_DURATION = 900;
     final int WELCOME_TEXT_ANIMATION_BASE_DELAY = 175;
     final int CONTINUE_FAB_ANIMATION_DURATION = 750;
-    private String LOG_TAG = getClass().getSimpleName();
+    private final String LOG_TAG = getClass().getSimpleName();
     private boolean hasTransitioned = false;
     private SupportAnimator transitionAnimationWhite = null;
     private SupportAnimator transitionAnimationBlue = null;
@@ -299,7 +298,7 @@ public class WelcomeActivity extends UsageTrackingAppCompatActivity {
         hasTransitioned = true;
         Intent loginActivityIntent = new Intent(getBaseContext(), LoginActivity.class);
         loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        ActivityCompat.startActivity(this, loginActivityIntent, null);
+        startActivity(loginActivityIntent, null);
     }
 
     private int getScreenHeight() {

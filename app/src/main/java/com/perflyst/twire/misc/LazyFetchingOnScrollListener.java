@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -16,8 +17,8 @@ import com.perflyst.twire.tasks.GetVisualElementsTask;
  * Created by Sebastian on 06-08-2015.
  */
 public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
+    private final LazyFetchingActivity<T> mLazyFetchingActivity;
     private GetVisualElementsTask<T> getElementsTask;
-    private LazyFetchingActivity<T> mLazyFetchingActivity;
 
 
     public LazyFetchingOnScrollListener(AppCompatActivity mActivity, Toolbar mMainToolbar, Toolbar mDecorativeToolbar, View mToolbarShadow, View mIconCircle, TextView mIconText, String LOG_TAG, LazyFetchingActivity<T> aLazyFetchingActivity, boolean isMainActivity) {
@@ -31,13 +32,13 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
     }
 
     @Override
-    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
         super.onScrollStateChanged(recyclerView, newState);
         checkForNewElements(recyclerView);
     }
 
     @Override
-    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
         checkForNewElements(recyclerView);
     }

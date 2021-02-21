@@ -21,21 +21,21 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.perflyst.twire.R;
-import com.perflyst.twire.activities.UsageTrackingAppCompatActivity;
 import com.perflyst.twire.service.Service;
 import com.rey.material.widget.ProgressView;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
-public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
-    private final String LOG_TAG = getClass().getSimpleName();
+public class ConfirmSetupActivity extends AppCompatActivity {
     private final int SHOW_CONTINUE_ICON_DURATION = 650;
     private final int REVEAL_ANIMATION_DURATION = 650;
     private final int REVEAL_ANIMATION_DELAY = 200;
+    private final SupportAnimator transitionAnimationWhite = null;
     private boolean hasTransitioned = false;
-    private SupportAnimator transitionAnimationWhite = null;
     private ImageView mGearIcon,
             mContinueIcon;
     private ProgressView mSetupProgress;
@@ -479,7 +479,7 @@ public class ConfirmSetupActivity extends UsageTrackingAppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... params) {
-            while (!LoginActivity.hasLoadedFollows()) {
+            while (LoginActivity.loadingFollows()) {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {

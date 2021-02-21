@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class DrawableBulletSpawn extends BulletSpan {
-    private int mGap;
-    private Drawable mDrawable;
-    float scaleFactor = 0.6f;
+    final float scaleFactor = 0.6f;
+    private final int mGap;
+    private final Drawable mDrawable;
 
     public DrawableBulletSpawn(int gap, Drawable drawable) {
         super(gap);

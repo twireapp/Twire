@@ -6,30 +6,22 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.TrafficStats;
 import android.os.Build;
-import android.os.Process;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -59,30 +51,17 @@ import com.perflyst.twire.model.ChannelInfo;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSessionContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -95,11 +74,7 @@ import okhttp3.Response;
 // TODO: Split this service out to multiple more cohesive service classes
 public class Service {
 
-    // always verify the host - dont check for certificate
-    public final static HostnameVerifier DO_NOT_VERIFY = (hostname, session) -> true;
-    public static int NOTIFICATION_ALARM_ID = 754641782;
-
-    public static OkHttpClient client = new OkHttpClient.Builder()
+    public static final OkHttpClient client = new OkHttpClient.Builder()
             .readTimeout(5, TimeUnit.SECONDS)
             .connectTimeout(3, TimeUnit.SECONDS)
             .build();
@@ -143,7 +118,6 @@ public class Service {
      * Makes a timestamp from a length in seconds.
      *
      * @param videoLengthInSeconds Length in seconds
-     * @return
      */
     public static String calculateTwitchVideoLength(int videoLengthInSeconds) {
         String result = "";
@@ -300,24 +274,6 @@ public class Service {
     }
 
     /**
-     * Decodes a byte array to a bitmap and returns it.
-     */
-    public static Bitmap getBitmapFromByteArray(byte[] bytes) {
-        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-    }
-
-    /**
-     * Creates a byte-array for a drawable and returns it.
-     * This is useful for sending images with intents.
-     */
-    public static byte[] getDrawableByteArray(Drawable aDrawable) {
-        Bitmap bitmap = drawableToBitmap(aDrawable);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        return baos.toByteArray();
-    }
-
-    /**
      * Converts a drawable to a bitmap and returns it.
      */
     private static Bitmap drawableToBitmap(Drawable drawable) {
@@ -344,11 +300,8 @@ public class Service {
 
     /**
      * Creates a string with a unicode emoticon.
-     *
-     * @param unicode
-     * @return
      */
-    public static String getEmijoByUnicode(int unicode) {
+    public static String getEmojiByUnicode(int unicode) {
         return new String(Character.toChars(unicode));
     }
 
@@ -406,46 +359,9 @@ public class Service {
     }
 
     /**
-     * Returns a resized bitmap with a specified factor to change the width and height with.
-     */
-    public static Bitmap getResizedBitmap(Bitmap bm, float factorchange) {
-        return getResizedBitmap(bm, (int) (bm.getWidth() * factorchange), (int) (bm.getHeight() * factorchange));
-    }
-
-    /**
-     * Creates a new resized bitmap with a specified width and height.
-     */
-    public static Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-        //bm.recycle();
-        return resizedBitmap;
-    }
-
-    public static Bitmap getResizedBitmap(Bitmap bm, int dpHeight, Context context) {
-        try {
-            Bitmap.Config mConfig = bm.getConfig() == null ? Bitmap.Config.ARGB_8888 : bm.getConfig();
-
-            Bitmap resizedBitmap = bm.copy(mConfig, true);
-            int heightPx = Service.dpToPixels(context, dpHeight);
-            int widthPx = (int) ((1.0 * resizedBitmap.getWidth() / resizedBitmap.getHeight()) * (heightPx * 1.0));
-            return getResizedBitmap(resizedBitmap, widthPx, heightPx);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
      * Method for increasing a Navigation Drawer's edge size.
      */
-    public static void increaseNavigationDrawerEdge(DrawerLayout aDrawerLayout, Context context) {
+    public static void increaseNavigationDrawerEdge(DrawerLayout aDrawerLayout) {
         // Increase the area from which you can open the navigation drawer.
         try {
             Field mDragger = aDrawerLayout.getClass().getDeclaredField("mLeftDragger");
@@ -494,20 +410,6 @@ public class Service {
         return false;
     }
 
-    /**
-     * Checks if the device is connected to a valid network
-     * Can be called on the UI thread
-     */
-    public static boolean isNetWorkConnected(Context context) {
-        ConnectivityManager cm = ContextCompat.getSystemService(context, ConnectivityManager.class);
-        NetworkInfo networkInfo = null;
-        if (cm != null) {
-            networkInfo = cm.getActiveNetworkInfo();
-        }
-
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
-    }
-
     public static void startNotifications(Context context) {
     }
 
@@ -535,32 +437,6 @@ public class Service {
             parent.removeView(v);
             parent.addView(v, 0);
         }
-    }
-
-    public static void saveImageToStorage(Bitmap image, String key, Context context) {
-        try {
-            // Create an ByteArrayOutputStream and feed a compressed bitmap image in it
-            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.PNG, 100, byteStream); // PNG as only format with transparency
-
-            // Create a FileOutputStream with out key and set the mode to private to ensure
-            // Only this app and read the file. Write out ByteArrayOutput to the file and close it
-            FileOutputStream fileOut = context.openFileOutput(key, Context.MODE_PRIVATE);
-            fileOut.write(byteStream.toByteArray());
-            byteStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static Bitmap getImageFromStorage(String key, Context context) throws IOException {
-        InputStream fileIn = context.openFileInput(key);
-        return BitmapFactory.decodeStream(fileIn);
-    }
-
-    public static boolean doesStorageFileExist(String key, Context context) {
-        File file = context.getFileStreamPath(key);
-        return file.exists();
     }
 
     /**
@@ -653,26 +529,6 @@ public class Service {
         return result;
     }
 
-    public static class SimpleResponse
-    {
-        public int code;
-        public String body;
-        public Response response;
-
-        public SimpleResponse(Response response)
-        {
-            assert response.body() != null;
-
-            code = response.code();
-            this.response = response;
-
-            try {
-                body = response.body().string();
-            } catch (IOException ignored) {
-            }
-        }
-    }
-
     public static SimpleResponse makeRequest(Request request) {
         Response response;
         try {
@@ -684,60 +540,7 @@ public class Service {
     }
 
     public static HttpURLConnection openConnection(URL url) throws IOException {
-/*
-        HttpURLConnection conn = null;
-
-        if (url.getProtocol().toLowerCase().equals("https")) {
-            trustAllHosts();
-            HttpsURLConnection https = (HttpsURLConnection) url.openConnection();
-            https.setHostnameVerifier(DO_NOT_VERIFY);
-            conn = https;
-        } else {
-            conn = (HttpURLConnection) url.openConnection();
-        }
-
-        return conn;
-*/
         return (HttpURLConnection) url.openConnection();
-    }
-
-    /**
-     * Trust every server - dont check for any certificate
-     */
-    public static void trustAllHosts() {
-        // Create a trust manager that does not validate certificate chains
-        TrustManager[] trustAllCerts = {
-                new X509TrustManager() {
-                    @Override
-                    public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
-
-                    }
-
-                    @Override
-                    public void checkServerTrusted(X509Certificate[] x509Certificates, String s) {
-
-                    }
-
-                    public X509Certificate[] getAcceptedIssuers() {
-                        return new X509Certificate[]{};
-                    }
-                }
-        };
-
-        // Install the all-trusting trust manager
-        try {
-            SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, trustAllCerts, new SecureRandom());
-            SSLSessionContext sslSessionContext = sc.getServerSessionContext();
-            int sessionCacheSize = sslSessionContext.getSessionCacheSize();
-            if (sessionCacheSize > 0) {
-                sslSessionContext.setSessionCacheSize(0);
-            }
-            HttpsURLConnection
-                    .setDefaultSSLSocketFactory(sc.getSocketFactory());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static ChannelInfo getStreamerInfoFromUserId(int streamerId) throws NullPointerException {
@@ -867,32 +670,6 @@ public class Service {
         return result;
     }
 
-    /**
-     * Updates an existing streamer's info in the database
-     */
-    public static void updateStreamerInfoDb(ChannelInfo aChannelInfo, Context context) {
-        ContentValues values = new ContentValues();
-        values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, aChannelInfo.getFollowers());
-        values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, aChannelInfo.getViews());
-
-
-        updateStreamerInfoDbWithValues(values, context, aChannelInfo.getStreamerName());
-    }
-
-    public static void updateStreamerInfoNotificationSettingForAll(Context context, boolean enable) {
-        ContentValues values = new ContentValues();
-        values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, enable ? 1 : 0);
-
-        updateStreamerInfoDbWithValues(values, context, null, new String[]{});
-    }
-
-    public static void updateStreamerInfoNotificationSetting(ChannelInfo aChannelInfo, Context context) {
-        ContentValues values = new ContentValues();
-        values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, aChannelInfo.isNotifyWhenLive() ? 1 : 0);
-
-        updateStreamerInfoDbWithValues(values, context, aChannelInfo.getStreamerName());
-    }
-
     private static void updateStreamerInfoDbWithValues(ContentValues values, Context context, String streamerName) {
         updateStreamerInfoDbWithValues(values, context, SubscriptionsDbHelper.COLUMN_STREAMER_NAME + "=?", new String[]{streamerName});
     }
@@ -960,7 +737,6 @@ public class Service {
 
     }
 
-
     public static void clearStreamerInfoDb(Context context) {
         Log.i("SERVICE", "CLEARING STREAMERINFO DATABASE");
         TempStorage.getLoadedStreamers().clear();
@@ -968,80 +744,27 @@ public class Service {
         helper.onUpgrade(helper.getWritableDatabase(), SubscriptionsDbHelper.DATABASE_VERSION, SubscriptionsDbHelper.DATABASE_VERSION + 1);
     }
 
-    public static boolean isVertical(Context aContext) {
-        int orientation = aContext.getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            return true;
-        } else return orientation != Configuration.ORIENTATION_LANDSCAPE;
-    }
-
-    public static void setTopRounded(Bitmap workingBitmap, float cornerRadius) {
-        int w = workingBitmap.getWidth();
-        int h = workingBitmap.getHeight();
-        Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas(bmp);
-        Shader shader = new BitmapShader(workingBitmap, Shader.TileMode.MIRROR,
-                Shader.TileMode.MIRROR);
-
-        Paint paint = new Paint(Paint.FILTER_BITMAP_FLAG);
-        paint.setAntiAlias(true);
-        paint.setShader(shader);
-        RectF rec = new RectF(0, 0, w, h - (h / 3.0f));
-        c.drawRect(new RectF(0, (h / 3.0f), w, h), paint);
-        c.drawRoundRect(rec, cornerRadius, cornerRadius, paint);
-        //v.setImageDrawable(new BitmapDrawable(context.getResources(), bmp));
-        //v.setImageBitmap(new BitmapDrawable(context.getResources(), bmp).getBitmap());
-    }
-
-    // Convert transparentColor to be transparent in a Bitmap.
-    public static Bitmap makeTransparent(Bitmap bit, int transparentColor) {
-        int width = bit.getWidth();
-        int height = bit.getHeight();
-        Bitmap myBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        int[] allpixels = new int[myBitmap.getHeight() * myBitmap.getWidth()];
-        bit.getPixels(allpixels, 0, myBitmap.getWidth(), 0, 0, myBitmap.getWidth(), myBitmap.getHeight());
-        myBitmap.setPixels(allpixels, 0, width, 0, 0, width, height);
-
-        for (int i = 0; i < myBitmap.getHeight() * myBitmap.getWidth(); i++) {
-            if (allpixels[i] == transparentColor)
-                allpixels[i] = Color.alpha(Color.TRANSPARENT);
-        }
-
-        myBitmap.setPixels(allpixels, 0, myBitmap.getWidth(), 0, 0, myBitmap.getWidth(), myBitmap.getHeight());
-        return myBitmap;
-    }
-
-    public static double getDataReceived() {
-        return (double) TrafficStats.getUidRxBytes(Process
-                .myUid()) / (1024 * 1024);
-    }
-
     public static int dpToPixels(Context context, float dp) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
 
-    /**
-     * Gets Bitmap from the specified URL
-     * Must not be called on Main UI Thread
-     */
-    public static Bitmap getBitmapFromUrl(String url) {
-        Bitmap bitmap = null;
+    public static class SimpleResponse {
+        public int code;
+        public String body;
+        public Response response;
 
-        try {
-            HttpURLConnection connection = openConnection(new URL(url));
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            bitmap = BitmapFactory.decodeStream(input);
+        public SimpleResponse(Response response) {
+            assert response.body() != null;
 
-        } catch (Exception e) {
-            //e.printStackTrace();
+            code = response.code();
+            this.response = response;
 
-            if (url.contains("https")) {
-                return getBitmapFromUrl(url.replace("https", "http"));
+            try {
+                body = response.body().string();
+            } catch (IOException ignored) {
             }
         }
-
-        return bitmap;
     }
+
 }

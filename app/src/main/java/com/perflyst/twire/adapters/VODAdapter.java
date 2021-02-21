@@ -32,10 +32,10 @@ import java.util.Locale;
  */
 
 class VODViewHolder extends MainActivityAdapter.ElementsViewHolder {
-    ImageView vPreviewImage;
-    TextView vDisplayName, vTitle, vGame, vTimeStamp;
-    SeekBar vProgressBar;
-    private CardView vCard;
+    final ImageView vPreviewImage;
+    final TextView vDisplayName, vTitle, vGame, vTimeStamp;
+    final SeekBar vProgressBar;
+    private final CardView vCard;
 
     VODViewHolder(View v) {
         super(v);
@@ -66,8 +66,9 @@ class VODViewHolder extends MainActivityAdapter.ElementsViewHolder {
 
 public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder> {
     private final float VOD_WATCHED_IMAGE_ALPHA = 0.5f;
-    private int rightMargin, leftMargin, topMargin, bottomMargin;
-    private Activity activity;
+    private final int topMargin, bottomMargin;
+    private final Activity activity;
+    private int rightMargin, leftMargin;
     private boolean showName;
 
     public VODAdapter(AutoSpanRecyclerView recyclerView, Activity aActivity) {
@@ -120,10 +121,6 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
                 activity.overridePendingTransition(R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim);
             }
         }
-    }
-
-    @Override
-    protected void handleElementOnLongClick(View v) {
     }
 
     @Override
@@ -215,17 +212,17 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
     }
 
     @Override
-    int getLayoutRessource() {
+    int getLayoutResource() {
         return R.layout.cell_vod;
     }
 
     @Override
-    int getCornerRadiusRessource() {
+    int getCornerRadiusResource() {
         return R.dimen.stream_card_corner_radius;
     }
 
     @Override
-    int getTopMarginRessource() {
+    int getTopMarginResource() {
         return R.dimen.stream_card_first_top_margin;
     }
 

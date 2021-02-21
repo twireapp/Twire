@@ -12,8 +12,8 @@ import android.view.animation.AnimationSet;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -102,21 +102,20 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     protected abstract MainActivityAdapter<E, ?> constructAdapter(AutoSpanRecyclerView recyclerView);
 
     /**
-     * Get the drawable ressource int used to represent this activity
+     * Get the drawable resource int used to represent this activity
      *
-     * @return the ressource int
+     * @return the resource int
      */
     protected abstract int getActivityIconRes();
 
     /***
-     * Get the string ressource int used for the title of this activity
-     * @return the ressource int
+     * Get the string resource int used for the title of this activity
+     * @return the resource int
      */
     protected abstract int getActivityTitleRes();
 
     /***
      * Construct the AutoSpanBehaviour used for this main activity's AutoSpanRecyclerView
-     * @return
      */
     protected abstract AutoSpanBehaviour constructSpanBehaviour();
 
@@ -139,7 +138,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
         initTitleAndIcon();
 
         setSupportActionBar(mMainToolbar);
-        getSupportActionBar().setTitle("");
+        if (getSupportActionBar() != null) getSupportActionBar().setTitle("");
         mMainToolbar.setPadding(0, 0, Service.dpToPixels(getBaseContext(), 5), 0); // to make sure the cast icon is aligned 16 dp from the right edge.
         mMainToolbar.bringToFront();
         mMainToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent));
@@ -165,7 +164,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
             initActivityAnimation();
         }
 
-        Service.increaseNavigationDrawerEdge(mDrawerLayout, getBaseContext());
+        Service.increaseNavigationDrawerEdge(mDrawerLayout);
 
         checkForTip();
         checkForUpdate();
@@ -216,12 +215,10 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if (savedInstanceState != null) {
-            if (mAdapter.getItemCount() >= 0) {
-                mRecyclerView.scrollToPosition(0);
-            }
+        if (mAdapter.getItemCount() >= 0) {
+            mRecyclerView.scrollToPosition(0);
         }
     }
 
@@ -262,17 +259,9 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
      * Scrolls to the top of the recyclerview. When the position is reached refreshElements() is called
      */
     public void scrollToTopAndRefresh() {
-        ScrollToStartPositionTask scrollTask = new ScrollToStartPositionTask(new ScrollToStartPositionTask.PositionCallBack() {
-            @Override
-            public void positionReached() {
-                if (mRecyclerView != null && mAdapter != null) {
-                    refreshElements();
-                }
-            }
-
-            @Override
-            public void cancelled() {
-
+        ScrollToStartPositionTask scrollTask = new ScrollToStartPositionTask(() -> {
+            if (mRecyclerView != null && mAdapter != null) {
+                refreshElements();
             }
         }, mRecyclerView, mScrollListener);
         scrollTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -302,7 +291,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     }
 
     /**
-     * Check if useablity Tips should be shown to the user
+     * Check if usability Tips should be shown to the user
      */
     private void checkForTip() {
         if (!settings.isTipsShown()) {
@@ -397,7 +386,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     }
 
     /**
-     * Starts the transition animation to another Main Activity. The method takes an intent where the final result activty has been set.
+     * Starts the transition animation to another Main Activity. The method takes an intent where the final result activity has been set.
      * The method puts extra necessary information on the intent before it is started.
      *
      * @param aIntent Intent containing the destination Activity
@@ -406,6 +395,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     public void transitionToOtherMainActivity(final Intent aIntent) {
         hideErrorView();
         GridLayoutManager manager = (GridLayoutManager) mRecyclerView.getLayoutManager();
+        if (manager == null) return;
         final int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
         final int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
 
@@ -423,7 +413,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
             @Override
             public void onAnimationEnd(Animation animation) {
                 isTransitioned = true;
-                ActivityCompat.startActivity(MainActivity.this, aIntent, null);
+                startActivity(aIntent, null);
             }
 
             public void onAnimationStart(Animation animation) {
@@ -435,7 +425,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
 
         AnimationService.startAlphaHideAnimation(mCircleIconWrapper);
         AnimationSet alphaHideAnimation = AnimationService.startAlphaHideAnimation(mTitleView);
-        if (mRecyclerView.getAdapter().getItemCount() != 0) {
+        if (mRecyclerView.getAdapter() != null && mRecyclerView.getAdapter().getItemCount() != 0) {
             AnimationService.animateFakeClearing(lastVisibleItemPosition, firstVisibleItemPosition, mRecyclerView, animationListener, mAdapter instanceof StreamsAdapter);
         } else {
             alphaHideAnimation.setAnimationListener(animationListener);
@@ -449,6 +439,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     public void checkIsBackFromMainActivity() {
         if (isTransitioned) {
             GridLayoutManager manager = (GridLayoutManager) mRecyclerView.getLayoutManager();
+            if (manager == null) return;
             final int DELAY_BETWEEN = 50;
             int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
             int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
@@ -478,7 +469,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     }
 
     /**
-     * Starts appropriate animations if the activity has been started by anouther main activity. When the animations end super.onBackPressed() is called.
+     * Starts appropriate animations if the activity has been started by another main activity. When the animations end super.onBackPressed() is called.
      * Returns true if that activity has been started through another main activity, else return false;
      */
     public boolean handleBackPressed() {
@@ -513,7 +504,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
             final int firstVisibleItemPosition = manager.findFirstVisibleItemPosition();
             final int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
             int duration = (int) alphaHideAnimation.getDuration();
-            if (mRecyclerView.getAdapter().getItemCount() != 0) {
+            if (mRecyclerView.getAdapter() != null && mRecyclerView.getAdapter().getItemCount() != 0) {
                 duration = AnimationService.animateFakeClearing(lastVisibleItemPosition, firstVisibleItemPosition, mRecyclerView, animationListener, mAdapter instanceof StreamsAdapter);
             } else {
                 alphaHideAnimation.setAnimationListener(animationListener);

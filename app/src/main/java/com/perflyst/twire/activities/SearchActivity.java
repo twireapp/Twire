@@ -56,13 +56,13 @@ public class SearchActivity extends ThemeActivity {
     private static final int POSITION_CHANNELS = 1;
     private static final int POSITION_GAMES = 2;
     private static final int TOTAL_COUNT = 3;
+    private final String LOG_TAG = getClass().getSimpleName();
     @BindView(R.id.container)
     protected ViewPager2 mViewPager;
     @BindView(R.id.ic_back_arrow)
     protected ImageView mBackIcon;
     @BindView(R.id.edit_text_search)
     protected EditText mSearchText;
-    private String LOG_TAG = getClass().getSimpleName();
     private String query;
     private SearchFragment mStreamsFragment, mChannelsFragment, mGamesFragment;
 
@@ -133,8 +133,6 @@ public class SearchActivity extends ThemeActivity {
     }
 
     public static class SearchGamesFragment extends SearchFragment<Game> {
-        private String LOG_TAG = getClass().getSimpleName();
-
         static SearchGamesFragment newInstance() {
             return new SearchGamesFragment();
         }
@@ -182,8 +180,6 @@ public class SearchActivity extends ThemeActivity {
     }
 
     public static class SearchStreamsFragment extends SearchFragment<StreamInfo> {
-        private String LOG_TAG = getClass().getSimpleName();
-
         static SearchStreamsFragment newInstance() {
             return new SearchStreamsFragment();
         }
@@ -218,8 +214,6 @@ public class SearchActivity extends ThemeActivity {
                 JSONObject fullDataObject = new JSONObject(Service.urlToJSONString(URL));
                 String STREAMS_ARRAY = "streams";
                 JSONArray mStreamsArray = fullDataObject.getJSONArray(STREAMS_ARRAY);
-                String TOTAL_IN_QUERY_INT = "_total";
-                int totalChannels = fullDataObject.getInt(TOTAL_IN_QUERY_INT);
 
                 for (int i = 0; i < mStreamsArray.length(); i++) {
                     JSONObject streamObject = mStreamsArray.getJSONObject(i);
@@ -232,8 +226,6 @@ public class SearchActivity extends ThemeActivity {
     }
 
     public static class SearchChannelsFragment extends SearchFragment<ChannelInfo> {
-        private String LOG_TAG = getClass().getSimpleName();
-
         static SearchChannelsFragment newInstance() {
             return new SearchChannelsFragment();
         }
@@ -270,8 +262,6 @@ public class SearchActivity extends ThemeActivity {
                 JSONObject fullDataObject = new JSONObject(Service.urlToJSONString(URL));
                 String CHANNELS_ARRAY = "channels";
                 JSONArray mChannelArray = fullDataObject.getJSONArray(CHANNELS_ARRAY);
-                String TOTAL_IN_QUERY_INT = "_total";
-                int totalChannels = fullDataObject.getInt(TOTAL_IN_QUERY_INT);
 
                 for (int i = 0; i < mChannelArray.length(); i++) {
                     JSONObject channel = mChannelArray.getJSONObject(i);
@@ -290,7 +280,6 @@ public class SearchActivity extends ThemeActivity {
         @BindView(R.id.circle_progress)
         protected ProgressView mProgressView;
         String query = null;
-        private String LOG_TAG = getClass().getSimpleName();
         private LazyFetchingOnScrollListener<E> lazyFetchingOnScrollListener;
         private int limit = 10,
                 offset = 0,
@@ -299,11 +288,6 @@ public class SearchActivity extends ThemeActivity {
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-        }
-
-        @Override
-        public void onResume() {
-            super.onResume();
         }
 
         @Override

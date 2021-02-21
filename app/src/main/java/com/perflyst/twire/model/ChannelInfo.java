@@ -38,12 +38,12 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
             return new ChannelInfo[size];
         }
     };
-    private int userId;
-    private String streamerName;
-    private String displayName;
+    private final int userId;
+    private final String streamerName;
+    private final String displayName;
+    private final int followers;
+    private final int views;
     private String streamDescription;
-    private int followers;
-    private int views;
     private URL logoURL;
     private URL videoBannerURL;
     private URL profileBannerURL;
@@ -158,11 +158,15 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         this.notifyWhenLive = notifyWhenLive;
     }
 
+    @NonNull
     public String toString() {
         return this.displayName;
     }
 
     public boolean equals(Object o) {
+        if (getClass() != o.getClass())
+            return false;
+
         ChannelInfo other = (ChannelInfo) o;
         return this.streamerName.equals(other.getStreamerName());
 
@@ -173,28 +177,12 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         return String.CASE_INSENSITIVE_ORDER.compare(another.getDisplayName(), getDisplayName());
     }
 
-    public String getNotificationTag() {
-        return streamerName;
-    }
-
-    public Bitmap getLogoImage() {
-        return logoImage;
-    }
-
     private void setLogoImage(Bitmap logoImage) {
         this.logoImage = logoImage;
     }
 
-    public Bitmap getVideoBannerImage() {
-        return videoBannerImage;
-    }
-
     private void setVideoBannerImage(Bitmap videoBannerImage) {
         this.videoBannerImage = videoBannerImage;
-    }
-
-    public Bitmap getProfileBannerImage() {
-        return profileBannerImage;
     }
 
     private void setProfileBannerImage(Bitmap profileBannerImage) {
@@ -209,16 +197,8 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         return this.displayName;
     }
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     public String getStreamerName() {
         return this.streamerName;
-    }
-
-    public void setStreamerName(String streamerName) {
-        this.streamerName = streamerName;
     }
 
     public String getStreamDescription() {
@@ -233,48 +213,20 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         return followers;
     }
 
-    public void setFollowers(int followers) {
-        this.followers = followers;
-    }
-
     public int getViews() {
         return views;
-    }
-
-    public void setViews(int views) {
-        this.views = views;
     }
 
     public URL getVideoBannerURL() {
         return videoBannerURL;
     }
 
-    public void setVideoBannerURL(URL videoBannerURL) {
-        this.videoBannerURL = videoBannerURL;
-    }
-
     public URL getLogoURL() {
         return logoURL;
     }
 
-    public void setLogoURL(URL logoURL) {
-        this.logoURL = logoURL;
-    }
-
-    public String getLogoURLString() {
-        if (logoURL == null) {
-            return null;
-        } else {
-            return logoURL.toString();
-        }
-    }
-
     public URL getProfileBannerURL() {
         return profileBannerURL;
-    }
-
-    public void setProfileBannerURL(URL profileBannerURL) {
-        this.profileBannerURL = profileBannerURL;
     }
 
     @Override

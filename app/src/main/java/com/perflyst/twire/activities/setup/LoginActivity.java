@@ -1,5 +1,6 @@
 package com.perflyst.twire.activities.setup;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,11 +30,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
-import com.perflyst.twire.activities.UsageTrackingAppCompatActivity;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetFollowsFromDB;
@@ -44,7 +45,7 @@ import com.rey.material.widget.SnackBar;
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
-public class LoginActivity extends UsageTrackingAppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private static GetFollowsFromDB subscriptionsTask;
     private static boolean toTransition = false, isPartOfSetup = true;
     private final String LOGIN_URL = "https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=" +
@@ -57,7 +58,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
     private final int REVEAL_ANIMATION_DURATION = 650;
     private final int REVEAL_ANIMATION_DELAY = 200;
     private final int SHOW_SNACKBAR_DELAY = 200;
-    private String LOG_TAG = "LoginActivity";
+    private final String LOG_TAG = "LoginActivity";
     private boolean isWebViewShown = false,
             isWebViewHiding = false,
             hasTransitioned = false;
@@ -83,8 +84,8 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
     private RelativeLayout mLoginTextContainer;
     private SnackBar mSnackbar;
 
-    public static boolean hasLoadedFollows() {
-        return subscriptionsTask != null && subscriptionsTask.isFinished();
+    public static boolean loadingFollows() {
+        return subscriptionsTask == null || !subscriptionsTask.isFinished();
     }
 
     @Override
@@ -179,8 +180,8 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
             isPartOfSetup = getIntent().getBooleanExtra(getString(R.string.login_intent_part_of_setup), true);
 
             if (getIntent().hasExtra(getString(R.string.login_intent_token_not_valid)) && getIntent().getBooleanExtra(getString(R.string.login_intent_token_not_valid), false)) {
-                mLoginTextLineOne.setText(getString(R.string.login_unvalid_token_text_line_one));
-                mLoginTextLineTwo.setText(getString(R.string.login_unvalid_token_text_line_two));
+                mLoginTextLineOne.setText(getString(R.string.login_invalid_token_text_line_one));
+                mLoginTextLineTwo.setText(getString(R.string.login_invalid_token_text_line_two));
             }
         }
     }
@@ -243,10 +244,6 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         // Seb you wonderful man. - Seb from the future
         subscriptionsTask = new GetFollowsFromDB();
         subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
-    }
-
-    public void handleLoginFailure() {
-
     }
 
     public void handleNoInternet() {
@@ -337,6 +334,7 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
         mSnackbar.applyStyle(R.style.snack_bar_style_mobile);
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void initLoginView() {
         CookieManager cm = CookieManager.getInstance();
         cm.removeAllCookie();
@@ -436,7 +434,9 @@ public class LoginActivity extends UsageTrackingAppCompatActivity {
     private void navigateToNotificationActivity() {
         // Go to the login activity, with no transition.
         hasTransitioned = true;
-        if (!LoginActivity.hasLoadedFollows()) {
+        Settings settings = new Settings(getBaseContext());
+        settings.setSetup(true);
+        if (LoginActivity.loadingFollows()) {
             this.startActivity(new Intent(getBaseContext(), ConfirmSetupActivity.class));
         } else {
             this.startActivity(Service.getLoggedInIntent(getBaseContext()));

@@ -10,10 +10,11 @@ import java.util.HashMap;
  * Created by Sebastian Rask Jepsen on 28/07/16.
  */
 public class Emote implements Comparable<Emote>, Serializable {
-    private String emoteKeyword;
+    private final String emoteKeyword;
+    private final boolean isTextEmote;
     private String urlTemplate;
     private HashMap<Integer, String> urlMap;
-    private boolean isTextEmote, isSubscriberEmote, isCustomChannelEmote;
+    private boolean isSubscriberEmote, isCustomChannelEmote;
 
     public Emote(String emoteKeyword, String urlTemplate) {
         this.emoteKeyword = emoteKeyword;
@@ -30,6 +31,18 @@ public class Emote implements Comparable<Emote>, Serializable {
     public Emote(String textEmoteUnicode) {
         emoteKeyword = textEmoteUnicode;
         isTextEmote = true;
+    }
+
+    public static Emote Twitch(String keyword, String id) {
+        return new Emote(keyword, "https://static-cdn.jtvnw.net/emoticons/v1/" + id + "/{0}.0");
+    }
+
+    public static Emote BTTV(String keyword, String id) {
+        return new Emote(keyword, "https://cdn.betterttv.net/emote/" + id + "/{0}x");
+    }
+
+    public static Emote FFZ(String keyword, HashMap<Integer, String> urlMap) {
+        return new Emote(keyword, urlMap);
     }
 
     public boolean isCustomChannelEmote() {
@@ -84,21 +97,6 @@ public class Emote implements Comparable<Emote>, Serializable {
         return emoteKeyword;
     }
 
-    public static Emote Twitch(String keyword, String id)
-    {
-        return new Emote(keyword, "https://static-cdn.jtvnw.net/emoticons/v1/" + id + "/{0}.0");
-    }
-
-    public static Emote BTTV(String keyword, String id)
-    {
-        return new Emote(keyword, "https://cdn.betterttv.net/emote/" + id + "/{0}x");
-    }
-
-    public static Emote FFZ(String keyword, HashMap<Integer, String> urlMap)
-    {
-        return new Emote(keyword, urlMap);
-    }
-
     @Override
     public int compareTo(@NonNull Emote emote) {
         if (this.isCustomChannelEmote() && !emote.isCustomChannelEmote()) {
@@ -119,7 +117,8 @@ public class Emote implements Comparable<Emote>, Serializable {
         String emoteUrl = getEmoteUrl(1);
 
         if (isTextEmote != emote.isTextEmote) return false;
-        if (emoteUrl != null ? !emoteUrl.equals(emote.getEmoteUrl(1)) : emote.getEmoteUrl(1) != null) return false;
+        if (emoteUrl != null ? !emoteUrl.equals(emote.getEmoteUrl(1)) : emote.getEmoteUrl(1) != null)
+            return false;
         return emoteKeyword != null ? emoteKeyword.equals(emote.emoteKeyword) : emote.emoteKeyword == null;
     }
 

@@ -45,22 +45,19 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         T extends MainActivityAdapter.ElementsViewHolder> extends RecyclerView.Adapter<T> {
-    private boolean isBelowLollipop;
+    private final boolean isBelowLollipop;
+    private final HashMap<CharSequence, PreviewTarget> mTargets;
+    private final AutoSpanRecyclerView mRecyclerView;
+    private final int translateLength, cardWidth;
+    private final View.OnClickListener mOnClickListener;
+    private final View.OnLongClickListener mOnLongClickListener;
+    private final Settings mSettings;
     private String LOG_TAG,
             elementStyle;
     private List<E> mElements;
-    private HashMap<CharSequence, PreviewTarget> mTargets;
-    private AutoSpanRecyclerView mRecyclerView;
     private boolean sortElements, animateInsert;
-    private int translateLength,
-            mLastPosition,
-            cardWidth,
-            topMargin,
-            layout_ressource;
+    private int mLastPosition, topMargin;
     private Context context;
-    private View.OnClickListener mOnClickListener;
-    private View.OnLongClickListener mOnLongClickListener;
-    private Settings mSettings;
 
     public MainActivityAdapter(AutoSpanRecyclerView recyclerView, Context aContext) {
         mElements = new ArrayList<>();
@@ -71,10 +68,9 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
 
         elementStyle = initElementStyle();
         mLastPosition = -1;
-        topMargin = (int) context.getResources().getDimension(getTopMarginRessource());
+        topMargin = (int) context.getResources().getDimension(getTopMarginResource());
         cardWidth = calculateCardWidth();
         translateLength = context.getResources().getDisplayMetrics().heightPixels - topMargin;
-        layout_ressource = getLayoutRessource();
         isBelowLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
         sortElements = true;
         animateInsert = true;
@@ -91,7 +87,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
     }
 
     @Override
-    public void onBindViewHolder(final T viewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final T viewHolder, final int position) {
         final E element = mElements.get(position);
         if (element == null) {
             return;
@@ -108,12 +104,13 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
     }
 
     @Override
+    @NonNull
     // Is called every time a new viewHolder instance is created.
     // It tells the adapter how we want to the layout of the data for each row should be formatted
     public T onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(getLayoutRessource(), viewGroup, false);
+                inflate(getLayoutResource(), viewGroup, false);
 
         itemView.setOnClickListener(mOnClickListener);
         itemView.setOnLongClickListener(mOnLongClickListener);
@@ -163,7 +160,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
              * clip its children that intersect with rounded corners. Round the image corners so
              * the rounded corners still appear. */
             creator = creator.transform(new RoundedTopTransformation(
-                    context.getResources().getDimension(getCornerRadiusRessource())));
+                    context.getResources().getDimension(getCornerRadiusResource())));
         }
         PreviewTarget mTarget = new PreviewTarget() {
             private boolean loaded = false;
@@ -185,7 +182,8 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
             }
 
             @Override
-            public void onLoadCleared(@Nullable Drawable placeholder) {}
+            public void onLoadCleared(@Nullable Drawable placeholder) {
+            }
         };
 
         creator.into(mTarget);
@@ -380,25 +378,25 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
     abstract void setViewData(E element, T viewHolder);
 
     /**
-     * Returns the layout ressource used for the views showing the element information
+     * Returns the layout resource used for the views showing the element information
      *
-     * @return the layout ressource
+     * @return the layout resource
      */
-    abstract int getLayoutRessource();
+    abstract int getLayoutResource();
 
     /**
-     * Returns the dimension ressource for the corner radius
+     * Returns the dimension resource for the corner radius
      *
-     * @return the ressource
+     * @return the resource
      */
-    abstract int getCornerRadiusRessource();
+    abstract int getCornerRadiusResource();
 
     /**
-     * Returns the dimension ressource that defines how long the first added element should be from the top.
+     * Returns the dimension resource that defines how long the first added element should be from the top.
      *
-     * @return the ressource
+     * @return the resource
      */
-    abstract int getTopMarginRessource();
+    abstract int getTopMarginResource();
 
     abstract int calculateCardWidth();
 

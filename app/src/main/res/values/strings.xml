@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Twire</string>
-    <string name="app_id" translatable="false">com.perflyst.twire</string>
 
     <string name="ok">OK</string>
     <string name="done">DONE</string>
@@ -24,9 +23,7 @@
     <string name="vods">Videos</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
-    <string name="percent">%s %%</string>
-    <string name="disable_all">DISABLE ALL</string>
-    <string name="enable_all">ENABLE ALL</string>
+    <string name="percent">%d %%</string>
 
     <!-- Time -->
     <string name="today">Today</string>
@@ -54,7 +51,6 @@
     <string name="chat_only">Chat only</string>
     <string name="available_qualities">Quality settings</string>
     <string name="quality_auto">Auto</string>
-    <string name="quality_audio">Audio only</string>
 
     <!-- StreamFragment -->
     <string name="stream_sleep_timer_stopped">Sleep timer stopped</string>
@@ -63,23 +59,17 @@
 
     <string name="stream_fragment_tag" translatable="false">StreamFragmentTag</string>
     <string name="stream_fragment_streamerInfo" translatable="false">streamerInfoForIntent</string>
-    <string name="stream_fragment_streamInfo" translatable="false">streamInfoForIntent</string>
     <string name="stream_fragment_viewers" translatable="false">streamViewers</string>
 
     <string name="stream_fragment_autoplay" translatable="false">streamAutoPlay</string>
-    <string name="stream_fragment_name" translatable="false">streamer_twitch_name</string>
-    <string name="stream_fragment_display_name" translatable="false">streamer_display_name</string>
     <string name="stream_fragment_vod_id" translatable="false">stream_vod_id</string>
     <string name="stream_fragment_vod_length" translatable="false">stream_vod_length</string>
-    <string name="stream_fragment_islivestream" translatable="false">stream_is_live_stream</string>
     <string name="stream_preview_transition" translatable="false">SharedViewPreviewTransition</string>
     <string name="stream_preview_url" translatable="false">stream_image_preview</string>
     <string name="stream_shared_transition" translatable="false">stream_has_shared_transition</string>
     <string name="stream_preview_alpha" translatable="false">stream_image_alpha</string>
-    <string name="stream_preview_vod" translatable="false">stream_remove_black_bars</string>
     <string name="stream_sleep_timer_title">Sleep timer</string>
     <string name="stream_seek_dialog_title">Seek to</string>
-    <string name="stream_no_audio_only">Sorry, audio-only is not available for this stream</string>
     <string name="stream_audio_only_active">Playing audio only</string>
 
     <string name="stream_fullscreen">Fullscreen</string>
@@ -96,12 +86,10 @@
     <string name="vod_streams_card_stream_views">%s views</string>
 
     <!-- Fonts -->
-    <string name="font_roboto_thin" translatable="false">sans-serif-thin</string>
     <string name="font_roboto_regular" translatable="false">sans-serif</string>
     <string name="font_roboto_mono" translatable="false">monospace</string>
     <string name="font_roboto_medium" translatable="false">sans-serif-medium</string>
     <string name="font_roboto_light" translatable="false">sans-serif-light</string>
-    <string name="font_roboto_condensed" translatable="false">sans-serif-condensed</string>
 
     <!-- Cards -->
     <string name="card_style_minimal">Collapsed</string>
@@ -132,10 +120,8 @@
     <string name="no_server_response_message">Oops, Twitch\'s servers don\'t seem to be responding. Refresh?</string>
 
     <!-- My Games Activity -->
-    <string name="my_games_activity_title" translatable="false">@string/navigation_drawer_my_games_title</string>
 
     <!-- My Channels activity -->
-    <string name="my_channels_error_none_found">No follows found</string>
     <string name="my_channels_activity_title" translatable="false">@string/navigation_drawer_follows_title</string>
     <string name="my_channels_activity_label">Following</string>
 
@@ -164,9 +150,7 @@
 
     <!-- OnlineStreamCardAdapter-->
     <string name="intent_key_streamer_info" translatable="false">StreamerInfoIntent</string>
-    <string name="intent_key_stream_info" translatable="false">StreamInfoIntent</string>
     <string name="intent_key_stream_viewers" translatable="false">StreamViewers</string>
-    <string name="intent_key_streamer_name" translatable="false">StreamerNameIntent</string>
 
     <!-- Welcome Activity -->
     <string name="title_activity_welcome">Twire setup</string>
@@ -184,8 +168,8 @@
     <string name="login_on_success_message">Hello, %s</string>
     <string name="login_intent_part_of_setup" translatable="false">login_intent_part_of_setup</string>
     <string name="login_intent_token_not_valid" translatable="false">login_intent_token_not_valid</string>
-    <string name="login_unvalid_token_text_line_one">Unfortunately you </string>
-    <string name="login_unvalid_token_text_line_two">have to log in again</string>
+    <string name="login_invalid_token_text_line_one">Unfortunately you </string>
+    <string name="login_invalid_token_text_line_two">have to log in again</string>
     <string name="skip_text">SKIP</string>
 
     <!-- Confirm Setup Activity -->
@@ -244,7 +228,6 @@
 
     <!-- Game Activity -->
     <string name="game_intent_key" translatable="false">GAME_OBJECT</string>
-    <string name="game_intent_image_key" translatable="false">GAME_INTENT_IMAGE</string>
 
     <!-- Search Activity -->
     <string name="search_hint">Search</string>
@@ -257,7 +240,6 @@
     <string name="navigation_drawer_my_streams_title">My streams</string>
     <string name="navigation_drawer_top_streams_title">Top streams</string>
     <string name="navigation_drawer_follows_title">Followed streamers</string>
-    <string name="navigation_drawer_my_games_title">My games</string>
     <string name="navigation_drawer_top_games_title">Top games</string>
     <string name="navigation_drawer_search_title">Search</string>
     <string name="navigation_drawer_settings_title">Settings</string>
@@ -273,10 +255,7 @@
     <string name="true_night_theme_name">True night</string>
 
     <!-- Shared Preferences -->
-    <string name="pref_online_streams_error_key" translatable="false">pref_online_streams_error</string>
     <string name="title_activity_game" translatable="false">GameActivity</string>
-    <string name="title_activity_conform_setup" translatable="false">ConformSetupActivity</string>
-    <string name="title_activity_start_up" translatable="false">StartUpActivity</string>
     <string name="title_activity_search" translatable="false">SearchActivity</string>
 
     <!-- Tooltips -->
@@ -301,6 +280,13 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.9.3</item>
+        <item>F Fix VODs not loading.</item>
+        <item>F Fix only seeing 20 followed channels.</item>
+        <item>F Fix not staying logged in between relaunches.</item>
+        <item>A Add Chinese (Simplified) and Finnish translations.</item>
+        <item>C Update German translation.</item>
+
         <item>V 2.9.2</item>
         <item>F Fix only the Auto quality being available.</item>
         <item>F Fix page titles not being translated in some languages.</item>

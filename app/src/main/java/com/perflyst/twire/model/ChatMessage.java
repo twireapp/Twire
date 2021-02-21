@@ -1,16 +1,18 @@
 package com.perflyst.twire.model;
 
 
+import androidx.annotation.NonNull;
+
 import com.perflyst.twire.chat.ChatManager;
 
 import java.util.List;
 
 public class ChatMessage {
-    private String message;
-    private String name;
-    private String color;
-    private List<Badge> badges;
-    private List<ChatEmote> emotes;
+    private final String message;
+    private final String name;
+    private final String color;
+    private final List<Badge> badges;
+    private final List<ChatEmote> emotes;
     private boolean highlight;
 
     public ChatMessage(String message, String name, String color, List<Badge> badges, List<ChatEmote> emotes, boolean highlight) {
@@ -67,6 +69,7 @@ public class ChatMessage {
     }
 
     @Override
+    @NonNull
     public String toString() {
         return "ChatMessage{" +
                 "message='" + message + '\'' +

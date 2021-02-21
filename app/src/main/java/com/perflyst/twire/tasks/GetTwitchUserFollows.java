@@ -5,8 +5,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.model.ChannelInfo;
-import com.perflyst.twire.service.JSONService;
-import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.service.TempStorage;
 
@@ -15,102 +13,68 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Request;
+
+import static com.perflyst.twire.service.Service.SimpleResponse;
+import static com.perflyst.twire.service.Service.deleteStreamerInfoFromDB;
+import static com.perflyst.twire.service.Service.getApplicationClientID;
+import static com.perflyst.twire.service.Service.getStreamerInfoFromUserId;
+import static com.perflyst.twire.service.Service.makeRequest;
+
 /**
  * Connects to Twitch to retrieve a list of streamers that a specified user follow.
- *
- * Returns an ArrayList of streamnames
+ * <p>
+ * Returns an ArrayList of stream names
  */
 
 public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
     private final String LOG_TAG = getClass().getSimpleName();
-    private long timerStart = System.currentTimeMillis();
+    private final long timerStart = System.currentTimeMillis();
     private WeakReference<Context> baseContext;
-
-    private ArrayList<Integer> getFollowIdsFromJSONObject(JSONObject mJSON) throws JSONException {
-        String FOLLOWS_ARRAY_KEY = "follows";
-        JSONArray followsArray = mJSON.getJSONArray(FOLLOWS_ARRAY_KEY);
-        ArrayList<Integer> followIds = new ArrayList<>();
-
-        // For every JSON object (follow) in the array, add it to the list of followed streamers
-        for (int j = 0; j < followsArray.length(); j++) {
-            String CHANNEL_OBJECT_KEY = "channel";
-            JSONObject channelObject = followsArray.getJSONObject(j).getJSONObject(CHANNEL_OBJECT_KEY);
-            try {
-                ChannelInfo mChannelInfo = JSONService.getStreamerInfo(channelObject, false);
-                Service.updateStreamerInfoDb(mChannelInfo, baseContext.get()); // Update the current database object
-                followIds.add(mChannelInfo.getUserId());
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return followIds;
-    }
 
     @Override
     protected ArrayList<ChannelInfo> doInBackground(Object... params) {
         ArrayList<Integer> userSubs = new ArrayList<>();
 
-        int currentOffset = 0;
+        String currentCursor = "";
         baseContext = new WeakReference<>((Context) params[1]);
 
         Settings mSettings = new Settings(baseContext.get());
         int userId = mSettings.getGeneralTwitchUserID();
 
-        int MAXIMUM_FOLLOWS_FOR_QUERY = 20;
-        final String BASE_URL = "https://api.twitch.tv/kraken/users/"
-                + userId
-                + "/follows/channels?direction=DESC&limit="
-                + MAXIMUM_FOLLOWS_FOR_QUERY
-                + "&offset=" + currentOffset + "&sortby=created_at";
-
+        final String BASE_URL = "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + userId + "&after=";
 
         // Get all the userIds of a users follows
         try {
-            // First create a JSON string to get the total amount of follows. Then create a similar JSON string with a limit of the total amount of follows
-            JSONObject JSONStringFull = new JSONObject(Service.urlToJSONString(BASE_URL));
-            String TOTAL_FOLLOWS_INTEGER_KEY = "_total";
-            int total = JSONStringFull.getInt(TOTAL_FOLLOWS_INTEGER_KEY);
-            int roundedTotal = ((total + (MAXIMUM_FOLLOWS_FOR_QUERY - 1)) / MAXIMUM_FOLLOWS_FOR_QUERY) * MAXIMUM_FOLLOWS_FOR_QUERY;// Round up the nearest MAXIMUM
+            while (true) {
+                Request request = new Request.Builder()
+                        .url(BASE_URL + currentCursor)
+                        .header("Client-ID", getApplicationClientID())
+                        .header("Authorization", "Bearer " + mSettings.getGeneralTwitchAccessToken())
+                        .build();
 
-            int numberOfQueries = roundedTotal / MAXIMUM_FOLLOWS_FOR_QUERY;
-            ArrayList<FollowIdsFromURLThread> mThreads = new ArrayList<>();
-            for (int i = 0; i < numberOfQueries - 1; i++) {
-                currentOffset += MAXIMUM_FOLLOWS_FOR_QUERY;
-                String newURL = "https://api.twitch.tv/kraken/users/"
-                        + userId
-                        + "/follows/channels?direction=DESC&limit="
-                        + MAXIMUM_FOLLOWS_FOR_QUERY
-                        + "&offset=" + currentOffset + "&sortby=created_at";
+                SimpleResponse response = makeRequest(request);
+                if (response == null)
+                    return null;
 
-                FollowIdsFromURLThread mFollowThread = new FollowIdsFromURLThread(newURL);
-                mFollowThread.start();
-                mThreads.add(mFollowThread);
-            }
+                JSONObject page = new JSONObject(response.body);
+                JSONArray follows = page.getJSONArray("data");
 
-            // Make sure all the threads finish
-            for (Thread mThread : mThreads) {
-                try {
-                    mThread.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                for (int i = 0; i < follows.length(); i++) {
+                    JSONObject follow = follows.getJSONObject(i);
+                    userSubs.add(follow.getInt("to_id"));
                 }
+
+                JSONObject pagination = page.getJSONObject("pagination");
+                if (!pagination.has("cursor"))
+                    break;
+
+                currentCursor = pagination.getString("cursor");
             }
-
-            // Get the results from the threads and add them to the "result" list
-            userSubs.addAll(getFollowIdsFromJSONObject(JSONStringFull));
-            for (FollowIdsFromURLThread mThread : mThreads) {
-                userSubs.addAll(mThread.getFollowIds());
-            }
-
-            Log.d(LOG_TAG, "Follows Found " + userSubs.size() + " - Should be " + total + " - With " + mThreads.size() + " threads");
-
-
         } catch (JSONException e) {
             Log.w(LOG_TAG, e.getMessage());
         }
@@ -127,7 +91,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         // If a retrieved follow is not in the loaded streamers - Then add it to the database.
         for (Integer si : loadedStreamerIds) {
             if (!userSubs.contains(si)) {
-                boolean result = Service.deleteStreamerInfoFromDB(baseContext.get(), si);
+                boolean result = deleteStreamerInfoFromDB(baseContext.get(), si);
                 try {
                     for (ChannelInfo info : TempStorage.getLoadedStreamers()) {
                         if (si.equals(info.getUserId()))
@@ -199,32 +163,9 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         Log.d(LOG_TAG, "Completed task in " + TimeUnit.MILLISECONDS.toSeconds(duration) + " seconds");
     }
 
-    private class FollowIdsFromURLThread extends Thread {
-        ArrayList<Integer> mFollowIds = new ArrayList<>();
-        private String URL;
-
-        FollowIdsFromURLThread(String URL) {
-            this.URL = URL;
-        }
-
-        @Override
-        public void run() {
-            try {
-                JSONObject mJSON = new JSONObject(Service.urlToJSONString(URL));
-                mFollowIds = getFollowIdsFromJSONObject(mJSON);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        ArrayList<Integer> getFollowIds() {
-            return mFollowIds;
-        }
-    }
-
     private class StreamerInfoFromIdsThread extends Thread {
-        private ArrayList<Integer> userIds;
-        private ArrayList<ChannelInfo> streamers = new ArrayList<>();
+        private final ArrayList<Integer> userIds;
+        private final ArrayList<ChannelInfo> streamers = new ArrayList<>();
 
         StreamerInfoFromIdsThread(ArrayList<Integer> ids) {
             this.userIds = ids;
@@ -233,7 +174,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         @Override
         public void run() {
             for (Integer name : userIds) {
-                ChannelInfo info = Service.getStreamerInfoFromUserId(name);
+                ChannelInfo info = getStreamerInfoFromUserId(name);
                 if (info != null) {
                     info.setNotifyWhenLive(true); // Enable by default
                 }

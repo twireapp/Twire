@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,12 +48,12 @@ import static com.perflyst.twire.misc.Utils.appendSpan;
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHolder> implements Drawable.Callback {
     private final String LOG_TAG = getClass().getSimpleName();
-    private List<ChatMessage> messages;
-    private ChatRecyclerView mRecyclerView;
-    private Activity context;
-    private Settings settings;
-    private ChatAdapterCallback mCallback;
-    private boolean isNightTheme;
+    private final List<ChatMessage> messages;
+    private final ChatRecyclerView mRecyclerView;
+    private final Activity context;
+    private final Settings settings;
+    private final ChatAdapterCallback mCallback;
+    private final boolean isNightTheme;
 
     public ChatAdapter(ChatRecyclerView aRecyclerView, Activity aContext, ChatAdapterCallback aCallback) {
         messages = new ArrayList<>();
@@ -65,6 +66,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     @Override
+    @NonNull
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater
                 .from(parent.getContext())
@@ -74,7 +76,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     @Override
-    public void onBindViewHolder(final ContactViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ContactViewHolder holder, int position) {
         try {
             final ChatMessage message = messages.get(position);
             if (message.getMessage().equals("Test")) {
@@ -96,8 +98,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             appendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
 
             int preLength = builder.length();
-            String PREMESSAGE = ": ";
-            String messageWithPre = PREMESSAGE + message.getMessage();
+            String beforeMessage = ": ";
+            String messageWithPre = beforeMessage + message.getMessage();
             appendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
 
             checkForLink(builder.toString(), builder);
@@ -115,7 +117,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
                     holder.message.setTextIsSelectable(true);
 
-                    builder.setSpan(emoteSpan, fromPosition + PREMESSAGE.length(), toPosition + 1 + PREMESSAGE.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    builder.setSpan(emoteSpan, fromPosition + beforeMessage.length(), toPosition + 1 + beforeMessage.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 }
             }
 
@@ -152,7 +154,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         return result;
     }
 
-    private void checkForLink(String message, SpannableStringBuilder spanbuilder) {
+    private void checkForLink(String message, SpannableStringBuilder spanBuilder) {
         Matcher linkMatcher = Patterns.WEB_URL.matcher(message);
         while (linkMatcher.find()) {
             String url = linkMatcher.group(0);
@@ -163,7 +165,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             final String finalUrl = url;
             ClickableSpan clickableSpan = new ClickableSpan() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(@NonNull View view) {
                     CustomTabsIntent.Builder mTabs = new CustomTabsIntent.Builder();
                     mTabs.setStartAnimations(context, R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim);
                     mTabs.setExitAnimations(context, R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim);
@@ -173,7 +175,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                 }
             };
 
-            spanbuilder.setSpan(clickableSpan, linkMatcher.start(), linkMatcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spanBuilder.setSpan(clickableSpan, linkMatcher.start(), linkMatcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
     }
 
@@ -257,7 +259,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     @Override
-    public void invalidateDrawable(Drawable drawable) {
+    public void invalidateDrawable(@NonNull Drawable drawable) {
         Log.d(LOG_TAG, "Invalidate drawable");
 /*
         if (drawable instanceof GifDrawable) {
@@ -269,13 +271,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     @Override
-    public void scheduleDrawable(Drawable drawable, Runnable runnable, long l) {
+    public void scheduleDrawable(@NonNull Drawable drawable, @NonNull Runnable runnable, long l) {
         Log.d(LOG_TAG, "Schedule drawable");
 
     }
 
     @Override
-    public void unscheduleDrawable(Drawable drawable, Runnable runnable) {
+    public void unscheduleDrawable(@NonNull Drawable drawable, @NonNull Runnable runnable) {
         Log.d(LOG_TAG, "Unschedule drawable");
     }
 
@@ -284,7 +286,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     static class ContactViewHolder extends RecyclerView.ViewHolder {
-        private TextView message;
+        private final TextView message;
 
         ContactViewHolder(View itemView) {
             super(itemView);

@@ -54,7 +54,6 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
         final String URL = "https://api.twitch.tv/kraken/streams/followed?oauth_token=" + new Settings(getBaseContext()).getGeneralTwitchAccessToken() + "&limit=" + getLimit() + "&offset=" + getCurrentOffset() + "&stream_type=live";
         final String ARRAY_KEY = "streams";
-        final String TOTAL_STREAMS_INT = "_total";
 
         List<StreamInfo> mResultList = new ArrayList<>();
         String jsonString = Service.urlToJSONString(URL);
@@ -66,15 +65,14 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
             mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
         }
 
-		int elementsToFetch = mAdapter.getItemCount() + mResultList.size();
-		if (!mResultList.isEmpty()) {
-			elementsToFetch += 1;
-		}
-		setMaxElementsToFetch(elementsToFetch);
+        int elementsToFetch = mAdapter.getItemCount() + mResultList.size();
+        if (!mResultList.isEmpty()) {
+            elementsToFetch += 1;
+        }
+        setMaxElementsToFetch(elementsToFetch);
 
-		shouldShowErrorView();
+        shouldShowErrorView();
 
         return mResultList;
     }
 }
-

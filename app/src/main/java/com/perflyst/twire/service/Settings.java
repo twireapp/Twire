@@ -11,12 +11,10 @@ import com.google.gson.reflect.TypeToken;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.model.Emote;
-import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.tasks.GetLiveStreamURL;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by SebastianRask on 29-04-2015.
@@ -36,27 +34,16 @@ public class Settings {
     private final String GENERAL_TWITCH_USER_IS_PARTNER = "genTwitchUserIsPartner";
     private final String GENERAL_TWITCH_USER_ID = "genTwitchUserID";
     private final String GENERAL_FILTER_TOP_STREAMS_LANGUAGE = "genFilterTopStreamLanguage";
-    private final String NOTIFICATIONS_CHECK_INTERVAL_KEY = "notCheckInterval";
-    private final String NOTIFICATIONS_VIBRATIONG_KEY = "notVibration";
-    private final String NOTIFICATIONS_SOUND_KEY = "notSound";
-    private final String NOTIFICATIONS_LED_KEY = "notLED";
-    private final String NOTIFICATIONS_SCREEM_WAKE_KEY = "notScreenWake";
-    private final String NOTIFICATIONS_QUIET_HOURS_KEY = "notQuietHours";
-    private final String NOTIFICATIONS_QUIET_HOURS_START_HOUR = "notQuietStartHour";
-    private final String NOTIFICATIONS_QUIET_HOURS_START_MINUTE = "notQuietStartMinute";
-    private final String NOTIFICATIONS_QUIET_HOURS_END_HOUR = "notQuietEndHour";
-    private final String NOTIFICATIONS_QUIET_HOURS_END_MINUTE = "notQuietEndMinute";
     private final String NOTIFICATIONS_IS_DISABLED = "notIsDisabled";
-    private final String NOTIFICATIONS_SHOW_IN_QUIET_HOURS = "notShowInQuietHours";
     private final String STREAM_PLAYER_SHOW_VIEWERCOUNT = "streamPlayerShowViewerCount",
-            STREAM_PLAYER_REAVEL_NAVIGATION = "streamPlayerRevealNavigation",
+            STREAM_PLAYER_REVEAL_NAVIGATION = "streamPlayerRevealNavigation",
             STREAM_PLAYER_AUTO_PLAYBACK = "streamPlayerAutoPlackbackOnReturn";
     private final String APPEARANCE_STREAM_STYLE = "appStreamStyle";
     private final String APPEARANCE_GAME_STYLE = "appGameStyle";
     private final String APPEARANCE_FOLLOW_STYLE = "appFollowStyle";
-    private final String APPERANCE_STREAM_SIZE = "appStreamSize";
-    private final String APPERANCE_GAME_SIZE = "appGameSize";
-    private final String APPERANCE_STREAMER_SIZE = "appStreamerSize";
+    private final String APPEARANCE_STREAM_SIZE = "appStreamSize";
+    private final String APPEARANCE_GAME_SIZE = "appGameSize";
+    private final String APPEARANCE_STREAMER_SIZE = "appStreamerSize";
     private final String THEME_CHOSEN = "themeColorScheme";
     private final String STREAM_PREF_QUALITY = "streamQualPref";
     private final String STREAM_VOD_PROGRESS = "streamVodProgress";
@@ -67,19 +54,17 @@ public class Settings {
     private final String SETUP_IS_LOGGED_IN = "setupIsLoggedIn";
     private final String TIP_IS_SHOWN = "tipsAreShown";
     private final String GENERAL_START_PAGE = "genUserStartPage";
-    private final String CHAT_EMOTE_STORAGE = "genSaveEmotesToLocalStorage";
     private final String CHAT_EMOTE_SIZE = "chatEmoteSize";
     private final String CHAT_MESSAGE_SIZE = "chatMessageSize";
     private final String CHAT_LANDSCAPE_ENABLE = "chatLandscapeEnable";
-    private final String CHAT_LANDSCAPE_SWIPABLE = "chatLandscapeSwipable";
+    private final String CHAT_LANDSCAPE_SWIPEABLE = "chatLandscapeSwipable";
     private final String CHAT_LANDSCAPE_WIDTH = "chatLandscapeWidth";
     private final String CHAT_RECENT_EMOTES = "chatRecentEmotes";
     private final String CHAT_KEYBOARD_HEIGHT = "chatKeyboardHeight";
     private final String NOTIFY_LIVE = "notifyUserLive";
     private final String LAST_START_UP_VERSION_CODE = "lastStartUpVersionCode";
-    private final String IS_UPDATED = "hasBeenUpdated";
     private final String SHOW_CHANGELOGS = "showChangelogs";
-    private Context context;
+    private final Context context;
 
     public Settings(Context context) {
         this.context = context;
@@ -108,19 +93,6 @@ public class Settings {
     private <T> T getValue(Type type, T defaultValue) {
         SharedPreferences preferences = getPreferences();
         return preferences.contains("lastNotificationCheckStreamList") ? (T) new Gson().fromJson(preferences.getString("lastNotificationCheckStreamList", ""), type) : defaultValue;
-    }
-
-    public List<StreamInfo> getLastNotificationCheckLiveChannels() {
-        return getValue(new TypeToken<List<StreamInfo>>() {
-        }.getType(), new ArrayList<>());
-    }
-
-    /***
-     * Get and set Channel names that were online last notification check.
-     */
-    public void setLastNotificationCheckLiveChannels(List<StreamInfo> liveChannels) {
-        String LAST_NOTIFICATIONS_CHECK_LIVESTREAMS = "lastNotificationCheckStreamList";
-        setValue(LAST_NOTIFICATIONS_CHECK_LIVESTREAMS, liveChannels);
     }
 
     public int getLastVersionCode() {
@@ -166,8 +138,6 @@ public class Settings {
 
     /**
      * Chat - Keyboard height. Save the height of users soft keyboard
-     *
-     * @param height
      */
     public void setKeyboardHeight(int height) {
         SharedPreferences.Editor editor = getEditor();
@@ -192,7 +162,7 @@ public class Settings {
 
     public String getAppearanceGameSize() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getString(this.APPERANCE_GAME_SIZE, context.getString(R.string.card_size_large));
+        return preferences.getString(this.APPEARANCE_GAME_SIZE, context.getString(R.string.card_size_large));
     }
 
     /**
@@ -201,13 +171,13 @@ public class Settings {
 
     public void setAppearanceGameSize(String sizeName) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putString(this.APPERANCE_GAME_SIZE, sizeName);
+        editor.putString(this.APPEARANCE_GAME_SIZE, sizeName);
         editor.commit();
     }
 
     public String getAppearanceStreamSize() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getString(this.APPERANCE_STREAM_SIZE, context.getString(R.string.card_size_large));
+        return preferences.getString(this.APPEARANCE_STREAM_SIZE, context.getString(R.string.card_size_large));
     }
 
     /**
@@ -216,13 +186,13 @@ public class Settings {
 
     public void setAppearanceStreamSize(String sizeName) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putString(this.APPERANCE_STREAM_SIZE, sizeName);
+        editor.putString(this.APPEARANCE_STREAM_SIZE, sizeName);
         editor.commit();
     }
 
     public String getAppearanceChannelSize() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getString(this.APPERANCE_STREAMER_SIZE, context.getString(R.string.card_size_large));
+        return preferences.getString(this.APPEARANCE_STREAMER_SIZE, context.getString(R.string.card_size_large));
     }
 
     /**
@@ -231,7 +201,7 @@ public class Settings {
 
     public void setAppearanceChannelSize(String sizeName) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putString(this.APPERANCE_STREAMER_SIZE, sizeName);
+        editor.putString(this.APPEARANCE_STREAMER_SIZE, sizeName);
         editor.commit();
     }
 
@@ -307,8 +277,6 @@ public class Settings {
 
     /**
      * Get the chat emote size. The result is always from 1 to 3.
-     *
-     * @return
      */
     public int getEmoteSize() {
         SharedPreferences preferences = getPreferences();
@@ -329,8 +297,6 @@ public class Settings {
 
     /**
      * Get the chat message size. The result is always from 1 to 3.
-     *
-     * @return
      */
     public int getMessageSize() {
         SharedPreferences preferences = getPreferences();
@@ -367,34 +333,34 @@ public class Settings {
     }
 
     /**
-     * Chat - Should the chat be able to be showed in landspace
+     * Chat - Should the chat be able to be showed in landscape
      *
      * @param enableChat True if yes, false if no.
      */
 
     public void setShowChatInLandscape(boolean enableChat) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.CHAT_LANDSCAPE_SWIPABLE, enableChat);
+        editor.putBoolean(this.CHAT_LANDSCAPE_SWIPEABLE, enableChat);
         editor.commit();
     }
 
     public boolean isChatInLandscapeEnabled() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.CHAT_LANDSCAPE_SWIPABLE, true);
+        return preferences.getBoolean(this.CHAT_LANDSCAPE_SWIPEABLE, true);
     }
 
-    public boolean isChatLandscapeSwipable() {
+    public boolean isChatLandscapeSwipeable() {
         SharedPreferences preferences = getPreferences();
         return preferences.getBoolean(this.CHAT_LANDSCAPE_ENABLE, true);
     }
 
     /**
-     * Chat - Set if the chat should be showable by swiping the videoview
+     * Chat - Set if the chat should be showable by swiping the VideoView
      *
      * @param enableChatSwipe True if yes, false if no.
      */
 
-    public void setChatLandscapeSwipable(boolean enableChatSwipe) {
+    public void setChatLandscapeSwipeable(boolean enableChatSwipe) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_LANDSCAPE_ENABLE, enableChatSwipe);
         editor.commit();
@@ -409,9 +375,9 @@ public class Settings {
      * Tool tips for showing user functionality when they start the app for the first time.
      */
 
-    public void setTipsShown(boolean tipsshown) {
+    public void setTipsShown(boolean shown) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.TIP_IS_SHOWN, tipsshown);
+        editor.putBoolean(this.TIP_IS_SHOWN, shown);
         editor.commit();
     }
 
@@ -650,7 +616,7 @@ public class Settings {
     }
 
     /**
-     * General - Wether or not the user is a Twitch Partner
+     * General - Whether or not the user is a Twitch Partner
      */
 
     public void setGeneralTwitchUserIsPartner(boolean aUpdatedAtDate) {
@@ -680,21 +646,6 @@ public class Settings {
     }
 
     /**
-     * General - Filter top streams by language
-     */
-
-    public void setGeneralFilterTopStreamsByLanguage(boolean filterTopStreamsByLanguage) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.GENERAL_FILTER_TOP_STREAMS_LANGUAGE, filterTopStreamsByLanguage);
-        editor.commit();
-    }
-
-    public boolean getGeneralFilterTopStreamsByLanguage() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.GENERAL_FILTER_TOP_STREAMS_LANGUAGE, true);
-    }
-
-    /**
      * Stream Player -
      */
 
@@ -704,9 +655,24 @@ public class Settings {
         editor.commit();
     }
 
+    public boolean getGeneralFilterTopStreamsByLanguage() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.GENERAL_FILTER_TOP_STREAMS_LANGUAGE, true);
+    }
+
+    /**
+     * General - Filter top streams by language
+     */
+
+    public void setGeneralFilterTopStreamsByLanguage(boolean filterTopStreamsByLanguage) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.GENERAL_FILTER_TOP_STREAMS_LANGUAGE, filterTopStreamsByLanguage);
+        editor.commit();
+    }
+
     public boolean getStreamPlayerShowNavigationBar() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.STREAM_PLAYER_REAVEL_NAVIGATION, false);
+        return preferences.getBoolean(this.STREAM_PLAYER_REVEAL_NAVIGATION, false);
     }
 
     /**
@@ -715,7 +681,7 @@ public class Settings {
 
     public void setStreamPlayerShowNavigationBar(boolean showNavigationBar) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.STREAM_PLAYER_REAVEL_NAVIGATION, showNavigationBar);
+        editor.putBoolean(this.STREAM_PLAYER_REVEAL_NAVIGATION, showNavigationBar);
         editor.commit();
     }
 
@@ -737,174 +703,6 @@ public class Settings {
     public boolean isNotificationsDisabled() {
         SharedPreferences preferences = getPreferences();
         return preferences.getBoolean(this.NOTIFICATIONS_IS_DISABLED, false);
-    }
-
-    /**
-     * Notification - Is the notifications disabled
-     */
-
-    public void setNotificationsDisabled(boolean isDisabled) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.NOTIFICATIONS_IS_DISABLED, isDisabled);
-        editor.commit();
-    }
-
-    public boolean isNotificationsShowInQuietHours() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.NOTIFICATIONS_SHOW_IN_QUIET_HOURS, true);
-    }
-
-    /**
-     * Notification - Should notifications be pushed while in quiet hours
-     */
-
-    public void setNotificationsShowInQuietHours(boolean showInQuietHours) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.NOTIFICATIONS_SHOW_IN_QUIET_HOURS, showInQuietHours);
-        editor.commit();
-    }
-
-    public String getNotificationsCheckInterval() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getString(this.NOTIFICATIONS_CHECK_INTERVAL_KEY, "15");
-    }
-
-    /**
-     * Notifications - How long between checks for new online streamers
-     */
-
-    public void setNotificationsCheckInterval(String interval) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putString(this.NOTIFICATIONS_CHECK_INTERVAL_KEY, interval);
-        editor.commit();
-    }
-
-    /**
-     * Notifications - Vibrate or not
-     */
-
-    public void setNotificationsVibration(boolean vibrate) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.NOTIFICATIONS_VIBRATIONG_KEY, vibrate);
-        editor.commit();
-    }
-
-    public boolean getNotificationsVibrations() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.NOTIFICATIONS_VIBRATIONG_KEY, true);
-    }
-
-    public boolean getNotificationsSound() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.NOTIFICATIONS_SOUND_KEY, false);
-    }
-
-    /**
-     * Notifications - Play Sound or not
-     */
-
-    public void setNotificationsSound(boolean playSound) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.NOTIFICATIONS_SOUND_KEY, playSound);
-        editor.commit();
-    }
-
-    public boolean getNotificationsScreenWake() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.NOTIFICATIONS_SCREEM_WAKE_KEY, true);
-    }
-
-    /**
-     * Notifications - Wake Screen or not
-     */
-
-    public void setNotificationsScreenWake(boolean wake) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.NOTIFICATIONS_SCREEM_WAKE_KEY, wake);
-        editor.commit();
-    }
-
-    public boolean getNotificationsLED() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.NOTIFICATIONS_LED_KEY, false);
-    }
-
-    /**
-     * Notifications - Blink LED or not
-     */
-
-    public void setNotificationsLED(boolean blinkLED) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.NOTIFICATIONS_LED_KEY, blinkLED);
-        editor.commit();
-    }
-
-    public boolean getNotificationsQuietHours() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.NOTIFICATIONS_QUIET_HOURS_KEY, false);
-    }
-
-    /**
-     * Notifications - Enable Quiet Hours or not
-     */
-
-    public void setNotificationsQuietHours(boolean enable) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putBoolean(this.NOTIFICATIONS_QUIET_HOURS_KEY, enable);
-        editor.commit();
-    }
-
-    public int getNotificationsQuietStartHour() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getInt(this.NOTIFICATIONS_QUIET_HOURS_START_HOUR, 22);
-    }
-
-    /**
-     * Notifications
-     * Quiet Hours - Start Time
-     */
-
-    public void setNotificationsQuietStartHour(int hour) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putInt(this.NOTIFICATIONS_QUIET_HOURS_START_HOUR, hour);
-        editor.commit();
-    }
-
-    public int getNotificationsQuietStartMinute() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getInt(this.NOTIFICATIONS_QUIET_HOURS_START_MINUTE, 0);
-    }
-
-    public void setNotificationsQuietStartMinute(int minute) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putInt(this.NOTIFICATIONS_QUIET_HOURS_START_MINUTE, minute);
-        editor.commit();
-    }
-
-    public int getNotificationsQuietEndHour() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getInt(this.NOTIFICATIONS_QUIET_HOURS_END_HOUR, 10);
-    }
-
-    /**
-     * Notifications
-     * Quiet Hours - End Time
-     */
-    public void setNotificationsQuietEndHour(int hour) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putInt(this.NOTIFICATIONS_QUIET_HOURS_END_HOUR, hour);
-        editor.commit();
-    }
-
-    public int getNotificationsQuietEndMinute() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getInt(this.NOTIFICATIONS_QUIET_HOURS_END_MINUTE, 0);
-    }
-
-    public void setNotificationsQuietEndMinute(int minute) {
-        SharedPreferences.Editor editor = getEditor();
-        editor.putInt(this.NOTIFICATIONS_QUIET_HOURS_END_MINUTE, minute);
-        editor.commit();
     }
 
     public boolean isSetup() {

@@ -15,15 +15,15 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Connects to the internal database and extracts all the subscription streamernames. creates an
+ * Connects to the internal database and extracts all the subscription streamer names. creates an
  * object getting all information about the stream and puts it in a list.
- * After it has gotten all the streamername it rebuilds the cards in the recyclerview
+ * After it has gotten all the streamer names it rebuilds the cards in the recyclerview
  */
 public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, ChannelInfo>> {
-    private long timerStart = System.currentTimeMillis();
-    private String LOG_TAG = getClass().getSimpleName();
+    private final long timerStart = System.currentTimeMillis();
+    private final String LOG_TAG = getClass().getSimpleName();
+    private final GetTwitchUserFollows twitchUserFollows;
     private WeakReference<Context> baseContext;
-    private GetTwitchUserFollows twitchUserFollows;
     private FollowingFetcher mFollowingFetcher;
 
     public GetFollowsFromDB() {

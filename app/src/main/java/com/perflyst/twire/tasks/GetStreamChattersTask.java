@@ -14,8 +14,8 @@ import java.util.ArrayList;
  */
 
 public class GetStreamChattersTask extends AsyncTask<Void, Void, ArrayList<String>> {
-    private GetStreamChattersTaskDelegate delegate;
-    private String mStreamTwitchName;
+    private final GetStreamChattersTaskDelegate delegate;
+    private final String mStreamTwitchName;
 
     public GetStreamChattersTask(GetStreamChattersTaskDelegate delegate, String mStreamTwitchName) {
         this.delegate = delegate;

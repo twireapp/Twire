@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/login_icon_margin_top"
             app:srcCompat="@drawable/ic_settings"
-            android:tint="@color/colorSetupSecond" />
+            app:tint="@color/colorSetupSecond" />
 
         <!-- Next Three are for the success icon animation -->
         <ImageView
@@ -31,7 +31,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/login_icon_margin_top"
             android:src="@drawable/circle_for_login"
-            android:tint="@color/green_600" />
+            app:tint="@color/green_600" />
 
         <ImageView
             android:id="@+id/login_success_circle"
@@ -41,7 +41,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/login_icon_margin_top"
             android:src="@drawable/circle_login_success"
-            android:tint="@color/green_500" />
+            app:tint="@color/green_500" />
 
         <ImageView
             android:id="@+id/login_icon_done"
@@ -52,7 +52,7 @@
             android:layout_marginTop="@dimen/login_icon_margin_top"
             android:padding="@dimen/login_icon_success_padding"
             app:srcCompat="@drawable/ic_done"
-            android:tint="@color/colorSetupSecond" />
+            app:tint="@color/colorSetupSecond" />
 
         <!-- Container for the Login instructions -->
         <RelativeLayout
@@ -103,7 +103,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/welcome_continue_circle_shadow_margin_bottom"
             android:src="@drawable/circle_for_login"
-            android:tint="@color/colorSetupFABShadow" />
+            app:tint="@color/colorSetupFABShadow" />
 
 
         <TextView
@@ -187,8 +187,8 @@
                 android:layout_width="@dimen/welcome_continue_circle_diameter"
                 android:layout_height="@dimen/welcome_continue_circle_diameter"
                 android:layout_gravity="center"
-                android:tint="@color/colorSetupSecond"
-                app:srcCompat="@drawable/circle_for_login" />
+                app:srcCompat="@drawable/circle_for_login"
+                app:tint="@color/colorSetupSecond" />
 
             <ImageView
                 android:id="@+id/forward_arrow"
@@ -196,7 +196,7 @@
                 android:layout_height="@dimen/welcome_continue_arrow_diameter"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/ic_arrow_forward"
-                android:tint="@color/colorSetupMain" />
+                app:tint="@color/colorSetupMain" />
         </FrameLayout>
     </RelativeLayout>
 

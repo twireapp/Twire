@@ -48,7 +48,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
-
                 android:checkMark="?android:attr/listChoiceIndicatorMultiple"
                 android:gravity="center_vertical"
                 android:text="@string/changelog_show_after_update"
@@ -71,11 +70,9 @@
             android:id="@+id/done_button"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/done"
             android:background="@color/transparent"
+            android:text="@string/done"
             app:layout_constraintLeft_toLeftOf="@id/notifications_choose_divider"
-            app:layout_constraintRight_toRightOf="parent">
-
-        </com.rey.material.widget.Button>
+            app:layout_constraintRight_toRightOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

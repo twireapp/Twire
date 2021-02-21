@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/android:colorBackground">
+        android:background="?android:attr/colorBackground">
 
 
         <androidx.appcompat.widget.Toolbar
@@ -55,16 +55,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:tint="?attr/colorPrimaryDark"
-                app:srcCompat="@drawable/circle_for_activity_icon" />
+                app:srcCompat="@drawable/circle_for_activity_icon"
+                app:tint="?attr/colorPrimaryDark" />
 
             <ImageView
                 android:id="@+id/img_icon"
                 android:layout_width="@dimen/main_activity_icon_size"
                 android:layout_height="@dimen/main_activity_icon_size"
                 android:layout_gravity="center"
-                android:tint="?attr/mainActivityIconColor"
-                app:srcCompat="@drawable/ic_person" />
+                app:srcCompat="@drawable/ic_person"
+                app:tint="?attr/mainActivityIconColor" />
 
         </FrameLayout>
 

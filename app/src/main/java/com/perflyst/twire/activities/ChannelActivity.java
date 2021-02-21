@@ -69,11 +69,11 @@ public class ChannelActivity extends ThemeActivity {
     private static final String fragmentStreamerInfoArg = "streamerInfoArg",
             fragmentVodsBroadCastsOnlyArg = "vodsBroadcastsOnlyArg",
             fragmentVodsStreamerInfoArg = "streamerNameArg";
-    private final int SHOW_FAB_DELAY = 300;
     private final static int POSITION_DESC = 0;
     private final static int POSITION_BROADCASTS = 1;
     private final static int POSITION_HIGHLIGHTS = 2;
     private final static int TOTAL_COUNT = 3;
+    private final int SHOW_FAB_DELAY = 300;
     private ChannelInfo info;
     private ImageView streamerImage;
     private Toolbar toolbar,
@@ -111,6 +111,7 @@ public class ChannelActivity extends ThemeActivity {
         // Get the StreamerInfo object sent with the intent to open this activity
         Intent intent = getIntent();
         info = intent.getParcelableExtra(getResources().getString(R.string.channel_info_intent_object));
+        assert info != null;
 
         streamerInfoName.setText(info.getDisplayName());
         streamerFollowers.setText(getReadableInt(info.getFollowers()));
@@ -145,7 +146,7 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
     }
@@ -211,7 +212,7 @@ public class ChannelActivity extends ThemeActivity {
     private Target<Bitmap> getNightThemeTarget() {
         return new CustomTarget<Bitmap>() {
             @Override
-            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition)  {
+            public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
                 streamerImage.setImageBitmap(bitmap);
             }
 
@@ -293,36 +294,7 @@ public class ChannelActivity extends ThemeActivity {
         mFollowHandler = new FollowHandler(
                 info,
                 getBaseContext(),
-                new FollowHandler.Delegate() {
-                    @Override
-                    public void streamerIsFollowed() {
-                    }
-
-                    @Override
-                    public void streamerIsNotFollowed() {
-                    }
-
-                    @Override
-                    public void userIsNotLoggedIn() {
-                        mFab.hide();
-                    }
-
-                    @Override
-                    public void followSuccess() {
-                    }
-
-                    @Override
-                    public void followFailure() {
-                    }
-
-                    @Override
-                    public void unfollowSuccess() {
-                    }
-
-                    @Override
-                    public void unfollowFailure() {
-                    }
-                }
+                () -> mFab.hide()
         );
 
         mFab.setOnClickListener(v -> {

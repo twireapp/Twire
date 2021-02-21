@@ -44,7 +44,6 @@ public class RoundedImageView extends AppCompatImageView {
                 sbmp.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
 
-        final int color = 0xffa19774;
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, sbmp.getWidth(), sbmp.getHeight());
 
@@ -91,7 +90,7 @@ public class RoundedImageView extends AppCompatImageView {
             layerDrawable.draw(new Canvas(b));
         }
         Bitmap bitmap = b.copy(Bitmap.Config.ARGB_8888, true);
-        int w = getWidth(), h = getHeight();
+        int w = getWidth();
 
         Bitmap roundBitmap = getCroppedBitmap(bitmap, w);
         canvas.drawBitmap(roundBitmap, 0, 0, null);

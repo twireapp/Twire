@@ -189,7 +189,7 @@ public class AnimationService {
      * Get the Column position for a view's index in a recyclerview
      *
      * @param indexPosition The position of the view you want to know the column position of
-     * @param recyclerView  The recyclerview contraining the view
+     * @param recyclerView  The recyclerview constraining the view
      * @return The Column position
      */
     public static int getColumnPosFromIndex(int indexPosition, AutoSpanRecyclerView recyclerView) {
@@ -197,7 +197,7 @@ public class AnimationService {
     }
 
     /**
-     * Get the Row position for a view's index in  arecyclerview
+     * Get the Row position for a view's index in a recyclerview
      *
      * @param indexPosition The position of the view
      * @param recyclerView  The recyclerview that contains the view
@@ -267,7 +267,7 @@ public class AnimationService {
         }, delay);
     }
 
-    /**
+    /*
      * Animations for fake clearing of a view in a recyclerview when transitioning to or back another MainActivity
      */
 
@@ -364,8 +364,4 @@ public class AnimationService {
 
         return mAnimations;
     }
-
-    /**
-     * END
-     */
 }

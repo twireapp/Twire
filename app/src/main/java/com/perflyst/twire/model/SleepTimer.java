@@ -16,13 +16,13 @@ import biz.kasual.materialnumberpicker.MaterialNumberPicker;
  * Created by Sebastian Rask Jepsen on 22/07/16.
  */
 public class SleepTimer {
-    private String LOG_TAG = getClass().getSimpleName();
+    private final String LOG_TAG = getClass().getSimpleName();
+    private final Handler sleepTimerHandler;
+    private final Runnable sleepTimerRunnable;
+    private final SleepTimerDelegate delegate;
+    private final Settings settings;
+    private final Context context;
     private int sleepTimerProgressMinutes;
-    private Handler sleepTimerHandler;
-    private Runnable sleepTimerRunnable;
-    private SleepTimerDelegate delegate;
-    private Settings settings;
-    private Context context;
     private boolean isRunning;
 
     public SleepTimer(final SleepTimerDelegate delegate, Context context) {
@@ -61,6 +61,7 @@ public class SleepTimer {
 
         DialogService.getSleepTimerDialog(activity, isRunning, (dialog, which) -> {
                     View customView = dialog.getCustomView();
+                    if (customView == null) return;
                     MaterialNumberPicker hourPicker = customView.findViewById(R.id.hourPicker);
                     MaterialNumberPicker minPicker = customView.findViewById(R.id.minutePicker);
 

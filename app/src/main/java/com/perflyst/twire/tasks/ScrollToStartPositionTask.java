@@ -12,9 +12,9 @@ import java.lang.ref.WeakReference;
  * Created by Sebastian Rask on 14-04-2016.
  */
 public class ScrollToStartPositionTask extends AsyncTask<Void, Void, Void> {
-    private PositionCallBack callBack;
-    private WeakReference<RecyclerView> recyclerView;
-    private UniversalOnScrollListener mScrollListener;
+    private final PositionCallBack callBack;
+    private final WeakReference<RecyclerView> recyclerView;
+    private final UniversalOnScrollListener mScrollListener;
 
     public ScrollToStartPositionTask(PositionCallBack callBack, RecyclerView recyclerView, UniversalOnScrollListener mScrollListener) {
         this.callBack = callBack;
@@ -43,15 +43,7 @@ public class ScrollToStartPositionTask extends AsyncTask<Void, Void, Void> {
         callBack.positionReached();
     }
 
-    @Override
-    protected void onCancelled() {
-        super.onCancelled();
-        callBack.cancelled();
-    }
-
     public interface PositionCallBack {
         void positionReached();
-
-        void cancelled();
     }
 }

@@ -103,8 +103,6 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
                 mSettings.setGeneralTwitchUserUpdatedDate((String) mUserInfo[6]);
 
             mLoginActivity.get().handleLoginSuccess();
-        } else {
-            mLoginActivity.get().handleLoginFailure();
         }
     }
 }

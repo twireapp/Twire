@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GetVisualElementsTask<T> extends AsyncTask<Void, Void, List<T>> {
-    private LazyFetchingActivity<T> mLazyActivity;
-    private String LOG_TAG = getClass().getSimpleName();
+    private final LazyFetchingActivity<T> mLazyActivity;
+    private final String LOG_TAG = getClass().getSimpleName();
     private boolean isCancelled = false;
     private int offset,
             limit;

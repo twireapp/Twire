@@ -18,8 +18,8 @@ import java.util.List;
 
 public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
 
-    private String mStreamerName;
-    private Delegate mDelegate;
+    private final String mStreamerName;
+    private final Delegate mDelegate;
 
     public GetPanelsTask(String mStreamerName, Delegate mDelegate) {
         this.mStreamerName = mStreamerName;

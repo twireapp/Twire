@@ -5,15 +5,18 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 
-import javax.net.ssl.*;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSessionContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 
 /**
  * This is an extension of the SSLSocketFactory which enables TLS 1.2 and 1.1.
  * Created for usage on Android 4.1-4.4 devices, which haven't enabled those by default.
- *
+ * <p>
  * Copied from https://github.com/TeamNewPipe/NewPipe-legacy/blob/master/app/src/main/java
  * /org/schabi/newpipelegacy/util/TLSSocketFactoryCompat.java
  */
@@ -22,23 +25,11 @@ public class TLSSocketFactoryCompat extends SSLSocketFactory {
 
     private static TLSSocketFactoryCompat instance = null;
 
-    private SSLSocketFactory internalSSLSocketFactory;
+    private final SSLSocketFactory internalSSLSocketFactory;
 
     public TLSSocketFactoryCompat() throws KeyManagementException, NoSuchAlgorithmException {
         SSLContext context = SSLContext.getInstance("TLS");
         context.init(null, null, null);
-        SSLSessionContext sslSessionContext = context.getServerSessionContext();
-        int sessionCacheSize = sslSessionContext.getSessionCacheSize();
-        if (sessionCacheSize > 0) {
-            sslSessionContext.setSessionCacheSize(0);
-        }
-        internalSSLSocketFactory = context.getSocketFactory();
-    }
-
-    public TLSSocketFactoryCompat(final TrustManager[] tm)
-            throws KeyManagementException, NoSuchAlgorithmException {
-        SSLContext context = SSLContext.getInstance("TLS");
-        context.init(null, tm, new SecureRandom());
         SSLSessionContext sslSessionContext = context.getServerSessionContext();
         int sessionCacheSize = sslSessionContext.getSessionCacheSize();
         if (sessionCacheSize > 0) {

@@ -6,15 +6,10 @@
     <string name="stop">ARRÊTER</string>
     <string name="cancel">ANNULER</string>
     <string name="resume">RELANCER</string>
-    <string name="undo">ANNULER</string>
-    <string name="yes">Oui</string>
-    <string name="no">Non</string>
     <string name="enabled">Activer</string>
     <string name="disabled">Désactiver</string>
     <string name="minutes_short">m</string>
     <string name="hours_short">h</string>
-    <string name="minutes">minutes</string>
-    <string name="hours">heures</string>
     <string name="action_settings">Paramètres</string>
     <string name="settings_activity_title">Paramètres</string>
     <string name="drawer_open">Ouvrir</string>
@@ -22,21 +17,15 @@
     <string name="subscription_card_displayName">Nom</string>
     <string name="content_desc_twitchProfileBanner_imageView">La bannière du profil définie par l\'utilisateur</string>
     <string name="content_desc_twitchLogo_imageView">Image du logo des streameurs Twitch</string>
-    <string name="description">Contrôles du média</string>
     <string name="no_elements_added_notice">Aucun(e) %s n\'a été trouvé(e)</string>
     <string name="vods">vidéos</string>
     <string name="play">Lecture</string>
     <string name="pause">Pause</string>
-    <string name="stop_lower">Stop</string>
-    <string name="percent">%s %%</string>
-    <string name="disable_all">TOUT DÉSACTIVER</string>
-    <string name="enable_all">TOUT ACTIVER</string>
+    <string name="percent">%d %%</string>
     <!-- Time -->
     <string name="today">Aujourd\'hui</string>
     <string name="yesterday">Hier</string>
     <!-- ChannelActivity -->
-    <string name="streamerInfo_followers_title">Abonnés</string>
-    <string name="streamerInfo_views_title">Vues</string>
     <string name="streamerInfo_desc_tab">Description</string>
     <string name="streamerInfo_broadcasts_tab">Rediffusions</string>
     <string name="streamerInfo_highlights_tab">Temps forts</string>
@@ -52,18 +41,11 @@
     <string name="chat_only">Chat uniquement</string>
     <string name="available_qualities">Réglage de la qualité</string>
     <string name="quality_auto">Auto</string>
-    <string name="quality_audio">Audio uniquement</string>
     <!-- StreamFragment -->
     <string name="stream_sleep_timer_stopped">La minuterie d\'arrêt est interrompue</string>
     <string name="stream_sleep_timer_started">La minuterie d\'arrêt a démarré. Le stream sera interrompu dans %1$d heures et %2$d minutes.</string>
     <string name="stream_sleep_timer_started_minutes_only">La minuterie d\'arrêt a démarré. Le stream sera interrompu dans %d minutes.</string>
     <string name="stream_sleep_timer_title">Minuterie d\'arrêt programmée</string>
-    <string name="stream_chromecast_playing">Diffusé sur %s…</string>
-    <string name="stream_chromecast_failed">Un problème est survenu en diffusant sur %s</string>
-    <string name="stream_chromecast_no_vod">Désolé, la lecture des rediffusions par Chromecast  n\'est actuellement pas pris en charge</string>
-    <string name="stream_chromecast_connection_failed">Twire n\'a pas pu se connecter à %s</string>
-    <string name="stream_chromecast_connecting">Connexion…</string>
-    <string name="stream_no_audio_only">Désolé, la lecture en audio uniquement n\'est pas disponible pour ce stream</string>
     <string name="stream_audio_only_active">Lecture audio uniquement</string>
     <!-- VOD activity -->
     <string name="vod_playback_failed">Échec de la lecture de la vidéo. Essayez une autre qualité.</string>
@@ -89,21 +71,14 @@
     <string name="preview_game_title">Titre du jeu</string>
     <string name="preview_game_viewers">1337 Spectateurs</string>
     <!-- Top Games Activity -->
-    <string name="top_games_activity_title">@string/navigation_drawer_top_games_title</string>
     <!--Errors -->
     <string name="error_external_playback_failed">Échec de l\'envoi de l\'URL au lecteur externe</string>
     <string name="error_nothing_found">Il n\'y a rien ici</string>
     <string name="no_server_response_message">Oups, les serveurs de Twitch ne semblent pas répondre. Rafraîchir ?</string>
-    <string name="no_server_response_action">OK</string>
     <!-- My Games Activity -->
-    <string name="my_games__error_none_found">Aucun jeu trouvé</string>
-    <string name="my_games_activity_title">@string/navigation_drawer_my_games_title</string>
     <!-- My Channels activity -->
-    <string name="my_channels_error_none_found">Aucun follower trouvé</string>
-    <string name="my_channels_activity_title">@string/navigation_drawer_follows_title</string>
     <string name="my_channels_activity_label">Followers</string>
     <!-- Live Stream Activity -->
-    <string name="stream_no_chromecast_quality_supported">Désolé, ce stream n\'existe pas </string>
     <string name="stream_playback_failed">Échec de la lecture du flux. Essayez une autre qualité.</string>
     <string name="title_activity_live_stream">Stream en direct</string>
     <string name="chat_send_message_hint">Écrire un message</string>
@@ -111,35 +86,19 @@
     <string name="chat_status_connected">Prêt à chatter</string>
     <string name="chat_status_reconnecting">Reconnexion…</string>
     <string name="chat_status_connection_failed">Échec de la connexion</string>
-    <string name="chat_emote_size_title">Taille des émotes</string>
-    <string name="chat_message_size_title">Taille des messages</string>
     <!-- ChannelInfo activity -->
-    <string name="channel_info_name">John Doe</string>
-    <string name="channel_info_bio">Cet utilisateur est apparemment très réservé sur le stream…</string>
     <!-- My Streams activity -->
-    <string name="my_streams_error">Aucun stream trouvé</string>
-    <string name="my_streams_activity_title">@string/navigation_drawer_my_streams_title</string>
     <string name="my_streams_preview_image">Aperçu du direct</string>
     <string name="my_streams_cell_current_viewers">%d spectateurs</string>
-    <string name="my_streams_cell_online_since">Démarré il y a x minutes</string>
     <!-- Top Streams Activity -->
-    <string name="top_streams_activity_title">@string/navigation_drawer_top_streams_title</string>
     <!-- Featured Streams Activity -->
-    <string name="featured_activity_title">@string/navigation_drawer_featured_title</string>
-    <string name="featured_error_no_more_streams">Twitch n\'a plus de stream en tête d\'affiche pour le moment</string>
     <!-- Online Streams Status -->
-    <string name="enum_ready_message"> </string>
-    <string name="enum_no_internet_message">Vous ne semblez pas avoir de connexion internet</string>
-    <string name="enum_twitch_fuckup_message">Les serveurs de Twitch semblent indisponibles</string>
-    <string name="enum_no_online_streams">Aucun des streameurs que vous suivez n\'est actuellement en ligne</string>
     <!-- OnlineStreamCardAdapter-->
-    <string name="streams_adapter_viewers">spectateurs</string>
     <!-- Welcome Activity -->
     <string name="title_activity_welcome">Configuration de Twire</string>
     <string name="welcome_text_line_one">Bienvenue sur</string>
     <string name="welcome_text_line_two">Twire</string>
     <!-- Login Activity-->
-    <string name="title_activity_login">@string/title_activity_welcome</string>
     <string name="login_text_line_one">Allons-y !</string>
     <string name="login_text_line_two">Tout d\'abord, connectez-vous à Twitch.</string>
     <string name="login_user_cancel">Vous devez vous connecter pour utiliser Twire…</string>
@@ -147,13 +106,7 @@
     <string name="login_user_no_internet">Vous aurez besoin d\'une connexion internet pour configurer Twire.</string>
     <string name="login_user_no_internet_action">NOUVEL ESSAI</string>
     <string name="login_on_success_message">Bonjour %s</string>
-    <string name="login_unvalid_token_text_line_one">Malheureusement, vous </string>
-    <string name="login_unvalid_token_text_line_two">devez vous identifier à nouveau</string>
     <!-- Notification Activity -->
-    <string name="title_activity_notification">@string/title_activity_welcome</string>
-    <string name="notification_text_line_one">Comment voulez-vous paramètrer vos notifications ?</string>
-    <string name="notification_text_line_two">Tout d\'abord, connectez-vous à Twitch</string>
-    <string name="notification_customize_button">PERSONNALISER</string>
     <string name="skip_text">PASSER</string>
     <!-- Confirm Setup Activity -->
     <string name="confirm_text_line_one">Ne bougez pas !</string>
@@ -165,10 +118,6 @@
     <string name="settings_stream_player_summary">Nombre de spectateurs actuels, Comportement du lecteur</string>
     <string name="settings_appearance_name">Apparence</string>
     <string name="settings_appearance_summary">Thème, Style de carte, Taille de carte</string>
-    <string name="settings_notifications_name">Notifications</string>
-    <string name="settings_notifications_summary">Intervalle de vérification, Son, Vibration, etc.</string>
-    <string name="settings_rate_name">Noter l\'application</string>
-    <string name="settings_rate_summary">Donnez votre avis</string>
     <string name="settings_chat_name">Chat de Twitch</string>
     <string name="settings_chat_name_summary">Taille des émotes, Tailles des messages</string>
     <!-- General settings -->
@@ -184,7 +133,6 @@
     <!-- Chat Settings -->
     <string name="chat_emote_size">Taille des émotes</string>
     <string name="chat_message_size">Taille des messages</string>
-    <string name="chat_emote_storage">Sauvegarder localement les émotes</string>
     <string name="chat_landscape_enable">Chat en paysage</string>
     <string name="chat_landscape_swipe">Glisser pour afficher le chat en paysage</string>
     <string name="chat_landscape_width">Largeur du chat en paysage</string>
@@ -208,29 +156,6 @@
     <string name="appearance_streamer_header">Streameurs</string>
     <string name="appearance_game_header">Jeux</string>
     <!-- Notifications settings -->
-    <string name="check_activity_settings_notifications">Intervalle de vérification</string>
-    <string name="choose_streamers_activity_settings_notifications_title">Streameurs</string>
-    <string name="choose_who_summary_activity_settings_notifications">Être notifié(e) lorsque ces streameurs sont en direct</string>
-    <string name="vibrate_activity_settings_notifications">Vibrer</string>
-    <string name="screen_wake_activity_settings_notifications">Allumer l\'écran</string>
-    <string name="sound_activity_settings_notifications">Jouer un son</string>
-    <string name="led_activity_settings_notifications">Allumez la LED</string>
-    <string name="quiet_hours_activity_settings_notifications">Heures silencieuses</string>
-    <string name="quiet_hours_start_tag_activity_settings_notifications">Début</string>
-    <string name="quiet_hours_end_tag_activity_settings_notifications">Fin</string>
-    <string name="quiet_hours_show_notifications">Afficher les notifications pendant les heures silencieuses</string>
-    <string name="notifications_time_of_day">%1$s:%2$s</string>
-    <string name="notifications_check_interval">Intervalle de vérification</string>
-    <string name="notifications_never">Jamais</string>
-    <string name="notifications_5">5 Minutes</string>
-    <string name="notifications_15">15 Minutes</string>
-    <string name="notifications_30">30 Minutes</string>
-    <string name="notifications_60">1 Heure</string>
-    <string name="notifications_120">2 Heures</string>
-    <string name="notifications_minutes">%s Minutes</string>
-    <string name="notifications_hours">%s Heures</string>
-    <string name="notifications_disabled_key">Jamais</string>
-    <string name="notifications_not_logged_in">Les notifications ne seront affichées que si vous êtes connecté(e) à un compte Twitch.</string>
     <!-- Game Activitiy -->
     <!-- Search Activity -->
     <string name="search_hint">Rechercher</string>
@@ -242,16 +167,12 @@
     <string name="navigation_drawer_my_streams_title">Mes Streams</string>
     <string name="navigation_drawer_top_streams_title">Top Streams</string>
     <string name="navigation_drawer_follows_title">Streameurs Suivis</string>
-    <string name="navigation_drawer_my_games_title">Mes Jeux</string>
     <string name="navigation_drawer_top_games_title">Top Jeux</string>
     <string name="navigation_drawer_search_title">Rechercher</string>
     <string name="navigation_drawer_settings_title">Paramètres</string>
     <string name="navigation_drawer_logged_in_textview">Connecté(e) en tant que %s</string>
     <string name="navigation_drawer_not_logged_in">Non connecté(e)</string>
     <!-- Menu Actions -->
-    <string name="menu_action_refresh">Rafraichir</string>
-    <string name="menu_action_search">Rechercher</string>
-    <string name="ccl_media_route_menu_title">Continuer à regarder sur…</string>
     <!-- Theme Dialog -->
     <string name="theme_dialog_title">Thèmes</string>
     <string name="blue_theme_name">Bleu</string>
@@ -263,33 +184,9 @@
     <!-- Tooltips -->
     <string name="tip_navigate">Cliquez pour naviguer</string>
     <!--Twitch language Code -->
-    <string-array name="twitch_language_codes">
-        <item>English|en</item>
-        <item>Chinese|zh</item>
-        <item>Japanese|ja</item>
-        <item>Korean|ko</item>
-        <item>Spanish|es</item>
-        <item>Portuguese|pt</item>
-        <item>German|de</item>
-        <item>Polish|pl</item>
-        <item>Russian|ru</item>
-        <item>French|fr</item>
-        <item>Italian|it</item>
-        <item>Swedish|sv</item>
-        <item>Norwegian|no</item>
-        <item>Danish|da</item>
-        <item>Dutch|nl</item>
-        <item>Finnish|fi</item>
-        <item>Turkish|tr</item>
-        <item>Czech|cs</item>
-        <item>Slovak|sk</item>
-        <item>Hungarian|hu</item>
-    </string-array>
     <string name="chat_message_option_mention">Mentionner</string>
     <string name="chat_message_option_duplicate">Dupliquer le message</string>
     <string name="chat_message_option_block">Bloquer</string>
-    <string name="action_got_it">Compris</string>
-    <string name="action_share">Partager</string>
     <string name="stream_external_play_using">Regarder en utilisant…</string>
     <string name="changelog_show_after_update">Afficher le journal des modifications après une mise à jour</string>
     <string name="changelog_title">Journal des modifications</string>

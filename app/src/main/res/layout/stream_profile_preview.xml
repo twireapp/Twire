@@ -41,8 +41,8 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:tint="@color/white"
-                    app:srcCompat="@drawable/ic_vods" />
+                    app:srcCompat="@drawable/ic_vods"
+                    app:tint="@color/white" />
 
                 <ImageView
                     android:id="@+id/follow_unfollow_icon"
@@ -51,14 +51,13 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:tint="?attr/colorAccent"
-                    app:srcCompat="@drawable/ic_heart" />
+                    app:srcCompat="@drawable/ic_heart"
+                    app:tint="?attr/colorAccent" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/twitch_name"
-                    android:layout_alignBottom="@id/additional_toolbar"
                     android:baselineAligned="false"
                     android:gravity="center"
                     android:orientation="horizontal"
@@ -89,8 +88,8 @@
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                                 android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
-                                android:tint="@color/white"
-                                app:srcCompat="@drawable/ic_person" />
+                                app:srcCompat="@drawable/ic_person"
+                                app:tint="@color/white" />
                         </LinearLayout>
                     </FrameLayout>
 
@@ -118,8 +117,8 @@
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                                 android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
-                                android:tint="@color/white"
-                                app:srcCompat="@drawable/ic_visibility" />
+                                app:srcCompat="@drawable/ic_visibility"
+                                app:tint="@color/white" />
                         </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>

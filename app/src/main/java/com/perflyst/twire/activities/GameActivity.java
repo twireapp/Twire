@@ -35,14 +35,10 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    @Override
     public void customizeActivity() {
         Intent intent = getIntent();
         game = intent.getParcelableExtra(getResources().getString(R.string.game_intent_key));
+        assert game != null;
         mTitleView.setText(game.getGameTitle());
     }
 

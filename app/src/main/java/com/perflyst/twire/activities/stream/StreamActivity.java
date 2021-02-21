@@ -46,12 +46,13 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 public abstract class StreamActivity extends ThemeActivity implements SensorEventListener, StreamFragment.StreamFragmentListener {
     private static final int SENSOR_DELAY = 500 * 1000; // 500ms
     private static final int FROM_RADS_TO_DEGS = -57;
+    private final String LOG_TAG = getClass().getSimpleName();
     public StreamFragment mStreamFragment;
     public ChatFragment mChatFragment;
-    private String LOG_TAG = getClass().getSimpleName();
     private Sensor mRotationSensor;
     private Settings settings;
     private boolean mBackstackLost;
+    private boolean onStopCalled;
 
     protected abstract int getLayoutResource();
 
@@ -107,12 +108,12 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateOrientation();
     }
 
-	@Override
+    @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do nothing :)
     }
@@ -194,16 +195,16 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         }
     }
 
-	@Override
-	@RequiresApi(24)
-	public void onUserLeaveHint() {
+    @Override
+    @RequiresApi(24)
+    public void onUserLeaveHint() {
         super.onUserLeaveHint();
 
         if (getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
             mStreamFragment.prePictureInPicture();
             enterPictureInPictureMode();
         }
-	}
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private TransitionSet constructTransitions() {
@@ -267,7 +268,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     @Override
-    public void onAttachFragment(Fragment fragment) {
+    public void onAttachFragment(@NonNull Fragment fragment) {
         if (fragment instanceof StreamFragment) {
             StreamFragment streamFragment = (StreamFragment) fragment;
             streamFragment.streamFragmentCallback = this;
@@ -311,7 +312,6 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         layoutParams.height = landscape ? MATCH_PARENT : WRAP_CONTENT;
     }
 
-    private boolean onStopCalled;
     @Override
     public void onStop() {
         super.onStop();
@@ -335,7 +335,7 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     }
 
     @Override
-    public void finish () {
+    public void finish() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mBackstackLost) {
             navToLauncherTask(getApplicationContext());
             finishAndRemoveTask();

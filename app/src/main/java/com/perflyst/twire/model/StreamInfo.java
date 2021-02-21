@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.perflyst.twire.R;
 
 
@@ -24,11 +26,11 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
             return new StreamInfo[0];
         }
     };
-    private ChannelInfo channelInfo;
+    private final ChannelInfo channelInfo;
+    private final String[] previews;
+    private final long startedAt;
     private String game;
     private int currentViewers;
-    private String[] previews;
-    private long startedAt;
     private String title;
     private int priority; // Variable only used for featured streams
 
@@ -47,12 +49,12 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
         String[] stringsData = in.createStringArray();
         int[] intData = in.createIntArray();
 
-        if (stringsData.length == 2) {
+        if (stringsData != null && stringsData.length == 2) {
             this.game = stringsData[0];
             this.title = stringsData[1];
         }
 
-        if (intData.length == 2) {
+        if (intData != null && intData.length == 2) {
             this.currentViewers = intData[0];
             this.priority = intData[1];
         }
@@ -91,48 +93,24 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public ChannelInfo getChannelInfo() {
         return channelInfo;
-    }
-
-    public void setChannelInfo(ChannelInfo channelInfo) {
-        this.channelInfo = channelInfo;
     }
 
     public String getGame() {
         return game;
     }
 
-    public void setGame(String game) {
-        this.game = game;
-    }
-
     public int getCurrentViewers() {
         return currentViewers;
-    }
-
-    public void setCurrentViewers(int currentViewers) {
-        this.currentViewers = currentViewers;
     }
 
     public String[] getPreviews() {
         return previews;
     }
 
-    public void setPreviews(String[] previews) {
-        this.previews = previews;
-    }
-
     public long getStartedAt() {
         return startedAt;
-    }
-
-    public void setStartedAt(long startedAt) {
-        this.startedAt = startedAt;
     }
 
     public boolean isFeaturedStream() {
@@ -167,6 +145,7 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
     }
 
     @Override
+    @NonNull
     public String toString() {
         return this.getChannelInfo().getDisplayName();
     }

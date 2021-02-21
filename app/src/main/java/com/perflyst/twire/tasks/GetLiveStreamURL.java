@@ -23,20 +23,19 @@ import okhttp3.RequestBody;
 
 /**
  * Async task. Gets the required access token for a specific streamer. Then starts the streamers live stream.
- * Requires to be executed with the username of the streamer and a reference to the videoview
+ * Requires to be executed with the username of the streamer and a reference to the VideoView
  */
 public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<String, Quality>> {
     public static final String QUALITY_SOURCE = "chunked";
     public static final String QUALITY_AUTO = "auto";
-    private String LOG_TAG = getClass().getSimpleName();
-    private AsyncResponse callback;
+    private final String LOG_TAG = getClass().getSimpleName();
+    private final AsyncResponse callback;
 
     public GetLiveStreamURL(AsyncResponse aCallback) {
         callback = aCallback;
     }
 
-    protected String formatQuery(boolean isLive, String channelOrVod)
-    {
+    protected String formatQuery(boolean isLive, String channelOrVod) {
         return "{\n" +
                 "    \"operationName\": \"PlaybackAccessToken\",\n" +
                 "    \"extensions\": {\n" +
@@ -58,8 +57,8 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     @Override
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String streamerName = params[0];
-        String sig = "";
-        String tokenString = "";
+        String signature = "";
+        String token = "";
 
         Request request = new Request.Builder()
                 .url("https://gql.twitch.tv/gql")
@@ -71,10 +70,10 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         try {
             JSONObject resultJSON = new JSONObject(resultString);
             JSONObject tokenJSON = resultJSON.getJSONObject("data").getJSONObject("streamPlaybackAccessToken");
-            tokenString = tokenJSON.getString("value");
-            sig = tokenJSON.getString("signature");
+            token = tokenJSON.getString("value");
+            signature = tokenJSON.getString("signature");
 
-            Log.d("ACCESS_TOKEN_STRING", tokenString);
+            Log.d("ACCESS_TOKEN_STRING", token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -86,7 +85,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
                 "&allow_audio_only=true" +
                 "&allow_source=true" +
                 "&type=any" +
-                "&p=%s", streamerName, safeEncode(tokenString), sig, "" + new Random().nextInt(6));
+                "&p=%s", streamerName, safeEncode(token), signature, "" + new Random().nextInt(6));
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
         return parseM3U8(streamUrl);

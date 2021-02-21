@@ -15,6 +15,7 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.DimenRes;
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.core.widget.CompoundButtonCompat;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.Service;
@@ -23,14 +24,14 @@ import com.perflyst.twire.service.Service;
  * Created by Sebastian Rask on 13-05-2016.
  */
 public class LayoutSelector {
-    private String[] layoutTitles;
-    private OnLayoutSelected selectCallback;
-    private Activity activity;
+    private final String[] layoutTitles;
+    private final OnLayoutSelected selectCallback;
+    private final Activity activity;
+    @LayoutRes
+    private final int previewLayout;
     private View layoutSelectorView;
     @AttrRes
     private int textColor = -1;
-    @LayoutRes
-    private int previewLayout;
     @DimenRes
     private int previewMaxHeightRes = -1;
     private int selectedLayoutIndex = -1;
@@ -84,7 +85,7 @@ public class LayoutSelector {
                                 Service.getColorAttribute(R.attr.colorAccent, R.color.accent, activity), //Enabled
                         }
                 );
-                radioButton.setSupportButtonTintList(colorStateList);
+                CompoundButtonCompat.setButtonTintList(radioButton, colorStateList);
             }
 
 
@@ -103,8 +104,8 @@ public class LayoutSelector {
         }
     }
 
-    public LayoutSelector setTextColorAttr(@AttrRes int textAppearanceRessource) {
-        textColor = textAppearanceRessource;
+    public LayoutSelector setTextColorAttr(@AttrRes int textAppearanceResource) {
+        textColor = textAppearanceResource;
         return this;
     }
 

@@ -11,6 +11,7 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,20 +24,18 @@ import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
  * Created by Sebastian on 06-08-2015.
  */
 public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
-    private String LOG_TAG;
+    private final String LOG_TAG;
+    private final boolean isMainActivity;
+    private final AppCompatActivity mActivity;
+    private final Toolbar mMainToolbar;
+    private final Toolbar mDecorativeToolbar;
+    private final View mToolbarShadow;
+    private final View mIconCircle;
+    private final TextView mIconText;
     // variables to control main toolbar shadow
     private float minAmountToScroll, minAmountToolbarHide;
     private int amountScrolled;
-    private boolean isToolbarTransparent, isMainActivity;
-
-    private AppCompatActivity mActivity;
-    private Toolbar mMainToolbar;
-    private Toolbar mDecorativeToolbar;
-    private View mToolbarShadow;
-
-    private View mIconCircle;
-    private TextView mIconText;
-
+    private boolean isToolbarTransparent;
     private ValueAnimator mFadeToolbarAnimation;
 
     private Animation mShowShadowAnimation;
@@ -63,7 +62,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
     }
 
     @Override
-    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
         if (isMainActivity) {
             float toolbarTranslationY = mMainToolbar.getTranslationY(); // Save the Y value to a variable to prevent "getting" it multiple times
             int TOOLBAR_HEIGHT = (int) mActivity.getResources().getDimension(R.dimen.main_toolbar_height);
@@ -89,7 +88,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
     }
 
     @Override
-    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         if (isMainActivity) {
             int TOOLBAR_HEIGHT = (int) mActivity.getResources().getDimension(R.dimen.main_toolbar_height);
             if (mActivity.getSupportActionBar() != null) {
@@ -228,10 +227,6 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
 
     public int getAmountScrolled() {
         return amountScrolled;
-    }
-
-    public void setAmountScrolled(int scrolled) {
-        amountScrolled = scrolled;
     }
 
     private void initAnimations() {

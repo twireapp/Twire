@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.R;
@@ -17,8 +18,8 @@ import java.util.List;
  */
 
 public class MentionAdapter extends RecyclerView.Adapter<MentionAdapter.SuggestionViewHolder> {
+    private final MentionAdapterDelegate mDelegate;
     private List<String> mentionSuggestions;
-    private MentionAdapterDelegate mDelegate;
 
     public MentionAdapter(MentionAdapterDelegate aDelegate) {
         mDelegate = aDelegate;
@@ -26,6 +27,7 @@ public class MentionAdapter extends RecyclerView.Adapter<MentionAdapter.Suggesti
     }
 
     @Override
+    @NonNull
     public SuggestionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater
                 .from(parent.getContext())
@@ -55,7 +57,7 @@ public class MentionAdapter extends RecyclerView.Adapter<MentionAdapter.Suggesti
     }
 
     static class SuggestionViewHolder extends RecyclerView.ViewHolder {
-        TextView mName;
+        final TextView mName;
 
         SuggestionViewHolder(View itemView) {
             super(itemView);

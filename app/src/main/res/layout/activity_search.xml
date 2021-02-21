@@ -18,7 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-
             app:contentInsetEnd="@dimen/search_toolbar_padding"
             app:contentInsetLeft="@dimen/search_toolbar_padding"
             app:contentInsetRight="@dimen/search_toolbar_padding"
@@ -51,8 +50,8 @@
                             android:paddingStart="@dimen/search_back_arrow_start_padding"
                             android:paddingLeft="@dimen/search_back_arrow_start_padding"
                             android:paddingRight="@dimen/search_back_arrow_start_padding"
-                            android:tint="?attr/searchActivityUpIconColor"
-                            app:srcCompat="@drawable/ic_arrow_back" />
+                            app:srcCompat="@drawable/ic_arrow_back"
+                            app:tint="?attr/searchActivityUpIconColor" />
 
                         <EditText
                             android:id="@+id/edit_text_search"
@@ -64,6 +63,7 @@
                             android:hint="@string/search_hint"
                             android:imeActionLabel="Search"
                             android:imeOptions="actionDone"
+                            android:importantForAutofill="no"
                             android:inputType="text"
                             android:maxLines="1"
                             android:padding="@dimen/search_edittext_padding"
@@ -80,8 +80,8 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="@dimen/search_icon_padding"
-                android:tint="?attr/searchActivityUpIconColor"
-                app:srcCompat="@drawable/ic_search" />
+                app:srcCompat="@drawable/ic_search"
+                app:tint="?attr/searchActivityUpIconColor" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -97,7 +97,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -21,7 +21,6 @@ import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
 
 public class AppearanceSettingsFragment extends Fragment {
-    private String LOG_TAG = getClass().getSimpleName();
     private TextView themeSummary, streamsStyleSummary, gameStyleSummary, followStyleSummary, streamSizeSummary, gameSizeSummary, streamerSizeSummary;
     private ImageView themeSummaryColor;
     private Settings settings;
@@ -114,7 +113,7 @@ public class AppearanceSettingsFragment extends Fragment {
             drawableRes = R.drawable.circle_theme_night_chooser;
         }
 
-        return ContextCompat.getDrawable(getContext(), drawableRes);
+        return ContextCompat.getDrawable(requireContext(), drawableRes);
     }
 
     private void onClickThemeColor() {
@@ -159,7 +158,7 @@ public class AppearanceSettingsFragment extends Fragment {
             view1.setImageResource(R.drawable.preview_game);
 
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                    (int) getContext().getResources().getDimension(R.dimen.game_preview_width),
+                    (int) requireContext().getResources().getDimension(R.dimen.game_preview_width),
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
             lp.gravity = Gravity.CENTER;
@@ -198,7 +197,7 @@ public class AppearanceSettingsFragment extends Fragment {
             streamerLogo.setImageResource(R.drawable.preview_streamer);
 
             FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
-                    (int) getContext().getResources().getDimension(R.dimen.subscription_card_preview_width),
+                    (int) requireContext().getResources().getDimension(R.dimen.subscription_card_preview_width),
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
             lp.gravity = Gravity.CENTER;
@@ -217,7 +216,7 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void onClickStreamSize() {
         DialogService.getChooseCardSizeDialog(
-                getActivity(),
+                requireActivity(),
                 R.string.appearance_streams_size_title,
                 settings.getAppearanceStreamSize(),
                 (dialog, itemView, which, text) -> {
@@ -230,7 +229,7 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void onClickStreamerSize() {
         DialogService.getChooseCardSizeDialog(
-                getActivity(),
+                requireActivity(),
                 R.string.appearance_streamer_size_title,
                 settings.getAppearanceChannelSize(),
                 (dialog, itemView, which, text) -> {
@@ -243,7 +242,7 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void onClickGameSize() {
         DialogService.getChooseCardSizeDialog(
-                getActivity(),
+                requireActivity(),
                 R.string.appearance_game_size_title,
                 settings.getAppearanceGameSize(),
                 (dialog, itemView, which, text) -> {

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,8 +27,8 @@ import java.util.List;
  */
 
 public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHolder> {
-    private List<Panel> mPanels;
-    private Activity mActivity;
+    private final List<Panel> mPanels;
+    private final Activity mActivity;
 
     public PanelAdapter(Activity mActivity) {
         this.mActivity = mActivity;
@@ -40,6 +41,7 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
     }
 
     @Override
+    @NonNull
     public PanelViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater
                 .from(parent.getContext())
@@ -54,7 +56,7 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
     }
 
     @Override
-    public void onBindViewHolder(final PanelViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final PanelViewHolder holder, int position) {
         Panel mPanel = mPanels.get(position);
 
         String imageUrl = mPanel.getmImageUrl();
@@ -89,8 +91,8 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
     }
 
     static class PanelViewHolder extends RecyclerView.ViewHolder {
-        ImageView mImageView;
-        TextView mHtmlText;
+        final ImageView mImageView;
+        final TextView mHtmlText;
 
         PanelViewHolder(View itemView) {
             super(itemView);

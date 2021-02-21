@@ -9,7 +9,7 @@ import com.perflyst.twire.service.StreamsService;
 
 import java.util.List;
 
-/**
+/*
  * Created by Sebastian Rask on 17-05-2017.
  */
 
@@ -18,8 +18,8 @@ import java.util.List;
  * This task should not be executed for time critical task.
  */
 public class GetFollowedLiveStreamsTask extends AsyncTask<Void, Void, List<StreamInfo>> {
-    private Context context;
-    private FetchLiveStreamsCallback callback;
+    private final Context context;
+    private final FetchLiveStreamsCallback callback;
 
     public GetFollowedLiveStreamsTask(Context context, FetchLiveStreamsCallback callback) {
         this.context = context;

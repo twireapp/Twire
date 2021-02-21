@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -22,7 +23,6 @@ import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 
 public class SettingsGeneralActivity extends ThemeActivity {
-    private String LOG_TAG = getClass().getSimpleName();
     private Settings settings;
     private TextView twitchNameView, startPageSubText;
     private CheckedTextView filterTopStreamsByLanguageView;
@@ -57,8 +57,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
     }
@@ -86,7 +85,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
 
     public void onClickTwitchName(View v) {
         if (settings.isLoggedIn()) {
-            MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialig(this, settings.getGeneralTwitchDisplayName());
+            MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialog(this, settings.getGeneralTwitchDisplayName());
             dialog.getBuilder().onPositive((dialog1, which) -> {
                 dialog1.dismiss();
                 Service.clearStreamerInfoDb(getBaseContext());

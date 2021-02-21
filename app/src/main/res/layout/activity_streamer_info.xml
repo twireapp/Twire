@@ -4,8 +4,8 @@
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
     android:fitsSystemWindows="true"
-    android:background="?attr/android:colorBackground"
     tools:context="com.perflyst.twire.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -100,8 +100,8 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                             android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
-                            android:tint="@color/white"
-                            app:srcCompat="@drawable/ic_person" />
+                            app:srcCompat="@drawable/ic_person"
+                            app:tint="@color/white" />
                     </LinearLayout>
                 </FrameLayout>
 
@@ -129,8 +129,8 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                             android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
-                            android:tint="@color/white"
-                            app:srcCompat="@drawable/ic_visibility" />
+                            app:srcCompat="@drawable/ic_visibility"
+                            app:tint="@color/white" />
                     </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
@@ -167,6 +167,5 @@
             android:tint="@color/white"
             app:srcCompat="@drawable/ic_heart" />
     </RelativeLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

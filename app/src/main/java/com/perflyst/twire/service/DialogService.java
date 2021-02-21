@@ -53,7 +53,7 @@ public class DialogService {
         return builder.build();
     }
 
-    public static MaterialDialog getSettingsLoginOrLogoutDialig(Activity activity, String username) {
+    public static MaterialDialog getSettingsLoginOrLogoutDialog(Activity activity, String username) {
         return getBaseThemedDialog(activity)
                 .content(activity.getString(R.string.gen_dialog_login_or_out_content, username))
                 .positiveText(R.string.gen_dialog_login_or_out_login_action)
@@ -62,10 +62,10 @@ public class DialogService {
 
     public static MaterialDialog getChooseStartUpPageDialog(Activity activity, String currentlySelectedPageTitle, MaterialDialog.ListCallbackSingleChoice listCallbackSingleChoice) {
         final Settings settings = new Settings(activity);
-        @ArrayRes int arrayRessource = settings.isLoggedIn() ? R.array.StartupPages : R.array.StartupPagesNoLogin;
+        @ArrayRes int arrayResource = settings.isLoggedIn() ? R.array.StartupPages : R.array.StartupPagesNoLogin;
 
         int indexOfPage = 0;
-        String[] androidStrings = activity.getResources().getStringArray(arrayRessource);
+        String[] androidStrings = activity.getResources().getStringArray(arrayResource);
         for (int i = 0; i < androidStrings.length; i++) {
             if (androidStrings[i].equals(currentlySelectedPageTitle)) {
                 indexOfPage = i;
@@ -75,7 +75,7 @@ public class DialogService {
 
         return getBaseThemedDialog(activity)
                 .title(R.string.gen_start_page)
-                .items(arrayRessource)
+                .items(arrayResource)
                 .itemsCallbackSingleChoice(indexOfPage, listCallbackSingleChoice)
                 .positiveText(R.string.ok)
                 .negativeText(R.string.cancel)

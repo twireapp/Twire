@@ -27,12 +27,12 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         }
 
     };
-    private String gameTitle;
+    private final String gameTitle;
+    private final String gamePreviewSmallURL;
+    private final String gamePreviewMediumURL;
+    private final String gamePreviewLargeURL;
     private int gameViewers;
     private int gameStreamers;
-    private String gamePreviewSmallURL;
-    private String gamePreviewMediumURL;
-    private String gamePreviewLargeURL;
 
     public Game(String gameTitle, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
         this(gameTitle, -1, -1, gamePreviewSmallURL, gamePreviewMediumURL, gamePreviewLargeURL);
@@ -84,20 +84,12 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         return gameTitle;
     }
 
-    public void setGameTitle(String gameTitle) {
-        this.gameTitle = gameTitle;
-    }
-
     public int getGameViewers() {
         return gameViewers;
     }
 
     public void setGameViewers(int gameViewers) {
         this.gameViewers = gameViewers;
-    }
-
-    public int getGameStreamers() {
-        return gameStreamers;
     }
 
     public void setGameStreamers(int gameStreamers) {
@@ -108,24 +100,12 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         return gamePreviewSmallURL;
     }
 
-    public void setGamePreviewSmallURL(String gamePreviewSmallURL) {
-        this.gamePreviewSmallURL = gamePreviewSmallURL;
-    }
-
     private String getGamePreviewMediumURL() {
         return gamePreviewMediumURL;
     }
 
-    public void setGamePreviewMediumURL(String gamePreviewMediumURL) {
-        this.gamePreviewMediumURL = gamePreviewMediumURL;
-    }
-
     private String getGamePreviewLargeURL() {
         return gamePreviewLargeURL;
-    }
-
-    public void setGamePreviewLargeURL(String gamePreviewLargeURL) {
-        this.gamePreviewLargeURL = gamePreviewLargeURL;
     }
 
     @Override

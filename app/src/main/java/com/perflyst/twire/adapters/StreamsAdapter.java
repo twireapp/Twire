@@ -27,10 +27,10 @@ import java.util.Comparator;
  * Created by Sebastian Rask on 11-04-2016.
  */
 class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
-    ImageView vPreviewImage;
-    TextView vDisplayName, vTitle, vGame;
-    View sharedPadding;
-    private CardView vCard;
+    final ImageView vPreviewImage;
+    final TextView vDisplayName, vTitle, vGame;
+    final View sharedPadding;
+    private final CardView vCard;
     //private TextView vOnlineSince;
 
     StreamViewHolder(View v) {
@@ -61,10 +61,10 @@ class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
 }
 
 public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHolder> {
-    private String LOG_TAG = getClass().getSimpleName();
-    private int rightMargin, leftMargin, topMargin, bottomMargin;
+    private final int topMargin, bottomMargin;
+    private final Activity activity;
+    private int rightMargin, leftMargin;
     private boolean considerPriority;
-    private Activity activity;
 
     public StreamsAdapter(AutoSpanRecyclerView recyclerView, Activity aActivity) {
         super(recyclerView, aActivity);
@@ -168,17 +168,17 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
     }
 
     @Override
-    int getLayoutRessource() {
+    int getLayoutResource() {
         return R.layout.cell_stream;
     }
 
     @Override
-    int getCornerRadiusRessource() {
+    int getCornerRadiusResource() {
         return R.dimen.stream_card_corner_radius;
     }
 
     @Override
-    int getTopMarginRessource() {
+    int getTopMarginResource() {
         return R.dimen.stream_card_first_top_margin;
     }
 

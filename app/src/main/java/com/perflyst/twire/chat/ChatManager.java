@@ -1,6 +1,6 @@
 package com.perflyst.twire.chat;
 
-/**
+/*
  * Created by SebastianRask on 03-03-2016.
  */
 
@@ -39,29 +39,33 @@ import java.util.regex.Pattern;
 
 public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Void> {
     public static final int VOD_LOADING = -1;
+    public static final List<Badge> ffzBadges = new ArrayList<>();
     private static double currentProgress;
     private static String cursor = "";
     private static boolean seek = false;
     private static double previousProgress;
     private final String LOG_TAG = getClass().getSimpleName();
-    private Pattern roomstatePattern = Pattern.compile("@.*r9k=([01]);.*slow=(0|\\d+);subs-only=([01])"),
+    private final Pattern roomstatePattern = Pattern.compile("@.*r9k=([01]);.*slow=(0|\\d+);subs-only=([01])"),
             userStatePattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod="),
             stdVarPattern = Pattern.compile("@(.+) :.+ PRIVMSG #\\S* :(.*)"),
             tagPattern = Pattern.compile("([^=]+)=?(.+)?"),
             noticePattern = Pattern.compile("@.*msg-id=(\\w*)");
+    private final String user;
+    private final String password;
+    private final String channelName;
+    private final String hashChannel;
+    private final int channelUserId;
+    private final String vodId;
+    private final ChatCallback callback;
+    private final ChatEmoteManager mEmoteManager;
+    private final Map<String, Map<String, Badge>> globalBadges = new HashMap<>();
+    private final Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
     // Default Twitch Chat connect IP/domain and port
     private String twitchChatServer = "irc.twitch.tv";
     private int twitchChatPort = 6667;
     private BufferedWriter writer;
     private Handler callbackHandler;
     private boolean isStopping;
-    private String user;
-    private String password;
-    private String channelName;
-    private String hashChannel;
-    private int channelUserId;
-    private String vodId;
-    private ChatCallback callback;
     // Data about the user and how to display his/hers message
     private String userDisplayName;
     private String userColor;
@@ -70,25 +74,18 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private boolean chatIsR9kmode;
     private boolean chatIsSlowmode;
     private boolean chatIsSubsonlymode;
-    private ChatEmoteManager mEmoteManager;
-
-    private Map<String, Map<String, Badge>> globalBadges = new HashMap<>();
-    private Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
-    public static List<Badge> ffzBadges = new ArrayList<>();
 
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
         mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId);
         Settings appSettings = new Settings(aContext);
 
-        if(appSettings.isLoggedIn()) { // if user is logged in ...
+        if (appSettings.isLoggedIn()) { // if user is logged in ...
             // ... use their credentials
             Log.d(LOG_TAG, "Using user credentials for chat login.");
 
             user = appSettings.getGeneralTwitchName();
             password = "oauth:" + appSettings.getGeneralTwitchAccessToken();
-        }
-        else
-        {
+        } else {
             // ... else: use anonymous credentials
             Log.d(LOG_TAG, "Using anonymous credentials for chat login.");
 
@@ -349,7 +346,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                                     continue;
 
                                 String keyword = body.substring(begin, end);
-                                emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[] { begin }));
+                                emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[]{begin}));
                             }
                         }
                         emotes.addAll(mEmoteManager.findCustomEmotes(body));
@@ -409,8 +406,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     /**
      * Parses the received line and gets the roomstate.
      * If the roomstate has changed since last check variables are changed and the chatfragment is notified
-     *
-     * @param line
      */
     private void handleRoomstate(String line) {
         Matcher roomstateMatcher = roomstatePattern.matcher(line);
@@ -433,8 +428,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
     /**
      * Parses the received line and saves data such as the users color, if the user is mod, subscriber or turbouser
-     *
-     * @param line
      */
     private void handleUserstate(String line) {
         Matcher userstateMatcher = userStatePattern.matcher(line);
@@ -449,7 +442,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
             userColor = userstateMatcher.group(2);
             userDisplayName = userstateMatcher.group(3);
-            String emoteSets = userstateMatcher.group(4);
         } else {
             Log.e(LOG_TAG, "Failed to find userstate pattern in: \n" + line);
         }
@@ -458,8 +450,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     /**
      * Parses and builds retrieved messages.
      * Sends build message back via callback.
-     *
-     * @param line
      */
     private void handleMessage(String line) {
         Matcher stdVarMatcher = stdVarPattern.matcher(line);
@@ -467,7 +457,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         if (stdVarMatcher.find()) {
             Map<String, String> tags = new HashMap<>();
             for (String tag : stdVarMatcher.group(1).split(";")) {
-                Matcher tagMatcher =  tagPattern.matcher(tag);
+                Matcher tagMatcher = tagPattern.matcher(tag);
                 if (tagMatcher.find()) {
                     String value = tagMatcher.group(2);
                     if (value == null)
@@ -494,7 +484,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
             ChatMessage chatMessage = new ChatMessage(message, displayName, color, getBadges(badges), emotes, false);
 
-            if(message.contains("@" + getUserDisplayName())) {
+            if (message.contains("@" + getUserDisplayName())) {
                 Log.d(LOG_TAG, "Highlighting message with mention: " + message);
                 chatMessage.setHighlight(true);
             }
@@ -507,9 +497,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
     /**
      * Sends a PONG with the connected twitch server, as specified by Twitch IRC API.
-     *
-     * @param line
-     * @throws IOException
      */
     private void handlePing(String line) throws IOException {
         writer.write("PONG " + line.substring(5) + "\r\n");
@@ -561,8 +548,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     /**
      * Fetches the chat properties from Twitch.
      * Should never be called on the UI thread.
-     *
-     * @return
      */
     private ChatProperties fetchChatProperties() {
         final String URL = "https://api.twitch.tv/api/channels/" + channelName + "/chat_properties";
@@ -570,7 +555,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         final String REQUIRE_VERIFIED_ACC_BOOL = "require_verified_account";
         final String SUBS_ONLY_BOOL = "subsonly";
         final String EVENT_BOOL = "devchat";
-        final String CLUSTER_STRING = "cluster";
         final String CHAT_SERVERS_ARRAY = "chat_servers";
 
         try {
@@ -579,7 +563,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             boolean requireVerifiedAccount = dataObject.getBoolean(REQUIRE_VERIFIED_ACC_BOOL);
             boolean subsOnly = dataObject.getBoolean(SUBS_ONLY_BOOL);
             boolean isEvent = dataObject.getBoolean(EVENT_BOOL);
-            String cluster = "";//dataObject.getString(CLUSTER_STRING);
             JSONArray chatServers = dataObject.getJSONArray(CHAT_SERVERS_ARRAY);
 
             ArrayList<String> chatServersResult = new ArrayList<>();
@@ -587,7 +570,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                 chatServersResult.add(chatServers.getString(i));
             }
 
-            return new ChatProperties(hideLinks, requireVerifiedAccount, subsOnly, isEvent, cluster, chatServersResult);
+            return new ChatProperties(hideLinks, requireVerifiedAccount, subsOnly, isEvent, chatServersResult);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -684,6 +667,10 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         return badgeObjects;
     }
 
+    private int getRandomNumber(int min, int max) {
+        return (new Random()).nextInt((max - min) + 1) + min;
+    }
+
     public interface ChatCallback {
         void onMessage(ChatMessage message);
 
@@ -704,7 +691,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
      * Class used for determining which callback to make in the AsyncTasks OnProgressUpdate
      */
     protected static class ProgressUpdate {
-        private UpdateType updateType;
+        private final UpdateType updateType;
         private ChatMessage message;
 
         ProgressUpdate(UpdateType type) {
@@ -720,16 +707,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             return updateType;
         }
 
-        public void setUpdateType(UpdateType updateType) {
-            this.updateType = updateType;
-        }
-
         public ChatMessage getMessage() {
             return message;
-        }
-
-        public void setMessage(ChatMessage message) {
-            this.message = message;
         }
 
         public enum UpdateType {
@@ -741,10 +720,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             ON_ROOMSTATE_CHANGE,
             ON_CUSTOM_EMOTES_FETCHED
         }
-    }
-
-    private int getRandomNumber(int min,int max) {
-        return (new Random()).nextInt((max - min) + 1) + min;
     }
 }
 

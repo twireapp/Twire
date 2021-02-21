@@ -26,10 +26,10 @@ class ChatEmoteManager {
     private final List<Emote> customGlobal = new ArrayList<>();
     private final List<Emote> customChannel = new ArrayList<>();
 
-    private Pattern emotePattern = Pattern.compile("([\\d_A-Z]+):((?:\\d+-\\d+,?)+)");
+    private final Pattern emotePattern = Pattern.compile("([\\d_A-Z]+):((?:\\d+-\\d+,?)+)");
 
-    private String channelName;
-    private int channelId;
+    private final String channelName;
+    private final int channelId;
 
     ChatEmoteManager(String channelName, int channelId) {
         this.channelName = channelName;
@@ -53,7 +53,7 @@ class ChatEmoteManager {
 
         try {
             String bttvResponse = Service.urlToJSONString(BTTV_GLOBAL_URL);
-            if (bttvResponse != null) {
+            if (!bttvResponse.isEmpty()) {
                 JSONArray globalEmotes = new JSONArray(bttvResponse);
 
                 for (int i = 0; i < globalEmotes.length(); i++) {
@@ -64,7 +64,7 @@ class ChatEmoteManager {
             }
 
             String bttvChannelResponse = Service.urlToJSONString(BTTV_CHANNEL_URL);
-            if (bttvChannelResponse != null) {
+            if (!bttvChannelResponse.isEmpty()) {
                 JSONObject topChannelEmotes = new JSONObject(bttvChannelResponse);
                 JSONArray channelEmotes = topChannelEmotes.getJSONArray(CHANNEL_EMOTE_ARRAY);
 
@@ -108,10 +108,10 @@ class ChatEmoteManager {
             }
 
             String ffzResponse = Service.urlToJSONString(FFZ_CHANNEL_URL);
-            if (ffzResponse != null) {
+            if (!ffzResponse.isEmpty()) {
                 JSONObject channelTopObject = new JSONObject(ffzResponse);
                 JSONObject channelSets = channelTopObject.getJSONObject(SETS);
-                for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext();) {
+                for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext(); ) {
                     JSONArray emoticons = channelSets.getJSONObject(iterator.next()).getJSONArray(EMOTICONS);
                     for (int emoteIndex = 0; emoteIndex < emoticons.length(); emoteIndex++) {
                         Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
@@ -147,7 +147,7 @@ class ChatEmoteManager {
 
         JSONObject urls = emoteObject.getJSONObject(EMOTE_URLS);
         HashMap<Integer, String> urlMap = new HashMap<>();
-        for (Iterator<String> iterator = urls.keys(); iterator.hasNext();) {
+        for (Iterator<String> iterator = urls.keys(); iterator.hasNext(); ) {
             String key = iterator.next();
             urlMap.put(Integer.parseInt(key), "https:" + urls.getString(key));
         }
@@ -169,7 +169,7 @@ class ChatEmoteManager {
             if (emoteKeywordToEmote.containsKey(part)) {
                 Emote emote = emoteKeywordToEmote.get(part);
 
-                int[] positions = { position };
+                int[] positions = {position};
                 final ChatEmote chatEmote = new ChatEmote(emote, positions);
                 emotes.add(chatEmote);
             }

@@ -28,7 +28,6 @@
     <string name="login_user_no_internet_action">重試</string>
     <string name="title_activity_welcome">設置Twire</string>
     <string name="my_streams_preview_image">直播頻道預覽</string>
-    <string name="my_channels_error_none_found">無追隨者</string>
     <string name="my_channels_activity_label">追隨中</string>
     <string name="stream_sleep_timer_title">定時睡眠</string>
     <string name="stream_sleep_timer_started_minutes_only">已開始定時睡眠，影片將於 %d 分鐘後暫停。</string>
@@ -117,8 +116,6 @@
     <string name="title_activity_streamer_info">頻道</string>
     <string name="yesterday">昨日</string>
     <string name="today">今日</string>
-    <string name="enable_all">啟用全部</string>
-    <string name="disable_all">停用全部</string>
     <string name="percent">%s %%</string>
     <string name="pause">暫停</string>
     <string name="play">播放</string>
@@ -145,16 +142,11 @@
     <string name="menu_profile">簡介</string>
     <string name="player_show_navigation">輕按顯示導覽列</string>
     <string name="stream_audio_only_active">只播放音訊中</string>
-    <string name="stream_no_audio_only">抱歉，此直播沒有提供只播放音訊的選項</string>
-    <string name="quality_audio">僅音訊</string>
     <string name="audio_only">只播放音訊</string>
     <string name="chat_only">只顯示聊天室</string>
-    <string name="login_unvalid_token_text_line_two">您將需要重新登入</string>
-    <string name="login_unvalid_token_text_line_one">很抱歉</string>
     <string name="gen_dialog_login_or_out_content">您想登入新帳戶或是想登出自%s？</string>
     <string name="chat_status_connected">已連接至聊天室</string>
     <string name="chat_landscape_swipe">橫向時拖動以顯示聊天室</string>
-    <string name="navigation_drawer_my_games_title">我的遊戲</string>
     <string name="navigation_drawer_featured_title">直播推介</string>
     <string name="login_user_cancel">您需要登入才可使用Twire…</string>
     <string name="tip_navigate">按此前往分頁</string>

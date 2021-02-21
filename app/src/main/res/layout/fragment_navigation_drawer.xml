@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginBottom="@dimen/navigation_drawer_devider_height"
+                android:layout_marginBottom="@dimen/navigation_drawer_divider_height"
                 android:adjustViewBounds="true" />
 
             <ImageView
@@ -120,8 +120,8 @@
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:tint="?attr/colorAccent"
-                            app:srcCompat="@drawable/navigation_drawer_count_background" />
+                            app:srcCompat="@drawable/navigation_drawer_count_background"
+                            app:tint="?attr/colorAccent" />
 
                         <TextView
                             android:id="@+id/streams_count"

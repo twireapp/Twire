@@ -5,14 +5,14 @@ package com.perflyst.twire.model;
  */
 
 public class Panel {
-    private String mStreamerName;
-    private int mUserId;
+    private final String mStreamerName;
+    private final int mUserId;
+    private final String mDescription;
+    private final String mImageUrl;
+    private final String mLinkUrl;
+    private final String mTitle;
+    private final String mHtml;
     private int mOrder;
-    private String mDescription;
-    private String mImageUrl;
-    private String mLinkUrl;
-    private String mTitle;
-    private String mHtml;
 
     public Panel(String mStreamerName, int mUserId, int mOrder, String mDescription,
                  String mImageUrl, String mLinkUrl, String mTitle, String mHtml) {
@@ -30,24 +30,12 @@ public class Panel {
         return mHtml;
     }
 
-    public void setmHtml(String mHtml) {
-        this.mHtml = mHtml;
-    }
-
     public String getmStreamerName() {
         return mStreamerName;
     }
 
-    public void setmStreamerName(String mStreamerName) {
-        this.mStreamerName = mStreamerName;
-    }
-
     public int getmUserId() {
         return mUserId;
-    }
-
-    public void setmUserId(int mUserId) {
-        this.mUserId = mUserId;
     }
 
     public int getmOrder() {
@@ -62,31 +50,15 @@ public class Panel {
         return mDescription;
     }
 
-    public void setmDescription(String mDescription) {
-        this.mDescription = mDescription;
-    }
-
     public String getmImageUrl() {
         return mImageUrl;
-    }
-
-    public void setmImageUrl(String mImageUrl) {
-        this.mImageUrl = mImageUrl;
     }
 
     public String getmLinkUrl() {
         return mLinkUrl;
     }
 
-    public void setmLinkUrl(String mLinkUrl) {
-        this.mLinkUrl = mLinkUrl;
-    }
-
     public String getmTitle() {
         return mTitle;
-    }
-
-    public void setmTitle(String mTitle) {
-        this.mTitle = mTitle;
     }
 }

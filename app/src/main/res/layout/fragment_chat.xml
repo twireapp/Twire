@@ -69,8 +69,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:padding="@dimen/chat_emote_backspace_padding"
-                android:tint="?attr/chatInputTextColor"
-                app:srcCompat="@drawable/ic_backspace" />
+                app:srcCompat="@drawable/ic_backspace"
+                app:tint="?attr/chatInputTextColor" />
         </RelativeLayout>
 
         <View
@@ -106,8 +106,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:clickable="false"
-            android:tint="?attr/chatSendIconColor"
-            app:srcCompat="@drawable/ic_send" />
+            app:srcCompat="@drawable/ic_send"
+            app:tint="?attr/chatSendIconColor" />
 
         <ImageView
             android:id="@+id/chat_emote_keyboard_ic"
@@ -118,8 +118,8 @@
             android:layout_marginRight="@dimen/chat_emote_icon_margin_right"
             android:layout_toStartOf="@+id/chat_send_ic"
             android:layout_toLeftOf="@+id/chat_send_ic"
-            android:tint="?attr/chatSendIconColor"
-            app:srcCompat="@drawable/ic_mood" />
+            app:srcCompat="@drawable/ic_mood"
+            app:tint="?attr/chatSendIconColor" />
 
         <com.perflyst.twire.views.EditTextBackEvent
             android:id="@+id/send_message_textview"
@@ -165,9 +165,9 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:tint="?attr/chatRoomstateIconColor"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_roomstate_slowmode_26dp" />
+                app:srcCompat="@drawable/ic_roomstate_slowmode_26dp"
+                app:tint="?attr/chatRoomstateIconColor" />
 
             <ImageView
                 android:id="@+id/r9k_ic"
@@ -176,9 +176,9 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/slowmode_ic"
                 android:layout_toLeftOf="@id/slowmode_ic"
-                android:tint="?attr/chatRoomstateIconColor"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_roomstate_r9k_26dp" />
+                app:srcCompat="@drawable/ic_roomstate_r9k_26dp"
+                app:tint="?attr/chatRoomstateIconColor" />
 
             <ImageView
                 android:id="@+id/subsonly_ic"
@@ -187,9 +187,9 @@
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/r9k_ic"
                 android:layout_toLeftOf="@id/r9k_ic"
-                android:tint="?attr/chatRoomstateIconColor"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_roomstate_subsonly_26dp" />
+                app:srcCompat="@drawable/ic_roomstate_subsonly_26dp"
+                app:tint="?attr/chatRoomstateIconColor" />
         </RelativeLayout>
     </FrameLayout>
 

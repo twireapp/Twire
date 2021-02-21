@@ -216,7 +216,6 @@
                 android:layout_height="@dimen/settings_divider_height"
                 android:background="?attr/dividerColor" />
 
-
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

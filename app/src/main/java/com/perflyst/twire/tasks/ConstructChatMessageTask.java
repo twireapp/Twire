@@ -16,11 +16,11 @@ import java.util.List;
  * Created by Sebastian Rask Jepsen on 07/08/16.
  */
 public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage> {
-    private Callback callback;
-    private List<Emote> customEmotes, twitchEmotes, subscriberEmotes;
-    private ChatManager chatManager;
-    private String message;
-    private HashMap<String, Integer> wordOccurenc;
+    private final Callback callback;
+    private final List<Emote> customEmotes, twitchEmotes, subscriberEmotes;
+    private final ChatManager chatManager;
+    private final String message;
+    private final HashMap<String, Integer> wordOccurrences;
 
     public ConstructChatMessageTask(Callback callback, List<Emote> customEmotes, List<Emote> twitchEmotes, List<Emote> subscriberEmotes, ChatManager chatManager, String message) {
         this.callback = callback;
@@ -29,7 +29,7 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
         this.subscriberEmotes = subscriberEmotes;
         this.chatManager = chatManager;
         this.message = message;
-        this.wordOccurenc = new HashMap<>();
+        this.wordOccurrences = new HashMap<>();
     }
 
     @Override
@@ -83,12 +83,12 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
             if (emotesToCheck != null) {
                 for (Emote emote : emotesToCheck) {
                     if (word.equals(emote.getKeyword())) {
-                        int fromIndex = wordOccurenc.containsKey(word) ? wordOccurenc.get(word) : 0;
+                        int fromIndex = wordOccurrences.containsKey(word) ? wordOccurrences.get(word) : 0;
                         int wordIndex = message.indexOf(word, fromIndex);
 
-                        wordOccurenc.put(word, wordIndex + word.length() - 1);
+                        wordOccurrences.put(word, wordIndex + word.length() - 1);
 
-                        result.add(new ChatEmote(emote, new int[] { wordIndex }));
+                        result.add(new ChatEmote(emote, new int[]{wordIndex}));
                     }
                 }
             }

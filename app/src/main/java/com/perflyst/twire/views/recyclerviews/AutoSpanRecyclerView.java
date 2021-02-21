@@ -3,6 +3,7 @@ package com.perflyst.twire.views.recyclerviews;
 import android.content.Context;
 import android.util.AttributeSet;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,12 +44,12 @@ public class AutoSpanRecyclerView extends RecyclerView {
 
         this.addOnScrollListener(new OnScrollListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 mScrollAmount += dy;
                 setScrolled(mScrollAmount != 0);
@@ -97,10 +98,6 @@ public class AutoSpanRecyclerView extends RecyclerView {
 
     public void setScrolled(boolean isScrolled) {
         scrolled = isScrolled;
-    }
-
-    protected Settings getSettings() {
-        return mSettings;
     }
 
     public int getSpanCount() {
