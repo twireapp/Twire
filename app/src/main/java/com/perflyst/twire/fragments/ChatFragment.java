@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -456,7 +457,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         if (subscriberEmotesLoaded.size() > 0 && adapter != null && getContext() != null) {
             Log.d(LOG_TAG, "Adding subscriber emotes: " + subscriberEmotesLoaded.size());
 
-            Drawable icon = ContextCompat.getDrawable(getContext(), R.drawable.ic_attach_money);
+            Drawable icon = AppCompatResources.getDrawable(getContext(), R.drawable.ic_attach_money);
             if (icon == null) return;
             icon.setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
 
