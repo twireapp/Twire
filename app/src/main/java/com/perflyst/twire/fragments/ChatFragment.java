@@ -112,7 +112,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private FrameLayout mChatStatusBar;
 
     //Emote Keyboard
-    private EmoteGridFragment textEmotesFragment, recentEmotesFragment, twitchEmotesFragment, customEmotesFragment, subscriberEmotesFragment;
+    private EmoteGridFragment unicodeEmotesFragment, recentEmotesFragment, twitchEmotesFragment, customEmotesFragment, subscriberEmotesFragment;
     private ImageView mEmoteKeyboardButton, mEmoteChatBackspace;
     private ViewGroup emoteKeyboardContainer;
     private boolean isEmoteKeyboardOpen = false;
@@ -462,7 +462,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             TabLayout.Tab newTab = mEmoteTabs.newTab();
             newTab.setIcon(icon);
-            mEmoteTabs.addTab(newTab, adapter.SUBSCRIBE_POSITION, false);
+            mEmoteTabs.addTab(newTab, adapter.SUBSCRIBER_POSITION, false);
             adapter.showSubscriberEmote = true;
             adapter.notifyDataSetChanged();
 
@@ -912,11 +912,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     }
 
     protected enum EmoteFragmentType {
-        UNICODE,
-        CUSTOM,
+        RECENT,
         TWITCH,
         SUBSCRIBER,
-        ALL
+        CUSTOM,
+        UNICODE
     }
 
     public static class EmoteGridFragment extends Fragment {
@@ -966,20 +966,20 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             if (fragmentType != null) {
                 switch (fragmentType) {
-                    case UNICODE:
-                        addUnicodeEmotes();
-                        break;
-                    case ALL:
+                    case RECENT:
                         addRecentEmotes();
                         break;
                     case TWITCH:
                         addTwitchEmotes();
                         break;
+                    case SUBSCRIBER:
+                        addSubscriberEmotes();
+                        break;
                     case CUSTOM:
                         addCustomEmotes();
                         break;
-                    case SUBSCRIBER:
-                        addSubscriberEmotes();
+                    case UNICODE:
+                        addUnicodeEmotes();
                         break;
                 }
             }
@@ -1097,16 +1097,16 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             }
 
             void addEmote(Emote emote) {
-                if (fragmentType == EmoteFragmentType.ALL && emotesToHide != null && emotesToHide.contains(emote)) {
+                if (fragmentType == EmoteFragmentType.RECENT && emotesToHide != null && emotesToHide.contains(emote)) {
                     return;
                 }
 
                 if (!emotes.contains(emote)) {
-                    int position = fragmentType == EmoteFragmentType.ALL ? 0 : emotes.size();
+                    int position = fragmentType == EmoteFragmentType.RECENT ? 0 : emotes.size();
                     emotes.add(position, emote);
                     notifyItemInserted(position);
 
-                    if (fragmentType == EmoteFragmentType.ALL && recentEmotes != null && !recentEmotes.contains(emote)) {
+                    if (fragmentType == EmoteFragmentType.RECENT && recentEmotes != null && !recentEmotes.contains(emote)) {
                         recentEmotes.add(position, emote);
                     }
                 } else if (!isVisible()) {
@@ -1119,7 +1119,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             void addEmotes(List<Emote> emoteList) {
                 emotes.addAll(emoteList);
-                if (fragmentType == EmoteFragmentType.ALL && emotesToHide != null) {
+                if (fragmentType == EmoteFragmentType.RECENT && emotesToHide != null) {
                     emotes.removeAll(emotesToHide);
                 }
 
@@ -1142,26 +1142,26 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private class EmotesPagerAdapter extends FragmentPagerAdapter {
         final int RECENT_POSITION = 0,
                 TWITCH_POSITION = 1,
-                SUBSCRIBE_POSITION = 2,
+                SUBSCRIBER_POSITION = 2,
                 CUSTOM_POSITION = 3,
-                EMOJI_POSITION = 4;
+                UNICODE_POSITION = 4;
         boolean showSubscriberEmote = false;
 
         EmotesPagerAdapter(FragmentManager fm) {
             super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
             EmoteKeyboardDelegate delegate = ChatFragment.this;
 
-            textEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.UNICODE, delegate);
-            recentEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.ALL, delegate);
+            recentEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.RECENT, delegate);
             twitchEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.TWITCH, delegate);
             subscriberEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.SUBSCRIBER, delegate);
             customEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.CUSTOM, delegate);
+            unicodeEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.UNICODE, delegate);
         }
 
         @Override
         @NonNull
         public Fragment getItem(int position) {
-            if (!showSubscriberEmote && position >= SUBSCRIBE_POSITION) {
+            if (!showSubscriberEmote && position >= SUBSCRIBER_POSITION) {
                 position++;
             }
 
@@ -1170,12 +1170,12 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     return recentEmotesFragment;
                 case TWITCH_POSITION:
                     return twitchEmotesFragment;
-                case SUBSCRIBE_POSITION:
+                case SUBSCRIBER_POSITION:
                     return subscriberEmotesFragment;
                 case CUSTOM_POSITION:
                     return customEmotesFragment;
-                case EMOJI_POSITION:
-                    return textEmotesFragment;
+                case UNICODE_POSITION:
+                    return unicodeEmotesFragment;
                 default:
                     return EmoteGridFragment.newInstance();
             }
@@ -1183,7 +1183,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         @Override
         public int getCount() {
-            int count = EMOJI_POSITION + 1;
+            int count = UNICODE_POSITION + 1;
             if (!showSubscriberEmote) {
                 count--;
             }
