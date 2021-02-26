@@ -30,29 +30,7 @@
                 android:layout_toLeftOf="@+id/backspace_divider"
                 app:tabGravity="center"
                 app:tabMaxWidth="@dimen/chat_emote_tab_max_width"
-                app:tabMode="scrollable">
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="@dimen/chat_emote_tab_icon_size"
-                    android:layout_height="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_schedule" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="@dimen/chat_emote_tab_icon_size"
-                    android:layout_height="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_twitch" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="@dimen/chat_emote_tab_icon_size"
-                    android:layout_height="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_betterttv_500px" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_width="@dimen/chat_emote_tab_icon_size"
-                    android:layout_height="@dimen/chat_emote_tab_icon_size"
-                    android:icon="@drawable/ic_mood" />
-
-            </com.google.android.material.tabs.TabLayout>
+                app:tabMode="scrollable" />
 
             <View
                 android:id="@+id/backspace_divider"
@@ -78,7 +56,7 @@
             android:layout_height="@dimen/chat_emote_divider"
             android:background="?attr/chatStatusBarColor" />
 
-        <androidx.viewpager.widget.ViewPager
+        <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/tabs_viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
