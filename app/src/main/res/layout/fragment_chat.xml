@@ -133,7 +133,7 @@
             android:imeOptions="actionSend"
             android:inputType="textImeMultiLine"
             android:maxHeight="@dimen/chat_input_height_max"
-            android:maxLength="150"
+            android:maxLength="500"
             android:textColor="?attr/chatInputTextColor"
             android:textColorHint="?attr/chatInputHintColor" />
     </RelativeLayout>
