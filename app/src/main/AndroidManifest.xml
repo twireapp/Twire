@@ -103,12 +103,12 @@
         <activity
             android:name=".activities.setup.WelcomeActivity"
             android:label="@string/title_activity_welcome"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="sensor" />
         <activity
             android:name=".activities.setup.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".activities.setup.WelcomeActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="sensor">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.setup.WelcomeActivity" />
@@ -116,7 +116,7 @@
         <activity
             android:name=".activities.setup.ConfirmSetupActivity"
             android:label="@string/title_activity_welcome"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="sensor" />
         <activity
             android:name=".activities.StartUpActivity"
             android:exported="true"
