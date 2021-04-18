@@ -103,6 +103,7 @@
     <string name="preview_stream_title">Stream title</string>
     <string name="preview_stream_display_name">Name</string>
     <string name="preview_stream_game_and_viewers">1337 viewers - Game title</string>
+    <string name="preview_stream_online_since">00:30:00</string>
 
     <!-- Game Card -->
     <string name="game_viewers">%s viewers</string>

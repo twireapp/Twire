@@ -21,6 +21,7 @@ import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
+import java.text.DecimalFormat;
 import java.util.Comparator;
 
 /**
@@ -28,7 +29,7 @@ import java.util.Comparator;
  */
 class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
     final ImageView vPreviewImage;
-    final TextView vDisplayName, vTitle, vGame;
+    final TextView vDisplayName, vTitle, vGame, vOnlineSince;
     final View sharedPadding;
     private final CardView vCard;
     //private TextView vOnlineSince;
@@ -41,7 +42,7 @@ class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
         vTitle = v.findViewById(R.id.stream_title);
         vGame = v.findViewById(R.id.stream_game_and_viewers);
         sharedPadding = v.findViewById(R.id.shared_padding);
-        //vOnlineSince = v.findViewById(R.id.stream_online_since);
+        vOnlineSince = v.findViewById(R.id.stream_online_since);
     }
 
     @Override
@@ -156,14 +157,27 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
 
     @Override
     void setViewData(StreamInfo element, StreamViewHolder viewHolder) {
+        //get the current unix timestamp from the system
+        Long timestamp = System.currentTimeMillis();
+
+        //do some time magic here
+        long millis = timestamp - element.getStartedAt();
+        int hours = (int) (millis / (1000 * 60 * 60));
+        int minutes = (int) ((millis / (1000 * 60)) % 60);
+        int seconds = (int) ((millis / (1000)) % 60);
+
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
         viewHolder.vPreviewImage.getLayoutParams().width = metrics.widthPixels;
 
         String viewers = getContext().getResources().getString(R.string.my_streams_cell_current_viewers, element.getCurrentViewers());
         String gameAndViewers = viewers + " - " + element.getGame();
+        //create the String and convert single digit numbers like: 6 to 06
+        String OnlineSince = new DecimalFormat("00").format(hours) + ":" + new DecimalFormat("00").format(minutes) + ":" + new DecimalFormat("00").format(seconds);
+
         viewHolder.vDisplayName.setText(element.getChannelInfo().getDisplayName());
         viewHolder.vTitle.setText(element.getTitle());
         viewHolder.vGame.setText(gameAndViewers);
+        viewHolder.vOnlineSince.setText(OnlineSince);
         viewHolder.vPreviewImage.setVisibility(View.VISIBLE);
     }
 
