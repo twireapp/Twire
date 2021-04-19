@@ -58,6 +58,7 @@
     <string name="stream_fragment_tag" translatable="false">StreamFragmentTag</string>
     <string name="stream_fragment_streamerInfo" translatable="false">streamerInfoForIntent</string>
     <string name="stream_fragment_viewers" translatable="false">streamViewers</string>
+    <string name="stream_fragment_runtime" translatable="false">streamRuntime</string>
 
     <string name="stream_fragment_autoplay" translatable="false">streamAutoPlay</string>
     <string name="stream_fragment_vod_id" translatable="false">stream_vod_id</string>
@@ -150,6 +151,7 @@
     <!-- OnlineStreamCardAdapter-->
     <string name="intent_key_streamer_info" translatable="false">StreamerInfoIntent</string>
     <string name="intent_key_stream_viewers" translatable="false">StreamViewers</string>
+    <string name="intent_key_stream_runtime" translatable="false">StreamRuntime</string>
 
     <!-- Welcome Activity -->
     <string name="title_activity_welcome">Twire setup</string>

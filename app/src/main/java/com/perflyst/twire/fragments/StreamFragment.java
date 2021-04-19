@@ -152,7 +152,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             mPreview,
             mShowChatButton;
     private SeekBar mProgressBar;
-    private TextView mCurrentProgressView, castingTextView, mCurrentViewersView;
+    private TextView mCurrentProgressView, castingTextView, mCurrentViewersView, mRuntime;
     private AppCompatActivity mActivity;
     private Snackbar snackbar;
     private ProgressView mBufferingView;
@@ -297,6 +297,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         mProgressBar = mRootView.findViewById(R.id.progressBar);
         mBufferingView = mRootView.findViewById(R.id.circle_progress);
         mCurrentViewersView = mRootView.findViewById(R.id.txtViewViewers);
+        mRuntime = mRootView.findViewById(R.id.txtViewRuntime);
         mActivity = (AppCompatActivity) getActivity();
         mClickInterceptor = mRootView.findViewById(R.id.click_interceptor);
         View mCurrentViewersWrapper = mRootView.findViewById(R.id.viewers_wrapper);
@@ -380,6 +381,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
             if (args != null && args.containsKey(getString(R.string.stream_fragment_viewers)) && settings.getStreamPlayerShowViewerCount()) {
                 mCurrentViewersView.setText(String.valueOf(args.getInt(getString(R.string.stream_fragment_viewers))));
+                mRuntime.setText(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
                 startFetchingViewers();
             } else {
                 mCurrentViewersWrapper.setVisibility(View.GONE);
