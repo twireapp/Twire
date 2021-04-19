@@ -73,6 +73,7 @@
 
     <string name="stream_fullscreen">Fullscreen</string>
     <string name="stream_viewers">Viewers</string>
+    <string name="stream_runtime"></string>
     <string name="stream_show_chat">Show chat</string>
     <string name="stream_forward">Forward 10 seconds</string>
     <string name="stream_backward">Backward 10 seconds</string>
