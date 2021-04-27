@@ -328,7 +328,7 @@ public class Service {
         if (view != null) {
             InputMethodManager inputMethodManager = ContextCompat.getSystemService(activity, InputMethodManager.class);
             if (inputMethodManager != null) {
-                inputMethodManager.toggleSoftInputFromWindow(view.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+                inputMethodManager.showSoftInput(view, 0);
             }
         }
     }
