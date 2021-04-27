@@ -3,11 +3,6 @@ package com.perflyst.twire.tasks;
 import android.os.AsyncTask;
 
 import com.perflyst.twire.model.Panel;
-import com.perflyst.twire.service.Service;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +25,9 @@ public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
     protected List<Panel> doInBackground(Void... voids) {
         List<Panel> result = new ArrayList<>();
 
+        // This code is commented out because the /panels API has been removed.
+        // If Twitch adds another API that allows us to get the panels, it should replace the code below.
+        /*
         try {
             String jsonString = Service.urlToJSONString("https://api.twitch.tv/api/channels/" + mStreamerName + "/panels");
             JSONArray json = new JSONArray(jsonString);
@@ -63,6 +61,7 @@ public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        */
 
         return result;
     }
