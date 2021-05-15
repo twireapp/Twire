@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.misc.SecretKeys;
+import com.perflyst.twire.misc.StringGenerator;
 import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.service.Service;
 
@@ -78,14 +79,49 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
             e.printStackTrace();
         }
 
-        String streamUrl = String.format("http://usher.twitch.tv/api/channel/hls/%s.m3u8" +
-                "?player=twitchweb&" +
-                "&token=%s" +
-                "&sig=%s" +
-                "&allow_audio_only=true" +
-                "&allow_source=true" +
-                "&type=any" +
-                "&p=%s", streamerName, safeEncode(token), signature, "" + new Random().nextInt(6));
+        //build ping request for ttv.lol
+        Request ping = new Request.Builder()
+                .url("https://api.ttv.lol/ping")
+                .build();
+
+        //get response code
+        Service.SimpleResponse pingresponse = Service.makeRequest(ping);
+        int responsecode = pingresponse.code;
+        Log.d("Response Code", String.valueOf(responsecode));
+
+        String streamUrl = "";
+
+        //if ping successful use ttv.lol otherwise use fallback twitch api
+        if (responsecode == 200) {
+            //modified api call here for ttv.lol
+            Log.d("Using ttv.lol api", String.valueOf(responsecode));
+            streamUrl = String.format("https://api.ttv.lol/playlist/%s.m3u8", streamerName);
+            String streamParameters = String.format(
+                    "?allow_source=true" +
+                    "&fast_bread=true" +
+                    "&play_session_id:%s" +
+                    "&player_backend=mediaplayer" +
+                    "&playlist_include_framerate=true" +
+                    "&reassignments_supported=true" +
+                    "&sig=%s" +
+                    "&supported_codecs=vp09" +
+                    "&token=%s" +
+                    "&cdm=wv" +
+                    "&player_version=1.4.0", StringGenerator.randomString(32), StringGenerator.randomString(32), token);
+            //only encode the parameters of the url
+            streamUrl = streamUrl + safeEncode(streamParameters);
+        } else {
+            //default twitch api call here
+            Log.d("Using default api", String.valueOf(responsecode));
+            streamUrl = String.format("http://usher.twitch.tv/api/channel/hls/%s.m3u8" +
+                    "?player=twitchweb&" +
+                    "&token=%s" +
+                    "&sig=%s" +
+                    "&allow_audio_only=true" +
+                    "&allow_source=true" +
+                    "&type=any" +
+                    "&p=%s", streamerName, safeEncode(token), signature, "" + new Random().nextInt(6));
+        }
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
         return parseM3U8(streamUrl);
