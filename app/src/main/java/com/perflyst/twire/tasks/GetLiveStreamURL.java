@@ -31,6 +31,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     public static final String QUALITY_AUTO = "auto";
     private final String LOG_TAG = getClass().getSimpleName();
     private final AsyncResponse callback;
+    public boolean ttvfun = false;
 
     public GetLiveStreamURL(AsyncResponse aCallback) {
         callback = aCallback;
@@ -93,9 +94,14 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
 
         //if ping successful use ttv.lol otherwise use fallback twitch api
         if (responsecode == 200) {
+            ttvfun = true;
+        } else {
+            ttvfun = false;
+        }
+        if (ttvfun == true) {
             //modified api call here for ttv.lol
             Log.d("Using ttv.lol api", String.valueOf(responsecode));
-            streamUrl = String.format("https://api.ttv.lol/playlist/%s.m3u8", streamerName);
+            streamUrl = String.format("http://api.ttv.lol/playlist/%s.m3u8", streamerName);
             String streamParameters = String.format(
                     "?allow_source=true" +
                     "&fast_bread=true" +
@@ -104,7 +110,6 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
                     "&playlist_include_framerate=true" +
                     "&reassignments_supported=true" +
                     "&sig=%s" +
-                    "&supported_codecs=vp09" +
                     "&token=%s" +
                     "&cdm=wv" +
                     "&player_version=1.4.0", StringGenerator.randomString(32), StringGenerator.randomString(32), token);
@@ -133,16 +138,31 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     }
 
     LinkedHashMap<String, Quality> parseM3U8(String urlToRead) {
-        Request request = new Request.Builder()
-                .url(urlToRead)
-                .header("Referer", "https://player.twitch.tv")
-                .header("Origin", "https://player.twitch.tv")
-                .build();
+        Request request;
+        Log.d("M3U8 Url", urlToRead);
+        if (ttvfun == true) {
+            request = new Request.Builder()
+                    .url(urlToRead)
+                    .header("Referer", "https://player.twitch.tv")
+                    .header("Origin", "https://player.twitch.tv")
+                    //so apparently this header took me 2 hours of debugging because without it we get a 401 response here
+                    .header("X-Donate-To", "https://ttv.lol/donate")
+                    .build();
+            }
+        else {
+            request = new Request.Builder()
+                    .url(urlToRead)
+                    .header("Referer", "https://player.twitch.tv")
+                    .header("Origin", "https://player.twitch.tv")
+                    .build();
+        }
 
         String result = "";
         Service.SimpleResponse response = Service.makeRequest(request);
         if (response != null)
+            Log.d("M3U8 Response Code", String.valueOf(response.response.code()));
             result = response.body;
+        Log.d("result", result);
 
         LinkedHashMap<String, Quality> resultList = new LinkedHashMap<>();
         resultList.put(QUALITY_AUTO, new Quality("Auto", urlToRead));
