@@ -19,4 +19,17 @@ public class StringGenerator {
 
         return sb.toString();
     }
+
+    public static final String DATA_Numbers = "0123456789";
+    public static Random RANDOM_Numbers = new Random();
+
+    public static String randomNumbers(int len) {
+        StringBuilder sb = new StringBuilder(len);
+
+        for (int i = 0; i < len; i++) {
+            sb.append(DATA_Numbers.charAt(RANDOM_Numbers.nextInt(DATA_Numbers.length())));
+        }
+
+        return sb.toString();
+    }
 }

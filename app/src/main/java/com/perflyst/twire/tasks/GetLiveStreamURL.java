@@ -95,13 +95,14 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         //if ping successful use ttv.lol otherwise use fallback twitch api
         if (responsecode == 200) {
             ttvfun = true;
+            Log.d("Using ttv.lol api", String.valueOf(responsecode));
         } else {
             ttvfun = false;
+            Log.d("Using default api", String.valueOf(responsecode));
         }
         if (ttvfun == true) {
-            //modified api call here for ttv.lol
-            Log.d("Using ttv.lol api", String.valueOf(responsecode));
-            streamUrl = String.format("http://api.ttv.lol/playlist/%s.m3u8", streamerName);
+            //modified api call here for ttv.log
+            streamUrl = String.format("https://api.ttv.lol/playlist/%s.m3u8", streamerName);
             String streamParameters = String.format(
                     "?allow_source=true" +
                     "&fast_bread=true" +
@@ -117,7 +118,6 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
             streamUrl = streamUrl + safeEncode(streamParameters);
         } else {
             //default twitch api call here
-            Log.d("Using default api", String.valueOf(responsecode));
             streamUrl = String.format("http://usher.twitch.tv/api/channel/hls/%s.m3u8" +
                     "?player=twitchweb&" +
                     "&token=%s" +
