@@ -1434,6 +1434,7 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
         MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(MediaItem.fromUri(Uri.parse(url)));
+        Log.d("Playing", url);
         currentMediaSource = mediaSource;
         player.setMediaSource(mediaSource);
         player.prepare();

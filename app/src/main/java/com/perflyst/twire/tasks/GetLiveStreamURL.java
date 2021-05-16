@@ -102,18 +102,15 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         }
         if (ttvfun == true) {
             //modified api call here for ttv.log
-            streamUrl = String.format("https://api.ttv.lol/playlist/%s.m3u8", streamerName);
+            streamUrl = String.format("http://api.ttv.lol/playlist/%s.m3u8", streamerName);
             String streamParameters = String.format(
-                    "?allow_source=true" +
-                    "&fast_bread=true" +
-                    "&play_session_id:%s" +
-                    "&player_backend=mediaplayer" +
-                    "&playlist_include_framerate=true" +
-                    "&reassignments_supported=true" +
-                    "&sig=%s" +
+                    "?player=twitchweb&" +
                     "&token=%s" +
-                    "&cdm=wv" +
-                    "&player_version=1.4.0", StringGenerator.randomString(32), StringGenerator.randomString(32), token);
+                    "&sig=%s" +
+                    "&allow_audio_only=true" +
+                    "&allow_source=true" +
+                    "&type=any" +
+                    "p=%S", token, signature, "" + new Random().nextInt(6));
             //only encode the parameters of the url
             streamUrl = streamUrl + safeEncode(streamParameters);
         } else {
@@ -148,8 +145,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
                     //so apparently this header took me 2 hours of debugging because without it we get a 401 response here
                     .header("X-Donate-To", "https://ttv.lol/donate")
                     .build();
-            }
-        else {
+            } else {
             request = new Request.Builder()
                     .url(urlToRead)
                     .header("Referer", "https://player.twitch.tv")
@@ -165,7 +161,11 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         Log.d("result", result);
 
         LinkedHashMap<String, Quality> resultList = new LinkedHashMap<>();
-        resultList.put(QUALITY_AUTO, new Quality("Auto", urlToRead));
+
+        //when using ttv.lol the Quality setting "auto" dosen`t work so I just skip it 
+        if (ttvfun == false) {
+            resultList.put(QUALITY_AUTO, new Quality("Auto", urlToRead));
+        }
 
         Pattern p = Pattern.compile("GROUP-ID=\"(.+)\",NAME=\"(.+)\".+\\n.+\\n(https?://\\S+)");
         Matcher m = p.matcher(result);
