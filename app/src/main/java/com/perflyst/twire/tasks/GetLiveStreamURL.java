@@ -101,8 +101,9 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
             Log.d("Using default api", String.valueOf(responsecode));
         }
         if (ttvfun == true) {
-            //modified api call here for ttv.log
-            streamUrl = String.format("http://api.ttv.lol/playlist/%s.m3u8", streamerName);
+            //modified api call here for ttv.lol
+            //ttv.lol requires https, because without it you get a 301 redirect thats not supported
+            streamUrl = String.format("https://api.ttv.lol/playlist/%s.m3u8", streamerName);
             String streamParameters = String.format(
                     "?player=twitchweb&" +
                     "&token=%s" +
@@ -162,10 +163,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
 
         LinkedHashMap<String, Quality> resultList = new LinkedHashMap<>();
 
-        //when using ttv.lol the Quality setting "auto" dosen`t work so I just skip it 
-        if (ttvfun == false) {
-            resultList.put(QUALITY_AUTO, new Quality("Auto", urlToRead));
-        }
+        resultList.put(QUALITY_AUTO, new Quality("Auto", urlToRead));
 
         Pattern p = Pattern.compile("GROUP-ID=\"(.+)\",NAME=\"(.+)\".+\\n.+\\n(https?://\\S+)");
         Matcher m = p.matcher(result);

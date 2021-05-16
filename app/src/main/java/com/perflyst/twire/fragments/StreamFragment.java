@@ -1432,6 +1432,11 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
         properties.set("Referer", "https://player.twitch.tv");
         properties.set("Origin", "https://player.twitch.tv");
 
+        //add the donation header otherwise you get a 401 error
+        if (url.contains("api.ttv.lol")) {
+            properties.set("X-Donate-To", "https://ttv.lol/donate");
+        }
+
         MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
                 .createMediaSource(MediaItem.fromUri(Uri.parse(url)));
         Log.d("Playing", url);
