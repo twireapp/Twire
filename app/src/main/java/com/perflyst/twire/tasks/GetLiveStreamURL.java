@@ -104,6 +104,20 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
             //modified api call here for ttv.lol
             //ttv.lol requires https, because without it you get a 301 redirect thats not supported
             streamUrl = String.format("https://api.ttv.lol/playlist/%s.m3u8", streamerName);
+
+
+            //we don´t want to leak the user id or the token to a 3`rd party api as it is
+            //not needed: https://github.com/TTV-LOL/extensions/issues/8
+            try {
+                JSONObject obj = new JSONObject(token);
+                obj.put("token", "");
+                obj.put("user_ip", "");
+                obj.put("user_id", "");
+                token = obj.toString(2);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             String streamParameters = String.format(
                     "?player=twitchweb&" +
                     "&token=%s" +
