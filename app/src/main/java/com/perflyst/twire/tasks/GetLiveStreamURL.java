@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.misc.SecretKeys;
-import com.perflyst.twire.misc.StringGenerator;
 import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.service.Service;
 
