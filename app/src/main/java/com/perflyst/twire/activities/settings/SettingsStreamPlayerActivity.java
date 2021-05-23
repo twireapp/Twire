@@ -16,8 +16,8 @@ import com.perflyst.twire.service.Settings;
 public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private Settings settings;
-    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary;
-    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView;
+    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mUseProxySummary;
+    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mUseProxy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +28,12 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         mShowNavigationBarView = findViewById(R.id.player_show_navigation_title);
         mShowViewCountView = findViewById(R.id.player_show_viewercount_title);
         mAutoPlaybackView = findViewById(R.id.player_auto_continue_playback_title);
+        mUseProxy = findViewById(R.id.player_use_proxy);
 
         mShowViewCountSummary = findViewById(R.id.player_show_viewercount_title_summary);
         mShowNavigationBarSummary = findViewById(R.id.player_show_navigation_summary);
         mAutoPlaybackSummary = findViewById(R.id.player_auto_continue_playback_summary);
+        mUseProxySummary = findViewById(R.id.player_use_proxy_summary);
 
         final Toolbar toolbar = findViewById(R.id.settings_player_toolbar);
         setSupportActionBar(toolbar);
@@ -68,6 +70,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         updateSummary(mShowViewCountView, mShowViewCountSummary, settings.getStreamPlayerShowViewerCount());
         updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, settings.getStreamPlayerShowNavigationBar());
         updateSummary(mAutoPlaybackView, mAutoPlaybackSummary, settings.getStreamPlayerAutoContinuePlaybackOnReturn());
+        updateSummary(mUseProxy, mUseProxySummary, settings.getStreamPlayerUseProxy());
     }
 
     public void onClickShowNavigationBar(View v) {
@@ -82,6 +85,11 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     public void onClickAutoPlayback(View v) {
         settings.setStreamPlayerAutoContinuePlaybackOnReturn(!settings.getStreamPlayerAutoContinuePlaybackOnReturn());
+        updateSummaries();
+    }
+
+    public void onClickVideoProxy(View v) {
+        settings.setStreamPlayerVideoProxy(!settings.getStreamPlayerUseProxy());
         updateSummaries();
     }
 }
