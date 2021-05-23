@@ -382,11 +382,12 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
             if (!settings.getStreamPlayerRuntime()) {
                 mRuntimeWrapper.setVisibility(View.GONE);
+            } else {
+                mRuntime.setText(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
             }
 
             if (args != null && args.containsKey(getString(R.string.stream_fragment_viewers)) && settings.getStreamPlayerShowViewerCount()) {
                 mCurrentViewersView.setText(String.valueOf(args.getInt(getString(R.string.stream_fragment_viewers))));
-                mRuntime.setText(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
                 startFetchingViewers();
             } else {
                 mCurrentViewersWrapper.setVisibility(View.GONE);
