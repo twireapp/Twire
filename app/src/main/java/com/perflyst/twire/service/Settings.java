@@ -36,6 +36,7 @@ public class Settings {
     private final String GENERAL_FILTER_TOP_STREAMS_LANGUAGE = "genFilterTopStreamLanguage";
     private final String NOTIFICATIONS_IS_DISABLED = "notIsDisabled";
     private final String STREAM_PLAYER_SHOW_VIEWERCOUNT = "streamPlayerShowViewerCount",
+            STREAM_PLAYER_SHOW_RUNTIME = "streamPlayerShowRuntime",
             STREAM_PLAYER_REVEAL_NAVIGATION = "streamPlayerRevealNavigation",
             STREAM_PLAYER_AUTO_PLAYBACK = "streamPlayerAutoPlackbackOnReturn";
     private final String APPEARANCE_STREAM_STYLE = "appStreamStyle";
@@ -645,6 +646,11 @@ public class Settings {
         return preferences.getBoolean(this.STREAM_PLAYER_SHOW_VIEWERCOUNT, true);
     }
 
+    public boolean getStreamPlayerRuntime() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.STREAM_PLAYER_SHOW_RUNTIME, true);
+    }
+
     /**
      * Stream Player -
      */
@@ -652,6 +658,12 @@ public class Settings {
     public void setStreamPlayerShowViewerCount(boolean showViewCount) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.STREAM_PLAYER_SHOW_VIEWERCOUNT, showViewCount);
+        editor.commit();
+    }
+
+    public void setStreamRuntime(boolean showRuntime) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.STREAM_PLAYER_SHOW_RUNTIME, showRuntime);
         editor.commit();
     }
 

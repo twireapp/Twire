@@ -100,11 +100,12 @@
                     app:tint="@android:color/white" />
 
                 <LinearLayout
-                    android:id="@+id/viewers_wrapper"
+                    android:id="@+id/runtime_wrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
+                    android:layout_centerInParent="true"
+                    android:layout_toLeftOf="@id/viewers_wrapper"
+                    android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -126,6 +127,15 @@
                         android:text="@string/stream_runtime"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/toolbar_viewers_text_size" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/viewers_wrapper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="@dimen/viewers_icon_size"
