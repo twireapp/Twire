@@ -104,7 +104,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_centerInParent="true"
-                    android:layout_toLeftOf="@id/viewers_wrapper"
+                    android:layout_toLeftOf="@id/centerhelper"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
@@ -129,12 +129,20 @@
                         android:textSize="@dimen/toolbar_viewers_text_size" />
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/centerhelper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
+
                 <LinearLayout
                     android:id="@+id/viewers_wrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/centerhelper"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -156,6 +164,7 @@
                         android:text=""
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/toolbar_viewers_text_size" />
+
                 </LinearLayout>
 
                 <LinearLayout
