@@ -16,7 +16,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
@@ -100,11 +102,17 @@ import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.rey.material.widget.ProgressView;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
@@ -383,7 +391,69 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             if (!settings.getStreamPlayerRuntime()) {
                 mRuntimeWrapper.setVisibility(View.GONE);
             } else {
-                mRuntime.setText(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
+                Log.d("Runtime String", args.getString(getString(R.string.stream_fragment_runtime)));
+                Date date = null;
+                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                try {
+                    date = format.parse(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
+                    Log.d("Date", String.valueOf(date));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                int startminute = date.getMinutes();
+                int starthour = date.getHours();
+
+                // https://stackoverflow.com/questions/46774195/countdown-reverse-counter
+                // this is a reverse countdowntimer
+                new CountDownTimer(999999999, 1000) {
+                    int min = startminute;
+                    int hour = starthour;
+
+                    public void onTick(long millisUntilFinished) {
+                        long time = 999999999 - millisUntilFinished;
+                        long sec = (time/1000)%60;
+                        if (sec == 0){
+                            min++;
+                            if (min > 59){
+                                min = 0;
+                                hour++;
+                            }
+                        }
+                        if (sec < 10) {
+                            if (min < 10) {
+                                if (hour < 10) {
+                                    mRuntime.setText("0" + hour + ":0" + min + ":0" + sec);
+                                } else {
+                                    mRuntime.setText("" + hour + ":0" + min + ":0" + sec);
+                                }
+                            } else {
+                                if (hour < 10) {
+                                    mRuntime.setText("0" + hour + ":" + min + ":0" + sec);
+                                } else {
+                                    mRuntime.setText("" + hour + ":" + min + ":0" + sec);
+                                }
+                            }
+                        } else {
+                            if (min < 10) {
+                                if (hour < 10) {
+                                    mRuntime.setText("0" + hour + ":0" + min + ":" + sec);
+                                } else {
+                                    mRuntime.setText("" + hour + ":0" + min + ":" + sec);
+                                }
+                            } else {
+                                if (hour < 10) {
+                                    mRuntime.setText("0" + hour + ":" + min + ":" + sec);
+                                } else {
+                                    mRuntime.setText("" + hour + ":" + min + ":" + sec);
+                                }
+                            }
+                        }
+                    }
+
+                    public void onFinish() {}
+                }.start();
+                //mRuntime.setText(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
             }
 
             if (args != null && args.containsKey(getString(R.string.stream_fragment_viewers)) && settings.getStreamPlayerShowViewerCount()) {
