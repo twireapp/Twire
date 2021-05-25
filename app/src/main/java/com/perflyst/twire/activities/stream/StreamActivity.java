@@ -169,8 +169,8 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
 
     @Override
     public void onBackPressed() {
-        if (mChatFragment == null || mChatFragment.notifyBackPressed()) {
-            super.onBackPressed();
+        if (mChatFragment == null || !mChatFragment.notifyBackPressed()) {
+            return;
         }
 
         // Eww >(

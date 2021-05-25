@@ -30,11 +30,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.content.res.AppCompatResources;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -116,15 +115,18 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private EmoteGridFragment textEmotesFragment, recentEmotesFragment, twitchEmotesFragment, customEmotesFragment, subscriberEmotesFragment;
     private ImageView mEmoteKeyboardButton, mEmoteChatBackspace;
     private ViewGroup emoteKeyboardContainer;
-    private boolean isEmoteKeyboardOpen = false;
     private TabLayout mEmoteTabs;
     private ViewPager mEmoteViewPager;
     private Integer selectedTabColorRes, unselectedTabColorRes;
-    private boolean hasSoftKeyboardBeenShown = false,
-            hideKeyboardWhenShown = false,
-            isSoftKeyboardOpen = false;
+    private KeyboardState keyboardState = KeyboardState.CLOSED;
     private ColorFilter defaultBackgroundColor;
     private BottomSheetDialog bottomSheetDialog;
+
+    private enum KeyboardState {
+        CLOSED,
+        SOFT,
+        EMOTE
+    }
 
     public static ChatFragment getInstance(Bundle args) {
         ChatFragment fragment = new ChatFragment();
@@ -432,8 +434,10 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
      * Notify this fragment that back was pressed. Returns true if the super should be called. Else returns false
      */
     public boolean notifyBackPressed() {
-        if (isEmoteKeyboardOpen) {
-            hideEmoteKeyboard();
+        // Check if the emote keyboard is open and close it.
+        // The latter condition should never happen but it's been added since you can't detect if the soft keyboard is open reliably.
+        if (keyboardState == KeyboardState.EMOTE || (keyboardState == KeyboardState.CLOSED && emoteKeyboardContainer.getVisibility() == View.VISIBLE)) {
+            setKeyboardState(KeyboardState.CLOSED);
             return false;
         } else {
             return true;
@@ -509,70 +513,43 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         ViewGroup.LayoutParams lp = emoteKeyboardContainer.getLayoutParams();
         lp.height = keyboardHeight;
         emoteKeyboardContainer.setLayoutParams(lp);
-
-        hasSoftKeyboardBeenShown = true;
     }
 
     private void emoteButtonClicked(View clickedView) {
         clickedView.performHapticFeedback(VIBRATION_FEEDBACK);
 
-        if (hasSoftKeyboardBeenShown) {
-            requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-        }
-
-        if (!isEmoteKeyboardOpen) {
-            if (!hasSoftKeyboardBeenShown) {
-                Log.d(LOG_TAG, "SHOW SOFT KEYBOARD");
-                hideKeyboardWhenShown = true;
-                if (mSendText.requestFocus()) {
-                    openSoftKeyboard();
-                }
+        if (keyboardState == KeyboardState.EMOTE) {
+            if (mSendText.requestFocus()) {
+                setKeyboardState(KeyboardState.SOFT);
             }
-
-            showEmoteKeyboard();
-
         } else {
-            if (isSoftKeyboardOpen) {
-                closeSoftKeyboard();
-            } else {
-                requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-                openSoftKeyboard();
-            }
+            setKeyboardState(KeyboardState.EMOTE);
         }
     }
 
-    private void showEmoteKeyboard() {
-        Log.d(LOG_TAG, "Show emote keyboard");
+    private void setKeyboardState(KeyboardState state) {
+        if (keyboardState == state)
+            return;
 
-        closeSoftKeyboard();
-        isEmoteKeyboardOpen = true;
-        emoteKeyboardContainer.setVisibility(View.VISIBLE);
-        mEmoteKeyboardButton.setColorFilter(Service.getAccentColor(requireContext()));
-        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-    }
-
-    private void hideEmoteKeyboard() {
-        Log.d(LOG_TAG, "Hide emote keyboard");
-        isEmoteKeyboardOpen = false;
-
-        emoteKeyboardContainer.setVisibility(View.GONE);
-        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        mEmoteKeyboardButton.setColorFilter(defaultBackgroundColor);
-    }
-
-    private void openSoftKeyboard() {
-        Service.showKeyboard(requireActivity());
-        isSoftKeyboardOpen = true;
-        mEmoteKeyboardButton.setColorFilter(defaultBackgroundColor);
-    }
-
-    private void closeSoftKeyboard() {
-        isSoftKeyboardOpen = false;
-        Service.hideKeyboard(requireActivity());
-
-        if (isEmoteKeyboardOpen) {
+        if (state == KeyboardState.EMOTE)
             mEmoteKeyboardButton.setColorFilter(Service.getAccentColor(requireContext()));
+        else
+            mEmoteKeyboardButton.setColorFilter(defaultBackgroundColor);
+        requireActivity().getWindow().setSoftInputMode((emoteKeyboardContainer.getVisibility() == View.VISIBLE) ? WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING : WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+        if (state == KeyboardState.EMOTE) {
+            if (keyboardState == KeyboardState.SOFT)
+                Service.hideKeyboard(requireActivity());
+
+            emoteKeyboardContainer.setVisibility(View.VISIBLE);
+        } else if (state == KeyboardState.SOFT) {
+            Service.showKeyboard(requireActivity());
+        } else if (state == KeyboardState.CLOSED) {
+            emoteKeyboardContainer.setVisibility(View.GONE);
+            Service.hideKeyboard(requireActivity());
         }
+
+        keyboardState = state;
     }
 
     private void setupEmoteViews() {
@@ -671,9 +648,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         mSendButton.setOnClickListener(v -> sendMessage());
         mSendText.setOnEditTextImeBackListener((ctrl, text) -> {
-            if (isEmoteKeyboardOpen && isSoftKeyboardOpen) {
-                hideEmoteKeyboard();
-            }
+            if (keyboardState == KeyboardState.SOFT)
+                setKeyboardState(KeyboardState.CLOSED);
 
             setMentionSuggestions(new ArrayList<>());
         });
@@ -732,11 +708,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
             }
         });
-        mSendText.setOnClickListener(view -> {
-            if (isEmoteKeyboardOpen) {
-                requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
-                isSoftKeyboardOpen = true;
-                mEmoteKeyboardButton.setColorFilter(defaultBackgroundColor);
+        mSendText.setOnFocusChangeListener((view, hasFocus) -> {
+            if (keyboardState == KeyboardState.EMOTE && hasFocus) {
+                setKeyboardState(KeyboardState.SOFT);
             }
         });
     }
@@ -783,12 +757,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                                         getResources().getConfiguration().orientation
                                                 == Configuration.ORIENTATION_PORTRAIT) {
                                     Log.d(LOG_TAG, "Soft Keyboard shown");
-                                    if (hideKeyboardWhenShown) {
-                                        closeSoftKeyboard();
-                                        hideKeyboardWhenShown = false;
-                                    }
 
                                     notifyKeyboardHeightRecorded(lastBottom - r.bottom);
+                                    setKeyboardState(KeyboardState.SOFT);
                                 }
                                 lastBottom = r.bottom;
                             }
@@ -806,8 +777,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private void sendMessage() {
         final String message = mSendText.getText() + "";
         if (message.isEmpty()) {
-            hideEmoteKeyboard();
-            closeSoftKeyboard();
+            setKeyboardState(KeyboardState.CLOSED);
             return;
         }
 
@@ -833,8 +803,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         );
         getMessageTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        hideEmoteKeyboard();
-        closeSoftKeyboard();
+        setKeyboardState(KeyboardState.CLOSED);
         mSendText.setText("");
 
         SendMessageTask sendMessageTask = new SendMessageTask(chatManager, message);

@@ -128,14 +128,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         readFFZBadges();
 
         if (vodId == null) {
-            ChatProperties properties = fetchChatProperties();
-            if (properties != null) {
-                String ipAndPort = properties.getChatIp();
-                String[] ipAndPortArr = ipAndPort.split(":");
-                twitchChatServer = ipAndPortArr[0];
-                twitchChatPort = Integer.parseInt(ipAndPortArr[1]);
-            }
-
             connect(twitchChatServer, twitchChatPort);
         } else {
             processVodChat();
@@ -543,39 +535,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
      */
     private void leaveChannel() {
         sendRawMessage("PART " + hashChannel);
-    }
-
-    /**
-     * Fetches the chat properties from Twitch.
-     * Should never be called on the UI thread.
-     */
-    private ChatProperties fetchChatProperties() {
-        final String URL = "https://api.twitch.tv/api/channels/" + channelName + "/chat_properties";
-        final String HIDE_LINKS_BOOL = "hide_chat_links";
-        final String REQUIRE_VERIFIED_ACC_BOOL = "require_verified_account";
-        final String SUBS_ONLY_BOOL = "subsonly";
-        final String EVENT_BOOL = "devchat";
-        final String CHAT_SERVERS_ARRAY = "chat_servers";
-
-        try {
-            JSONObject dataObject = new JSONObject(Service.urlToJSONString(URL));
-            boolean hideLinks = dataObject.getBoolean(HIDE_LINKS_BOOL);
-            boolean requireVerifiedAccount = dataObject.getBoolean(REQUIRE_VERIFIED_ACC_BOOL);
-            boolean subsOnly = dataObject.getBoolean(SUBS_ONLY_BOOL);
-            boolean isEvent = dataObject.getBoolean(EVENT_BOOL);
-            JSONArray chatServers = dataObject.getJSONArray(CHAT_SERVERS_ARRAY);
-
-            ArrayList<String> chatServersResult = new ArrayList<>();
-            for (int i = 0; i < chatServers.length(); i++) {
-                chatServersResult.add(chatServers.getString(i));
-            }
-
-            return new ChatProperties(hideLinks, requireVerifiedAccount, subsOnly, isEvent, chatServersResult);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private void readBadges(String url, Map<String, Map<String, Badge>> badgeMap) {
