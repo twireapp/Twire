@@ -8,33 +8,44 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/video_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/VideoView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:background="@color/black"
             app:use_controller="false" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/video_interface"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#4000">
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#4000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <ImageView
                 android:id="@+id/backward"
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:contentDescription="@string/stream_backward"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/play_pause_wrapper"
+                app:layout_constraintEnd_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:srcCompat="@drawable/ic_replay_10" />
 
             <ImageView
@@ -42,10 +53,10 @@
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:contentDescription="@string/stream_forward"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/play_pause_wrapper"
                 app:layout_constraintStart_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/play_pause_wrapper"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:srcCompat="@drawable/ic_forward_10" />
 
             <ImageView
@@ -54,19 +65,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:contentDescription="@string/stream_show_chat"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:srcCompat="@drawable/ic_chevron_left"
                 tools:ignore="RtlHardcoded" />
 
             <RelativeLayout
                 android:id="@+id/control_toolbar_wrapper"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="?attr/streamToolbarColor"
                 android:paddingStart="@dimen/toolbar_icon_right_most_margin"
                 android:paddingEnd="@dimen/toolbar_icon_right_most_margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <ImageView
@@ -181,13 +194,15 @@
 
             <TextView
                 android:id="@+id/chromecast_text"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/play_pause_wrapper"
                 android:gravity="center"
                 android:textColor="@color/white"
                 android:textSize="@dimen/stream_chromecasting_msg_size"
                 android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.Toolbar
@@ -197,8 +212,8 @@
                 android:background="?attr/streamToolbarColor"
                 android:minHeight="@dimen/main_toolbar_height"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
@@ -206,27 +221,35 @@
                 android:id="@+id/play_pause_wrapper"
                 android:layout_width="@dimen/play_pause_wrapper_size"
                 android:layout_height="@dimen/play_pause_wrapper_size"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
 
                 <ImageView
                     android:id="@+id/ic_play"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:alpha="1"
                     android:contentDescription="@string/play"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:srcCompat="@drawable/ic_play_arrow"
                     app:tint="@android:color/white" />
 
                 <ImageView
                     android:id="@+id/ic_pause"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:alpha="0"
                     android:contentDescription="@string/pause"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:srcCompat="@drawable/ic_pause"
                     app:tint="@android:color/white" />
 
@@ -236,20 +259,22 @@
 
         <com.perflyst.twire.views.DynamicImageView
             android:id="@+id/preview"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
         <com.rey.material.widget.ProgressView
             android:id="@+id/circle_progress"
             android:layout_width="@dimen/buffer_spinner_size"
             android:layout_height="@dimen/buffer_spinner_size"
             app:cpd_transformDuration="500"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:pv_autostart="true"
             app:pv_circular="true"
             app:pv_progressMode="indeterminate"
@@ -257,10 +282,14 @@
 
         <View
             android:id="@+id/click_interceptor"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:clickable="true"
-            android:focusable="true" />
+            android:focusable="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

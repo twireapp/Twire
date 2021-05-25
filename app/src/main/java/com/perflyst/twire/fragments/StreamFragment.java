@@ -1123,9 +1123,11 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
         ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
         if (isLandscape && !pictureInPictureEnabled) {
-            layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_PARENT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
+            layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_CONSTRAINT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
+            layoutWrapper.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT;
         } else {
-            layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
+            layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT;
+            layoutWrapper.height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
         }
         mVideoWrapper.setLayoutParams(layoutWrapper);
 
