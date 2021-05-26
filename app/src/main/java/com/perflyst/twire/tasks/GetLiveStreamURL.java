@@ -58,8 +58,11 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     @Override
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String streamerName = params[0];
+        String usettv = params[1];
         String signature = "";
         String token = "";
+
+        Log.d("Use TTV setting", usettv);
 
         Request request = new Request.Builder()
                 .url("https://gql.twitch.tv/gql")
@@ -92,13 +95,14 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         String streamUrl = "";
 
         //if ping successful use ttv.lol otherwise use fallback twitch api
-        if (responsecode == 200) {
+        if (responsecode == 200 && usettv == "true") {
             ttvfun = true;
             Log.d("Using ttv.lol api", String.valueOf(responsecode));
         } else {
             ttvfun = false;
             Log.d("Using default api", String.valueOf(responsecode));
         }
+
         if (ttvfun == true) {
             //modified api call here for ttv.lol
             //ttv.lol requires https, because without it you get a 301 redirect that`s not supported

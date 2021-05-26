@@ -694,8 +694,15 @@ public class Settings {
 
     public boolean getStreamPlayerUseProxy() {
         SharedPreferences preferences = getPreferences();
+
         return preferences.getBoolean(this.STREAM_PLAYER_USE_PROXY, false);
     }
+    public String getStreamPlayerUseProxyString() {
+        SharedPreferences preferences = getPreferences();
+
+        return String.valueOf(preferences.getBoolean(this.STREAM_PLAYER_USE_PROXY, false));
+    }
+
 
     /**
      * Stream Player -

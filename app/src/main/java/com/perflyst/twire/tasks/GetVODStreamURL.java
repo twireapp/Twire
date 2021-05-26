@@ -28,9 +28,12 @@ public class GetVODStreamURL extends GetLiveStreamURL {
     @Override
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String vodId = params[0];
+        String usettv = params[1];
         String signature = "";
         String token = "";
         Boolean ttvfun = false;
+
+        Log.d("Use TTV setting", usettv);
 
         Request request = new Request.Builder()
                 .url("https://gql.twitch.tv/gql")
@@ -62,7 +65,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
         String vodURL = "";
 
         //if ping successful use ttv.lol otherwise use fallback twitch api
-        if (responsecode == 200) {
+        if (responsecode == 200 && usettv == "true") {
             ttvfun = true;
             Log.d("Using ttv.lol api", String.valueOf(responsecode));
         } else {
