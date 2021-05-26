@@ -1339,10 +1339,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         if (vodId == null) {
             GetLiveStreamURL task = new GetLiveStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mChannelInfo.getStreamerName(), settings.getStreamPlayerUseProxyString());
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mChannelInfo.getStreamerName(), settings.getStreamPlayerUseProxyString(), settings.getStreamPlayerProxyUrl());
         } else {
             GetLiveStreamURL task = new GetVODStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId.substring(1), settings.getStreamPlayerUseProxyString());
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId.substring(1), settings.getStreamPlayerUseProxyString(), settings.getStreamPlayerProxyUrl());
         }
     }
 

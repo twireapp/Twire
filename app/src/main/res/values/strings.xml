@@ -277,6 +277,7 @@
     <string name="changelog_show_after_update">Show changelog after an update</string>
     <string name="player_use_proxy">Use a Video Proxy</string>
     <string name="player_proxy_url">Player Proxy Url</string>
+    <string name="player_proxy_url_button">Save</string>
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">

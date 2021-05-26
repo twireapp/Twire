@@ -29,6 +29,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String vodId = params[0];
         String usettv = params[1];
+        String proxyurl = params[2];
         String signature = "";
         String token = "";
         Boolean ttvfun = false;
@@ -54,7 +55,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
 
         //build ping request for ttv.lol
         Request ping = new Request.Builder()
-                .url("https://api.ttv.lol/ping")
+                .url(proxyurl + "/ping")
                 .build();
 
         //get response code
@@ -67,7 +68,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
         //if ping successful use ttv.lol otherwise use fallback twitch api
         if (responsecode == 200 && usettv == "true") {
             ttvfun = true;
-            Log.d("Using ttv.lol api", String.valueOf(responsecode));
+            Log.d("Using " + proxyurl + " api", String.valueOf(responsecode));
         } else {
             ttvfun = false;
             Log.d("Using default api", String.valueOf(responsecode));
@@ -76,7 +77,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
         if (ttvfun == true) {
             //modified api call here for ttv.lol
             //ttv.lol requires https, because without it you get a 301 redirect thats not supported
-            vodURL = String.format("https://api.ttv.lol/vod/%s.m3u8", vodId);
+            vodURL = String.format(proxyurl + "/vod/%s.m3u8", vodId);
             String streamParameters = String.format(
                     "?nauthsig=%s" +
                     "&nauth=%s", signature, token);

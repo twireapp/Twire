@@ -694,15 +694,18 @@ public class Settings {
 
     public boolean getStreamPlayerUseProxy() {
         SharedPreferences preferences = getPreferences();
-
         return preferences.getBoolean(this.STREAM_PLAYER_USE_PROXY, false);
     }
+
     public String getStreamPlayerUseProxyString() {
         SharedPreferences preferences = getPreferences();
-
         return String.valueOf(preferences.getBoolean(this.STREAM_PLAYER_USE_PROXY, false));
     }
 
+    public String getStreamPlayerProxyUrl() {
+        SharedPreferences preferences = getPreferences();
+        return String.valueOf(preferences.getString(this.STREAM_PLAYER_PROXY_URL, "https://api.ttv.lol"));
+    }
 
     /**
      * Stream Player -
@@ -717,6 +720,12 @@ public class Settings {
     public void setStreamPlayerVideoProxy(boolean UseProxy) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.STREAM_PLAYER_USE_PROXY, UseProxy);
+        editor.commit();
+    }
+
+    public void setStreamPlayerVideoProxyUrl(String url) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putString(this.STREAM_PLAYER_PROXY_URL, url);
         editor.commit();
     }
 

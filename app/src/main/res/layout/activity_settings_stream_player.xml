@@ -185,6 +185,54 @@
                 android:layout_height="@dimen/settings_divider_height"
                 android:background="?attr/dividerColor" />
 
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/player_proxy_url_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:ems="10"
+                        android:hint="API url"
+                        android:inputType="textUri"
+                        android:selectAllOnFocus="true" />
+
+                    <Button
+                        android:id="@+id/proxy_url_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@id/player_proxy_url_input"
+                        android:onClick="onClickProxyUrl"
+                        android:text="@string/player_proxy_url_button" />
+
+                    <TextView
+                        android:id="@+id/player_proxy_url_info"
+                        style="@style/text_settings"
+                        android:text="Example API: https://api.ttv.lol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/sub_text_settings"
+                        android:layout_below="@id/proxy_url_button" />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
+
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

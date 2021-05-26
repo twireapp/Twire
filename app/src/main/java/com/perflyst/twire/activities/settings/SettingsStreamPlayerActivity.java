@@ -1,9 +1,11 @@
 package com.perflyst.twire.activities.settings;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
     private Settings settings;
     private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mUseProxySummary;
     private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mUseProxy;
+    private EditText mProxyUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,10 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         mShowViewCountView = findViewById(R.id.player_show_viewercount_title);
         mAutoPlaybackView = findViewById(R.id.player_auto_continue_playback_title);
         mUseProxy = findViewById(R.id.player_use_proxy);
+        mProxyUrl = findViewById(R.id.player_proxy_url_input);
+
+        // set current API Url as Text
+        mProxyUrl.setText(settings.getStreamPlayerProxyUrl());
 
         mShowViewCountSummary = findViewById(R.id.player_show_viewercount_title_summary);
         mShowNavigationBarSummary = findViewById(R.id.player_show_navigation_summary);
@@ -71,6 +78,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, settings.getStreamPlayerShowNavigationBar());
         updateSummary(mAutoPlaybackView, mAutoPlaybackSummary, settings.getStreamPlayerAutoContinuePlaybackOnReturn());
         updateSummary(mUseProxy, mUseProxySummary, settings.getStreamPlayerUseProxy());
+        mProxyUrl.setText(settings.getStreamPlayerProxyUrl());
     }
 
     public void onClickShowNavigationBar(View v) {
@@ -92,4 +100,15 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         settings.setStreamPlayerVideoProxy(!settings.getStreamPlayerUseProxy());
         updateSummaries();
     }
+
+    public void onClickProxyUrl(View v) {
+        if (mProxyUrl.getText().toString().contains("http://") | mProxyUrl.getText().toString().contains("https://")) {
+            settings.setStreamPlayerVideoProxyUrl(mProxyUrl.getText().toString());
+            Log.d("Setting as API", mProxyUrl.getText().toString());
+            updateSummaries();
+        } else {
+            Log.d("Url looks wrong", mProxyUrl.getText().toString());
+        }
+    }
+
 }

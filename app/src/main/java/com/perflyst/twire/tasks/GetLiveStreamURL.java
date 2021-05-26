@@ -59,6 +59,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String streamerName = params[0];
         String usettv = params[1];
+        String proxyurl = params[2];
         String signature = "";
         String token = "";
 
@@ -82,22 +83,34 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
             e.printStackTrace();
         }
 
-        //build ping request for ttv.lol
-        Request ping = new Request.Builder()
-                .url("https://api.ttv.lol/ping")
+
+
+        // check if the api is available
+        int responsecode = 0;
+
+        try {
+            // build ping request for ttv.lol
+            Request ping = new Request.Builder()
+                .url(proxyurl + "/ping")
                 .build();
 
-        //get response code
-        Service.SimpleResponse pingresponse = Service.makeRequest(ping);
-        int responsecode = pingresponse.code;
-        Log.d("Response Code", String.valueOf(responsecode));
+            // get response code
+            Service.SimpleResponse pingresponse = Service.makeRequest(ping);
+            responsecode = pingresponse.code;
+            Log.d("Response Code", String.valueOf(responsecode));
+        } catch (Exception e) {
+            e.printStackTrace();
+            // when the API ping breaks then define the response code as 404
+            responsecode = 404;
+        }
+
 
         String streamUrl = "";
 
         //if ping successful use ttv.lol otherwise use fallback twitch api
         if (responsecode == 200 && usettv == "true") {
             ttvfun = true;
-            Log.d("Using ttv.lol api", String.valueOf(responsecode));
+            Log.d("Using " + proxyurl + " api", String.valueOf(responsecode));
         } else {
             ttvfun = false;
             Log.d("Using default api", String.valueOf(responsecode));
@@ -106,7 +119,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         if (ttvfun == true) {
             //modified api call here for ttv.lol
             //ttv.lol requires https, because without it you get a 301 redirect that`s not supported
-            streamUrl = String.format("https://api.ttv.lol/playlist/%s.m3u8", streamerName);
+            streamUrl = String.format(proxyurl + "/playlist/%s.m3u8", streamerName);
 
 
             //we don´t want to leak the user id or the token to a 3`rd party api as it is
