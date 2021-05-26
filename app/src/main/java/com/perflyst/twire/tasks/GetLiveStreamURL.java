@@ -145,7 +145,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         }
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
-        return parseM3U8(streamUrl);
+        return parseM3U8(streamUrl, proxyurl);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         callback.finished(result);
     }
 
-    LinkedHashMap<String, Quality> parseM3U8(String urlToRead) {
+    LinkedHashMap<String, Quality> parseM3U8(String urlToRead, String proxyurl) {
         Request request;
         Log.d("M3U8 Url", urlToRead);
         if (ttvfun == true) {
@@ -162,7 +162,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
                     .header("Referer", "https://player.twitch.tv")
                     .header("Origin", "https://player.twitch.tv")
                     //so apparently this header took me 2 hours of debugging because without it we get a 401 response here
-                    .header("X-Donate-To", "https://ttv.lol/donate")
+                    .header("X-Donate-To", proxyurl.replace("api.", "") + "/donate")
                     .build();
             } else {
             request = new Request.Builder()

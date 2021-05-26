@@ -76,7 +76,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
 
         if (ttvfun == true) {
             //modified api call here for ttv.lol
-            //ttv.lol requires https, because without it you get a 301 redirect thats not supported
+            //ttv.lol requires https, because without it you get a 301 redirect that`s not supported
             vodURL = String.format(proxyurl + "/vod/%s.m3u8", vodId);
             String streamParameters = String.format(
                     "?nauthsig=%s" +
@@ -89,6 +89,6 @@ public class GetVODStreamURL extends GetLiveStreamURL {
         }
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + vodURL);
-        return parseM3U8(vodURL);
+        return parseM3U8(vodURL, proxyurl);
     }
 }

@@ -1426,8 +1426,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     put("Referer", "https://player.twitch.tv");
                     put("Origin", "https://player.twitch.tv");
                     //add the donation header otherwise you get a 401 error
-                    if (url.contains("api.ttv.lol")) {
-                        put("X-Donate-To", "https://ttv.lol/donate");
+                    if (url.contains(settings.getStreamPlayerProxyUrl())) {
+                        put("X-Donate-To", settings.getStreamPlayerProxyUrl().replace("api.", "") + "/donate");
                     }
                 }});
 
