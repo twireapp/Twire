@@ -86,7 +86,7 @@ dependencies {
     implementation "com.github.afollestad.material-dialogs:commons:0.8.6.2@aar"
 
     //https://github.com/google/ExoPlayer/blob/release-v2/RELEASENOTES.md
-    def exoPlayer = "2.12.1"
+    def exoPlayer = "2.14.0"
     implementation "com.google.android.exoplayer:exoplayer-core:$exoPlayer"
     implementation "com.google.android.exoplayer:exoplayer-hls:$exoPlayer"
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoPlayer"

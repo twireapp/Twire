@@ -65,7 +65,6 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.PlaybackPreparer;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
@@ -73,8 +72,7 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -109,7 +107,7 @@ import java.util.concurrent.TimeUnit;
 
 import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
-public class StreamFragment extends Fragment implements Player.EventListener, PlaybackPreparer {
+public class StreamFragment extends Fragment implements Player.Listener {
     private static int totalVerticalInset;
     private static boolean pipDisabling; // Tracks the PIP disabling animation.
     private final int HIDE_ANIMATION_DELAY = 3000;
@@ -511,7 +509,6 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             player = new SimpleExoPlayer.Builder(getContext()).build();
             player.addListener(this);
             mVideoView.setPlayer(player);
-            mVideoView.setPlaybackPreparer(this);
 
             if (currentMediaSource != null) {
                 player.setMediaSource(currentMediaSource);
@@ -540,11 +537,6 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
             player.release();
             player = null;
         }
-    }
-
-    @Override
-    public void preparePlayback() {
-        player.prepare();
     }
 
     @Override
@@ -1123,9 +1115,11 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
 
         ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
         if (isLandscape && !pictureInPictureEnabled) {
-            layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_PARENT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
+            layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_CONSTRAINT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
+            layoutWrapper.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT;
         } else {
-            layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
+            layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT;
+            layoutWrapper.height = ConstraintLayout.LayoutParams.WRAP_CONTENT;
         }
         mVideoWrapper.setLayoutParams(layoutWrapper);
 
@@ -1426,11 +1420,12 @@ public class StreamFragment extends Fragment implements Player.EventListener, Pl
      * Sets the URL to the VideoView and ChromeCast and starts playback.
      */
     private void playUrl(String url) {
-        DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory(getString(R.string.app_name));
-
-        HttpDataSource.RequestProperties properties = dataSourceFactory.getDefaultRequestProperties();
-        properties.set("Referer", "https://player.twitch.tv");
-        properties.set("Origin", "https://player.twitch.tv");
+        DefaultHttpDataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory()
+                .setUserAgent(getString(R.string.app_name))
+                .setDefaultRequestProperties(new HashMap<String, String>() {{
+                    put("Referer", "https://player.twitch.tv");
+                    put("Origin", "https://player.twitch.tv");
+                }});
 
         //add the donation header otherwise you get a 401 error
         if (url.contains("api.ttv.lol")) {
