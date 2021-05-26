@@ -77,6 +77,8 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
                 values.put(SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL, subToAdd.getProfileBannerURL().toString());
 
 
+            db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
+
             // we return the rowId so we can return the row we inserted to a cursor
             /*
             long rowId = db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
