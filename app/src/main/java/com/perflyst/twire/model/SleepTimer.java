@@ -6,11 +6,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 
+import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
-
-import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
 /**
  * Created by Sebastian Rask Jepsen on 22/07/16.

@@ -11,16 +11,15 @@
         android:layout_centerInParent="true"
         android:orientation="horizontal">
 
-        <biz.kasual.materialnumberpicker.MaterialNumberPicker
+        <com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker
             android:id="@+id/hourPicker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:npBackgroundColor="?attr/navigationDrawerBackground"
-            app:npDefaultValue="0"
-            app:npMaxValue="24"
-            app:npMinValue="0"
-            app:npTextColor="?attr/navigationDrawerTextColor"
-            app:npTextSize="@dimen/stream_sleep_timer_font_size" />
+            app:mnpMaxValue="24"
+            app:mnpMinValue="0"
+            app:mnpTextColor="?attr/navigationDrawerTextColor"
+            app:mnpTextSize="@dimen/stream_sleep_timer_font_size"
+            app:mnpValue="0" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -46,16 +45,15 @@
             android:textColor="?attr/navigationDrawerTextColor"
             android:textSize="@dimen/stream_sleep_timer_font_size" />
 
-        <biz.kasual.materialnumberpicker.MaterialNumberPicker
+        <com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker
             android:id="@+id/minutePicker"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            app:npBackgroundColor="?attr/navigationDrawerBackground"
-            app:npDefaultValue="15"
-            app:npMaxValue="59"
-            app:npMinValue="0"
-            app:npTextColor="?attr/navigationDrawerTextColor"
-            app:npTextSize="@dimen/stream_sleep_timer_font_size" />
+            app:mnpMaxValue="59"
+            app:mnpMinValue="0"
+            app:mnpTextColor="?attr/navigationDrawerTextColor"
+            app:mnpTextSize="@dimen/stream_sleep_timer_font_size"
+            app:mnpValue="15" />
     </LinearLayout>
 
     <TextView

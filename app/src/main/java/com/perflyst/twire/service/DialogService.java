@@ -10,11 +10,10 @@ import androidx.annotation.StringRes;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
+import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.perflyst.twire.R;
 import com.perflyst.twire.views.LayoutSelector;
 import com.rey.material.widget.Slider;
-
-import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
 /**
  * Created by Sebastian Rask on 02-05-2016.

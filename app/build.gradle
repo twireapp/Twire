@@ -70,9 +70,8 @@ dependencies {
     //https://github.com/Perflyst/SRJNeeds
     implementation "com.github.perflyst:srjneeds:85306c8"
 
-    //https://github.com/KasualBusiness/MaterialNumberPicker/releases
-    // TODO URGENT: Migrate to https://github.com/StephenVinouze/MaterialNumberPicker
-    implementation "biz.kasual:materialnumberpicker:1.2.1"
+    //https://github.com/StephenVinouze/MaterialNumberPicker/releases
+    implementation "com.github.StephenVinouze:MaterialNumberPicker:1.1.0"
 
     //https://github.com/google/gson/blob/master/CHANGELOG.md
     implementation "com.google.code.gson:gson:2.8.7"

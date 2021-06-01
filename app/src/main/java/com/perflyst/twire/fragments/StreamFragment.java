@@ -62,6 +62,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
+import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
@@ -104,8 +105,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
-import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
 public class StreamFragment extends Fragment implements Player.Listener {
     private static int totalVerticalInset;
