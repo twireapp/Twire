@@ -3,7 +3,7 @@ apply plugin: "com.android.application"
 android {
     compileSdkVersion 29
     buildToolsVersion "30.0.3"
-    ndkVersion "22.0.7026061"
+    ndkVersion "22.1.7171670"
 
     defaultConfig {
         applicationId "com.perflyst.twire"
@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    //AndroidX
     implementation "androidx.appcompat:appcompat:1.2.0"
     implementation "androidx.browser:browser:1.3.0"
     implementation "androidx.cardview:cardview:1.0.0"
@@ -49,9 +50,11 @@ dependencies {
     implementation "androidx.multidex:multidex:2.0.1"
     implementation "androidx.palette:palette:1.0.0"
     implementation "androidx.preference:preference:1.1.1"
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation "androidx.transition:transition:1.4.0"
-    implementation "com.google.android.material:material:1.2.1"
+    implementation "androidx.recyclerview:recyclerview:1.2.0"
+    implementation "androidx.transition:transition:1.4.1"
+    //  https://developer.android.com/jetpack/androidx/releases/recyclerview#recyclerview-1.2.0-alpha02
+    implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
+    implementation "com.google.android.material:material:1.3.0"
 
     //https://github.com/bumptech/glide/releases
     def glideVersion = "4.12.0"
@@ -72,7 +75,7 @@ dependencies {
     implementation "biz.kasual:materialnumberpicker:1.2.1"
 
     //https://github.com/google/gson/blob/master/CHANGELOG.md
-    implementation "com.google.code.gson:gson:2.8.6"
+    implementation "com.google.code.gson:gson:2.8.7"
 
     //https://github.com/JakeWharton/butterknife/blob/master/CHANGELOG.md
     implementation "com.jakewharton:butterknife:10.2.3"
@@ -93,7 +96,7 @@ dependencies {
     implementation "com.google.android.exoplayer:extension-mediasession:$exoPlayer"
 
     //https://github.com/google/conscrypt/releases
-    implementation "org.conscrypt:conscrypt-android:2.5.1"
+    implementation "org.conscrypt:conscrypt-android:2.5.2"
 
     //https://github.com/square/okhttp
     implementation "com.squareup.okhttp3:okhttp:3.12.13"
