@@ -27,7 +27,9 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,6 +38,10 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.net.ssl.HandshakeCompletedListener;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
 
 public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Void> {
     public static final int VOD_LOADING = -1;
@@ -61,8 +67,12 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private final Map<String, Map<String, Badge>> globalBadges = new HashMap<>();
     private final Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
     // Default Twitch Chat connect IP/domain and port
-    private String twitchChatServer = "irc.twitch.tv";
-    private int twitchChatPort = 6667;
+    private String twitchChatServer = "irc.chat.twitch.tv";
+    // Port 80 for unsecure connection | 443 for SSL
+    private int twitchChatPortunsecure = 80;
+    private int twitchChatPortsecure = 443;
+    private int twitchChatPort = 0;
+
     private BufferedWriter writer;
     private Handler callbackHandler;
     private boolean isStopping;
@@ -98,6 +108,14 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         channelUserId = aChannelUserId;
         vodId = aVodId;
         callback = aCallback;
+
+        //Set the Port Setting
+        if (appSettings.getChatEnableSSL())
+            twitchChatPort = twitchChatPortsecure;
+        else {
+            twitchChatPort = twitchChatPortunsecure;
+        }
+        Log.d("Use SSL Chat Server", String.valueOf(appSettings.getChatEnableSSL()));
 
         executeOnExecutor(THREAD_POOL_EXECUTOR);
     }
@@ -186,8 +204,101 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
      */
     private void connect(String address, int port) {
         try {
+            Log.d("Chat connecting to", address + ":" + port);
             @SuppressWarnings("resource")
-            Socket socket = new Socket(address, port);
+            Socket socket = new SSLSocket(address, port) {
+                @Override
+                public String[] getSupportedCipherSuites() {
+                    return new String[0];
+                }
+
+                @Override
+                public String[] getEnabledCipherSuites() {
+                    return new String[0];
+                }
+
+                @Override
+                public void setEnabledCipherSuites(String[] suites) {
+                }
+
+                @Override
+                public String[] getSupportedProtocols() {
+                    return new String[0];
+                }
+
+                @Override
+                public String[] getEnabledProtocols() {
+                    return new String[0];
+                }
+
+                @Override
+                public void setEnabledProtocols(String[] protocols) {
+
+                }
+
+                @Override
+                public SSLSession getSession() {
+                    return null;
+                }
+
+                @Override
+                public void addHandshakeCompletedListener(HandshakeCompletedListener listener) {
+
+                }
+
+                @Override
+                public void removeHandshakeCompletedListener(HandshakeCompletedListener listener) {
+
+                }
+
+                @Override
+                public void startHandshake() throws IOException {
+
+                }
+
+                @Override
+                public void setUseClientMode(boolean mode) {
+
+                }
+
+                @Override
+                public boolean getUseClientMode() {
+                    return false;
+                }
+
+                @Override
+                public void setNeedClientAuth(boolean need) {
+
+                }
+
+                @Override
+                public boolean getNeedClientAuth() {
+                    return false;
+                }
+
+                @Override
+                public void setWantClientAuth(boolean want) {
+
+                }
+
+                @Override
+                public boolean getWantClientAuth() {
+                    return false;
+                }
+
+                @Override
+                public void setEnableSessionCreation(boolean flag) {
+
+                }
+
+                @Override
+                public boolean getEnableSessionCreation() {
+                    return false;
+                }
+            };
+
+            Log.d("is connected", String.valueOf(socket.isConnected()));
+
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -198,6 +309,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
             String line;
             while ((line = reader.readLine()) != null) {
+                Log.d("Line", line);
                 if (isStopping) {
                     leaveChannel();
                     Log.d(LOG_TAG, "Stopping chat for " + channelName);

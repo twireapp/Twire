@@ -59,6 +59,7 @@ public class Settings {
     private final String CHAT_LANDSCAPE_ENABLE = "chatLandscapeEnable";
     private final String CHAT_LANDSCAPE_SWIPEABLE = "chatLandscapeSwipable";
     private final String CHAT_LANDSCAPE_WIDTH = "chatLandscapeWidth";
+    private final String CHAT_ENABLE_SSL = "chatenablessl";
     private final String CHAT_RECENT_EMOTES = "chatRecentEmotes";
     private final String CHAT_KEYBOARD_HEIGHT = "chatKeyboardHeight";
     private final String NOTIFY_LIVE = "notifyUserLive";
@@ -736,6 +737,21 @@ public class Settings {
     public boolean isLoggedIn() {
         SharedPreferences preferences = getPreferences();
         return preferences.getBoolean(this.SETUP_IS_LOGGED_IN, false);
+    }
+
+    /**
+     * Chat - Enable SSL?
+     */
+
+    public boolean getChatEnableSSL() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_ENABLE_SSL, false);
+    }
+
+    public void setChatEnableSSL(boolean SSL) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_ENABLE_SSL, SSL);
+        editor.commit();
     }
 
     public Context getContext() {
