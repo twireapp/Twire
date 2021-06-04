@@ -37,9 +37,8 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.net.ssl.HandshakeCompletedListener;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
 public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Void> {
     public static final int VOD_LOADING = -1;
@@ -69,7 +68,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     // Port 6667 for unsecure connection | 6697 for SSL
     private int twitchChatPortunsecure = 6667;
     private int twitchChatPortsecure = 6697;
-    private int twitchChatPort = 0;
+    private int twitchChatPort;
 
     private BufferedWriter writer;
     private Handler callbackHandler;
@@ -204,97 +203,16 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         try {
             Log.d("Chat connecting to", address + ":" + port);
             @SuppressWarnings("resource")
-            Socket socket = new SSLSocket(address, port) {
-                @Override
-                public String[] getSupportedCipherSuites() {
-                    return new String[0];
-                }
-
-                @Override
-                public String[] getEnabledCipherSuites() {
-                    return new String[0];
-                }
-
-                @Override
-                public void setEnabledCipherSuites(String[] suites) {
-                }
-
-                @Override
-                public String[] getSupportedProtocols() {
-                    return new String[0];
-                }
-
-                @Override
-                public String[] getEnabledProtocols() {
-                    return new String[0];
-                }
-
-                @Override
-                public void setEnabledProtocols(String[] protocols) {
-
-                }
-
-                @Override
-                public SSLSession getSession() {
-                    return null;
-                }
-
-                @Override
-                public void addHandshakeCompletedListener(HandshakeCompletedListener listener) {
-
-                }
-
-                @Override
-                public void removeHandshakeCompletedListener(HandshakeCompletedListener listener) {
-
-                }
-
-                @Override
-                public void startHandshake() throws IOException {
-
-                }
-
-                @Override
-                public void setUseClientMode(boolean mode) {
-
-                }
-
-                @Override
-                public boolean getUseClientMode() {
-                    return false;
-                }
-
-                @Override
-                public void setNeedClientAuth(boolean need) {
-
-                }
-
-                @Override
-                public boolean getNeedClientAuth() {
-                    return false;
-                }
-
-                @Override
-                public void setWantClientAuth(boolean want) {
-
-                }
-
-                @Override
-                public boolean getWantClientAuth() {
-                    return false;
-                }
-
-                @Override
-                public void setEnableSessionCreation(boolean flag) {
-
-                }
-
-                @Override
-                public boolean getEnableSessionCreation() {
-                    return false;
-                }
-            };
-
+            Socket socket;
+            // if we don`t use the SSL Port then create a default socket
+            if (port != twitchChatPortsecure) {
+                socket = new Socket(address, port);
+            } else {
+                // if we use the SSL Port then create a SSL Socket
+                // https://stackoverflow.com/questions/13874387/create-app-with-sslsocket-java
+                SSLSocketFactory factory=(SSLSocketFactory) SSLSocketFactory.getDefault();
+                socket=(SSLSocket) factory.createSocket(address, port);
+            }
 
             Log.d("is connected", String.valueOf(socket.isConnected()));
 
