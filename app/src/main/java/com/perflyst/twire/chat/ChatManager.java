@@ -27,9 +27,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -68,9 +66,9 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private final Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
     // Default Twitch Chat connect IP/domain and port
     private String twitchChatServer = "irc.chat.twitch.tv";
-    // Port 80 for unsecure connection | 443 for SSL
-    private int twitchChatPortunsecure = 80;
-    private int twitchChatPortsecure = 443;
+    // Port 6667 for unsecure connection | 6697 for SSL
+    private int twitchChatPortunsecure = 6667;
+    private int twitchChatPortsecure = 6697;
     private int twitchChatPort = 0;
 
     private BufferedWriter writer;
@@ -297,6 +295,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                 }
             };
 
+
             Log.d("is connected", String.valueOf(socket.isConnected()));
 
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
@@ -306,6 +305,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             writer.write("NICK " + user + "\r\n");
             writer.write("USER " + user + " \r\n");
             writer.flush();
+
+            Log.d("reader", reader.readLine());
 
             String line;
             while ((line = reader.readLine()) != null) {
