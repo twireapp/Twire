@@ -59,7 +59,7 @@ public class Settings {
     private final String CHAT_LANDSCAPE_ENABLE = "chatLandscapeEnable";
     private final String CHAT_LANDSCAPE_SWIPEABLE = "chatLandscapeSwipable";
     private final String CHAT_LANDSCAPE_WIDTH = "chatLandscapeWidth";
-    private final String CHAT_ENABLE_SSL = "chatenablessl";
+    private final String CHAT_ENABLE_SSL = "chatEnableSSL";
     private final String CHAT_RECENT_EMOTES = "chatRecentEmotes";
     private final String CHAT_KEYBOARD_HEIGHT = "chatKeyboardHeight";
     private final String NOTIFY_LIVE = "notifyUserLive";

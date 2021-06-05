@@ -206,6 +206,7 @@
     <string name="chat_size_small">Small</string>
     <string name="chat_size_medium">Medium</string>
     <string name="chat_size_high">Large</string>
+    <string name="chat_enable_ssl">Use SSL for the connection</string>
 
     <!-- Stream Player Settings -->
     <string name="player_show_viewercount">Show viewer count</string>
@@ -275,7 +276,6 @@
     <!-- Changelog -->
     <string name="changelog_title">Changelog</string>
     <string name="changelog_show_after_update">Show changelog after an update</string>
-    <string name="chat_enable_ssl">Enable Secure Connection</string>
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">

@@ -214,8 +214,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                 socket=(SSLSocket) factory.createSocket(address, port);
             }
 
-            Log.d("is connected", String.valueOf(socket.isConnected()));
-
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
@@ -224,11 +222,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             writer.write("USER " + user + " \r\n");
             writer.flush();
 
-            Log.d("reader", reader.readLine());
-
             String line;
             while ((line = reader.readLine()) != null) {
-                Log.d("Line", line);
                 if (isStopping) {
                     leaveChannel();
                     Log.d(LOG_TAG, "Stopping chat for " + channelName);
