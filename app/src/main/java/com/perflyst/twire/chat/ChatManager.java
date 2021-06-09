@@ -37,6 +37,9 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
 public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Void> {
     public static final int VOD_LOADING = -1;
     public static final List<Badge> ffzBadges = new ArrayList<>();
@@ -61,8 +64,12 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private final Map<String, Map<String, Badge>> globalBadges = new HashMap<>();
     private final Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
     // Default Twitch Chat connect IP/domain and port
-    private String twitchChatServer = "irc.twitch.tv";
-    private int twitchChatPort = 6667;
+    private String twitchChatServer = "irc.chat.twitch.tv";
+    // Port 6667 for unsecure connection | 6697 for SSL
+    private int twitchChatPortunsecure = 6667;
+    private int twitchChatPortsecure = 6697;
+    private int twitchChatPort;
+
     private BufferedWriter writer;
     private Handler callbackHandler;
     private boolean isStopping;
@@ -98,6 +105,14 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         channelUserId = aChannelUserId;
         vodId = aVodId;
         callback = aCallback;
+
+        //Set the Port Setting
+        if (appSettings.getChatEnableSSL())
+            twitchChatPort = twitchChatPortsecure;
+        else {
+            twitchChatPort = twitchChatPortunsecure;
+        }
+        Log.d("Use SSL Chat Server", String.valueOf(appSettings.getChatEnableSSL()));
 
         executeOnExecutor(THREAD_POOL_EXECUTOR);
     }
@@ -186,8 +201,19 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
      */
     private void connect(String address, int port) {
         try {
+            Log.d("Chat connecting to", address + ":" + port);
             @SuppressWarnings("resource")
-            Socket socket = new Socket(address, port);
+            Socket socket;
+            // if we don`t use the SSL Port then create a default socket
+            if (port != twitchChatPortsecure) {
+                socket = new Socket(address, port);
+            } else {
+                // if we use the SSL Port then create a SSL Socket
+                // https://stackoverflow.com/questions/13874387/create-app-with-sslsocket-java
+                SSLSocketFactory factory=(SSLSocketFactory) SSLSocketFactory.getDefault();
+                socket=(SSLSocket) factory.createSocket(address, port);
+            }
+
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 

@@ -17,8 +17,8 @@ import com.perflyst.twire.service.Settings;
 
 public class SettingsTwitchChatActivity extends ThemeActivity {
     private Settings settings;
-    private TextView emoteSizeSummary, messageSizeSummary, chatLandscapeWidthSummary, chatLandscapeToggleSummary, chatLandscapeSwipeToShowSummary;
-    private CheckedTextView chatLandscapeToggle, chatSwipeToShowToggle;
+    private TextView emoteSizeSummary, messageSizeSummary, chatLandscapeWidthSummary, chatLandscapeToggleSummary, chatLandscapeSwipeToShowSummary, chat_enable_ssl_summary;
+    private CheckedTextView chatLandscapeToggle, chatSwipeToShowToggle, chat_enable_ssl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +37,21 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         chatLandscapeWidthSummary = findViewById(R.id.chat_landscape_summary);
         chatLandscapeToggleSummary = findViewById(R.id.chat_landscape_enable_summary);
         chatLandscapeSwipeToShowSummary = findViewById(R.id.chat_landscape_swipe_summary);
+        chat_enable_ssl_summary = findViewById(R.id.chat_enable_ssl_summary);
 
         chatLandscapeToggle = findViewById(R.id.chat_landscape_enable_title);
         chatSwipeToShowToggle = findViewById(R.id.chat_landscape_swipe_title);
+        chat_enable_ssl = findViewById(R.id.chat_enable_ssl);
         updateSummaries();
+    }
+
+    private void updateSummary(CheckedTextView checkView, TextView summary, boolean isEnabled) {
+        checkView.setChecked(isEnabled);
+        if (isEnabled) {
+            summary.setText(getString(R.string.enabled));
+        } else {
+            summary.setText(getString(R.string.disabled));
+        }
     }
 
     private void updateSummaries() {
@@ -50,20 +61,11 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         chatLandscapeWidthSummary.setText(String.format(getString(R.string.percent), settings.getChatLandscapeWidth()));
 
         // Chat enabled in landscape
-        chatLandscapeToggle.setChecked(settings.isChatInLandscapeEnabled());
-        if (settings.isChatInLandscapeEnabled()) {
-            chatLandscapeToggleSummary.setText(getString(R.string.enabled));
-        } else {
-            chatLandscapeToggleSummary.setText(getString(R.string.disabled));
-        }
-
+        updateSummary(chatLandscapeToggle, chatLandscapeToggleSummary, settings.isChatInLandscapeEnabled());
         // Chat showable by swiping
-        chatSwipeToShowToggle.setChecked(settings.isChatLandscapeSwipeable());
-        if (settings.isChatLandscapeSwipeable()) {
-            chatLandscapeSwipeToShowSummary.setText(getString(R.string.enabled));
-        } else {
-            chatLandscapeSwipeToShowSummary.setText(getString(R.string.disabled));
-        }
+        updateSummary(chatSwipeToShowToggle, chatLandscapeSwipeToShowSummary, settings.isChatLandscapeSwipeable());
+        // Chat SSL Enabled
+        updateSummary(chat_enable_ssl, chat_enable_ssl_summary, settings.getChatEnableSSL());
     }
 
     @Override
@@ -106,6 +108,11 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 
     public void onClickChatLandscapeSwipeable(View _view) {
         settings.setChatLandscapeSwipeable(!settings.isChatLandscapeSwipeable());
+        updateSummaries();
+    }
+
+    public void onClickChatEnableSSL(View _view) {
+        settings.setChatEnableSSL(!settings.getChatEnableSSL());
         updateSummaries();
     }
 

@@ -206,6 +206,7 @@
     <string name="chat_size_small">Small</string>
     <string name="chat_size_medium">Medium</string>
     <string name="chat_size_high">Large</string>
+    <string name="chat_enable_ssl">Use SSL for the connection</string>
 
     <!-- Stream Player Settings -->
     <string name="player_show_viewercount">Show viewer count</string>
