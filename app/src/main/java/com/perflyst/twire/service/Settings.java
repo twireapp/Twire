@@ -50,6 +50,7 @@ public class Settings {
     private final String STREAM_VOD_LENGTH = "streamVodLength";
     private final String STREAM_SLEEP_HOUR = "streamSleepHour";
     private final String STREAM_SLEEP_MINUTE = "streamSleepMinute";
+    private final String PLAYBACK_SPEED = "playbackSpeed";
     private final String SETUP_IS_SETUP = "setupIsSetup";
     private final String SETUP_IS_LOGGED_IN = "setupIsLoggedIn";
     private final String TIP_IS_SHOWN = "tipsAreShown";
@@ -472,6 +473,14 @@ public class Settings {
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(this.STREAM_SLEEP_MINUTE, minute);
         editor.commit();
+    }
+
+    public float getPlaybackSpeed() {
+        return getPreferences().getFloat(this.PLAYBACK_SPEED, 1);
+    }
+
+    public void setPlaybackSpeed(float speed) {
+        getEditor().putFloat(this.PLAYBACK_SPEED, speed).commit();
     }
 
     public String getGeneralTwitchAccessToken() {

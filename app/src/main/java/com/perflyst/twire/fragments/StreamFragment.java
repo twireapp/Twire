@@ -66,6 +66,7 @@ import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
@@ -509,6 +510,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
             player.addListener(this);
             mVideoView.setPlayer(player);
 
+            if (vodId != null) {
+                player.setPlaybackParameters(new PlaybackParameters(settings.getPlaybackSpeed()));
+            }
+
             if (currentMediaSource != null) {
                 player.setMediaSource(currentMediaSource);
                 player.prepare();
@@ -813,6 +818,13 @@ public class StreamFragment extends Fragment implements Player.Listener {
         sleepTimer.show(getActivity());
     }
 
+    private void speedButtonClicked() {
+        DialogService.getSpeedDialog(getActivity(), player.getPlaybackParameters().speed, (speed) -> {
+            player.setPlaybackParameters(new PlaybackParameters(speed));
+            settings.setPlaybackSpeed(speed);
+        }).show();
+    }
+
     private void showSeekDialog() {
         DialogService.getSeekDialog(getActivity(), (dialog, which) -> {
                     if (which == DialogAction.NEGATIVE)
@@ -846,6 +858,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
             return true;
         });
+
+        menu.findItem(R.id.menu_item_speed).setVisible(vodId != null);
     }
 
     @Override
@@ -855,16 +869,19 @@ public class StreamFragment extends Fragment implements Player.Listener {
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_item_sleep:
-                sleepButtonClicked();
-                return true;
-            case R.id.menu_item_profile:
-                profileButtonClicked();
-                return true;
-            case R.id.menu_item_external:
-                playWithExternalPlayer();
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_sleep) {
+            sleepButtonClicked();
+            return true;
+        } else if (itemId == R.id.menu_item_profile) {
+            profileButtonClicked();
+            return true;
+        } else if (itemId == R.id.menu_item_external) {
+            playWithExternalPlayer();
+            return true;
+        } else if (itemId == R.id.menu_item_speed) {
+            speedButtonClicked();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

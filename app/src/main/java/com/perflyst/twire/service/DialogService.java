@@ -2,6 +2,7 @@ package com.perflyst.twire.service;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.ArrayRes;
 import androidx.annotation.DrawableRes;
@@ -14,6 +15,8 @@ import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.perflyst.twire.R;
 import com.perflyst.twire.views.LayoutSelector;
 import com.rey.material.widget.Slider;
+
+import java.util.Arrays;
 
 /**
  * Created by Sebastian Rask on 02-05-2016.
@@ -219,6 +222,35 @@ public class DialogService {
             slider.setValue(startValue, false);
             slider.setOnPositionChangeListener(sliderChangeListener);
         }
+
+        return dialog;
+    }
+
+    public interface SpeedChangedListener {
+        void onSpeedChanged(float speed);
+    }
+
+    public static MaterialDialog getSpeedDialog(Activity activity, float currentSpeed, SpeedChangedListener listener) {
+        MaterialDialog dialog = getBaseThemedDialog(activity)
+                .title(R.string.menu_speed)
+                .customView(R.layout.dialog_speed, false)
+                .positiveText(R.string.done)
+                .build();
+
+        Float[] speedValues = new Float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f };
+
+        View customView = dialog.getCustomView();
+        TextView speedDisplay = customView.findViewById(R.id.speed_display);
+        Slider slider = customView.findViewById(R.id.speed_slider);
+        slider.setValue(Arrays.asList(speedValues).indexOf(currentSpeed), false);
+        slider.setValueDescriptionProvider((value) -> activity.getString(R.string.playback_speed, speedValues[value]));
+        slider.setOnPositionChangeListener((view, fromUser, oldPos, newPos, oldValue, newValue) -> {
+            float newSpeed = speedValues[newValue];
+            listener.onSpeedChanged(newSpeed);
+            speedDisplay.setText(activity.getString(R.string.playback_speed_display, newSpeed));
+        });
+
+        speedDisplay.setText(activity.getString(R.string.playback_speed_display, currentSpeed));
 
         return dialog;
     }
