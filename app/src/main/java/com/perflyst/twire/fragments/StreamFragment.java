@@ -1292,7 +1292,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      */
     private void resumeStream() {
         showPauseIcon();
-
+        
         if (!isAudioOnlyModeEnabled()) {
             if (vodId == null) {
                 player.seekToDefaultPosition(); // Go forward to live
@@ -1736,7 +1736,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     private void stopAudioOnly() {
         disableAudioOnlyView();
-        showPlayIcon();
 
         // start stream with last quality
         releasePlayer();
