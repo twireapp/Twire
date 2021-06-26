@@ -389,12 +389,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
             if (!settings.getStreamPlayerRuntime()) {
                 mRuntimeWrapper.setVisibility(View.GONE);
             } else {
-                Log.d("Runtime String", args.getString(getString(R.string.stream_fragment_runtime)));
                 Date date = null;
                 SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                 try {
                     date = format.parse(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
-                    Log.d("Date", String.valueOf(date));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -451,7 +449,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
                     public void onFinish() {}
                 }.start();
-                //mRuntime.setText(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
             }
 
             if (args != null && args.containsKey(getString(R.string.stream_fragment_viewers)) && settings.getStreamPlayerShowViewerCount()) {

@@ -73,7 +73,6 @@
 
     <string name="stream_fullscreen">Fullscreen</string>
     <string name="stream_viewers">Viewers</string>
-    <string name="stream_runtime"></string>
     <string name="stream_show_chat">Show chat</string>
     <string name="stream_forward">Forward 10 seconds</string>
     <string name="stream_backward">Backward 10 seconds</string>
@@ -215,6 +214,7 @@
     <string name="player_show_viewercount">Show viewer count</string>
     <string name="player_show_navigation">Reveal navigation bar on click</string>
     <string name="player_auto_player">Continue playback when returning</string>
+    <string name="player_show_runtime">Show the Stream Runtime</string>
 
     <!-- Appearance settings -->
     <string name="appearance_theme_color_title">Theme</string>
@@ -279,7 +279,6 @@
     <!-- Changelog -->
     <string name="changelog_title">Changelog</string>
     <string name="changelog_show_after_update">Show changelog after an update</string>
-    <string name="player_show_runtime">Show the Stream Runtime</string>
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">

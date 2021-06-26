@@ -661,7 +661,7 @@ public class Settings {
         editor.commit();
     }
 
-    public void setStreamRuntime(boolean showRuntime) {
+    public void setStreamPlayerRuntime(boolean showRuntime) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.STREAM_PLAYER_SHOW_RUNTIME, showRuntime);
         editor.commit();

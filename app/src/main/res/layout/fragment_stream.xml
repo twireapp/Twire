@@ -134,7 +134,6 @@
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/stream_runtime"
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/toolbar_viewers_text_size" />
                 </LinearLayout>

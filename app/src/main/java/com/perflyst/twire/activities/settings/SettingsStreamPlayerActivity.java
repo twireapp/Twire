@@ -84,7 +84,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
     }
 
     public void onClickShowRuntime(View v) {
-        settings.setStreamRuntime(!settings.getStreamPlayerRuntime());
+        settings.setStreamPlayerRuntime(!settings.getStreamPlayerRuntime());
         updateSummaries();
     }
 
