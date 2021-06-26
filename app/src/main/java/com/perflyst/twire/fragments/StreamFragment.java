@@ -104,6 +104,7 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -123,7 +124,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private final Handler delayAnimationHandler = new Handler(),
             progressHandler = new Handler(),
             fetchViewCountHandler = new Handler(),
-            fetchChattersHandler = new Handler();
+            fetchChattersHandler = new Handler(),
+            runtimeHandler = new Handler();
     private final HashMap<String, TextView> QualityOptions = new HashMap<>();
     private final int fetchViewCountDelay = 1000 * 60, // A minute
             fetchChattersDelay = 1000 * 60; // 30 seco... Nah just kidding. Also a minute.
@@ -134,7 +136,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             audioViewVisible = false,
             autoPlay = true,
             hasPaused = false,
-            seeking = false;
+            seeking = false,
+            runtime = false;
     private ChannelInfo mChannelInfo;
     private String vodId;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
@@ -190,9 +193,34 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     }
                 }
             }
+
             progressHandler.postDelayed(this, 1000);
         }
     };
+
+    private final Runnable runtimeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            // handle the Stream runtime here
+            if (runtime) {
+                Calendar calendar = Calendar.getInstance();
+                Date date = null;
+                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                try {
+                    date = format.parse(mRuntime.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                calendar.setTime(date);
+                calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 1);
+                mRuntime.setText(format.format(calendar.getTime()));
+            }
+
+            runtimeHandler.postDelayed(this, 1000);
+        }
+    };
+
     private int originalCtrlToolbarPadding,
             originalMainToolbarPadding,
             vodLength = 0,
@@ -389,6 +417,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             if (!settings.getStreamPlayerRuntime()) {
                 mRuntimeWrapper.setVisibility(View.GONE);
             } else {
+                runtime = true;
                 Date date = null;
                 SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                 try {
@@ -397,59 +426,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     e.printStackTrace();
                 }
 
-                int startminute = date.getMinutes();
-                int starthour = date.getHours();
-
-                // https://stackoverflow.com/questions/46774195/countdown-reverse-counter
-                // this is a reverse countdowntimer
-                new CountDownTimer(999999999, 1000) {
-                    int min = startminute;
-                    int hour = starthour;
-
-                    public void onTick(long millisUntilFinished) {
-                        long time = 999999999 - millisUntilFinished;
-                        long sec = (time/1000)%60;
-                        if (sec == 0){
-                            min++;
-                            if (min > 59){
-                                min = 0;
-                                hour++;
-                            }
-                        }
-                        if (sec < 10) {
-                            if (min < 10) {
-                                if (hour < 10) {
-                                    mRuntime.setText("0" + hour + ":0" + min + ":0" + sec);
-                                } else {
-                                    mRuntime.setText("" + hour + ":0" + min + ":0" + sec);
-                                }
-                            } else {
-                                if (hour < 10) {
-                                    mRuntime.setText("0" + hour + ":" + min + ":0" + sec);
-                                } else {
-                                    mRuntime.setText("" + hour + ":" + min + ":0" + sec);
-                                }
-                            }
-                        } else {
-                            if (min < 10) {
-                                if (hour < 10) {
-                                    mRuntime.setText("0" + hour + ":0" + min + ":" + sec);
-                                } else {
-                                    mRuntime.setText("" + hour + ":0" + min + ":" + sec);
-                                }
-                            } else {
-                                if (hour < 10) {
-                                    mRuntime.setText("0" + hour + ":" + min + ":" + sec);
-                                } else {
-                                    mRuntime.setText("" + hour + ":" + min + ":" + sec);
-                                }
-                            }
-                        }
-                    }
-
-                    public void onFinish() {}
-                }.start();
+                // set date with correct format
+                mRuntime.setText(format.format(date));
             }
+
 
             if (args != null && args.containsKey(getString(R.string.stream_fragment_viewers)) && settings.getStreamPlayerShowViewerCount()) {
                 mCurrentViewersView.setText(String.valueOf(args.getInt(getString(R.string.stream_fragment_viewers))));
@@ -603,6 +583,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mediaSession.setActive(true);
 
             progressHandler.postDelayed(progressRunnable, 1000);
+            runtimeHandler.postDelayed(runtimeRunnable, 1000);
         }
     }
 
@@ -763,6 +744,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
         Log.d(LOG_TAG, "Destroying");
         if (fetchViewCountRunnable != null) {
             fetchViewCountHandler.removeCallbacks(fetchViewCountRunnable);
+        }
+
+        if (settings.getStreamPlayerRuntime()) {
+            runtimeHandler.removeCallbacks(runtimeRunnable);
         }
 
         progressHandler.removeCallbacks(progressRunnable);
