@@ -18,8 +18,8 @@ import com.perflyst.twire.service.Settings;
 public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private Settings settings;
-    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mUseProxySummary;
-    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mUseProxy;
+    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mShowRuntimeSummary, mUseProxySummary;
+    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mShowRuntimeView, mUseProxy;
     private EditText mProxyUrl;
 
 
