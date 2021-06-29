@@ -36,6 +36,7 @@ public class Settings {
     private final String GENERAL_FILTER_TOP_STREAMS_LANGUAGE = "genFilterTopStreamLanguage";
     private final String NOTIFICATIONS_IS_DISABLED = "notIsDisabled";
     private final String STREAM_PLAYER_SHOW_VIEWERCOUNT = "streamPlayerShowViewerCount",
+            STREAM_PLAYER_SHOW_RUNTIME = "streamPlayerShowRuntime",
             STREAM_PLAYER_REVEAL_NAVIGATION = "streamPlayerRevealNavigation",
             STREAM_PLAYER_AUTO_PLAYBACK = "streamPlayerAutoPlackbackOnReturn",
             STREAM_PLAYER_USE_PROXY = "streamPlayerUseProxy",
@@ -52,6 +53,7 @@ public class Settings {
     private final String STREAM_VOD_LENGTH = "streamVodLength";
     private final String STREAM_SLEEP_HOUR = "streamSleepHour";
     private final String STREAM_SLEEP_MINUTE = "streamSleepMinute";
+    private final String PLAYBACK_SPEED = "playbackSpeed";
     private final String SETUP_IS_SETUP = "setupIsSetup";
     private final String SETUP_IS_LOGGED_IN = "setupIsLoggedIn";
     private final String TIP_IS_SHOWN = "tipsAreShown";
@@ -61,6 +63,7 @@ public class Settings {
     private final String CHAT_LANDSCAPE_ENABLE = "chatLandscapeEnable";
     private final String CHAT_LANDSCAPE_SWIPEABLE = "chatLandscapeSwipable";
     private final String CHAT_LANDSCAPE_WIDTH = "chatLandscapeWidth";
+    private final String CHAT_ENABLE_SSL = "chatEnableSSL";
     private final String CHAT_RECENT_EMOTES = "chatRecentEmotes";
     private final String CHAT_KEYBOARD_HEIGHT = "chatKeyboardHeight";
     private final String NOTIFY_LIVE = "notifyUserLive";
@@ -475,6 +478,14 @@ public class Settings {
         editor.commit();
     }
 
+    public float getPlaybackSpeed() {
+        return getPreferences().getFloat(this.PLAYBACK_SPEED, 1);
+    }
+
+    public void setPlaybackSpeed(float speed) {
+        getEditor().putFloat(this.PLAYBACK_SPEED, speed).commit();
+    }
+
     public String getGeneralTwitchAccessToken() {
         SharedPreferences preferences = getPreferences();
         return preferences.getString(this.GENERAL_TWITCH_ACCESS_TOKEN_KEY, SecretKeys.NO_LOG_IN_ACCESS_TOKEN);
@@ -647,6 +658,11 @@ public class Settings {
         return preferences.getBoolean(this.STREAM_PLAYER_SHOW_VIEWERCOUNT, true);
     }
 
+    public boolean getStreamPlayerRuntime() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.STREAM_PLAYER_SHOW_RUNTIME, true);
+    }
+
     /**
      * Stream Player -
      */
@@ -654,6 +670,12 @@ public class Settings {
     public void setStreamPlayerShowViewerCount(boolean showViewCount) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.STREAM_PLAYER_SHOW_VIEWERCOUNT, showViewCount);
+        editor.commit();
+    }
+
+    public void setStreamPlayerRuntime(boolean showRuntime) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.STREAM_PLAYER_SHOW_RUNTIME, showRuntime);
         editor.commit();
     }
 
@@ -765,6 +787,21 @@ public class Settings {
     public boolean isLoggedIn() {
         SharedPreferences preferences = getPreferences();
         return preferences.getBoolean(this.SETUP_IS_LOGGED_IN, false);
+    }
+
+    /**
+     * Chat - Enable SSL?
+     */
+
+    public boolean getChatEnableSSL() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_ENABLE_SSL, false);
+    }
+
+    public void setChatEnableSSL(boolean SSL) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_ENABLE_SSL, SSL);
+        editor.commit();
     }
 
     public Context getContext() {

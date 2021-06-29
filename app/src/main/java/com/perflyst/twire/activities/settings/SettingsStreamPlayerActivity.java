@@ -22,6 +22,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
     private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mUseProxy;
     private EditText mProxyUrl;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +31,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         settings = new Settings(getBaseContext());
         mShowNavigationBarView = findViewById(R.id.player_show_navigation_title);
         mShowViewCountView = findViewById(R.id.player_show_viewercount_title);
+        mShowRuntimeView = findViewById(R.id.player_show_runtime);
         mAutoPlaybackView = findViewById(R.id.player_auto_continue_playback_title);
         mUseProxy = findViewById(R.id.player_use_proxy);
         mProxyUrl = findViewById(R.id.player_proxy_url_input);
@@ -38,6 +40,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         mProxyUrl.setText(settings.getStreamPlayerProxyUrl());
 
         mShowViewCountSummary = findViewById(R.id.player_show_viewercount_title_summary);
+        mShowRuntimeSummary = findViewById(R.id.player_show_runtime_summary);
         mShowNavigationBarSummary = findViewById(R.id.player_show_navigation_summary);
         mAutoPlaybackSummary = findViewById(R.id.player_auto_continue_playback_summary);
         mUseProxySummary = findViewById(R.id.player_use_proxy_summary);
@@ -75,6 +78,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private void updateSummaries() {
         updateSummary(mShowViewCountView, mShowViewCountSummary, settings.getStreamPlayerShowViewerCount());
+        updateSummary(mShowRuntimeView, mShowRuntimeSummary, settings.getStreamPlayerRuntime());
         updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, settings.getStreamPlayerShowNavigationBar());
         updateSummary(mAutoPlaybackView, mAutoPlaybackSummary, settings.getStreamPlayerAutoContinuePlaybackOnReturn());
         updateSummary(mUseProxy, mUseProxySummary, settings.getStreamPlayerUseProxy());
@@ -88,6 +92,11 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     public void onClickShowViewerCount(View v) {
         settings.setStreamPlayerShowViewerCount(!settings.getStreamPlayerShowViewerCount());
+        updateSummaries();
+    }
+
+    public void onClickShowRuntime(View v) {
+        settings.setStreamPlayerRuntime(!settings.getStreamPlayerRuntime());
         updateSummaries();
     }
 

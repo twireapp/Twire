@@ -38,6 +38,9 @@ public class GetVODStreamURL extends GetLiveStreamURL {
                 .build();
 
         String resultString = Service.urlToJSONString(request);
+        if (resultString == null)
+            return new LinkedHashMap<>();
+
         try {
             JSONObject resultJSON = new JSONObject(resultString);
             JSONObject tokenJSON = resultJSON.getJSONObject("data").getJSONObject("videoPlaybackAccessToken");

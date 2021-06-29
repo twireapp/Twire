@@ -16,7 +16,9 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
@@ -62,9 +64,11 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
+import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
@@ -98,14 +102,19 @@ import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.rey.material.widget.ProgressView;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-
-import biz.kasual.materialnumberpicker.MaterialNumberPicker;
 
 public class StreamFragment extends Fragment implements Player.Listener {
     private static int totalVerticalInset;
@@ -115,7 +124,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private final Handler delayAnimationHandler = new Handler(),
             progressHandler = new Handler(),
             fetchViewCountHandler = new Handler(),
-            fetchChattersHandler = new Handler();
+            fetchChattersHandler = new Handler(),
+            runtimeHandler = new Handler();
     private final HashMap<String, TextView> QualityOptions = new HashMap<>();
     private final int fetchViewCountDelay = 1000 * 60, // A minute
             fetchChattersDelay = 1000 * 60; // 30 seco... Nah just kidding. Also a minute.
@@ -126,7 +136,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             audioViewVisible = false,
             autoPlay = true,
             hasPaused = false,
-            seeking = false;
+            seeking = false,
+            runtime = false;
     private ChannelInfo mChannelInfo;
     private String vodId;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
@@ -150,7 +161,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mPreview,
             mShowChatButton;
     private SeekBar mProgressBar;
-    private TextView mCurrentProgressView, castingTextView, mCurrentViewersView;
+    private TextView mCurrentProgressView, castingTextView, mCurrentViewersView, mRuntime;
     private AppCompatActivity mActivity;
     private Snackbar snackbar;
     private ProgressView mBufferingView;
@@ -182,9 +193,34 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     }
                 }
             }
+
             progressHandler.postDelayed(this, 1000);
         }
     };
+
+    private final Runnable runtimeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            // handle the Stream runtime here
+            if (runtime) {
+                Calendar calendar = Calendar.getInstance();
+                Date date = null;
+                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                try {
+                    date = format.parse(mRuntime.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                calendar.setTime(date);
+                calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 1);
+                mRuntime.setText(format.format(calendar.getTime()));
+            }
+
+            runtimeHandler.postDelayed(this, 1000);
+        }
+    };
+
     private int originalCtrlToolbarPadding,
             originalMainToolbarPadding,
             vodLength = 0,
@@ -295,9 +331,11 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mProgressBar = mRootView.findViewById(R.id.progressBar);
         mBufferingView = mRootView.findViewById(R.id.circle_progress);
         mCurrentViewersView = mRootView.findViewById(R.id.txtViewViewers);
+        mRuntime = mRootView.findViewById(R.id.txtViewRuntime);
         mActivity = (AppCompatActivity) getActivity();
         mClickInterceptor = mRootView.findViewById(R.id.click_interceptor);
         View mCurrentViewersWrapper = mRootView.findViewById(R.id.viewers_wrapper);
+        View mRuntimeWrapper = mRootView.findViewById(R.id.runtime_wrapper);
 
         setupToolbar();
         setupSpinner();
@@ -376,6 +414,23 @@ public class StreamFragment extends Fragment implements Player.Listener {
             View mTimeController = mRootView.findViewById(R.id.time_controller);
             mTimeController.setVisibility(View.INVISIBLE);
 
+            if (!settings.getStreamPlayerRuntime()) {
+                mRuntimeWrapper.setVisibility(View.GONE);
+            } else {
+                runtime = true;
+                Date date = null;
+                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                try {
+                    date = format.parse(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                // set date with correct format
+                mRuntime.setText(format.format(date));
+            }
+
+
             if (args != null && args.containsKey(getString(R.string.stream_fragment_viewers)) && settings.getStreamPlayerShowViewerCount()) {
                 mCurrentViewersView.setText(String.valueOf(args.getInt(getString(R.string.stream_fragment_viewers))));
                 startFetchingViewers();
@@ -384,6 +439,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
         } else {
             mCurrentViewersWrapper.setVisibility(View.GONE);
+            mRuntimeWrapper.setVisibility(View.GONE);
 
             mForward.setOnClickListener(v -> {
                 seeking = true;
@@ -510,6 +566,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
             player.addListener(this);
             mVideoView.setPlayer(player);
 
+            if (vodId != null) {
+                player.setPlaybackParameters(new PlaybackParameters(settings.getPlaybackSpeed()));
+            }
+
             if (currentMediaSource != null) {
                 player.setMediaSource(currentMediaSource);
                 player.prepare();
@@ -527,6 +587,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mediaSession.setActive(true);
 
             progressHandler.postDelayed(progressRunnable, 1000);
+            runtimeHandler.postDelayed(runtimeRunnable, 1000);
         }
     }
 
@@ -689,6 +750,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
             fetchViewCountHandler.removeCallbacks(fetchViewCountRunnable);
         }
 
+        if (settings.getStreamPlayerRuntime()) {
+            runtimeHandler.removeCallbacks(runtimeRunnable);
+        }
+
         progressHandler.removeCallbacks(progressRunnable);
         super.onDestroy();
     }
@@ -814,6 +879,13 @@ public class StreamFragment extends Fragment implements Player.Listener {
         sleepTimer.show(getActivity());
     }
 
+    private void speedButtonClicked() {
+        DialogService.getSpeedDialog(getActivity(), player.getPlaybackParameters().speed, (speed) -> {
+            player.setPlaybackParameters(new PlaybackParameters(speed));
+            settings.setPlaybackSpeed(speed);
+        }).show();
+    }
+
     private void showSeekDialog() {
         DialogService.getSeekDialog(getActivity(), (dialog, which) -> {
                     if (which == DialogAction.NEGATIVE)
@@ -847,6 +919,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
             return true;
         });
+
+        menu.findItem(R.id.menu_item_speed).setVisible(vodId != null);
     }
 
     @Override
@@ -856,16 +930,19 @@ public class StreamFragment extends Fragment implements Player.Listener {
             return true;
         }
 
-        switch (item.getItemId()) {
-            case R.id.menu_item_sleep:
-                sleepButtonClicked();
-                return true;
-            case R.id.menu_item_profile:
-                profileButtonClicked();
-                return true;
-            case R.id.menu_item_external:
-                playWithExternalPlayer();
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_item_sleep) {
+            sleepButtonClicked();
+            return true;
+        } else if (itemId == R.id.menu_item_profile) {
+            profileButtonClicked();
+            return true;
+        } else if (itemId == R.id.menu_item_external) {
+            playWithExternalPlayer();
+            return true;
+        } else if (itemId == R.id.menu_item_speed) {
+            speedButtonClicked();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

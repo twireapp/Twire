@@ -17,6 +17,7 @@ import androidx.core.app.ActivityOptionsCompat;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
+import com.perflyst.twire.misc.OnlineSince;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
@@ -28,7 +29,7 @@ import java.util.Comparator;
  */
 class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
     final ImageView vPreviewImage;
-    final TextView vDisplayName, vTitle, vGame;
+    final TextView vDisplayName, vTitle, vGame, vOnlineSince;
     final View sharedPadding;
     private final CardView vCard;
     //private TextView vOnlineSince;
@@ -41,7 +42,7 @@ class StreamViewHolder extends MainActivityAdapter.ElementsViewHolder {
         vTitle = v.findViewById(R.id.stream_title);
         vGame = v.findViewById(R.id.stream_game_and_viewers);
         sharedPadding = v.findViewById(R.id.shared_padding);
-        //vOnlineSince = v.findViewById(R.id.stream_online_since);
+        vOnlineSince = v.findViewById(R.id.stream_online_since);
     }
 
     @Override
@@ -161,9 +162,11 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
 
         String viewers = getContext().getResources().getString(R.string.my_streams_cell_current_viewers, element.getCurrentViewers());
         String gameAndViewers = viewers + " - " + element.getGame();
+
         viewHolder.vDisplayName.setText(element.getChannelInfo().getDisplayName());
         viewHolder.vTitle.setText(element.getTitle());
         viewHolder.vGame.setText(gameAndViewers);
+        viewHolder.vOnlineSince.setText(OnlineSince.getOnlineSince(element.getStartedAt()));
         viewHolder.vPreviewImage.setVisibility(View.VISIBLE);
     }
 
