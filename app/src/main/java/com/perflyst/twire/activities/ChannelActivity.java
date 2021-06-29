@@ -1,15 +1,12 @@
 package com.perflyst.twire.activities;
 
-import android.animation.Animator;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,12 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -39,14 +33,12 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.adapters.VODAdapter;
-import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.VideoOnDemand;
@@ -73,7 +65,6 @@ public class ChannelActivity extends ThemeActivity {
     private final static int POSITION_BROADCASTS = 1;
     private final static int POSITION_HIGHLIGHTS = 2;
     private final static int TOTAL_COUNT = 3;
-    private final int SHOW_FAB_DELAY = 300;
     private ChannelInfo info;
     private ImageView streamerImage;
     private Toolbar toolbar,
@@ -81,10 +72,8 @@ public class ChannelActivity extends ThemeActivity {
     private ViewPager2 mViewPager2;
     private TabLayout mTabLayout;
     private AppBarLayout mAppBar;
-    private FloatingActionButton mFab;
     private int COLOR_FADE_DURATION = 0;
     private ChannelFragment mDescriptionFragment, mBroadcastsFragment, mHighlightsFragment;
-    private FollowHandler mFollowHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +90,6 @@ public class ChannelActivity extends ThemeActivity {
         mViewPager2 = findViewById(R.id.streamer_info_viewPager2);
         mTabLayout = findViewById(R.id.streamer_info_tabLayout);
         mAppBar = findViewById(R.id.appbar);
-        mFab = findViewById(R.id.fab);
 
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -123,7 +111,6 @@ public class ChannelActivity extends ThemeActivity {
 
         setUpTabs();
         initStreamerImageAndColors();
-        initiateFAB();
     }
 
     @Override
@@ -135,7 +122,6 @@ public class ChannelActivity extends ThemeActivity {
     @Override
     public void onResume() {
         COLOR_FADE_DURATION = 800;
-        initiateFAB();
         super.onResume();
     }
 
@@ -270,7 +256,6 @@ public class ChannelActivity extends ThemeActivity {
                     Service.animateBackgroundColorChange(toolbar, newColor, primaryColor, COLOR_FADE_DURATION);
                     Service.animateBackgroundColorChange(additionalToolbar, newColor, primaryColor, COLOR_FADE_DURATION);
                     Service.animateBackgroundColorChange(mTabLayout, newColorDark, primaryColorDark, COLOR_FADE_DURATION);
-                    mFab.setBackgroundTintList(ColorStateList.valueOf(compositeNewColor));
                     mTabLayout.setSelectedTabIndicatorColor(compositeNewColor);
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -286,77 +271,6 @@ public class ChannelActivity extends ThemeActivity {
 
             }
         };
-    }
-
-    private void initiateFAB() {
-        mFollowHandler = new FollowHandler(
-                info,
-                getBaseContext(),
-                () -> mFab.hide()
-        );
-
-        mFab.setOnClickListener(v -> {
-            if (mFollowHandler.isStreamerFollowed()) {
-                mFollowHandler.unfollowStreamer();
-            } else {
-                mFollowHandler.followStreamer();
-            }
-
-            hideFAB();
-            new Handler().postDelayed(() -> {
-                updateFABIcon(!mFollowHandler.isStreamerFollowed());
-                showFAB();
-            }, SHOW_FAB_DELAY);
-        });
-
-        updateFABIcon(mFollowHandler.isStreamerFollowed());
-    }
-
-    private void updateFABIcon(boolean isFollowing) {
-        @DrawableRes int imageRes = isFollowing
-                ? R.drawable.ic_heart_broken
-                : R.drawable.ic_favorite;
-        mFab.setImageResource(imageRes);
-    }
-
-    private void hideFAB() {
-        mFab.setClickable(false);
-        int HIDE_FAB_DURATION = 200;
-        mFab.animate()
-                .translationY(getResources().getDimension(R.dimen.streamerInfo_fab_size) + getResources().getDimension(R.dimen.streamerInfo_fab_margin))
-                .setDuration(HIDE_FAB_DURATION)
-                .setInterpolator(new AccelerateInterpolator())
-                .start();
-    }
-
-    private void showFAB() {
-        int SHOW_FAB_DURATION = 300;
-        mFab.animate()
-                .translationY(0)
-                .setDuration(SHOW_FAB_DURATION)
-                .setInterpolator(new OvershootInterpolator())
-                .setListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        mFab.setClickable(true);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                })
-                .start();
     }
 
     /**

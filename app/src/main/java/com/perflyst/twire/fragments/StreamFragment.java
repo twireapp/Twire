@@ -16,9 +16,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
@@ -45,7 +43,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
@@ -86,7 +83,6 @@ import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.StreamActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.chat.ChatManager;
-import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
 import com.perflyst.twire.misc.ResizeWidthAnimation;
 import com.perflyst.twire.model.ChannelInfo;
@@ -102,7 +98,6 @@ import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.rey.material.widget.ProgressView;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -112,8 +107,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class StreamFragment extends Fragment implements Player.Listener {
@@ -1649,45 +1642,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             getContext().startActivity(intent);
         });
 
-        setupFollowButton(mFollowButton);
         setupPanels(mPanelsRecyclerView);
-    }
-
-    private void setupFollowButton(final ImageView imageView) {
-        final FollowHandler mFollowHandler = new FollowHandler(
-                mChannelInfo,
-                getContext(),
-                () -> imageView.setVisibility(View.GONE)
-        );
-        updateFollowIcon(imageView, mFollowHandler.isStreamerFollowed());
-
-        imageView.setOnClickListener(view -> {
-            final boolean isFollowed = mFollowHandler.isStreamerFollowed();
-            if (isFollowed) {
-                mFollowHandler.unfollowStreamer();
-            } else {
-                mFollowHandler.followStreamer();
-            }
-
-            final int ANIMATION_DURATION = 240;
-
-            imageView.animate()
-                    .setDuration(ANIMATION_DURATION)
-                    .alpha(0f)
-                    .start();
-
-            new Handler().postDelayed(() -> {
-                updateFollowIcon(imageView, !isFollowed);
-                imageView.animate().alpha(1f).setDuration(ANIMATION_DURATION).start();
-            }, ANIMATION_DURATION);
-        });
-    }
-
-    private void updateFollowIcon(ImageView imageView, boolean isFollowing) {
-        @DrawableRes int imageRes = isFollowing
-                ? R.drawable.ic_heart_broken
-                : R.drawable.ic_favorite;
-        imageView.setImageResource(imageRes);
     }
 
     private void setupPanels(RecyclerView recyclerView) {
