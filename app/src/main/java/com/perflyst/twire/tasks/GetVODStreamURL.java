@@ -28,13 +28,8 @@ public class GetVODStreamURL extends GetLiveStreamURL {
     @Override
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String vodId = params[0];
-        String usettv = params[1];
-        String proxyurl = params[2];
         String signature = "";
         String token = "";
-        Boolean ttvfun = false;
-
-        Log.d("Use TTV setting", usettv);
 
         Request request = new Request.Builder()
                 .url("https://gql.twitch.tv/gql")
@@ -53,42 +48,11 @@ public class GetVODStreamURL extends GetLiveStreamURL {
         }
 
 
-        //build ping request for ttv.lol
-        Request ping = new Request.Builder()
-                .url(proxyurl + "/ping")
-                .build();
+        //default twitch api call here
+        String vodURL = String.format("http://usher.twitch.tv/vod/%s?nauthsig=%s&nauth=%s", vodId, signature, safeEncode(token));
 
-        //get response code
-        Service.SimpleResponse pingresponse = Service.makeRequest(ping);
-        int responsecode = pingresponse.code;
-        Log.d("Response Code", String.valueOf(responsecode));
-
-        String vodURL = "";
-
-        //if ping successful use ttv.lol otherwise use fallback twitch api
-        if (responsecode == 200 && usettv == "true") {
-            ttvfun = true;
-            Log.d("Using " + proxyurl + " api", String.valueOf(responsecode));
-        } else {
-            ttvfun = false;
-            Log.d("Using default api", String.valueOf(responsecode));
-        }
-
-        if (ttvfun == true) {
-            //modified api call here for ttv.lol
-            //ttv.lol requires https, because without it you get a 301 redirect that`s not supported
-            vodURL = String.format(proxyurl + "/vod/%s.m3u8", vodId);
-            String streamParameters = String.format(
-                    "?nauthsig=%s" +
-                    "&nauth=%s", signature, token);
-            //only encode the parameters of the url
-            vodURL = vodURL + safeEncode(streamParameters);
-        } else {
-            //default twitch api call here
-            vodURL = String.format("http://usher.twitch.tv/vod/%s?nauthsig=%s&nauth=%s", vodId, signature, safeEncode(token));
-        }
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + vodURL);
-        return parseM3U8(vodURL, proxyurl);
+        return parseM3U8(vodURL, "");
     }
 }
