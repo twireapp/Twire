@@ -259,7 +259,7 @@
                     <TextView
                         android:id="@+id/player_proxy_url_info"
                         style="@style/text_settings"
-                        android:text="Example API: https://api.ttv.lol"
+                        android:text="@string/player_proxy_url_example"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/sub_text_settings"

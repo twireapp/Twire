@@ -144,7 +144,10 @@
     <string name="player_show_runtime">Streamlaufzeit anzeigen</string>
     <string name="player_show_navigation">Navigationsleiste beim Klicken anzeigen</string>
     <string name="player_auto_player">Fortsetzen der Wiedergabe bei Rückkehr</string>
+    <string name="player_use_proxy">Benutze ein Video Proxy</string>
+    <string name="player_proxy_url">Proxy Url</string>
     <string name="player_proxy_url_button">Speichern</string>
+    <string name="player_proxy_url_example">Beispiel API: https://much.ga</string>
     <!-- Appearance settings -->
     <string name="appearance_theme_color_title">Thema</string>
     <string name="appearance_streams_style_title">Stream-Stil</string>
