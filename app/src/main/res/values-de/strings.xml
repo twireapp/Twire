@@ -141,6 +141,7 @@
     <string name="chat_size_high">Groß</string>
     <!-- Stream Player Settings -->
     <string name="player_show_viewercount">Zuschauerzahl anzeigen</string>
+    <string name="player_show_runtime">Streamlaufzeit anzeigen</string>
     <string name="player_show_navigation">Navigationsleiste beim Klicken anzeigen</string>
     <string name="player_auto_player">Fortsetzen der Wiedergabe bei Rückkehr</string>
     <!-- Appearance settings -->

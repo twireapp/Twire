@@ -113,12 +113,43 @@
                     app:tint="@android:color/white" />
 
                 <LinearLayout
+                    android:id="@+id/runtime_wrapper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_toLeftOf="@id/centerhelper" >
+
+                    <ImageView
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="@dimen/runtime_icon_margin"
+                        android:contentDescription="@string/stream_viewers"
+                        app:srcCompat="@drawable/ic_runtime"
+                        app:tint="@color/red_A700" />
+
+                    <TextView
+                        android:id="@+id/txtViewRuntime"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/toolbar_icon_size"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/toolbar_viewers_text_size" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/centerhelper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true" />
+
+                <LinearLayout
                     android:id="@+id/viewers_wrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal">
+                    android:layout_toRightOf="@id/centerhelper" >
 
                     <ImageView
                         android:layout_width="@dimen/viewers_icon_size"
@@ -139,6 +170,7 @@
                         android:text=""
                         android:textColor="@android:color/white"
                         android:textSize="@dimen/toolbar_viewers_text_size" />
+
                 </LinearLayout>
 
                 <LinearLayout

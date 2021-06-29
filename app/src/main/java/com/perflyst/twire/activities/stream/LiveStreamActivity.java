@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.MentionAdapter;
+import com.perflyst.twire.misc.OnlineSince;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 
@@ -35,6 +36,7 @@ public class LiveStreamActivity extends StreamActivity {
         Intent liveStreamIntent = new Intent(context, LiveStreamActivity.class);
         liveStreamIntent.putExtra(context.getString(R.string.intent_key_streamer_info), stream.getChannelInfo());
         liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_viewers), stream.getCurrentViewers());
+        liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_runtime), OnlineSince.getOnlineSince(stream.getStartedAt()));
         liveStreamIntent.putExtra(context.getString(R.string.stream_preview_url), stream.getMediumPreview());
         liveStreamIntent.putExtra(context.getString(R.string.stream_shared_transition), sharedTransition);
         return liveStreamIntent;
@@ -56,10 +58,12 @@ public class LiveStreamActivity extends StreamActivity {
         Intent intent = getIntent();
         ChannelInfo mChannelInfo = intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
         int currentViewers = intent.getIntExtra(getResources().getString(R.string.intent_key_stream_viewers), -1);
+        String currentRuntime = intent.getStringExtra(getResources().getString(R.string.intent_key_stream_runtime));
 
         Bundle args = new Bundle();
         args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mChannelInfo);
         args.putInt(getString(R.string.stream_fragment_viewers), currentViewers);
+        args.putString(getString(R.string.stream_fragment_runtime), currentRuntime);
         args.putBoolean(getString(R.string.stream_fragment_autoplay), true);
         return args;
     }

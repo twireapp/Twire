@@ -12,7 +12,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -65,7 +65,7 @@
 
         <TextView
             android:id="@+id/stream_game_and_viewers"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal|bottom"
             android:gravity="center_horizontal|bottom"
@@ -75,7 +75,23 @@
             android:paddingBottom="@dimen/stream_divider_height"
             android:singleLine="true"
             android:text="@string/preview_stream_game_and_viewers"
-            android:textAppearance="@style/cardSecondaryText" />
+            android:textAppearance="@style/cardSecondaryText"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/stream_online_since"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|bottom"
+            android:gravity="center_horizontal|bottom"
+            android:paddingLeft="@dimen/stream_divider_height"
+            android:paddingTop="0dp"
+            android:paddingRight="@dimen/stream_divider_height"
+            android:paddingBottom="@dimen/stream_divider_height"
+            android:singleLine="true"
+            android:text="@string/preview_stream_online_since"
+            android:textAppearance="@style/cardSecondaryText"
+            android:visibility="visible" />
 
     </LinearLayout>
 
