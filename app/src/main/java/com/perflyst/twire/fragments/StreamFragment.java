@@ -137,7 +137,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             autoPlay = true,
             hasPaused = false,
             seeking = false,
-            runtime = false;
+            runtime = false,
+            runtimerunning = false;
     private ChannelInfo mChannelInfo;
     private String vodId;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
@@ -201,6 +202,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private final Runnable runtimeRunnable = new Runnable() {
         @Override
         public void run() {
+            runtimerunning = true;
             // handle the Stream runtime here
             if (runtime) {
                 Calendar calendar = Calendar.getInstance();
@@ -587,7 +589,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mediaSession.setActive(true);
 
             progressHandler.postDelayed(progressRunnable, 1000);
-            runtimeHandler.postDelayed(runtimeRunnable, 1000);
+            if (!runtimerunning) {
+                runtimeHandler.postDelayed(runtimeRunnable, 1000);
+            }
         }
     }
 
