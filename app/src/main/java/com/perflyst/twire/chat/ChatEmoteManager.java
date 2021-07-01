@@ -132,6 +132,41 @@ class ChatEmoteManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // 7TV emotes
+        // API Doc: https://github.com/SevenTV/ServerGo/blob/master/docs/rest-api.md
+        final String SEVENTV_GLOBAL_URL = "https://api.7tv.app/v2/emotes/global";
+        final String SEVENTV_CHANNEL_URL = "https://api.7tv.app/v2/users/" + channelName + "/emotes";
+
+        try {
+            String seventvResponseglobal = Service.urlToJSONString(SEVENTV_GLOBAL_URL);
+            String seventvResponsechannel = Service.urlToJSONString(SEVENTV_CHANNEL_URL);
+
+            // get global emotes
+            JSONArray seventvemotesglobal = new JSONArray(seventvResponseglobal);
+
+            // Read all the emotes
+            for (int i = 0; i < seventvemotesglobal.length(); i++) {
+                Emote emote = To7TV(seventvemotesglobal.getJSONObject(i));
+                emote.setCustomChannelEmote(true);
+                customChannel.add(emote);
+                result.put(emote.getKeyword(), emote);
+            }
+
+            // get channel emotes
+            JSONArray seventvemoteschannel = new JSONArray(seventvResponsechannel);
+
+            // Read all the emotes
+            for (int i = 0; i < seventvemoteschannel.length(); i++) {
+                Emote emote = To7TV(seventvemoteschannel.getJSONObject(i));
+                emote.setCustomChannelEmote(true);
+                customChannel.add(emote);
+                result.put(emote.getKeyword(), emote);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private Emote ToBTTV(JSONObject emoteObject) throws JSONException {
@@ -153,6 +188,13 @@ class ChatEmoteManager {
         }
 
         return Emote.FFZ(emoteObject.getString(EMOTE_NAME), urlMap);
+    }
+
+    private Emote To7TV(JSONObject emoteObject) throws JSONException {
+        final String EMOTE_ID = "id";
+        final String EMOTE_WORD = "name";
+
+        return Emote.SevenTV(emoteObject.getString(EMOTE_WORD), emoteObject.getString(EMOTE_ID));
     }
 
     /**
