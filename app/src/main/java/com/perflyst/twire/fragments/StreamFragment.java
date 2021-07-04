@@ -391,6 +391,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         });
 
         initializePlayer();
+        runtimeHandler.postDelayed(runtimeRunnable, 1000);
 
         mRootView.setOnSystemUiVisibilityChangeListener(
                 visibility -> {
@@ -587,7 +588,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mediaSession.setActive(true);
 
             progressHandler.postDelayed(progressRunnable, 1000);
-            runtimeHandler.postDelayed(runtimeRunnable, 1000);
         }
     }
 
