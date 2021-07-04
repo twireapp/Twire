@@ -18,8 +18,8 @@ import com.perflyst.twire.service.Settings;
 public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private Settings settings;
-    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mPlayerTypeSummary;
-    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView;
+    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mShowRuntimeSummary, mPlayerTypeSummary;
+    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mShowRuntimeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +29,12 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         settings = new Settings(getBaseContext());
         mShowNavigationBarView = findViewById(R.id.player_show_navigation_title);
         mShowViewCountView = findViewById(R.id.player_show_viewercount_title);
+        mShowRuntimeView = findViewById(R.id.player_show_runtime);
         mAutoPlaybackView = findViewById(R.id.player_auto_continue_playback_title);
         mPlayerTypeSummary = findViewById(R.id.player_type_summary);
 
         mShowViewCountSummary = findViewById(R.id.player_show_viewercount_title_summary);
+        mShowRuntimeSummary = findViewById(R.id.player_show_runtime_summary);
         mShowNavigationBarSummary = findViewById(R.id.player_show_navigation_summary);
         mAutoPlaybackSummary = findViewById(R.id.player_auto_continue_playback_summary);
 
@@ -71,6 +73,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         String[] types = getResources().getStringArray(R.array.PlayerType);
         mPlayerTypeSummary.setText(types[settings.getStreamPlayerType() - 1]);
         updateSummary(mShowViewCountView, mShowViewCountSummary, settings.getStreamPlayerShowViewerCount());
+        updateSummary(mShowRuntimeView, mShowRuntimeSummary, settings.getStreamPlayerRuntime());
         updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, settings.getStreamPlayerShowNavigationBar());
         updateSummary(mAutoPlaybackView, mAutoPlaybackSummary, settings.getStreamPlayerAutoContinuePlaybackOnReturn());
     }
@@ -82,6 +85,11 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     public void onClickShowViewerCount(View v) {
         settings.setStreamPlayerShowViewerCount(!settings.getStreamPlayerShowViewerCount());
+        updateSummaries();
+    }
+
+    public void onClickShowRuntime(View v) {
+        settings.setStreamPlayerRuntime(!settings.getStreamPlayerRuntime());
         updateSummaries();
     }
 

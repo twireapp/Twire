@@ -59,6 +59,7 @@
     <string name="stream_fragment_tag" translatable="false">StreamFragmentTag</string>
     <string name="stream_fragment_streamerInfo" translatable="false">streamerInfoForIntent</string>
     <string name="stream_fragment_viewers" translatable="false">streamViewers</string>
+    <string name="stream_fragment_runtime" translatable="false">streamRuntime</string>
 
     <string name="stream_fragment_autoplay" translatable="false">streamAutoPlay</string>
     <string name="stream_fragment_vod_id" translatable="false">stream_vod_id</string>
@@ -107,6 +108,7 @@
     <string name="preview_stream_title">Stream title</string>
     <string name="preview_stream_display_name">Name</string>
     <string name="preview_stream_game_and_viewers">1337 viewers - Game title</string>
+    <string name="preview_stream_online_since">00:30:00</string>
 
     <!-- Game Card -->
     <string name="game_viewers">%s viewers</string>
@@ -153,6 +155,7 @@
     <!-- OnlineStreamCardAdapter-->
     <string name="intent_key_streamer_info" translatable="false">StreamerInfoIntent</string>
     <string name="intent_key_stream_viewers" translatable="false">StreamViewers</string>
+    <string name="intent_key_stream_runtime" translatable="false">StreamRuntime</string>
 
     <!-- Welcome Activity -->
     <string name="title_activity_welcome">Twire setup</string>
@@ -216,6 +219,7 @@
     <string name="player_show_viewercount">Show viewer count</string>
     <string name="player_show_navigation">Reveal navigation bar on click</string>
     <string name="player_auto_player">Continue playback when returning</string>
+    <string name="player_show_runtime">Show the Stream Runtime</string>
     <string name="player_type">Stream Player Type</string>
 
     <!-- Appearance settings -->
