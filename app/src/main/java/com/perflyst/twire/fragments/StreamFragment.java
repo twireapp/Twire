@@ -1548,7 +1548,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 resetQualityViewBackground(qualityView);
                 mQualityBottomSheet.dismiss();
             }
-
         });
     }
 
