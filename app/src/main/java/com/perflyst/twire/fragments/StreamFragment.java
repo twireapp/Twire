@@ -1278,10 +1278,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
 
-        if (isAudioOnlyModeEnabled()) {
-            Log.d(LOG_TAG, "Pausing audio");
-            player.pause();
-        } else if (player != null) {
+        if (player != null) {
             player.pause();
         }
         releaseScreenOn();
@@ -1292,7 +1289,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      */
     private void resumeStream() {
         showPauseIcon();
-        
+
         if (!isAudioOnlyModeEnabled()) {
             if (vodId == null) {
                 player.seekToDefaultPosition(); // Go forward to live
@@ -1670,9 +1667,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mChatOnlySelector.setVisibility(View.VISIBLE);
         }
 
-        // Audio Only is currently broken, so let's not show it
-        //mAudioOnlySelector.setVisibility(View.VISIBLE);
-
         mAudioOnlySelector.setVisibility(View.VISIBLE);
         mAudioOnlySelector.setOnClickListener(view -> {
             mQualityBottomSheet.dismiss();
@@ -1720,13 +1714,11 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     private boolean isAudioOnlyModeEnabled() {
         // just use audioViewVisible as boolean
-        Log.d("Audio visible", String.valueOf(audioViewVisible));
         return audioViewVisible;
     }
 
     private void audioOnlyClicked() {
         mAudioOnlySelector.setChecked(!mAudioOnlySelector.isChecked());
-        Log.d("Audio Only", String.valueOf(mAudioOnlySelector.isChecked()));
         if (mAudioOnlySelector.isChecked()) {
             initAudioOnlyView();
         } else {
