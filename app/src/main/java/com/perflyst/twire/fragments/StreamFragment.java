@@ -139,7 +139,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             seeking = false,
             runtime = false;
     private ChannelInfo mChannelInfo;
-    private String[] types;
     private String vodId;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
     private Settings settings;
