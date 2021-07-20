@@ -71,7 +71,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private void updateSummaries() {
         String[] types = getResources().getStringArray(R.array.PlayerType);
-        mPlayerTypeSummary.setText(types[settings.getStreamPlayerType() - 1]);
+        mPlayerTypeSummary.setText(types[settings.getStreamPlayerType()]);
         updateSummary(mShowViewCountView, mShowViewCountSummary, settings.getStreamPlayerShowViewerCount());
         updateSummary(mShowRuntimeView, mShowRuntimeSummary, settings.getStreamPlayerRuntime());
         updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, settings.getStreamPlayerShowNavigationBar());
@@ -99,9 +99,9 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
     }
 
     public void onClickPlayerType(View _view) {
-        MaterialDialog dialog = DialogService.getChooseChatSizeDialog
+        MaterialDialog dialog = DialogService.getChoosePlayerTypeDialog
                 (this, R.string.player_type, R.array.PlayerType, settings.getStreamPlayerType(), (dialog1, itemView, which, text) -> {
-                    settings.setStreamPlayerType(which + 1);
+                    settings.setStreamPlayerType(which);
                     updateSummaries();
                     return true;
                 });

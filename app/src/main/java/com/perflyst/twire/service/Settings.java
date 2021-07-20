@@ -719,7 +719,7 @@ public class Settings {
 
     public int getStreamPlayerType() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getInt(this.STREAM_PLAYER_TYPE, 1);
+        return preferences.getInt(this.STREAM_PLAYER_TYPE, 0);
     }
 
     public void setStreamPlayerType(int playerType) {
