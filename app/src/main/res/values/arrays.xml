@@ -44,4 +44,11 @@
         <item>@string/chat_size_high</item>
     </string-array>
 
+    <string-array name="PlayerType">
+        <item>embed</item>
+        <item>site</item>
+        <item>thunderdome</item>
+        <item>picture-by-picture</item>
+    </string-array>
+
 </resources>

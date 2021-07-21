@@ -38,7 +38,8 @@ public class Settings {
     private final String STREAM_PLAYER_SHOW_VIEWERCOUNT = "streamPlayerShowViewerCount",
             STREAM_PLAYER_SHOW_RUNTIME = "streamPlayerShowRuntime",
             STREAM_PLAYER_REVEAL_NAVIGATION = "streamPlayerRevealNavigation",
-            STREAM_PLAYER_AUTO_PLAYBACK = "streamPlayerAutoPlackbackOnReturn";
+            STREAM_PLAYER_AUTO_PLAYBACK = "streamPlayerAutoPlackbackOnReturn",
+            STREAM_PLAYER_TYPE = "streamPlayerType";
     private final String APPEARANCE_STREAM_STYLE = "appStreamStyle";
     private final String APPEARANCE_GAME_STYLE = "appGameStyle";
     private final String APPEARANCE_FOLLOW_STYLE = "appFollowStyle";
@@ -710,6 +711,21 @@ public class Settings {
     public boolean getStreamPlayerAutoContinuePlaybackOnReturn() {
         SharedPreferences preferences = getPreferences();
         return preferences.getBoolean(this.STREAM_PLAYER_AUTO_PLAYBACK, false);
+    }
+
+    /**
+     * Stream Player - Type
+     */
+
+    public int getStreamPlayerType() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getInt(this.STREAM_PLAYER_TYPE, 0);
+    }
+
+    public void setStreamPlayerType(int playerType) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putInt(this.STREAM_PLAYER_TYPE, playerType);
+        editor.commit();
     }
 
     /**

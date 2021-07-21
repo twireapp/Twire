@@ -220,6 +220,7 @@
     <string name="player_show_navigation">Reveal navigation bar on click</string>
     <string name="player_auto_player">Continue playback when returning</string>
     <string name="player_show_runtime">Show the Stream Runtime</string>
+    <string name="player_type">Stream Player Type</string>
 
     <!-- Appearance settings -->
     <string name="appearance_theme_color_title">Theme</string>

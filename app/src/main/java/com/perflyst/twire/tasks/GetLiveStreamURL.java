@@ -35,7 +35,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         callback = aCallback;
     }
 
-    protected String formatQuery(boolean isLive, String channelOrVod) {
+    protected String formatQuery(boolean isLive, String channelOrVod, String PlayerType) {
         return "{\n" +
                 "    \"operationName\": \"PlaybackAccessToken\",\n" +
                 "    \"extensions\": {\n" +
@@ -49,7 +49,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
                 "        \"login\": \"" + (isLive ? channelOrVod : "") + "\",\n" +
                 "        \"isVod\": " + !isLive + ",\n" +
                 "        \"vodID\": \"" + (!isLive ? channelOrVod : "") + "\",\n" +
-                "        \"playerType\": \"embed\"\n" +
+                "        \"playerType\": \""+ PlayerType + "\"\n" +
                 "    }\n" +
                 "}";
     }
@@ -57,13 +57,14 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     @Override
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String streamerName = params[0];
+        String PlayerType = params[1];
         String signature = "";
         String token = "";
 
         Request request = new Request.Builder()
                 .url("https://gql.twitch.tv/gql")
                 .header("Client-ID", SecretKeys.TWITCH_WEB_CLIENT_ID)
-                .post(RequestBody.create(MediaType.get("application/json"), formatQuery(true, streamerName)))
+                .post(RequestBody.create(MediaType.get("application/json"), formatQuery(true, streamerName, PlayerType)))
                 .build();
 
         String resultString = Service.urlToJSONString(request);
