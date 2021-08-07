@@ -670,6 +670,20 @@ public class Service {
         return result;
     }
 
+    public static boolean isUserTwitch(Integer streamerId, Context context) {
+        SubscriptionsDbHelper mDbHelper = new SubscriptionsDbHelper(context);
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        String query = "SELECT * FROM " + SubscriptionsDbHelper.TABLE_NAME + " WHERE " + SubscriptionsDbHelper.COLUMN_ID + "='" + streamerId + "';";
+        boolean result = false;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            result = cursor.getInt(cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW)) > 0;
+        }
+        cursor.close();
+        db.close();
+        return result;
+    }
+
     private static void updateStreamerInfoDbWithValues(ContentValues values, Context context, String streamerName) {
         updateStreamerInfoDbWithValues(values, context, SubscriptionsDbHelper.COLUMN_STREAMER_NAME + "=?", new String[]{streamerName});
     }
@@ -698,7 +712,11 @@ public class Service {
         SubscriptionsDbHelper mDbHelper = new SubscriptionsDbHelper(context);
         SQLiteDatabase db = mDbHelper.getWritableDatabase(); // Get the data repository in write mode
 
-        boolean result = db.delete(SubscriptionsDbHelper.TABLE_NAME, SubscriptionsDbHelper.COLUMN_ID + " = '" + streamerId + "'", null) > 0;
+        boolean result = false;
+        if (!isUserTwitch(streamerId, context)) {
+            result = db.delete(SubscriptionsDbHelper.TABLE_NAME, SubscriptionsDbHelper.COLUMN_ID + " = '" + streamerId + "'", null) > 0;
+        }
+
         db.close();
 
         return result;
@@ -717,6 +735,7 @@ public class Service {
         values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, streamer.getFollowers());
         values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, streamer.getViews());
         values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, disableForStreamer ? 0 : 1); // Enable by default
+        values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, 0);
 
 
         // Test if the URL strings are null, to make sure we don't call toString on a null.

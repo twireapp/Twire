@@ -24,7 +24,8 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
     public static final String COLUMN_VIDEO_BANNER_URL = "videoBannerURL";
     public static final String COLUMN_PROFILE_BANNER_URL = "profileBannerURL";
     public static final String COLUMN_NOTIFY_WHEN_LIVE = "notifityWhenLive";
-    static final int DATABASE_VERSION = 7;
+    public static final String COLUMN_IS_TWITCH_FOLLOW = "isTwitchFollow";
+    static final int DATABASE_VERSION = 8;
     private static final String DATABASE_NAME = "SubscriptionsDb_09.db";
     private static final String SQL_CREATE_ENTRIES =
             "CREATE TABLE " + TABLE_NAME + " (" +
@@ -37,7 +38,8 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                     COLUMN_LOGO_URL + " TEXT, " +
                     COLUMN_VIDEO_BANNER_URL + " TEXT, " +
                     COLUMN_PROFILE_BANNER_URL + " TEXT, " +
-                    COLUMN_NOTIFY_WHEN_LIVE + " INTEGER" +
+                    COLUMN_NOTIFY_WHEN_LIVE + " INTEGER, " +
+                    COLUMN_IS_TWITCH_FOLLOW + " INTEGER" +
                     " );";
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + TABLE_NAME;

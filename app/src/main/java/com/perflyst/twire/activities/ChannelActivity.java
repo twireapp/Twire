@@ -295,21 +295,29 @@ public class ChannelActivity extends ThemeActivity {
                 () -> mFab.hide()
         );
 
-        mFab.setOnClickListener(v -> {
-            if (mFollowHandler.isStreamerFollowed()) {
-                mFollowHandler.unfollowStreamer();
-            } else {
-                mFollowHandler.followStreamer();
-            }
-
+        // If the channel got imported from Twitch, then hide the Follow/Unfollow Button
+        if (mFollowHandler.isStreamerFollowed() && mFollowHandler.isStreamerTwitch()) {
             hideFAB();
-            new Handler().postDelayed(() -> {
-                updateFABIcon(!mFollowHandler.isStreamerFollowed());
-                showFAB();
-            }, SHOW_FAB_DELAY);
-        });
+        } else {
+            mFab.setOnClickListener(v -> {
+                if (mFollowHandler.isStreamerFollowed()) {
+                    mFollowHandler.unfollowStreamer();
+                } else {
+                    mFollowHandler.followStreamer();
+                }
 
-        updateFABIcon(mFollowHandler.isStreamerFollowed());
+                hideFAB();
+                new Handler().postDelayed(() -> {
+                    updateFABIcon(mFollowHandler.isStreamerFollowed());
+                    if (mFollowHandler.isStreamerTwitch()) {
+                        hideFAB();
+                    } else {
+                        showFAB();
+                    }
+                }, SHOW_FAB_DELAY);
+            });
+            updateFABIcon(mFollowHandler.isStreamerFollowed());
+        }
     }
 
     private void updateFABIcon(boolean isFollowing) {
@@ -320,12 +328,32 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private void hideFAB() {
-        mFab.setClickable(false);
         int HIDE_FAB_DURATION = 200;
         mFab.animate()
                 .translationY(getResources().getDimension(R.dimen.streamerInfo_fab_size) + getResources().getDimension(R.dimen.streamerInfo_fab_margin))
                 .setDuration(HIDE_FAB_DURATION)
                 .setInterpolator(new AccelerateInterpolator())
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        mFab.setClickable(false);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mFab.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                })
                 .start();
     }
 
@@ -338,7 +366,7 @@ public class ChannelActivity extends ThemeActivity {
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
-
+                        mFab.setVisibility(View.VISIBLE);
                     }
 
                     @Override
