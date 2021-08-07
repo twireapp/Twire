@@ -62,6 +62,13 @@ public class DialogService {
                 .negativeText(R.string.gen_dialog_login_or_out_logout_action).build();
     }
 
+    public static MaterialDialog getSettingsWipeFollowsDialog(Activity activity) {
+        return getBaseThemedDialog(activity)
+                .content(activity.getString(R.string.gen_dialog_wipe_follows_content))
+                .positiveText(R.string.gen_dialog_wipe_follows_action)
+                .negativeText(R.string.gen_dialog_wipe_follows_cancel_action).build();
+    }
+
     public static MaterialDialog getChooseStartUpPageDialog(Activity activity, String currentlySelectedPageTitle, MaterialDialog.ListCallbackSingleChoice listCallbackSingleChoice) {
         final Settings settings = new Settings(activity);
         @ArrayRes int arrayResource = settings.isLoggedIn() ? R.array.StartupPages : R.array.StartupPagesNoLogin;

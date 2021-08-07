@@ -202,6 +202,10 @@
     <string name="gen_tips_have_been_reset">Tutorial tips have been reset</string>
     <string name="gen_language_filter">Filter top streams by language</string>
     <string name="gen_open_changelog">Open changelog</string>
+    <string name="gen_dialog_wipe_follows_content">Do you want to Wipe all Channels?</string>
+    <string name="gen_dialog_wipe_follows_action">Wipe</string>
+    <string name="gen_dialog_wipe_follows_cancel_action">Cancel</string>
+    <string name="gen_twitch_follows">Wipe all Channels</string>
 
     <!-- Chat Settings -->
     <string name="chat_emote_size">Emote size</string>

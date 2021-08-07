@@ -44,7 +44,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         baseContext = new WeakReference<>((Context) params[1]);
 
         Settings mSettings = new Settings(baseContext.get());
-        
+
         if (mSettings.isLoggedIn()) {
             int userId = mSettings.getGeneralTwitchUserID();
 
@@ -89,28 +89,6 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
             for (ChannelInfo si : TempStorage.getLoadedStreamers())
                 loadedStreamerIds.add(si.getUserId());
 
-            // Get the follows of the user defined twitch username
-            // If a retrieved follow is not in the loaded streamers - Then add it to the database.
-            for (Integer si : loadedStreamerIds) {
-                if (!userSubs.contains(si)) {
-                    boolean result = deleteStreamerInfoFromDB(baseContext.get(), si);
-                    try {
-                        for (ChannelInfo info : TempStorage.getLoadedStreamers()) {
-                            if (si.equals(info.getUserId()))
-                                TempStorage.removeLoadedStreamer(info);
-                        }
-                    } catch (ConcurrentModificationException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (result) {
-                        Log.d(LOG_TAG, "Successfully removed " + si + " from database and loadedStreamers");
-                    } else {
-                        Log.e(LOG_TAG, "Failed to remove " + si + " from database and loadedStreamers");
-                    }
-                }
-            }
-
             // Find the Twitch userIds that the app hasn't already loaded. Add it to the list of userIds that will be added to the database
             ArrayList<Integer> IdsToAddToDB = new ArrayList<>();
             ArrayList<StreamerInfoFromIdsThread> streamerInfoThreads = new ArrayList<>();
@@ -149,7 +127,6 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
             return streamersToAddToDB;
         } else {
             ArrayList<ChannelInfo> streamersToAddToDB = new ArrayList<>();
-
             return streamersToAddToDB;
         }
 

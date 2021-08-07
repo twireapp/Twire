@@ -763,9 +763,6 @@ public class Settings {
      */
 
     public void setLogin(boolean isLoggedIn) {
-        if (!isLoggedIn) {
-            Service.clearStreamerInfoDb(context);
-        }
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.SETUP_IS_LOGGED_IN, isLoggedIn);
         editor.commit();

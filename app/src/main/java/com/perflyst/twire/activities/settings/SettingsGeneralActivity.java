@@ -88,7 +88,6 @@ public class SettingsGeneralActivity extends ThemeActivity {
             MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialog(this, settings.getGeneralTwitchDisplayName());
             dialog.getBuilder().onPositive((dialog1, which) -> {
                 dialog1.dismiss();
-                Service.clearStreamerInfoDb(getBaseContext());
                 navigateToLogin();
             });
 
@@ -103,6 +102,20 @@ public class SettingsGeneralActivity extends ThemeActivity {
         } else {
             navigateToLogin();
         }
+    }
+
+    public void onClickWipeFollows(View v) {
+        MaterialDialog dialog = DialogService.getSettingsWipeFollowsDialog(this);
+        dialog.getBuilder().onPositive((dialog1, which) -> {
+            dialog1.dismiss();
+            Service.clearStreamerInfoDb(getBaseContext());
+        });
+
+        dialog.getBuilder().onNegative((dialog12, which) -> {
+            dialog12.dismiss();
+        });
+
+        dialog.show();
     }
 
     public void onClickStartPage(View v) {
