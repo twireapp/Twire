@@ -1,14 +1,16 @@
 package com.perflyst.twire.activities.main;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
+import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.service.JSONService;
 import com.perflyst.twire.service.Service;
-import com.perflyst.twire.service.Settings;
+import com.perflyst.twire.tasks.GetFollowsFromDB;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour;
@@ -20,6 +22,7 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
 
@@ -51,12 +54,26 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
     }
 
     @Override
-    public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
-        final String URL = "https://api.twitch.tv/kraken/streams/followed?oauth_token=" + new Settings(getBaseContext()).getGeneralTwitchAccessToken() + "&limit=" + getLimit() + "&offset=" + getCurrentOffset() + "&stream_type=live";
+    public List<StreamInfo> getVisualElements() throws JSONException, ExecutionException, InterruptedException, MalformedURLException {
+        // build the api link
+        String kraken_url = "https://api.twitch.tv/kraken/streams?limit=" + getLimit() + "&stream_type=live&offset=" + getCurrentOffset()+ "&channel=";
+        String user_logins = "";
+
+        GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
+        subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
+
+        for (ChannelInfo si : subscriptionsTask.get().values()) {
+            Log.d("USERID", String.valueOf(si.getUserId()));
+            user_logins = user_logins + si.getUserId() + ",";
+        }
+
+
+        kraken_url = kraken_url + user_logins;
+
         final String ARRAY_KEY = "streams";
 
         List<StreamInfo> mResultList = new ArrayList<>();
-        String jsonString = Service.urlToJSONString(URL);
+        String jsonString = Service.urlToJSONString(kraken_url);
         JSONObject fullDataObject = new JSONObject(jsonString);
         JSONArray topStreamsArray = fullDataObject.getJSONArray(ARRAY_KEY);
 

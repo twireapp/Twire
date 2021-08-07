@@ -100,11 +100,14 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
 
     @Override
     public void notifyUserNoElementsAdded() {
+        /*
+        We don´t want to notify the user when no elements are added
         if (mAdapter.getItemCount() == 0 && mAdapter.getItemCount() != getMaxElementsToFetch()) {
             if (!snackbar.isShown()) {
                 snackbar.show();
             }
         }
+         */
     }
 
     @Override
