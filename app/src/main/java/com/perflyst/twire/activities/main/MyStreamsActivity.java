@@ -63,7 +63,6 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
         subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
 
         for (ChannelInfo si : subscriptionsTask.get().values()) {
-            Log.d("USERID", String.valueOf(si.getUserId()));
             user_logins = user_logins + si.getUserId() + ",";
         }
 
