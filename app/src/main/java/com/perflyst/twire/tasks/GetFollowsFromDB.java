@@ -36,7 +36,7 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
     }
 
     protected Map<String, ChannelInfo> doInBackground(Context... params) {
-        Log.d(LOG_TAG, "Entered GetSubscriptionsFromDB");
+        Log.d(LOG_TAG, "Entered GetFollowsFromDB");
         baseContext = new WeakReference<>(params[0]);
         final boolean INCLUDE_THUMBNAILS = false;
 
