@@ -21,6 +21,7 @@ import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
+import com.perflyst.twire.service.SubscriptionsDbHelper;
 
 public class SettingsGeneralActivity extends ThemeActivity {
     private Settings settings;
@@ -154,4 +155,17 @@ public class SettingsGeneralActivity extends ThemeActivity {
     public void onClickOpenChangelog(View v) {
         new ChangelogDialogFragment().show(getSupportFragmentManager(), "ChangelogDialog");
     }
+
+    // Export/Import for Follows
+
+    public void onExport(View v) {
+        SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
+        helper.onExport(helper.getWritableDatabase());
+    }
+
+    public void onImport(View v) {
+        SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
+        helper.onImport(helper.getWritableDatabase());
+    }
+
 }

@@ -205,7 +205,9 @@
     <string name="gen_dialog_wipe_follows_content">Do you want to Wipe all Channels?</string>
     <string name="gen_dialog_wipe_follows_action">Wipe</string>
     <string name="gen_dialog_wipe_follows_cancel_action">Cancel</string>
-    <string name="gen_twitch_follows">Wipe all Channels</string>
+    <string name="gen_twitch_follows">Wipe all Follows</string>
+    <string name="gen_export_database">Export all Follows</string>
+    <string name="gen_import_database">Import Follows</string>
 
     <!-- Chat Settings -->
     <string name="chat_emote_size">Emote size</string>
