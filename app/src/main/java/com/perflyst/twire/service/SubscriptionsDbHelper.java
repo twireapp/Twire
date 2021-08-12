@@ -109,8 +109,10 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
 
     // Export import below
 
-    public void onImport(SQLiteDatabase db) {
-        if (!db.isOpen()) { return; }
+    public int onImport(SQLiteDatabase db) {
+        if (!db.isOpen()) {
+            return 0;
+        }
         try {
             String filedata = read(mContext, EXPORT_NAME);
             assert filedata != null;
@@ -151,13 +153,15 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 }
 
             }
+            db.close();
+            return channels.length();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        db.close();
+        return 0;
     }
 
-    public void onExport(SQLiteDatabase db) {
+    public int onExport(SQLiteDatabase db) {
         String query = "SELECT * FROM " + SubscriptionsDbHelper.TABLE_NAME + ";";
         Cursor cursor = db.rawQuery(query, null);
 
@@ -208,18 +212,21 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        try {
-            JSONObject channels = new JSONObject();
-            channels.put("Channels", channelstoExport);
-            String jsonStr = channels.toString();
-            Log.d("Export String", jsonStr);
+        if (channelstoExport.length()>0) {
+            try {
+                JSONObject channels = new JSONObject();
+                channels.put("Channels", channelstoExport);
+                String jsonStr = channels.toString();
+                Log.d("Export String", jsonStr);
 
-            // TO-DO Save File
-            create(mContext, EXPORT_NAME, jsonStr);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+                // TO-DO Save File
+                create(mContext, EXPORT_NAME, jsonStr);
+                return channelstoExport.length();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+        return 0;
     }
 
     private String read(Context context, String fileName) {

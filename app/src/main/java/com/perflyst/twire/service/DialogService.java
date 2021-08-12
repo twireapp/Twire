@@ -69,6 +69,20 @@ public class DialogService {
                 .negativeText(R.string.gen_dialog_wipe_follows_cancel_action).build();
     }
 
+    public static MaterialDialog getSettingsExportFollowsDialog(Activity activity) {
+        return getBaseThemedDialog(activity)
+                .content(activity.getString(R.string.gen_dialog_export_follows_content))
+                .positiveText(R.string.gen_dialog_export_follows_action)
+                .negativeText(R.string.gen_dialog_export_follows_cancel_action).build();
+    }
+
+    public static MaterialDialog getSettingsImportFollowsDialog(Activity activity) {
+        return getBaseThemedDialog(activity)
+                .content(activity.getString(R.string.gen_dialog_import_follows_content))
+                .positiveText(R.string.gen_dialog_import_follows_action)
+                .negativeText(R.string.gen_dialog_import_follows_cancel_action).build();
+    }
+
     public static MaterialDialog getChooseStartUpPageDialog(Activity activity, String currentlySelectedPageTitle, MaterialDialog.ListCallbackSingleChoice listCallbackSingleChoice) {
         final Settings settings = new Settings(activity);
         @ArrayRes int arrayResource = settings.isLoggedIn() ? R.array.StartupPages : R.array.StartupPagesNoLogin;

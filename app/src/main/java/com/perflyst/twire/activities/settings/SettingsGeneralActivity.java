@@ -1,11 +1,14 @@
 package com.perflyst.twire.activities.settings;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -105,20 +108,6 @@ public class SettingsGeneralActivity extends ThemeActivity {
         }
     }
 
-    public void onClickWipeFollows(View v) {
-        MaterialDialog dialog = DialogService.getSettingsWipeFollowsDialog(this);
-        dialog.getBuilder().onPositive((dialog1, which) -> {
-            dialog1.dismiss();
-            Service.clearStreamerInfoDb(getBaseContext());
-        });
-
-        dialog.getBuilder().onNegative((dialog12, which) -> {
-            dialog12.dismiss();
-        });
-
-        dialog.show();
-    }
-
     public void onClickStartPage(View v) {
         MaterialDialog dialog = DialogService.getChooseStartUpPageDialog
                 (this, startPageSubText.getText().toString(), (dialog1, view, which, text) -> {
@@ -156,16 +145,58 @@ public class SettingsGeneralActivity extends ThemeActivity {
         new ChangelogDialogFragment().show(getSupportFragmentManager(), "ChangelogDialog");
     }
 
+    // Database Stuff below
+
+    public void onClickWipeFollows(View v) {
+        MaterialDialog dialog = DialogService.getSettingsWipeFollowsDialog(this);
+        dialog.getBuilder().onPositive((dialog1, which) -> {
+            dialog1.dismiss();
+            Service.clearStreamerInfoDb(getBaseContext());
+            Toast infoToast = Toast.makeText(getBaseContext(),"Wiped Follows", Toast.LENGTH_SHORT);
+            infoToast.show();
+        });
+
+        dialog.getBuilder().onNegative((dialog2, which) -> {
+            dialog2.dismiss();
+        });
+
+        dialog.show();
+    }
+
     // Export/Import for Follows
 
     public void onExport(View v) {
-        SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
-        helper.onExport(helper.getWritableDatabase());
+        MaterialDialog dialog = DialogService.getSettingsExportFollowsDialog(this);
+        dialog.getBuilder().onPositive((dialog1, which) -> {
+            dialog1.dismiss();
+            SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
+            int exported = helper.onExport(helper.getWritableDatabase());
+            Toast infoToast = Toast.makeText(getBaseContext(),"Exported " + exported + " Follows", Toast.LENGTH_SHORT);
+            infoToast.show();
+        });
+
+        dialog.getBuilder().onNegative((dialog2, which) -> {
+            dialog2.dismiss();
+        });
+
+        dialog.show();
     }
 
     public void onImport(View v) {
-        SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
-        helper.onImport(helper.getWritableDatabase());
+        MaterialDialog dialog = DialogService.getSettingsImportFollowsDialog(this);
+        dialog.getBuilder().onPositive((dialog1, which) -> {
+            dialog1.dismiss();
+            SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
+            int imported = helper.onImport(helper.getWritableDatabase());
+            Toast infoToast = Toast.makeText(getBaseContext(),"Imported " + imported + " Follows", Toast.LENGTH_SHORT);
+            infoToast.show();
+        });
+
+        dialog.getBuilder().onNegative((dialog2, which) -> {
+            dialog2.dismiss();
+        });
+
+        dialog.show();
     }
 
 }
