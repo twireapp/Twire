@@ -120,29 +120,41 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 JSONObject tempchannel = channels.getJSONObject(i);
 
                 ContentValues values = new ContentValues();
+                // these can´t be empty
                 values.put(SubscriptionsDbHelper.COLUMN_ID, tempchannel.getInt("ID"));
-                values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, ifEmpty(tempchannel.getString("NAME")));
-                values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, ifEmpty(tempchannel.getString("DISPLAY_NAME")));
-                values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, ifEmpty(tempchannel.getString("DESCRIPTION")));
+                values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, tempchannel.getString("NAME"));
+                values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, tempchannel.getString("DISPLAY_NAME"));
+                values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, tempchannel.getString("DESCRIPTION"));
                 values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, tempchannel.getInt("FOLLOWERS"));
                 values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, tempchannel.getInt("VIEWS"));
                 values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, tempchannel.getInt("NOTIFY"));
                 values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, tempchannel.getInt("IS_TWITCH"));
-                values.put(SubscriptionsDbHelper.COLUMN_LOGO_URL, ifEmpty(tempchannel.getString("LOGO")));
-                values.put(SubscriptionsDbHelper.COLUMN_VIDEO_BANNER_URL, ifEmpty(tempchannel.getString("BANNER")));
-                values.put(SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL, ifEmpty(tempchannel.getString("PROFILE_BANNER")));
 
-                db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
+                // these could be empty
+                if (tempchannel.has("LOGO"))
+                    values.put(SubscriptionsDbHelper.COLUMN_LOGO_URL, tempchannel.getString("LOGO"));
+
+                if (tempchannel.has("BANNER"))
+                    values.put(SubscriptionsDbHelper.COLUMN_VIDEO_BANNER_URL, tempchannel.getString("BANNER"));
+
+                if (tempchannel.has("PROFILE_BANNER"))
+                    values.put(SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL, tempchannel.getString("PROFILE_BANNER"));
+
+                // check what methode should be used
+                String sql = "SELECT * FROM " + SubscriptionsDbHelper.TABLE_NAME + " WHERE _ID=" + tempchannel.getInt("ID");
+                Cursor cursor = db.rawQuery(sql,null);
+
+                if (cursor.getCount()>0) {
+                    db.replace(SubscriptionsDbHelper.TABLE_NAME, null, values);
+                } else {
+                    db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
+                }
 
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
         db.close();
-    }
-
-    public String ifEmpty(String temp) {
-        return "" + temp;
     }
 
     public void onExport(SQLiteDatabase db) {
@@ -231,7 +243,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
     private void create(Context context, String fileName, String jsonString) {
         try {
             ContextWrapper cw = new ContextWrapper(context);
-            File directory = null;
+            File directory;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                 directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
             } else {
