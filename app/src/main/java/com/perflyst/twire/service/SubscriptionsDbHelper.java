@@ -246,7 +246,15 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
 
     private String read(Context context, String fileName) {
         try {
-            FileInputStream fis = context.openFileInput(fileName);
+            ContextWrapper cw = new ContextWrapper(context);
+            File directory;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+                directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+            } else {
+                directory = android.os.Environment.getExternalStorageDirectory();
+            }
+            File importfile = new File(directory, fileName);
+            FileInputStream fis = new FileInputStream(importfile);
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader bufferedReader = new BufferedReader(isr);
             StringBuilder sb = new StringBuilder();
