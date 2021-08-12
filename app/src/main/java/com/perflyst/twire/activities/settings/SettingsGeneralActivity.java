@@ -152,11 +152,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
         dialog.getBuilder().onPositive((dialog1, which) -> {
             dialog1.dismiss();
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
-            if (settings.isLoggedIn()) {
-                helper.onWipe(helper.getWritableDatabase(), true);
-            } else {
-                helper.onWipe(helper.getWritableDatabase(), false);
-            }
+            helper.onWipe(helper.getWritableDatabase(), settings.isLoggedIn());
             Toast infoToast = Toast.makeText(getBaseContext(),"Wiped Follows", Toast.LENGTH_SHORT);
             infoToast.show();
         });
