@@ -107,6 +107,22 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
         return usersToNotify;
     }
 
+    // Wipe
+
+    public void onWipe(SQLiteDatabase db, boolean isLoggedin) {
+        if (!db.isOpen()) {
+            return;
+        }
+        String query;
+        if (isLoggedin) {
+            query = "DELETE FROM " + SubscriptionsDbHelper.TABLE_NAME + " WHERE " + SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW + " == 0;";
+        } else {
+            query = "DELETE FROM " + SubscriptionsDbHelper.TABLE_NAME + ";";
+        }
+        Log.d("query", query);
+        db.execSQL(query);
+    }
+
     // Export import below
 
     public int onImport(SQLiteDatabase db) {
@@ -153,7 +169,6 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 }
 
             }
-            db.close();
             return channels.length();
         } catch (JSONException e) {
             e.printStackTrace();
