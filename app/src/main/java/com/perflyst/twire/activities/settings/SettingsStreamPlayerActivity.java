@@ -21,7 +21,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private Settings settings;
     private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mShowRuntimeSummary, mPlayerTypeSummary, mUseProxySummary;
-    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mShowRuntimeView, mShowRuntimeView, mUseProxy;
+    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mShowRuntimeView, mUseProxy;
     private EditText mProxyUrl;
 
     @Override
@@ -122,6 +122,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         } else {
             Log.d("Url looks wrong", mProxyUrl.getText().toString());
         }
+    }
 
     public void onClickPlayerType(View _view) {
         MaterialDialog dialog = DialogService.getChoosePlayerTypeDialog

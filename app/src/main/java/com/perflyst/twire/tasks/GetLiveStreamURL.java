@@ -59,8 +59,8 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String streamerName = params[0];
         String PlayerType = params[1];
-        String usettv = params[1];
-        String proxyurl = params[2];
+        String usettv = params[2];
+        String proxyurl = params[3];
         String signature = "";
         String token = "";
 
