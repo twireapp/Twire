@@ -39,6 +39,7 @@ public class Settings {
             STREAM_PLAYER_SHOW_RUNTIME = "streamPlayerShowRuntime",
             STREAM_PLAYER_REVEAL_NAVIGATION = "streamPlayerRevealNavigation",
             STREAM_PLAYER_AUTO_PLAYBACK = "streamPlayerAutoPlackbackOnReturn",
+            STREAM_PLAYER_TYPE = "streamPlayerType",
             STREAM_PLAYER_USE_PROXY = "streamPlayerUseProxy",
             STREAM_PLAYER_PROXY_URL = "streamPlayerProxyUrl";
     private final String APPEARANCE_STREAM_STYLE = "appStreamStyle";
@@ -727,6 +728,21 @@ public class Settings {
     public String getStreamPlayerProxyUrl() {
         SharedPreferences preferences = getPreferences();
         return String.valueOf(preferences.getString(this.STREAM_PLAYER_PROXY_URL, "https://api.ttv.lol"));
+    }
+
+    /**
+     * Stream Player - Type
+     */
+
+    public int getStreamPlayerType() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getInt(this.STREAM_PLAYER_TYPE, 0);
+    }
+
+    public void setStreamPlayerType(int playerType) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putInt(this.STREAM_PLAYER_TYPE, playerType);
+        editor.commit();
     }
 
     /**

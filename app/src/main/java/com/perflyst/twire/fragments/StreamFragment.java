@@ -391,6 +391,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         });
 
         initializePlayer();
+        runtimeHandler.postDelayed(runtimeRunnable, 1000);
 
         mRootView.setOnSystemUiVisibilityChangeListener(
                 visibility -> {
@@ -587,7 +588,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mediaSession.setActive(true);
 
             progressHandler.postDelayed(progressRunnable, 1000);
-            runtimeHandler.postDelayed(runtimeRunnable, 1000);
         }
     }
 
@@ -1339,9 +1339,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
 
-        if (isAudioOnlyModeEnabled()) {
-            Log.d(LOG_TAG, "Pausing audio");
-        } else if (player != null) {
+        if (player != null) {
             player.pause();
         }
         releaseScreenOn();
@@ -1359,6 +1357,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
 
             player.play();
+        } else {
+            player.play();
         }
 
         keepScreenOn();
@@ -1374,7 +1374,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             startStreamWithTask();
         } else {
             if (qualityURLs.containsKey(quality)) {
-                if (chatOnlyViewVisible || audioViewVisible) {
+                if (chatOnlyViewVisible) {
                     return;
                 }
 
@@ -1403,7 +1403,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     updateQualitySelections(url);
                     qualityURLs = url;
 
-                    if (!checkForAudioOnlyMode()) {
+                    if (!isAudioOnlyModeEnabled()) {
                         startStreamWithQuality(new Settings(getContext()).getPrefStreamQuality());
                     }
                 } else {
@@ -1414,12 +1414,14 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
         };
 
+        String[] types = getResources().getStringArray(R.array.PlayerType);
+
         if (vodId == null) {
             GetLiveStreamURL task = new GetLiveStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mChannelInfo.getStreamerName(), settings.getStreamPlayerUseProxyString(), settings.getStreamPlayerProxyUrl());
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mChannelInfo.getStreamerName(), types[settings.getStreamPlayerType()], settings.getStreamPlayerUseProxyString(), settings.getStreamPlayerProxyUrl());
         } else {
             GetLiveStreamURL task = new GetVODStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId.substring(1), settings.getStreamPlayerUseProxyString(), settings.getStreamPlayerProxyUrl());
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId.substring(1), types[settings.getStreamPlayerType()], settings.getStreamPlayerUseProxyString(), settings.getStreamPlayerProxyUrl());
         }
     }
 
@@ -1535,12 +1537,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         startActivity(Intent.createChooser(intent, getString(R.string.stream_external_play_using)));
     }
 
-    /**
-     * Sets up audio mode and starts playback of audio, while pausing any playing video
-     */
-    private void playAudioOnly() {
-    }
-
     private void registerAudioOnlyDelegate() {
     }
 
@@ -1610,10 +1606,16 @@ public class StreamFragment extends Fragment implements Player.Listener {
      */
     private void setQualityOnClick(final TextView qualityView, String quality) {
         qualityView.setOnClickListener(v -> {
-            settings.setPrefStreamQuality(quality);
-            startStreamWithQuality(quality);
-            resetQualityViewBackground(qualityView);
-            mQualityBottomSheet.dismiss();
+            // don´t set audio only mode as default
+            if (quality != "audio_only") {
+                settings.setPrefStreamQuality(quality);
+            }
+            // don`t allow to change the Quality when using audio only Mode
+            if (!isAudioOnlyModeEnabled()) {
+                startStreamWithQuality(quality);
+                resetQualityViewBackground(qualityView);
+                mQualityBottomSheet.dismiss();
+            }
         });
     }
 
@@ -1732,15 +1734,12 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mChatOnlySelector.setVisibility(View.VISIBLE);
         }
 
-        // Audio Only is currently broken, so let's not show it
-        mAudioOnlySelector.setVisibility(View.GONE);
-        /*
         mAudioOnlySelector.setVisibility(View.VISIBLE);
         mAudioOnlySelector.setOnClickListener(view -> {
             mQualityBottomSheet.dismiss();
             audioOnlyClicked();
         });
-        */
+
 
         mChatOnlySelector.setOnClickListener(view -> {
             mQualityBottomSheet.dismiss();
@@ -1760,43 +1759,35 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
             showVideoInterface();
             updateSelectedQuality(null);
+            startStreamWithQuality("audio_only");
             hideQualities();
         }
     }
 
     private void disableAudioOnlyView() {
         if (audioViewVisible) {
-            mAudioOnlySelector.setChecked(false);
             audioViewVisible = false;
+            mAudioOnlySelector.setChecked(false);
             mVideoView.setVisibility(View.VISIBLE);
             mBufferingView.setVisibility(View.VISIBLE);
             Service.bringToBack(mPreview);
             previewInbackGround = true;
             castingTextView.setVisibility(View.INVISIBLE);
 
+            showQualities();
             showVideoInterface();
-            startStreamWithQuality(settings.getPrefStreamQuality());
         }
-    }
-
-    private boolean checkForAudioOnlyMode() {
-        boolean isAudioOnly = isAudioOnlyModeEnabled();
-        if (isAudioOnly) {
-            mAudioOnlySelector.setChecked(true);
-            playAudioOnly();
-        }
-
-        return isAudioOnly;
     }
 
     private boolean isAudioOnlyModeEnabled() {
-        return false;
+        // just use audioViewVisible as boolean
+        return audioViewVisible;
     }
 
     private void audioOnlyClicked() {
         mAudioOnlySelector.setChecked(!mAudioOnlySelector.isChecked());
         if (mAudioOnlySelector.isChecked()) {
-            playAudioOnly();
+            initAudioOnlyView();
         } else {
             stopAudioOnly();
         }
@@ -1804,8 +1795,15 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     private void stopAudioOnly() {
         disableAudioOnlyView();
-        showPlayIcon();
-        //startStreamWithQuality(settings.getPrefStreamQuality());
+
+        // start stream with last quality
+        releasePlayer();
+        initializePlayer();
+        updateSelectedQuality(settings.getPrefStreamQuality());
+        startStreamWithQuality(settings.getPrefStreamQuality());
+
+        // resume the stream
+        resumeStream();
     }
 
     private void stopAudioOnlyNoServiceCall() {

@@ -220,6 +220,7 @@
     <string name="player_show_navigation">Reveal navigation bar on click</string>
     <string name="player_auto_player">Continue playback when returning</string>
     <string name="player_show_runtime">Show the Stream Runtime</string>
+    <string name="player_type">Stream Player Type</string>
     <string name="player_use_proxy">Use a Video Proxy</string>
     <string name="player_proxy_url">Player Proxy Url</string>
     <string name="player_proxy_url_button">Save</string>
