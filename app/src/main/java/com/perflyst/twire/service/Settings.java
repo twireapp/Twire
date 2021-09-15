@@ -726,7 +726,7 @@ public class Settings {
 
     public String getStreamPlayerProxyUrl() {
         SharedPreferences preferences = getPreferences();
-        return String.valueOf(preferences.getString(this.STREAM_PLAYER_PROXY_URL, "https://much.ga"));
+        return String.valueOf(preferences.getString(this.STREAM_PLAYER_PROXY_URL, "https://api.ttv.lol"));
     }
 
     /**
