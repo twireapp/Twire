@@ -63,6 +63,7 @@ public class Settings {
     private final String CHAT_LANDSCAPE_SWIPEABLE = "chatLandscapeSwipable";
     private final String CHAT_LANDSCAPE_WIDTH = "chatLandscapeWidth";
     private final String CHAT_ENABLE_SSL = "chatEnableSSL";
+    private final String CHAT_ACCOUNT_CONNECT = "chatAccountConnect";
     private final String CHAT_RECENT_EMOTES = "chatRecentEmotes";
     private final String CHAT_KEYBOARD_HEIGHT = "chatKeyboardHeight";
     private final String NOTIFY_LIVE = "notifyUserLive";
@@ -788,6 +789,21 @@ public class Settings {
     public void setChatEnableSSL(boolean SSL) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_ENABLE_SSL, SSL);
+        editor.commit();
+    }
+
+    /**
+     * Chat - Connect with Account
+     */
+
+    public boolean getChatAccountConnect() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_ACCOUNT_CONNECT, true);
+    }
+
+    public void setChatAccountConnect(boolean AccountConnect) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_ACCOUNT_CONNECT, AccountConnect);
         editor.commit();
     }
 

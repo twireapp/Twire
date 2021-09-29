@@ -178,7 +178,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mChannelInfo = requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo));// intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
         vodID = requireArguments().getString(getString(R.string.stream_fragment_vod_id));
 
-        if (!settings.isLoggedIn() || vodID != null) {
+        if (!settings.isLoggedIn() || vodID != null || !settings.getChatAccountConnect()) {
             userNotLoggedIn();
         } else {
             setupChatInput();
