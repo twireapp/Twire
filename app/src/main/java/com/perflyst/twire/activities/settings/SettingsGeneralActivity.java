@@ -2,9 +2,11 @@ package com.perflyst.twire.activities.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,9 +25,11 @@ import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 
 public class SettingsGeneralActivity extends ThemeActivity {
+    private final String LOG_TAG = getClass().getSimpleName();
     private Settings settings;
-    private TextView twitchNameView, startPageSubText;
-    private CheckedTextView filterTopStreamsByLanguageView;
+    private TextView twitchNameView, startPageSubText, general_image_proxy_summary;
+    private CheckedTextView filterTopStreamsByLanguageView, general_image_proxy;
+    private EditText mImageProxyUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,12 @@ public class SettingsGeneralActivity extends ThemeActivity {
         startPageSubText = findViewById(R.id.start_page_sub_text);
         filterTopStreamsByLanguageView = findViewById(R.id.language_filter_title);
 
+        general_image_proxy_summary = findViewById(R.id.general_image_proxy_summary);
+        general_image_proxy = findViewById(R.id.general_image_proxy);
+        mImageProxyUrl = findViewById(R.id.image_proxy_url_input);
+
+        mImageProxyUrl.setText(settings.getImageProxyUrl());
+
         initTwitchDisplayName();
         initStartPageText();
         initFilterTopsStreamsByLanguage();
@@ -60,6 +70,20 @@ public class SettingsGeneralActivity extends ThemeActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         onBackPressed();
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateSummary(CheckedTextView checkView, TextView summary, boolean isEnabled) {
+        checkView.setChecked(isEnabled);
+        if (isEnabled) {
+            summary.setText(getString(R.string.enabled));
+        } else {
+            summary.setText(getString(R.string.disabled));
+        }
+    }
+
+    private void updateSummaries() {
+        updateSummary(general_image_proxy, general_image_proxy_summary, settings.getGeneralUseImageProxy());
+        mImageProxyUrl.setText(settings.getImageProxyUrl());
     }
 
     private void initStartPageText() {
@@ -141,4 +165,20 @@ public class SettingsGeneralActivity extends ThemeActivity {
     public void onClickOpenChangelog(View v) {
         new ChangelogDialogFragment().show(getSupportFragmentManager(), "ChangelogDialog");
     }
+
+    public void onClickImageProxy(View v) {
+        settings.setGeneralUseImageProxy(!settings.getGeneralUseImageProxy());
+        updateSummaries();
+    }
+
+    public void onClickImageProxyUrl(View v) {
+        if (mImageProxyUrl.getText().toString().contains("http://") | mImageProxyUrl.getText().toString().contains("https://")) {
+            settings.setImageProxyUrl(mImageProxyUrl.getText().toString());
+            Log.d(LOG_TAG, "Setting as Image Proxy: " + mImageProxyUrl.getText().toString());
+            updateSummaries();
+        } else {
+            Log.d(LOG_TAG, "Url looks wrong" + mImageProxyUrl.getText().toString());
+        }
+    }
+
 }

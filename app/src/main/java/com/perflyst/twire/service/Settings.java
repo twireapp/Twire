@@ -34,6 +34,8 @@ public class Settings {
     private final String GENERAL_TWITCH_USER_IS_PARTNER = "genTwitchUserIsPartner";
     private final String GENERAL_TWITCH_USER_ID = "genTwitchUserID";
     private final String GENERAL_FILTER_TOP_STREAMS_LANGUAGE = "genFilterTopStreamLanguage";
+    private final String GENERAL_IMAGE_PROXY = "genImageProxy";
+    private final String GENERAL_IMAGE_PROXY_URL = "genImageProxyUrl";
     private final String NOTIFICATIONS_IS_DISABLED = "notIsDisabled";
     private final String STREAM_PLAYER_SHOW_VIEWERCOUNT = "streamPlayerShowViewerCount",
             STREAM_PLAYER_SHOW_RUNTIME = "streamPlayerShowRuntime",
@@ -804,6 +806,36 @@ public class Settings {
     public void setChatAccountConnect(boolean AccountConnect) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_ACCOUNT_CONNECT, AccountConnect);
+        editor.commit();
+    }
+
+    /**
+     * General - Use Image Proxy
+     */
+
+    public boolean getGeneralUseImageProxy() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.GENERAL_IMAGE_PROXY, false);
+    }
+
+    public void setGeneralUseImageProxy(boolean ImageProxy) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.GENERAL_IMAGE_PROXY, ImageProxy);
+        editor.commit();
+    }
+
+    /**
+     * General - Use Image Proxy Url
+     */
+
+    public String getImageProxyUrl() {
+        SharedPreferences preferences = getPreferences();
+        return String.valueOf(preferences.getString(this.GENERAL_IMAGE_PROXY_URL, "https://external-content.duckduckgo.com/iu/?u="));
+    }
+
+    public void setImageProxyUrl(String url) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putString(this.GENERAL_IMAGE_PROXY_URL, url);
         editor.commit();
     }
 

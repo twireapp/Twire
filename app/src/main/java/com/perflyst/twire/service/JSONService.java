@@ -50,12 +50,14 @@ public class JSONService {
     }
 
     public static StreamInfo getStreamInfo(Context context, JSONObject streamObject, @Nullable ChannelInfo aChannelInfo, boolean loadDescription) throws JSONException, MalformedURLException {
+        Settings settings = new Settings(context);
         final String PREVIEW_LINK_OBJECT = "preview";
         final String CHANNEL_OBJECT = "channel";
         final String CHANNEL_STATUS_STRING = "status";
         final String GAME_STRING = "game";
         final String STREAM_START_TIME_STRING = "created_at";
         final String CURRENT_VIEWERS_INT = "viewers";
+        String prepend_image = "";
 
         final String PREVIEW_SMALL_STRING = "small";
         final String PREVIEW_MEDIUM_STRING = "medium";
@@ -75,10 +77,14 @@ public class JSONService {
             Log.i(LOG_TAG, "Status/title for " + mChannelInfo.getDisplayName() + " is null");
         }
 
+        if (settings.getGeneralUseImageProxy()) {
+            prepend_image = settings.getImageProxyUrl();
+        }
+
         String[] previews = {
-                JSONPreview.getString(PREVIEW_SMALL_STRING),
-                JSONPreview.getString(PREVIEW_MEDIUM_STRING),
-                JSONPreview.getString(PREVIEW_LARGE_STRING),
+                prepend_image + JSONPreview.getString(PREVIEW_SMALL_STRING),
+                prepend_image + JSONPreview.getString(PREVIEW_MEDIUM_STRING),
+                prepend_image + JSONPreview.getString(PREVIEW_LARGE_STRING),
         };
 
         String startedAtString = streamObject.getString(STREAM_START_TIME_STRING);

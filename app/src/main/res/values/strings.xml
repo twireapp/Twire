@@ -184,6 +184,9 @@
     <!-- Settings -->
     <string name="settings_general_name">General</string>
     <string name="settings_general_name_summary">Twitch account, startup page</string>
+    <string name="settings_general_image_proxy">Use an Image Proxy</string>
+    <string name="settings_general_image_proxy_url_button">Save</string>
+    <string name="settings_general_image_proxy_url_example">Example Proxy: https://external-content.duckduckgo.com/iu/?u=</string>
     <string name="settings_stream_player_name">Stream player</string>
     <string name="settings_stream_player_summary">Current viewer count, player behavior</string>
     <string name="settings_appearance_name">Appearance</string>
