@@ -52,7 +52,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
         general_image_proxy = findViewById(R.id.general_image_proxy);
         mImageProxyUrl = findViewById(R.id.image_proxy_url_input);
 
-        mImageProxyUrl.setText(settings.getImageProxyUrl());
+        updateSummaries();
 
         initTwitchDisplayName();
         initStartPageText();
