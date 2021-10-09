@@ -529,6 +529,38 @@ public class Service {
         return result;
     }
 
+    // new urlToJSONString for the helix API
+
+    public static String urlToJSONStringHelix(String urlToRead, String Token) {
+        String clientId = Service.getApplicationClientID();
+
+        Request request = new Request.Builder()
+                .url(urlToRead)
+                .header("Client-ID", clientId)
+                .header("Authorization", "Bearer " + Token)
+                .header("Accept", "application/json")
+                .build();
+
+        return urlToJSONStringHelix(request);
+    }
+
+    public static String urlToJSONStringHelix(Request request) {
+        SimpleResponse response = makeRequest(request);
+        if (response == null)
+            return null;
+
+        String result = response.body;
+
+        if (result.isEmpty() || result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[') {
+            Log.v("URL TO JSON STRING", request.url() + " did not successfully get read");
+            Log.v("URL TO JSON STRING", "Result of reading - " + result);
+        }
+
+        return result;
+    }
+
+    // end new urlToJSONString
+
     public static SimpleResponse makeRequest(Request request) {
         Response response;
         try {

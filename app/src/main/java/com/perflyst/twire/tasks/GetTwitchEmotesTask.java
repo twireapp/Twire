@@ -38,11 +38,13 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected Void doInBackground(Void... voids) {
+        Settings settings = new Settings(context.get());
         try {
-            Settings settings = new Settings(context.get());
-            String newUrl = "https://api.twitch.tv/kraken/users/" + settings.getGeneralTwitchUserID() + "/emotes?oauth_token=" + settings.getGeneralTwitchAccessToken();
-            JSONObject top = new JSONObject(Service.urlToJSONString(newUrl));
-            String SETS_KEY = "emoticon_sets";
+            String newUrl = "https://api.twitch.tv/helix/chat/emotes?broadcaster_id=" + settings.getGeneralTwitchUserID();
+            Log.d(LOG_TAG, newUrl);
+            JSONObject top = new JSONObject(Service.urlToJSONStringHelix(newUrl, settings.getGeneralTwitchAccessToken()));
+            Log.d(LOG_TAG, top.toString());
+            String SETS_KEY = "";
             JSONObject sets = top.getJSONObject(SETS_KEY);
             Iterator<?> setKeys = sets.keys();
 
@@ -50,13 +52,12 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                 String key = (String) setKeys.next();
                 if (!key.equals("0") && sets.get(key) instanceof JSONArray) {
                     JSONArray set = sets.getJSONArray(key);
-
                     for (int i = 0; i < set.length(); i++) {
                         JSONObject emoteObject = set.getJSONObject(i);
 
                         String ID_KEY_INT = "id";
                         String id = emoteObject.getInt(ID_KEY_INT) + "";
-                        String WORD_KEY_STRING = "code";
+                        String WORD_KEY_STRING = "name";
                         String word = emoteObject.getString(WORD_KEY_STRING);
                         Emote emote = Emote.Twitch(word, id);
                         emote.setSubscriberEmote(true);
@@ -65,14 +66,16 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                 }
             }
             Log.d(LOG_TAG, newUrl);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-
-            String url = "https://api.twitchemotes.com/api/v4/channels/0";
-            JSONArray emotesArray = new JSONObject(Service.urlToJSONString(url)).getJSONArray("emotes");
-
+        try {
+            String url = "https://api.twitch.tv/helix/chat/emotes/global";
+            JSONArray emotesArray = new JSONObject(Service.urlToJSONStringHelix(url, settings.getGeneralTwitchAccessToken())).getJSONArray("data");
             for (int i = 0; i < emotesArray.length(); i++) {
                 JSONObject emoteObject = emotesArray.getJSONObject(i);
-                String code = emoteObject.getString("code");
+                String code = emoteObject.getString("name");
 
                 // code is a escaped regex, so we need to convert it to any valid match for that regex
                 code = HtmlCompat.fromHtml(code.replaceAll("\\\\", ""), HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
@@ -80,7 +83,8 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                         .replaceAll("\\[(.).*?]", "$1")
                         .replaceAll("\\((.+)\\|.+\\)", "$1");
 
-                String emoteId = "" + emoteObject.getInt("id");
+                // this is a string now: example: emotesv2_89f3f0761c7b4f708061e9e4be3b7d17
+                String emoteId = "" + emoteObject.getString("id");
                 twitchEmotes.add(Emote.Twitch(code, emoteId));
             }
         } catch (JSONException e) {
