@@ -1,7 +1,6 @@
 package com.perflyst.twire.activities;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -301,6 +300,19 @@ public class SearchActivity extends ThemeActivity {
             setupRecyclerViewAndAdapter();
             checkForQuery();
 
+            // this let keyboard only close when there is a blank page.
+            // on swipe or clicking on buttons (stream,games..) won't make keyboard close
+            mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    InputMethodManager imm = (InputMethodManager)
+                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    return false;
+                }
+            });
+
             return rootView;
         }
 
@@ -429,22 +441,5 @@ public class SearchActivity extends ThemeActivity {
         public int getItemCount() {
             return TOTAL_COUNT;
         }
-    }
-    //hides keyboard in all the fragments when clicked outside of activity
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            View v = getCurrentFocus();
-            if ( v instanceof EditText) {
-                Rect outRect = new Rect();
-                v.getGlobalVisibleRect(outRect);
-                if (!outRect.contains((int)event.getRawX(), (int)event.getRawY())) {
-                    v.clearFocus();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                }
-            }
-        }
-        return super.dispatchTouchEvent(event);
     }
 }
