@@ -851,6 +851,15 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
     }
 
+    private void shareButtonClicked() {
+        // https://stackoverflow.com/questions/17167701/how-to-activate-share-button-in-android-app
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody = "https://twitch.tv/" + mChannelInfo.getStreamerName();
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
+
     private void profileButtonClicked() {
         mProfileBottomSheet.show();
     }
@@ -933,6 +942,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_item_sleep) {
             sleepButtonClicked();
+            return true;
+        } else if (itemId == R.id.menu_item_share) {
+            shareButtonClicked();
             return true;
         } else if (itemId == R.id.menu_item_profile) {
             profileButtonClicked();
