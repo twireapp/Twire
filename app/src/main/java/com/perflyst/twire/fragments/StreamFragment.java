@@ -855,7 +855,14 @@ public class StreamFragment extends Fragment implements Player.Listener {
         // https://stackoverflow.com/questions/17167701/how-to-activate-share-button-in-android-app
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "https://twitch.tv/" + mChannelInfo.getStreamerName();
+        String shareBody;
+
+        if (vodId == null) {
+            shareBody = "https://twitch.tv/" + mChannelInfo.getStreamerName();
+        } else {
+            shareBody = "https://www.twitch.tv/" + mChannelInfo.getStreamerName() + "/video/" + vodId.replaceAll("[a-zA-Z]+", "");
+        }
+
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
