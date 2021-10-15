@@ -3,6 +3,7 @@ package com.perflyst.twire.activities.settings;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckedTextView;
@@ -23,6 +24,8 @@ import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
+
+import java.util.regex.Matcher;
 
 public class SettingsGeneralActivity extends ThemeActivity {
     private final String LOG_TAG = getClass().getSimpleName();
@@ -172,12 +175,16 @@ public class SettingsGeneralActivity extends ThemeActivity {
     }
 
     public void onClickImageProxyUrl(View v) {
-        if (mImageProxyUrl.getText().toString().contains("http://") | mImageProxyUrl.getText().toString().contains("https://")) {
-            settings.setImageProxyUrl(mImageProxyUrl.getText().toString());
-            Log.d(LOG_TAG, "Setting as Image Proxy: " + mImageProxyUrl.getText().toString());
+        String proxy_url = mImageProxyUrl.getText().toString();
+
+        // app/src/main/java/com/perflyst/twire/activities/DeepLinkActivity.java 115
+        Matcher matcher = Patterns.WEB_URL.matcher(proxy_url);
+        if (matcher.find()) {
+            settings.setImageProxyUrl(proxy_url);
+            Log.d(LOG_TAG, "Setting as Image Proxy: " + proxy_url);
             updateSummaries();
         } else {
-            Log.d(LOG_TAG, "Url looks wrong" + mImageProxyUrl.getText().toString());
+            Log.d(LOG_TAG, "Url looks wrong" + proxy_url);
         }
     }
 
