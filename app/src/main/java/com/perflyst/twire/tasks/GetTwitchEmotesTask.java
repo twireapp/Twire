@@ -84,7 +84,7 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                         .replaceAll("\\((.+)\\|.+\\)", "$1");
 
                 // this is a string now: example: emotesv2_89f3f0761c7b4f708061e9e4be3b7d17
-                String emoteId = "" + emoteObject.getString("id");
+                String emoteId = emoteObject.getString("id");
                 twitchEmotes.add(Emote.Twitch(code, emoteId));
             }
         } catch (JSONException e) {
