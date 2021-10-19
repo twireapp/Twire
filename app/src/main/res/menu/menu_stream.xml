@@ -13,6 +13,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/menu_item_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/menu_share"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_item_profile"
         android:icon="@drawable/ic_person"
         android:title="@string/menu_profile"
