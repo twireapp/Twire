@@ -39,12 +39,13 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         Settings settings = new Settings(context.get());
+
+
+        /* Well so this has been broken at the moment because there is no replacement API. Please See: https://twitch.uservoice.com/forums/310213-developers/suggestions/43599900-get-the-authenticated-user-s-emotes-equivalent-to
         try {
-            String newUrl = "https://api.twitch.tv/helix/chat/emotes?broadcaster_id=" + settings.getGeneralTwitchUserID();
-            Log.d(LOG_TAG, newUrl);
+            String newUrl = "ADD API LINK HERE" + settings.getGeneralTwitchUserID();
             JSONObject top = new JSONObject(Service.urlToJSONStringHelix(newUrl, settings.getGeneralTwitchAccessToken()));
-            Log.d(LOG_TAG, top.toString());
-            String SETS_KEY = "";
+            String SETS_KEY = "data";
             JSONObject sets = top.getJSONObject(SETS_KEY);
             Iterator<?> setKeys = sets.keys();
 
@@ -69,6 +70,8 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        */
+
 
         try {
             String url = "https://api.twitch.tv/helix/chat/emotes/global";
