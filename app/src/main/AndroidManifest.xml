@@ -139,7 +139,8 @@
             android:excludeFromRecents="true"
             android:label="@string/router_activity_label"
             android:taskAffinity=""
-            android:theme="@style/DeepLinkTheme">
+            android:theme="@style/DeepLinkTheme"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

@@ -65,9 +65,8 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -147,7 +146,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
     private PlayerView mVideoView;
-    private ExoPlayer player;
+    private SimpleExoPlayer player;
     private MediaSource currentMediaSource;
     private Toolbar mToolbar;
     private ConstraintLayout mVideoInterface;
@@ -621,7 +620,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     @Override
-    public void onPlayerError(ExoPlaybackException exception) {
+    public void onPlayerError(@NonNull PlaybackException exception) {
         Log.e(LOG_TAG, "Something went wrong playing the stream for " + mChannelInfo.getDisplayName() + " - Exception: " + exception);
 
         playbackFailed();
