@@ -1,5 +1,7 @@
 package com.perflyst.twire.chat;
 
+import androidx.annotation.Nullable;
+
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
@@ -9,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -186,7 +189,10 @@ class ChatEmoteManager {
      * @param line The line to find emotes in
      * @return The list of emotes from the line
      */
-    List<ChatEmote> findTwitchEmotes(String line, String message) {
+    List<ChatEmote> findTwitchEmotes(@Nullable String line, String message) {
+        if (line == null)
+            return Collections.emptyList();
+
         List<ChatEmote> emotes = new ArrayList<>();
         Matcher emoteMatcher = emotePattern.matcher(line);
 
