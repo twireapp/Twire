@@ -37,6 +37,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -998,6 +999,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         public class EmoteAdapter extends RecyclerView.Adapter<EmoteAdapter.EmoteViewHolder> {
             private final ArrayList<Emote> emotes;
+            private Boolean columnsFound = false;
 
             private final View.OnClickListener emoteClickListener = new View.OnClickListener() {
                 @Override
@@ -1049,6 +1051,35 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     String emoteUrl = emoteAtPosition.getEmoteUrl(EMOTE_SIZE);
 
                     Glide.with(requireContext()).load(emoteUrl).into(holder.mImageEmote);
+                }
+            }
+
+            @Override
+            public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+                super.onAttachedToRecyclerView(recyclerView);
+
+                RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+                if (manager instanceof GridLayoutManager) {
+                    GridLayoutManager gridLayoutManager = (GridLayoutManager) manager;
+
+                    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+                        }
+
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+
+                            if (columnsFound)
+                                return;
+
+                            // To improve performance when scrolling emotes, we'll bump up the max recycled views.
+                            recyclerView.getRecycledViewPool().setMaxRecycledViews(0, gridLayoutManager.getSpanCount() * 2);
+                            columnsFound = true;
+                        }
+                    });
                 }
             }
 
