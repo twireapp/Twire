@@ -29,7 +29,7 @@ class ChatEmoteManager {
     private final List<Emote> customGlobal = new ArrayList<>();
     private final List<Emote> customChannel = new ArrayList<>();
 
-    private final Pattern emotePattern = Pattern.compile("([\\d_A-Z]+):((?:\\d+-\\d+,?)+)");
+    private final Pattern emotePattern = Pattern.compile("(\\w+):((?:\\d+-\\d+,?)+)");
 
     private final String channelName;
     private final int channelId;
