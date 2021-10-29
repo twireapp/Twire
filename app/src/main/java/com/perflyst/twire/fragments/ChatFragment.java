@@ -272,6 +272,15 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
             }
 
+            @Override
+            public void onEmoteSetsFetched(String[] emoteSets) {
+                GetTwitchEmotesTask getTwitchEmotesTask = new GetTwitchEmotesTask(emoteSets, (twitchEmotes, subscriberEmotes) -> {
+                    twitchEmotesLoaded(twitchEmotes);
+                    subscriberEmotesLoaded(subscriberEmotes, (EmotesPagerAdapter) mEmoteViewPager.getAdapter());
+                }, getContext());
+                getTwitchEmotesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+
             private void roomStateIconChange(boolean isOn, ImageView icon) {
                 if (isFragmentActive()) {
                     if (!isOn) {
@@ -628,12 +637,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     }
                 }
         );
-
-        GetTwitchEmotesTask getTwitchEmotesTask = new GetTwitchEmotesTask((twitchEmotes, subscriberEmotes) -> {
-            twitchEmotesLoaded(twitchEmotes);
-            subscriberEmotesLoaded(subscriberEmotes, pagerAdapter);
-        }, getContext());
-        getTwitchEmotesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @NonNull

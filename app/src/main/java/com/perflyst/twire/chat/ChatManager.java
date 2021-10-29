@@ -461,6 +461,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
         userColor = message.tags.get("color");
         userDisplayName = message.tags.get("display-name");
+        callback.onEmoteSetsFetched(message.tags.get("emote-sets").split(","));
     }
 
     /**
@@ -651,6 +652,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         void onRoomstateChange(boolean isR9K, boolean isSlow, boolean isSubsOnly);
 
         void onCustomEmoteIdFetched(List<Emote> channel, List<Emote> global);
+
+        void onEmoteSetsFetched(String[] emoteSets);
     }
 
     /**
