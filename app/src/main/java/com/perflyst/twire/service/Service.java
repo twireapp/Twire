@@ -514,6 +514,17 @@ public class Service {
         return urlToJSONString(request);
     }
 
+    public static String urlToJSONStringHelix(String urlToRead, Context context) {
+        Request request = new Request.Builder()
+                .url(urlToRead)
+                .header("Client-ID", Service.getApplicationClientID())
+                .header("Accept", "application/json")
+                .header("Authorization", "Bearer " + new Settings(context).getGeneralTwitchAccessToken())
+                .build();
+
+        return urlToJSONString(request);
+    }
+
     public static String urlToJSONString(Request request) {
         SimpleResponse response = makeRequest(request);
         if (response == null)
