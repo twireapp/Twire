@@ -35,16 +35,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.adapters.ChatAdapter;
@@ -78,6 +78,11 @@ interface EmoteKeyboardDelegate {
 }
 
 public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, ChatAdapter.ChatAdapterCallback {
+    private static final int POSITION_RECENT = 0;
+    private static final int POSITION_TWITCH = 1;
+    private static final int POSITION_SUBSCRIBER = 2;
+    private static final int POSITION_CUSTOM = 3;
+    private static final int POSITION_UNICODE = 4;
     private static final Integer[] supportedUnicodeEmotes = {
             0x1F600, 0x1F601, 0x1F602, 0x1F603, 0x1F604, 0x1F605, 0x1F606, 0x1F607, 0x1F608, 0x1F609, 0x1F60A, 0x1F60B, 0x1F60C, 0x1F60D, 0x1F60E, 0x1F60F,
             0x1F610, 0x1F611, 0x1F612, 0x1F613, 0x1F614, 0x1F615, 0x1F616, 0x1F617, 0x1F618, 0x1F619, 0x1F61A, 0x1F61B, 0x1F61C, 0x1F61D, 0x1F61E, 0x1F61F,
@@ -112,11 +117,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private FrameLayout mChatStatusBar;
 
     //Emote Keyboard
-    private EmoteGridFragment textEmotesFragment, recentEmotesFragment, twitchEmotesFragment, customEmotesFragment, subscriberEmotesFragment;
+    private EmoteGridFragment unicodeEmotesFragment, recentEmotesFragment, twitchEmotesFragment, customEmotesFragment, subscriberEmotesFragment;
     private ImageView mEmoteKeyboardButton, mEmoteChatBackspace;
     private ViewGroup emoteKeyboardContainer;
     private TabLayout mEmoteTabs;
-    private ViewPager mEmoteViewPager;
+    private ViewPager2 mEmoteViewPager;
     private Integer selectedTabColorRes, unselectedTabColorRes;
     private KeyboardState keyboardState = KeyboardState.CLOSED;
     private ColorFilter defaultBackgroundColor;
@@ -467,7 +472,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             TabLayout.Tab newTab = mEmoteTabs.newTab();
             newTab.setIcon(icon);
-            mEmoteTabs.addTab(newTab, adapter.SUBSCRIBE_POSITION, false);
+            mEmoteTabs.addTab(newTab, POSITION_SUBSCRIBER, false);
             adapter.showSubscriberEmote = true;
             adapter.notifyDataSetChanged();
 
@@ -568,28 +573,10 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         if (getActivity() == null)
             return;
 
-        final EmotesPagerAdapter pagerAdapter = new EmotesPagerAdapter(getActivity().getSupportFragmentManager());
-
-        for (int i = 0; i < mEmoteTabs.getTabCount(); i++) {
-            TabLayout.Tab tab = mEmoteTabs.getTabAt(i);
-            Drawable icon = tab != null ? tab.getIcon() : null;
-
-            if (icon != null) {
-                if (i == 0) {
-                    icon.setColorFilter(new PorterDuffColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN));
-                } else {
-                    icon.setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
-                }
-            }
-        }
+        final EmotesPagerAdapter pagerAdapter = new EmotesPagerAdapter(this);
 
         mEmoteViewPager.setAdapter(pagerAdapter);
-        mEmoteViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
+        mEmoteViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 if (mEmoteTabs.getTabCount() - 1 >= position) {
@@ -598,36 +585,60 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                         tab.select();
                 }
             }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
         });
 
         mEmoteTabs.addOnTabSelectedListener(
-                new TabLayout.ViewPagerOnTabSelectedListener(mEmoteViewPager) {
+                new TabLayout.OnTabSelectedListener() {
                     @Override
                     public void onTabSelected(@NonNull TabLayout.Tab tab) {
-                        super.onTabSelected(tab);
-
                         if (tab.getIcon() != null)
                             tab.getIcon().setColorFilter(new PorterDuffColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN));
                     }
 
                     @Override
                     public void onTabUnselected(TabLayout.Tab tab) {
-                        super.onTabUnselected(tab);
                         if (tab.getIcon() != null)
                             tab.getIcon().setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
                     }
 
                     @Override
                     public void onTabReselected(TabLayout.Tab tab) {
-                        super.onTabReselected(tab);
                     }
                 }
         );
+
+        new TabLayoutMediator(mEmoteTabs, mEmoteViewPager, (tab, position) -> {
+            for (int i = 0; i < mEmoteTabs.getTabCount(); i++) {
+                TabLayout.Tab tab1 = mEmoteTabs.getTabAt(i);
+                Drawable icon = tab1 != null ? tab1.getIcon() : null;
+
+                if (icon != null) {
+                    if (i == 0) {
+                        icon.setColorFilter(new PorterDuffColorFilter(selectedTabColorRes, PorterDuff.Mode.SRC_IN));
+                    } else {
+                        icon.setColorFilter(new PorterDuffColorFilter(unselectedTabColorRes, PorterDuff.Mode.SRC_IN));
+                    }
+                }
+            }
+            switch (position) {
+                default: // Deliberate fall-through to recent tab
+                case POSITION_RECENT:
+                    tab.setIcon(R.drawable.ic_schedule);
+                    break;
+                case POSITION_TWITCH:
+                    tab.setIcon(R.drawable.ic_twitch);
+                    break;
+                case POSITION_SUBSCRIBER:
+                    tab.setIcon(R.drawable.ic_attach_money);
+                    break;
+                case POSITION_CUSTOM:
+                    tab.setIcon(R.drawable.ic_betterttv_500px);
+                    break;
+                case POSITION_UNICODE:
+                    tab.setIcon(R.drawable.ic_mood);
+                    break;
+            }
+        }).attach();
 
         GetTwitchEmotesTask getTwitchEmotesTask = new GetTwitchEmotesTask((twitchEmotes, subscriberEmotes) -> {
             twitchEmotesLoaded(twitchEmotes);
@@ -882,11 +893,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     }
 
     protected enum EmoteFragmentType {
-        UNICODE,
-        CUSTOM,
+        RECENT,
         TWITCH,
         SUBSCRIBER,
-        ALL
+        CUSTOM,
+        UNICODE
     }
 
     public static class EmoteGridFragment extends Fragment {
@@ -904,10 +915,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             emoteGridFragment.fragmentType = fragmentType;
             emoteGridFragment.callback = callback;
             return emoteGridFragment;
-        }
-
-        static EmoteGridFragment newInstance() {
-            return new EmoteGridFragment();
         }
 
         @Override
@@ -936,20 +943,20 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             if (fragmentType != null) {
                 switch (fragmentType) {
-                    case UNICODE:
-                        addUnicodeEmotes();
-                        break;
-                    case ALL:
+                    case RECENT:
                         addRecentEmotes();
                         break;
                     case TWITCH:
                         addTwitchEmotes();
                         break;
+                    case SUBSCRIBER:
+                        addSubscriberEmotes();
+                        break;
                     case CUSTOM:
                         addCustomEmotes();
                         break;
-                    case SUBSCRIBER:
-                        addSubscriberEmotes();
+                    case UNICODE:
+                        addUnicodeEmotes();
                         break;
                 }
             }
@@ -1067,16 +1074,16 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             }
 
             void addEmote(Emote emote) {
-                if (fragmentType == EmoteFragmentType.ALL && emotesToHide != null && emotesToHide.contains(emote)) {
+                if (fragmentType == EmoteFragmentType.RECENT && emotesToHide != null && emotesToHide.contains(emote)) {
                     return;
                 }
 
                 if (!emotes.contains(emote)) {
-                    int position = fragmentType == EmoteFragmentType.ALL ? 0 : emotes.size();
+                    int position = fragmentType == EmoteFragmentType.RECENT ? 0 : emotes.size();
                     emotes.add(position, emote);
                     notifyItemInserted(position);
 
-                    if (fragmentType == EmoteFragmentType.ALL && recentEmotes != null && !recentEmotes.contains(emote)) {
+                    if (fragmentType == EmoteFragmentType.RECENT && recentEmotes != null && !recentEmotes.contains(emote)) {
                         recentEmotes.add(position, emote);
                     }
                 } else if (!isVisible()) {
@@ -1089,7 +1096,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             void addEmotes(List<Emote> emoteList) {
                 emotes.addAll(emoteList);
-                if (fragmentType == EmoteFragmentType.ALL && emotesToHide != null) {
+                if (fragmentType == EmoteFragmentType.RECENT && emotesToHide != null) {
                     emotes.removeAll(emotesToHide);
                 }
 
@@ -1109,51 +1116,45 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         }
     }
 
-    private class EmotesPagerAdapter extends FragmentPagerAdapter {
-        final int RECENT_POSITION = 0,
-                TWITCH_POSITION = 1,
-                SUBSCRIBE_POSITION = 2,
-                CUSTOM_POSITION = 3,
-                EMOJI_POSITION = 4;
+    private class EmotesPagerAdapter extends FragmentStateAdapter {
         boolean showSubscriberEmote = false;
 
-        EmotesPagerAdapter(FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        EmotesPagerAdapter(final Fragment f) {
+            super(f);
             EmoteKeyboardDelegate delegate = ChatFragment.this;
 
-            textEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.UNICODE, delegate);
-            recentEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.ALL, delegate);
+            recentEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.RECENT, delegate);
             twitchEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.TWITCH, delegate);
             subscriberEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.SUBSCRIBER, delegate);
             customEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.CUSTOM, delegate);
+            unicodeEmotesFragment = EmoteGridFragment.newInstance(EmoteFragmentType.UNICODE, delegate);
         }
 
-        @Override
         @NonNull
-        public Fragment getItem(int position) {
-            if (!showSubscriberEmote && position >= SUBSCRIBE_POSITION) {
+        @Override
+        public Fragment createFragment(int position) {
+            if (!showSubscriberEmote && position >= POSITION_SUBSCRIBER) {
                 position++;
             }
 
             switch (position) {
-                case RECENT_POSITION:
+                default: // Deliberate fall-through to recent tab
+                case POSITION_RECENT:
                     return recentEmotesFragment;
-                case TWITCH_POSITION:
+                case POSITION_TWITCH:
                     return twitchEmotesFragment;
-                case SUBSCRIBE_POSITION:
+                case POSITION_SUBSCRIBER:
                     return subscriberEmotesFragment;
-                case CUSTOM_POSITION:
+                case POSITION_CUSTOM:
                     return customEmotesFragment;
-                case EMOJI_POSITION:
-                    return textEmotesFragment;
-                default:
-                    return EmoteGridFragment.newInstance();
+                case POSITION_UNICODE:
+                    return unicodeEmotesFragment;
             }
         }
 
         @Override
-        public int getCount() {
-            int count = EMOJI_POSITION + 1;
+        public int getItemCount() {
+            int count = POSITION_UNICODE + 1;
             if (!showSubscriberEmote) {
                 count--;
             }
