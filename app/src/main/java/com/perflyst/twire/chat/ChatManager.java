@@ -80,7 +80,9 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId);
         Settings appSettings = new Settings(aContext);
 
-        if (appSettings.isLoggedIn()) { // if user is logged in ...
+        Log.d(LOG_TAG, "Login with main Account: " + appSettings.getChatAccountConnect());
+
+        if (appSettings.isLoggedIn() && appSettings.getChatAccountConnect()) { // if user is logged in ...
             // ... use their credentials
             Log.d(LOG_TAG, "Using user credentials for chat login.");
 
@@ -106,7 +108,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         else {
             twitchChatPort = twitchChatPortunsecure;
         }
-        Log.d("Use SSL Chat Server", String.valueOf(appSettings.getChatEnableSSL()));
+        Log.d(LOG_TAG, "Use SSL Chat Server: " + appSettings.getChatEnableSSL());
 
         executeOnExecutor(THREAD_POOL_EXECUTOR);
     }
