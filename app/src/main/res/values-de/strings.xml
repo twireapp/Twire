@@ -15,8 +15,8 @@
     <string name="drawer_open">Öffnen</string>
     <string name="drawer_close">Schließen</string>
     <string name="subscription_card_displayName">Name</string>
-    <string name="content_desc_twitchProfileBanner_imageView">The users specified profile banner</string>
-    <string name="content_desc_twitchLogo_imageView">Picture of the Streamers Twitch logo</string>
+    <string name="content_desc_twitchProfileBanner_imageView">Das vom Benutzer angegebene Profilbanner</string>
+    <string name="content_desc_twitchLogo_imageView">Bild des Twitch-Logos des Streamers</string>
     <string name="no_elements_added_notice">Es konnten keine %s gefunden werden</string>
     <string name="vods">Videos</string>
     <string name="play">Wiedergabe</string>
@@ -35,8 +35,8 @@
     <string name="menu_external">Externen Player verwenden</string>
     <string name="menu_profile">Profil</string>
     <string name="menu_sleep">Sleep Timer</string>
-    <string name="menu_options">Options</string>
-    <string name="options">Options</string>
+    <string name="menu_options">Optionen</string>
+    <string name="options">Optionen</string>
     <string name="audio_only">Nur Audio</string>
     <string name="chat_only">Nur Chat</string>
     <string name="available_qualities">Qualitätseinstellungen</string>
@@ -102,7 +102,7 @@
     <string name="login_text_line_one">Lass uns dich einrichten!</string>
     <string name="login_text_line_two">Melde dich zuerst bei Twitch an.</string>
     <string name="login_user_cancel">Du solltest dich jedoch anmelden, um Twire nutzen zu können…</string>
-    <string name="login_user_cancel_action">ICH HABS</string>
+    <string name="login_user_cancel_action">VERSTANDEN</string>
     <string name="login_user_no_internet">Du benötigst eine Internetverbindung, um Twire einzurichten.</string>
     <string name="login_user_no_internet_action">WIEDERHOLEN</string>
     <string name="login_on_success_message">Hallo %s</string>
@@ -195,7 +195,7 @@
     <string name="router_vod_error">Fehler beim Laden des VoD.</string>
     <string name="router_error_dialog_title">URL-Fehler</string>
     <string name="router_unknown_error">Ein unbekannter Fehler ist aufgetreten.</string>
-    <string name="router_activity_label">Spielen mit Twire</string>
+    <string name="router_activity_label">Mit Twire abspielen</string>
     <string name="gen_open_changelog">Änderungsprotokoll anzeigen</string>
     <string name="gen_language_filter">Top-Streams nach Sprache filtern</string>
     <string name="stream_forward">10 Sekunden vorwärts</string>
@@ -205,4 +205,17 @@
     <string name="stream_fullscreen">Vollbild</string>
     <string name="title_activity_streamer_info">Channel</string>
     <string name="router_nonexistent_user">Dieser Nutzer existiert nicht.</string>
+    <string name="login_invalid_token_text_line_two">dich erneut anmelden</string>
+    <string name="login_invalid_token_text_line_one">Leider musst du</string>
+    <string name="chat_enable_ssl">SSL für die Verbindung verwenden</string>
+    <string name="playback_speed">%.2f</string>
+    <string name="playback_speed_display">×%.2f</string>
+    <string name="menu_speed">Wiedergabegeschwindigkeit</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="player_type">Stream-Player-Typ</string>
+    <string name="menu_share">Teilen</string>
+    <string name="chat_enable_account_connect">Verbinden mit deinem Konto</string>
+    <string name="settings_general_image_proxy">Bild-Proxy verwenden</string>
+    <string name="settings_general_image_proxy_url_button">Speichern</string>
+    <string name="settings_general_image_proxy_url_example">Beispiel-Proxy: https://external-content.duckduckgo.com/iu/\?u=</string>
 </resources>
