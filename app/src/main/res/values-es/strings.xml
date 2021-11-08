@@ -204,4 +204,6 @@
     <string name="gen_open_changelog">Abrir la lista de cambios</string>
     <string name="gen_language_filter">Filtrar los directos populares por idioma</string>
     <string name="title_activity_streamer_info">Canal</string>
+    <string name="login_invalid_token_text_line_two">Necesita acceder de nuevo</string>
+    <string name="login_invalid_token_text_line_one">Desafortunadamente tu</string>
 </resources>
