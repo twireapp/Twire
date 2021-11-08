@@ -80,7 +80,7 @@
     <string name="login_on_success_message">Olá, %s</string>
     <string name="login_user_no_internet_action">TENTAR DE NOVO</string>
     <string name="login_user_cancel_action">ENTENDI</string>
-    <string name="login_user_cancel">Você precisa fazer o login para usar o Twire.</string>
+    <string name="login_user_cancel">Você precisa fazer o login para usar o Twire</string>
     <string name="login_text_line_two">Primeiro, faça login na Twitch.</string>
     <string name="login_text_line_one">Vamos fazer as configurações!</string>
     <string name="welcome_text_line_two">Twire</string>
@@ -93,7 +93,7 @@
     <string name="chat_status_connected">Pronto para conversar</string>
     <string name="chat_status_connecting">Conectando ao Chat…</string>
     <string name="chat_send_message_hint">Escrever mensagem</string>
-    <string name="title_activity_live_stream">Live stream</string>
+    <string name="title_activity_live_stream">Transmissão ao vivo</string>
     <string name="stream_playback_failed">Falha ao reproduzir stream. Tente outra qualidade.</string>
     <string name="my_channels_activity_label">Seguindo</string>
     <string name="no_server_response_message">Oops, os servidores da Twitch não parecem estar respondendo. Atualizar\?</string>
@@ -143,7 +143,7 @@
     <string name="title_activity_streamer_info">Canal</string>
     <string name="yesterday">Ontem</string>
     <string name="today">Hoje</string>
-    <string name="percent">%s %%</string>
+    <string name="percent">%d %%</string>
     <string name="pause">Pausar</string>
     <string name="play">Reproduzir</string>
     <string name="vods">vídeo</string>
@@ -165,4 +165,14 @@
     <string name="stop">PARAR</string>
     <string name="start">INICIAR</string>
     <string name="done">FEITO</string>
+    <string name="login_invalid_token_text_line_two">tem que fazer login novamente</string>
+    <string name="login_invalid_token_text_line_one">Infelizmente você</string>
+    <string name="chat_enable_ssl">Use SSL para a conexão</string>
+    <string name="playback_speed">%.2f</string>
+    <string name="playback_speed_display">×%.2f</string>
+    <string name="menu_speed">Velocidade de reprodução</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="player_show_runtime">Mostrar o Tempo de Execução da Stream</string>
+    <string name="player_type">Tipo de Reprodutor de Stream</string>
+    <string name="menu_share">Compartilhar</string>
 </resources>
