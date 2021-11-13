@@ -1,6 +1,7 @@
 package com.perflyst.twire.fragments;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,9 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
@@ -101,7 +100,6 @@ import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.rey.material.widget.ProgressView;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,8 +109,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class StreamFragment extends Fragment implements Player.Listener {
@@ -575,13 +571,24 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 player.prepare();
             }
 
+            PendingIntent pendingIntent = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+                pendingIntent = PendingIntent.getBroadcast(
+                        getContext(),
+                        0, mediaButtonIntent,
+                        PendingIntent.FLAG_IMMUTABLE
+                );
+            }
+
             ComponentName mediaButtonReceiver = new ComponentName(
                     getContext(), MediaButtonReceiver.class);
             mediaSession = new MediaSessionCompat(
                     getContext(),
                     getContext().getPackageName(),
                     mediaButtonReceiver,
-                    null);
+                    pendingIntent);
             MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
             mediaSessionConnector.setPlayer(player);
             mediaSession.setActive(true);
