@@ -293,6 +293,29 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.10.0</item>
+        <item>A Add playback speed control.</item>
+        <item>A Add SSL connection to chat.</item>
+        <item>A Add runtime label to stream cards and stream view.</item>
+        <item>A Add a sharing menu.</item>
+        <item>A Add an option to join chat anonymously.</item>
+        <item>A Add an option for image proxies.</item>
+        <item>C Improve the emote menu performance.</item>
+        <item>F Fix emotes not loading in the emote menu.</item>
+        <item>F Fix new emotes not being parsed correctly.</item>
+        <item>F Fix audio-only mode.</item>
+        <item>F Fix the character limit for sending messages.</item>
+        <item>F Fix the dates displayed for VODs.</item>
+        <item>F Fix the keyboard not closing when clicking on the background.</item>
+        <item>F Fix followed streamers not being cached.</item>
+        <item>C Remove streamer panels since the API has been removed.</item>
+        <item>F Fix the app crashing if a stream can\'t be loaded.</item>
+        <item>A Add an option for the player-type.</item>
+        <item>F Fix the emote keyboard not closing correctly.</item>
+        <item>F Fix crashes on older versions of Android.</item>
+        <item>A Add Korean translation.</item>
+        <item>C Update French, Finnish, Arabic, Portuguese (Brazil), Swedish, Turkish, Esperanto, Italian, Ukrainian, Polish, German, Russian, Spanish, Persian, Japanese, Chinese (Simplified), Norwegian Bokmål translations.</item>
+
         <item>V 2.9.3</item>
         <item>F Fix VODs not loading.</item>
         <item>F Fix only seeing 20 followed channels.</item>
