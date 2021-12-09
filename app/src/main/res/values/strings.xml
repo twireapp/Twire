@@ -215,6 +215,11 @@
     <string name="chat_size_high">Large</string>
     <string name="chat_enable_ssl">Use SSL for the connection</string>
 
+    <!-- Chat Emote Settings -->
+    <string name="chat_enable_emote_bttv">Enable BetterTTV (BTTV) Emotes</string>
+    <string name="chat_enable_emote_ffz">Enable FrankerFaceZ (FFZ) Emotes</string>
+    <string name="chat_enable_emote_seventv">Enable 7TV Emotes</string>
+
     <!-- Stream Player Settings -->
     <string name="player_show_viewercount">Show viewer count</string>
     <string name="player_show_navigation">Reveal navigation bar on click</string>

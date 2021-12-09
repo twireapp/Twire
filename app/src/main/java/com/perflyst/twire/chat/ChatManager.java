@@ -83,8 +83,17 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private boolean chatIsSubsonlymode;
 
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
-        mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId);
         Settings appSettings = new Settings(aContext);
+        JSONObject settings_object = new JSONObject();
+        try {
+            settings_object.put("enable_bttv", appSettings.getChatEmoteBTTV());
+            settings_object.put("enable_ffz", appSettings.getChatEmoteFFZ());
+            settings_object.put("enable_seventv", appSettings.getChatEmoteSEVENTV());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(LOG_TAG, "Chat Emote Settings: " + settings_object.toString());
+        mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId, settings_object);
 
         if (appSettings.isLoggedIn()) { // if user is logged in ...
             // ... use their credentials
