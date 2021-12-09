@@ -185,6 +185,43 @@
                 android:layout_height="@dimen/settings_divider_height"
                 android:background="?attr/dividerColor" />
 
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:onClick="onClickPlayerType">
+
+                    <TextView
+                        android:id="@+id/player_type_title"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/player_type"
+                        android:textAppearance="@style/text_settings_title" />
+
+                    <TextView
+                        android:id="@+id/player_type_summary"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/player_type_title"
+                        android:textAppearance="@style/sub_text_settings" />
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
+
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>

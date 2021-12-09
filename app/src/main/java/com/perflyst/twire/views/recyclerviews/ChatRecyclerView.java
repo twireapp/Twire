@@ -30,7 +30,7 @@ public class ChatRecyclerView extends RecyclerView {
     }
 
     public boolean isScrolled() {
-        float min = -1 * getContext().getResources().getDimension(R.dimen.chat_message_text_sie);
+        float min = -1 * getContext().getResources().getDimension(R.dimen.chat_message_text_size);
         return amountScrolled < min;
     }
 

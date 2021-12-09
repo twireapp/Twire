@@ -37,6 +37,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
@@ -178,7 +179,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mChannelInfo = requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo));// intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
         vodID = requireArguments().getString(getString(R.string.stream_fragment_vod_id));
 
-        if (!settings.isLoggedIn() || vodID != null) {
+        if (!settings.isLoggedIn() || vodID != null || !settings.getChatAccountConnect()) {
             userNotLoggedIn();
         } else {
             setupChatInput();
@@ -270,6 +271,15 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 } catch (IllegalAccessError e) {
                     e.printStackTrace();
                 }
+            }
+
+            @Override
+            public void onEmoteSetsFetched(String[] emoteSets) {
+                GetTwitchEmotesTask getTwitchEmotesTask = new GetTwitchEmotesTask(emoteSets, (twitchEmotes, subscriberEmotes) -> {
+                    twitchEmotesLoaded(twitchEmotes);
+                    subscriberEmotesLoaded(subscriberEmotes, (EmotesPagerAdapter) mEmoteViewPager.getAdapter());
+                }, getContext());
+                getTwitchEmotesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
 
             private void roomStateIconChange(boolean isOn, ImageView icon) {
@@ -628,12 +638,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     }
                 }
         );
-
-        GetTwitchEmotesTask getTwitchEmotesTask = new GetTwitchEmotesTask((twitchEmotes, subscriberEmotes) -> {
-            twitchEmotesLoaded(twitchEmotes);
-            subscriberEmotesLoaded(subscriberEmotes, pagerAdapter);
-        }, getContext());
-        getTwitchEmotesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     @NonNull
@@ -995,6 +999,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         public class EmoteAdapter extends RecyclerView.Adapter<EmoteAdapter.EmoteViewHolder> {
             private final ArrayList<Emote> emotes;
+            private Boolean columnsFound = false;
 
             private final View.OnClickListener emoteClickListener = new View.OnClickListener() {
                 @Override
@@ -1046,6 +1051,35 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     String emoteUrl = emoteAtPosition.getEmoteUrl(EMOTE_SIZE);
 
                     Glide.with(requireContext()).load(emoteUrl).into(holder.mImageEmote);
+                }
+            }
+
+            @Override
+            public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+                super.onAttachedToRecyclerView(recyclerView);
+
+                RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+                if (manager instanceof GridLayoutManager) {
+                    GridLayoutManager gridLayoutManager = (GridLayoutManager) manager;
+
+                    recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                        @Override
+                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                            super.onScrollStateChanged(recyclerView, newState);
+                        }
+
+                        @Override
+                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                            super.onScrolled(recyclerView, dx, dy);
+
+                            if (columnsFound)
+                                return;
+
+                            // To improve performance when scrolling emotes, we'll bump up the max recycled views.
+                            recyclerView.getRecycledViewPool().setMaxRecycledViews(0, gridLayoutManager.getSpanCount() * 2);
+                            columnsFound = true;
+                        }
+                    });
                 }
             }
 

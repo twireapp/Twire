@@ -15,6 +15,7 @@ import com.perflyst.twire.model.Badge;
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
+import com.perflyst.twire.model.IRCMessage;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 
@@ -34,8 +35,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -48,11 +47,6 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private static boolean seek = false;
     private static double previousProgress;
     private final String LOG_TAG = getClass().getSimpleName();
-    private final Pattern roomstatePattern = Pattern.compile("@.*r9k=([01]);.*slow=(0|\\d+);subs-only=([01])"),
-            userStatePattern = Pattern.compile("badges=(.*);color=(#?\\w*);display-name=(.+);emote-sets=(.+);mod="),
-            stdVarPattern = Pattern.compile("@(.+) :.+ PRIVMSG #\\S* :(.*)"),
-            tagPattern = Pattern.compile("([^=]+)=?(.+)?"),
-            noticePattern = Pattern.compile("@.*msg-id=(\\w*)");
     private final String user;
     private final String password;
     private final String channelName;
@@ -95,7 +89,9 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         Log.d(LOG_TAG, "Chat Emote Settings: " + settings_object.toString());
         mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId, settings_object);
 
-        if (appSettings.isLoggedIn()) { // if user is logged in ...
+        Log.d(LOG_TAG, "Login with main Account: " + appSettings.getChatAccountConnect());
+
+        if (appSettings.isLoggedIn() && appSettings.getChatAccountConnect()) { // if user is logged in ...
             // ... use their credentials
             Log.d(LOG_TAG, "Using user credentials for chat login.");
 
@@ -121,7 +117,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         else {
             twitchChatPort = twitchChatPortunsecure;
         }
-        Log.d("Use SSL Chat Server", String.valueOf(appSettings.getChatEnableSSL()));
+        Log.d(LOG_TAG, "Use SSL Chat Server: " + appSettings.getChatEnableSSL());
 
         executeOnExecutor(THREAD_POOL_EXECUTOR);
     }
@@ -239,22 +235,17 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                     break;
                 }
 
-                if (line.contains("004 " + user + " :")) {
+                IRCMessage ircMessage = IRCMessage.parse(line);
+                if (ircMessage != null) {
+                    handleIRC(ircMessage);
+                } else if (line.contains("004 " + user + " :")) {
                     Log.d(LOG_TAG, "<" + line);
                     Log.d(LOG_TAG, "Connected >> " + user + " ~ irc.twitch.tv");
                     onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTED));
                     sendRawMessage("CAP REQ :twitch.tv/tags twitch.tv/commands");
                     sendRawMessage("JOIN " + hashChannel + "\r\n");
-                } else if (userDisplayName == null && line.contains("USERSTATE " + hashChannel)) {
-                    handleUserstate(line);
-                } else if (line.contains("ROOMSTATE " + hashChannel)) {
-                    handleRoomstate(line);
-                } else if (line.contains("NOTICE " + hashChannel)) {
-                    handleNotice(line);
                 } else if (line.startsWith("PING")) { // Twitch wants to know if we are still here. Send PONG and Server info back
                     handlePing(line);
-                } else if (line.contains("PRIVMSG")) {
-                    handleMessage(line);
                 } else if (line.toLowerCase().contains("disconnected")) {
                     Log.e(LOG_TAG, "Disconnected - trying to reconnect");
                     onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
@@ -398,128 +389,121 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         }
     }
 
-    private void handleNotice(String line) {
-        Log.d(LOG_TAG, "Notice: " + line);
-        Matcher noticeMatcher = noticePattern.matcher(line);
-        if (noticeMatcher.find()) {
-            String msgId = noticeMatcher.group(1);
-            switch (msgId) {
-                case "subs_on":
-                    chatIsSubsonlymode = true;
-                    break;
-                case "subs_off":
-                    chatIsSubsonlymode = false;
-                    break;
-                case "slow_on":
-                    chatIsSlowmode = true;
-                    break;
-                case "slow_off":
-                    chatIsSlowmode = false;
-                    break;
-                case "r9k_on":
-                    chatIsR9kmode = true;
-                    break;
-                case "r9k_off":
-                    chatIsR9kmode = false;
-                    break;
-            }
-
-            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_ROOMSTATE_CHANGE));
-        } else {
-            Log.d(LOG_TAG, "Failed to find notice pattern in: \n" + line);
+    public void handleIRC(IRCMessage message) {
+        switch (message.command) {
+            case "PRIVMSG":
+            case "USERNOTICE":
+                handleMessage(message);
+                break;
+            case "USERSTATE":
+                if (userDisplayName == null)
+                    handleUserstate(message);
+                break;
+            case "ROOMSTATE":
+                handleRoomstate(message);
+                break;
+            case "NOTICE":
+                handleNotice(message);
+                break;
+            case "JOIN":
+                break;
+            default:
+                Log.e(LOG_TAG, "Unhandled command type: " + message.command);
+                break;
         }
+    }
+
+    private void handleNotice(IRCMessage message) {
+        String msgId = message.tags.get("msg-id");
+        switch (msgId) {
+            case "subs_on":
+                chatIsSubsonlymode = true;
+                break;
+            case "subs_off":
+                chatIsSubsonlymode = false;
+                break;
+            case "slow_on":
+                chatIsSlowmode = true;
+                break;
+            case "slow_off":
+                chatIsSlowmode = false;
+                break;
+            case "r9k_on":
+                chatIsR9kmode = true;
+                break;
+            case "r9k_off":
+                chatIsR9kmode = false;
+                break;
+        }
+
+        onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_ROOMSTATE_CHANGE));
     }
 
     /**
      * Parses the received line and gets the roomstate.
      * If the roomstate has changed since last check variables are changed and the chatfragment is notified
      */
-    private void handleRoomstate(String line) {
-        Matcher roomstateMatcher = roomstatePattern.matcher(line);
-        if (roomstateMatcher.find()) {
-            boolean newR9k = roomstateMatcher.group(1).equals("1");
-            boolean newSlow = !roomstateMatcher.group(2).equals("0");
-            boolean newSub = roomstateMatcher.group(3).equals("1");
-            // If the one of the roomstate types have changed notify the chatfragment
-            if (chatIsR9kmode != newR9k || chatIsSlowmode != newSlow || chatIsSubsonlymode != newSub) {
-                chatIsR9kmode = newR9k;
-                chatIsSlowmode = newSlow;
-                chatIsSubsonlymode = newSub;
+    private void handleRoomstate(IRCMessage message) {
+        boolean newR9k = message.tags.get("r9k").equals("1");
+        boolean newSlow = !message.tags.get("slow").equals("0");
+        boolean newSub = message.tags.get("subs-only").equals("1");
+        // If the one of the roomstate types have changed notify the chatfragment
+        if (chatIsR9kmode != newR9k || chatIsSlowmode != newSlow || chatIsSubsonlymode != newSub) {
+            chatIsR9kmode = newR9k;
+            chatIsSlowmode = newSlow;
+            chatIsSubsonlymode = newSub;
 
-                onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_ROOMSTATE_CHANGE));
-            }
-        } else {
-            Log.d(LOG_TAG, "Failed to find roomstate pattern in: \n" + line);
+            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_ROOMSTATE_CHANGE));
         }
     }
 
     /**
      * Parses the received line and saves data such as the users color, if the user is mod, subscriber or turbouser
      */
-    private void handleUserstate(String line) {
-        Matcher userstateMatcher = userStatePattern.matcher(line);
-        if (userstateMatcher.find()) {
-            userBadges = new HashMap<>();
-            if (!userstateMatcher.group(1).isEmpty()) {
-                for (String badge : userstateMatcher.group(1).split(",")) {
-                    String[] parts = badge.split("/");
-                    userBadges.put(parts[0], parts[1]);
-                }
+    private void handleUserstate(IRCMessage message) {
+        userBadges = new HashMap<>();
+        String badgeString = message.tags.get("badges");
+        if (badgeString != null && !badgeString.isEmpty()) {
+            for (String badge : badgeString.split(",")) {
+                String[] parts = badge.split("/");
+                userBadges.put(parts[0], parts[1]);
             }
-
-            userColor = userstateMatcher.group(2);
-            userDisplayName = userstateMatcher.group(3);
-        } else {
-            Log.e(LOG_TAG, "Failed to find userstate pattern in: \n" + line);
         }
+
+        userColor = message.tags.get("color");
+        userDisplayName = message.tags.get("display-name");
+        callback.onEmoteSetsFetched(message.tags.get("emote-sets").split(","));
     }
 
     /**
      * Parses and builds retrieved messages.
      * Sends build message back via callback.
      */
-    private void handleMessage(String line) {
-        Matcher stdVarMatcher = stdVarPattern.matcher(line);
-
-        if (stdVarMatcher.find()) {
-            Map<String, String> tags = new HashMap<>();
-            for (String tag : stdVarMatcher.group(1).split(";")) {
-                Matcher tagMatcher = tagPattern.matcher(tag);
-                if (tagMatcher.find()) {
-                    String value = tagMatcher.group(2);
-                    if (value == null)
-                        continue;
-
-                    tags.put(tagMatcher.group(1), value);
-                }
+    private void handleMessage(IRCMessage message) {
+        Map<String, String> tags = message.tags;
+        Map<String, String> badges = new HashMap<>();
+        String badgesString = tags.get("badges");
+        if (badgesString != null) {
+            for (String badge : badgesString.split(",")) {
+                String[] parts = badge.split("/");
+                badges.put(parts[0], parts[1]);
             }
-
-            Map<String, String> badges = new HashMap<>();
-            String badgesString = tags.get("badges");
-            if (badgesString != null) {
-                for (String badge : badgesString.split(",")) {
-                    String[] parts = badge.split("/");
-                    badges.put(parts[0], parts[1]);
-                }
-            }
-            String color = tags.get("color");
-            String displayName = tags.get("display-name");
-            String message = stdVarMatcher.group(2);
-            List<ChatEmote> emotes = new ArrayList<>(mEmoteManager.findTwitchEmotes(line, message));
-            emotes.addAll(mEmoteManager.findCustomEmotes(message));
-            //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
-
-            ChatMessage chatMessage = new ChatMessage(message, displayName, color, getBadges(badges), emotes, false);
-
-            if (message.contains("@" + getUserDisplayName())) {
-                Log.d(LOG_TAG, "Highlighting message with mention: " + message);
-                chatMessage.setHighlight(true);
-            }
-
-            publishProgress(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
-        } else {
-            Log.e(LOG_TAG, "Failed to find message pattern in: \n" + line);
         }
+        String color = tags.get("color");
+        String displayName = tags.get("display-name");
+        String content = message.content;
+        List<ChatEmote> emotes = new ArrayList<>(mEmoteManager.findTwitchEmotes(message.tags.get("emotes"), content));
+        emotes.addAll(mEmoteManager.findCustomEmotes(content));
+        //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
+
+        ChatMessage chatMessage = new ChatMessage(content, displayName, color, getBadges(badges), emotes, false);
+
+        if (content.contains("@" + getUserDisplayName())) {
+            Log.d(LOG_TAG, "Highlighting message with mention: " + content);
+            chatMessage.setHighlight(true);
+        }
+
+        publishProgress(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
     }
 
     /**
@@ -679,6 +663,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
         void onRoomstateChange(boolean isR9K, boolean isSlow, boolean isSubsOnly);
 
         void onCustomEmoteIdFetched(List<Emote> channel, List<Emote> global);
+
+        void onEmoteSetsFetched(String[] emoteSets);
     }
 
     /**

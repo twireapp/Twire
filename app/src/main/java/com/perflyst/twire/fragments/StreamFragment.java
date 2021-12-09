@@ -1,6 +1,7 @@
 package com.perflyst.twire.fragments;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,9 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
@@ -65,9 +64,8 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -102,7 +100,6 @@ import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.rey.material.widget.ProgressView;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -112,8 +109,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class StreamFragment extends Fragment implements Player.Listener {
@@ -147,7 +142,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
     private PlayerView mVideoView;
-    private ExoPlayer player;
+    private SimpleExoPlayer player;
     private MediaSource currentMediaSource;
     private Toolbar mToolbar;
     private ConstraintLayout mVideoInterface;
@@ -391,6 +386,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         });
 
         initializePlayer();
+        runtimeHandler.postDelayed(runtimeRunnable, 1000);
 
         mRootView.setOnSystemUiVisibilityChangeListener(
                 visibility -> {
@@ -575,19 +571,29 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 player.prepare();
             }
 
+            PendingIntent pendingIntent = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+                pendingIntent = PendingIntent.getBroadcast(
+                        getContext(),
+                        0, mediaButtonIntent,
+                        PendingIntent.FLAG_IMMUTABLE
+                );
+            }
+
             ComponentName mediaButtonReceiver = new ComponentName(
                     getContext(), MediaButtonReceiver.class);
             mediaSession = new MediaSessionCompat(
                     getContext(),
                     getContext().getPackageName(),
                     mediaButtonReceiver,
-                    null);
+                    pendingIntent);
             MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
             mediaSessionConnector.setPlayer(player);
             mediaSession.setActive(true);
 
             progressHandler.postDelayed(progressRunnable, 1000);
-            runtimeHandler.postDelayed(runtimeRunnable, 1000);
         }
     }
 
@@ -621,7 +627,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     @Override
-    public void onPlayerError(ExoPlaybackException exception) {
+    public void onPlayerError(@NonNull PlaybackException exception) {
         Log.e(LOG_TAG, "Something went wrong playing the stream for " + mChannelInfo.getDisplayName() + " - Exception: " + exception);
 
         playbackFailed();
@@ -851,6 +857,22 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
     }
 
+    private void shareButtonClicked() {
+        // https://stackoverflow.com/questions/17167701/how-to-activate-share-button-in-android-app
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody;
+
+        if (vodId == null) {
+            shareBody = "https://twitch.tv/" + mChannelInfo.getStreamerName();
+        } else {
+            shareBody = "https://www.twitch.tv/" + mChannelInfo.getStreamerName() + "/video/" + vodId.replaceAll("[a-zA-Z]+", "");
+        }
+
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
+
     private void profileButtonClicked() {
         mProfileBottomSheet.show();
     }
@@ -933,6 +955,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_item_sleep) {
             sleepButtonClicked();
+            return true;
+        } else if (itemId == R.id.menu_item_share) {
+            shareButtonClicked();
             return true;
         } else if (itemId == R.id.menu_item_profile) {
             profileButtonClicked();
@@ -1339,9 +1364,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
 
-        if (isAudioOnlyModeEnabled()) {
-            Log.d(LOG_TAG, "Pausing audio");
-        } else if (player != null) {
+        if (player != null) {
             player.pause();
         }
         releaseScreenOn();
@@ -1359,6 +1382,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
 
             player.play();
+        } else {
+            player.play();
         }
 
         keepScreenOn();
@@ -1374,7 +1399,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             startStreamWithTask();
         } else {
             if (qualityURLs.containsKey(quality)) {
-                if (chatOnlyViewVisible || audioViewVisible) {
+                if (chatOnlyViewVisible) {
                     return;
                 }
 
@@ -1403,7 +1428,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     updateQualitySelections(url);
                     qualityURLs = url;
 
-                    if (!checkForAudioOnlyMode()) {
+                    if (!isAudioOnlyModeEnabled()) {
                         startStreamWithQuality(new Settings(getContext()).getPrefStreamQuality());
                     }
                 } else {
@@ -1414,12 +1439,14 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
         };
 
+        String[] types = getResources().getStringArray(R.array.PlayerType);
+
         if (vodId == null) {
             GetLiveStreamURL task = new GetLiveStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mChannelInfo.getStreamerName());
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mChannelInfo.getStreamerName(), types[settings.getStreamPlayerType()]);
         } else {
             GetLiveStreamURL task = new GetVODStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId.substring(1));
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId.substring(1), types[settings.getStreamPlayerType()]);
         }
     }
 
@@ -1530,12 +1557,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         startActivity(Intent.createChooser(intent, getString(R.string.stream_external_play_using)));
     }
 
-    /**
-     * Sets up audio mode and starts playback of audio, while pausing any playing video
-     */
-    private void playAudioOnly() {
-    }
-
     private void registerAudioOnlyDelegate() {
     }
 
@@ -1605,10 +1626,16 @@ public class StreamFragment extends Fragment implements Player.Listener {
      */
     private void setQualityOnClick(final TextView qualityView, String quality) {
         qualityView.setOnClickListener(v -> {
-            settings.setPrefStreamQuality(quality);
-            startStreamWithQuality(quality);
-            resetQualityViewBackground(qualityView);
-            mQualityBottomSheet.dismiss();
+            // don´t set audio only mode as default
+            if (quality != "audio_only") {
+                settings.setPrefStreamQuality(quality);
+            }
+            // don`t allow to change the Quality when using audio only Mode
+            if (!isAudioOnlyModeEnabled()) {
+                startStreamWithQuality(quality);
+                resetQualityViewBackground(qualityView);
+                mQualityBottomSheet.dismiss();
+            }
         });
     }
 
@@ -1727,15 +1754,12 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mChatOnlySelector.setVisibility(View.VISIBLE);
         }
 
-        // Audio Only is currently broken, so let's not show it
-        mAudioOnlySelector.setVisibility(View.GONE);
-        /*
         mAudioOnlySelector.setVisibility(View.VISIBLE);
         mAudioOnlySelector.setOnClickListener(view -> {
             mQualityBottomSheet.dismiss();
             audioOnlyClicked();
         });
-        */
+
 
         mChatOnlySelector.setOnClickListener(view -> {
             mQualityBottomSheet.dismiss();
@@ -1755,43 +1779,35 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
             showVideoInterface();
             updateSelectedQuality(null);
+            startStreamWithQuality("audio_only");
             hideQualities();
         }
     }
 
     private void disableAudioOnlyView() {
         if (audioViewVisible) {
-            mAudioOnlySelector.setChecked(false);
             audioViewVisible = false;
+            mAudioOnlySelector.setChecked(false);
             mVideoView.setVisibility(View.VISIBLE);
             mBufferingView.setVisibility(View.VISIBLE);
             Service.bringToBack(mPreview);
             previewInbackGround = true;
             castingTextView.setVisibility(View.INVISIBLE);
 
+            showQualities();
             showVideoInterface();
-            startStreamWithQuality(settings.getPrefStreamQuality());
         }
-    }
-
-    private boolean checkForAudioOnlyMode() {
-        boolean isAudioOnly = isAudioOnlyModeEnabled();
-        if (isAudioOnly) {
-            mAudioOnlySelector.setChecked(true);
-            playAudioOnly();
-        }
-
-        return isAudioOnly;
     }
 
     private boolean isAudioOnlyModeEnabled() {
-        return false;
+        // just use audioViewVisible as boolean
+        return audioViewVisible;
     }
 
     private void audioOnlyClicked() {
         mAudioOnlySelector.setChecked(!mAudioOnlySelector.isChecked());
         if (mAudioOnlySelector.isChecked()) {
-            playAudioOnly();
+            initAudioOnlyView();
         } else {
             stopAudioOnly();
         }
@@ -1799,8 +1815,15 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     private void stopAudioOnly() {
         disableAudioOnlyView();
-        showPlayIcon();
-        //startStreamWithQuality(settings.getPrefStreamQuality());
+
+        // start stream with last quality
+        releasePlayer();
+        initializePlayer();
+        updateSelectedQuality(settings.getPrefStreamQuality());
+        startStreamWithQuality(settings.getPrefStreamQuality());
+
+        // resume the stream
+        resumeStream();
     }
 
     private void stopAudioOnlyNoServiceCall() {

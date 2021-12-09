@@ -42,8 +42,8 @@
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:contentDescription="@string/stream_backward"
-                app:layout_constraintStart_toStartOf="@+id/play_pause_wrapper"
-                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/play_pause_wrapper"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:srcCompat="@drawable/ic_replay_10" />
@@ -53,8 +53,8 @@
                 android:layout_width="@dimen/toolbar_icon_size"
                 android:layout_height="@dimen/toolbar_icon_size"
                 android:contentDescription="@string/stream_forward"
-                app:layout_constraintStart_toEndOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/play_pause_wrapper"
+                app:layout_constraintStart_toEndOf="@+id/play_pause_wrapper"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:srcCompat="@drawable/ic_forward_10" />

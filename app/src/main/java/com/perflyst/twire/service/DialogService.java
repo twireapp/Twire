@@ -154,6 +154,18 @@ public class DialogService {
                 .build();
     }
 
+    public static MaterialDialog getChoosePlayerTypeDialog(Activity activity, @StringRes int dialogTitle, @ArrayRes int array, int currentSize, MaterialDialog.ListCallbackSingleChoice callbackSingleChoice) {
+        int indexOfPage = currentSize;
+        String[] playerTypes = activity.getResources().getStringArray(array);
+
+        return getBaseThemedDialog(activity)
+                .title(dialogTitle)
+                .itemsCallbackSingleChoice(indexOfPage, callbackSingleChoice)
+                .items(playerTypes)
+                .positiveText(R.string.done)
+                .build();
+    }
+
     public static MaterialDialog getSleepTimerDialog(Activity activity, boolean isTimerRunning, MaterialDialog.SingleButtonCallback onStartCallback, MaterialDialog.SingleButtonCallback onStopCallBack, int hourValue, int minuteValue) {
 
         @StringRes int positiveText = isTimerRunning ? R.string.resume : R.string.start;

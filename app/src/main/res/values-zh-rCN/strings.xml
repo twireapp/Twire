@@ -151,7 +151,7 @@
     <string name="today">今天</string>
     <string name="enable_all">全部启用</string>
     <string name="disable_all">全部禁用</string>
-    <string name="percent">%s %%</string>
+    <string name="percent">%d %%</string>
     <string name="pause">暂停</string>
     <string name="play">播放</string>
     <string name="vods">视频</string>
@@ -160,9 +160,9 @@
     <string name="content_desc_twitchProfileBanner_imageView">用户自订横幅</string>
     <string name="subscription_card_displayName">名称</string>
     <string name="drawer_close">关闭</string>
-    <string name="ok">OK</string>
-    <string name="hours_short">h</string>
-    <string name="minutes_short">m</string>
+    <string name="ok">好</string>
+    <string name="hours_short">小时</string>
+    <string name="minutes_short">分钟</string>
     <string name="drawer_open">打开</string>
     <string name="settings_activity_title">设置</string>
     <string name="action_settings">设置</string>
@@ -173,4 +173,18 @@
     <string name="start">开始</string>
     <string name="done">完成</string>
     <string name="resume">继续</string>
+    <string name="chat_enable_ssl">使用 SSL 进行连接</string>
+    <string name="login_invalid_token_text_line_two">必须再次登录</string>
+    <string name="login_invalid_token_text_line_one">很不幸，你</string>
+    <string name="playback_speed">%.2f</string>
+    <string name="playback_speed_display">×%.2f</string>
+    <string name="menu_speed">回放速度</string>
+    <string name="player_show_runtime">显示流运行时间</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="player_type">流播放器类型</string>
+    <string name="menu_share">分享</string>
+    <string name="chat_enable_account_connect">使用您的帐户连接</string>
+    <string name="settings_general_image_proxy">使用图像代理</string>
+    <string name="settings_general_image_proxy_url_button">保存</string>
+    <string name="settings_general_image_proxy_url_example">示例：https://external-content.duckduckgo.com/iu/\?u=</string>
 </resources>

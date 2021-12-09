@@ -40,7 +40,7 @@
     <dimen name="chat_emote_tab_icon_size">24dp</dimen>
     <dimen name="chat_emote_tab_max_width">55dp</dimen>
     <dimen name="chat_emote_icon_margin_right">16dp</dimen>
-    <dimen name="chat_message_text_sie">14sp</dimen>
+    <dimen name="chat_message_text_size">14sp</dimen>
     <dimen name="chat_message_mention">16sp</dimen>
     <dimen name="chat_send_ic_size">24dp</dimen>
     <dimen name="chat_recyclerview_padding">8dp</dimen>

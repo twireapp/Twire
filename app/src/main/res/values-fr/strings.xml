@@ -18,7 +18,7 @@
     <string name="content_desc_twitchProfileBanner_imageView">La bannière du profil définie par l\'utilisateur</string>
     <string name="content_desc_twitchLogo_imageView">Image du logo des streameurs Twitch</string>
     <string name="no_elements_added_notice">Aucun(e) %s n\'a été trouvé(e)</string>
-    <string name="vods">vidéos</string>
+    <string name="vods">Vidéos</string>
     <string name="play">Lecture</string>
     <string name="pause">Pause</string>
     <string name="percent">%d %%</string>
@@ -204,4 +204,6 @@
     <string name="stream_fullscreen">Plein écran</string>
     <string name="stream_seek_dialog_title">Essayer</string>
     <string name="title_activity_streamer_info">Chaîne</string>
+    <string name="login_invalid_token_text_line_two">devez vous reconnecter</string>
+    <string name="login_invalid_token_text_line_one">Malheureusement vous</string>
 </resources>

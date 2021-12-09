@@ -108,8 +108,9 @@
             android:name=".activities.setup.LoginActivity"
             android:label="@string/title_activity_login"
             android:parentActivityName=".activities.setup.WelcomeActivity"
-            android:screenOrientation="sensor">
-            <meta-data
+            android:screenOrientation="sensor"
+            android:configChanges="orientation|screenSize">
+        <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.setup.WelcomeActivity" />
         </activity>
@@ -139,7 +140,8 @@
             android:excludeFromRecents="true"
             android:label="@string/router_activity_label"
             android:taskAffinity=""
-            android:theme="@style/DeepLinkTheme">
+            android:theme="@style/DeepLinkTheme"
+            android:exported="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

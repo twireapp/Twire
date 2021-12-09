@@ -28,13 +28,14 @@ public class GetVODStreamURL extends GetLiveStreamURL {
     @Override
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String vodId = params[0];
+        String PlayerType = params[1];
         String signature = "";
         String token = "";
 
         Request request = new Request.Builder()
                 .url("https://gql.twitch.tv/gql")
                 .header("Client-ID", SecretKeys.TWITCH_WEB_CLIENT_ID)
-                .post(RequestBody.create(MediaType.get("application/json"), formatQuery(false, vodId)))
+                .post(RequestBody.create(MediaType.get("application/json"), formatQuery(false, vodId, PlayerType)))
                 .build();
 
         String resultString = Service.urlToJSONString(request);
@@ -50,7 +51,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
             e.printStackTrace();
         }
 
-        String vodURL = String.format("http://usher.twitch.tv/vod/%s?nauthsig=%s&nauth=%s", vodId, signature, safeEncode(token));
+        String vodURL = String.format("http://usher.twitch.tv/vod/%s?allow_source=true&nauthsig=%s&nauth=%s", vodId, signature, safeEncode(token));
         Log.d(LOG_TAG, "HSL Playlist URL: " + vodURL);
         return parseM3U8(vodURL);
     }

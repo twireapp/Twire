@@ -7,7 +7,6 @@ package com.perflyst.twire.misc;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -109,7 +108,7 @@ public class TooltipWindow {
         tipWindow.setOutsideTouchable(true);
         tipWindow.setTouchable(true);
 
-        tipWindow.setBackgroundDrawable(new BitmapDrawable());
+        tipWindow.setBackgroundDrawable(null);
 
         tipWindow.setContentView(contentView);
 

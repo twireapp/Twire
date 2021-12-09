@@ -115,8 +115,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
                     final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize), holder.message, builder, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
 
-                    holder.message.setTextIsSelectable(true);
-
                     builder.setSpan(emoteSpan, fromPosition + beforeMessage.length(), toPosition + 1 + beforeMessage.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 }
             }

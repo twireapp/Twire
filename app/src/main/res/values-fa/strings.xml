@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subscription_card_displayName">نام</string>
+    <string name="drawer_close">بستن</string>
+    <string name="drawer_open">باز کردن</string>
+    <string name="settings_activity_title">تنظیمات</string>
+    <string name="action_settings">تنظیمات</string>
+    <string name="hours_short">س</string>
+    <string name="minutes_short">د</string>
+    <string name="disabled">غیرفعال شده</string>
+    <string name="enabled">فعال شده</string>
+    <string name="resume">از سرگیری</string>
+    <string name="cancel">لغو</string>
+    <string name="stop">متوقف کردن</string>
+    <string name="start">شروع</string>
+    <string name="done">انجام شد</string>
+    <string name="ok">خب</string>
+</resources>

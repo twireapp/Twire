@@ -161,7 +161,7 @@
     <string name="streamerInfo_desc_tab">Kuvaus</string>
     <string name="title_activity_streamer_info">Kanava</string>
     <string name="yesterday">Eilen</string>
-    <string name="percent">%s %%</string>
+    <string name="percent">%d%%</string>
     <string name="enable_all">Laita kaikki päälle</string>
     <string name="disable_all">Laita kaikki pois päältä</string>
     <string name="no_elements_added_notice">%s ei löytynyt</string>
@@ -173,4 +173,6 @@
     <string name="subscription_card_displayName">Nimi</string>
     <string name="drawer_close">Sulje</string>
     <string name="drawer_open">Avaa</string>
+    <string name="login_invalid_token_text_line_two">pitää kirjautua uudestaan</string>
+    <string name="login_invalid_token_text_line_one">Valitettavasti sinun</string>
 </resources>
