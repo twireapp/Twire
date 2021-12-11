@@ -435,15 +435,23 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
      * If the roomstate has changed since last check variables are changed and the chatfragment is notified
      */
     private void handleRoomstate(IRCMessage message) {
-        boolean newR9k = message.tags.get("r9k").equals("1");
-        boolean newSlow = !message.tags.get("slow").equals("0");
-        boolean newSub = message.tags.get("subs-only").equals("1");
-        // If the one of the roomstate types have changed notify the chatfragment
-        if (chatIsR9kmode != newR9k || chatIsSlowmode != newSlow || chatIsSubsonlymode != newSub) {
-            chatIsR9kmode = newR9k;
-            chatIsSlowmode = newSlow;
-            chatIsSubsonlymode = newSub;
+        boolean roomstateChanged = false;
 
+        if( message.tags.get("r9k") != null) {
+            chatIsR9kmode = message.tags.get("r9k").equals("1");
+            roomstateChanged = true;
+        }
+        if( message.tags.get("slow") != null) {
+            chatIsSlowmode = !message.tags.get("slow").equals("0");
+            roomstateChanged = true;
+        }
+        if( message.tags.get("subs-only") != null) {
+            chatIsSubsonlymode = message.tags.get("subs-only").equals("1");
+            roomstateChanged = true;
+        }
+
+        // If the one of the roomstate types have changed notify the chatfragment
+        if (roomstateChanged) {
             onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_ROOMSTATE_CHANGE));
         }
     }
