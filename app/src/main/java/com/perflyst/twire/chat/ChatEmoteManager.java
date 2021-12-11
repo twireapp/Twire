@@ -3,6 +3,7 @@ package com.perflyst.twire.chat;
 import androidx.annotation.Nullable;
 
 import com.perflyst.twire.model.ChatEmote;
+import com.perflyst.twire.model.ChatEmoteSettings;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
 
@@ -33,12 +34,12 @@ class ChatEmoteManager {
 
     private final String channelName;
     private final int channelId;
-    private final JSONObject emote_settings;
+    private final ChatEmoteSettings emote_settings;
 
-    ChatEmoteManager(String channelName, int channelId, JSONObject emote_settings) {
+    ChatEmoteManager(String channelName, int channelId, ChatEmoteSettings emotesettings) {
         this.channelName = channelName;
         this.channelId = channelId;
-        this.emote_settings = emote_settings;
+        this.emote_settings = emotesettings;
     }
 
 
@@ -50,23 +51,16 @@ class ChatEmoteManager {
     void loadCustomEmotes(EmoteFetchCallback callback) {
         Map<String, Emote> result = new HashMap<>();
 
+        // Emote Settings
+        boolean enabled_bttv = emote_settings.isBBTVenabled();
+        boolean enabled_ffz = emote_settings.isFFZenabled();
+        boolean enabled_seventv = emote_settings.isSevenTVenabled();
+
         // BetterTTV emotes
         final String BTTV_GLOBAL_URL = "https://api.betterttv.net/3/cached/emotes/global";
         final String BTTV_CHANNEL_URL = "https://api.betterttv.net/3/cached/users/twitch/" + channelId;
         final String CHANNEL_EMOTE_ARRAY = "channelEmotes";
         final String SHARED_EMOTE_ARRAY = "sharedEmotes";
-
-        boolean enabled_bttv = false;
-        boolean enabled_ffz = false;
-        boolean enabled_seventv = false;
-
-        try {
-            enabled_seventv = emote_settings.getBoolean("enable_bttv");
-            enabled_seventv = emote_settings.getBoolean("enable_ffz");
-            enabled_seventv = emote_settings.getBoolean("enable_seventv");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         try {
             String bttvResponse = "";
@@ -181,7 +175,7 @@ class ChatEmoteManager {
             // Read all the emotes
             for (int i = 0; i < seventvemotesglobal.length(); i++) {
                 Emote emote = To7TV(seventvemotesglobal.getJSONObject(i));
-                emote.setCustomChannelEmote(true);
+                emote.setCustomChannelEmote(false);
                 customChannel.add(emote);
                 result.put(emote.getKeyword(), emote);
             }
