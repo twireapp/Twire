@@ -3,9 +3,9 @@ package com.perflyst.twire.chat;
 import androidx.annotation.Nullable;
 
 import com.perflyst.twire.model.ChatEmote;
-import com.perflyst.twire.model.ChatEmoteSettings;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.service.Settings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,12 +34,12 @@ class ChatEmoteManager {
 
     private final String channelName;
     private final int channelId;
-    private final ChatEmoteSettings emote_settings;
+    private final Settings settings;
 
-    ChatEmoteManager(String channelName, int channelId, ChatEmoteSettings emotesettings) {
+    ChatEmoteManager(String channelName, int channelId, Settings settings) {
         this.channelName = channelName;
         this.channelId = channelId;
-        this.emote_settings = emotesettings;
+        this.settings = settings;
     }
 
 
@@ -52,9 +52,9 @@ class ChatEmoteManager {
         Map<String, Emote> result = new HashMap<>();
 
         // Emote Settings
-        boolean enabled_bttv = emote_settings.isBBTVenabled();
-        boolean enabled_ffz = emote_settings.isFFZenabled();
-        boolean enabled_seventv = emote_settings.isSevenTVenabled();
+        boolean enabled_bttv = settings.getChatEmoteBTTV();
+        boolean enabled_ffz = settings.getChatEmoteFFZ();
+        boolean enabled_seventv = settings.getChatEmoteSEVENTV();
 
         // BetterTTV emotes
         final String BTTV_GLOBAL_URL = "https://api.betterttv.net/3/cached/emotes/global";
@@ -115,8 +115,20 @@ class ChatEmoteManager {
             if (enabled_ffz) {
                 topObject = new JSONObject(Service.urlToJSONString(FFZ_GLOBAL_URL));
             }
-            JSONArray defaultSets = topObject.getJSONArray(DEFAULT_SETS);
-            JSONObject sets = topObject.getJSONObject(SETS);
+
+            JSONArray defaultSets;
+            if (topObject.has("defaultSets")) {
+                defaultSets = topObject.getJSONArray(DEFAULT_SETS);
+            } else {
+                defaultSets = new JSONArray();
+            }
+
+            JSONObject sets;
+            if (topObject.has("sets")) {
+                sets = topObject.getJSONObject(SETS);
+            } else {
+                sets = new JSONObject();
+            }
 
             for (int setIndex = 0; setIndex < defaultSets.length(); setIndex++) {
                 JSONArray emoticons = sets.getJSONObject(defaultSets.get(setIndex).toString()).getJSONArray(EMOTICONS);
@@ -181,7 +193,14 @@ class ChatEmoteManager {
             }
 
             // get channel emotes
-            JSONArray seventvemoteschannel = new JSONArray(seventvResponsechannel);
+            JSONArray seventvemoteschannel;
+            try {
+                JSONObject response = new JSONObject(seventvResponsechannel);
+                seventvemoteschannel = new JSONArray();
+            } catch (JSONException e) {
+                // If there is an exception above then the User has custom emotes
+                seventvemoteschannel = new JSONArray(seventvResponsechannel);
+            }
 
             // Read all the emotes
             for (int i = 0; i < seventvemoteschannel.length(); i++) {

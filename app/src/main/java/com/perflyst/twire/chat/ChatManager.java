@@ -13,7 +13,6 @@ import android.util.SparseArray;
 
 import com.perflyst.twire.model.Badge;
 import com.perflyst.twire.model.ChatEmote;
-import com.perflyst.twire.model.ChatEmoteSettings;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.model.IRCMessage;
@@ -79,8 +78,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
         Settings appSettings = new Settings(aContext);
-        ChatEmoteSettings emotesettings = new ChatEmoteSettings(appSettings.getChatEmoteBTTV(), appSettings.getChatEmoteFFZ(), appSettings.getChatEmoteSEVENTV());
-        mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId, emotesettings);
+        mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId, appSettings);
 
         Log.d(LOG_TAG, "Login with main Account: " + appSettings.getChatAccountConnect());
 
