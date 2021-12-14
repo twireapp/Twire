@@ -68,6 +68,9 @@ public class Settings {
     private final String CHAT_ACCOUNT_CONNECT = "chatAccountConnect";
     private final String CHAT_RECENT_EMOTES = "chatRecentEmotes";
     private final String CHAT_KEYBOARD_HEIGHT = "chatKeyboardHeight";
+    private final String CHAT_EMOTE_BTTV = "chatEmoteBTTV";
+    private final String CHAT_EMOTE_FFZ = "chatEmoteFFZ";
+    private final String CHAT_EMOTE_SEVENTV = "chatEmoteSEVENTV";
     private final String NOTIFY_LIVE = "notifyUserLive";
     private final String LAST_START_UP_VERSION_CODE = "lastStartUpVersionCode";
     private final String SHOW_CHANGELOGS = "showChangelogs";
@@ -795,6 +798,42 @@ public class Settings {
     }
 
     /**
+     * Chat - Emote Settings
+     */
+
+    public boolean getChatEmoteBTTV() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_EMOTE_BTTV, true);
+    }
+
+    public void setChatEmoteBTTV(boolean setting) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_EMOTE_BTTV, setting);
+        editor.commit();
+    }
+
+    public boolean getChatEmoteFFZ() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_EMOTE_FFZ, true);
+    }
+
+    public void setChatEmoteFFZ(boolean setting) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_EMOTE_FFZ, setting);
+        editor.commit();
+    }
+
+    public boolean getChatEmoteSEVENTV() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_EMOTE_SEVENTV, false);
+    }
+
+    public void setChatEmoteSEVENTV(boolean setting) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_EMOTE_SEVENTV, setting);
+    }
+
+     /**
      * Chat - Connect with Account
      */
 

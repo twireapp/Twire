@@ -77,8 +77,8 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private boolean chatIsSubsonlymode;
 
     public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
-        mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId);
         Settings appSettings = new Settings(aContext);
+        mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId, appSettings);
 
         Log.d(LOG_TAG, "Login with main Account: " + appSettings.getChatAccountConnect());
 
