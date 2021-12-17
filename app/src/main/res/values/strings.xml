@@ -208,13 +208,11 @@
     <string name="gen_open_changelog">Open changelog</string>
     <string name="gen_dialog_wipe_follows_content">Do you want to Wipe all Follows?</string>
     <string name="gen_dialog_wipe_follows_action">Wipe</string>
-    <string name="gen_dialog_wipe_follows_cancel_action">Cancel</string>
+    <string name="gen_dialog_follows_cancel_action">Cancel</string>
     <string name="gen_dialog_export_follows_content">Do you want to Export all Follows?</string>
     <string name="gen_dialog_export_follows_action">Export</string>
-    <string name="gen_dialog_export_follows_cancel_action">Cancel</string>
     <string name="gen_dialog_import_follows_content">Do you want to Import all Follows?</string>
     <string name="gen_dialog_import_follows_action">Import</string>
-    <string name="gen_dialog_import_follows_cancel_action">Cancel</string>
     <string name="gen_twitch_follows">Wipe all Follows</string>
     <string name="gen_export_database">Export all Follows</string>
     <string name="gen_import_database">Import Follows</string>
