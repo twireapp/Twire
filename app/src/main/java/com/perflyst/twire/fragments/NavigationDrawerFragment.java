@@ -244,16 +244,6 @@ public class NavigationDrawerFragment extends Fragment {
         } else {
             mUserNameTextView.setText(getString(R.string.navigation_drawer_not_logged_in));
         }
-
-
-        /*
-        this was used to hide elements when the user is not logged in
-        if (!mSettings.isLoggedIn()) {
-            for (View userView : mUserRequiredViews) {
-                userView.setVisibility(View.GONE);
-            }
-        }
-         */
     }
 
 
