@@ -180,7 +180,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
             dialog1.dismiss();
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
             helper.onWipe(helper.getWritableDatabase(), settings.isLoggedIn());
-            Toast infoToast = Toast.makeText(getBaseContext(),"Wiped Follows", Toast.LENGTH_SHORT);
+            Toast infoToast = Toast.makeText(getBaseContext(), getString(R.string.gen_toast_wipe_database), Toast.LENGTH_SHORT);
             infoToast.show();
         });
 
@@ -199,7 +199,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
             dialog1.dismiss();
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
             int exported = helper.onExport(helper.getWritableDatabase());
-            Toast infoToast = Toast.makeText(getBaseContext(),"Exported " + exported + " Follows", Toast.LENGTH_SHORT);
+            Toast infoToast = Toast.makeText(getBaseContext(), String.format(getString(R.string.gen_toast_export_database), exported), Toast.LENGTH_SHORT);
             infoToast.show();
         });
 
@@ -216,7 +216,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
             dialog1.dismiss();
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
             int imported = helper.onImport(helper.getWritableDatabase());
-            Toast infoToast = Toast.makeText(getBaseContext(),"Imported " + imported + " Follows", Toast.LENGTH_SHORT);
+            Toast infoToast = Toast.makeText(getBaseContext(), String.format(getString(R.string.gen_toast_import_database), imported), Toast.LENGTH_SHORT);
             infoToast.show();
         });
 
@@ -226,7 +226,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
 
         dialog.show();
     }
-      
+
     public void onClickImageProxy(View v) {
         settings.setGeneralUseImageProxy(!settings.getGeneralUseImageProxy());
         updateSummaries();

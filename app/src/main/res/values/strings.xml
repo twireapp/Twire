@@ -216,6 +216,9 @@
     <string name="gen_twitch_follows">Wipe all follows</string>
     <string name="gen_export_database">Export all follows</string>
     <string name="gen_import_database">Import follows</string>
+    <string name="gen_toast_wipe_database">Wiped Follows</string>
+    <string name="gen_toast_export_database">Exported %1$x Follows</string>
+    <string name="gen_toast_import_database">Imported %1$x Follows</string>
 
     <!-- Chat Settings -->
     <string name="chat_emote_size">Emote size</string>

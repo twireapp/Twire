@@ -131,7 +131,9 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
         }
         try {
             String filedata = read(mContext, EXPORT_NAME);
-            assert filedata != null;
+            if (filedata == null) {
+                return 0;
+            }
             JSONObject channelsfile = new JSONObject(filedata);
             JSONArray channels = channelsfile.getJSONArray("Channels");
             for (int i = 0; i < channels.length(); i++) {
