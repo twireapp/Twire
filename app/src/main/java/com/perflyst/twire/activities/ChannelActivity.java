@@ -296,7 +296,7 @@ public class ChannelActivity extends ThemeActivity {
         );
 
         // If the channel got imported from Twitch, then hide the Follow/Unfollow Button
-        if (mFollowHandler.isStreamerFollowed() && mFollowHandler.isStreamerTwitch()) {
+        if (mFollowHandler.isStreamerTwitch()) {
             hideFAB();
         } else {
             mFab.setOnClickListener(v -> {
@@ -309,11 +309,7 @@ public class ChannelActivity extends ThemeActivity {
                 hideFAB();
                 new Handler().postDelayed(() -> {
                     updateFABIcon(mFollowHandler.isStreamerFollowed());
-                    if (mFollowHandler.isStreamerTwitch()) {
-                        hideFAB();
-                    } else {
-                        showFAB();
-                    }
+                    showFAB();
                 }, SHOW_FAB_DELAY);
             });
             updateFABIcon(mFollowHandler.isStreamerFollowed());
