@@ -1,12 +1,15 @@
 package com.perflyst.twire.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -296,6 +299,19 @@ public class SearchActivity extends ThemeActivity {
 
             setupRecyclerViewAndAdapter();
             checkForQuery();
+
+            // this let keyboard only close when there is a blank page.
+            // on swipe or clicking on buttons (stream,games..) won't make keyboard close
+            mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    InputMethodManager imm = (InputMethodManager)
+                            getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    return false;
+                }
+            });
 
             return rootView;
         }

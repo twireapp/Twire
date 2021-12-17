@@ -256,6 +256,171 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_divider_height"
                 android:background="?attr/dividerColor" />
+  
+          <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:onClick="onClickChatAccountConnect">
+
+                    <CheckedTextView
+                        android:id="@+id/chat_enable_account_connect"
+                        style="@style/text_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                        android:gravity="center_vertical"
+                        android:text="@string/chat_enable_account_connect"
+                        android:textAppearance="@style/text_settings_title" />
+
+                    <TextView
+                        android:id="@+id/chat_enable_account_connect_summary"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/chat_enable_account_connect"
+                        android:textAppearance="@style/sub_text_settings" />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
+          
+          
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:onClick="onClickChatEmoteBTTV">
+
+                    <CheckedTextView
+                        android:id="@+id/chat_enable_emote_bttv"
+                        style="@style/text_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                        android:gravity="center_vertical"
+                        android:text="@string/chat_enable_emote_bttv"
+                        android:textAppearance="@style/text_settings_title" />
+
+                    <TextView
+                        android:id="@+id/chat_enable_emote_bttv_summary"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/chat_enable_emote_bttv"
+                        android:textAppearance="@style/sub_text_settings" />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:onClick="onClickChatEmoteFFZ">
+
+                    <CheckedTextView
+                        android:id="@+id/chat_enable_emote_ffz"
+                        style="@style/text_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                        android:gravity="center_vertical"
+                        android:text="@string/chat_enable_emote_ffz"
+                        android:textAppearance="@style/text_settings_title" />
+
+                    <TextView
+                        android:id="@+id/chat_enable_emote_ffz_summary"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/chat_enable_emote_ffz"
+                        android:textAppearance="@style/sub_text_settings" />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
+                    android:onClick="onClickChatEmoteSEVENTV">
+
+                    <CheckedTextView
+                        android:id="@+id/chat_enable_emote_seventv"
+                        style="@style/text_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                        android:gravity="center_vertical"
+                        android:text="@string/chat_enable_emote_seventv"
+                        android:textAppearance="@style/text_settings_title" />
+
+                    <TextView
+                        android:id="@+id/chat_enable_emote_seventv_summary"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/chat_enable_emote_seventv"
+                        android:textAppearance="@style/sub_text_settings" />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
 
         </LinearLayout>
     </ScrollView>

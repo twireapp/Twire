@@ -199,6 +199,102 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
+                    android:onClick="onClickImageProxy">
+
+                    <CheckedTextView
+                        android:id="@+id/general_image_proxy"
+                        style="@style/text_settings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+
+                        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                        android:gravity="center_vertical"
+                        android:text="@string/settings_general_image_proxy"
+                        android:textAppearance="@style/text_settings_title" />
+
+                    <TextView
+                        android:id="@+id/general_image_proxy_summary"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/general_image_proxy"
+                        android:textAppearance="@style/sub_text_settings" />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical">
+
+                    <EditText
+                        android:id="@+id/image_proxy_url_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:ems="10"
+                        android:hint="API url"
+                        android:inputType="textUri"
+                        android:selectAllOnFocus="true" />
+
+                    <TextView
+                        android:id="@+id/player_proxy_url_info"
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/image_proxy_url_input"
+                        android:text="@string/settings_general_image_proxy_url_example"
+                        android:textAppearance="@style/sub_text_settings" />
+
+                    <Button
+                        android:id="@+id/image_proxy_url_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/player_proxy_url_info"
+                        android:layout_alignRight="@id/image_proxy_url_input"
+                        android:onClick="onClickImageProxyUrl"
+                        android:text="@string/settings_general_image_proxy_url_button" />
+
+                </RelativeLayout>
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
+				
+				
+			<View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_divider_height"
+                android:background="?attr/dividerColor" />
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:mrl_rippleDelayClick="false">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/settings_small_item_height"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center_vertical"
                     android:onClick="onClickWipeFollows">
 
                     <TextView

@@ -40,7 +40,7 @@
     <dimen name="chat_emote_tab_icon_size">24dp</dimen>
     <dimen name="chat_emote_tab_max_width">55dp</dimen>
     <dimen name="chat_emote_icon_margin_right">16dp</dimen>
-    <dimen name="chat_message_text_sie">14sp</dimen>
+    <dimen name="chat_message_text_size">14sp</dimen>
     <dimen name="chat_message_mention">16sp</dimen>
     <dimen name="chat_send_ic_size">24dp</dimen>
     <dimen name="chat_recyclerview_padding">8dp</dimen>
@@ -73,7 +73,7 @@
     <!-- Text sizes -->
     <dimen name="font_title_size">20sp</dimen>
     <dimen name="font_activity_icon_size">20sp</dimen>
-    <dimen name="font_settings_size">18sp</dimen>
+    <dimen name="font_settings_size">16sp</dimen>
     <dimen name="font_navigation_drawer_size">14sp</dimen>
     <dimen name="font_navigation_drawer_title">18sp</dimen>
     <dimen name="font_sub_settings_size">14sp</dimen>
@@ -124,7 +124,8 @@
     <!-- Settings Activity -->
     <dimen name="settings_divider_height">1dp</dimen>
     <dimen name="settings_item_height">72dp</dimen>
-    <dimen name="settings_small_item_height">72dp</dimen>
+    <!-- We want to use sp here because of accessibility settings -->
+    <dimen name="settings_small_item_height">76sp</dimen>
     <dimen name="settings_text_left_margin">16dp</dimen>
     <dimen name="settings_text_right_margin">16dp</dimen>
     <dimen name="settings_theme_picket_color_size">23dp</dimen>

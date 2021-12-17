@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preview_game_title">Titolo de ludo</string>
+    <string name="card_size_huge">MAKSIMUMA</string>
+    <string name="card_size_large">Granda</string>
+    <string name="card_size_normal">Ordinara</string>
+    <string name="card_size_small">Malgranda</string>
+    <string name="preview_stream_display_name">Nomo</string>
+    <string name="true_night_theme_name">Vernokta</string>
+    <string name="night_theme_name">Nokta</string>
+    <string name="black_theme_name">Nigra</string>
+    <string name="purple_theme_name">Purpura</string>
+    <string name="blue_theme_name">Blua</string>
+    <string name="theme_dialog_title">Etosoj</string>
+    <string name="navigation_drawer_settings_title">Agordoj</string>
+    <string name="navigation_drawer_search_title">Serĉi</string>
+    <string name="games_tab">LUDOJ</string>
+    <string name="options">Opcioj</string>
+    <string name="menu_options">Opcioj</string>
+    <string name="percent">%d%%</string>
+    <string name="pause">Paŭzigi</string>
+    <string name="play">Ludi</string>
+    <string name="vods">Filmoj</string>
+    <string name="streamerInfo_desc_tab">Priskribo</string>
+    <string name="title_activity_streamer_info">Kanalo</string>
+    <string name="yesterday">Hieraŭ</string>
+    <string name="today">Hodiaŭ</string>
+    <string name="subscription_card_displayName">Nomo</string>
+    <string name="drawer_close">Fermi</string>
+    <string name="drawer_open">Malfermi</string>
+    <string name="settings_activity_title">Agordoj</string>
+    <string name="action_settings">Agordoj</string>
+    <string name="hours_short">h</string>
+    <string name="minutes_short">min</string>
+    <string name="disabled">Malŝaltita</string>
+    <string name="enabled">Ŝaltita</string>
+    <string name="resume">DAŬRIGI</string>
+    <string name="cancel">NULIGI</string>
+    <string name="stop">ĈESIGI</string>
+    <string name="start">KOMENCI</string>
+    <string name="done">FARITE</string>
+    <string name="ok">BONE</string>
+</resources>

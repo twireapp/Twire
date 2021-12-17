@@ -34,6 +34,8 @@ public class Settings {
     private final String GENERAL_TWITCH_USER_IS_PARTNER = "genTwitchUserIsPartner";
     private final String GENERAL_TWITCH_USER_ID = "genTwitchUserID";
     private final String GENERAL_FILTER_TOP_STREAMS_LANGUAGE = "genFilterTopStreamLanguage";
+    private final String GENERAL_IMAGE_PROXY = "genImageProxy";
+    private final String GENERAL_IMAGE_PROXY_URL = "genImageProxyUrl";
     private final String NOTIFICATIONS_IS_DISABLED = "notIsDisabled";
     private final String STREAM_PLAYER_SHOW_VIEWERCOUNT = "streamPlayerShowViewerCount",
             STREAM_PLAYER_SHOW_RUNTIME = "streamPlayerShowRuntime",
@@ -63,8 +65,12 @@ public class Settings {
     private final String CHAT_LANDSCAPE_SWIPEABLE = "chatLandscapeSwipable";
     private final String CHAT_LANDSCAPE_WIDTH = "chatLandscapeWidth";
     private final String CHAT_ENABLE_SSL = "chatEnableSSL";
+    private final String CHAT_ACCOUNT_CONNECT = "chatAccountConnect";
     private final String CHAT_RECENT_EMOTES = "chatRecentEmotes";
     private final String CHAT_KEYBOARD_HEIGHT = "chatKeyboardHeight";
+    private final String CHAT_EMOTE_BTTV = "chatEmoteBTTV";
+    private final String CHAT_EMOTE_FFZ = "chatEmoteFFZ";
+    private final String CHAT_EMOTE_SEVENTV = "chatEmoteSEVENTV";
     private final String NOTIFY_LIVE = "notifyUserLive";
     private final String LAST_START_UP_VERSION_CODE = "lastStartUpVersionCode";
     private final String SHOW_CHANGELOGS = "showChangelogs";
@@ -785,6 +791,87 @@ public class Settings {
     public void setChatEnableSSL(boolean SSL) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_ENABLE_SSL, SSL);
+        editor.commit();
+    }
+
+    /**
+     * Chat - Emote Settings
+     */
+
+    public boolean getChatEmoteBTTV() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_EMOTE_BTTV, true);
+    }
+
+    public void setChatEmoteBTTV(boolean setting) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_EMOTE_BTTV, setting);
+        editor.commit();
+    }
+
+    public boolean getChatEmoteFFZ() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_EMOTE_FFZ, true);
+    }
+
+    public void setChatEmoteFFZ(boolean setting) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_EMOTE_FFZ, setting);
+        editor.commit();
+    }
+
+    public boolean getChatEmoteSEVENTV() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_EMOTE_SEVENTV, false);
+    }
+
+    public void setChatEmoteSEVENTV(boolean setting) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_EMOTE_SEVENTV, setting);
+    }
+
+     /**
+     * Chat - Connect with Account
+     */
+
+    public boolean getChatAccountConnect() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.CHAT_ACCOUNT_CONNECT, true);
+    }
+
+    public void setChatAccountConnect(boolean AccountConnect) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.CHAT_ACCOUNT_CONNECT, AccountConnect);
+        editor.commit();
+    }
+
+    /**
+     * General - Use Image Proxy
+     */
+
+    public boolean getGeneralUseImageProxy() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getBoolean(this.GENERAL_IMAGE_PROXY, false);
+    }
+
+    public void setGeneralUseImageProxy(boolean ImageProxy) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putBoolean(this.GENERAL_IMAGE_PROXY, ImageProxy);
+        editor.commit();
+    }
+
+    /**
+     * General - Use Image Proxy Url
+     */
+
+    public String getImageProxyUrl() {
+        SharedPreferences preferences = getPreferences();
+        return String.valueOf(preferences.getString(this.GENERAL_IMAGE_PROXY_URL, "https://external-content.duckduckgo.com/iu/?u="));
+    }
+
+    public void setImageProxyUrl(String url) {
+        SharedPreferences.Editor editor = getEditor();
+        editor.putString(this.GENERAL_IMAGE_PROXY_URL, url);
         editor.commit();
     }
 

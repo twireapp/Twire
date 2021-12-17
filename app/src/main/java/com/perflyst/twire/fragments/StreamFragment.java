@@ -1,6 +1,7 @@
 package com.perflyst.twire.fragments;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,9 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
@@ -65,9 +64,8 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -102,7 +100,6 @@ import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.rey.material.widget.ProgressView;
 
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -112,8 +109,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class StreamFragment extends Fragment implements Player.Listener {
@@ -147,7 +142,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
     private PlayerView mVideoView;
-    private ExoPlayer player;
+    private SimpleExoPlayer player;
     private MediaSource currentMediaSource;
     private Toolbar mToolbar;
     private ConstraintLayout mVideoInterface;
@@ -576,13 +571,24 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 player.prepare();
             }
 
+            PendingIntent pendingIntent = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            {
+                Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+                pendingIntent = PendingIntent.getBroadcast(
+                        getContext(),
+                        0, mediaButtonIntent,
+                        PendingIntent.FLAG_IMMUTABLE
+                );
+            }
+
             ComponentName mediaButtonReceiver = new ComponentName(
                     getContext(), MediaButtonReceiver.class);
             mediaSession = new MediaSessionCompat(
                     getContext(),
                     getContext().getPackageName(),
                     mediaButtonReceiver,
-                    null);
+                    pendingIntent);
             MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
             mediaSessionConnector.setPlayer(player);
             mediaSession.setActive(true);
@@ -621,7 +627,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     @Override
-    public void onPlayerError(ExoPlaybackException exception) {
+    public void onPlayerError(@NonNull PlaybackException exception) {
         Log.e(LOG_TAG, "Something went wrong playing the stream for " + mChannelInfo.getDisplayName() + " - Exception: " + exception);
 
         playbackFailed();
@@ -851,6 +857,22 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
     }
 
+    private void shareButtonClicked() {
+        // https://stackoverflow.com/questions/17167701/how-to-activate-share-button-in-android-app
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        String shareBody;
+
+        if (vodId == null) {
+            shareBody = "https://twitch.tv/" + mChannelInfo.getStreamerName();
+        } else {
+            shareBody = "https://www.twitch.tv/" + mChannelInfo.getStreamerName() + "/video/" + vodId.replaceAll("[a-zA-Z]+", "");
+        }
+
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, "Share via"));
+    }
+
     private void profileButtonClicked() {
         mProfileBottomSheet.show();
     }
@@ -933,6 +955,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_item_sleep) {
             sleepButtonClicked();
+            return true;
+        } else if (itemId == R.id.menu_item_share) {
+            shareButtonClicked();
             return true;
         } else if (itemId == R.id.menu_item_profile) {
             profileButtonClicked();

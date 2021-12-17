@@ -1,14 +1,18 @@
 package com.perflyst.twire.chat;
 
+import androidx.annotation.Nullable;
+
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.service.Settings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -26,14 +30,16 @@ class ChatEmoteManager {
     private final List<Emote> customGlobal = new ArrayList<>();
     private final List<Emote> customChannel = new ArrayList<>();
 
-    private final Pattern emotePattern = Pattern.compile("([\\d_A-Z]+):((?:\\d+-\\d+,?)+)");
+    private final Pattern emotePattern = Pattern.compile("(\\w+):((?:\\d+-\\d+,?)+)");
 
     private final String channelName;
     private final int channelId;
+    private final Settings settings;
 
-    ChatEmoteManager(String channelName, int channelId) {
+    ChatEmoteManager(String channelName, int channelId, Settings settings) {
         this.channelName = channelName;
         this.channelId = channelId;
+        this.settings = settings;
     }
 
 
@@ -45,6 +51,11 @@ class ChatEmoteManager {
     void loadCustomEmotes(EmoteFetchCallback callback) {
         Map<String, Emote> result = new HashMap<>();
 
+        // Emote Settings
+        boolean enabled_bttv = settings.getChatEmoteBTTV();
+        boolean enabled_ffz = settings.getChatEmoteFFZ();
+        boolean enabled_seventv = settings.getChatEmoteSEVENTV();
+
         // BetterTTV emotes
         final String BTTV_GLOBAL_URL = "https://api.betterttv.net/3/cached/emotes/global";
         final String BTTV_CHANNEL_URL = "https://api.betterttv.net/3/cached/users/twitch/" + channelId;
@@ -52,7 +63,10 @@ class ChatEmoteManager {
         final String SHARED_EMOTE_ARRAY = "sharedEmotes";
 
         try {
-            String bttvResponse = Service.urlToJSONString(BTTV_GLOBAL_URL);
+            String bttvResponse = "";
+            if (enabled_bttv) {
+                bttvResponse = Service.urlToJSONString(BTTV_GLOBAL_URL);
+            }
             if (!bttvResponse.isEmpty()) {
                 JSONArray globalEmotes = new JSONArray(bttvResponse);
 
@@ -63,7 +77,10 @@ class ChatEmoteManager {
                 }
             }
 
-            String bttvChannelResponse = Service.urlToJSONString(BTTV_CHANNEL_URL);
+            String bttvChannelResponse = "";
+            if (enabled_bttv) {
+                bttvChannelResponse = Service.urlToJSONString(BTTV_CHANNEL_URL);
+            }
             if (!bttvChannelResponse.isEmpty()) {
                 JSONObject topChannelEmotes = new JSONObject(bttvChannelResponse);
                 JSONArray channelEmotes = topChannelEmotes.getJSONArray(CHANNEL_EMOTE_ARRAY);
@@ -94,9 +111,24 @@ class ChatEmoteManager {
         final String EMOTICONS = "emoticons";
 
         try {
-            JSONObject topObject = new JSONObject(Service.urlToJSONString(FFZ_GLOBAL_URL));
-            JSONArray defaultSets = topObject.getJSONArray(DEFAULT_SETS);
-            JSONObject sets = topObject.getJSONObject(SETS);
+            JSONObject topObject = new JSONObject();
+            if (enabled_ffz) {
+                topObject = new JSONObject(Service.urlToJSONString(FFZ_GLOBAL_URL));
+            }
+
+            JSONArray defaultSets;
+            if (topObject.has("defaultSets")) {
+                defaultSets = topObject.getJSONArray(DEFAULT_SETS);
+            } else {
+                defaultSets = new JSONArray();
+            }
+
+            JSONObject sets;
+            if (topObject.has("sets")) {
+                sets = topObject.getJSONObject(SETS);
+            } else {
+                sets = new JSONObject();
+            }
 
             for (int setIndex = 0; setIndex < defaultSets.length(); setIndex++) {
                 JSONArray emoticons = sets.getJSONObject(defaultSets.get(setIndex).toString()).getJSONArray(EMOTICONS);
@@ -107,7 +139,10 @@ class ChatEmoteManager {
                 }
             }
 
-            String ffzResponse = Service.urlToJSONString(FFZ_CHANNEL_URL);
+            String ffzResponse = "";
+            if (enabled_ffz) {
+                ffzResponse = Service.urlToJSONString(FFZ_CHANNEL_URL);
+            }
             if (!ffzResponse.isEmpty()) {
                 JSONObject channelTopObject = new JSONObject(ffzResponse);
                 JSONObject channelSets = channelTopObject.getJSONObject(SETS);
@@ -132,6 +167,52 @@ class ChatEmoteManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        // 7TV emotes
+        // API Doc: https://github.com/SevenTV/ServerGo/blob/master/docs/rest-api.md
+        final String SEVENTV_GLOBAL_URL = "https://api.7tv.app/v2/emotes/global";
+        final String SEVENTV_CHANNEL_URL = "https://api.7tv.app/v2/users/" + channelName + "/emotes";
+
+        try {
+            String seventvResponseglobal = "";
+            String seventvResponsechannel = "";
+            if (enabled_seventv) {
+                seventvResponseglobal = Service.urlToJSONString(SEVENTV_GLOBAL_URL);
+                seventvResponsechannel = Service.urlToJSONString(SEVENTV_CHANNEL_URL);
+            }
+
+            // get global emotes
+            JSONArray seventvemotesglobal = new JSONArray(seventvResponseglobal);
+
+            // Read all the emotes
+            for (int i = 0; i < seventvemotesglobal.length(); i++) {
+                Emote emote = To7TV(seventvemotesglobal.getJSONObject(i));
+                emote.setCustomChannelEmote(false);
+                customChannel.add(emote);
+                result.put(emote.getKeyword(), emote);
+            }
+
+            // get channel emotes
+            JSONArray seventvemoteschannel;
+            try {
+                JSONObject response = new JSONObject(seventvResponsechannel);
+                seventvemoteschannel = new JSONArray();
+            } catch (JSONException e) {
+                // If there is an exception above then the User has custom emotes
+                seventvemoteschannel = new JSONArray(seventvResponsechannel);
+            }
+
+            // Read all the emotes
+            for (int i = 0; i < seventvemoteschannel.length(); i++) {
+                Emote emote = To7TV(seventvemoteschannel.getJSONObject(i));
+                emote.setCustomChannelEmote(true);
+                customChannel.add(emote);
+                result.put(emote.getKeyword(), emote);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private Emote ToBTTV(JSONObject emoteObject) throws JSONException {
@@ -153,6 +234,13 @@ class ChatEmoteManager {
         }
 
         return Emote.FFZ(emoteObject.getString(EMOTE_NAME), urlMap);
+    }
+
+    private Emote To7TV(JSONObject emoteObject) throws JSONException {
+        final String EMOTE_ID = "id";
+        final String EMOTE_WORD = "name";
+
+        return Emote.SevenTV(emoteObject.getString(EMOTE_WORD), emoteObject.getString(EMOTE_ID));
     }
 
     /**
@@ -186,7 +274,10 @@ class ChatEmoteManager {
      * @param line The line to find emotes in
      * @return The list of emotes from the line
      */
-    List<ChatEmote> findTwitchEmotes(String line, String message) {
+    List<ChatEmote> findTwitchEmotes(@Nullable String line, String message) {
+        if (line == null)
+            return Collections.emptyList();
+
         List<ChatEmote> emotes = new ArrayList<>();
         Matcher emoteMatcher = emotePattern.matcher(line);
 

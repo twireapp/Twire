@@ -83,7 +83,7 @@
     <string name="chat_status_connection_failed">Tilkobling mislyktes</string>
     <string name="chat_status_reconnecting">Kobler til igjen…</string>
     <string name="chat_status_connected">Klar til sludring</string>
-    <string name="chat_status_connecting">Kobler til sludring…</string>
+    <string name="chat_status_connecting">Kobler til sludring …</string>
     <string name="chat_send_message_hint">Skriv inn melding</string>
     <string name="title_activity_live_stream">Sanntidsstrøm</string>
     <string name="stream_playback_failed">Klarte ikke å spille av strøm. Prøv i annen kvalitet.</string>
@@ -136,7 +136,7 @@
     <string name="title_activity_streamer_info">Kanal</string>
     <string name="yesterday">I går</string>
     <string name="today">I dag</string>
-    <string name="percent">%s %%</string>
+    <string name="percent">%d %%</string>
     <string name="pause">Pause</string>
     <string name="play">Spill</string>
     <string name="vods">Videoer</string>
@@ -165,4 +165,18 @@
     <string name="chat_emote_size">Smilefjesstørrelse</string>
     <string name="settings_chat_name_summary">Smilefjesstørrelse, meldingsstørrelse</string>
     <string name="settings_stream_player_name">Strøm-spiller</string>
+    <string name="login_invalid_token_text_line_two">logge inn igjen</string>
+    <string name="login_invalid_token_text_line_one">Beklageligvis må du</string>
+    <string name="chat_enable_ssl">Bruk SSL for tilkoblingen</string>
+    <string name="player_show_runtime">Vis forløpt avspillingstid</string>
+    <string name="menu_speed">Avspillingshastighet</string>
+    <string name="player_type">Avspillertype for strøm</string>
+    <string name="menu_share">Del</string>
+    <string name="settings_general_image_proxy_url_example">Eksempel-mellomtjener: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="playback_speed">%.2f</string>
+    <string name="settings_general_image_proxy">Bruk en bildemellomtjener</string>
+    <string name="settings_general_image_proxy_url_button">Lagre</string>
+    <string name="chat_enable_account_connect">Koble til med kontoen din</string>
+    <string name="playback_speed_display">×%.2f</string>
+    <string name="preview_stream_online_since">00:30:00</string>
 </resources>

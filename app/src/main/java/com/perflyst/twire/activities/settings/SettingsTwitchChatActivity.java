@@ -17,8 +17,8 @@ import com.perflyst.twire.service.Settings;
 
 public class SettingsTwitchChatActivity extends ThemeActivity {
     private Settings settings;
-    private TextView emoteSizeSummary, messageSizeSummary, chatLandscapeWidthSummary, chatLandscapeToggleSummary, chatLandscapeSwipeToShowSummary, chat_enable_ssl_summary;
-    private CheckedTextView chatLandscapeToggle, chatSwipeToShowToggle, chat_enable_ssl;
+    private TextView emoteSizeSummary, messageSizeSummary, chatLandscapeWidthSummary, chatLandscapeToggleSummary, chatLandscapeSwipeToShowSummary, chat_enable_ssl_summary, chat_enable_account_connect_summary, chat_enable_emote_bbtv_summary, chat_enable_emote_ffz_summary, chat_enable_emote_seventv_summary;
+    private CheckedTextView chatLandscapeToggle, chatSwipeToShowToggle, chat_enable_ssl, chat_enable_account_connect, chat_enable_emote_bbtv, chat_enable_emote_ffz, chat_enable_emote_seventv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +38,20 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         chatLandscapeToggleSummary = findViewById(R.id.chat_landscape_enable_summary);
         chatLandscapeSwipeToShowSummary = findViewById(R.id.chat_landscape_swipe_summary);
         chat_enable_ssl_summary = findViewById(R.id.chat_enable_ssl_summary);
+        chat_enable_emote_bbtv_summary = findViewById(R.id.chat_enable_emote_bttv_summary);
+        chat_enable_emote_ffz_summary = findViewById(R.id.chat_enable_emote_ffz_summary);
+        chat_enable_emote_seventv_summary = findViewById(R.id.chat_enable_emote_seventv_summary);
+        chat_enable_account_connect_summary = findViewById(R.id.chat_enable_account_connect_summary);
+
 
         chatLandscapeToggle = findViewById(R.id.chat_landscape_enable_title);
         chatSwipeToShowToggle = findViewById(R.id.chat_landscape_swipe_title);
         chat_enable_ssl = findViewById(R.id.chat_enable_ssl);
+        chat_enable_emote_bbtv = findViewById(R.id.chat_enable_emote_bttv);
+        chat_enable_emote_ffz = findViewById(R.id.chat_enable_emote_ffz);
+        chat_enable_emote_seventv = findViewById(R.id.chat_enable_emote_seventv);
+        chat_enable_account_connect = findViewById(R.id.chat_enable_account_connect);
+
         updateSummaries();
     }
 
@@ -66,6 +76,12 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         updateSummary(chatSwipeToShowToggle, chatLandscapeSwipeToShowSummary, settings.isChatLandscapeSwipeable());
         // Chat SSL Enabled
         updateSummary(chat_enable_ssl, chat_enable_ssl_summary, settings.getChatEnableSSL());
+        // Update Chat Emote Stuff
+        updateSummary(chat_enable_emote_bbtv, chat_enable_emote_bbtv_summary, settings.getChatEmoteBTTV());
+        updateSummary(chat_enable_emote_ffz, chat_enable_emote_ffz_summary, settings.getChatEmoteFFZ());
+        updateSummary(chat_enable_emote_seventv, chat_enable_emote_seventv_summary, settings.getChatEmoteSEVENTV());
+        // Chat enable Login with Account
+        updateSummary(chat_enable_account_connect, chat_enable_account_connect_summary, settings.getChatAccountConnect());
     }
 
     @Override
@@ -113,6 +129,27 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 
     public void onClickChatEnableSSL(View _view) {
         settings.setChatEnableSSL(!settings.getChatEnableSSL());
+        updateSummaries();
+    }
+
+
+    public void onClickChatEmoteBTTV(View _view) {
+        settings.setChatEmoteBTTV(!settings.getChatEmoteBTTV());
+        updateSummaries();
+    }
+
+    public void onClickChatEmoteFFZ(View _view) {
+        settings.setChatEmoteFFZ(!settings.getChatEmoteFFZ());
+        updateSummaries();
+    }
+
+    public void onClickChatEmoteSEVENTV(View _view) {
+        settings.setChatEmoteSEVENTV(!settings.getChatEmoteSEVENTV());
+        updateSummaries();
+    }
+
+    public void onClickChatAccountConnect(View _view) {
+        settings.setChatAccountConnect(!settings.getChatAccountConnect());
         updateSummaries();
     }
 
