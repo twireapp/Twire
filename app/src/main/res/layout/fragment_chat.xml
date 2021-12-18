@@ -153,52 +153,36 @@
             android:text="@string/chat_status_connecting"
             android:textColor="?attr/chatStatusBarTextColor" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:orientation="horizontal"
             android:layout_gravity="end">
 
-            <View
-                android:id="@+id/roomstate_anchor"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
-
             <ImageView
-                android:id="@+id/slowmode_ic"
+                android:id="@+id/subsonly_ic"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/roomstate_anchor"
-                android:layout_toLeftOf="@id/roomstate_anchor"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_roomstate_slowmode"
+                app:srcCompat="@drawable/ic_roomstate_subsonly"
                 app:tint="?attr/chatRoomstateIconColor" />
 
             <ImageView
                 android:id="@+id/r9k_ic"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/slowmode_ic"
-                android:layout_toLeftOf="@id/slowmode_ic"
                 android:visibility="gone"
                 app:srcCompat="@drawable/ic_roomstate_r9k"
                 app:tint="?attr/chatRoomstateIconColor" />
 
             <ImageView
-                android:id="@+id/subsonly_ic"
+                android:id="@+id/slowmode_ic"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/r9k_ic"
-                android:layout_toLeftOf="@id/r9k_ic"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_roomstate_subsonly"
+                app:srcCompat="@drawable/ic_roomstate_slowmode"
                 app:tint="?attr/chatRoomstateIconColor" />
-        </RelativeLayout>
+        </LinearLayout>
     </FrameLayout>
 
     <FrameLayout
