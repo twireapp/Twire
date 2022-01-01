@@ -20,8 +20,7 @@ import java.util.ArrayList;
  * Created by SebastianRask on 29-04-2015.
  */
 public class Settings {
-    private static final Type MAP_TYPE = new TypeToken<ArrayList<Emote>>() {
-    }.getType();
+    private static final Type MAP_TYPE = new TypeToken<ArrayList<Emote>>(){}.getType();
     private final String GENERAL_TWITCH_ACCESS_TOKEN_KEY = "genTwitchAccessToken";
     private final String GENERAL_TWITCH_NAME_KEY = "genTwitchName";
     private final String GENERAL_TWITCH_DISPLAY_NAME_KEY = "genTwitchDisplayName";
@@ -155,11 +154,6 @@ public class Settings {
         editor.commit();
     }
 
-    public ArrayList<Emote> getRecentEmotes() {
-        SharedPreferences preferences = getPreferences();
-        return new Gson().fromJson(preferences.getString(this.CHAT_RECENT_EMOTES, ""), MAP_TYPE);
-    }
-
     /**
      * Emotes - list of recent emotes
      */
@@ -170,14 +164,19 @@ public class Settings {
         editor.commit();
     }
 
-    public String getAppearanceGameSize() {
+    public ArrayList<Emote> getRecentEmotes() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getString(this.APPEARANCE_GAME_SIZE, context.getString(R.string.card_size_large));
+        return new Gson().fromJson(preferences.getString(this.CHAT_RECENT_EMOTES, ""), MAP_TYPE);
     }
 
     /**
      * Appearance - The size of the Game Card.
      */
+
+    public String getAppearanceGameSize() {
+        SharedPreferences preferences = getPreferences();
+        return preferences.getString(this.APPEARANCE_GAME_SIZE, context.getString(R.string.card_size_large));
+    }
 
     public void setAppearanceGameSize(String sizeName) {
         SharedPreferences.Editor editor = getEditor();
