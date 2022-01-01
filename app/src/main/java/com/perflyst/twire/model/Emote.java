@@ -2,9 +2,8 @@ package com.perflyst.twire.model;
 
 import androidx.annotation.NonNull;
 
-import com.google.common.base.Function;
-
 import java.io.Serializable;
+import java.text.MessageFormat;
 import java.util.HashMap;
 
 /**
@@ -13,11 +12,11 @@ import java.util.HashMap;
 public class Emote implements Comparable<Emote>, Serializable {
     private final String emoteKeyword;
     private final boolean isTextEmote;
-    private Function<String, String> urlTemplate;
+    private String urlTemplate;
     private HashMap<Integer, String> urlMap;
     private boolean isSubscriberEmote, isCustomChannelEmote;
 
-    public Emote(String emoteKeyword, Function<String, String> urlTemplate) {
+    public Emote(String emoteKeyword, String urlTemplate) {
         this.emoteKeyword = emoteKeyword;
         this.urlTemplate = urlTemplate;
         this.isTextEmote = false;
@@ -35,12 +34,11 @@ public class Emote implements Comparable<Emote>, Serializable {
     }
 
     public static Emote Twitch(String keyword, String id) {
-        // TODO: Check the theme and use the correct URL.
-        return new Emote(keyword, size -> "https://static-cdn.jtvnw.net/emoticons/v2/" + id + "/default/light/" + size + ".0");
+        return new Emote(keyword, "https://static-cdn.jtvnw.net/emoticons/v1/" + id + "/{0}.0");
     }
 
     public static Emote BTTV(String keyword, String id) {
-        return new Emote(keyword, size -> "https://cdn.betterttv.net/emote/" + id + "/" + size + "x");
+        return new Emote(keyword, "https://cdn.betterttv.net/emote/" + id + "/{0}x");
     }
 
     public static Emote FFZ(String keyword, HashMap<Integer, String> urlMap) {
@@ -48,8 +46,9 @@ public class Emote implements Comparable<Emote>, Serializable {
     }
 
     public static Emote SevenTV(String keyword, String id) {
-        return new Emote(keyword, size -> "https://cdn.7tv.app/emote/" + id + "/" + size + "x");
+        return new Emote(keyword, "https://cdn.7tv.app/emote/" + id + "/{0}x");
     }
+
 
     public boolean isCustomChannelEmote() {
         return isCustomChannelEmote;
@@ -78,7 +77,7 @@ public class Emote implements Comparable<Emote>, Serializable {
             return null;
         }
 
-        return urlTemplate == null ? null : urlTemplate.apply(String.valueOf(size));
+        return urlTemplate == null ? null : MessageFormat.format(urlTemplate, size);
     }
 
     public int getBestAvailableSize(int size) {
