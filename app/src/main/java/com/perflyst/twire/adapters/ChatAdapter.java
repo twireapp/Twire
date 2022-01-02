@@ -62,7 +62,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         mCallback = aCallback;
         settings = new Settings(context);
 
-        isNightTheme = settings.getTheme().equals(context.getString(R.string.night_theme_name)) || settings.getTheme().equals(context.getString(R.string.true_night_theme_name));
+        isNightTheme = settings.isDarkTheme();
     }
 
     @Override
@@ -113,7 +113,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                     int emoteSize = settings.getEmoteSize();
                     int emotePixels = emoteSize == 1 ? 28 : emoteSize == 2 ? 56 : 112;
 
-                    final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize), holder.message, builder, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
+                    final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize, isNightTheme), holder.message, builder, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
 
                     builder.setSpan(emoteSpan, fromPosition + beforeMessage.length(), toPosition + 1 + beforeMessage.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 }

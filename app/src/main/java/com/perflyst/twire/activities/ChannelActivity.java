@@ -195,10 +195,9 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private void initStreamerImageAndColors() {
-        Target<Bitmap> mTarget = getNightThemeTarget();
-        String theme = new Settings(this).getTheme();
-        if (!theme.equals(getString(R.string.night_theme_name)) && !theme.equals(getString(R.string.true_night_theme_name))) {
-            mTarget = getLightThemeTarget();
+        Target<Bitmap> mTarget = getLightThemeTarget();
+        if (new Settings(this).isDarkTheme()) {
+            mTarget = getNightThemeTarget();
         }
 
         Glide.with(getBaseContext())
