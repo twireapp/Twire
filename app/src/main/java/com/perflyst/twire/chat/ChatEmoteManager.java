@@ -160,6 +160,50 @@ class ChatEmoteManager {
             e.printStackTrace();
         }
 
+        // 7TV emotes
+        // API Doc: https://github.com/SevenTV/ServerGo/blob/master/docs/rest-api.md
+        final String SEVENTV_GLOBAL_URL = "https://api.7tv.app/v2/emotes/global";
+        final String SEVENTV_CHANNEL_URL = "https://api.7tv.app/v2/users/" + channelName + "/emotes";
+
+        try {
+            String seventvResponseglobal = enabled_seventv ? Service.urlToJSONString(SEVENTV_GLOBAL_URL) : "";
+            if (!seventvResponseglobal.isEmpty()) {
+                // get global emotes
+                JSONArray seventvemotesglobal = new JSONArray(seventvResponseglobal);
+
+                // Read all the emotes
+                for (int i = 0; i < seventvemotesglobal.length(); i++) {
+                    Emote emote = To7TV(seventvemotesglobal.getJSONObject(i));
+                    emote.setCustomChannelEmote(false);
+                    customChannel.add(emote);
+                    result.put(emote.getKeyword(), emote);
+                }
+            }
+
+            String seventvResponsechannel = enabled_seventv ? Service.urlToJSONString(SEVENTV_CHANNEL_URL) : "";
+            if (!seventvResponseglobal.isEmpty()) {
+                // get channel emotes
+                JSONArray seventvemoteschannel;
+                try {
+                    JSONObject response = new JSONObject(seventvResponsechannel);
+                    seventvemoteschannel = new JSONArray();
+                } catch (JSONException e) {
+                    // If there is an exception above then the User has custom emotes
+                    seventvemoteschannel = new JSONArray(seventvResponsechannel);
+                }
+
+                // Read all the emotes
+                for (int i = 0; i < seventvemoteschannel.length(); i++) {
+                    Emote emote = To7TV(seventvemoteschannel.getJSONObject(i));
+                    emote.setCustomChannelEmote(true);
+                    customChannel.add(emote);
+                    result.put(emote.getKeyword(), emote);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         emoteKeywordToEmote = result;
 
         try {
@@ -167,52 +211,6 @@ class ChatEmoteManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // 7TV emotes
-        // API Doc: https://github.com/SevenTV/ServerGo/blob/master/docs/rest-api.md
-        final String SEVENTV_GLOBAL_URL = "https://api.7tv.app/v2/emotes/global";
-        final String SEVENTV_CHANNEL_URL = "https://api.7tv.app/v2/users/" + channelName + "/emotes";
-
-        try {
-            String seventvResponseglobal = "";
-            String seventvResponsechannel = "";
-            if (enabled_seventv) {
-                seventvResponseglobal = Service.urlToJSONString(SEVENTV_GLOBAL_URL);
-                seventvResponsechannel = Service.urlToJSONString(SEVENTV_CHANNEL_URL);
-            }
-
-            // get global emotes
-            JSONArray seventvemotesglobal = new JSONArray(seventvResponseglobal);
-
-            // Read all the emotes
-            for (int i = 0; i < seventvemotesglobal.length(); i++) {
-                Emote emote = To7TV(seventvemotesglobal.getJSONObject(i));
-                emote.setCustomChannelEmote(false);
-                customChannel.add(emote);
-                result.put(emote.getKeyword(), emote);
-            }
-
-            // get channel emotes
-            JSONArray seventvemoteschannel;
-            try {
-                JSONObject response = new JSONObject(seventvResponsechannel);
-                seventvemoteschannel = new JSONArray();
-            } catch (JSONException e) {
-                // If there is an exception above then the User has custom emotes
-                seventvemoteschannel = new JSONArray(seventvResponsechannel);
-            }
-
-            // Read all the emotes
-            for (int i = 0; i < seventvemoteschannel.length(); i++) {
-                Emote emote = To7TV(seventvemoteschannel.getJSONObject(i));
-                emote.setCustomChannelEmote(true);
-                customChannel.add(emote);
-                result.put(emote.getKeyword(), emote);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private Emote ToBTTV(JSONObject emoteObject) throws JSONException {
