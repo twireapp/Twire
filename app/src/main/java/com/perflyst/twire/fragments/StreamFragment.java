@@ -89,6 +89,7 @@ import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.chat.ChatManager;
 import com.perflyst.twire.lowlatency.LLHlsPlaylistParserFactory;
 import com.perflyst.twire.misc.FollowHandler;
+import com.perflyst.twire.misc.OnlineSince;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
 import com.perflyst.twire.misc.ResizeWidthAnimation;
 import com.perflyst.twire.model.ChannelInfo;
@@ -105,11 +106,7 @@ import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.rey.material.widget.ProgressView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -141,6 +138,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             landscapeChatVisible = false;
     private UserInfo mUserInfo;
     private String vodId;
+    private long startTime;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
     private Settings settings;
     private SleepTimer sleepTimer;
@@ -204,18 +202,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         public void run() {
             // handle the Stream runtime here
             if (runtime) {
-                Calendar calendar = Calendar.getInstance();
-                Date date = null;
-                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-                try {
-                    date = format.parse(mRuntime.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                calendar.setTime(date);
-                calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 1);
-                mRuntime.setText(format.format(calendar.getTime()));
+                mRuntime.setText(OnlineSince.getOnlineSince(startTime));
             }
 
             runtimeHandler.postDelayed(this, 1000);
@@ -416,16 +403,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 mRuntime.setVisibility(View.GONE);
             } else {
                 runtime = true;
-                Date date = null;
-                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-                try {
-                    date = format.parse(String.valueOf(args.getString(getString(R.string.stream_fragment_runtime))));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                // set date with correct format
-                mRuntime.setText(format.format(date));
+                startTime = args.getLong(getString(R.string.stream_fragment_start_time));
             }
 
 

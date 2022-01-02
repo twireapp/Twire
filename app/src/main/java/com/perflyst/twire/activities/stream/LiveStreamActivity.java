@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.MentionAdapter;
-import com.perflyst.twire.misc.OnlineSince;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.model.UserInfo;
 
@@ -36,7 +35,7 @@ public class LiveStreamActivity extends StreamActivity {
         Intent liveStreamIntent = new Intent(context, LiveStreamActivity.class);
         liveStreamIntent.putExtra(context.getString(R.string.intent_key_streamer_info), stream.getUserInfo());
         liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_viewers), stream.getCurrentViewers());
-        liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_runtime), OnlineSince.getOnlineSince(stream.getStartedAt()));
+        liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_start_time), stream.getStartedAt());
         liveStreamIntent.putExtra(context.getString(R.string.stream_preview_url), stream.getMediumPreview());
         liveStreamIntent.putExtra(context.getString(R.string.stream_shared_transition), sharedTransition);
         return liveStreamIntent;
@@ -58,12 +57,12 @@ public class LiveStreamActivity extends StreamActivity {
         Intent intent = getIntent();
         UserInfo mUserInfo = intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
         int currentViewers = intent.getIntExtra(getResources().getString(R.string.intent_key_stream_viewers), -1);
-        String currentRuntime = intent.getStringExtra(getResources().getString(R.string.intent_key_stream_runtime));
+        long currentStartTime = intent.getLongExtra(getResources().getString(R.string.intent_key_stream_start_time), 0);
 
         Bundle args = new Bundle();
         args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mUserInfo);
         args.putInt(getString(R.string.stream_fragment_viewers), currentViewers);
-        args.putString(getString(R.string.stream_fragment_runtime), currentRuntime);
+        args.putLong(getString(R.string.stream_fragment_start_time), currentStartTime);
         args.putBoolean(getString(R.string.stream_fragment_autoplay), true);
         return args;
     }

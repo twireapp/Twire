@@ -14,8 +14,7 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.time.Instant;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -128,15 +127,7 @@ public class JSONService {
         };
 
         String startedAtString = streamObject.getString(STREAM_START_TIME_STRING);
-        int year = Integer.parseInt(startedAtString.substring(0, 4));
-        int month = Integer.parseInt(startedAtString.substring(5, 7));
-        int day = Integer.parseInt(startedAtString.substring(8, 10));
-        int hour = Integer.parseInt(startedAtString.substring(11, 13));
-        int minute = Integer.parseInt(startedAtString.substring(14, 16));
-
-        Calendar startedAt = new GregorianCalendar(year, month - 1, day, hour, minute); // Month is somehow index based
-        long startAtLong = startedAt.getTimeInMillis();
-
+        long startAtLong = Instant.parse(startedAtString).toEpochMilli();
 
         return new StreamInfo(userInfo, gameName, currentViewers, previews, startAtLong, title);
     }
