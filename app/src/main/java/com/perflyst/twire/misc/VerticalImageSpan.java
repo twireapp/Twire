@@ -13,6 +13,8 @@ public class VerticalImageSpan extends ImageSpan {
         super(drawable);
     }
 
+    private int yOffset;
+
     @Override
     public int getSize(@NonNull Paint paint, CharSequence text,
                        int start, int end,
@@ -21,11 +23,11 @@ public class VerticalImageSpan extends ImageSpan {
         Rect rect = d.getBounds();
 
         if (fm != null) {
-            Paint.FontMetricsInt pfm = paint.getFontMetricsInt();
-
-            int ascent = pfm.ascent;
-            int middle = ascent + (pfm.descent - ascent) / 2;
+            int ascent = fm.ascent;
+            int middle = ascent + (fm.descent - ascent) / 2;
             int halfHeight = rect.height() / 2;
+
+            yOffset = middle - halfHeight;
 
             fm.ascent = middle - halfHeight;
             fm.top = fm.ascent;
@@ -41,14 +43,8 @@ public class VerticalImageSpan extends ImageSpan {
                      int start, int end, float x,
                      int top, int y, int bottom, @NonNull Paint paint) {
         Drawable drawable = getDrawable();
-        Rect bounds = drawable.getBounds();
         canvas.save();
-
-        Paint.FontMetricsInt fontMetricsInt = paint.getFontMetricsInt();
-        int descent = fontMetricsInt.descent;
-        int transY = y + descent - (descent - fontMetricsInt.ascent) / 2;
-        canvas.translate(x, (float) (transY - bounds.height() / 2));
-
+        canvas.translate(x, y + yOffset);
         drawable.draw(canvas);
         canvas.restore();
     }
