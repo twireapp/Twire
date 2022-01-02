@@ -391,14 +391,18 @@ public class Settings {
         editor.commit();
     }
 
+    /**
+     * Theme
+     */
     public String getTheme() {
         SharedPreferences preferences = getPreferences();
         return preferences.getString(this.THEME_CHOSEN, context.getResources().getString(R.string.blue_theme_name));
     }
 
-    /**
-     * Theme
-     */
+    public boolean isDarkTheme() {
+        String theme = getTheme();
+        return theme.equals(context.getString(R.string.night_theme_name)) || theme.equals(context.getString(R.string.true_night_theme_name));
+    }
 
     public void setTheme(String theme) {
         SharedPreferences.Editor editor = getEditor();

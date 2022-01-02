@@ -1000,6 +1000,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         public class EmoteAdapter extends RecyclerView.Adapter<EmoteAdapter.EmoteViewHolder> {
             private final ArrayList<Emote> emotes;
             private Boolean columnsFound = false;
+            private boolean isDarkTheme;
 
             private final View.OnClickListener emoteClickListener = new View.OnClickListener() {
                 @Override
@@ -1035,6 +1036,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                         .from(parent.getContext())
                         .inflate(R.layout.view_emote_showcase, parent, false);
 
+                isDarkTheme = new Settings(getContext()).isDarkTheme();
+
                 itemView.setOnClickListener(emoteClickListener);
                 itemView.setOnLongClickListener(emoteLongClickListener);
                 return new EmoteViewHolder(itemView);
@@ -1048,7 +1051,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     holder.mTextEmote.setText(emoteAtPosition.getKeyword());
                 } else {
                     int EMOTE_SIZE = 2;
-                    String emoteUrl = emoteAtPosition.getEmoteUrl(EMOTE_SIZE);
+                    String emoteUrl = emoteAtPosition.getEmoteUrl(EMOTE_SIZE, isDarkTheme);
 
                     Glide.with(requireContext()).load(emoteUrl).into(holder.mImageEmote);
                 }
