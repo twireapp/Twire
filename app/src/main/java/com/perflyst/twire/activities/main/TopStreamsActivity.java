@@ -51,7 +51,7 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
         Log.i(LOG_TAG, "Adding Top Streams: " + streamsToAdd.size());
     }
 
-    public String pagination = "";
+    private String pagination = "";
 
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {

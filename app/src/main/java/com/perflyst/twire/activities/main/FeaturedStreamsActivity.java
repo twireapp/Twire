@@ -61,7 +61,7 @@ public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
      * Methods for functionality and for controlling the SwipeRefreshLayout
      */
 
-    public String pagination = "";
+    private String pagination = "";
 
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {

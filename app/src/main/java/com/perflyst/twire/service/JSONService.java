@@ -186,12 +186,15 @@ public class JSONService {
     public static Game getGame(JSONObject game) throws JSONException {
         final String TITLE_STRING_KEY = "name";
         final String PREVIEW_OBJECT_KEY = "box_art_url";
+        final String GAME_ID_KEY = "id";
 
         String gameTitle = game.getString(TITLE_STRING_KEY);
         String smallPreview = game.getString(PREVIEW_OBJECT_KEY).replace("{width}", "52").replace("{height}", "72");
         String mediumPreview = game.getString(PREVIEW_OBJECT_KEY).replace("{width}", "136").replace("{height}", "190");
         String largePreview = game.getString(PREVIEW_OBJECT_KEY).replace("{width}", "272").replace("{height}", "380");
 
-        return new Game(gameTitle, smallPreview, mediumPreview, largePreview);
+        int game_ID = game.getInt(GAME_ID_KEY);
+
+        return new Game(gameTitle, game_ID, smallPreview, mediumPreview, largePreview);
     }
 }
