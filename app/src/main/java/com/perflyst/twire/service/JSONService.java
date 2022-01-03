@@ -15,16 +15,51 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Sebastian Rask on 25-04-2016.
  */
 public class JSONService {
     private static final String LOG_TAG = JSONService.class.getSimpleName();
+
+    // based on https://github.com/twurple/twurple/blob/6d3ca508fe0a21fadd77b63b62d0df66b9150f97/packages/api/src/api/helix/video/HelixVideo.ts#L175
+    public static int getVodlenght(String length) {
+        int all = 0;
+        String[] letters = {
+          "h",
+          "m",
+          "s"
+        };
+        int[] times = {
+                3600,
+                60,
+                1
+        };
+        String[] regex = {
+                "[0-9]{1,}[h]",
+                "[0-9]{1,}[m]",
+                "[0-9]{1,}[s]"
+        };
+
+        for (int i=0; i < regex.length; i++) {
+            Pattern pattern = Pattern.compile(regex[i]);
+            Matcher matcher = pattern.matcher(length);
+            if (matcher.find()) {
+                String match = matcher.group().replace(letters[i], "");
+                int temp = Integer.parseInt(match);
+                all = all + (temp * times[i]);
+            }
+        }
+        return all;
+    }
 
     public static VideoOnDemand getVod(JSONObject vodObject) throws JSONException {
         final String TITLE_STRING = "title";
@@ -38,7 +73,7 @@ public class JSONService {
 
         String gameTitle = "";
 
-        return new VideoOnDemand(vodObject.getString(TITLE_STRING), gameTitle, vodObject.getString(PREVIEW_URL_IMAGE).replace("%{width}", "320").replace("%{height}", "180"), vodObject.getString(VIDEO_ID_STRING), vodObject.getString(CHANNEL_NAME_STRING), vodObject.getString(CHANNEL_DISPLAY_NAME_STRING), vodObject.getInt(VIDEO_VIEWS_INT), vodObject.getString(VIDEO_LENGTH_INT), vodObject.has(RECORDED_DATE_STRING) ? vodObject.getString(RECORDED_DATE_STRING) : "");
+        return new VideoOnDemand(vodObject.getString(TITLE_STRING), gameTitle, vodObject.getString(PREVIEW_URL_IMAGE).replace("%{width}", "320").replace("%{height}", "180"), vodObject.getString(VIDEO_ID_STRING), vodObject.getString(CHANNEL_NAME_STRING), vodObject.getString(CHANNEL_DISPLAY_NAME_STRING), vodObject.getInt(VIDEO_VIEWS_INT), getVodlenght(vodObject.getString(VIDEO_LENGTH_INT)), vodObject.has(RECORDED_DATE_STRING) ? vodObject.getString(RECORDED_DATE_STRING) : "");
     }
 
     public static StreamInfo getStreamInfo(Context context, JSONObject streamObject, @Nullable ChannelInfo aChannelInfo, boolean loadDescription) throws JSONException, MalformedURLException {
@@ -62,7 +97,7 @@ public class JSONService {
         JSONArray temp_array = channel_object.getJSONArray(ARRAY_KEY);
 
         JSONObject JSONChannel = temp_array.getJSONObject(0);
-        ChannelInfo mChannelInfo = aChannelInfo == null ? getStreamerInfo(context, JSONChannel, loadDescription) : aChannelInfo;
+        ChannelInfo mChannelInfo = aChannelInfo == null ? getStreamerInfo(context, JSONChannel) : aChannelInfo;
 
         String gameName = streamObject.getString(GAME_STRING);
 
@@ -101,7 +136,7 @@ public class JSONService {
         return new StreamInfo(mChannelInfo, gameName, currentViewers, previews, startAtLong, title);
     }
 
-    public static ChannelInfo getStreamerInfo(Context context, JSONObject channel, boolean loadDescriptionOnSameThread) throws JSONException, MalformedURLException {
+    public static ChannelInfo getStreamerInfo(Context context, JSONObject channel) throws JSONException, MalformedURLException {
         final String DISPLAY_NAME_STRING = "display_name";
         final String TWITCH_NAME_STRING = "login";
         final String FOLLOWERS_INT = "followers";
@@ -133,7 +168,7 @@ public class JSONService {
             logoURL = new URL(channel.getString(LOGO_URL_STRING));
         }
 
-        if (!channel.isNull(VIDEO_BANNER_URL_STRING)) {
+        if (!channel.getString(VIDEO_BANNER_URL_STRING).equals("")) {
             videoBannerURL = new URL(channel.getString(VIDEO_BANNER_URL_STRING));
         }
 

@@ -41,13 +41,13 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
     private final String displayName;
     private final String recordedAtString;
     private final int views;
-    private final String length;
+    private final int length;
     private boolean isBroadcast;
     private Calendar recordedAt;
     private ChannelInfo channelInfo;
 
     public VideoOnDemand(String videoTitle, String gameTitle, String previewUrl, String videoId,
-                         String channelName, String displayName, int views, String length, String recordedAt) {
+                         String channelName, String displayName, int views, int length, String recordedAt) {
         this.videoTitle = videoTitle;
         this.gameTitle = gameTitle;
         this.previewUrl = previewUrl;
@@ -73,7 +73,7 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         this.displayName = data[5];
         this.recordedAtString = data[6];
         this.views = Integer.parseInt(data[7]);
-        this.length = data[8];
+        this.length = Integer.parseInt(data[8]);
         this.isBroadcast = Boolean.parseBoolean(data[9]);
         this.channelInfo = in.readParcelable(ChannelInfo.class.getClassLoader());
 
@@ -154,7 +154,7 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         return views;
     }
 
-    public String getLength() {
+    public int getLength() {
         return length;
     }
 
