@@ -232,7 +232,7 @@ public class Settings {
 
     public String getAppearanceGameStyle() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getString(this.APPEARANCE_GAME_STYLE, context.getString(R.string.card_style_normal));
+        return preferences.getString(this.APPEARANCE_GAME_STYLE, context.getString(R.string.card_style_expanded));
     }
 
     /**
