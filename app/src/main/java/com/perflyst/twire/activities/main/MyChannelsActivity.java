@@ -48,16 +48,12 @@ public class MyChannelsActivity extends LazyMainActivity<ChannelInfo> {
 
     @Override
     public List<ChannelInfo> getVisualElements() throws ExecutionException, InterruptedException {
-        /*
-        This is not updating, for the moment we are going to force reload it every time
         if (TempStorage.hasLoadedStreamers()) {
             return new ArrayList<>(TempStorage.getLoadedStreamers());
+        } else {
+            GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
+            subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
+            return new ArrayList<>(subscriptionsTask.get().values());
         }
-         */
-
-        GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
-        subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
-
-        return new ArrayList<>(subscriptionsTask.get().values());
     }
 }
