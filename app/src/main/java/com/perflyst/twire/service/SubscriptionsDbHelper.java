@@ -235,8 +235,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 channels.put("Channels", channelstoExport);
                 String jsonStr = channels.toString();
                 Log.d("Export String", jsonStr);
-
-                // TO-DO Save File
+                
                 create(mContext, EXPORT_NAME, jsonStr);
                 return channelstoExport.length();
             } catch (JSONException e) {
