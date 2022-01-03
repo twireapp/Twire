@@ -19,7 +19,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
     protected Snackbar snackbar;
 
     protected int currentOffset = 0;
-    protected int elementsToFetchLimit = 10;
+    protected int elementsToFetchLimit = 20;
     protected int maxElementsToFetch = 500;
 
     /**

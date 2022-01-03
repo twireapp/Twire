@@ -63,14 +63,14 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
         List<Game> resultList = new ArrayList<>();
 
         //Indentation is meant to mimic the structure of the JSON code
-        final String URL = "https://api.twitch.tv/kraken/games/top?limit=" + getLimit() + "&offset=" + getCurrentOffset();
-        final String GAMES_ARRAY_KEY = "top";
+        final String URL = "https://api.twitch.tv/helix/games/top?first=" + getLimit();
+        final String GAMES_ARRAY_KEY = "data";
         final String VIEWERS_INTEGER_KEY = "viewers";
         final String CHANNELS_INTEGER_KEY = "channels";
         final String GAME_OBJECT_KEY = "game";
 
 
-        String jsonString = Service.urlToJSONString(URL);
+        String jsonString = Service.urlToJSONStringHelix(URL, this);
         JSONObject fullDataObject = new JSONObject(jsonString);
         JSONArray gamesArray = fullDataObject.getJSONArray(GAMES_ARRAY_KEY);
 

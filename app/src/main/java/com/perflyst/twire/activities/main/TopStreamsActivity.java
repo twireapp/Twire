@@ -51,17 +51,19 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
         Log.i(LOG_TAG, "Adding Top Streams: " + streamsToAdd.size());
     }
 
+    public String pagination = "";
+
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
         final String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
-        final String URL = "https://api.twitch.tv/kraken/streams?limit=" + getLimit() + "&offset="
-                + getCurrentOffset() + languageFilter;
-        final String GAMES_ARRAY_KEY = "streams";
-
+        final String URL = "https://api.twitch.tv/helix/streams?first=" + getLimit() + (pagination != "" ? "&after=" + pagination : "") + languageFilter;
+        final String GAMES_ARRAY_KEY = "data";
+        
         List<StreamInfo> mResultList = new ArrayList<>();
-        String jsonString = Service.urlToJSONString(URL);
+        String jsonString = Service.urlToJSONStringHelix(URL, this);
         JSONObject fullDataObject = new JSONObject(jsonString);
         JSONArray topStreamsArray = fullDataObject.getJSONArray(GAMES_ARRAY_KEY);
+        this.pagination = fullDataObject.getJSONObject("pagination").getString("cursor");
 
         for (int i = 0; i < topStreamsArray.length(); i++) {
             JSONObject streamObject = topStreamsArray.getJSONObject(i);
