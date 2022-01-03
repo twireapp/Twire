@@ -56,28 +56,60 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, ExecutionException, InterruptedException, MalformedURLException {
         // build the api link
-        String kraken_url = "https://api.twitch.tv/kraken/streams?limit=" + getLimit() + "&stream_type=live&offset=" + getCurrentOffset()+ "&channel=";
+        String helix_url = "https://api.twitch.tv/helix/streams?first=" + getLimit();
         String user_logins = "";
 
         GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
         subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
 
+        ArrayList<String> requesturls = new ArrayList<>();
+        int number = 0;
+        int exactnumber = 0;
+
+        // loop over all channel in the DB
         for (ChannelInfo si : subscriptionsTask.get().values()) {
-            user_logins = user_logins + si.getUserId() + ",";
+            // if the number of channels, already in the url, is smaller than 99 and is not the last channel
+            // e.g. if there are 160 Channels in the DB then this will result in 2 request urls ([0-99] and [100-159])
+            if (number <= 99 && exactnumber != subscriptionsTask.get().values().size() -1) {
+                user_logins = user_logins + "&user_id=" + si.getUserId();
+                number++;
+                // if the request url has 100 user ids or is the last channel in the list
+            } else if (number > 99 || exactnumber == (subscriptionsTask.get().values().size() -1)) {
+                // add the new request url to the list
+                requesturls.add(helix_url + user_logins);
+                // reset stuff
+                user_logins = "";
+                number = 0;
+            }
+            exactnumber++;
         }
 
+        Log.d(LOG_TAG, requesturls.toString());
 
-        kraken_url = kraken_url + user_logins;
+        JSONArray final_array = new JSONArray();
+        final String ARRAY_KEY = "data";
+        String jsonString;
 
-        final String ARRAY_KEY = "streams";
+        // for every request url in the list
+        for (int i=0; i<requesturls.size(); i++) {
+            String temp_jsonString;
+            // request the url
+            temp_jsonString = Service.urlToJSONStringHelix(requesturls.get(i), this);
+            JSONObject fullDataObject = new JSONObject(temp_jsonString);
+            // create the array
+            JSONArray temp_array = fullDataObject.getJSONArray(ARRAY_KEY);
+            // append the new array to the final one
+            for (int x=0; x<temp_array.length(); x++) {
+                final_array.put(temp_array.get(x));
+            }
+        }
+        Log.d(LOG_TAG, final_array.toString());
+
 
         List<StreamInfo> mResultList = new ArrayList<>();
-        String jsonString = Service.urlToJSONString(kraken_url);
-        JSONObject fullDataObject = new JSONObject(jsonString);
-        JSONArray topStreamsArray = fullDataObject.getJSONArray(ARRAY_KEY);
 
-        for (int i = 0; i < topStreamsArray.length(); i++) {
-            JSONObject streamObject = topStreamsArray.getJSONObject(i);
+        for (int i = 0; i < final_array.length(); i++) {
+            JSONObject streamObject = final_array.getJSONObject(i);
             mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
         }
 
