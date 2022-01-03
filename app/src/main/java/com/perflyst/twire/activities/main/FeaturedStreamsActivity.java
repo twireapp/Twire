@@ -61,28 +61,24 @@ public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
      * Methods for functionality and for controlling the SwipeRefreshLayout
      */
 
+    public String pagination = "";
+
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
         List<StreamInfo> resultList = new ArrayList<>();
 
         //Indentation is meant to mimic the structure of the JSON code
-        final String URL = "https://api.twitch.tv/kraken/streams/featured?limit=" + getLimit() + "&offset=" + getCurrentOffset();
-        final String FEATURED_ARRAY_KEY = "featured";
-        final String STREAM_PRIORITY_INTEGER_KEY = "priority";
-        final String STREAM_OBJECT_KEY = "stream";
+        final String URL = "https://api.twitch.tv/helix/streams?first=" + getLimit() + (pagination != "" ? "&after=" + pagination : "");
 
-        String jsonString = Service.urlToJSONString(URL);
+        String jsonString = Service.urlToJSONStringHelix(URL, this);
         JSONObject fullDataObject = new JSONObject(jsonString);
-        JSONArray topFeaturedArray = fullDataObject.getJSONArray(FEATURED_ARRAY_KEY);
+        JSONArray topFeaturedArray = fullDataObject.getJSONArray("data");
 
         for (int i = 0; i < topFeaturedArray.length(); i++) {
             // Get all the JSON objects we need to get all the required data.
-            JSONObject topObject = topFeaturedArray.getJSONObject(i);
-            JSONObject streamObject = topObject.getJSONObject(STREAM_OBJECT_KEY);
-
-            int streamPriority = topObject.getInt(STREAM_PRIORITY_INTEGER_KEY);
+            JSONObject streamObject = topFeaturedArray.getJSONObject(i);
             StreamInfo mStreamInfo = JSONService.getStreamInfo(getBaseContext(), streamObject, null, false);
-            mStreamInfo.setPriority(streamPriority);
+            mStreamInfo.setPriority(1);
             resultList.add(mStreamInfo);
         }
 
