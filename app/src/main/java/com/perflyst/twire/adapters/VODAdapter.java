@@ -195,9 +195,10 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
     }
 
     private String getFormattedLengthAndTime(VideoOnDemand vod) {
+
         String time;
         Calendar now = Calendar.getInstance(), vodDate = vod.getRecordedAt();
-
+        /*
         Calendar lastYear = new GregorianCalendar(now.get(Calendar.YEAR) - 1, 1, 1);
         long daysAgo = TimeUnit.MILLISECONDS.toDays(now.getTimeInMillis() - vodDate.getTimeInMillis());
 
@@ -216,9 +217,10 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         } else {
             // if over a year ago -> show full date
             time = new SimpleDateFormat("d. MMM yy", Locale.getDefault()).format(vodDate.getTime());
-        }
+        }*/
 
-        return time + " " + Service.calculateTwitchVideoLength(vod.getLength());
+        // just return the full Date for now, because Helix is sending the Video duration in a weird format
+        return new SimpleDateFormat("d. MMM yy", Locale.getDefault()).format(vodDate.getTime());
     }
 
     @Override

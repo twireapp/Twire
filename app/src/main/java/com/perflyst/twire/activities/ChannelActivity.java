@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -544,7 +545,7 @@ public class ChannelActivity extends ThemeActivity {
 
         private String getUrl() {
             String type = broadcasts ? "archive" : "highlight";
-            return "https://api.twitch.tv/kraken/channels/" + channelInfo.getUserId() + "/videos?hls=true&limit=" + getLimit() + "&offset=" + getCurrentOffset() + "&broadcast_type=" + type;
+            return "https://api.twitch.tv/helix/videos?user_id=" + channelInfo.getUserId() + "&first=" + getLimit() + "&type=" + type;
         }
 
         @Override
@@ -610,12 +611,11 @@ public class ChannelActivity extends ThemeActivity {
         @Override
         public List<VideoOnDemand> getVisualElements() throws JSONException {
             List<VideoOnDemand> result = new ArrayList<>();
-            final String VIDEOS_ARRAY = "videos";
-            final String TOTAL_VODS_INT = "_total";
-            JSONObject vodsTopObject = new JSONObject(Service.urlToJSONString(getUrl()));
-            JSONArray vods = vodsTopObject.getJSONArray(VIDEOS_ARRAY);
 
-            setMaxElementsToFetch(vodsTopObject.getInt(TOTAL_VODS_INT));
+            JSONObject vodsTopObject = new JSONObject(Service.urlToJSONStringHelix(getUrl(), getContext()));
+            JSONArray vods = vodsTopObject.getJSONArray("data");
+
+            setMaxElementsToFetch(vods.length());
             for (int i = 0; i < vods.length(); i++) {
                 VideoOnDemand vod = JSONService.getVod(vods.getJSONObject(i));
                 vod.setChannelInfo(channelInfo);
@@ -623,7 +623,7 @@ public class ChannelActivity extends ThemeActivity {
                 result.add(vod);
             }
 
-            if (vodsTopObject.getInt(TOTAL_VODS_INT) <= 0 && getActivity() != null) {
+            if (vods.length() <= 0 && getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     if (mErrorEmote != null && mErrorText != null) {
                         showError();

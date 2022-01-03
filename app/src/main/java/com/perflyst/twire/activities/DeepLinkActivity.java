@@ -68,7 +68,7 @@ public class DeepLinkActivity extends AppCompatActivity {
             int vodId = parseInt(params.get(1));
             JSONObject jsonObject = new JSONObject(Service.urlToJSONString("https://api.twitch.tv/kraken/videos/" + vodId));
             VideoOnDemand vod = JSONService.getVod(jsonObject);
-            vod.setChannelInfo(JSONService.getStreamerInfo(jsonObject.getJSONObject("channel"), true));
+            vod.setChannelInfo(JSONService.getStreamerInfo(this, jsonObject.getJSONObject("channel"), true));
 
             intent = VODActivity.createVODIntent(vod, this, false);
         } else if (paramSize == 1) { // twitch.tv/<channel>

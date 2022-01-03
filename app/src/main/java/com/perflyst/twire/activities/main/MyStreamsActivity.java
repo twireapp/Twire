@@ -70,11 +70,11 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
         for (ChannelInfo si : subscriptionsTask.get().values()) {
             // if the number of channels, already in the url, is smaller than 99 and is not the last channel
             // e.g. if there are 160 Channels in the DB then this will result in 2 request urls ([0-99] and [100-159])
-            if (number <= 99 && exactnumber != subscriptionsTask.get().values().size() -1) {
+            if (number <= 99 && exactnumber != subscriptionsTask.get().values().size() - 1) {
                 user_logins = user_logins + "&user_id=" + si.getUserId();
                 number++;
                 // if the request url has 100 user ids or is the last channel in the list
-            } else if (number > 99 || exactnumber == (subscriptionsTask.get().values().size() -1)) {
+            } else if (number > 99 || exactnumber == (subscriptionsTask.get().values().size() - 1)) {
                 // add the new request url to the list
                 requesturls.add(helix_url + user_logins);
                 // reset stuff
@@ -84,11 +84,8 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
             exactnumber++;
         }
 
-        Log.d(LOG_TAG, requesturls.toString());
-
         JSONArray final_array = new JSONArray();
         final String ARRAY_KEY = "data";
-        String jsonString;
 
         // for every request url in the list
         for (int i=0; i<requesturls.size(); i++) {
@@ -103,8 +100,6 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
                 final_array.put(temp_array.get(x));
             }
         }
-        Log.d(LOG_TAG, final_array.toString());
-
 
         List<StreamInfo> mResultList = new ArrayList<>();
 
