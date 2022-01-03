@@ -809,7 +809,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                        }, mChannelInfo.getUserId()
+                        }, mChannelInfo.getUserId(), getContext()
                 );
 
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
