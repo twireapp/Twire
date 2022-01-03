@@ -554,17 +554,21 @@ public class Service {
         return (HttpURLConnection) url.openConnection();
     }
 
-    public static ChannelInfo getStreamerInfoFromUserId(int streamerId) throws NullPointerException {
+    public static ChannelInfo getStreamerInfoFromUserId(int streamerId, Context context) throws NullPointerException {
 
         ChannelInfo channelInfo = null;
         try {
-            JSONObject JSONString = new JSONObject(urlToJSONString("https://api.twitch.tv/kraken/channels/" + streamerId));
+            JSONObject JSONString = new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/channels?broadcaster_id=" + streamerId, context)).getJSONObject("data");
+            int userId = JSONString.getInt("broadcaster_id");
+            String displayName = JSONString.getString("broadcaster_name");
+            String name = JSONString.getString("broadcaster_login");
 
-            int userId = JSONString.getInt("_id");
-            String displayName = JSONString.getString("display_name");
-            String name = JSONString.getString("name");
-            int followers = JSONString.getInt("followers");
-            int views = JSONString.getInt("views");
+            // Fetch the Total Follower Count here
+            String userFollows = Service.urlToJSONStringHelix("https://api.twitch.tv/helix/users/follows?first=1&to_id=" + userId, context);
+            JSONObject fullDataObject = new JSONObject(userFollows);
+            int followers = fullDataObject.getInt("total");
+
+            int views = fullDataObject.getInt("view_count");
             URL logoURL = null;
             URL videoBannerURL = null;
             URL profileBannerURL = null;
@@ -580,8 +584,7 @@ public class Service {
                 profileBannerURL = new URL(JSONString.getString("profile_banner"));
             }
 
-            JSONObject JSONStringTwo = new JSONObject(urlToJSONString("https://api.twitch.tv/kraken/users/" + streamerId));
-            String description = JSONStringTwo.getString("bio");
+            String description = fullDataObject.getString("description");
 
             channelInfo = new ChannelInfo(userId, name, displayName, description, followers, views, logoURL, videoBannerURL, profileBannerURL, false);
 

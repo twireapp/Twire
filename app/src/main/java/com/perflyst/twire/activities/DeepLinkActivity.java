@@ -104,7 +104,7 @@ public class DeepLinkActivity extends AppCompatActivity {
                 intent = LiveStreamActivity.createLiveStreamIntent(stream, false, this);
             } else {
                 // If we can't load the stream, try to show the user's channel instead.
-                ChannelInfo info = Service.getStreamerInfoFromUserId(Integer.parseInt(userID));
+                ChannelInfo info = Service.getStreamerInfoFromUserId(Integer.parseInt(userID), this);
                 if (info != null) {
                     intent = new Intent(this, ChannelActivity.class);
                     intent.putExtra(getResources().getString(R.string.channel_info_intent_object), info);

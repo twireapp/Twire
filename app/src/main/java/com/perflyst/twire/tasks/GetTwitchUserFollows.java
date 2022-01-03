@@ -160,7 +160,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         @Override
         public void run() {
             for (Integer name : userIds) {
-                ChannelInfo info = getStreamerInfoFromUserId(name);
+                ChannelInfo info = getStreamerInfoFromUserId(name, baseContext.get());
                 if (info != null) {
                     info.setNotifyWhenLive(true); // Enable by default
                 }
