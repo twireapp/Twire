@@ -187,31 +187,28 @@
 
                     <TextView
                         android:id="@+id/currentProgress"
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
 
                         android:gravity="center"
                         android:shadowColor="@color/black"
                         android:shadowDx="1"
                         android:shadowDy="1"
                         android:shadowRadius="5"
-                        android:text=""
                         android:textColor="@color/white" />
 
                     <SeekBar
                         android:id="@+id/progressBar"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="3"
+                        android:layout_weight="1"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp" />
 
                     <TextView
                         android:id="@+id/maxProgress"
-                        android:layout_width="0dp"
+                        android:layout_width="60dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
 
                         android:gravity="center"
                         android:shadowColor="@color/black"
