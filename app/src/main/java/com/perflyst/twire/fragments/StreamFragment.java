@@ -66,7 +66,6 @@ import com.bumptech.glide.signature.ObjectKey;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
@@ -563,7 +562,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mVideoView.setPlayer(player);
 
             if (vodId != null) {
-                player.setPlaybackParameters(new PlaybackParameters(settings.getPlaybackSpeed()));
+                player.setPlaybackSpeed(settings.getPlaybackSpeed());
+                player.setSkipSilenceEnabled(settings.getSkipSilence());
             }
 
             if (currentMediaSource != null) {
@@ -901,11 +901,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         sleepTimer.show(getActivity());
     }
 
-    private void speedButtonClicked() {
-        DialogService.getSpeedDialog(getActivity(), player.getPlaybackParameters().speed, (speed) -> {
-            player.setPlaybackParameters(new PlaybackParameters(speed));
-            settings.setPlaybackSpeed(speed);
-        }).show();
+    private void playbackButtonClicked() {
+        DialogService.getPlaybackDialog(getActivity(), player).show();
     }
 
     private void showSeekDialog() {
@@ -942,7 +939,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             return true;
         });
 
-        menu.findItem(R.id.menu_item_speed).setVisible(vodId != null);
+        menu.findItem(R.id.menu_item_playback).setVisible(vodId != null);
     }
 
     @Override
@@ -965,8 +962,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         } else if (itemId == R.id.menu_item_external) {
             playWithExternalPlayer();
             return true;
-        } else if (itemId == R.id.menu_item_speed) {
-            speedButtonClicked();
+        } else if (itemId == R.id.menu_item_playback) {
+            playbackButtonClicked();
             return true;
         }
 

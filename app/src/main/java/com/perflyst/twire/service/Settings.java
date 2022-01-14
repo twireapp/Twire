@@ -55,6 +55,7 @@ public class Settings {
     private final String STREAM_SLEEP_HOUR = "streamSleepHour";
     private final String STREAM_SLEEP_MINUTE = "streamSleepMinute";
     private final String PLAYBACK_SPEED = "playbackSpeed";
+    private final String SKIP_SILENCE = "playbackSkipSilence";
     private final String SETUP_IS_SETUP = "setupIsSetup";
     private final String SETUP_IS_LOGGED_IN = "setupIsLoggedIn";
     private final String TIP_IS_SHOWN = "tipsAreShown";
@@ -493,6 +494,14 @@ public class Settings {
 
     public void setPlaybackSpeed(float speed) {
         getEditor().putFloat(this.PLAYBACK_SPEED, speed).commit();
+    }
+
+    public boolean getSkipSilence() {
+        return getPreferences().getBoolean(this.SKIP_SILENCE, false);
+    }
+
+    public void setSkipSilence(boolean skipSilence) {
+        getEditor().putBoolean(this.SKIP_SILENCE, skipSilence).commit();
     }
 
     public String getGeneralTwitchAccessToken() {

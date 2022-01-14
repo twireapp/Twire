@@ -2,9 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_item_speed"
+        android:id="@+id/menu_item_playback"
         android:icon="@drawable/ic_speed"
-        android:title="@string/menu_speed"
+        android:title="@string/menu_playback"
         app:showAsAction="always" />
     <item
         android:id="@+id/menu_item_options"

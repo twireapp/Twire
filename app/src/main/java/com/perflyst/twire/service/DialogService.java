@@ -12,8 +12,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.perflyst.twire.R;
 import com.perflyst.twire.views.LayoutSelector;
+import com.rey.material.widget.CheckedTextView;
 import com.rey.material.widget.Slider;
 
 import java.util.Arrays;
@@ -238,31 +240,42 @@ public class DialogService {
         return dialog;
     }
 
-    public interface SpeedChangedListener {
-        void onSpeedChanged(float speed);
-    }
-
-    public static MaterialDialog getSpeedDialog(Activity activity, float currentSpeed, SpeedChangedListener listener) {
+    public static MaterialDialog getPlaybackDialog(Activity activity, SimpleExoPlayer player) {
         MaterialDialog dialog = getBaseThemedDialog(activity)
-                .title(R.string.menu_speed)
-                .customView(R.layout.dialog_speed, false)
+                .title(R.string.menu_playback)
+                .customView(R.layout.dialog_playback, false)
                 .positiveText(R.string.done)
                 .build();
 
+        View customView = dialog.getCustomView();
+        Settings settings = new Settings(customView.getContext());
+
+        // Speed
+        Float initialSpeed = settings.getPlaybackSpeed();
         Float[] speedValues = new Float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f };
 
-        View customView = dialog.getCustomView();
         TextView speedDisplay = customView.findViewById(R.id.speed_display);
         Slider slider = customView.findViewById(R.id.speed_slider);
-        slider.setValue(Arrays.asList(speedValues).indexOf(currentSpeed), false);
+        slider.setValue(Arrays.asList(speedValues).indexOf(initialSpeed), false);
         slider.setValueDescriptionProvider((value) -> activity.getString(R.string.playback_speed, speedValues[value]));
         slider.setOnPositionChangeListener((view, fromUser, oldPos, newPos, oldValue, newValue) -> {
             float newSpeed = speedValues[newValue];
-            listener.onSpeedChanged(newSpeed);
+            settings.setPlaybackSpeed(newSpeed);
+            player.setPlaybackSpeed(newSpeed);
             speedDisplay.setText(activity.getString(R.string.playback_speed_display, newSpeed));
         });
 
-        speedDisplay.setText(activity.getString(R.string.playback_speed_display, currentSpeed));
+        speedDisplay.setText(activity.getString(R.string.playback_speed_display, initialSpeed));
+
+        // Skip Silence
+        CheckedTextView skipSilenceView = customView.findViewById(R.id.skip_silence);
+        skipSilenceView.setChecked(settings.getSkipSilence());
+        skipSilenceView.setOnClickListener((view) -> {
+            boolean newState = !settings.getSkipSilence();
+            settings.setSkipSilence(newState);
+            player.setSkipSilenceEnabled(newState);
+            skipSilenceView.setChecked(newState);
+        });
 
         return dialog;
     }

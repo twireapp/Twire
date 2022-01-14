@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingLeft="24dp"
+    android:paddingRight="24dp"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/speed_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/navigationDrawerTextColor"
+        android:textStyle="italic" />
+
+    <com.rey.material.widget.Slider
+        android:id="@+id/speed_slider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:paddingHorizontal="8dp"
+        app:sl_alwaysFillThumb="true"
+        app:sl_discreteMode="true"
+        app:sl_maxValue="6"
+        app:sl_minValue="0"
+        app:sl_transformAnimDuration="100"
+        app:sl_travelAnimDuration="10"
+        app:sl_value="3" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/settings_divider_height"
+        android:background="?attr/dividerColor" />
+
+    <com.rey.material.widget.CheckedTextView
+        android:id="@+id/skip_silence"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+        android:gravity="center_vertical"
+        android:text="@string/skip_silence"
+        android:textAppearance="@style/text_settings_title" />
+</LinearLayout>

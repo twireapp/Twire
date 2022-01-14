@@ -45,7 +45,7 @@
     <string name="menu_sleep">Sleep timer</string>
     <string name="menu_share">Share</string>
     <string name="menu_options">Options</string>
-    <string name="menu_speed">Playback Speed</string>
+    <string name="menu_playback">Playback Settings</string>
     <string name="options">Options</string>
     <string name="audio_only">Audio only</string>
     <string name="chat_only">Chat only</string>
@@ -81,6 +81,7 @@
 
     <string name="playback_speed_display">×%.2f</string>
     <string name="playback_speed">%.2f</string>
+    <string name="skip_silence">Skip Silence</string>
 
     <!-- VOD activity -->
     <string name="vod_playback_failed">Failed to play VOD. Try another quality.</string>
