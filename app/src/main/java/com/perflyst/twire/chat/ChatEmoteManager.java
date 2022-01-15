@@ -63,10 +63,7 @@ class ChatEmoteManager {
         final String SHARED_EMOTE_ARRAY = "sharedEmotes";
 
         try {
-            String bttvResponse = "";
-            if (enabled_bttv) {
-                bttvResponse = Service.urlToJSONString(BTTV_GLOBAL_URL);
-            }
+            String bttvResponse = enabled_bttv ? Service.urlToJSONString(BTTV_GLOBAL_URL) : "";
             if (!bttvResponse.isEmpty()) {
                 JSONArray globalEmotes = new JSONArray(bttvResponse);
 
@@ -77,10 +74,7 @@ class ChatEmoteManager {
                 }
             }
 
-            String bttvChannelResponse = "";
-            if (enabled_bttv) {
-                bttvChannelResponse = Service.urlToJSONString(BTTV_CHANNEL_URL);
-            }
+            String bttvChannelResponse = enabled_bttv ? Service.urlToJSONString(BTTV_CHANNEL_URL) : "";
             if (!bttvChannelResponse.isEmpty()) {
                 JSONObject topChannelEmotes = new JSONObject(bttvChannelResponse);
                 JSONArray channelEmotes = topChannelEmotes.getJSONArray(CHANNEL_EMOTE_ARRAY);
@@ -111,10 +105,7 @@ class ChatEmoteManager {
         final String EMOTICONS = "emoticons";
 
         try {
-            JSONObject topObject = new JSONObject();
-            if (enabled_ffz) {
-                topObject = new JSONObject(Service.urlToJSONString(FFZ_GLOBAL_URL));
-            }
+            JSONObject topObject = enabled_ffz ? new JSONObject(Service.urlToJSONString(FFZ_GLOBAL_URL)) : new JSONObject();
 
             JSONArray defaultSets;
             if (topObject.has("defaultSets")) {
@@ -139,10 +130,7 @@ class ChatEmoteManager {
                 }
             }
 
-            String ffzResponse = "";
-            if (enabled_ffz) {
-                ffzResponse = Service.urlToJSONString(FFZ_CHANNEL_URL);
-            }
+            String ffzResponse = enabled_ffz ? Service.urlToJSONString(FFZ_CHANNEL_URL) : "";
             if (!ffzResponse.isEmpty()) {
                 JSONObject channelTopObject = new JSONObject(ffzResponse);
                 JSONObject channelSets = channelTopObject.getJSONObject(SETS);
