@@ -328,8 +328,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mRuntime = mRootView.findViewById(R.id.txtViewRuntime);
         mActivity = (AppCompatActivity) getActivity();
         mClickInterceptor = mRootView.findViewById(R.id.click_interceptor);
-        View mCurrentViewersWrapper = mRootView.findViewById(R.id.viewers_wrapper);
-        View mRuntimeWrapper = mRootView.findViewById(R.id.runtime_wrapper);
 
         setupToolbar();
         setupSpinner();
@@ -410,7 +408,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mTimeController.setVisibility(View.INVISIBLE);
 
             if (!settings.getStreamPlayerRuntime()) {
-                mRuntimeWrapper.setVisibility(View.GONE);
+                mRuntime.setVisibility(View.GONE);
             } else {
                 runtime = true;
                 Date date = null;
@@ -430,11 +428,11 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 mCurrentViewersView.setText(String.valueOf(args.getInt(getString(R.string.stream_fragment_viewers))));
                 startFetchingViewers();
             } else {
-                mCurrentViewersWrapper.setVisibility(View.GONE);
+                mCurrentViewersView.setVisibility(View.GONE);
             }
         } else {
-            mCurrentViewersWrapper.setVisibility(View.GONE);
-            mRuntimeWrapper.setVisibility(View.GONE);
+            mCurrentViewersView.setVisibility(View.GONE);
+            mRuntime.setVisibility(View.GONE);
 
             mForward.setOnClickListener(v -> {
                 seeking = true;

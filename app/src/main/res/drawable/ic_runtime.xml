@@ -1,11 +1,8 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt"
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:viewportWidth="1080"
     android:viewportHeight="1080"
-    android:width="1080dp"
-    android:height="1080dp">
-    <path
-        android:pathData="M0 0H100V100H0V0Z"
-        android:fillColor="#00000000" />
+    android:width="13dp"
+    android:height="13dp">
     <group
         android:scaleX="15.32"
         android:scaleY="15.32"

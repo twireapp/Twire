@@ -66,8 +66,7 @@
     <dimen name="toolbar_viewers_text_size">16sp</dimen>
     <dimen name="play_pause_wrapper_size">56dp</dimen>
     <dimen name="buffer_spinner_size">60dp</dimen>
-    <dimen name="viewers_icon_margin">8dp</dimen>
-    <dimen name="runtime_icon_margin">2dp</dimen>
+    <dimen name="toolbar_icon_margin">4dp</dimen>
     <dimen name="viewers_icon_size">20dp</dimen>
 
     <!-- Text sizes -->
