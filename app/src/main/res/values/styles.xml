@@ -134,7 +134,6 @@
         <item name="android:colorActivatedHighlight">@color/accentColorNightTheme</item>
 
         <item name="android:colorBackground">@color/black</item>
-        <item name="dividerColor">@color/black</item>
         <item name="backgroundColor">@color/black</item>
 
         <!-- Chat -->
