@@ -532,7 +532,7 @@ public class Service {
 
         String result = response.body;
 
-        if (result.isEmpty() || result.length() >= 1 && result.charAt(0) != '{' && result.charAt(0) != '[') {
+        if (result == null || result.isEmpty() || result.charAt(0) != '{' && result.charAt(0) != '[') {
             Log.v("URL TO JSON STRING", request.url() + " did not successfully get read");
             Log.v("URL TO JSON STRING", "Result of reading - " + result);
         }
