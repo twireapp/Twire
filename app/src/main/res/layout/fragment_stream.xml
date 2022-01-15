@@ -173,7 +173,8 @@
                         android:shadowDx="1"
                         android:shadowDy="1"
                         android:shadowRadius="5"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        tools:text="1:23:45" />
 
                     <SeekBar
                         android:id="@+id/progressBar"
@@ -193,7 +194,8 @@
                         android:shadowDx="1"
                         android:shadowDy="1"
                         android:shadowRadius="5"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        tools:text="1:23:45" />
                 </LinearLayout>
 
 
@@ -296,7 +298,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
