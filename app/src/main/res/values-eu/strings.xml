@@ -43,7 +43,7 @@
     <string name="preview_game_viewers">1337 ikusle</string>
     <string name="game_viewers">%s ikusle</string>
     <string name="preview_stream_game_and_viewers">1337 ikusle - Jokoaren izenburua</string>
-    <string name="percent">%s %%</string>
+    <string name="percent">%d %%</string>
     <string name="no_elements_added_notice">Ezin izan dira %s aurkitu</string>
     <string name="content_desc_twitchProfileBanner_imageView">Erabiltzaileak ezarritako profileko bannerra</string>
     <string name="changelog_show_after_update">Erakutsi eguneraketen aldaketak</string>
@@ -160,4 +160,26 @@
     <string name="start">HASI</string>
     <string name="done">EGINDA</string>
     <string name="ok">ADOS</string>
+    <string name="card_style_minimal">Kolapsatuta</string>
+    <string name="card_style_expanded">Hedatua</string>
+    <string name="login_invalid_token_text_line_one">Zoritxarrez, zuk</string>
+    <string name="login_invalid_token_text_line_two">berriro konektatu behar zara</string>
+    <string name="confirm_text_line_one">Egon lasai!</string>
+    <string name="chat_landscape_swipe">Arrastatu txata horizontalean erakusteko</string>
+    <string name="title_activity_vod">Eskaeraren araberako bideoa</string>
+    <string name="settings_general_image_proxy">Irudi-proxy bat erabili</string>
+    <string name="settings_general_image_proxy_url_button">Gorde</string>
+    <string name="settings_general_image_proxy_url_example">Proxyaren adibide bat: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_ssl">Erabili SSL konektatzeko</string>
+    <string name="chat_enable_account_connect">Konektatu zure kontuarekin</string>
+    <string name="player_show_runtime">Erakutsi Zuzeneko gauzatzeko denbora</string>
+    <string name="player_type">Zuzeneko erreproduzitzaile mota</string>
+    <string name="menu_share">Partekatu</string>
+    <string name="menu_speed">Erreprodukzio-abiadura</string>
+    <string name="playback_speed_display">×%.2f</string>
+    <string name="playback_speed">%.2f</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="chat_enable_emote_bttv">BetterTTVko (BTTV) emoteak aktibatu</string>
+    <string name="chat_enable_emote_ffz">Aktibatu FrankerFaceZ (FFZ) emoteak</string>
+    <string name="chat_enable_emote_seventv">Aktibatu 7TV emoteak</string>
 </resources>
