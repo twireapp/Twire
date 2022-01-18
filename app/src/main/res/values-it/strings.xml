@@ -218,4 +218,7 @@
     <string name="settings_general_image_proxy">Usa Proxy per le Immagini</string>
     <string name="settings_general_image_proxy_url_button">Salva</string>
     <string name="chat_enable_account_connect">Connettiti usando il tuo account</string>
+    <string name="chat_enable_emote_bttv">Attiva Emote BetterTTV (BTTV)</string>
+    <string name="chat_enable_emote_ffz">Attiva Emote FrankerFaceZ (FFZ)</string>
+    <string name="chat_enable_emote_seventv">Attiva Emote 7TV</string>
 </resources>
