@@ -175,4 +175,13 @@
     <string name="player_show_runtime">Mostrar o Tempo de Execução da Stream</string>
     <string name="player_type">Tipo de Reprodutor de Stream</string>
     <string name="menu_share">Compartilhar</string>
+    <string name="settings_general_image_proxy">Usar um Proxy de Imagem</string>
+    <string name="settings_general_image_proxy_url_button">Salvar</string>
+    <string name="settings_general_image_proxy_url_example">Exemplo de Proxy: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_account_connect">Conecte-se usando sua conta</string>
+    <string name="chat_enable_emote_bttv">Ativar Emotes BetterTTV (BTTV)</string>
+    <string name="chat_enable_emote_ffz">Ativar Emotes FrankerFaceZ (FFZ)</string>
+    <string name="chat_enable_emote_seventv">Ativar Emotes 7TV</string>
+    <string name="skip_silence">Pular Silêncio</string>
+    <string name="menu_playback">Configurações de Reprodução</string>
 </resources>
