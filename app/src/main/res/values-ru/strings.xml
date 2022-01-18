@@ -175,4 +175,13 @@
     <string name="player_show_runtime">Показать продолжительность стрима</string>
     <string name="preview_stream_online_since">00:30:00</string>
     <string name="menu_share">Поделиться</string>
+    <string name="chat_enable_emote_bttv">Включить эмоции BetterTTV (BTTV)</string>
+    <string name="chat_enable_emote_ffz">Включить эмоции FrankerFaceZ (FFZ)</string>
+    <string name="chat_enable_emote_seventv">Включить эмоции 7TV</string>
+    <string name="settings_general_image_proxy">Использовать прокси для изображений</string>
+    <string name="settings_general_image_proxy_url_button">Сохранить</string>
+    <string name="settings_general_image_proxy_url_example">Пример прокси: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_account_connect">Подключитесь, используя свою учетную запись</string>
+    <string name="menu_playback">Настройки воспроизведения</string>
+    <string name="skip_silence">Пропускать тишину</string>
 </resources>
