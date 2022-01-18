@@ -6,13 +6,13 @@
     <string name="navigation_drawer_logged_in_textview">Zalogowany jako %s</string>
     <string name="navigation_drawer_settings_title">Ustawienia</string>
     <string name="navigation_drawer_search_title">Szukaj</string>
-    <string name="navigation_drawer_top_games_title">Największe gry</string>
+    <string name="navigation_drawer_top_games_title">Najpopularniejsze gry</string>
     <string name="navigation_drawer_follows_title">Obserwowane profile</string>
-    <string name="navigation_drawer_top_streams_title">Największe transmisje</string>
+    <string name="navigation_drawer_top_streams_title">Najpopularniejsze transmisje</string>
     <string name="navigation_drawer_my_streams_title">Moje transmisje</string>
-    <string name="navigation_drawer_featured_title">Pokazywane transmisje</string>
+    <string name="navigation_drawer_featured_title">Proponowane transmisje</string>
     <string name="games_tab">GRY</string>
-    <string name="streamers_tab">STREAMERZY</string>
+    <string name="streamers_tab">TRANSMITUJĄCY</string>
     <string name="streams_tab">TRANSMISJE</string>
     <string name="search_hint">Szukaj</string>
     <string name="appearance_game_header">Gry</string>
@@ -28,9 +28,9 @@
     <string name="player_auto_player">Wznów odtwarzanie po powrocie</string>
     <string name="player_show_navigation">Pokaż pasek nawigacji po naciśnięciu</string>
     <string name="player_show_viewercount">Pokaż ilość widzów</string>
-    <string name="chat_size_high">Duża</string>
-    <string name="chat_size_medium">Średnia</string>
-    <string name="chat_size_small">Mała</string>
+    <string name="chat_size_high">Duży</string>
+    <string name="chat_size_medium">Średni</string>
+    <string name="chat_size_small">Mały</string>
     <string name="chat_landscape_width_dialog">Szerokość czatu</string>
     <string name="chat_landscape_width">Szerokość czatu w trybie poziomym</string>
     <string name="chat_landscape_swipe">Przesuń aby pokazać czat w trybie poziomym</string>
@@ -38,9 +38,9 @@
     <string name="chat_message_size">Rozmiar wiadomości</string>
     <string name="chat_emote_size">Rozmiar emotek</string>
     <string name="gen_open_changelog">Otwórz listę zmian</string>
-    <string name="gen_language_filter">Filtruj największe transmisje według języka</string>
-    <string name="gen_tips_have_been_reset">Zresetowano pomoce z tutoriala</string>
-    <string name="gen_reset_tips">Zresetuj pomoce z tutoriala</string>
+    <string name="gen_language_filter">Filtruj najpopularniejsze transmisje według języka</string>
+    <string name="gen_tips_have_been_reset">Zresetowano wskazówki z tutoriala</string>
+    <string name="gen_reset_tips">Zresetuj wskazówki z tutoriala</string>
     <string name="gen_start_page">Strona Startowa</string>
     <string name="gen_twitch_name">Nazwa użytkownika</string>
     <string name="gen_dialog_login_or_out_logout_action">WYLOGUJ SIĘ</string>
@@ -52,7 +52,7 @@
     <string name="settings_appearance_summary">Motyw, styl kart, wielkość kart</string>
     <string name="settings_appearance_name">Wygląd</string>
     <string name="settings_stream_player_summary">Aktualna liczba widzów, zachowanie odtwarzacza</string>
-    <string name="settings_stream_player_name">Odtwarzacz transmisji</string>
+    <string name="settings_stream_player_name">Odtwarzacz</string>
     <string name="settings_general_name_summary">Konto Twitch\'a, strona startowa</string>
     <string name="settings_general_name">Ogólne</string>
     <string name="confirm_text_line_two">Pobierany twoje obserwowane kanały z Twitch\'a.</string>
@@ -70,13 +70,13 @@
     <string name="title_activity_welcome">Konfiguracja Twire</string>
     <string name="my_streams_cell_current_viewers">%d widzów</string>
     <string name="my_streams_preview_image">Podgląd kanału na żywo</string>
-    <string name="chat_status_connection_failed">Połączenie przerwane</string>
+    <string name="chat_status_connection_failed">Połączenie Przerwane</string>
     <string name="chat_status_reconnecting">Ponowne łączenie…</string>
     <string name="chat_status_connected">Gotowe do czatowania</string>
     <string name="chat_status_connecting">Łączenie z czatem…</string>
     <string name="chat_send_message_hint">Napisz wiadomość</string>
     <string name="title_activity_live_stream">Transmisja na żywo</string>
-    <string name="stream_playback_failed">Nie udało się odtworzyć transmisji. Spróbuj użyć innej jakości.</string>
+    <string name="stream_playback_failed">Nie udało się odtworzyć transmisji. Spróbuj odtworzyć w innej jakości.</string>
     <string name="my_channels_activity_label">Obserwowane</string>
     <string name="no_server_response_message">Ups, Wydaje nam się że serwery Twitcha nie odpowiadają. Odświeżyć\?</string>
     <string name="error_nothing_found">Tu nic nie ma</string>
@@ -97,7 +97,7 @@
     <string name="vod_streams_card_stream_views">%s wyświetleń</string>
     <string name="vod_views">%d wyświetleń</string>
     <string name="title_activity_vod">Filmy</string>
-    <string name="vod_playback_failed">Nieudało się odtworzyć VOD. Spróbuj użyć innej jakości.</string>
+    <string name="vod_playback_failed">Nieudało się odtworzyć VOD. Spróbuj je odtworzyć w innej jakości.</string>
     <string name="stream_backward">Cofnij o 10 sekund</string>
     <string name="stream_forward">Pomiń 10 sekund</string>
     <string name="stream_show_chat">Pokaż czat</string>
@@ -106,10 +106,10 @@
     <string name="stream_audio_only_active">Odtwarzanie tylko dźwięku</string>
     <string name="stream_sleep_timer_title">Minutnik</string>
     <string name="stream_sleep_timer_started_minutes_only">Minutnik włączony. Stream zostanie zapauzowany za %d minut.</string>
-    <string name="login_user_cancel">Nie musisz się logować aby używać Twire…</string>
+    <string name="login_user_cancel">Aby korzystać z Twire, musisz się zalogować…</string>
     <string name="welcome_text_line_two">Twire</string>
-    <string name="card_style_minimal">Zmienjszone</string>
-    <string name="stream_seek_dialog_title">Szukać</string>
+    <string name="card_style_minimal">Zmniejszone</string>
+    <string name="stream_seek_dialog_title">Wyszukać do</string>
     <string name="changelog_show_after_update">Wyświetlać listę zmian po aktualizacji</string>
     <string name="changelog_title">Lista zmian</string>
     <string name="router_channel_error">Nie udało się załadować kanału.</string>
@@ -123,7 +123,7 @@
     <string name="chat_message_option_duplicate">Zduplikuj wiadomość</string>
     <string name="chat_message_option_mention">Wspomnij</string>
     <string name="tip_navigate">Naciśnij aby się poruszać</string>
-    <string name="true_night_theme_name">Bardziej nocny</string>
+    <string name="true_night_theme_name">Prawdziwie Nocny</string>
     <string name="night_theme_name">Nocny</string>
     <string name="black_theme_name">Czarny</string>
     <string name="purple_theme_name">Fioletowy</string>
@@ -177,6 +177,11 @@
     <string name="settings_general_image_proxy">Używaj Proxy dla obrazów</string>
     <string name="settings_general_image_proxy_url_button">Zapisz</string>
     <string name="chat_enable_account_connect">Połącz się używając Konta</string>
-    <string name="settings_general_image_proxy_url_example">Przykładowe Proxy:https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="settings_general_image_proxy_url_example">Przykładowe Proxy: https://external-content.duckduckgo.com/iu/\?u=</string>
     <string name="menu_share">Udostępnij</string>
+    <string name="chat_enable_emote_bttv">Włącz Emotki BetterTTV (BTTV)</string>
+    <string name="chat_enable_emote_seventv">Włącz Emotki 7TV</string>
+    <string name="chat_enable_emote_ffz">Włącz Emotki FrankerFaceZ (FFZ)</string>
+    <string name="skip_silence">Pomiń Ciszę</string>
+    <string name="menu_playback">Ustawienia odtwarzania</string>
 </resources>
