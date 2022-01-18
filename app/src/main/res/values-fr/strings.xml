@@ -206,4 +206,21 @@
     <string name="title_activity_streamer_info">Chaîne</string>
     <string name="login_invalid_token_text_line_two">devez vous reconnecter</string>
     <string name="login_invalid_token_text_line_one">Malheureusement vous</string>
+    <string name="playback_speed_display">%.2f×</string>
+    <string name="playback_speed">%.2f</string>
+    <string name="settings_general_image_proxy_url_button">Enregistrer</string>
+    <string name="settings_general_image_proxy_url_example">Exemple de proxy : https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_ssl">Utiliser SSL pour la connexion</string>
+    <string name="chat_enable_account_connect">Se connecter avec votre compte</string>
+    <string name="menu_share">Partager</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="chat_enable_emote_bttv">Activer BetterTTV (BTTV) Emotes</string>
+    <string name="menu_speed">Vitesse de lecture</string>
+    <string name="chat_enable_emote_ffz">Activer FrankerFaceZ (FFZ) Emotes</string>
+    <string name="chat_enable_emote_seventv">Activer 7TV Emotes</string>
+    <string name="settings_general_image_proxy">Utiliser un proxy d\'image</string>
+    <string name="player_show_runtime">Afficher la progression du flux</string>
+    <string name="player_type">Type de lecture de flux</string>
+    <string name="skip_silence">Passer les silences</string>
+    <string name="menu_playback">Préférences de lecture</string>
 </resources>
