@@ -58,7 +58,7 @@
     <string name="router_error_dialog_title">URL Hatası</string>
     <string name="router_unknown_error">Bilinmeyen bir hata oluştu.</string>
     <string name="router_activity_label">Twire kullanarak oynat</string>
-    <string name="stream_external_play_using">Kullanarak oyna…</string>
+    <string name="stream_external_play_using">Kullanarak oynat…</string>
     <string name="chat_message_option_block">Engelle</string>
     <string name="chat_message_option_duplicate">Yinelenen mesaj</string>
     <string name="chat_message_option_mention">Bahset</string>
@@ -179,4 +179,7 @@
     <string name="settings_general_image_proxy_url_button">Kaydet</string>
     <string name="chat_enable_account_connect">Hesabınızı kullanarak bağlanın</string>
     <string name="settings_general_image_proxy_url_example">Örnek Vekil: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_emote_bttv">BetterTTV (BTTV) İfadelerini Etkinleştir</string>
+    <string name="chat_enable_emote_ffz">FrankerFaceZ (FFZ) İfadelerini Etkinleştir</string>
+    <string name="chat_enable_emote_seventv">7TV İfadelerini Etkinleştir</string>
 </resources>
