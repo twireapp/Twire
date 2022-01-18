@@ -187,4 +187,9 @@
     <string name="settings_general_image_proxy">使用图像代理</string>
     <string name="settings_general_image_proxy_url_button">保存</string>
     <string name="settings_general_image_proxy_url_example">示例：https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_emote_bttv">启用 BetterTTV (BTTV) 表情</string>
+    <string name="chat_enable_emote_seventv">启用 7TV 表情</string>
+    <string name="chat_enable_emote_ffz">启用 FrankerFaceZ (FFZ) 表情</string>
+    <string name="menu_playback">播放设置</string>
+    <string name="skip_silence">跳过静音</string>
 </resources>
