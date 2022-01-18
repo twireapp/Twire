@@ -218,4 +218,7 @@
     <string name="settings_general_image_proxy">Bild-Proxy verwenden</string>
     <string name="settings_general_image_proxy_url_button">Speichern</string>
     <string name="settings_general_image_proxy_url_example">Beispiel-Proxy: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_emote_bttv">BetterTTV (BTTV) Emotes aktivieren</string>
+    <string name="chat_enable_emote_ffz">FrankerFaceZ (FFZ) Emotes aktivieren</string>
+    <string name="chat_enable_emote_seventv">7TV Emotes aktivieren</string>
 </resources>
