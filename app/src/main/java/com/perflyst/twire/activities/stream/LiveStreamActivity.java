@@ -94,13 +94,6 @@ public class LiveStreamActivity extends StreamActivity {
         super.onBackPressed();
     }
 
-    @Override
-    protected void update(float[] vectors) {
-        if (this.mStreamFragment != null && !this.mStreamFragment.chatOnlyViewVisible) {
-            super.update(vectors);
-        }
-    }
-
     public void setMentionSuggestions(List<String> mentionSuggestions, @Nullable final Rect inputRect) {
         if (mMentionAdapter == null) {
             return;

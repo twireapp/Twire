@@ -6,10 +6,6 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -43,13 +39,10 @@ import java.util.Set;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
-public abstract class StreamActivity extends ThemeActivity implements SensorEventListener, StreamFragment.StreamFragmentListener {
-    private static final int SENSOR_DELAY = 500 * 1000; // 500ms
-    private static final int FROM_RADS_TO_DEGS = -57;
+public abstract class StreamActivity extends ThemeActivity implements StreamFragment.StreamFragmentListener {
     private final String LOG_TAG = getClass().getSimpleName();
     public StreamFragment mStreamFragment;
     public ChatFragment mChatFragment;
-    private Sensor mRotationSensor;
     private Settings settings;
     private boolean mBackstackLost;
     private boolean onStopCalled;
@@ -93,16 +86,6 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
             }
         }
 
-        try {
-            SensorManager mSensorManager = ContextCompat.getSystemService(this, SensorManager.class);
-            if (mSensorManager != null) {
-                mRotationSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
-                mSensorManager.registerListener(this, mRotationSensor, SENSOR_DELAY);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         settings = new Settings(this);
         updateOrientation();
     }
@@ -111,49 +94,6 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         updateOrientation();
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // Do nothing :)
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        try {
-            if (event.sensor == mRotationSensor && getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                if (event.values.length > 4) {
-                    float[] truncatedRotationVector = new float[4];
-                    System.arraycopy(event.values, 0, truncatedRotationVector, 0, 4);
-                    update(truncatedRotationVector);
-                } else {
-                    update(event.values);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected void update(float[] vectors) {
-        int worldAxisX = SensorManager.AXIS_X;
-        int worldAxisZ = SensorManager.AXIS_Z;
-
-        float[] rotationMatrix = new float[9];
-        float[] adjustedRotationMatrix = new float[9];
-        float[] orientation = new float[3];
-
-        SensorManager.getRotationMatrixFromVector(rotationMatrix, vectors);
-        SensorManager.remapCoordinateSystem(rotationMatrix, worldAxisX, worldAxisZ, adjustedRotationMatrix);
-        SensorManager.getOrientation(adjustedRotationMatrix, orientation);
-
-        float roll = orientation[2] * FROM_RADS_TO_DEGS;
-
-        if (roll > -45 && roll < 45) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-            Log.d(LOG_TAG, "Requesting undefined");
-        }
-        Log.d(LOG_TAG, "Roll: " + roll);
     }
 
     protected void resetStream() {
