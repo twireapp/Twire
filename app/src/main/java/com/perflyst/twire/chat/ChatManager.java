@@ -10,6 +10,7 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.perflyst.twire.TwireApplication;
+import com.google.common.collect.ImmutableSetMultimap;
 import com.perflyst.twire.model.Badge;
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
@@ -44,7 +45,7 @@ import javax.net.ssl.SSLSocketFactory;
 public class ChatManager implements Runnable {
     public static ChatManager instance = null;
 
-    public static final List<Badge> ffzBadges = new ArrayList<>();
+    public static ImmutableSetMultimap<String, Badge> ffzBadgeMap;
     private static double currentProgress;
     private static String cursor = "";
     private static boolean seek = false;
@@ -243,6 +244,8 @@ public class ChatManager implements Runnable {
                 }
             }
 
+            // If we reach this line then the socket closed but chat wasn't stopped, so reconnect.
+            connect(address, port);
         } catch (IOException e) {
             e.printStackTrace();
 
@@ -583,30 +586,30 @@ public class ChatManager implements Runnable {
     }
 
     private void readFFZBadges() {
-        ffzBadges.clear();
+        ImmutableSetMultimap.Builder<String, Badge> mapBuilder = ImmutableSetMultimap.builder();
 
         try {
             JSONObject topObject = new JSONObject(Service.urlToJSONString("https://api.frankerfacez.com/v1/badges"));
             JSONArray badges = topObject.getJSONArray("badges");
             JSONObject users = topObject.getJSONObject("users");
             for (int badgeIndex = 0; badgeIndex < badges.length(); badgeIndex++) {
-                JSONObject badge = badges.getJSONObject(badgeIndex);
+                JSONObject badgeJSON = badges.getJSONObject(badgeIndex);
 
                 SparseArray<String> urls = new SparseArray<>();
-                JSONObject urlsObject = badge.getJSONObject("urls");
+                JSONObject urlsObject = badgeJSON.getJSONObject("urls");
                 for (Iterator<String> iterator = urlsObject.keys(); iterator.hasNext(); ) {
                     String size = iterator.next();
                     urls.put(Integer.parseInt(size), "https:" + urlsObject.getString(size));
                 }
 
-                List<String> emoteUsers = new ArrayList<>();
-                JSONArray badgeUsers = users.getJSONArray(badge.getString("id"));
+                Badge badge = new Badge(badgeJSON.getString("name"), urls, badgeJSON.getString("color"), badgeJSON.isNull("replaces") ? null : badgeJSON.getString("replaces"));
+                JSONArray badgeUsers = users.getJSONArray(badgeJSON.getString("id"));
                 for (int userIndex = 0; userIndex < badgeUsers.length(); userIndex++) {
-                    emoteUsers.add(badgeUsers.getString(userIndex));
+                    mapBuilder.put(badgeUsers.getString(userIndex), badge);
                 }
-
-                ffzBadges.add(new Badge(badge.getString("name"), urls, badge.getString("color"), badge.isNull("replaces") ? null : badge.getString("replaces"), emoteUsers));
             }
+
+            ffzBadgeMap = mapBuilder.build();
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -24,18 +24,16 @@ public class ChatMessage {
         this.highlight = highlight;
 
         // Load any special FFZ badges the user has
-        for (Badge badge : ChatManager.ffzBadges) {
-            if (badge.users.contains(name.toLowerCase())) {
-                if (badge.replaces != null) {
-                    for (int i = 0; i < badges.size(); i++) {
-                        if (badges.get(i).name.equals(badge.replaces)) {
-                            badges.set(i, badge);
-                            break;
-                        }
+        for (Badge badge : ChatManager.ffzBadgeMap.get(name.toLowerCase())) {
+            if (badge.replaces != null) {
+                for (int i = 0; i < badges.size(); i++) {
+                    if (badges.get(i).name.equals(badge.replaces)) {
+                        badges.set(i, badge);
+                        break;
                     }
-                } else {
-                    badges.add(badge);
                 }
+            } else {
+                badges.add(badge);
             }
         }
     }
