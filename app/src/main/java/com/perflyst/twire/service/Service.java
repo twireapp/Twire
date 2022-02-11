@@ -558,7 +558,7 @@ public class Service {
 
         ChannelInfo channelInfo = null;
         try {
-            JSONObject JSONString = new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/channels?broadcaster_id=" + streamerId, context)).getJSONObject("data");
+            JSONObject JSONString = new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/channels?broadcaster_id=" + streamerId, context)).getJSONArray("data").getJSONObject(0);
             int userId = JSONString.getInt("broadcaster_id");
             String displayName = JSONString.getString("broadcaster_name");
             String name = JSONString.getString("broadcaster_login");
@@ -568,23 +568,15 @@ public class Service {
             JSONObject fullDataObject = new JSONObject(userFollows);
             int followers = fullDataObject.getInt("total");
 
-            int views = fullDataObject.getInt("view_count");
-            URL logoURL = null;
-            URL videoBannerURL = null;
+            JSONObject more_info =  new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/users?id=" + userId, context)).getJSONArray("data").getJSONObject(0);
+
+            URL logoURL = new URL(more_info.getString("profile_image_url"));
+            URL videoBannerURL = new URL(more_info.getString("offline_image_url"));
+            // I don´t think helix still has these: https://discuss.dev.twitch.tv/t/twitch-api-user-profile-banner/24463/4
             URL profileBannerURL = null;
 
-            // Make sure streamer has actually set the pictures
-            if (!JSONString.isNull("logo")) {
-                logoURL = new URL(JSONString.getString("logo"));
-            }
-            if (!JSONString.isNull("video_banner")) {
-                videoBannerURL = new URL(JSONString.getString("video_banner"));
-            }
-            if (!JSONString.isNull("profile_banner")) {
-                profileBannerURL = new URL(JSONString.getString("profile_banner"));
-            }
-
-            String description = fullDataObject.getString("description");
+            int views = more_info.getInt("view_count");
+            String description = more_info.getString("description");
 
             channelInfo = new ChannelInfo(userId, name, displayName, description, followers, views, logoURL, videoBannerURL, profileBannerURL, false);
 
