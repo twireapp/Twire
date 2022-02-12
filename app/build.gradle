@@ -29,7 +29,7 @@ android {
         }
     }
 
-    lintOptions {
+    lint {
         checkReleaseBuilds false
         abortOnError false
     }
