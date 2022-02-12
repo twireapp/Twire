@@ -570,10 +570,18 @@ public class Service {
 
             JSONObject more_info =  new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/users?id=" + userId, context)).getJSONArray("data").getJSONObject(0);
 
-            URL logoURL = new URL(more_info.getString("profile_image_url"));
-            URL videoBannerURL = new URL(more_info.getString("offline_image_url"));
+            URL logoURL = null;
+            URL videoBannerURL = null;
             // I don´t think helix still has these: https://discuss.dev.twitch.tv/t/twitch-api-user-profile-banner/24463/4
             URL profileBannerURL = null;
+
+            if (more_info.getString("profile_image_url").contains("https")) {
+                logoURL = new URL(more_info.getString("profile_image_url"));
+            }
+
+            if (more_info.getString("offline_image_url").contains("https")) {
+                videoBannerURL = new URL(more_info.getString("offline_image_url"));
+            }
 
             int views = more_info.getInt("view_count");
             String description = more_info.getString("description");
