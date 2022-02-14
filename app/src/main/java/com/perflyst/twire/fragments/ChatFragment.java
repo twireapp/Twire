@@ -47,6 +47,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.adapters.ChatAdapter;
 import com.perflyst.twire.chat.ChatManager;
@@ -292,6 +293,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
             }
         });
+
+        TwireApplication.backgroundPoster.post(chatManager);
 
         if (supportedTextEmotes == null) {
             supportedTextEmotes = new ArrayList<>();
