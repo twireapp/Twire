@@ -599,7 +599,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                 }
 
                 List<String> emoteUsers = new ArrayList<>();
-                JSONArray badgeUsers = users.getJSONArray(Integer.toString(badgeIndex + 1));
+                JSONArray badgeUsers = users.getJSONArray(badge.getString("id"));
                 for (int userIndex = 0; userIndex < badgeUsers.length(); userIndex++) {
                     emoteUsers.add(badgeUsers.getString(userIndex));
                 }
