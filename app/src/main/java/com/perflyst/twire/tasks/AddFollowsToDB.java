@@ -105,7 +105,7 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
         if (result != null) {
             TempStorage.addLoadedStreamer(result);
             Log.d(LOG_TAG, "Count of streamers added: " + result.size());
-            Log.d(LOG_TAG, "Streamers (" + result.toString() + ") added to database");
+            Log.d(LOG_TAG, "Streamers (" + result + ") added to database");
         }
     }
 

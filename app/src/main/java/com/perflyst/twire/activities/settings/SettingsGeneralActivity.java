@@ -182,13 +182,9 @@ public class SettingsGeneralActivity extends ThemeActivity {
             helper.onWipe(helper.getWritableDatabase(), settings.isLoggedIn());
             Toast infoToast = Toast.makeText(getBaseContext(), getString(R.string.gen_toast_wipe_database), Toast.LENGTH_SHORT);
             infoToast.show();
-        });
-
-        dialog.getBuilder().onNegative((dialog2, which) -> {
+        }).onNegative((dialog2, which) -> {
             dialog2.dismiss();
-        });
-
-        dialog.show();
+        }).show();
     }
 
     // Export/Import for Follows
@@ -201,13 +197,9 @@ public class SettingsGeneralActivity extends ThemeActivity {
             int exported = helper.onExport(helper.getWritableDatabase());
             Toast infoToast = Toast.makeText(getBaseContext(), String.format(getString(R.string.gen_toast_export_database), exported), Toast.LENGTH_SHORT);
             infoToast.show();
-        });
-
-        dialog.getBuilder().onNegative((dialog2, which) -> {
+        }).onNegative((dialog2, which) -> {
             dialog2.dismiss();
-        });
-
-        dialog.show();
+        }).show();
     }
 
     public void onImport(View v) {
@@ -218,13 +210,9 @@ public class SettingsGeneralActivity extends ThemeActivity {
             int imported = helper.onImport(helper.getWritableDatabase());
             Toast infoToast = Toast.makeText(getBaseContext(), String.format(getString(R.string.gen_toast_import_database), imported), Toast.LENGTH_SHORT);
             infoToast.show();
-        });
-
-        dialog.getBuilder().onNegative((dialog2, which) -> {
+        }).onNegative((dialog2, which) -> {
             dialog2.dismiss();
-        });
-
-        dialog.show();
+        }).show();
     }
 
     public void onClickImageProxy(View v) {
