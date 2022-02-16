@@ -3,6 +3,7 @@ package com.perflyst.twire.activities.main;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.common.collect.Lists;
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
@@ -72,8 +73,14 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
         List<StreamInfo> mResultList = new ArrayList<>();
         final String ARRAY_KEY = "data";
         for (List<ChannelInfo> chunk : Lists.partition(channels, 100)) {
-            String url = helix_url + Lists.transform(chunk, channelInfo -> "&user_id=" + channelInfo.getUserId());
-
+            // this returns a list, I found no easy way to convert it to a string
+            List ids = Lists.transform(chunk, channelInfo -> "&user_id=" + channelInfo.getUserId());
+            // convert the new list to a string
+            String id_string = "";
+            for (int i=0; i<ids.size(); i++) {
+                id_string = id_string + ids.get(i);
+            }
+            String url = helix_url + id_string;
             // request the url
             String temp_jsonString = Service.urlToJSONStringHelix(url, this);
             JSONObject fullDataObject = new JSONObject(temp_jsonString);
@@ -84,11 +91,6 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
                 JSONObject streamObject = temp_array.getJSONObject(i);
                 mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
             }
-        }
-
-        for (int i = 0; i < final_array.length(); i++) {
-            JSONObject streamObject = final_array.getJSONObject(i);
-            mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
         }
 
         int elementsToFetch = mAdapter.getItemCount() + mResultList.size();
