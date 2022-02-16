@@ -57,9 +57,7 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, ExecutionException, InterruptedException, MalformedURLException {
         // build the api link
-        // String helix_url = "https://api.twitch.tv/helix/streams?first=100" + getLimit();
         String helix_url = "https://api.twitch.tv/helix/streams?first=100";
-        String user_logins = "";
 
         ArrayList<ChannelInfo> channels;
         if (TempStorage.hasLoadedStreamers()) {
@@ -70,46 +68,23 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
             channels = new ArrayList<>(subscriptionsTask.get().values());
         }
 
-        ArrayList<String> requesturls = new ArrayList<>();
-        int number = 0;
-        int exactnumber = 1;
-
-        // loop over all channel in the DB
-        for (ChannelInfo si : channels) {
-            // if the number of channels, already in the url, is smaller than 99 and is not the last channel
-            // e.g. if there are 160 Channels in the DB then this will result in 2 request urls ([0-99] and [100-159])
-            if (number <= 99 && exactnumber != channels.size()) {
-                user_logins = user_logins + "&user_id=" + si.getUserId();
-                number++;
-                // if the request url has 100 user ids or is the last channel in the list
-            } else if (number > 99 || exactnumber == channels.size()) {
-                // add the new request url to the list
-                requesturls.add(helix_url + user_logins);
-                // reset stuff
-                user_logins = "";
-                number = 0;
-            }
-            exactnumber++;
-        }
-
-        JSONArray final_array = new JSONArray();
+        // loop over all the channels in the DB in chunks of 100
+        List<StreamInfo> mResultList = new ArrayList<>();
         final String ARRAY_KEY = "data";
+        for (List<ChannelInfo> chunk : Lists.partition(channels, 100)) {
+            String url = helix_url + Lists.transform(chunk, channelInfo -> "&user_id=" + channelInfo.getUserId());
 
-        // for every request url in the list
-        for (int i=0; i<requesturls.size(); i++) {
-            String temp_jsonString;
             // request the url
-            temp_jsonString = Service.urlToJSONStringHelix(requesturls.get(i), this);
+            String temp_jsonString = Service.urlToJSONStringHelix(url, this);
             JSONObject fullDataObject = new JSONObject(temp_jsonString);
             // create the array
             JSONArray temp_array = fullDataObject.getJSONArray(ARRAY_KEY);
             // append the new array to the final one
-            for (int x=0; x<temp_array.length(); x++) {
-                final_array.put(temp_array.get(x));
+            for (int i = 0; i < temp_array.length(); i++) {
+                JSONObject streamObject = temp_array.getJSONObject(i);
+                mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
             }
         }
-
-        List<StreamInfo> mResultList = new ArrayList<>();
 
         for (int i = 0; i < final_array.length(); i++) {
             JSONObject streamObject = final_array.getJSONObject(i);
