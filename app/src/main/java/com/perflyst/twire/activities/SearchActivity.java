@@ -264,7 +264,7 @@ public class SearchActivity extends ThemeActivity {
 
                 for (int i = 0; i < mChannelArray.length(); i++) {
                     JSONObject channel = mChannelArray.getJSONObject(i);
-                    mStreamers.add(JSONService.getStreamerInfo(channel, false));
+                    mStreamers.add(JSONService.getStreamerInfo(getContext(), channel));
                 }
 
             }

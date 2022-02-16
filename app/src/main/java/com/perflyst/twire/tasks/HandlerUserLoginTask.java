@@ -34,31 +34,31 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
         mLoginActivity = new WeakReference<>((LoginActivity) params[2]);
 
         try {
-            String BASE_USER_INFO_URL = "https://api.twitch.tv/kraken/user?oauth_token=";
-            String jsonString = Service.urlToJSONString(BASE_USER_INFO_URL + token);
+            // the User is fetched by the Bearer token
+            String BASE_USER_INFO_URL = "https://api.twitch.tv/helix/users";
+            String jsonString = Service.urlToJSONStringHelix(BASE_USER_INFO_URL, mSettings.getContext());
             Log.d(LOG_TAG, "JSON: " + jsonString);
 
-            JSONObject baseJSON = new JSONObject(jsonString);
+            JSONObject baseJSON = new JSONObject(jsonString).getJSONArray("data").getJSONObject(0);
             // This is the keys to get information from the JSONObject
             String USER_DISPLAY_NAME_STRING = "display_name";
             String mDisplayName = baseJSON.getString(USER_DISPLAY_NAME_STRING);
-            String USER_NAME_STRING = "name";
+            String USER_NAME_STRING = "login";
             String mUserName = baseJSON.getString(USER_NAME_STRING);
-            String USER_BIO_STRING = "bio";
+            String USER_BIO_STRING = "description";
             String mUserBio = baseJSON.getString(USER_BIO_STRING);
-            String USER_LOGO_URL_STRING = "logo";
+            String USER_LOGO_URL_STRING = "profile_image_url";
             String mLogoURL = baseJSON.getString(USER_LOGO_URL_STRING);
             String USER_EMAIL_ADDRESS_STRING = "email";
             String mEmail = baseJSON.getString(USER_EMAIL_ADDRESS_STRING);
             String USER_CREATION_DATE_STRING = "created_at";
             String mCreatedAtDate = baseJSON.getString(USER_CREATION_DATE_STRING);
-            String USER_UPDATED_DATE_STRING = "updated_at";
-            String mUpdateAtDate = baseJSON.getString(USER_UPDATED_DATE_STRING);
+            String mUpdateAtDate = baseJSON.getString(USER_CREATION_DATE_STRING);
             String USER_TYPE_STRING = "type";
             String mUserType = baseJSON.getString(USER_TYPE_STRING);
-            String USER_IS_PARTNERED_BOOLEAN = "partnered";
-            boolean isPartner = baseJSON.getBoolean(USER_IS_PARTNERED_BOOLEAN);
-            String USER_ID_INT = "_id";
+            String USER_TYPE = "broadcaster_type";
+            boolean isPartner = baseJSON.getString(USER_TYPE) == "partner";
+            String USER_ID_INT = "id";
             int mID = baseJSON.getInt(USER_ID_INT);
 
             return new Object[]{

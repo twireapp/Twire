@@ -23,7 +23,7 @@ import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
  */
 class GameViewHolder extends MainActivityAdapter.ElementsViewHolder {
     final View sharedPadding;
-    private final TextView vGameViewers;
+    //private final TextView vGameViewers;
     private final TextView vGameTitle;
     private final ImageView vGamePreview;
     private final CardView vCard;
@@ -32,14 +32,16 @@ class GameViewHolder extends MainActivityAdapter.ElementsViewHolder {
         super(v);
         vGamePreview = v.findViewById(R.id.image_game_preview);
         vGameTitle = v.findViewById(R.id.game_card_title);
-        vGameViewers = v.findViewById(R.id.game_viewers);
+        //vGameViewers = v.findViewById(R.id.game_viewers);
         vCard = v.findViewById(R.id.cardView_game);
         sharedPadding = v.findViewById(R.id.shared_padding);
     }
 
+    /*
     TextView getGameViewers() {
         return vGameViewers;
     }
+     */
 
     TextView getGameTitle() {
         return vGameTitle;
@@ -146,8 +148,9 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
     void setViewData(Game element, GameViewHolder viewHolder) {
         // Set the data on the holder's views
         String mGameTitle = element.getGameTitle();
-        String mGameViewers = Integer.toString(element.getGameViewers());
+        //String mGameViewers = Integer.toString(element.getGameViewers());
         viewHolder.getGameTitle().setText(mGameTitle);
+        /*
         if (element.getGameViewers() == -1) {
             viewHolder.getGameViewers().setVisibility(View.GONE);
             if (getElementStyle().equals(getContext().getString(R.string.card_style_normal)))
@@ -155,6 +158,7 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
         } else {
             viewHolder.getGameViewers().setText(getContext().getString(R.string.game_viewers, mGameViewers));
         }
+         */
     }
 
     @Override
@@ -185,21 +189,21 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
     @Override
     protected void setExpandedStyle(GameViewHolder viewHolder) {
         viewHolder.getGameTitle().setVisibility(View.VISIBLE);
-        viewHolder.getGameViewers().setVisibility(View.VISIBLE);
+        //viewHolder.getGameViewers().setVisibility(View.VISIBLE);
         viewHolder.sharedPadding.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void setNormalStyle(GameViewHolder viewHolder) {
         viewHolder.getGameTitle().setVisibility(View.GONE);
-        viewHolder.getGameViewers().setVisibility(View.VISIBLE);
+        //viewHolder.getGameViewers().setVisibility(View.VISIBLE);
         viewHolder.sharedPadding.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void setCollapsedStyle(GameViewHolder viewHolder) {
         viewHolder.getGameTitle().setVisibility(View.GONE);
-        viewHolder.getGameViewers().setVisibility(View.GONE);
+        //viewHolder.getGameViewers().setVisibility(View.GONE);
         viewHolder.sharedPadding.setVisibility(View.GONE);
     }
 }

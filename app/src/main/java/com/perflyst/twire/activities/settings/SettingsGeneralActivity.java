@@ -1,5 +1,7 @@
 package com.perflyst.twire.activities.settings;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +27,7 @@ import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
+import com.perflyst.twire.service.SubscriptionsDbHelper;
 
 import java.util.regex.Matcher;
 
@@ -115,7 +119,6 @@ public class SettingsGeneralActivity extends ThemeActivity {
             MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialog(this, settings.getGeneralTwitchDisplayName());
             dialog.getBuilder().onPositive((dialog1, which) -> {
                 dialog1.dismiss();
-                Service.clearStreamerInfoDb(getBaseContext());
                 navigateToLogin();
             });
 
@@ -167,6 +170,49 @@ public class SettingsGeneralActivity extends ThemeActivity {
 
     public void onClickOpenChangelog(View v) {
         new ChangelogDialogFragment().show(getSupportFragmentManager(), "ChangelogDialog");
+    }
+
+    // Database Stuff below
+
+    public void onClickWipeFollows(View v) {
+        MaterialDialog dialog = DialogService.getSettingsWipeFollowsDialog(this);
+        dialog.getBuilder().onPositive((dialog1, which) -> {
+            dialog1.dismiss();
+            SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
+            helper.onWipe(helper.getWritableDatabase(), settings.isLoggedIn());
+            Toast infoToast = Toast.makeText(getBaseContext(), getString(R.string.gen_toast_wipe_database), Toast.LENGTH_SHORT);
+            infoToast.show();
+        }).onNegative((dialog2, which) -> {
+            dialog2.dismiss();
+        }).show();
+    }
+
+    // Export/Import for Follows
+
+    public void onExport(View v) {
+        MaterialDialog dialog = DialogService.getSettingsExportFollowsDialog(this);
+        dialog.getBuilder().onPositive((dialog1, which) -> {
+            dialog1.dismiss();
+            SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
+            int exported = helper.onExport(helper.getWritableDatabase());
+            Toast infoToast = Toast.makeText(getBaseContext(), String.format(getString(R.string.gen_toast_export_database), exported), Toast.LENGTH_SHORT);
+            infoToast.show();
+        }).onNegative((dialog2, which) -> {
+            dialog2.dismiss();
+        }).show();
+    }
+
+    public void onImport(View v) {
+        MaterialDialog dialog = DialogService.getSettingsImportFollowsDialog(this);
+        dialog.getBuilder().onPositive((dialog1, which) -> {
+            dialog1.dismiss();
+            SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
+            int imported = helper.onImport(helper.getWritableDatabase());
+            Toast infoToast = Toast.makeText(getBaseContext(), String.format(getString(R.string.gen_toast_import_database), imported), Toast.LENGTH_SHORT);
+            infoToast.show();
+        }).onNegative((dialog2, which) -> {
+            dialog2.dismiss();
+        }).show();
     }
 
     public void onClickImageProxy(View v) {

@@ -58,32 +58,28 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
         return new GamesAdapter(recyclerView, getBaseContext(), this);
     }
 
+    public String pagination = "";
+
     @Override
     public List<Game> getVisualElements() throws JSONException {
         List<Game> resultList = new ArrayList<>();
 
         //Indentation is meant to mimic the structure of the JSON code
-        final String URL = "https://api.twitch.tv/kraken/games/top?limit=" + getLimit() + "&offset=" + getCurrentOffset();
-        final String GAMES_ARRAY_KEY = "top";
-        final String VIEWERS_INTEGER_KEY = "viewers";
-        final String CHANNELS_INTEGER_KEY = "channels";
-        final String GAME_OBJECT_KEY = "game";
-
-
-        String jsonString = Service.urlToJSONString(URL);
+        final String URL = "https://api.twitch.tv/helix/games/top?first=" + getLimit() + (pagination != "" ? "&after=" + pagination : "");
+        String jsonString = Service.urlToJSONStringHelix(URL, this);
         JSONObject fullDataObject = new JSONObject(jsonString);
-        JSONArray gamesArray = fullDataObject.getJSONArray(GAMES_ARRAY_KEY);
+        JSONArray gamesArray = fullDataObject.getJSONArray("data");
+        this.pagination = fullDataObject.getJSONObject("pagination").getString("cursor");
 
         for (int i = 0; i < gamesArray.length(); i++) {
             // Get all the JSON objects we need to get all the required data.
             JSONObject topObject = gamesArray.getJSONObject(i);
-            JSONObject gameObject = topObject.getJSONObject(GAME_OBJECT_KEY);
 
             // Get all the data with the keys
-            int viewers = topObject.getInt(VIEWERS_INTEGER_KEY);
-            int channels = topObject.getInt(CHANNELS_INTEGER_KEY);
+            int viewers = 0;
+            int channels = 0;
 
-            Game game = JSONService.getGame(gameObject);
+            Game game = JSONService.getGame(topObject);
             game.setGameViewers(viewers);
             game.setGameStreamers(channels);
 

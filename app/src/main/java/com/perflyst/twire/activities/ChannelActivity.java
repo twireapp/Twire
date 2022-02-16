@@ -294,21 +294,25 @@ public class ChannelActivity extends ThemeActivity {
                 () -> mFab.hide()
         );
 
-        mFab.setOnClickListener(v -> {
-            if (mFollowHandler.isStreamerFollowed()) {
-                mFollowHandler.unfollowStreamer();
-            } else {
-                mFollowHandler.followStreamer();
-            }
-
+        // If the channel got imported from Twitch, then hide the Follow/Unfollow Button
+        if (mFollowHandler.isStreamerTwitch()) {
             hideFAB();
-            new Handler().postDelayed(() -> {
-                updateFABIcon(!mFollowHandler.isStreamerFollowed());
-                showFAB();
-            }, SHOW_FAB_DELAY);
-        });
+        } else {
+            mFab.setOnClickListener(v -> {
+                if (mFollowHandler.isStreamerFollowed()) {
+                    mFollowHandler.unfollowStreamer();
+                } else {
+                    mFollowHandler.followStreamer();
+                }
 
-        updateFABIcon(mFollowHandler.isStreamerFollowed());
+                hideFAB();
+                new Handler().postDelayed(() -> {
+                    updateFABIcon(mFollowHandler.isStreamerFollowed());
+                    showFAB();
+                }, SHOW_FAB_DELAY);
+            });
+            updateFABIcon(mFollowHandler.isStreamerFollowed());
+        }
     }
 
     private void updateFABIcon(boolean isFollowing) {
@@ -319,12 +323,32 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private void hideFAB() {
-        mFab.setClickable(false);
         int HIDE_FAB_DURATION = 200;
         mFab.animate()
                 .translationY(getResources().getDimension(R.dimen.streamerInfo_fab_size) + getResources().getDimension(R.dimen.streamerInfo_fab_margin))
                 .setDuration(HIDE_FAB_DURATION)
                 .setInterpolator(new AccelerateInterpolator())
+                .setListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        mFab.setClickable(false);
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mFab.setVisibility(View.INVISIBLE);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                })
                 .start();
     }
 
@@ -337,7 +361,7 @@ public class ChannelActivity extends ThemeActivity {
                 .setListener(new Animator.AnimatorListener() {
                     @Override
                     public void onAnimationStart(Animator animation) {
-
+                        mFab.setVisibility(View.VISIBLE);
                     }
 
                     @Override
@@ -452,7 +476,7 @@ public class ChannelActivity extends ThemeActivity {
         protected VODAdapter mAdapter;
         private ChannelInfo channelInfo;
         private boolean broadcasts, showError;
-        private int limit = 10,
+        private int limit = 20,
                 offset = 0,
                 maxElementsToFetch = 500;
         private ProgressView progressView;
@@ -517,9 +541,11 @@ public class ChannelActivity extends ThemeActivity {
             return rootView;
         }
 
+        private String pagination = "";
+
         private String getUrl() {
             String type = broadcasts ? "archive" : "highlight";
-            return "https://api.twitch.tv/kraken/channels/" + channelInfo.getUserId() + "/videos?hls=true&limit=" + getLimit() + "&offset=" + getCurrentOffset() + "&broadcast_type=" + type;
+            return "https://api.twitch.tv/helix/videos?user_id=" + channelInfo.getUserId() + "&first=" + getLimit() + "&type=" + type + (pagination != "" ? "&after=" + pagination : "");
         }
 
         @Override
@@ -582,23 +608,60 @@ public class ChannelActivity extends ThemeActivity {
 
         }
 
+        private boolean archive_done = false;
+        private boolean highlight_done = false;
+
         @Override
         public List<VideoOnDemand> getVisualElements() throws JSONException {
-            List<VideoOnDemand> result = new ArrayList<>();
-            final String VIDEOS_ARRAY = "videos";
-            final String TOTAL_VODS_INT = "_total";
-            JSONObject vodsTopObject = new JSONObject(Service.urlToJSONString(getUrl()));
-            JSONArray vods = vodsTopObject.getJSONArray(VIDEOS_ARRAY);
+            String type = broadcasts ? "archive" : "highlight";
 
-            setMaxElementsToFetch(vodsTopObject.getInt(TOTAL_VODS_INT));
-            for (int i = 0; i < vods.length(); i++) {
-                VideoOnDemand vod = JSONService.getVod(vods.getJSONObject(i));
+            List<VideoOnDemand> result = new ArrayList<>();
+
+            if (type == "archive" && archive_done || type == "highlight" && highlight_done) {
+                return result;
+            }
+
+            if (type == "archive") {
+                archive_done = true;
+            } else if (type == "highlight") {
+                highlight_done = true;
+            }
+
+            ArrayList<String> vods = new ArrayList<>();
+            int fetch = 1;
+            // this takes around 1.5 Seconds on WIFI with 120 Vods
+            while (fetch == 1) {
+                JSONObject vodsTopObject = new JSONObject(Service.urlToJSONStringHelix(getUrl(), getContext()));
+                JSONArray temp_vods = vodsTopObject.getJSONArray("data");
+                for (int x=0; x < temp_vods.length(); x++) {
+                    vods.add(temp_vods.getString(x));
+                }
+
+                // check if the request returns a cursor for our pagination system
+                if (vodsTopObject.getJSONObject("pagination").has("cursor")) {
+                    // set our pagination cursor and keep fetching data
+                    if (pagination == vodsTopObject.getJSONObject("pagination").getString("cursor")) {
+                        pagination = "";
+                        fetch = 0;
+                    }
+                    pagination = vodsTopObject.getJSONObject("pagination").getString("cursor");
+                } else {
+                    // there is no cursor = no more data
+                    pagination = "";
+                    fetch = 0;
+                }
+            }
+
+            setMaxElementsToFetch(vods.size());
+            for (int i = 0; i < vods.size(); i++) {
+                JSONObject temp_object = new JSONObject(vods.get(i));
+                VideoOnDemand vod = JSONService.getVod(temp_object);
                 vod.setChannelInfo(channelInfo);
                 vod.setBroadcast(this.broadcasts);
                 result.add(vod);
             }
 
-            if (vodsTopObject.getInt(TOTAL_VODS_INT) <= 0 && getActivity() != null) {
+            if (vods.size() <= 0 && getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     if (mErrorEmote != null && mErrorText != null) {
                         showError();

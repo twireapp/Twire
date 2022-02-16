@@ -66,31 +66,45 @@ public class DeepLinkActivity extends AppCompatActivity {
             errorMessage = R.string.router_vod_error;
 
             int vodId = parseInt(params.get(1));
-            JSONObject jsonObject = new JSONObject(Service.urlToJSONString("https://api.twitch.tv/kraken/videos/" + vodId));
+            JSONArray jsonArray = new JSONObject(Service.urlToJSONStringHelix("https://api.twitch.tv/helix/videos?id=" + vodId, this)).getJSONArray("data");
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
             VideoOnDemand vod = JSONService.getVod(jsonObject);
-            vod.setChannelInfo(JSONService.getStreamerInfo(jsonObject.getJSONObject("channel"), true));
+
+            String channel_request_url = "https://api.twitch.tv/helix/users?id=" + jsonObject.getString("user_id");
+            String channel_string = Service.urlToJSONStringHelix(channel_request_url, this);
+            JSONObject channel_object = new JSONObject(channel_string);
+            JSONArray temp_array = channel_object.getJSONArray("data");
+            JSONObject JSONChannel = temp_array.getJSONObject(0);
+            vod.setChannelInfo(JSONService.getStreamerInfo(this, JSONChannel));
 
             intent = VODActivity.createVODIntent(vod, this, false);
         } else if (paramSize == 1) { // twitch.tv/<channel>
-            JSONObject jsonObject = new JSONObject(Service.urlToJSONString("https://api.twitch.tv/kraken/users?login=" + params.get(0)));
-            JSONArray users = jsonObject.getJSONArray("users");
-            if (users.length() == 0) {
+            String channel_request_url = "https://api.twitch.tv/helix/users?login=" + params.get(0);
+            String channel_string = Service.urlToJSONStringHelix(channel_request_url, this);
+            JSONObject channel_object = new JSONObject(channel_string);
+            JSONArray temp_array;
+            try {
+                temp_array = channel_object.getJSONArray("data");
+            } catch (Exception e) {
                 errorMessage = R.string.router_nonexistent_user;
                 return null;
             }
 
+            JSONObject JSONChannel = temp_array.getJSONObject(0);
+
             errorMessage = R.string.router_channel_error;
 
-            String userID = users.getJSONObject(0).getString("_id");
-            jsonObject = new JSONObject(Service.urlToJSONString("https://api.twitch.tv/kraken/streams/" + userID));
-            JSONObject streamObject = jsonObject.isNull("stream") ? null : jsonObject.getJSONObject("stream");
+            String userID = JSONChannel.getString("id");
+            JSONObject streamsObject = new JSONObject(Service.urlToJSONStringHelix("https://api.twitch.tv/helix/streams?user_id=" + userID, this));
+            JSONArray real_stream = streamsObject.getJSONArray("data");
+            JSONObject streamObject = real_stream.length() == 0 ? null : real_stream.getJSONObject(0);
 
             if (streamObject != null) {
                 StreamInfo stream = JSONService.getStreamInfo(this, streamObject, null, false);
                 intent = LiveStreamActivity.createLiveStreamIntent(stream, false, this);
             } else {
                 // If we can't load the stream, try to show the user's channel instead.
-                ChannelInfo info = Service.getStreamerInfoFromUserId(Integer.parseInt(userID));
+                ChannelInfo info = Service.getStreamerInfoFromUserId(Integer.parseInt(userID), this);
                 if (info != null) {
                     intent = new Intent(this, ChannelActivity.class);
                     intent.putExtra(getResources().getString(R.string.channel_info_intent_object), info);

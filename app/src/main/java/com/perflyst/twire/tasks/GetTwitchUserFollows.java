@@ -44,107 +44,93 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         baseContext = new WeakReference<>((Context) params[1]);
 
         Settings mSettings = new Settings(baseContext.get());
-        int userId = mSettings.getGeneralTwitchUserID();
 
-        final String BASE_URL = "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + userId + "&after=";
+        if (mSettings.isLoggedIn()) {
+            int userId = mSettings.getGeneralTwitchUserID();
 
-        // Get all the userIds of a users follows
-        try {
-            while (true) {
-                Request request = new Request.Builder()
-                        .url(BASE_URL + currentCursor)
-                        .header("Client-ID", getApplicationClientID())
-                        .header("Authorization", "Bearer " + mSettings.getGeneralTwitchAccessToken())
-                        .build();
+            final String BASE_URL = "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + userId + "&after=";
 
-                SimpleResponse response = makeRequest(request);
-                if (response == null)
-                    return null;
+            // Get all the userIds of a users follows
+            try {
+                while (true) {
+                    Request request = new Request.Builder()
+                            .url(BASE_URL + currentCursor)
+                            .header("Client-ID", getApplicationClientID())
+                            .header("Authorization", "Bearer " + mSettings.getGeneralTwitchAccessToken())
+                            .build();
 
-                JSONObject page = new JSONObject(response.body);
-                JSONArray follows = page.getJSONArray("data");
+                    SimpleResponse response = makeRequest(request);
+                    if (response == null)
+                        return null;
 
-                for (int i = 0; i < follows.length(); i++) {
-                    JSONObject follow = follows.getJSONObject(i);
-                    userSubs.add(follow.getInt("to_id"));
-                }
+                    JSONObject page = new JSONObject(response.body);
+                    JSONArray follows = page.getJSONArray("data");
 
-                JSONObject pagination = page.getJSONObject("pagination");
-                if (!pagination.has("cursor"))
-                    break;
-
-                currentCursor = pagination.getString("cursor");
-            }
-        } catch (JSONException e) {
-            Log.w(LOG_TAG, e.getMessage());
-        }
-        // ------- Has now loaded all the user's followed streamers ----------
-
-        ArrayList<Integer> loadedStreamerIds = new ArrayList<>();
-        ArrayList<ChannelInfo> streamersToAddToDB = new ArrayList<>();
-
-        // Get and save the streamerName of the already loadedStreamers
-        for (ChannelInfo si : TempStorage.getLoadedStreamers())
-            loadedStreamerIds.add(si.getUserId());
-
-        // Get the follows of the user defined twitch username
-        // If a retrieved follow is not in the loaded streamers - Then add it to the database.
-        for (Integer si : loadedStreamerIds) {
-            if (!userSubs.contains(si)) {
-                boolean result = deleteStreamerInfoFromDB(baseContext.get(), si);
-                try {
-                    for (ChannelInfo info : TempStorage.getLoadedStreamers()) {
-                        if (si.equals(info.getUserId()))
-                            TempStorage.removeLoadedStreamer(info);
+                    for (int i = 0; i < follows.length(); i++) {
+                        JSONObject follow = follows.getJSONObject(i);
+                        userSubs.add(follow.getInt("to_id"));
                     }
-                } catch (ConcurrentModificationException e) {
+
+                    JSONObject pagination = page.getJSONObject("pagination");
+                    if (!pagination.has("cursor"))
+                        break;
+
+                    currentCursor = pagination.getString("cursor");
+                }
+            } catch (JSONException e) {
+                Log.w(LOG_TAG, e.getMessage());
+            }
+            // ------- Has now loaded all the user's followed streamers ----------
+
+            ArrayList<Integer> loadedStreamerIds = new ArrayList<>();
+            ArrayList<ChannelInfo> streamersToAddToDB = new ArrayList<>();
+
+            // Get and save the streamerName of the already loadedStreamers
+            for (ChannelInfo si : TempStorage.getLoadedStreamers())
+                loadedStreamerIds.add(si.getUserId());
+
+            // Find the Twitch userIds that the app hasn't already loaded. Add it to the list of userIds that will be added to the database
+            ArrayList<Integer> IdsToAddToDB = new ArrayList<>();
+            ArrayList<StreamerInfoFromIdsThread> streamerInfoThreads = new ArrayList<>();
+            for (Integer id : userSubs) {
+                if (!loadedStreamerIds.contains(id)) {
+                    IdsToAddToDB.add(id);
+                }
+            }
+
+            // Create the threads with part of the userIds
+            final int NAMES_PER_THREAD = 20;
+            for (int i = 0; i < IdsToAddToDB.size(); i += NAMES_PER_THREAD) {
+                int lastIndex = i + NAMES_PER_THREAD;
+                if (lastIndex > IdsToAddToDB.size()) {
+                    lastIndex = IdsToAddToDB.size();
+                }
+                StreamerInfoFromIdsThread streamerInfoThread = new StreamerInfoFromIdsThread(new ArrayList<>(IdsToAddToDB.subList(i, lastIndex)));
+                streamerInfoThread.start();
+                streamerInfoThreads.add(streamerInfoThread);
+            }
+
+            // Wait for the threads to finish
+            for (Thread thread : streamerInfoThreads) {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
-                if (result) {
-                    Log.d(LOG_TAG, "Successfully removed " + si + " from database and loadedStreamers");
-                } else {
-                    Log.e(LOG_TAG, "Failed to remove " + si + " from database and loadedStreamers");
-                }
             }
-        }
 
-        // Find the Twitch userIds that the app hasn't already loaded. Add it to the list of userIds that will be added to the database
-        ArrayList<Integer> IdsToAddToDB = new ArrayList<>();
-        ArrayList<StreamerInfoFromIdsThread> streamerInfoThreads = new ArrayList<>();
-        for (Integer id : userSubs) {
-            if (!loadedStreamerIds.contains(id)) {
-                IdsToAddToDB.add(id);
+            // Get the result from the threads and add the StreamerInfo objects to the result list
+            for (StreamerInfoFromIdsThread thread : streamerInfoThreads) {
+                streamersToAddToDB.addAll(thread.getStreamers());
             }
+
+            return streamersToAddToDB;
+        } else {
+            ArrayList<ChannelInfo> streamersToAddToDB = new ArrayList<>();
+            return streamersToAddToDB;
         }
 
-        // Create the threads with part of the userIds
-        final int NAMES_PER_THREAD = 20;
-        for (int i = 0; i < IdsToAddToDB.size(); i += NAMES_PER_THREAD) {
-            int lastIndex = i + NAMES_PER_THREAD;
-            if (lastIndex > IdsToAddToDB.size()) {
-                lastIndex = IdsToAddToDB.size();
-            }
-            StreamerInfoFromIdsThread streamerInfoThread = new StreamerInfoFromIdsThread(new ArrayList<>(IdsToAddToDB.subList(i, lastIndex)));
-            streamerInfoThread.start();
-            streamerInfoThreads.add(streamerInfoThread);
-        }
 
-        // Wait for the threads to finish
-        for (Thread thread : streamerInfoThreads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Get the result from the threads and add the StreamerInfo objects to the result list
-        for (StreamerInfoFromIdsThread thread : streamerInfoThreads) {
-            streamersToAddToDB.addAll(thread.getStreamers());
-        }
-
-        return streamersToAddToDB;
     }
 
     @Override
@@ -174,7 +160,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         @Override
         public void run() {
             for (Integer name : userIds) {
-                ChannelInfo info = getStreamerInfoFromUserId(name);
+                ChannelInfo info = getStreamerInfoFromUserId(name, baseContext.get());
                 if (info != null) {
                     info.setNotifyWhenLive(true); // Enable by default
                 }

@@ -1,14 +1,19 @@
 package com.perflyst.twire.activities.main;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
+import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.service.JSONService;
 import com.perflyst.twire.service.Service;
-import com.perflyst.twire.service.Settings;
+import com.perflyst.twire.service.TempStorage;
+import com.perflyst.twire.tasks.GetFollowsFromDB;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour;
@@ -20,6 +25,7 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
 
@@ -51,18 +57,34 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
     }
 
     @Override
-    public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
-        final String URL = "https://api.twitch.tv/kraken/streams/followed?oauth_token=" + new Settings(getBaseContext()).getGeneralTwitchAccessToken() + "&limit=" + getLimit() + "&offset=" + getCurrentOffset() + "&stream_type=live";
-        final String ARRAY_KEY = "streams";
+    public List<StreamInfo> getVisualElements() throws JSONException, ExecutionException, InterruptedException, MalformedURLException {
+        // build the api link
+        String helix_url = "https://api.twitch.tv/helix/streams?first=100";
 
+        ArrayList<ChannelInfo> channels;
+        if (TempStorage.hasLoadedStreamers()) {
+            channels = new ArrayList<>(TempStorage.getLoadedStreamers());
+        } else {
+            GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
+            subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
+            channels = new ArrayList<>(subscriptionsTask.get().values());
+        }
+
+        // loop over all the channels in the DB in chunks of 100
         List<StreamInfo> mResultList = new ArrayList<>();
-        String jsonString = Service.urlToJSONString(URL);
-        JSONObject fullDataObject = new JSONObject(jsonString);
-        JSONArray topStreamsArray = fullDataObject.getJSONArray(ARRAY_KEY);
-
-        for (int i = 0; i < topStreamsArray.length(); i++) {
-            JSONObject streamObject = topStreamsArray.getJSONObject(i);
-            mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
+        final String ARRAY_KEY = "data";
+        for (List<ChannelInfo> chunk : Lists.partition(channels, 100)) {
+            String url = helix_url + Joiner.on("").join(Lists.transform(chunk, channelInfo -> "&user_id=" + channelInfo.getUserId()));
+            // request the url
+            String temp_jsonString = Service.urlToJSONStringHelix(url, this);
+            JSONObject fullDataObject = new JSONObject(temp_jsonString);
+            // create the array
+            JSONArray temp_array = fullDataObject.getJSONArray(ARRAY_KEY);
+            // append the new array to the final one
+            for (int i = 0; i < temp_array.length(); i++) {
+                JSONObject streamObject = temp_array.getJSONObject(i);
+                mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
+            }
         }
 
         int elementsToFetch = mAdapter.getItemCount() + mResultList.size();

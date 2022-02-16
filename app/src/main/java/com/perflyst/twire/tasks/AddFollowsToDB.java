@@ -64,6 +64,7 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
             values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, subToAdd.getFollowers());
             values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, subToAdd.getViews());
             values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, subToAdd.isNotifyWhenLive() && !disableForStreamer ? 1 : 0);
+            values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, 1);
 
 
             // Test if the URL strings are null, to make sure we don't call toString on a null.
@@ -104,7 +105,7 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
         if (result != null) {
             TempStorage.addLoadedStreamer(result);
             Log.d(LOG_TAG, "Count of streamers added: " + result.size());
-            Log.d(LOG_TAG, "Streamers (" + result.toString() + ") added to database");
+            Log.d(LOG_TAG, "Streamers (" + result + ") added to database");
         }
     }
 

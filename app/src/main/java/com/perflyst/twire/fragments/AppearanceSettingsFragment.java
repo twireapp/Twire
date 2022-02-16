@@ -165,22 +165,24 @@ public class AppearanceSettingsFragment extends Fragment {
             previewView.setLayoutParams(lp);
 
             View gameTitle = previewView.findViewById(R.id.game_card_title);
+            /*
             TextView gameViewers = previewView.findViewById(R.id.game_viewers);
             if (gameViewers.getText().equals("")) {
                 gameViewers.setText(getString(R.string.preview_game_viewers));
             }
+             */
 
             if (title.equals(getString(R.string.card_style_expanded))) {
                 gameTitle.setVisibility(View.VISIBLE);
-                gameViewers.setVisibility(View.VISIBLE);
+                //gameViewers.setVisibility(View.VISIBLE);
                 sharedPadding.setVisibility(View.VISIBLE);
             } else if (title.equals(getString(R.string.card_style_normal))) {
                 gameTitle.setVisibility(View.GONE);
-                gameViewers.setVisibility(View.VISIBLE);
+                //gameViewers.setVisibility(View.VISIBLE);
                 sharedPadding.setVisibility(View.VISIBLE);
             } else if (title.equals(getString(R.string.card_style_minimal))) {
                 gameTitle.setVisibility(View.GONE);
-                gameViewers.setVisibility(View.GONE);
+                //gameViewers.setVisibility(View.GONE);
                 sharedPadding.setVisibility(View.GONE);
             }
 

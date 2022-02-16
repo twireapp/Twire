@@ -807,7 +807,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                        }, mChannelInfo.getUserId()
+                        }, mChannelInfo.getUserId(), getContext()
                 );
 
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -1441,7 +1441,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mChannelInfo.getStreamerName(), types[settings.getStreamPlayerType()]);
         } else {
             GetLiveStreamURL task = new GetVODStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId.substring(1), types[settings.getStreamPlayerType()]);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId, types[settings.getStreamPlayerType()]);
         }
     }
 
