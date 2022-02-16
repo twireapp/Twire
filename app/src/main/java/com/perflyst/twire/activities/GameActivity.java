@@ -69,7 +69,7 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException, UnsupportedEncodingException {
         String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
 
-        String url = "https://api.twitch.tv/helix/streams?game_id=" + game.getGameId() + "&first=" + getLimit() + "&after=" + (pagination != "" ? "&after=" + pagination : "") + languageFilter;
+        String url = "https://api.twitch.tv/helix/streams?game_id=" + game.getGameId() + "&first=" + getLimit() + (pagination != "" ? "&after=" + pagination : "") + languageFilter;
 
         List<StreamInfo> mResultList = new ArrayList<>();
         String jsonString = Service.urlToJSONStringHelix(url, this);
