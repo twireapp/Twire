@@ -50,10 +50,11 @@ public class MyChannelsActivity extends LazyMainActivity<ChannelInfo> {
     public List<ChannelInfo> getVisualElements() throws ExecutionException, InterruptedException {
         if (TempStorage.hasLoadedStreamers()) {
             return new ArrayList<>(TempStorage.getLoadedStreamers());
-        } else {
-            GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
-            subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
-            return new ArrayList<>(subscriptionsTask.get().values());
         }
+
+        GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
+        subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
+
+        return new ArrayList<>(subscriptionsTask.get().values());
     }
 }
