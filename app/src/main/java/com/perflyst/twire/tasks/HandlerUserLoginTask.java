@@ -56,11 +56,8 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
             String mUpdateAtDate = baseJSON.getString(USER_CREATION_DATE_STRING);
             String USER_TYPE_STRING = "type";
             String mUserType = baseJSON.getString(USER_TYPE_STRING);
-            String USER_IS_PARTNERED_BOOLEAN = "broadcaster_type";
-            boolean isPartner = false;
-            if (baseJSON.getString(USER_IS_PARTNERED_BOOLEAN) == "partner") {
-                isPartner = true;
-            }
+            String USER_TYPE = "broadcaster_type";
+            boolean isPartner = baseJSON.getString(USER_TYPE) == "partner";
             String USER_ID_INT = "id";
             int mID = baseJSON.getInt(USER_ID_INT);
 
