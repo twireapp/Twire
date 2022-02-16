@@ -477,7 +477,7 @@ public class ChannelActivity extends ThemeActivity {
         protected VODAdapter mAdapter;
         private ChannelInfo channelInfo;
         private boolean broadcasts, showError;
-        private int limit = 10,
+        private int limit = 20,
                 offset = 0,
                 maxElementsToFetch = 500;
         private ProgressView progressView;
@@ -542,9 +542,11 @@ public class ChannelActivity extends ThemeActivity {
             return rootView;
         }
 
+        private String pagination = "";
+
         private String getUrl() {
             String type = broadcasts ? "archive" : "highlight";
-            return "https://api.twitch.tv/helix/videos?user_id=" + channelInfo.getUserId() + "&first=" + getLimit() + "&type=" + type;
+            return "https://api.twitch.tv/helix/videos?user_id=" + channelInfo.getUserId() + "&first=" + getLimit() + "&type=" + type + (pagination != "" ? "&after=" + pagination : "");
         }
 
         @Override
@@ -607,22 +609,60 @@ public class ChannelActivity extends ThemeActivity {
 
         }
 
+        private boolean archive_done = false;
+        private boolean highlight_done = false;
+
         @Override
         public List<VideoOnDemand> getVisualElements() throws JSONException {
+            String type = broadcasts ? "archive" : "highlight";
+
             List<VideoOnDemand> result = new ArrayList<>();
 
-            JSONObject vodsTopObject = new JSONObject(Service.urlToJSONStringHelix(getUrl(), getContext()));
-            JSONArray vods = vodsTopObject.getJSONArray("data");
+            if (type == "archive" && archive_done || type == "highlight" && highlight_done) {
+                return result;
+            }
 
-            setMaxElementsToFetch(vods.length());
-            for (int i = 0; i < vods.length(); i++) {
-                VideoOnDemand vod = JSONService.getVod(vods.getJSONObject(i));
+            if (type == "archive") {
+                archive_done = true;
+            } else if (type == "highlight") {
+                highlight_done = true;
+            }
+
+            ArrayList<String> vods = new ArrayList<>();
+            int fetch = 1;
+            // this takes around 1.5 Seconds on WIFI with 120 Vods
+            while (fetch == 1) {
+                JSONObject vodsTopObject = new JSONObject(Service.urlToJSONStringHelix(getUrl(), getContext()));
+                JSONArray temp_vods = vodsTopObject.getJSONArray("data");
+                for (int x=0; x < temp_vods.length(); x++) {
+                    vods.add(temp_vods.getString(x));
+                }
+
+                // check if the request returns a cursor for our pagination system
+                if (vodsTopObject.getJSONObject("pagination").has("cursor")) {
+                    // set our pagination cursor and keep fetching data
+                    if (pagination == vodsTopObject.getJSONObject("pagination").getString("cursor")) {
+                        pagination = "";
+                        fetch = 0;
+                    }
+                    pagination = vodsTopObject.getJSONObject("pagination").getString("cursor");
+                } else {
+                    // there is no cursor = no more data
+                    pagination = "";
+                    fetch = 0;
+                }
+            }
+
+            setMaxElementsToFetch(vods.size());
+            for (int i = 0; i < vods.size(); i++) {
+                JSONObject temp_object = new JSONObject(vods.get(i));
+                VideoOnDemand vod = JSONService.getVod(temp_object);
                 vod.setChannelInfo(channelInfo);
                 vod.setBroadcast(this.broadcasts);
                 result.add(vod);
             }
 
-            if (vods.length() <= 0 && getActivity() != null) {
+            if (vods.size() <= 0 && getActivity() != null) {
                 getActivity().runOnUiThread(() -> {
                     if (mErrorEmote != null && mErrorText != null) {
                         showError();
