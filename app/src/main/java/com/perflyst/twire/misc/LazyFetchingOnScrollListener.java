@@ -51,7 +51,6 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
     }
 
     public void checkForNewElements(RecyclerView recyclerView) {
-        int currentOffset = mLazyFetchingActivity.getCurrentOffset();
         int maxElementsToFetchTotal = mLazyFetchingActivity.getMaxElementsToFetch();
 
         // If the task has already been run, make a new task as a task can only be run once.
@@ -59,13 +58,14 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
             getElementsTask = new GetVisualElementsTask<>(mLazyFetchingActivity);
         }
 
+        RecyclerView.Adapter mAdapter = recyclerView.getAdapter();
+        if (mAdapter == null) {
+            return;
+        }
+
         // Only bother to check if we need to fetch more game objects if we are not already in the process of doing so.
-        if (getElementsTask.getStatus() != AsyncTask.Status.RUNNING && currentOffset < maxElementsToFetchTotal) {
+        if (getElementsTask.getStatus() != AsyncTask.Status.RUNNING && mAdapter.getItemCount() < maxElementsToFetchTotal) {
             GridLayoutManager lm = (GridLayoutManager) recyclerView.getLayoutManager();
-            RecyclerView.Adapter mAdapter = recyclerView.getAdapter();
-            if (mAdapter == null) {
-                return;
-            }
 
             int lastViewPosition = lm.findLastVisibleItemPosition();
             int spanCount = lm.getSpanCount();
