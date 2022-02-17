@@ -22,6 +22,8 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.ChannelsAdapter;
@@ -142,8 +144,8 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public String getElementsURL(String query) {
-            return "https://api.twitch.tv/kraken/search/games?type=suggest&query=" + query;
+        public String getElementsURL() {
+            return "https://api.twitch.tv/helix/search/categories?query=" + query + "&first=" + getLimit() + getPagination();
         }
 
         @Override
@@ -164,15 +166,17 @@ public class SearchActivity extends ThemeActivity {
         public List<Game> getVisualElements() throws JSONException {
             List<Game> mGames = new ArrayList<>();
             if (query != null) {
-                String URL = getElementsURL(query);
-                JSONObject fullDataObject = new JSONObject(Service.urlToJSONString(URL));
-                String GAMES_ARRAY = "games";
+                String URL = getElementsURL();
+                JSONObject fullDataObject = new JSONObject(Service.urlToJSONStringHelix(URL, getContext()));
+                String GAMES_ARRAY = "data";
                 JSONArray gamesArray = fullDataObject.getJSONArray(GAMES_ARRAY);
 
                 for (int i = 0; i < gamesArray.length(); i++) {
                     JSONObject gameObject = gamesArray.getJSONObject(i);
                     mGames.add(JSONService.getGame(gameObject));
                 }
+
+                setCursorFromResponse(fullDataObject);
             }
             return mGames;
         }
@@ -184,8 +188,8 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public String getElementsURL(String searchQuery) {
-            return "https://api.twitch.tv/kraken/search/streams?query=" + searchQuery + "&limit=" + getLimit() + "&offset=" + getCurrentOffset();
+        public String getElementsURL() {
+            return "https://api.twitch.tv/helix/search/channels?query=" + query + "&first=" + getLimit() + getPagination() + "&live_only=true";
         }
 
         @Override
@@ -209,15 +213,24 @@ public class SearchActivity extends ThemeActivity {
         public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
             List<StreamInfo> mStreams = new ArrayList<>();
             if (query != null) {
-                String URL = getElementsURL(query);
-                JSONObject fullDataObject = new JSONObject(Service.urlToJSONString(URL));
-                String STREAMS_ARRAY = "streams";
+                String URL = getElementsURL();
+                JSONObject fullDataObject = new JSONObject(Service.urlToJSONStringHelix(URL, getContext()));
+                String STREAMS_ARRAY = "data";
                 JSONArray mStreamsArray = fullDataObject.getJSONArray(STREAMS_ARRAY);
 
+                List<String> ids = new ArrayList<>();
                 for (int i = 0; i < mStreamsArray.length(); i++) {
                     JSONObject streamObject = mStreamsArray.getJSONObject(i);
-                    mStreams.add(JSONService.getStreamInfo(getContext(), streamObject, null, false));
+                    ids.add(streamObject.getString("id"));
                 }
+
+                String url = "https://api.twitch.tv/helix/streams?" + Joiner.on("&").join(Lists.transform(ids, id -> "user_id=" + id));
+                JSONArray result = new JSONObject(Service.urlToJSONStringHelix(url, getContext())).getJSONArray("data");
+                for (int i = 0; i < result.length(); i++) {
+                    mStreams.add(JSONService.getStreamInfo(getContext(), result.getJSONObject(i), false));
+                }
+
+                setCursorFromResponse(fullDataObject);
             }
 
             return mStreams;
@@ -235,8 +248,8 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public String getElementsURL(String searchQuery) {
-            return "https://api.twitch.tv/kraken/search/channels?limit=" + getLimit() + "&offset=" + getCurrentOffset() + "&query=" + searchQuery;
+        public String getElementsURL() {
+            return "https://api.twitch.tv/helix/search/channels?query=" + query + "&limit=" + getLimit() + getPagination();
         }
 
         @Override
@@ -257,16 +270,24 @@ public class SearchActivity extends ThemeActivity {
         public List<ChannelInfo> getVisualElements() throws JSONException, MalformedURLException {
             List<ChannelInfo> mStreamers = new ArrayList<>();
             if (query != null) {
-                String URL = getElementsURL(query);
-                JSONObject fullDataObject = new JSONObject(Service.urlToJSONString(URL));
-                String CHANNELS_ARRAY = "channels";
+                String URL = getElementsURL();
+                JSONObject fullDataObject = new JSONObject(Service.urlToJSONStringHelix(URL, getContext()));
+                String CHANNELS_ARRAY = "data";
                 JSONArray mChannelArray = fullDataObject.getJSONArray(CHANNELS_ARRAY);
 
+                List<String> ids = new ArrayList<>();
                 for (int i = 0; i < mChannelArray.length(); i++) {
                     JSONObject channel = mChannelArray.getJSONObject(i);
-                    mStreamers.add(JSONService.getStreamerInfo(getContext(), channel));
+                    ids.add(channel.getString("id"));
                 }
 
+                String url = "https://api.twitch.tv/helix/users?" + Joiner.on("&").join(Lists.transform(ids, id -> "id=" + id));
+                JSONArray result = new JSONObject(Service.urlToJSONStringHelix(url, getContext())).getJSONArray("data");
+                for (int i = 0; i < result.length(); i++) {
+                    mStreamers.add(JSONService.getStreamerInfo(getContext(), result.getJSONObject(i)));
+                }
+
+                setCursorFromResponse(fullDataObject);
             }
             return mStreamers;
         }
@@ -280,7 +301,7 @@ public class SearchActivity extends ThemeActivity {
         protected ProgressView mProgressView;
         String query = null;
         private LazyFetchingOnScrollListener<E> lazyFetchingOnScrollListener;
-        private int limit = 10,
+        private int limit = 20,
                 maxElementsToFetch = 500;
         private String cursor = null;
 
@@ -355,6 +376,14 @@ public class SearchActivity extends ThemeActivity {
             }
         }
 
+        protected String getPagination() {
+            return getCursor() == null ? "" : ("&after=" + getCursor());
+        }
+
+        protected void setCursorFromResponse(JSONObject response) throws JSONException {
+            setCursor(response.getJSONObject("pagination").getString("cursor"));
+        }
+
         @Override
         public int getLimit() {
             return limit;
@@ -407,7 +436,7 @@ public class SearchActivity extends ThemeActivity {
             maxElementsToFetch = aMax;
         }
 
-        public abstract String getElementsURL(String searchQuery);
+        public abstract String getElementsURL();
 
         public abstract AutoSpanBehaviour constructBehaviour();
 
