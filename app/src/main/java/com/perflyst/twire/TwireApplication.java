@@ -7,6 +7,8 @@ import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
 import com.perflyst.twire.utils.TLSSocketFactoryCompat;
+import com.techyourchance.threadposter.BackgroundThreadPoster;
+import com.techyourchance.threadposter.UiThreadPoster;
 
 import org.conscrypt.Conscrypt;
 
@@ -18,6 +20,9 @@ import java.security.Security;
 @SuppressLint("StaticFieldLeak") // It is alright to store application context statically
 public class TwireApplication extends MultiDexApplication {
     public static final boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
+
+    public static final UiThreadPoster uiThreadPoster = new UiThreadPoster();
+    public static final BackgroundThreadPoster backgroundPoster = new BackgroundThreadPoster();
 
     @Override
     public void onCreate() {

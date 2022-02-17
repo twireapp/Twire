@@ -100,7 +100,7 @@ public class DeepLinkActivity extends AppCompatActivity {
             JSONObject streamObject = real_stream.length() == 0 ? null : real_stream.getJSONObject(0);
 
             if (streamObject != null) {
-                StreamInfo stream = JSONService.getStreamInfo(this, streamObject, null, false);
+                StreamInfo stream = JSONService.getStreamInfo(this, streamObject, false);
                 intent = LiveStreamActivity.createLiveStreamIntent(stream, false, this);
             } else {
                 // If we can't load the stream, try to show the user's channel instead.

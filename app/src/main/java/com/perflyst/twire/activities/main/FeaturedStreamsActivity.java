@@ -77,7 +77,7 @@ public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
         for (int i = 0; i < topFeaturedArray.length(); i++) {
             // Get all the JSON objects we need to get all the required data.
             JSONObject streamObject = topFeaturedArray.getJSONObject(i);
-            StreamInfo mStreamInfo = JSONService.getStreamInfo(getBaseContext(), streamObject, null, false);
+            StreamInfo mStreamInfo = JSONService.getStreamInfo(getBaseContext(), streamObject, false);
             mStreamInfo.setPriority(1);
             resultList.add(mStreamInfo);
         }

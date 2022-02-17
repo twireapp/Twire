@@ -83,7 +83,7 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
             // append the new array to the final one
             for (int i = 0; i < temp_array.length(); i++) {
                 JSONObject streamObject = temp_array.getJSONObject(i);
-                mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
+                mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, false));
             }
         }
 

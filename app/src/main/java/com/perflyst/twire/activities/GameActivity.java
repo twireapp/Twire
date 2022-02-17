@@ -78,7 +78,7 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
 
         for (int i = 0; i < topStreamsArray.length(); i++) {
             JSONObject streamObject = topStreamsArray.getJSONObject(i);
-            mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
+            mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, false));
         }
 
         return mResultList;

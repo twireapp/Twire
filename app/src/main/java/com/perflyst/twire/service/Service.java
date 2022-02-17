@@ -47,6 +47,7 @@ import com.perflyst.twire.activities.main.TopGamesActivity;
 import com.perflyst.twire.activities.main.TopStreamsActivity;
 import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.model.ChannelInfo;
+import com.perflyst.twire.model.UserInfo;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -558,35 +559,25 @@ public class Service {
 
         ChannelInfo channelInfo = null;
         try {
-            JSONObject JSONString = new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/channels?broadcaster_id=" + streamerId, context)).getJSONArray("data").getJSONObject(0);
-            int userId = JSONString.getInt("broadcaster_id");
-            String displayName = JSONString.getString("broadcaster_name");
-            String name = JSONString.getString("broadcaster_login");
-
-            // Fetch the Total Follower Count here
-            String userFollows = Service.urlToJSONStringHelix("https://api.twitch.tv/helix/users/follows?first=1&to_id=" + userId, context);
-            JSONObject fullDataObject = new JSONObject(userFollows);
-            int followers = fullDataObject.getInt("total");
-
-            JSONObject more_info =  new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/users?id=" + userId, context)).getJSONArray("data").getJSONObject(0);
+            JSONObject info = new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/users?id=" + streamerId, context)).getJSONArray("data").getJSONObject(0);
 
             URL logoURL = null;
             URL videoBannerURL = null;
             // I don´t think helix still has these: https://discuss.dev.twitch.tv/t/twitch-api-user-profile-banner/24463/4
             URL profileBannerURL = null;
 
-            if (more_info.getString("profile_image_url").contains("https")) {
-                logoURL = new URL(more_info.getString("profile_image_url"));
+            if (info.getString("profile_image_url").contains("https")) {
+                logoURL = new URL(info.getString("profile_image_url"));
             }
 
-            if (more_info.getString("offline_image_url").contains("https")) {
-                videoBannerURL = new URL(more_info.getString("offline_image_url"));
+            if (info.getString("offline_image_url").contains("https")) {
+                videoBannerURL = new URL(info.getString("offline_image_url"));
             }
 
-            int views = more_info.getInt("view_count");
-            String description = more_info.getString("description");
+            int views = info.getInt("view_count");
+            String description = info.getString("description");
 
-            channelInfo = new ChannelInfo(userId, name, displayName, description, followers, views, logoURL, videoBannerURL, profileBannerURL, false);
+            channelInfo = new ChannelInfo(JSONService.getUserInfo(info), description, -1, views, logoURL, videoBannerURL, profileBannerURL, false);
 
         } catch (JSONException e) {
             Log.v("Service: ", e.getMessage());
@@ -650,10 +641,10 @@ public class Service {
                 }
 
                 // Create new StreamerInfo object from data fetched from database
-                ChannelInfo mChannelInfo = new ChannelInfo(streamerId, streamerName, displayName,
+                ChannelInfo mChannelInfo = new ChannelInfo(new UserInfo(streamerId, streamerName, displayName),
                         streamDescription, followers, views, logo, videoBanner, profileBanner, includeThumbnails);
                 mChannelInfo.setNotifyWhenLive(notifyWhenLive);
-                subscriptions.put(mChannelInfo.getStreamerName(), mChannelInfo);
+                subscriptions.put(mChannelInfo.getDisplayName(), mChannelInfo);
 
                 // Move to the next record in the database
                 cursor.moveToNext();
@@ -743,10 +734,9 @@ public class Service {
         // Create a new map of values where column names are the keys
         ContentValues values = new ContentValues();
         values.put(SubscriptionsDbHelper.COLUMN_ID, streamer.getUserId());
-        values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, streamer.getStreamerName());
+        values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, streamer.getLogin());
         values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, streamer.getDisplayName());
         values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, streamer.getStreamDescription());
-        values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, streamer.getFollowers());
         values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, streamer.getViews());
         values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, disableForStreamer ? 0 : 1); // Enable by default
         values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, 0);
@@ -762,12 +752,14 @@ public class Service {
         if (streamer.getProfileBannerURL() != null)
             values.put(SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL, streamer.getProfileBannerURL().toString());
 
-        SubscriptionsDbHelper helper = new SubscriptionsDbHelper(context);
-        SQLiteDatabase db = helper.getWritableDatabase();
-        db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
-        db.close();
 
-
+        streamer.getFollowers(context, followers -> {
+            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, followers.or(0));
+            SubscriptionsDbHelper helper = new SubscriptionsDbHelper(context);
+            SQLiteDatabase db = helper.getWritableDatabase();
+            db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
+            db.close();
+        });
     }
 
     public static void clearStreamerInfoDb(Context context) {

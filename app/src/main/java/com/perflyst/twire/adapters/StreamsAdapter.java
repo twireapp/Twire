@@ -15,11 +15,14 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityOptionsCompat;
 
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.misc.OnlineSince;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
+import com.perflyst.twire.model.UserInfo;
+import com.perflyst.twire.service.Service;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 import java.util.Comparator;
@@ -113,14 +116,18 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         int itemPosition = getRecyclerView().getChildAdapterPosition(view);
 
         StreamInfo item = getElements().get(itemPosition);
-        ChannelInfo mChannelInfo = item.getChannelInfo();
+        UserInfo userInfo = item.getUserInfo();
 
-        Intent intent = new Intent(getContext(), ChannelActivity.class);
-        intent.putExtra(getContext().getResources().getString(R.string.channel_info_intent_object), mChannelInfo);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        TwireApplication.backgroundPoster.post(() -> {
+            ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(userInfo.getUserId(), getContext());
 
-        getContext().startActivity(intent);
-        activity.overridePendingTransition(R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim);
+            Intent intent = new Intent(getContext(), ChannelActivity.class);
+            intent.putExtra(getContext().getResources().getString(R.string.channel_info_intent_object), mChannelInfo);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            getContext().startActivity(intent);
+            activity.overridePendingTransition(R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim);
+        });
     }
 
     @Override
@@ -163,7 +170,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         String viewers = getContext().getResources().getString(R.string.my_streams_cell_current_viewers, element.getCurrentViewers());
         String gameAndViewers = viewers + " - " + element.getGame();
 
-        viewHolder.vDisplayName.setText(element.getChannelInfo().getDisplayName());
+        viewHolder.vDisplayName.setText(element.getUserInfo().getDisplayName());
         viewHolder.vTitle.setText(element.getTitle());
         viewHolder.vGame.setText(gameAndViewers);
         viewHolder.vOnlineSince.setText(OnlineSince.getOnlineSince(element.getStartedAt()));
