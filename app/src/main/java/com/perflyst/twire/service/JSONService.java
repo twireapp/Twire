@@ -72,19 +72,19 @@ public class JSONService {
         // Twitch doesn't keep their field names consistent, so we need to make them consistent.
         if (userObject.has("broadcaster_login")) { // Search uses id, broadcaster_login, display_name
             return new UserInfo(
-                    userObject.getInt("broadcaster_id"),
+                    userObject.getString("broadcaster_id"),
                     userObject.getString("broadcaster_login"),
                     userObject.getString("broadcaster_name")
             );
         } else if (userObject.has("login")) { // Users uses id, login, display_name
             return new UserInfo(
-                    userObject.getInt("id"),
+                    userObject.getString("id"),
                     userObject.getString("login"),
                     userObject.getString("display_name")
             );
         } else if (userObject.has("user_id")) { // Streams uses user_id, user_login, user_name
             return new UserInfo(
-                    userObject.getInt("user_id"),
+                    userObject.getString("user_id"),
                     userObject.getString("user_login"),
                     userObject.getString("user_name")
             );
@@ -183,7 +183,7 @@ public class JSONService {
         String mediumPreview = preview.replace("{width}", "300").replace("{height}", "400");
         String largePreview = preview.replace("{width}", "600").replace("{height}", "800");
 
-        int game_ID = game.getInt(GAME_ID_KEY);
+        String game_ID = game.getString(GAME_ID_KEY);
 
         return new Game(gameTitle, game_ID, smallPreview, mediumPreview, largePreview);
     }

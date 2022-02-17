@@ -41,7 +41,7 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
     }
 
     public ArrayList<ChannelInfo> call() {
-        ArrayList<Integer> userSubs = new ArrayList<>();
+        ArrayList<String> userSubs = new ArrayList<>();
 
         String currentCursor = "";
 
@@ -51,7 +51,7 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
             return new ArrayList<>();
         }
 
-        int userId = mSettings.getGeneralTwitchUserID();
+        String userId = mSettings.getGeneralTwitchUserID();
 
         final String BASE_URL = "https://api.twitch.tv/helix/channels/followed?first=100&user_id=" + userId + "&after=";
 
@@ -73,7 +73,7 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
 
                 for (int i = 0; i < follows.length(); i++) {
                     JSONObject follow = follows.getJSONObject(i);
-                    userSubs.add(follow.getInt("broadcaster_id"));
+                    userSubs.add(follow.getString("broadcaster_id"));
                 }
 
                 JSONObject pagination = page.getJSONObject("pagination");
@@ -87,13 +87,13 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
         }
         // ------- Has now loaded all the user's followed streamers ----------
 
-        ArrayList<Integer> loadedStreamerIds = new ArrayList<>();
+        ArrayList<String> loadedStreamerIds = new ArrayList<>();
         ArrayList<ChannelInfo> streamersToAddToDB = new ArrayList<>();
 
         try (SubscriptionsDbHelper helper = new SubscriptionsDbHelper(baseContext.get())) {
             for (ChannelInfo si : TempStorage.getLoadedStreamers())
             {
-                int streamerId = si.getUserId();
+                String streamerId = si.getUserId();
                 // If the streamer was followed by the user on Twitch but is no longer followed, remove it from the database
                 if (!userSubs.contains(streamerId) && Service.isUserTwitch(streamerId, baseContext.get())) {
                     helper.getWritableDatabase().delete(SubscriptionsDbHelper.TABLE_NAME, SubscriptionsDbHelper.COLUMN_ID + " = ?", new String[] {String.valueOf(streamerId)});
@@ -107,9 +107,9 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
         }
 
         // Find the Twitch userIds that the app hasn't already loaded. Add it to the list of userIds that will be added to the database
-        ArrayList<Integer> IdsToAddToDB = new ArrayList<>();
+        ArrayList<String> IdsToAddToDB = new ArrayList<>();
         ArrayList<StreamerInfoFromIdsThread> streamerInfoThreads = new ArrayList<>();
-        for (Integer id : userSubs) {
+        for (String id : userSubs) {
             if (!loadedStreamerIds.contains(id)) {
                 IdsToAddToDB.add(id);
             }
@@ -156,16 +156,16 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
     }
 
     private class StreamerInfoFromIdsThread extends Thread {
-        private final ArrayList<Integer> userIds;
+        private final ArrayList<String> userIds;
         private final ArrayList<ChannelInfo> streamers = new ArrayList<>();
 
-        StreamerInfoFromIdsThread(ArrayList<Integer> ids) {
+        StreamerInfoFromIdsThread(ArrayList<String> ids) {
             this.userIds = ids;
         }
 
         @Override
         public void run() {
-            for (Integer name : userIds) {
+            for (String name : userIds) {
                 ChannelInfo info = getStreamerInfoFromUserId(name, baseContext.get());
                 if (info != null) {
                     info.setNotifyWhenLive(true); // Enable by default

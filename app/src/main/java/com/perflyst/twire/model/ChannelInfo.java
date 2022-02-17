@@ -33,7 +33,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
 
             source.readStringArray(data);
             return new ChannelInfo(
-                    new UserInfo(Integer.parseInt(data[0]), data[1], data[2]),
+                    new UserInfo(data[0], data[1], data[2]),
                     data[3],
                     Integer.parseInt(data[4]),
                     Integer.parseInt(data[5]),
@@ -135,7 +135,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
             return false;
 
         ChannelInfo other = (ChannelInfo) o;
-        return this.getUserId() == other.getUserId();
+        return this.getUserId().equals(other.getUserId());
 
     }
 

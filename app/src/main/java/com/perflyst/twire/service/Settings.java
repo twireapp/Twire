@@ -119,6 +119,15 @@ public class Settings {
             setTheme(newTheme);
         }
 
+        // Migrate int user ids to string
+        try {
+            int userId = preferences.getInt(this.GENERAL_TWITCH_USER_ID, 0);
+            if (userId != 0) {
+                setGeneralTwitchUserID(String.valueOf(userId));
+            }
+        } catch (ClassCastException ignored) {
+        }
+
         editor.apply();
     }
 
@@ -166,9 +175,9 @@ public class Settings {
         setValue(SHOW_CHANGELOGS, state);
     }
 
-    public ArrayList<Integer> getUsersNotToNotifyWhenLive() {
+    public ArrayList<String> getUsersNotToNotifyWhenLive() {
         SharedPreferences preferences = getPreferences();
-        return new Gson().fromJson(preferences.getString(this.NOTIFY_LIVE, ""), new TypeToken<ArrayList<Integer>>() {
+        return new Gson().fromJson(preferences.getString(this.NOTIFY_LIVE, ""), new TypeToken<ArrayList<String>>() {
         }.getType());
     }
 
@@ -177,7 +186,7 @@ public class Settings {
      * This is only used for when upgrading DB
      */
 
-    void setUsersNotToNotifyWhenLive(ArrayList<Integer> emotes) {
+    void setUsersNotToNotifyWhenLive(ArrayList<String> emotes) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.NOTIFY_LIVE, new Gson().toJson(emotes));
         editor.commit();
@@ -689,18 +698,18 @@ public class Settings {
         editor.commit();
     }
 
-    public int getGeneralTwitchUserID() {
+    public String getGeneralTwitchUserID() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getInt(this.GENERAL_TWITCH_USER_ID, 0);
+        return preferences.getString(this.GENERAL_TWITCH_USER_ID, "0");
     }
 
     /**
      * General - The user's twitch ID
      */
 
-    public void setGeneralTwitchUserID(int aID) {
+    public void setGeneralTwitchUserID(String aID) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putInt(this.GENERAL_TWITCH_USER_ID, aID);
+        editor.putString(this.GENERAL_TWITCH_USER_ID, aID);
         editor.commit();
     }
 

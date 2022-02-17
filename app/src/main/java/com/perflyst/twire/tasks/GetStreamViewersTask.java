@@ -15,11 +15,11 @@ import java.util.concurrent.Callable;
  * Created by Sebastian Rask on 17-09-2016.
  */
 public class GetStreamViewersTask implements Callable<Integer> {
-    private final int streamerUserId;
+    private final String streamerUserId;
     private final WeakReference<Context> context;
 
 
-    public GetStreamViewersTask(int streamerUserId, Context context) {
+    public GetStreamViewersTask(String streamerUserId, Context context) {
         this.streamerUserId = streamerUserId;
         this.context = new WeakReference<>(context);
     }

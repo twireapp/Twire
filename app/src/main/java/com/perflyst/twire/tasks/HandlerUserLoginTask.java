@@ -49,8 +49,8 @@ public class HandlerUserLoginTask implements Runnable {
             String mUserType = baseJSON.getString(USER_TYPE_STRING);
             String USER_TYPE = "broadcaster_type";
             boolean isPartner = baseJSON.getString(USER_TYPE).equals("partner");
-            String USER_ID_INT = "id";
-            int mID = baseJSON.getInt(USER_ID_INT);
+            String USER_ID_STRING = "id";
+            String mID = baseJSON.getString(USER_ID_STRING);
 
             mUserInfo = new Object[]{
                     mDisplayName,
@@ -77,7 +77,7 @@ public class HandlerUserLoginTask implements Runnable {
             mSettings.setGeneralTwitchUserCreatedDate((String) mUserInfo[5]);
             mSettings.setGeneralTwitchUserType((String) mUserInfo[7]);
             mSettings.setGeneralTwitchUserIsPartner((boolean) mUserInfo[8]);
-            mSettings.setGeneralTwitchUserID((int) mUserInfo[9]);
+            mSettings.setGeneralTwitchUserID((String) mUserInfo[9]);
 
             if (mUserInfo[2] != null)
                 mSettings.setGeneralTwitchUserBio((String) mUserInfo[2]);

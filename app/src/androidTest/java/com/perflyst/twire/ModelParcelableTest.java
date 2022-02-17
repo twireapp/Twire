@@ -35,7 +35,7 @@ public class ModelParcelableTest {
     @Test
     public void channelInfo() throws MalformedURLException {
         ChannelInfo channelInfo = new ChannelInfo(
-                new UserInfo(1, "login", "name"),
+                new UserInfo("1", "login", "name"),
                 "description",
                 2,
                 3,
@@ -57,7 +57,7 @@ public class ModelParcelableTest {
     public void game() {
         Game game = new Game(
                 "title",
-                1,
+                "1",
                 2,
                 3,
                 "https://example.com/small",
@@ -78,7 +78,7 @@ public class ModelParcelableTest {
     @Test
     public void streamInfo() {
         StreamInfo streamInfo = new StreamInfo(
-                new UserInfo(1, "login", "name"),
+                new UserInfo("1", "login", "name"),
                 "game",
                 2,
                 new String[] { "previews" },
@@ -98,7 +98,7 @@ public class ModelParcelableTest {
     @Test
     public void userInfo() {
         UserInfo userInfo = new UserInfo(
-                1,
+                "1",
                 "login",
                 "name"
         );

@@ -523,7 +523,8 @@ public class Service {
         return (HttpURLConnection) url.openConnection();
     }
 
-    public static ChannelInfo getStreamerInfoFromUserId(int streamerId, Context context) throws NullPointerException {
+    public static ChannelInfo getStreamerInfoFromUserId(String streamerId, Context context) throws NullPointerException {
+
         ChannelInfo channelInfo = null;
         try {
             JSONObject info = new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/users?id=" + streamerId, context)).getJSONArray("data").getJSONObject(0);
@@ -580,7 +581,7 @@ public class Service {
 
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
-                int streamerId = cursor.getInt(0);
+                String streamerId = cursor.getString(0);
                 String streamerName = cursor.getString(1);
                 String displayName = cursor.getString(2);
                 String streamDescription = cursor.getString(3);
@@ -642,7 +643,7 @@ public class Service {
         return result;
     }
 
-    public static boolean isUserTwitch(Integer streamerId, Context context) {
+    public static boolean isUserTwitch(String streamerId, Context context) {
         SubscriptionsDbHelper mDbHelper = new SubscriptionsDbHelper(context);
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + SubscriptionsDbHelper.TABLE_NAME + " WHERE " + SubscriptionsDbHelper.COLUMN_ID + "='" + streamerId + "';";
@@ -657,8 +658,8 @@ public class Service {
         return result;
     }
 
-    public static void updateStreamerInfoDbWithValues(ContentValues values, Context context, Integer id) {
-        updateStreamerInfoDbWithValues(values, context, SubscriptionsDbHelper.COLUMN_ID + "=?", new String[]{String.valueOf(id)});
+    public static void updateStreamerInfoDbWithValues(ContentValues values, Context context, String id) {
+        updateStreamerInfoDbWithValues(values, context, SubscriptionsDbHelper.COLUMN_ID + "=?", new String[]{id});
     }
 
     private static void updateStreamerInfoDbWithValues(ContentValues values, Context context, String whereClause, String[] whereArgs) {
@@ -686,7 +687,7 @@ public class Service {
         SQLiteDatabase db = mDbHelper.getWritableDatabase(); // Get the data repository in write mode
 
         boolean result = false;
-        int streamerId = channelInfo.getUserId();
+        String streamerId = channelInfo.getUserId();
         if (!isUserTwitch(streamerId, context)) {
             result = db.delete(SubscriptionsDbHelper.TABLE_NAME, SubscriptionsDbHelper.COLUMN_ID + " = '" + streamerId + "'", null) > 0;
 
@@ -700,7 +701,7 @@ public class Service {
     }
 
     public static void insertStreamerInfoToDB(Context context, ChannelInfo streamer) {
-        ArrayList<Integer> usersNotToNotifyWhenLive = new Settings(context).getUsersNotToNotifyWhenLive();
+        ArrayList<String> usersNotToNotifyWhenLive = new Settings(context).getUsersNotToNotifyWhenLive();
         boolean disableForStreamer = usersNotToNotifyWhenLive != null && usersNotToNotifyWhenLive.contains(streamer.getUserId());
 
         // Create a new map of values where column names are the keys

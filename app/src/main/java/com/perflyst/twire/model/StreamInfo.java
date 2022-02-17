@@ -115,9 +115,9 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
             return false;
         }
 
-        int thisId = getUserInfo().getUserId();
-        int otherId = ((StreamInfo) obj).getUserInfo().getUserId();
-        return thisId == otherId;
+        String thisId = getUserInfo().getUserId();
+        String otherId = ((StreamInfo) obj).getUserInfo().getUserId();
+        return thisId.equals(otherId);
     }
 
     /**

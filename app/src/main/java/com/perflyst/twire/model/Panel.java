@@ -6,7 +6,7 @@ package com.perflyst.twire.model;
 
 public class Panel {
     private final String mStreamerName;
-    private final int mUserId;
+    private final String mUserId;
     private final String mDescription;
     private final String mImageUrl;
     private final String mLinkUrl;
@@ -14,7 +14,7 @@ public class Panel {
     private final String mHtml;
     private int mOrder;
 
-    public Panel(String mStreamerName, int mUserId, int mOrder, String mDescription,
+    public Panel(String mStreamerName, String mUserId, int mOrder, String mDescription,
                  String mImageUrl, String mLinkUrl, String mTitle, String mHtml) {
         this.mStreamerName = mStreamerName;
         this.mUserId = mUserId;
@@ -34,7 +34,7 @@ public class Panel {
         return mStreamerName;
     }
 
-    public int getmUserId() {
+    public String getmUserId() {
         return mUserId;
     }
 

@@ -29,7 +29,7 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         }
 
     };
-    private int gameId;
+    private String gameId;
     private int gameViewers;
     private int gameStreamers;
     private final String gameTitle;
@@ -37,11 +37,11 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
     private final String gamePreviewMediumURL;
     private final String gamePreviewLargeURL;
 
-    public Game(String gameTitle, int gameId, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
+    public Game(String gameTitle, String gameId, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
         this(gameTitle, gameId, -1, -1, gamePreviewSmallURL, gamePreviewMediumURL, gamePreviewLargeURL);
     }
 
-    public Game(String gameTitle, int gameId, int gameViewers, int gameStreamers, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
+    public Game(String gameTitle, String gameId, int gameViewers, int gameStreamers, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
         this.gameId = gameId;
         this.gameViewers = gameViewers;
         this.gameStreamers = gameStreamers;
@@ -52,24 +52,25 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
     }
 
     public Game(Parcel parcel) {
-        String[] stringData = new String[4];
-        int[] intData = new int[3];
+        String[] stringData = new String[5];
+        int[] intData = new int[2];
         parcel.readStringArray(stringData);
         parcel.readIntArray(intData);
 
-        gameId = intData[0];
-        gameViewers = intData[1];
-        gameStreamers = intData[2];
+        gameViewers = intData[0];
+        gameStreamers = intData[1];
 
-        gameTitle = stringData[0];
-        gamePreviewSmallURL = stringData[1];
-        gamePreviewMediumURL = stringData[2];
-        gamePreviewLargeURL = stringData[3];
+        gameId = stringData[0];
+        gameTitle = stringData[1];
+        gamePreviewSmallURL = stringData[2];
+        gamePreviewMediumURL = stringData[3];
+        gamePreviewLargeURL = stringData[4];
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         String[] toSend = {
+                gameId,
                 gameTitle,
                 gamePreviewSmallURL,
                 gamePreviewMediumURL,
@@ -77,7 +78,6 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         };
 
         int[] integers = {
-                gameId,
                 gameViewers,
                 gameStreamers
         };
@@ -114,7 +114,7 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         return gamePreviewLargeURL;
     }
 
-    public int getGameId() { return gameId; }
+    public String getGameId() { return gameId; }
 
     @Override
     public boolean equals(Object o) {

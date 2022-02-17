@@ -88,15 +88,15 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
         //db.close();
     }
 
-    private ArrayList<Integer> getUsersNotToNotify(SQLiteDatabase db) throws SQLiteException {
+    private ArrayList<String> getUsersNotToNotify(SQLiteDatabase db) throws SQLiteException {
         String query = "SELECT * FROM " + SubscriptionsDbHelper.TABLE_NAME + " WHERE " + SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE + "=" + 0 + ";";
         Cursor cursor = db.rawQuery(query, null);
 
-        ArrayList<Integer> usersToNotify = new ArrayList<>();
+        ArrayList<String> usersToNotify = new ArrayList<>();
 
         while (cursor.moveToNext()) {
             int idPosition = cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_ID);
-            int userId = cursor.getInt(idPosition);
+            String userId = cursor.getString(idPosition);
 
             usersToNotify.add(userId);
         }

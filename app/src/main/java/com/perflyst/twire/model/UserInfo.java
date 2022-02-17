@@ -12,7 +12,7 @@ public class UserInfo implements Parcelable {
             String[] data = new String[3];
 
             source.readStringArray(data);
-            return new UserInfo(Integer.parseInt(data[0]), data[1], data[2]);
+            return new UserInfo(data[0], data[1], data[2]);
         }
 
         @Override
@@ -26,11 +26,11 @@ public class UserInfo implements Parcelable {
         }
     };
 
-    private final int id;
+    private final String id;
     private final String login;
     private final String name;
 
-    public UserInfo(int id, String login, String name) {
+    public UserInfo(String id, String login, String name) {
         this.id = id;
         this.login = login;
         this.name = name;
@@ -44,7 +44,7 @@ public class UserInfo implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         String[] toSend = {
-                String.valueOf(this.id),
+                this.id,
                 this.login,
                 this.name
         };
@@ -62,11 +62,11 @@ public class UserInfo implements Parcelable {
             return false;
 
         UserInfo other = (UserInfo) o;
-        return this.id == other.getUserId();
+        return this.id.equals(other.getUserId());
 
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return id;
     }
 

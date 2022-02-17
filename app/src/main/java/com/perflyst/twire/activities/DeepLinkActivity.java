@@ -1,7 +1,5 @@
 package com.perflyst.twire.activities;
 
-import static java.lang.Integer.parseInt;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -65,8 +63,7 @@ public class DeepLinkActivity extends AppCompatActivity {
         if (paramSize == 2 && params.get(0).equals("videos")) { // twitch.tv/videos/<id>
             errorMessage = R.string.router_vod_error;
 
-            int vodId = parseInt(params.get(1));
-            JSONArray jsonArray = new JSONObject(Service.urlToJSONStringHelix("https://api.twitch.tv/helix/videos?id=" + vodId, this)).getJSONArray("data");
+            JSONArray jsonArray = new JSONObject(Service.urlToJSONStringHelix("https://api.twitch.tv/helix/videos?id=" + params.get(1), this)).getJSONArray("data");
             JSONObject jsonObject = jsonArray.getJSONObject(0);
             VideoOnDemand vod = JSONService.getVod(jsonObject);
 
@@ -104,7 +101,7 @@ public class DeepLinkActivity extends AppCompatActivity {
                 intent = LiveStreamActivity.createLiveStreamIntent(stream, false, this);
             } else {
                 // If we can't load the stream, try to show the user's channel instead.
-                ChannelInfo info = Service.getStreamerInfoFromUserId(Integer.parseInt(userID), this);
+                ChannelInfo info = Service.getStreamerInfoFromUserId(userID, this);
                 if (info != null) {
                     intent = new Intent(this, ChannelActivity.class);
                     intent.putExtra(getString(R.string.channel_info_intent_object), info);
