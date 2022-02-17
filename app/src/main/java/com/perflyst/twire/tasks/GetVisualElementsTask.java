@@ -12,8 +12,6 @@ public class GetVisualElementsTask<T> extends AsyncTask<Void, Void, List<T>> {
     private final LazyFetchingActivity<T> mLazyActivity;
     private final String LOG_TAG = getClass().getSimpleName();
     private boolean isCancelled = false;
-    private int offset,
-            limit;
 
     public GetVisualElementsTask(LazyFetchingActivity<T> mLazyActivity) {
         this.mLazyActivity = mLazyActivity;
@@ -22,9 +20,6 @@ public class GetVisualElementsTask<T> extends AsyncTask<Void, Void, List<T>> {
     @Override
     protected final List<T> doInBackground(Void... params) {
         List<T> resultList = new ArrayList<>();
-
-        offset = mLazyActivity.getCurrentOffset();
-        limit = mLazyActivity.getLimit();
 
         try {
             resultList = mLazyActivity.getVisualElements();
@@ -45,8 +40,6 @@ public class GetVisualElementsTask<T> extends AsyncTask<Void, Void, List<T>> {
         if (mVisualElements.isEmpty()) {
             Log.i(LOG_TAG, "ADDING 0 VISUAL ELEMENTS");
             mLazyActivity.notifyUserNoElementsAdded();
-        } else {
-            mLazyActivity.setCurrentOffset(offset + limit);
         }
 
         mLazyActivity.addToAdapter(mVisualElements);

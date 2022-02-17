@@ -564,13 +564,13 @@ public class ChannelActivity extends ThemeActivity {
         }
 
         @Override
-        public int getCurrentOffset() {
-            return offset;
+        public String getCursor() {
+            return pagination;
         }
 
         @Override
-        public void setCurrentOffset(int aOffset) {
-            offset = aOffset;
+        public void setCursor(String cursor) {
+            pagination = cursor;
         }
 
         @Override

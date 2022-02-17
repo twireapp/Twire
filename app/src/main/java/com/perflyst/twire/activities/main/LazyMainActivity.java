@@ -18,7 +18,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
 
     protected Snackbar snackbar;
 
-    protected int currentOffset = 0;
+    protected String cursor = null;
     protected int elementsToFetchLimit = 20;
     protected int maxElementsToFetch = 500;
 
@@ -33,7 +33,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
         // Fetch new elements after the adapter animations are done
         // ToDo: These elements should be loaded while the animations are running. But not be added until the animations are done.
         new Handler().postDelayed(() -> {
-            setCurrentOffset(0);
+            setCursor(null);
             getRecyclerView().scrollToPosition(0);
             mOnScrollListener.resetAndFetch(getRecyclerView());
         }, duration);
@@ -64,7 +64,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
     @Override
     public void onResume() {
         super.onResume();
-        if (currentOffset == 0) {
+        if (cursor == null) {
             startRefreshing();
         }
     }
@@ -146,13 +146,13 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
     }
 
     @Override
-    public int getCurrentOffset() {
-        return currentOffset;
+    public String getCursor() {
+        return cursor;
     }
 
     @Override
-    public void setCurrentOffset(int currentOffset) {
-        this.currentOffset = currentOffset;
+    public void setCursor(String cursor) {
+        this.cursor = cursor;
     }
 
     @Override

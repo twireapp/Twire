@@ -281,8 +281,8 @@ public class SearchActivity extends ThemeActivity {
         String query = null;
         private LazyFetchingOnScrollListener<E> lazyFetchingOnScrollListener;
         private int limit = 10,
-                offset = 0,
                 maxElementsToFetch = 500;
+        private String cursor = null;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -345,7 +345,7 @@ public class SearchActivity extends ThemeActivity {
         public void reset(String searchQuery) {
             if (mAdapter != null && mRecyclerView != null) {
                 query = searchQuery;
-                setCurrentOffset(0);
+                setCursor(null);
                 mAdapter.clearNoAnimation();
                 mRecyclerView.scrollToPosition(0);
                 startProgress();
@@ -375,13 +375,13 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public int getCurrentOffset() {
-            return offset;
+        public String getCursor() {
+            return cursor;
         }
 
         @Override
-        public void setCurrentOffset(int aOffset) {
-            offset = aOffset;
+        public void setCursor(String cursor) {
+            this.cursor = cursor;
         }
 
         @Override

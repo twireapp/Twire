@@ -13,9 +13,9 @@ public interface LazyFetchingActivity<T> {
 
     void stopRefreshing();
 
-    int getCurrentOffset();
+    String getCursor();
 
-    void setCurrentOffset(int aOffset);
+    void setCursor(String cursor);
 
     void startProgress();
 
