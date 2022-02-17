@@ -35,8 +35,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
         new Handler().postDelayed(() -> {
             setCurrentOffset(0);
             getRecyclerView().scrollToPosition(0);
-            GetVisualElementsTask<T> getTopGamesTask = new GetVisualElementsTask<>(LazyMainActivity.this);
-            getTopGamesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            mOnScrollListener.resetAndFetch(getRecyclerView());
         }, duration);
     }
 
