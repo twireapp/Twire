@@ -1,5 +1,7 @@
 package com.perflyst.twire.activities.main;
 
+import static com.perflyst.twire.misc.Utils.getSystemLanguage;
+
 import android.util.Log;
 
 import com.perflyst.twire.R;
@@ -19,8 +21,6 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.perflyst.twire.misc.Utils.getSystemLanguage;
 
 public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
@@ -66,7 +66,7 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
         for (int i = 0; i < topStreamsArray.length(); i++) {
             JSONObject streamObject = topStreamsArray.getJSONObject(i);
-            mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, null, false));
+            mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, false));
         }
 
         return mResultList;

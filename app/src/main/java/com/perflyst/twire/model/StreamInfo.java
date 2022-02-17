@@ -26,7 +26,7 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
             return new StreamInfo[0];
         }
     };
-    private final ChannelInfo channelInfo;
+    private final UserInfo userInfo;
     private final String[] previews;
     private final long startedAt;
     private String game;
@@ -34,9 +34,9 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
     private String title;
     private int priority; // Variable only used for featured streams
 
-    public StreamInfo(ChannelInfo channelInfo, String game, int currentViewers,
+    public StreamInfo(UserInfo userInfo, String game, int currentViewers,
                       String[] previews, long startedAt, String title) {
-        this.channelInfo = channelInfo;
+        this.userInfo = userInfo;
         this.game = game;
         this.currentViewers = currentViewers;
         this.previews = previews;
@@ -61,7 +61,7 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
 
         this.startedAt = in.readLong();
         this.previews = in.createStringArray();
-        this.channelInfo = in.readParcelable(StreamInfo.class.getClassLoader());
+        this.userInfo = in.readParcelable(StreamInfo.class.getClassLoader());
     }
 
     @Override
@@ -80,7 +80,7 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
         dest.writeStringArray(stringsToSend);
         dest.writeLong(startedAt);
         dest.writeStringArray(previews);
-        dest.writeParcelable(channelInfo, flags);
+        dest.writeParcelable(userInfo, flags);
     }
 
     @Override
@@ -93,8 +93,8 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
         return title;
     }
 
-    public ChannelInfo getChannelInfo() {
-        return channelInfo;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
     public String getGame() {
@@ -131,9 +131,9 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
             return false;
         }
 
-        String thisStreamerName = getChannelInfo().getStreamerName();
-        String otherStreamerName = ((StreamInfo) obj).getChannelInfo().getStreamerName();
-        return thisStreamerName.equals(otherStreamerName);
+        int thisId = getUserInfo().getUserId();
+        int otherId = ((StreamInfo) obj).getUserInfo().getUserId();
+        return thisId == otherId;
     }
 
     /**
@@ -147,7 +147,7 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
     @Override
     @NonNull
     public String toString() {
-        return this.getChannelInfo().getDisplayName();
+        return this.getUserInfo().getDisplayName();
     }
 
     @Override

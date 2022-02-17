@@ -51,9 +51,9 @@ import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.adapters.ChatAdapter;
 import com.perflyst.twire.chat.ChatManager;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
-import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
+import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.ConstructChatMessageTask;
@@ -97,7 +97,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
     private ChatAdapter mChatAdapter;
     private ChatManager chatManager;
-    private ChannelInfo mChannelInfo;
+    private UserInfo mUserInfo;
     private String vodID;
     private Settings settings;
 
@@ -176,7 +176,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mRecyclerView.setLayoutManager(llm);
         mRecyclerView.setItemAnimator(null);
 
-        mChannelInfo = requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo));// intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
+        mUserInfo = requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo));// intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
         vodID = requireArguments().getString(getString(R.string.stream_fragment_vod_id));
 
         if (!settings.isLoggedIn() || vodID != null || !settings.getChatAccountConnect()) {
@@ -197,7 +197,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     public void onStart() {
         super.onStart();
         final ChatFragment instance = this;
-        chatManager = new ChatManager(getContext(), mChannelInfo.getStreamerName(), mChannelInfo.getUserId(), vodID, new ChatManager.ChatCallback() {
+        chatManager = new ChatManager(getContext(), mUserInfo, vodID, new ChatManager.ChatCallback() {
             private boolean connected = false;
 
             private boolean isFragmentActive() {

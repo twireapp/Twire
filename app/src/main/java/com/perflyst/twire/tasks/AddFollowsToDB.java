@@ -48,7 +48,7 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
             }
             // Make sure the streamer is not already in the database
             if (TempStorage.containsLoadedStreamer(subToAdd)) {
-                Log.d(LOG_TAG, "Streamer (" + subToAdd.getStreamerName() + ") already in database");
+                Log.d(LOG_TAG, "Streamer (" + subToAdd.getLogin() + ") already in database");
                 continue;
             }
 
@@ -58,10 +58,10 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
             // Create a new map of values where column names are the keys
             ContentValues values = new ContentValues();
             values.put(SubscriptionsDbHelper.COLUMN_ID, subToAdd.getUserId());
-            values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, subToAdd.getStreamerName());
+            values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, subToAdd.getLogin());
             values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, subToAdd.getDisplayName());
             values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, subToAdd.getStreamDescription());
-            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, subToAdd.getFollowers());
+            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, subToAdd.fetchFollowers(baseContext).or(0));
             values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, subToAdd.getViews());
             values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, subToAdd.isNotifyWhenLive() && !disableForStreamer ? 1 : 0);
             values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, 1);
@@ -94,7 +94,7 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
             subsAdded.add(subToAdd);
 
             // And to the map to ensure we can check if they are online
-            subsToCheck.put(subToAdd.getStreamerName(), subToAdd);
+            subsToCheck.put(subToAdd.getLogin(), subToAdd);
         }
         db.close();
 

@@ -29,7 +29,7 @@ public class FollowHandler {
 
     private void init() {
         if (new Settings(mContext).isLoggedIn()) {
-            isStreamerFollowed = Service.isUserFollowingStreamer(mChannelInfo.getStreamerName(), mContext);
+            isStreamerFollowed = Service.isUserFollowingStreamer(mChannelInfo.getLogin(), mContext);
             isStreamerTwitch = Service.isUserTwitch(mChannelInfo.getUserId(), mContext);
         } else {
             mDelegate.userIsNotLoggedIn();
@@ -38,7 +38,7 @@ public class FollowHandler {
 
     // isStreamerFollowed, isStreamerTwitch need to be checked every time, because they can change fast for example when spamming the button
     public boolean isStreamerFollowed() {
-        isStreamerFollowed = Service.isUserFollowingStreamer(mChannelInfo.getStreamerName(), mContext);
+        isStreamerFollowed = Service.isUserFollowingStreamer(mChannelInfo.getLogin(), mContext);
         return isStreamerFollowed;
     }
     public boolean isStreamerTwitch() {

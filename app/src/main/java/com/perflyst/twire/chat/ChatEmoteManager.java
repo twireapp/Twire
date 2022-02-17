@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.Emote;
+import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 
@@ -32,13 +33,11 @@ class ChatEmoteManager {
 
     private final Pattern emotePattern = Pattern.compile("(\\w+):((?:\\d+-\\d+,?)+)");
 
-    private final String channelName;
-    private final int channelId;
+    private final UserInfo channel;
     private final Settings settings;
 
-    ChatEmoteManager(String channelName, int channelId, Settings settings) {
-        this.channelName = channelName;
-        this.channelId = channelId;
+    ChatEmoteManager(UserInfo channel, Settings settings) {
+        this.channel = channel;
         this.settings = settings;
     }
 
@@ -58,7 +57,7 @@ class ChatEmoteManager {
 
         // BetterTTV emotes
         final String BTTV_GLOBAL_URL = "https://api.betterttv.net/3/cached/emotes/global";
-        final String BTTV_CHANNEL_URL = "https://api.betterttv.net/3/cached/users/twitch/" + channelId;
+        final String BTTV_CHANNEL_URL = "https://api.betterttv.net/3/cached/users/twitch/" + channel.getUserId();
         final String CHANNEL_EMOTE_ARRAY = "channelEmotes";
         final String SHARED_EMOTE_ARRAY = "sharedEmotes";
 
@@ -99,7 +98,7 @@ class ChatEmoteManager {
 
         // FFZ emotes
         final String FFZ_GLOBAL_URL = "https://api.frankerfacez.com/v1/set/global";
-        final String FFZ_CHANNEL_URL = "https://api.frankerfacez.com/v1/room/" + channelName;
+        final String FFZ_CHANNEL_URL = "https://api.frankerfacez.com/v1/room/" + channel.getLogin();
         final String DEFAULT_SETS = "default_sets";
         final String SETS = "sets";
         final String EMOTICONS = "emoticons";
@@ -151,7 +150,7 @@ class ChatEmoteManager {
         // 7TV emotes
         // API Doc: https://github.com/SevenTV/ServerGo/blob/master/docs/rest-api.md
         final String SEVENTV_GLOBAL_URL = "https://api.7tv.app/v2/emotes/global";
-        final String SEVENTV_CHANNEL_URL = "https://api.7tv.app/v2/users/" + channelName + "/emotes";
+        final String SEVENTV_CHANNEL_URL = "https://api.7tv.app/v2/users/" + channel.getLogin() + "/emotes";
 
         try {
             String seventvResponseglobal = enabled_seventv ? Service.urlToJSONString(SEVENTV_GLOBAL_URL) : "";

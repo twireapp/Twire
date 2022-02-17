@@ -8,8 +8,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.core.util.Consumer;
 
+import com.google.common.base.Optional;
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
+import com.perflyst.twire.service.Service;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,27 +28,46 @@ import java.util.ArrayList;
  * Created by Sebastian Rask on 30-01-2015.
  * This class is designed to hold all relevant information about a twitch user/streamer
  */
-public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainElement {
+public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Parcelable, MainElement {
     public static final Parcelable.Creator<ChannelInfo> CREATOR = new ClassLoaderCreator<ChannelInfo>() {
         @Override
         public ChannelInfo createFromParcel(Parcel source) {
-            return new ChannelInfo(source);
+            String[] data = new String[9];
+
+            source.readStringArray(data);
+            return new ChannelInfo(
+                    new UserInfo(Integer.parseInt(data[0]), data[1], data[2]),
+                    data[3],
+                    Integer.parseInt(data[4]),
+                    Integer.parseInt(data[5]),
+                    findUrl(data[6]),
+                    findUrl(data[7]),
+                    findUrl(data[8])
+            );
         }
 
         @Override
         public ChannelInfo createFromParcel(Parcel source, ClassLoader loader) {
-            return new ChannelInfo(source);
+            return createFromParcel(source);
         }
 
         @Override
         public ChannelInfo[] newArray(int size) {
             return new ChannelInfo[size];
         }
+
+        public URL findUrl(String text) {
+            if (text == null) return null;
+
+            try {
+                return new URL(text);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
     };
-    private final int userId;
-    private final String streamerName;
-    private final String displayName;
-    private final int followers;
+    private Optional<Integer> followers;
     private final int views;
     private String streamDescription;
     private URL logoURL;
@@ -52,16 +78,14 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
     private Bitmap profileBannerImage;
     private boolean notifyWhenLive;
 
-    public ChannelInfo(int userId, String streamerName, String displayName, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL, Boolean loadBitmap) {
-        this.streamerName = streamerName;
-        this.displayName = displayName;
+    public ChannelInfo(UserInfo userInfo, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL, Boolean loadBitmap) {
+        super(userInfo.getUserId(), userInfo.getLogin(), userInfo.getDisplayName());
         this.streamDescription = streamDescription;
-        this.followers = followers;
+        this.followers = followers == -1 ? Optional.absent() : Optional.of(followers);
         this.views = views;
         this.logoURL = logoURL;
         this.videoBannerURL = videoBannerURL;
         this.profileBannerURL = profileBannerURL;
-        this.userId = userId;
 
         if (loadBitmap) {
             LoadBitmapTask imageTask = new LoadBitmapTask();
@@ -69,48 +93,17 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         }
     }
 
-    public ChannelInfo(int userId, String streamerName, String displayName, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL) {
-        this.displayName = displayName;
-        this.streamerName = streamerName;
+    public ChannelInfo(UserInfo userInfo, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL) {
+        super(userInfo.getUserId(), userInfo.getLogin(), userInfo.getDisplayName());
         this.streamDescription = streamDescription;
-        this.followers = followers;
+        this.followers = followers == -1 ? Optional.absent() : Optional.of(followers);
         this.views = views;
         this.logoURL = logoURL;
         this.videoBannerURL = videoBannerURL;
         this.profileBannerURL = profileBannerURL;
-        this.userId = userId;
     }
 
     // Parcel Part
-    // Constructor to recreate the streamerInfo object when an activity receives it. - I think
-    public ChannelInfo(Parcel in) {
-        String[] data = new String[9];
-
-        in.readStringArray(data);
-        this.userId = Integer.parseInt(data[0]);
-        this.streamerName = data[1];
-        this.displayName = data[2];
-        this.streamDescription = data[3];
-        this.followers = Integer.parseInt(data[4]);
-        this.views = Integer.parseInt(data[5]);
-        // Test for null in URL and make sure the URLs are viable
-        try {
-            if (data[6] != null) {
-                this.logoURL = new URL(data[6]);
-            }
-
-            if (data[7] != null) {
-                this.videoBannerURL = new URL(data[7]);
-            }
-
-            if (data[8] != null) {
-                this.profileBannerURL = new URL(data[8]);
-            }
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -120,11 +113,11 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
     public void writeToParcel(Parcel dest, int flags) {
         // Create array with values to send with intent - I think
         String[] toSend = {
-                String.valueOf(this.userId),
-                this.streamerName,
-                this.displayName,
+                String.valueOf(this.getUserId()),
+                this.getLogin(),
+                this.getDisplayName(),
                 this.streamDescription,
-                String.valueOf(this.followers),
+                String.valueOf(this.followers.or(-1)),
                 String.valueOf(this.views),
                 null, //this.logoURL.toString(),
                 null, //this.videoBannerURL.toString(),
@@ -158,17 +151,12 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         this.notifyWhenLive = notifyWhenLive;
     }
 
-    @NonNull
-    public String toString() {
-        return this.displayName;
-    }
-
     public boolean equals(Object o) {
         if (getClass() != o.getClass())
             return false;
 
         ChannelInfo other = (ChannelInfo) o;
-        return this.streamerName.equals(other.getStreamerName());
+        return this.getUserId() == other.getUserId();
 
     }
 
@@ -189,18 +177,6 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         this.profileBannerImage = profileBannerImage;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public String getDisplayName() {
-        return this.displayName;
-    }
-
-    public String getStreamerName() {
-        return this.streamerName;
-    }
-
     public String getStreamDescription() {
         return this.streamDescription;
     }
@@ -209,8 +185,28 @@ public class ChannelInfo implements Comparable<ChannelInfo>, Parcelable, MainEle
         this.streamDescription = streamDescription;
     }
 
-    public int getFollowers() {
-        return followers;
+    public void getFollowers(Context context, Consumer<Optional<Integer>> callback) {
+        TwireApplication.backgroundPoster.post(() -> {
+            fetchFollowers(context);
+            TwireApplication.uiThreadPoster.post(() -> callback.accept(followers));
+        });
+    }
+
+    public Optional<Integer> fetchFollowers(Context context) {
+        if (followers.isPresent()) {
+            return followers;
+        }
+
+        String userFollows = Service.urlToJSONStringHelix("https://api.twitch.tv/helix/users/follows?first=1&to_id=" + getUserId(), context);
+
+        try {
+            JSONObject fullDataObject = new JSONObject(userFollows);
+            followers = Optional.of(fullDataObject.getInt("total"));
+            return followers;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return Optional.absent();
+        }
     }
 
     public int getViews() {

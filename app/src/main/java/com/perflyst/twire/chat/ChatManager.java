@@ -16,6 +16,7 @@ import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.model.IRCMessage;
+import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 
@@ -49,9 +50,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private final String LOG_TAG = getClass().getSimpleName();
     private final String user;
     private final String password;
-    private final String channelName;
-    private final String hashChannel;
-    private final int channelUserId;
+    private final UserInfo channel;
     private final String vodId;
     private final ChatCallback callback;
     private final ChatEmoteManager mEmoteManager;
@@ -76,9 +75,9 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     private boolean chatIsSlowmode;
     private boolean chatIsSubsonlymode;
 
-    public ChatManager(Context aContext, String aChannel, int aChannelUserId, String aVodId, ChatCallback aCallback) {
+    public ChatManager(Context aContext, UserInfo aChannel, String aVodId, ChatCallback aCallback) {
         Settings appSettings = new Settings(aContext);
-        mEmoteManager = new ChatEmoteManager(aChannel, aChannelUserId, appSettings);
+        mEmoteManager = new ChatEmoteManager(aChannel, appSettings);
 
         Log.d(LOG_TAG, "Login with main Account: " + appSettings.getChatAccountConnect());
 
@@ -96,9 +95,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             password = "SCHMOOPIIE";
         }
 
-        hashChannel = "#" + aChannel;
-        channelName = aChannel;
-        channelUserId = aChannelUserId;
+        channel = aChannel;
         vodId = aVodId;
         callback = aCallback;
 
@@ -131,11 +128,11 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
 
     @Override
     protected Void doInBackground(Void... params) {
-        Log.d(LOG_TAG, "Trying to start chat " + hashChannel + " for user " + user);
+        Log.d(LOG_TAG, "Trying to start chat " + channel.getLogin() + " for user " + user);
         mEmoteManager.loadCustomEmotes(() -> onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CUSTOM_EMOTES_FETCHED)));
 
         readBadges("https://badges.twitch.tv/v1/badges/global/display", globalBadges);
-        readBadges("https://badges.twitch.tv/v1/badges/channels/" + channelUserId + "/display", channelBadges);
+        readBadges("https://badges.twitch.tv/v1/badges/channels/" + channel.getUserId() + "/display", channelBadges);
         readFFZBadges();
 
         if (vodId == null) {
@@ -222,7 +219,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
             while ((line = reader.readLine()) != null) {
                 if (isStopping) {
                     leaveChannel();
-                    Log.d(LOG_TAG, "Stopping chat for " + channelName);
+                    Log.d(LOG_TAG, "Stopping chat for " + channel.getLogin());
                     break;
                 }
 
@@ -234,7 +231,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                     Log.d(LOG_TAG, "Connected >> " + user + " ~ irc.twitch.tv");
                     onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTED));
                     sendRawMessage("CAP REQ :twitch.tv/tags twitch.tv/commands");
-                    sendRawMessage("JOIN " + hashChannel + "\r\n");
+                    sendRawMessage("JOIN #" + channel.getLogin() + "\r\n");
                 } else if (line.startsWith("PING")) { // Twitch wants to know if we are still here. Send PONG and Server info back
                     handlePing(line);
                 } else if (line.toLowerCase().contains("disconnected")) {
@@ -540,7 +537,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
     public void sendMessage(final String message) {
         try {
             if (writer != null) {
-                writer.write("PRIVMSG " + hashChannel + " :" + message + "\r\n");
+                writer.write("PRIVMSG #" + channel.getLogin() + " :" + message + "\r\n");
                 writer.flush();
             }
         } catch (Exception e) {
@@ -552,7 +549,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
      * Leaves the current hashChannel
      */
     private void leaveChannel() {
-        sendRawMessage("PART " + hashChannel);
+        sendRawMessage("PART #" + channel.getLogin());
     }
 
     private void readBadges(String url, Map<String, Map<String, Badge>> badgeMap) {

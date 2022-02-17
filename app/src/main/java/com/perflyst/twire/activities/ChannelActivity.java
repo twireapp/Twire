@@ -114,7 +114,7 @@ public class ChannelActivity extends ThemeActivity {
         assert info != null;
 
         streamerInfoName.setText(info.getDisplayName());
-        streamerFollowers.setText(getReadableInt(info.getFollowers()));
+        info.getFollowers(getApplicationContext(), followers -> streamerFollowers.setText(getReadableInt(followers.or(0))));
         streamerViewers.setText(getReadableInt(info.getViews()));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -466,7 +466,7 @@ public class ChannelActivity extends ThemeActivity {
             mPanelsRecyclerView.setAdapter(mPanelsAdapter);
             mPanelsRecyclerView.setLayoutManager(llm);
 
-            GetPanelsTask mTask = new GetPanelsTask(info.getStreamerName(), mPanelsAdapter::addPanels);
+            GetPanelsTask mTask = new GetPanelsTask(info.getLogin(), mPanelsAdapter::addPanels);
             mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
     }

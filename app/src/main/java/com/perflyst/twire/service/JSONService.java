@@ -1,24 +1,19 @@
 package com.perflyst.twire.service;
 
 import android.content.Context;
-import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.Game;
 import com.perflyst.twire.model.StreamInfo;
+import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.model.VideoOnDemand;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
@@ -76,40 +71,50 @@ public class JSONService {
         return new VideoOnDemand(vodObject.getString(TITLE_STRING), gameTitle, vodObject.getString(PREVIEW_URL_IMAGE).replace("%{width}", "320").replace("%{height}", "180"), vodObject.getString(VIDEO_ID_STRING), vodObject.getString(CHANNEL_NAME_STRING), vodObject.getString(CHANNEL_DISPLAY_NAME_STRING), vodObject.getInt(VIDEO_VIEWS_INT), getVodLenght(vodObject.getString(VIDEO_LENGTH_INT)), vodObject.has(RECORDED_DATE_STRING) ? vodObject.getString(RECORDED_DATE_STRING) : "");
     }
 
-    public static StreamInfo getStreamInfo(Context context, JSONObject streamObject, @Nullable ChannelInfo aChannelInfo, boolean loadDescription) throws JSONException, MalformedURLException {
+    public static UserInfo getUserInfo(JSONObject userObject) throws JSONException {
+        // Twitch doesn't keep their field names consistent, so we need to make them consistent.
+        if (userObject.has("broadcaster_login")) { // Search uses id, broadcaster_login, display_name
+            return new UserInfo(
+                    userObject.getInt("id"),
+                    userObject.getString("broadcaster_login"),
+                    userObject.getString("display_name")
+            );
+        } else if (userObject.has("login")) { // Users uses id, login, display_name
+            return new UserInfo(
+                    userObject.getInt("id"),
+                    userObject.getString("login"),
+                    userObject.getString("display_name")
+            );
+        } else if (userObject.has("user_id")) { // Streams uses user_id, user_login, user_name
+            return new UserInfo(
+                    userObject.getInt("user_id"),
+                    userObject.getString("user_login"),
+                    userObject.getString("user_name")
+            );
+        }
+
+        throw new JSONException("Could not parse user JSON.");
+    }
+
+    public static StreamInfo getStreamInfo(Context context, JSONObject streamObject, boolean loadDescription) throws JSONException, MalformedURLException {
         Settings settings = new Settings(context);
         final String PREVIEW_LINK_OBJECT = "thumbnail_url";
-        final String CHANNEL_OBJECT = "channel";
         final String CHANNEL_STATUS_STRING = "title";
         final String GAME_STRING = "game_name";
         final String STREAM_START_TIME_STRING = "started_at";
         final String CURRENT_VIEWERS_INT = "viewer_count";
-        final String USER_ID = "user_id";
         String prepend_image = "";
 
-        String user_id = streamObject.getString(USER_ID);
-
-        // Get the Channel Object using Helix
-        final String ARRAY_KEY = "data";
-        String channel_request_url = "https://api.twitch.tv/helix/users?id=" + user_id;
-        String channel_string = Service.urlToJSONStringHelix(channel_request_url, context);
-        JSONObject channel_object = new JSONObject(channel_string);
-        JSONArray temp_array = channel_object.getJSONArray(ARRAY_KEY);
-
-        JSONObject JSONChannel = temp_array.getJSONObject(0);
-        ChannelInfo mChannelInfo = aChannelInfo == null ? getStreamerInfo(context, JSONChannel) : aChannelInfo;
+        UserInfo userInfo = getUserInfo(streamObject);
 
         String gameName = streamObject.getString(GAME_STRING);
 
-        String title = context.getString(R.string.default_stream_title, mChannelInfo.getDisplayName(), gameName);
+        String title = context.getString(R.string.default_stream_title, userInfo.getDisplayName(),  gameName);
         int currentViewers = streamObject.getInt(CURRENT_VIEWERS_INT);
 
-        // Get the Stream Title with Helix
-        String channel_stream = Service.urlToJSONStringHelix("https://api.twitch.tv/helix/streams?first=1&user_id=" + user_id, context);
-        JSONObject channel_stream_object = new JSONObject(channel_stream);
-        JSONArray channel_stream_array = channel_stream_object.getJSONArray("data");
-        channel_stream_object = channel_stream_array.getJSONObject(0);
-        title = channel_stream_object.getString("title");
+        if (streamObject.has(CHANNEL_STATUS_STRING)) {
+            title = streamObject.getString(CHANNEL_STATUS_STRING);
+        }
 
         if (settings.getGeneralUseImageProxy()) {
             prepend_image = settings.getImageProxyUrl();
@@ -133,12 +138,10 @@ public class JSONService {
         long startAtLong = startedAt.getTimeInMillis();
 
 
-        return new StreamInfo(mChannelInfo, gameName, currentViewers, previews, startAtLong, title);
+        return new StreamInfo(userInfo, gameName, currentViewers, previews, startAtLong, title);
     }
 
     public static ChannelInfo getStreamerInfo(Context context, JSONObject channel) throws JSONException, MalformedURLException {
-        final String DISPLAY_NAME_STRING = "display_name";
-        final String TWITCH_NAME_STRING = "login";
         final String FOLLOWERS_INT = "followers";
         final String VIEWS_INT = "view_count";
         final String LOGO_URL_STRING = "profile_image_url";
@@ -148,16 +151,8 @@ public class JSONService {
         final String PROFILE_BANNER_URL_STRING = "profile_banner";
         final String PROFILE_BANNER_BACKGROUND_COLOR_STRING = "profile_banner_background_color";
         final String BIO_STRING = "description";
-        final String USER_ID_INT = "id";
 
-        String displayName = channel.getString(DISPLAY_NAME_STRING);
-        int userId = channel.getInt(USER_ID_INT);
-        final String twitchName = channel.getString(TWITCH_NAME_STRING);
-
-        // Fetch the Total Follower Count here
-        String userFollows = Service.urlToJSONStringHelix("https://api.twitch.tv/helix/users/follows?first=1&to_id=" + userId, context);
-        JSONObject fullDataObject = new JSONObject(userFollows);
-        int follows = fullDataObject.getInt("total");
+        UserInfo userInfo = getUserInfo(channel);
 
         int views = channel.getInt(VIEWS_INT);
         URL logoURL = null,
@@ -176,7 +171,7 @@ public class JSONService {
             profileBannerURL = new URL(channel.getString(PROFILE_BANNER_URL_STRING));
         }
 
-        final ChannelInfo channelInfo = new ChannelInfo(userId, twitchName, displayName, "", follows, views, logoURL, videoBannerURL, profileBannerURL);
+        final ChannelInfo channelInfo = new ChannelInfo(userInfo, "", -1, views, logoURL, videoBannerURL, profileBannerURL);
 
         channelInfo.setStreamDescription(channel.getString(BIO_STRING));
 
