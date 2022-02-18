@@ -9,8 +9,8 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -36,7 +36,7 @@ import java.util.concurrent.TimeUnit;
 class VODViewHolder extends MainActivityAdapter.ElementsViewHolder {
     final ImageView vPreviewImage;
     final TextView vDisplayName, vTitle, vGame, vTimeStamp;
-    final SeekBar vProgressBar;
+    final ProgressBar vProgressBar;
     private final CardView vCard;
 
     VODViewHolder(View v) {
@@ -175,7 +175,6 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
             int vodLength = getSettings().getVodLength(element.getVideoId());
 
             viewHolder.vProgressBar.setVisibility(View.VISIBLE);
-            viewHolder.vProgressBar.getThumb().mutate().setAlpha(0);
             viewHolder.vProgressBar.setPadding(0, 0, 0, 0);
 
             viewHolder.vPreviewImage.setAlpha(VOD_WATCHED_IMAGE_ALPHA);
