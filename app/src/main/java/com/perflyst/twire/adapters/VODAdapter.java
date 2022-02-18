@@ -172,13 +172,12 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
 
         if (hasVodBeenWatched(element.getVideoId())) {
             int vodProgress = getSettings().getVodProgress(element.getVideoId());
-            int vodLength = getSettings().getVodLength(element.getVideoId());
 
             viewHolder.vProgressBar.setVisibility(View.VISIBLE);
             viewHolder.vProgressBar.setPadding(0, 0, 0, 0);
 
             viewHolder.vPreviewImage.setAlpha(VOD_WATCHED_IMAGE_ALPHA);
-            viewHolder.vProgressBar.setMax(vodLength);
+            viewHolder.vProgressBar.setMax(element.getLength());
             viewHolder.vProgressBar.setProgress(vodProgress);
         } else {
             viewHolder.vProgressBar.setVisibility(View.INVISIBLE);
@@ -187,10 +186,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
     }
 
     private boolean hasVodBeenWatched(String id) {
-        int vodProgress = getSettings().getVodProgress(id);
-        int vodLength = getSettings().getVodLength(id);
-
-        return vodLength > 0 && vodProgress > 0;
+        return getSettings().getVodProgress(id) > 0;
     }
 
     private String getFormattedLengthAndTime(VideoOnDemand vod) {

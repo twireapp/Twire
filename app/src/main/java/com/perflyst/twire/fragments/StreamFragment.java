@@ -284,8 +284,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             vodId = args.getString(getString(R.string.stream_fragment_vod_id));
             vodLength = args.getInt(getString(R.string.stream_fragment_vod_length));
             autoPlay = args.getBoolean(getString(R.string.stream_fragment_autoplay));
-
-            settings.setVodLength(vodId, vodLength);
         }
 
         final View mRootView = inflater.inflate(R.layout.fragment_stream, container, false);
@@ -737,7 +735,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         if (vodId != null) {
             settings.setVodProgress(vodId, currentProgress / 1000);
-            settings.setVodLength(vodId, vodLength);
             Log.d(LOG_TAG, "Saving Current progress: " + currentProgress);
         }
 

@@ -77,8 +77,26 @@ public class Settings {
     private final String SHOW_CHANGELOGS = "showChangelogs";
     private final Context context;
 
+    private static boolean migrated = false;
+
     public Settings(Context context) {
         this.context = context;
+
+        if (migrated) return;
+        migrated = true;
+
+        SharedPreferences preferences = getPreferences();
+        SharedPreferences.Editor editor = preferences.edit();
+        for (String key : preferences.getAll().keySet()) {
+            if (key.startsWith(this.STREAM_VOD_PROGRESS + "v")) {
+                editor.putInt(this.STREAM_VOD_PROGRESS + key.substring(this.STREAM_VOD_PROGRESS.length() + 1), preferences.getInt(key, 0));
+                editor.remove(key);
+            } else if (key.startsWith(this.STREAM_VOD_LENGTH)) {
+                editor.remove(key);
+            }
+        }
+
+        editor.apply();
     }
 
     private SharedPreferences.Editor getEditor() {
@@ -430,6 +448,7 @@ public class Settings {
      * Stream VOD - Used to remember the progress of a vod
      */
 
+    // TODO: This should probably be stored in a database.
     public void setVodProgress(String VODid, int progress) {
         Log.d(getClass().getSimpleName(), "Saving Current Progress: " + progress);
         SharedPreferences.Editor editor = getEditor();
@@ -445,18 +464,6 @@ public class Settings {
     /**
      * Stream VOD - Used to remember the length of a vod
      */
-
-    public void setVodLength(String VODid, int length) {
-        Log.d(getClass().getSimpleName(), "Saving Current Progress: " + length);
-        SharedPreferences.Editor editor = getEditor();
-        editor.putInt(this.STREAM_VOD_LENGTH + VODid, length);
-        editor.commit();
-    }
-
-    public int getVodLength(String VODid) {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getInt(this.STREAM_VOD_LENGTH + VODid, 0);
-    }
 
     public int getStreamSleepTimerHour() {
         SharedPreferences preferences = getPreferences();
