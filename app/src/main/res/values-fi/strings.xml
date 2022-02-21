@@ -11,7 +11,7 @@
     <string name="pause">Tauko</string>
     <string name="play">Toista</string>
     <string name="vods">Videot</string>
-    <string name="vod_playback_failed">VOD:in toisto epäonnistui. Kokeile toista videolaatua.</string>
+    <string name="vod_playback_failed">Tallenteen toisto epäonnistui. Kokeile toista videolaatua.</string>
     <string name="stream_playback_failed">Striimin toistaminen epäonnistui. Kokeile toista videonlaatua.</string>
     <string name="navigation_drawer_not_logged_in">Ei kirjautuneena</string>
     <string name="content_desc_twitchLogo_imageView">Kuva kanavan Twitch-logosta</string>
@@ -25,7 +25,7 @@
     <string name="blue_theme_name">Sininen</string>
     <string name="theme_dialog_title">Teemat</string>
     <string name="search_hint">Etsi</string>
-    <string name="settings_stream_player_name">Lähetyssoitin</string>
+    <string name="settings_stream_player_name">Lähetyksen soitin</string>
     <string name="settings_general_name_summary">Twitch-tili, aloitussivu</string>
     <string name="settings_general_name">Yleiset</string>
     <string name="confirm_text_line_two">Haemme seuraamasi kanavat Twitchistä.</string>
@@ -76,7 +76,7 @@
     <string name="card_style_normal">Normaali</string>
     <string name="vod_streams_card_stream_views">%s katsomiskertaa</string>
     <string name="vod_views">%d katsomiskertaa</string>
-    <string name="title_activity_vod">Video On Demand</string>
+    <string name="title_activity_vod">Videotallenne</string>
     <string name="stream_backward">Taaksepäin 10 sekunttia</string>
     <string name="stream_forward">Eteenpäin 10 sekunttia</string>
     <string name="stream_show_chat">Näytä chat</string>
@@ -108,9 +108,9 @@
     <string name="chat_landscape_swipe">Näytä chat raahaamalla sivuttain käännettynä</string>
     <string name="chat_landscape_enable">Chat sivuttain käännettynä</string>
     <string name="chat_message_size">Viestin koko</string>
-    <string name="chat_emote_size">Emoten koko</string>
+    <string name="chat_emote_size">Hymiön koko</string>
     <string name="gen_open_changelog">Avaa muutosloki</string>
-    <string name="gen_language_filter">Suodata parhaat lähetykset kielen perusteella</string>
+    <string name="gen_language_filter">Suodata suosituimmat lähetykset kielen perusteella</string>
     <string name="gen_reset_tips">Nollaa opasvinkit</string>
     <string name="gen_start_page">Aloitussivu</string>
     <string name="gen_twitch_name">Twitch Käyttäjänimi</string>
@@ -118,7 +118,7 @@
     <string name="gen_dialog_login_or_out_login_action">KIRJAUDU SISÄÄN</string>
     <string name="gen_dialog_login_or_out_content">Haluatko kirjautua uuteen tiliin vai kirjautua ulos tililtä %s\?</string>
     <string name="gen_not_logged_in">Paina kirjautuaksesi sisään</string>
-    <string name="settings_chat_name_summary">Emoten koko, viestin koko</string>
+    <string name="settings_chat_name_summary">Hymiön koko, viestin koko</string>
     <string name="settings_chat_name">Twitch chat</string>
     <string name="settings_appearance_summary">Teema, korttityyli, kortin koko</string>
     <string name="settings_appearance_name">Ulkonäkö</string>
@@ -141,12 +141,12 @@
     <string name="tip_navigate">Paina navigoidaksesi</string>
     <string name="navigation_drawer_follows_title">Seuratut kanavat</string>
     <string name="streamers_tab">KANAVAT</string>
-    <string name="navigation_drawer_top_streams_title">Parhaat lähetykset</string>
-    <string name="navigation_drawer_my_streams_title">Minun lähetykset</string>
-    <string name="navigation_drawer_featured_title">Esitellyt lähetykset</string>
+    <string name="navigation_drawer_top_streams_title">Suosituimmat lähetykset</string>
+    <string name="navigation_drawer_my_streams_title">Suosikkilähetykseni</string>
+    <string name="navigation_drawer_featured_title">Esiteltävät lähetykset</string>
     <string name="games_tab">PELIT</string>
     <string name="streams_tab">LÄHETYKSET</string>
-    <string name="navigation_drawer_top_games_title">Parhaat pelit</string>
+    <string name="navigation_drawer_top_games_title">Suosituimmat kategoriat</string>
     <string name="navigation_drawer_my_games_title">Minun pelit</string>
     <string name="chat_message_option_block">Estä</string>
     <string name="audio_only">Vain ääni</string>
@@ -175,4 +175,20 @@
     <string name="drawer_open">Avaa</string>
     <string name="login_invalid_token_text_line_two">pitää kirjautua uudestaan</string>
     <string name="login_invalid_token_text_line_one">Valitettavasti sinun</string>
+    <string name="skip_silence">Ohita hiljaisuus</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="player_show_runtime">Näytä lähetyksen kesto</string>
+    <string name="settings_general_image_proxy">Käytä kuvanvälityspalvelinta</string>
+    <string name="settings_general_image_proxy_url_button">Tallenna</string>
+    <string name="settings_general_image_proxy_url_example">Välityspalvelimen esimerkki: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_ssl">Käytä SSL:ää yhteyden muodostamisessa</string>
+    <string name="chat_enable_account_connect">Yhdistä käyttämällä Tiliäsi</string>
+    <string name="chat_enable_emote_ffz">Käytä FrankerFaceZ (FFZ) hymiöitä</string>
+    <string name="chat_enable_emote_seventv">Käytä 7TV hymiöitä</string>
+    <string name="player_type">Lähetyksen soittimen tyyppi</string>
+    <string name="chat_enable_emote_bttv">Käytä BetterTTV (BTTV) hymiöitä</string>
+    <string name="menu_share">Jaa</string>
+    <string name="menu_playback">Toiston asetukset</string>
+    <string name="playback_speed">%.2f</string>
+    <string name="playback_speed_display">×%.2f</string>
 </resources>
