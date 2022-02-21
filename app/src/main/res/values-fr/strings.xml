@@ -223,4 +223,6 @@
     <string name="player_type">Type de lecture de flux</string>
     <string name="skip_silence">Passer les silences</string>
     <string name="menu_playback">Préférences de lecture</string>
+    <string name="gen_dialog_export_follows_action">Exporter</string>
+    <string name="gen_dialog_import_follows_action">Importer</string>
 </resources>
