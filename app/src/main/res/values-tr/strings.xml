@@ -18,7 +18,7 @@
     <string name="options">Seçenekler</string>
     <string name="menu_speed">Oynatma Hızı</string>
     <string name="menu_options">Seçenekler</string>
-    <string name="menu_sleep">Zaman ayarlı kapatıcı</string>
+    <string name="menu_sleep">Uyku zamanlayıcısı</string>
     <string name="menu_profile">Profil</string>
     <string name="menu_external">Harici oynatıcı kullan</string>
     <string name="streamerInfo_description">Açıklama bulunamadı</string>
@@ -175,11 +175,13 @@
     <string name="playback_speed_display">×%.2f</string>
     <string name="player_type">Yayın Oynatıcısı Türü</string>
     <string name="menu_share">Paylaş</string>
-    <string name="settings_general_image_proxy">Bir Görüntü Vekili Kullanın</string>
+    <string name="settings_general_image_proxy">Görüntü Vekili kullan</string>
     <string name="settings_general_image_proxy_url_button">Kaydet</string>
     <string name="chat_enable_account_connect">Hesabınızı kullanarak bağlanın</string>
     <string name="settings_general_image_proxy_url_example">Örnek Vekil: https://external-content.duckduckgo.com/iu/\?u=</string>
     <string name="chat_enable_emote_bttv">BetterTTV (BTTV) İfadelerini Etkinleştir</string>
     <string name="chat_enable_emote_ffz">FrankerFaceZ (FFZ) İfadelerini Etkinleştir</string>
     <string name="chat_enable_emote_seventv">7TV İfadelerini Etkinleştir</string>
+    <string name="skip_silence">Sessizliği Geç</string>
+    <string name="menu_playback">Oynatma Ayarları</string>
 </resources>
