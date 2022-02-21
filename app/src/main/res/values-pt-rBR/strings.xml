@@ -184,4 +184,16 @@
     <string name="chat_enable_emote_seventv">Ativar Emotes 7TV</string>
     <string name="skip_silence">Pular Silêncio</string>
     <string name="menu_playback">Configurações de Reprodução</string>
+    <string name="gen_dialog_import_follows_action">Importar</string>
+    <string name="gen_dialog_wipe_follows_content">Deseja limpar todos os seguidores\?</string>
+    <string name="gen_dialog_export_follows_action">Exportar</string>
+    <string name="gen_dialog_wipe_follows_action">Limpar</string>
+    <string name="gen_export_database">Exportar todos os seguidores</string>
+    <string name="gen_dialog_export_follows_content">Deseja exportar todos os seguidores\?</string>
+    <string name="gen_dialog_import_follows_content">Deseja importar todos os seguidores\?</string>
+    <string name="gen_twitch_follows">Limpar todos os seguidores</string>
+    <string name="gen_import_database">Importar seguidores</string>
+    <string name="gen_toast_export_database">%1$x Seguidores Exportados</string>
+    <string name="gen_toast_wipe_database">Seguidores Limpos</string>
+    <string name="gen_toast_import_database">%1$x Seguidores Importados</string>
 </resources>
