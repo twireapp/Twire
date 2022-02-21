@@ -157,4 +157,10 @@
     <string name="content_desc_twitchProfileBanner_imageView">Användarens specificerade profilbanderoll</string>
     <string name="vod_streams_card_stream_views">%s visningar</string>
     <string name="vod_views">%d visningar</string>
+    <string name="skip_silence">Hoppa över tystnad</string>
+    <string name="settings_general_image_proxy_url_button">Spara</string>
+    <string name="gen_dialog_export_follows_action">Exportera</string>
+    <string name="gen_dialog_import_follows_action">Importera</string>
+    <string name="menu_share">Dela</string>
+    <string name="vod_playback_failed">Uppspelning av VOD misslyckades. Testa en annan kvalitet.</string>
 </resources>
