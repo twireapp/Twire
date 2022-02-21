@@ -184,4 +184,16 @@
     <string name="chat_enable_account_connect">Подключитесь, используя свою учетную запись</string>
     <string name="menu_playback">Настройки воспроизведения</string>
     <string name="skip_silence">Пропускать тишину</string>
+    <string name="gen_export_database">Экспортировать все подписки</string>
+    <string name="gen_import_database">Импортировать подписки</string>
+    <string name="gen_toast_wipe_database">Стертые подписки</string>
+    <string name="gen_toast_export_database">Экспортировано %1$x подписок</string>
+    <string name="gen_dialog_import_follows_action">Импортировать</string>
+    <string name="gen_twitch_follows">Стереть все подписки</string>
+    <string name="gen_toast_import_database">Импортировано %1$x подписок</string>
+    <string name="gen_dialog_export_follows_content">Вы хотите экспортировать все подписки\?</string>
+    <string name="gen_dialog_export_follows_action">Экспортировать</string>
+    <string name="gen_dialog_wipe_follows_content">Вы хотите стереть все подписки\?</string>
+    <string name="gen_dialog_wipe_follows_action">Стереть</string>
+    <string name="gen_dialog_import_follows_content">Вы хотите импортировать все подписки\?</string>
 </resources>
