@@ -116,7 +116,7 @@
     <string name="title_activity_streamer_info">頻道</string>
     <string name="yesterday">昨日</string>
     <string name="today">今日</string>
-    <string name="percent">%s %%</string>
+    <string name="percent">%d %%</string>
     <string name="pause">暫停</string>
     <string name="play">播放</string>
     <string name="vods">影片</string>
@@ -165,4 +165,22 @@
     <string name="chat_landscape_width_dialog">聊天室闊度</string>
     <string name="chat_landscape_width">橫向時聊天室闊度</string>
     <string name="error_nothing_found">這裡空空如也</string>
+    <string name="skip_silence">跳過靜音部份</string>
+    <string name="login_invalid_token_text_line_one">很抱歉，您</string>
+    <string name="login_invalid_token_text_line_two">將需重新登入</string>
+    <string name="chat_enable_account_connect">以 Twitch 帳戶連接至聊天室</string>
+    <string name="player_show_runtime">顯示直播上線時間</string>
+    <string name="chat_enable_emote_seventv">啟用 7TV 貼圖</string>
+    <string name="menu_playback">播放設定</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="chat_enable_ssl">使用 SSL 連線</string>
+    <string name="chat_enable_emote_bttv">啟用 BetterTTV (BTTV) 貼圖</string>
+    <string name="chat_enable_emote_ffz">啟用 FrankerFaceZ (FFZ) 貼圖</string>
+    <string name="player_type">影片播放器種類</string>
+    <string name="settings_general_image_proxy_url_button">儲存</string>
+    <string name="settings_general_image_proxy">使用代理伺服器下載圖片</string>
+    <string name="settings_general_image_proxy_url_example">例如：https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="menu_share">分享</string>
+    <string name="playback_speed_display">×%.2f</string>
+    <string name="playback_speed">%.2f</string>
 </resources>
