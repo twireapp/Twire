@@ -206,4 +206,11 @@
     <string name="title_activity_streamer_info">Canal</string>
     <string name="login_invalid_token_text_line_two">Necesita acceder de nuevo</string>
     <string name="login_invalid_token_text_line_one">Desafortunadamente tu</string>
+    <string name="skip_silence">Saltar Silencio</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="settings_general_image_proxy_url_button">Guardar</string>
+    <string name="settings_general_image_proxy_url_example">Proxy de ejemplo: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="menu_playback">Ajustes de reproduccion</string>
+    <string name="playback_speed_display">×%.2f</string>
+    <string name="playback_speed">%.2f</string>
 </resources>
