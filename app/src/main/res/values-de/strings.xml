@@ -221,4 +221,18 @@
     <string name="chat_enable_emote_bttv">BetterTTV (BTTV) Emotes aktivieren</string>
     <string name="chat_enable_emote_ffz">FrankerFaceZ (FFZ) Emotes aktivieren</string>
     <string name="chat_enable_emote_seventv">7TV Emotes aktivieren</string>
+    <string name="skip_silence">Stille überspringen</string>
+    <string name="menu_playback">Wiedergabeeinstellungen</string>
+    <string name="gen_dialog_export_follows_content">Möchtest du alle Folgende exportieren\?</string>
+    <string name="gen_dialog_import_follows_action">Importieren</string>
+    <string name="gen_dialog_wipe_follows_content">Möchtest du alle Folgende löschen\?</string>
+    <string name="gen_dialog_export_follows_action">Exportieren</string>
+    <string name="gen_dialog_wipe_follows_action">Löschen</string>
+    <string name="gen_toast_export_database">%1$x Folgende exportiert</string>
+    <string name="gen_dialog_import_follows_content">Möchtest du alle Folgende importieren\?</string>
+    <string name="gen_twitch_follows">Alle Folgende löschen</string>
+    <string name="gen_export_database">Alle Folgende exportieren</string>
+    <string name="gen_import_database">Folgende importieren</string>
+    <string name="gen_toast_wipe_database">Folgende gelöscht</string>
+    <string name="gen_toast_import_database">%1$x Folgende importiert</string>
 </resources>
