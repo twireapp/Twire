@@ -184,4 +184,16 @@
     <string name="chat_enable_emote_ffz">Włącz Emotki FrankerFaceZ (FFZ)</string>
     <string name="skip_silence">Pomiń Ciszę</string>
     <string name="menu_playback">Ustawienia odtwarzania</string>
+    <string name="gen_dialog_import_follows_action">Importowanie</string>
+    <string name="gen_twitch_follows">Usuwanie wszystkich obserwacji</string>
+    <string name="gen_dialog_export_follows_content">Czy chcesz wyeksportować wszystkie obserwacje\?</string>
+    <string name="gen_dialog_wipe_follows_content">Czy chcesz usunąć wszystkie obserwacje\?</string>
+    <string name="gen_export_database">Eksport wszystkich obserwacji</string>
+    <string name="gen_dialog_export_follows_action">Eksportuj</string>
+    <string name="gen_dialog_import_follows_content">Czy chcesz zaimportować wszystkie obserwacje\?</string>
+    <string name="gen_toast_wipe_database">Usunięte Obserwacje</string>
+    <string name="gen_dialog_wipe_follows_action">Usuwanie</string>
+    <string name="gen_import_database">Importowanie obserwacji</string>
+    <string name="gen_toast_export_database">Wyeksportowano %1$x Obserwacje</string>
+    <string name="gen_toast_import_database">Zaimportowano %1$x Obserwacji</string>
 </resources>
