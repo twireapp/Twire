@@ -848,6 +848,7 @@ public class Settings {
     public void setChatEmoteSEVENTV(boolean setting) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_EMOTE_SEVENTV, setting);
+        editor.commit();
     }
 
      /**
