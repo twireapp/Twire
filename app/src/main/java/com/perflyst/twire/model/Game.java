@@ -27,23 +27,23 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         }
 
     };
-    private final String gameTitle;
     private int gameId;
+    private int gameViewers;
+    private int gameStreamers;
+    private final String gameTitle;
     private final String gamePreviewSmallURL;
     private final String gamePreviewMediumURL;
     private final String gamePreviewLargeURL;
-    private int gameViewers;
-    private int gameStreamers;
 
     public Game(String gameTitle, int gameId, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
         this(gameTitle, gameId, -1, -1, gamePreviewSmallURL, gamePreviewMediumURL, gamePreviewLargeURL);
     }
 
     public Game(String gameTitle, int gameId, int gameViewers, int gameStreamers, String gamePreviewSmallURL, String gamePreviewMediumURL, String gamePreviewLargeURL) {
-        this.gameTitle = gameTitle;
         this.gameId = gameId;
         this.gameViewers = gameViewers;
         this.gameStreamers = gameStreamers;
+        this.gameTitle = gameTitle;
         this.gamePreviewSmallURL = gamePreviewSmallURL;
         this.gamePreviewMediumURL = gamePreviewMediumURL;
         this.gamePreviewLargeURL = gamePreviewLargeURL;
@@ -55,11 +55,11 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         parcel.readStringArray(stringData);
         parcel.readIntArray(intData);
 
-        gameTitle = stringData[0];
-        gameId = intData[4];
-        gameViewers = intData[0];
-        gameStreamers = intData[1];
+        gameId = intData[0];
+        gameViewers = intData[1];
+        gameStreamers = intData[2];
 
+        gameTitle = stringData[0];
         gamePreviewSmallURL = stringData[1];
         gamePreviewMediumURL = stringData[2];
         gamePreviewLargeURL = stringData[3];
@@ -75,9 +75,9 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         };
 
         int[] integers = {
+                gameId,
                 gameViewers,
-                gameStreamers,
-                gameId
+                gameStreamers
         };
 
         dest.writeStringArray(toSend);
