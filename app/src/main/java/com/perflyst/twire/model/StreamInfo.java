@@ -46,8 +46,8 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
     }
 
     public StreamInfo(Parcel in) {
-        String[] stringsData = in.createStringArray();
         int[] intData = in.createIntArray();
+        String[] stringsData = in.createStringArray();
 
         if (stringsData != null && stringsData.length == 2) {
             this.game = stringsData[0];
