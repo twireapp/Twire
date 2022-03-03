@@ -498,7 +498,7 @@ public class Service {
         return result == null ? "" : result;
     }
 
-    private static String urlToJSONString(String urlToRead, Boolean useOurClientId) {
+    public static String urlToJSONString(String urlToRead, Boolean useOurClientId) {
         String clientId;
         if (useOurClientId) {
             clientId = Service.getApplicationClientID();

@@ -276,7 +276,7 @@ public class ChatManager extends AsyncTask<Void, ChatManager.ProgressUpdate, Voi
                 }
 
                 if (downloadedComments.isEmpty()) {
-                    String result = Service.urlToJSONString("https://api.twitch.tv/v5/videos/" + vodId + "/comments?cursor=" + cursor + "&content_offset_seconds=" + currentProgress);
+                    String result = Service.urlToJSONString("https://api.twitch.tv/v5/videos/" + vodId + "/comments?cursor=" + cursor + "&content_offset_seconds=" + currentProgress, false);
 
                     if (result.isEmpty()) {
                         reconnecting = true;
