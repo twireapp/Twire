@@ -133,7 +133,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             autoPlay = true,
             hasPaused = false,
             seeking = false,
-            runtime = false;
+            runtime = false,
+            landscapeChatVisible = false;
     private UserInfo mUserInfo;
     private String vodId;
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
@@ -834,11 +835,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 delayHiding();
             }
 
-            if (view.getRotation() == 0f) {
-                showLandscapeChat();
-            } else {
-                hideLandscapeChat();
-            }
+            setLandscapeChat(!landscapeChatVisible);
         });
     }
 
@@ -990,15 +987,12 @@ public class StreamFragment extends Fragment implements Player.Listener {
                                 int upPosition = (int) event.getRawX();
                                 int deltaPosition = upPosition - downPosition;
 
-                                if (deltaPosition < 20 && deltaPosition > -20) {
+                                if (Math.abs(deltaPosition) < 20) {
+                                    setLandscapeChat(landscapeChatVisible);
                                     return false;
                                 }
 
-                                if (upPosition < downPosition) {
-                                    showLandscapeChat();
-                                } else {
-                                    hideLandscapeChat();
-                                }
+                                setLandscapeChat(upPosition < downPosition);
 
                                 break;
                             case MotionEvent.ACTION_MOVE:
@@ -1028,28 +1022,14 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
     }
 
-    /**
-     * Show the landscape chat with an animation that changes the width of the VideoView wrapper.
-     * The ShowChatButton is also rotated
-     */
-    private void showLandscapeChat() {
-        int width = getScreenRect(getActivity()).height();
-        ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, width - getLandscapeChatTargetWidth());
-        resizeWidthAnimation.setDuration(250);
-        mVideoWrapper.startAnimation(resizeWidthAnimation);
-        mShowChatButton.animate().rotation(180f).start();
-    }
+    private void setLandscapeChat(boolean visible) {
+        landscapeChatVisible = visible;
 
-    /**
-     * hides the landscape chat with an animation that changes the width of the VideoView wrapper to the width of the screen.
-     * The ShowChatButton is also rotated
-     */
-    private void hideLandscapeChat() {
         int width = getScreenRect(getActivity()).height();
-        ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, width);
+        ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, visible ? width - getLandscapeChatTargetWidth() : width);
         resizeWidthAnimation.setDuration(250);
         mVideoWrapper.startAnimation(resizeWidthAnimation);
-        mShowChatButton.animate().rotation(0f).start();
+        mShowChatButton.animate().rotation(visible ? 180f : 0).start();
     }
 
     private int getLandscapeChatTargetWidth() {
