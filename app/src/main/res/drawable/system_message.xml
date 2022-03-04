@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp"
+    android:paddingLeft="@dimen/chat_recyclerview_padding"
+    android:paddingRight="@dimen/chat_recyclerview_padding">
+    <item>
+        <inset
+            android:insetTop="-4dp"
+            android:insetRight="-4dp"
+            android:insetBottom="-4dp">
+
+            <shape android:shape="rectangle">
+                <stroke
+                    android:width="3dp"
+                    android:color="?attr/colorAccent" />
+            </shape>
+        </inset>
+    </item>
+</layer-list>

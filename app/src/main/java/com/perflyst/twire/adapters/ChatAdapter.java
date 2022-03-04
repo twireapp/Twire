@@ -89,33 +89,44 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             }
 
             final SpannableStringBuilder builder = new SpannableStringBuilder();
-            for (Badge badge : message.getBadges()) {
-                final GlideImageSpan badgeSpan = new GlideImageSpan(context, badge.getUrl(2), holder.message, 36, 1, badge.color);
-                appendSpan(builder, "  ", badgeSpan).append(" ");
+            if (!message.systemMessage.isEmpty()) {
+                appendSpan(builder, message.systemMessage, new ForegroundColorSpan(Color.GRAY));
+                holder.message.setBackgroundResource(R.drawable.system_message);
+            } else {
+                holder.message.setBackgroundResource(0);
             }
 
-            int nameColor = getNameColor(message.getColor());
-            appendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
+            if (!message.getMessage().isEmpty()) {
+                if (!message.systemMessage.isEmpty()) builder.append('\n');
 
-            int preLength = builder.length();
-            String beforeMessage = ": ";
-            String messageWithPre = beforeMessage + message.getMessage();
-            appendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
+                for (Badge badge : message.getBadges()) {
+                    final GlideImageSpan badgeSpan = new GlideImageSpan(context, badge.getUrl(2), holder.message, 36, 1, badge.color);
+                    appendSpan(builder, "  ", badgeSpan).append(" ");
+                }
 
-            checkForLink(builder.toString(), builder);
+                int nameColor = getNameColor(message.getColor());
+                appendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
 
-            for (ChatEmote chatEmote : message.getEmotes()) {
-                for (Integer emotePosition : chatEmote.getPositions()) {
-                    final Emote emote = chatEmote.getEmote();
-                    final int fromPosition = emotePosition + preLength;
-                    final int toPosition = emotePosition + emote.getKeyword().length() - 1 + preLength;
+                int preLength = builder.length();
+                String beforeMessage = ": ";
+                String messageWithPre = beforeMessage + message.getMessage();
+                appendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
 
-                    int emoteSize = settings.getEmoteSize();
-                    int emotePixels = emoteSize == 1 ? 28 : emoteSize == 2 ? 56 : 112;
+                checkForLink(builder.toString(), builder);
 
-                    final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize, isNightTheme), holder.message, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
+                for (ChatEmote chatEmote : message.getEmotes()) {
+                    for (Integer emotePosition : chatEmote.getPositions()) {
+                        final Emote emote = chatEmote.getEmote();
+                        final int fromPosition = emotePosition + preLength;
+                        final int toPosition = emotePosition + emote.getKeyword().length() - 1 + preLength;
 
-                    builder.setSpan(emoteSpan, fromPosition + beforeMessage.length(), toPosition + 1 + beforeMessage.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        int emoteSize = settings.getEmoteSize();
+                        int emotePixels = emoteSize == 1 ? 28 : emoteSize == 2 ? 56 : 112;
+
+                        final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize, isNightTheme), holder.message, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
+
+                        builder.setSpan(emoteSpan, fromPosition + beforeMessage.length(), toPosition + 1 + beforeMessage.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                    }
                 }
             }
 

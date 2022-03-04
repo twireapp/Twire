@@ -536,6 +536,7 @@ public class ChatManager implements Runnable {
 
         ChatMessage chatMessage = new ChatMessage(content, displayName, color, getBadges(badges), emotes, false);
         chatMessage.setID(tags.get("id"));
+        chatMessage.systemMessage = tags.getOrDefault("system-msg", "");
 
         if (content.contains("@" + getUserDisplayName())) {
             Log.d(LOG_TAG, "Highlighting message with mention: " + content);
