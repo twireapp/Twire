@@ -977,6 +977,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
                         final int X = (int) event.getRawX();
                         switch (event.getAction() & MotionEvent.ACTION_MASK) {
                             case MotionEvent.ACTION_DOWN:
+                                // If the user taps while the wrapper is in the resizing animation, cancel it.
+                                mVideoWrapper.clearAnimation();
+
                                 ConstraintLayout.LayoutParams lParams = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
                                 if (lParams.width > 0)
                                     widthOnDown = lParams.width;
