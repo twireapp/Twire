@@ -862,7 +862,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (vodId == null) {
             shareBody = "https://twitch.tv/" + mUserInfo.getLogin();
         } else {
-            shareBody = "https://www.twitch.tv/" + mUserInfo.getLogin() + "/video/" + vodId.replaceAll("[a-zA-Z]+", "");
+            shareBody = "https://www.twitch.tv/" + mUserInfo.getLogin() + "/video/" + vodId;
         }
 
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
