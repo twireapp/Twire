@@ -68,6 +68,7 @@ import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -563,6 +564,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             if (vodId != null) {
                 player.setPlaybackSpeed(settings.getPlaybackSpeed());
                 player.setSkipSilenceEnabled(settings.getSkipSilence());
+                player.setSeekParameters(SeekParameters.CLOSEST_SYNC);
             }
 
             if (currentMediaSource != null) {
