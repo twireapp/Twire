@@ -12,7 +12,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.perflyst.twire.R;
 import com.perflyst.twire.views.LayoutSelector;
 import com.rey.material.widget.CheckedTextView;
@@ -261,7 +261,7 @@ public class DialogService {
         return dialog;
     }
 
-    public static MaterialDialog getPlaybackDialog(Activity activity, SimpleExoPlayer player) {
+    public static MaterialDialog getPlaybackDialog(Activity activity, ExoPlayer player) {
         MaterialDialog dialog = getBaseThemedDialog(activity)
                 .title(R.string.menu_playback)
                 .customView(R.layout.dialog_playback, false)

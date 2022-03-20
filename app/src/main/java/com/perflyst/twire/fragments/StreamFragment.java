@@ -64,15 +64,15 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -143,8 +143,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private LinkedHashMap<String, Quality> qualityURLs;
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
-    private PlayerView mVideoView;
-    private SimpleExoPlayer player;
+    private StyledPlayerView mVideoView;
+    private ExoPlayer player;
     private MediaSource currentMediaSource;
     private Toolbar mToolbar;
     private ConstraintLayout mVideoInterface;
@@ -556,7 +556,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     private void initializePlayer() {
         if (player == null) {
-            player = new SimpleExoPlayer.Builder(getContext()).build();
+            player = new ExoPlayer.Builder(getContext()).build();
             player.addListener(this);
             mVideoView.setPlayer(player);
 
