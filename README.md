@@ -4,7 +4,7 @@
 
 This is a fork of the [Pocket Plays for Twitch](https://github.com/SebastianRask/Pocket-Plays-for-Twitch) Android application. More information [in this issue](https://github.com/SebastianRask/Pocket-Plays-for-Twitch/issues/1).
 
-Twire is an open source, ad-free Twitch browser and stream player for Android. Supports VODs with chat replay, custom emotes (BTTV and FFZ) and Picture in Picture mode.
+Twire is an open source, ad-free Twitch browser and stream player for Android. Supports VODs with chat replay, custom emotes (BTTV, FFZ and 7TV) and Picture in Picture mode.
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
