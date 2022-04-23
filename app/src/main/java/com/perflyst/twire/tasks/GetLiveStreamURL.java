@@ -89,6 +89,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
                 "&allow_audio_only=true" +
                 "&allow_source=true" +
                 "&type=any" +
+                "&fast_bread=true" +
                 "&p=%s", streamerName, safeEncode(token), signature, "" + new Random().nextInt(6));
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
