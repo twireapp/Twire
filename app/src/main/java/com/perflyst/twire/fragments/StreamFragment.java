@@ -85,6 +85,7 @@ import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.StreamActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.chat.ChatManager;
+import com.perflyst.twire.lowlatency.LLHlsPlaylistParserFactory;
 import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
 import com.perflyst.twire.misc.ResizeWidthAnimation;
@@ -1494,8 +1495,14 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     put("Origin", "https://player.twitch.tv");
                 }});
 
+        MediaItem mediaItem = new MediaItem.Builder()
+                .setLiveConfiguration(new MediaItem.LiveConfiguration.Builder().setTargetOffsetMs(1000).build())
+                .setUri(url)
+                .build();
+
         MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
-                .createMediaSource(MediaItem.fromUri(Uri.parse(url)));
+                .setPlaylistParserFactory(new LLHlsPlaylistParserFactory())
+                .createMediaSource(mediaItem);
         currentMediaSource = mediaSource;
         player.setMediaSource(mediaSource);
         player.prepare();
