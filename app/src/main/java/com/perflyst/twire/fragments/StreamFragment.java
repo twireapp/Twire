@@ -348,9 +348,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
             try {
                 if (player.isPlaying()) {
-                    pauseStream();
+                    player.pause();
                 } else if (!player.isPlaying()) {
-                    resumeStream();
+                    player.play();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -462,7 +462,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                     if (progress == vodLength) {
-                        pauseStream();
+                        player.pause();
                     }
 
                     if (vodId != null && !seeking && !fromUser) {
@@ -607,6 +607,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
     }
 
+    /* Player.Listener implementation */
     @Override
     public void onPlaybackStateChanged(@Player.State int playbackState) {
         if (playbackState == Player.STATE_READY) {
@@ -632,6 +633,23 @@ public class StreamFragment extends Fragment implements Player.Listener {
         Log.e(LOG_TAG, "Something went wrong playing the stream for " + mUserInfo.getDisplayName() + " - Exception: " + exception);
 
         playbackFailed();
+    }
+
+    @Override
+    public void onPlayWhenReadyChanged(boolean isPlaying, int _ignored) {
+        if (isPlaying) {
+            showPauseIcon();
+            keepScreenOn();
+
+            if (!isAudioOnlyModeEnabled() && vodId == null) {
+                player.seekToDefaultPosition(); // Go forward to live
+            }
+        } else {
+            showPlayIcon();
+            releaseScreenOn();
+
+            delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
+        }
     }
 
     /**
@@ -733,7 +751,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mBufferingView.stop();
 
         if (!castingViewVisible && !audioViewVisible) {
-            pauseStream();
+            player.pause();
         }
 
         if (vodId != null) {
@@ -879,7 +897,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 @Override
                 public void onTimesUp() {
                     stopAudioOnly();
-                    pauseStream();
+                    player.pause();
                 }
 
                 @Override
@@ -1335,40 +1353,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     /**
-     * Pauses and stops the playback of the Video Stream
-     */
-    private void pauseStream() {
-        Log.d(LOG_TAG, "Chat, pausing stream");
-        showPlayIcon();
-
-        delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
-
-        if (player != null) {
-            player.pause();
-        }
-        releaseScreenOn();
-    }
-
-    /**
-     * Goes forward to live and starts playback of the VideoView
-     */
-    private void resumeStream() {
-        showPauseIcon();
-
-        if (!isAudioOnlyModeEnabled()) {
-            if (vodId == null) {
-                player.seekToDefaultPosition(); // Go forward to live
-            }
-
-            player.play();
-        } else {
-            player.play();
-        }
-
-        keepScreenOn();
-    }
-
-    /**
      * Tries playing stream with a quality.
      * If the given quality doesn't exist for the stream the try the next best quality option.
      * If no Quality URLS have yet been created then try to start stream with an aync task.
@@ -1517,7 +1501,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         player.prepare();
 
         checkVodProgress();
-        resumeStream();
+        player.play();
     }
 
     private void playWithExternalPlayer() {
@@ -1809,7 +1793,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         startStreamWithQuality(settings.getPrefStreamQuality());
 
         // resume the stream
-        resumeStream();
+        player.play();
     }
 
     private void stopAudioOnlyNoServiceCall() {
@@ -1977,7 +1961,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                         if (player.isPlaying()) {
                             Log.d(LOG_TAG, "Chat, pausing from headsetPlug");
                             showVideoInterface();
-                            pauseStream();
+                            player.pause();
                         }
                         break;
                     case 1:
