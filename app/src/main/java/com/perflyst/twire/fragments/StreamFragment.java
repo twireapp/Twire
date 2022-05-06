@@ -165,7 +165,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private Snackbar snackbar;
     private ProgressView mBufferingView;
     private BottomSheetDialog mQualityBottomSheet, mProfileBottomSheet;
-    private CheckedTextView mAudioOnlySelector, mChatOnlySelector;
+    private CheckedTextView mAudioOnlySelector, mMuteSelector, mChatOnlySelector;
     private ViewGroup rootView;
     private MenuItem optionsMenuItem;
     private LinearLayout mQualityWrapper;
@@ -1720,6 +1720,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         mQualityWrapper = mQualityBottomSheet.findViewById(R.id.quality_wrapper);
         mAudioOnlySelector = mQualityBottomSheet.findViewById(R.id.audio_only_selector);
+        mMuteSelector = mQualityBottomSheet.findViewById(R.id.mute_selector);
         mChatOnlySelector = mQualityBottomSheet.findViewById(R.id.chat_only_selector);
         TextView optionsTitle = mQualityBottomSheet.findViewById(R.id.options_text);
 
@@ -1737,6 +1738,11 @@ public class StreamFragment extends Fragment implements Player.Listener {
             audioOnlyClicked();
         });
 
+        mMuteSelector.setVisibility(View.VISIBLE);
+        mMuteSelector.setOnClickListener(view -> {
+            mQualityBottomSheet.dismiss();
+            muteClicked();
+        });
 
         mChatOnlySelector.setOnClickListener(view -> {
             mQualityBottomSheet.dismiss();
@@ -1787,6 +1793,15 @@ public class StreamFragment extends Fragment implements Player.Listener {
             initAudioOnlyView();
         } else {
             stopAudioOnly();
+        }
+    }
+
+    private void muteClicked() {
+        mMuteSelector.setChecked(!mMuteSelector.isChecked());
+        if (mMuteSelector.isChecked()) {
+            player.setVolume(0);
+        } else {
+            player.setVolume(1);
         }
     }
 

@@ -31,6 +31,15 @@
                 android:visibility="gone" />
 
             <CheckedTextView
+                android:id="@+id/mute_selector"
+                style="@style/stream_settings_item"
+                android:background="?attr/selectableItemBackground"
+                android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                android:gravity="center_vertical"
+                android:text="@string/mute"
+                android:visibility="gone" />
+
+            <CheckedTextView
                 android:id="@+id/chat_only_selector"
                 style="@style/stream_settings_item"
                 android:background="?attr/selectableItemBackground"
