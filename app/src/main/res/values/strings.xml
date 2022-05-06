@@ -48,6 +48,7 @@
     <string name="menu_playback">Playback Settings</string>
     <string name="options">Options</string>
     <string name="audio_only">Audio only</string>
+    <string name="mute">Mute</string>
     <string name="chat_only">Chat only</string>
     <string name="available_qualities">Quality settings</string>
     <string name="quality_auto">Auto</string>
