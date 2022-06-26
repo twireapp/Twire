@@ -2,6 +2,7 @@ package com.perflyst.twire.fragments;
 
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.PictureInPictureParams;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Rational;
 import android.view.Display;
 import android.view.DisplayCutout;
 import android.view.LayoutInflater;
@@ -651,6 +653,28 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
             delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onSurfaceSizeChanged(int width, int height) {
+        Rect videoRect = new Rect();
+        mVideoView.getVideoSurfaceView().getGlobalVisibleRect(videoRect);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            videoRect.left += totalVerticalInset;
+            videoRect.right += totalVerticalInset;
+        }
+
+        PictureInPictureParams.Builder builder = new PictureInPictureParams.Builder()
+                .setAspectRatio(new Rational(16, 9))
+                .setSourceRectHint(videoRect);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            builder.setAutoEnterEnabled(true);
+        }
+
+        mActivity.setPictureInPictureParams(builder.build());
     }
 
     /**

@@ -200,6 +200,10 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
     public void onUserLeaveHint() {
         super.onUserLeaveHint();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return;
+        }
+
         if (getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
             mStreamFragment.prePictureInPicture();
             enterPictureInPictureMode();
