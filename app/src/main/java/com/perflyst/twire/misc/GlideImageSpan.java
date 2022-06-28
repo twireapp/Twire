@@ -42,7 +42,6 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
         super(new BlankDrawable());
 
         this.textView = textView;
-        this.textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         final GlideImageSpan instance = this;
 
         int scaledAssumedSize = Math.round(assumedSize / scale);
@@ -62,7 +61,6 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
                     @Override
                     public void onLoadStarted(Drawable resource) {
                         mDrawable = resource;
-                        textView.invalidate();
                     }
 
                     @Override
@@ -73,22 +71,21 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
                             animatable = (Animatable) resource;
                             resource.setCallback(instance);
 
+                            instance.textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+
                             animatable.start();
                         }
 
                         mDrawable = resource;
-                        if (resource.getIntrinsicWidth() != assumedSize) {
-                            textView.setText(builder);
-                        } else {
-                            textView.invalidate();
-                        }
+
+                        textView.setText(builder);
                     }
 
 
                     @Override
                     public void onLoadFailed(Drawable resource) {
                         mDrawable = resource;
-                        textView.invalidate();
+                        textView.setText(builder);
                     }
 
                     @Override
@@ -98,7 +95,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
                         }
 
                         mDrawable = placeholder;
-                        textView.invalidate();
+                        textView.setText(builder);
                     }
                 });
     }
@@ -132,22 +129,4 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
 
         return drawable;
     }
-
-/*
-    @Override
-    public void chooseHeight(CharSequence text, int start, int end, int spanstartv, int lineHeight, Paint.FontMetricsInt fm) {
-        if (end == ((Spanned) text).getSpanEnd(this)) {
-            int ht = getDrawable().getIntrinsicHeight();
-
-            int need = ht - (lineHeight + fm.descent - fm.ascent - spanstartv);
-            if (need > 0) {
-                fm.descent += need;
-            }
-
-            need = ht - (lineHeight + fm.bottom - fm.top - spanstartv);
-            if (need > 0) {
-                fm.bottom += need;
-            }
-        }
-    }*/
 }
