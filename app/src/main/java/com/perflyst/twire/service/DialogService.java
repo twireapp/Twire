@@ -2,6 +2,7 @@ package com.perflyst.twire.service;
 
 import android.app.Activity;
 import android.view.View;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import androidx.annotation.ArrayRes;
@@ -13,6 +14,7 @@ import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.Player;
 import com.perflyst.twire.R;
 import com.perflyst.twire.views.LayoutSelector;
 import com.rey.material.widget.CheckedTextView;
@@ -211,14 +213,14 @@ public class DialogService {
         return dialog;
     }
 
-    public static MaterialDialog getSeekDialog(Activity activity, MaterialDialog.SingleButtonCallback buttonCallback, int currentProgress, int maxProgress) {
+    private static long newTime = 0;
+    public static MaterialDialog getSeekDialog(Activity activity, Player player) {
         MaterialDialog dialog = getBaseThemedDialog(activity)
                 .title(R.string.stream_seek_dialog_title)
                 .customView(R.layout.dialog_seek, false)
                 .positiveText(R.string.done)
                 .negativeText(R.string.cancel)
-                .onPositive(buttonCallback)
-                .onNegative(buttonCallback)
+                .onPositive((dialog1, which) -> player.seekTo(newTime))
                 .build();
 
         View customView = dialog.getCustomView();
@@ -226,13 +228,22 @@ public class DialogService {
         MaterialNumberPicker minutePicker = customView.findViewById(R.id.minute_picker);
         MaterialNumberPicker secondPicker = customView.findViewById(R.id.second_picker);
 
+        int maxProgress = (int) (player.getDuration() / 1000);
         hourPicker.setMaxValue(maxProgress / 3600);
         minutePicker.setMaxValue(Math.min(maxProgress / 60, 59));
         secondPicker.setMaxValue(Math.min(maxProgress, 59));
 
+        int currentProgress = (int) (player.getCurrentPosition() / 1000);
         hourPicker.setValue(currentProgress / 3600);
         minutePicker.setValue(currentProgress / 60 % 60);
         secondPicker.setValue(currentProgress % 60);
+
+        NumberPicker.OnValueChangeListener updateTime = (a, b, c) -> newTime = (hourPicker.getValue() * 3600L + minutePicker.getValue() * 60L + secondPicker.getValue()) * 1000;
+        hourPicker.setOnValueChangedListener(updateTime);
+        minutePicker.setOnValueChangedListener(updateTime);
+        secondPicker.setOnValueChangedListener(updateTime);
+
+        newTime = player.getCurrentPosition();
 
         return dialog;
     }
