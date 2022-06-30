@@ -23,7 +23,7 @@ import androidx.fragment.app.DialogFragment;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.perflyst.twire.BuildConfig;
 import com.perflyst.twire.R;
-import com.perflyst.twire.misc.DrawableBulletSpawn;
+import com.perflyst.twire.misc.DrawableBulletSpan;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
@@ -73,7 +73,7 @@ public class ChangelogDialogFragment extends DialogFragment {
                         ContextCompat.getColor(activity, colorMap.get(prefix)), PorterDuff.Mode.SRC_IN));
                 drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
-                Utils.appendSpan(builder, text, new DrawableBulletSpawn(15, drawable));
+                Utils.appendSpan(builder, text, new DrawableBulletSpan(15, drawable));
             }
 
             builder.append('\n');

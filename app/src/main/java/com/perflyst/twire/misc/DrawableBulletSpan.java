@@ -10,12 +10,12 @@ import android.text.style.BulletSpan;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class DrawableBulletSpawn extends BulletSpan {
+public class DrawableBulletSpan extends BulletSpan {
     final float scaleFactor = 0.6f;
     private final int mGap;
     private final Drawable mDrawable;
 
-    public DrawableBulletSpawn(int gap, Drawable drawable) {
+    public DrawableBulletSpan(int gap, Drawable drawable) {
         super(gap);
 
         mGap = gap;
