@@ -23,7 +23,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
     protected int maxElementsToFetch = 500;
 
     /**
-     * Refreshes the Activity's visual elements by clearing the adapter and setting the current offset to one.
+     * Refreshes the Activity's visual elements by clearing the adapter and setting the cursor to null.
      * After the adapter is finished clearing, new elements will be loaded and added.
      */
     @Override
@@ -59,14 +59,6 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
 
         GetVisualElementsTask<T> getElementsTask = new GetVisualElementsTask<>(this);
         getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (cursor == null) {
-            startRefreshing();
-        }
     }
 
     @Override
