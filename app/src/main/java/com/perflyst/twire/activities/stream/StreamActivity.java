@@ -205,7 +205,6 @@ public abstract class StreamActivity extends ThemeActivity implements SensorEven
         }
 
         if (getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
-            mStreamFragment.prePictureInPicture();
             enterPictureInPictureMode();
         }
     }

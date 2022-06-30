@@ -1870,15 +1870,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
     }
 
-    public void prePictureInPicture() {
-        pictureInPictureEnabled = true;
-
-        int width = getScreenRect(getActivity()).height();
-        ResizeWidthAnimation resizeWidthAnimation = new ResizeWidthAnimation(mVideoWrapper, width);
-        resizeWidthAnimation.setDuration(250);
-        mVideoWrapper.startAnimation(resizeWidthAnimation);
-    }
-
     @Override
     public void onPictureInPictureModeChanged(boolean enabled) {
         mVideoInterface.setVisibility(enabled ? View.INVISIBLE : View.VISIBLE);
