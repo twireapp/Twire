@@ -577,7 +577,7 @@ public class Service {
             int views = info.getInt("view_count");
             String description = info.getString("description");
 
-            channelInfo = new ChannelInfo(JSONService.getUserInfo(info), description, -1, views, logoURL, videoBannerURL, profileBannerURL, false);
+            channelInfo = new ChannelInfo(JSONService.getUserInfo(info), description, -1, views, logoURL, videoBannerURL, profileBannerURL);
 
         } catch (JSONException e) {
             Log.v("Service: ", e.getMessage());
@@ -591,7 +591,7 @@ public class Service {
     /**
      * Connects to the database containing data of user follows. Loops through every record of in the database and creates a StreamerInfo object for these
      */
-    public static Map<String, ChannelInfo> getStreamerInfoFromDB(Context context, boolean includeThumbnails) {
+    public static Map<String, ChannelInfo> getStreamerInfoFromDB(Context context) {
         Map<String, ChannelInfo> subscriptions = new TreeMap<>();
         SubscriptionsDbHelper mDbHelper = new SubscriptionsDbHelper(context);
         final boolean DISTINCT = true;
@@ -642,7 +642,7 @@ public class Service {
 
                 // Create new StreamerInfo object from data fetched from database
                 ChannelInfo mChannelInfo = new ChannelInfo(new UserInfo(streamerId, streamerName, displayName),
-                        streamDescription, followers, views, logo, videoBanner, profileBanner, includeThumbnails);
+                        streamDescription, followers, views, logo, videoBanner, profileBanner);
                 mChannelInfo.setNotifyWhenLive(notifyWhenLive);
                 subscriptions.put(mChannelInfo.getDisplayName(), mChannelInfo);
 

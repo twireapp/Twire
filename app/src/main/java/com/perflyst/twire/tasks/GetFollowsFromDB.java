@@ -38,9 +38,8 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
     protected Map<String, ChannelInfo> doInBackground(Context... params) {
         Log.d(LOG_TAG, "Entered GetFollowsFromDB");
         baseContext = new WeakReference<>(params[0]);
-        final boolean INCLUDE_THUMBNAILS = false;
 
-        Map<String, ChannelInfo> resultList = Service.getStreamerInfoFromDB(baseContext.get(), INCLUDE_THUMBNAILS);
+        Map<String, ChannelInfo> resultList = Service.getStreamerInfoFromDB(baseContext.get());
         Log.d(LOG_TAG, resultList.size() + " streamers fetched from database");
         Log.d(LOG_TAG, resultList.toString());
 

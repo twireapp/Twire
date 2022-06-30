@@ -1,9 +1,6 @@
 package com.perflyst.twire.model;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -18,11 +15,8 @@ import com.perflyst.twire.service.Service;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 /**
  * Created by Sebastian Rask on 30-01-2015.
@@ -73,25 +67,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
     private URL logoURL;
     private URL videoBannerURL;
     private URL profileBannerURL;
-    private Bitmap logoImage;
-    private Bitmap videoBannerImage;
-    private Bitmap profileBannerImage;
     private boolean notifyWhenLive;
-
-    public ChannelInfo(UserInfo userInfo, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL, Boolean loadBitmap) {
-        super(userInfo.getUserId(), userInfo.getLogin(), userInfo.getDisplayName());
-        this.streamDescription = streamDescription;
-        this.followers = followers == -1 ? Optional.absent() : Optional.of(followers);
-        this.views = views;
-        this.logoURL = logoURL;
-        this.videoBannerURL = videoBannerURL;
-        this.profileBannerURL = profileBannerURL;
-
-        if (loadBitmap) {
-            LoadBitmapTask imageTask = new LoadBitmapTask();
-            imageTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, this.logoURL, this.videoBannerURL, this.profileBannerURL);
-        }
-    }
 
     public ChannelInfo(UserInfo userInfo, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL) {
         super(userInfo.getUserId(), userInfo.getLogin(), userInfo.getDisplayName());
@@ -165,18 +141,6 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
         return String.CASE_INSENSITIVE_ORDER.compare(another.getDisplayName(), getDisplayName());
     }
 
-    private void setLogoImage(Bitmap logoImage) {
-        this.logoImage = logoImage;
-    }
-
-    private void setVideoBannerImage(Bitmap videoBannerImage) {
-        this.videoBannerImage = videoBannerImage;
-    }
-
-    private void setProfileBannerImage(Bitmap profileBannerImage) {
-        this.profileBannerImage = profileBannerImage;
-    }
-
     public String getStreamDescription() {
         return this.streamDescription;
     }
@@ -244,50 +208,5 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
     @Override
     public int getPlaceHolder(Context context) {
         return R.drawable.ic_profile_template_300p;
-    }
-
-    /**
-     * Requires 3 URLs for images. Also if one of the URLs is null.
-     * This Async class loads and creates bitmaps for a StreamerInfo object if a boolean value for the constructor is true
-     */
-    public class LoadBitmapTask extends AsyncTask<URL, Void, ArrayList<Bitmap>> {
-
-        @Override
-        protected ArrayList<Bitmap> doInBackground(URL... params) {
-            URL[] urls = {params[0], params[1], params[2]};
-            ArrayList<Bitmap> bitmaps = new ArrayList<>();
-
-            for (URL url : urls) {
-                Bitmap bitmap = null;
-                if (url != null) {
-                    try {
-                        InputStream is = (InputStream) url.getContent();
-                        bitmap = BitmapFactory.decodeStream(is);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                bitmaps.add(bitmap);
-            }
-
-            return bitmaps;
-
-        }
-
-        protected void onPostExecute(ArrayList<Bitmap> results) {
-
-            if (results.get(0) != null) {
-                setLogoImage(results.get(0));
-            }
-
-            if (results.get(1) != null) {
-                setVideoBannerImage(results.get(1));
-            }
-
-            if (results.get(2) != null) {
-                setProfileBannerImage(results.get(2));
-            }
-        }
     }
 }
