@@ -865,7 +865,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * If the screen is in landscape it is show, else it is shown
      */
     private void checkShowChatButtonVisibility() {
-        if (isLandscape && settings.isChatInLandscapeEnabled() && !pictureInPictureEnabled) {
+        if (isLandscape && settings.isChatInLandscapeEnabled()) {
             mShowChatButton.setVisibility(View.VISIBLE);
         } else {
             mShowChatButton.setVisibility(View.GONE);
