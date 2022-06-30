@@ -245,7 +245,7 @@ public class ChatManager implements Runnable {
             }
 
             // If we reach this line then the socket closed but chat wasn't stopped, so reconnect.
-            connect(address, port);
+            if (!isStopping) connect(address, port);
         } catch (IOException e) {
             e.printStackTrace();
 
