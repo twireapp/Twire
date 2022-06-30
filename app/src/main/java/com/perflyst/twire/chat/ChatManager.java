@@ -114,7 +114,7 @@ public class ChatManager implements Runnable {
         Log.d(LOG_TAG, "Use SSL Chat Server: " + appSettings.getChatEnableSSL());
     }
 
-    public static void updateVodProgress(int aCurrentProgress, boolean aSeek) {
+    public static void updateVodProgress(long aCurrentProgress, boolean aSeek) {
         currentProgress = aCurrentProgress / 1000f;
         seek |= aSeek;
 

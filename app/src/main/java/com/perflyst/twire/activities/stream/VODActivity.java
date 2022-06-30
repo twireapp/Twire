@@ -46,7 +46,6 @@ public class VODActivity extends StreamActivity {
         Bundle args = new Bundle();
         args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mVod.getChannelInfo());
         args.putString(getString(R.string.stream_fragment_vod_id), mVod.getVideoId());
-        args.putInt(getString(R.string.stream_fragment_vod_length), mVod.getLength());
         return args;
     }
 

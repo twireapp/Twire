@@ -115,7 +115,7 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
 
         // Eww >(
         if (mStreamFragment != null) {
-            if (mStreamFragment.isFullscreen) {
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 mStreamFragment.toggleFullscreen();
             } else if (mStreamFragment.chatOnlyViewVisible) {
                 this.finish();
@@ -169,15 +169,6 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
 
     private void overrideTransition() {
         this.overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim);
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (mStreamFragment == null) {
-            return;
-        }
-        mStreamFragment.onWindowFocusChanged(hasFocus);
     }
 
     @Override

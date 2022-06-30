@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -41,7 +42,6 @@ import android.widget.CheckedTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +53,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.media.session.MediaButtonReceiver;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -60,11 +64,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Fade;
 import androidx.transition.TransitionManager;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
-import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
@@ -74,6 +76,7 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.util.Util;
@@ -116,25 +119,19 @@ import java.util.function.Consumer;
 public class StreamFragment extends Fragment implements Player.Listener {
     private static int totalVerticalInset;
     private static boolean pipDisabling; // Tracks the PIP disabling animation.
-    private final int HIDE_ANIMATION_DELAY = 3000;
     private final String LOG_TAG = getClass().getSimpleName();
-    private final Handler delayAnimationHandler = new Handler(),
-            progressHandler = new Handler(),
-            fetchViewCountHandler = new Handler(),
+    private final Handler fetchViewCountHandler = new Handler(),
             fetchChattersHandler = new Handler(),
-            runtimeHandler = new Handler();
+            vodHandler = new Handler();
     private final HashMap<String, TextView> QualityOptions = new HashMap<>();
     private final int fetchViewCountDelay = 1000 * 60, // A minute
             fetchChattersDelay = 1000 * 60; // 30 seco... Nah just kidding. Also a minute.
     public StreamFragmentListener streamFragmentCallback;
     public boolean chatOnlyViewVisible = false;
-    public boolean isFullscreen = false;
     private boolean castingViewVisible = false,
             audioViewVisible = false,
             autoPlay = true,
             hasPaused = false,
-            seeking = false,
-            runtime = false,
             landscapeChatVisible = false;
     private UserInfo mUserInfo;
     private String vodId;
@@ -143,7 +140,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private Settings settings;
     private SleepTimer sleepTimer;
     private Map<String, Quality> qualityURLs;
-    private boolean isLandscape = false, previewInbackGround = false;
+    private boolean isLandscape = false;
     private Runnable fetchViewCountRunnable;
     private StyledPlayerView mVideoView;
     private ExoPlayer player;
@@ -159,8 +156,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mFullScreenButton,
             mPreview,
             mShowChatButton;
-    private SeekBar mProgressBar;
-    private TextView mCurrentProgressView, castingTextView, mCurrentViewersView, mRuntime;
+    private TextView castingTextView, mCurrentViewersView, mRuntime;
     private AppCompatActivity mActivity;
     private Snackbar snackbar;
     private ProgressView mBufferingView;
@@ -169,51 +165,22 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private ViewGroup rootView;
     private MenuItem optionsMenuItem;
     private LinearLayout mQualityWrapper;
-    private View mClickInterceptor;
-    private final Runnable hideAnimationRunnable = () -> {
-        if (getActivity() != null)
-            hideVideoInterface();
-    };
-    private final Runnable progressRunnable = new Runnable() {
+    private View mOverlay;
+
+    private final Runnable vodRunnable = new Runnable() {
         @Override
         public void run() {
-            if (player == null)
-                return;
+            if (player == null) return;
 
-            if (player.isPlaying()) {
-                if (currentProgress != player.getCurrentPosition())
-                    mProgressBar.setProgress((int) player.getCurrentPosition());
+            ChatManager.updateVodProgress(player.getCurrentPosition(), false);
 
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    mBufferingView.stop();
-                    delayHiding();
-                    if (!previewInbackGround) {
-                        hidePreview();
-                    }
-                }
-            }
-
-            progressHandler.postDelayed(this, 1000);
+            if (player.isPlaying()) vodHandler.postDelayed(this, 1000);
         }
     };
 
-    private final Runnable runtimeRunnable = new Runnable() {
-        @Override
-        public void run() {
-            // handle the Stream runtime here
-            if (runtime) {
-                mRuntime.setText(OnlineSince.getOnlineSince(startTime));
-            }
-
-            runtimeHandler.postDelayed(this, 1000);
-        }
-    };
-
-    private int originalCtrlToolbarPadding,
-            originalMainToolbarPadding,
-            vodLength = 0,
-            currentProgress = 0,
-            videoHeightBeforeChatOnly;
+    private int originalCtrlToolbarPadding;
+    private int originalMainToolbarPadding;
+    private int videoHeightBeforeChatOnly;
     private Integer triesForNextBest = 0;
     private boolean pictureInPictureEnabled; // Tracks if PIP is enabled including the animation.
     private MediaSessionCompat mediaSession;
@@ -283,7 +250,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (args != null) {
             mUserInfo = args.getParcelable(getString(R.string.stream_fragment_streamerInfo));
             vodId = args.getString(getString(R.string.stream_fragment_vod_id));
-            vodLength = args.getInt(getString(R.string.stream_fragment_vod_length));
             autoPlay = args.getBoolean(getString(R.string.stream_fragment_autoplay));
         }
 
@@ -321,14 +287,12 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mQualityButton = mRootView.findViewById(R.id.settings_icon);
         mFullScreenButton = mRootView.findViewById(R.id.fullscreen_icon);
         mShowChatButton = mRootView.findViewById(R.id.show_chat_button);
-        mCurrentProgressView = mRootView.findViewById(R.id.currentProgress);
         castingTextView = mRootView.findViewById(R.id.chromecast_text);
-        mProgressBar = mRootView.findViewById(R.id.progressBar);
-        mBufferingView = mRootView.findViewById(R.id.circle_progress);
+        mBufferingView = mRootView.findViewById(R.id.exo_buffering);
         mCurrentViewersView = mRootView.findViewById(R.id.txtViewViewers);
         mRuntime = mRootView.findViewById(R.id.txtViewRuntime);
         mActivity = (AppCompatActivity) getActivity();
-        mClickInterceptor = mRootView.findViewById(R.id.click_interceptor);
+        mOverlay = mVideoView.getOverlayFrameLayout();
 
         landscapeChatVisible = settings.isChatInLandscapeEnabled();
 
@@ -342,69 +306,28 @@ public class StreamFragment extends Fragment implements Player.Listener {
             setPreviewAndCheckForSharedTransition();
 
         mFullScreenButton.setOnClickListener(v -> toggleFullscreen());
-        mPlayPauseWrapper.setOnClickListener(v -> {
-            if (mPlayPauseWrapper.getAlpha() < 0.5f) {
-                return;
-            }
-
-            try {
-                if (player.isPlaying()) {
-                    player.pause();
-                } else if (!player.isPlaying()) {
-                    player.play();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                startStreamWithQuality(settings.getPrefStreamQuality());
-            }
-        });
-
-        mVideoWrapper.setOnClickListener(v -> {
-            delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
-            if (isVideoInterfaceShowing()) {
-                hideVideoInterface();
-                if (isDeviceBelowKitkat())
-                    setAndroidUiMode();
-            } else {
-                showVideoInterface();
-
-                // Show the navigation bar
-                if (isLandscape && settings.getStreamPlayerShowNavigationBar() && Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
-                    View decorView = requireActivity().getWindow().getDecorView();
-                    decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            | View.SYSTEM_UI_FLAG_FULLSCREEN // Hide Status bar
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                }
-
-                if (player.isPlaying()) {
-                    delayHiding();
-                }
-
-                Handler h = new Handler();
-                h.postDelayed(this::setAndroidUiMode, HIDE_ANIMATION_DELAY);
-            }
-        });
+        mPlayPauseWrapper.setOnClickListener(v -> player.setPlayWhenReady(!player.getPlayWhenReady()));
 
         initializePlayer();
-        runtimeHandler.postDelayed(runtimeRunnable, 1000);
 
-        mRootView.setOnSystemUiVisibilityChangeListener(
-                visibility -> {
-                    if (visibility == 0) {
-                        showVideoInterface();
-                        delayHiding();
-                        Handler h = new Handler();
-                        h.postDelayed(this::setAndroidUiMode, HIDE_ANIMATION_DELAY);
-                    }
-                }
-        );
+        StyledPlayerControlView controlView = mVideoView.findViewById(R.id.exo_controller);
 
-        ImageView mForward = mRootView.findViewById(R.id.forward);
-        ImageView mBackward = mRootView.findViewById(R.id.backward);
+        controlView.setShowFastForwardButton(vodId != null);
+        controlView.setShowRewindButton(vodId != null);
 
-        int seekButtonVisibility = vodId == null ? View.INVISIBLE : View.VISIBLE;
-        mForward.setVisibility(seekButtonVisibility);
-        mBackward.setVisibility(seekButtonVisibility);
+        controlView.setShowTimeoutMs(3000);
+        controlView.setAnimationEnabled(false);
+
+        controlView.addVisibilityListener(visibility -> {
+            if (visibility == View.VISIBLE) {
+                showVideoInterface();
+            } else {
+                hideVideoInterface();
+            }
+        });
+
+        // Use ExoPlayer's overlay frame to intercept click events and pass them along
+        mOverlay.setOnClickListener(view -> mVideoView.performClick());
 
         if (vodId == null) {
             View mTimeController = mRootView.findViewById(R.id.time_controller);
@@ -413,8 +336,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             if (!settings.getStreamPlayerRuntime()) {
                 mRuntime.setVisibility(View.GONE);
             } else {
-                runtime = true;
                 startTime = args.getLong(getString(R.string.stream_fragment_start_time));
+                controlView.setProgressUpdateListener((position, bufferedPosition) -> mRuntime.setText(OnlineSince.getOnlineSince(startTime)));
             }
 
 
@@ -428,70 +351,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mCurrentViewersView.setVisibility(View.GONE);
             mRuntime.setVisibility(View.GONE);
 
-            mForward.setOnClickListener(v -> {
-                seeking = true;
-                mProgressBar.setProgress(currentProgress + 10000);
-                seeking = false;
-                ChatManager.updateVodProgress(currentProgress, false);
-            });
-
-            mBackward.setOnClickListener(v -> {
-                seeking = true;
-                mProgressBar.setProgress(currentProgress - 10000);
-                seeking = false;
-                streamFragmentCallback.onSeek();
-                ChatManager.updateVodProgress(currentProgress, true);
-            });
-
-            mCurrentProgressView.setOnClickListener(v -> showSeekDialog());
-
-            TextView maxProgress = mRootView.findViewById(R.id.maxProgress);
-            maxProgress.setText(Service.calculateTwitchVideoLength(vodLength));
-
-            mProgressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (progress == vodLength) {
-                        player.pause();
-                    }
-
-                    if (vodId != null && !seeking && !fromUser) {
-                        ChatManager.updateVodProgress(progress, false);
-                    }
-
-                    if ((fromUser || seeking) && !audioViewVisible) {
-                        player.seekTo(progress);
-                        showVideoInterface();
-
-                        if (progress > 0) {
-                            settings.setVodProgress(vodId, progress / 1000);
-                        }
-                    }
-                    currentProgress = progress;
-                    mCurrentProgressView.setText(Service.calculateTwitchVideoLength(currentProgress / 1000));
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    seeking = true;
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    seeking = false;
-                    delayHiding();
-
-                    if (vodId != null) {
-                        ChatManager.updateVodProgress(currentProgress, true);
-                        streamFragmentCallback.onSeek();
-                    }
-                }
-            });
-            seeking = true;
-            mProgressBar.setMax(vodLength * 1000);
-            seeking = false;
-
-            checkVodProgress();
+            mRootView.findViewById(R.id.exo_position).setOnClickListener(v -> showSeekDialog());
         }
 
         keepScreenOn();
@@ -547,7 +407,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     private void initializePlayer() {
         if (player == null) {
-            player = new ExoPlayer.Builder(getContext(), mediaSourceFactory).build();
+            player = new ExoPlayer.Builder(getContext(), mediaSourceFactory)
+                    .setSeekBackIncrementMs(10000)
+                    .setSeekForwardIncrementMs(10000)
+                    .build();
             player.addListener(this);
             mVideoView.setPlayer(player);
 
@@ -555,10 +418,11 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 player.setPlaybackSpeed(settings.getPlaybackSpeed());
                 player.setSkipSilenceEnabled(settings.getSkipSilence());
                 player.setSeekParameters(SeekParameters.CLOSEST_SYNC);
+                player.seekTo(settings.getVodProgress(vodId) * 1000L);
             }
 
             if (currentMediaItem != null) {
-                player.setMediaItem(currentMediaItem);
+                player.setMediaItem(currentMediaItem, false);
                 player.prepare();
             }
 
@@ -583,8 +447,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
             mediaSessionConnector.setPlayer(player);
             mediaSession.setActive(true);
-
-            progressHandler.postDelayed(progressRunnable, 1000);
         }
     }
 
@@ -592,32 +454,16 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (player != null) {
             mediaSession.release();
 
+            if (vodId != null) {
+                settings.setVodProgress(vodId, player);
+            }
+
             player.release();
             player = null;
         }
     }
 
     /* Player.Listener implementation */
-    @Override
-    public void onPlaybackStateChanged(@Player.State int playbackState) {
-        if (playbackState == Player.STATE_READY) {
-            mBufferingView.stop();
-            hideVideoInterface();
-            delayHiding();
-
-            Log.d(LOG_TAG, "Render Start");
-            if (!previewInbackGround) {
-                hidePreview();
-            }
-        } else if (playbackState == Player.STATE_BUFFERING) {
-            mBufferingView.start();
-            delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
-            showVideoInterface();
-
-            Log.d(LOG_TAG, "Render stop. Buffering start");
-        }
-    }
-
     @Override
     public void onPlayerError(@NonNull PlaybackException exception) {
         Log.e(LOG_TAG, "Something went wrong playing the stream for " + mUserInfo.getDisplayName() + " - Exception: " + exception);
@@ -637,8 +483,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         } else {
             showPlayIcon();
             releaseScreenOn();
-
-            delayAnimationHandler.removeCallbacks(hideAnimationRunnable);
         }
     }
 
@@ -664,12 +508,23 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mActivity.setPictureInPictureParams(builder.build());
     }
 
-    /**
-     * Hides the preview image and updates the state
-     */
-    private void hidePreview() {
+    @Override
+    public void onPositionDiscontinuity(@NonNull Player.PositionInfo oldPosition, @NonNull Player.PositionInfo newPosition, int reason) {
+        if (vodId == null || reason != Player.DISCONTINUITY_REASON_SEEK) return;
+
+        boolean seekBackwards = oldPosition.positionMs > newPosition.positionMs;
+        ChatManager.updateVodProgress(newPosition.positionMs, seekBackwards);
+        if (seekBackwards) streamFragmentCallback.onSeek();
+    }
+
+    @Override
+    public void onRenderedFirstFrame() {
         mPreview.setVisibility(View.INVISIBLE);
-        previewInbackGround = true;
+    }
+
+    @Override
+    public void onIsPlayingChanged(boolean isPlaying) {
+        if (isPlaying) vodRunnable.run();
     }
 
     public void backPressed() {
@@ -680,12 +535,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        // Checks the orientation of the screen
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            isLandscape = true;
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            isLandscape = false;
-        }
+        isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        mFullScreenButton.setImageResource(isLandscape ? R.drawable.ic_fullscreen_exit : R.drawable.ic_fullscreen);
 
         checkShowChatButtonVisibility();
         updateUI();
@@ -702,11 +553,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     @Override
     public void onResume() {
         super.onResume();
-
-        // If the app was closed in the background we need to seek to currentProgress when resuming.
-        // Android also triggers onResume when coming out of PIP but we don't need to do it then.
-        if (!pipDisabling)
-            player.seekTo(currentProgress);
 
         pipDisabling = false;
 
@@ -760,15 +606,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         Log.d(LOG_TAG, "Stream Fragment Stopped");
         super.onStop();
 
-        mBufferingView.stop();
-
         if (!castingViewVisible && !audioViewVisible) {
             player.pause();
-        }
-
-        if (vodId != null) {
-            settings.setVodProgress(vodId, currentProgress / 1000);
-            Log.d(LOG_TAG, "Saving Current progress: " + currentProgress);
         }
 
         if (Util.SDK_INT > 23) {
@@ -786,11 +625,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             fetchViewCountHandler.removeCallbacks(fetchViewCountRunnable);
         }
 
-        if (settings.getStreamPlayerRuntime()) {
-            runtimeHandler.removeCallbacks(runtimeRunnable);
-        }
-
-        progressHandler.removeCallbacks(progressRunnable);
         super.onDestroy();
     }
 
@@ -860,14 +694,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      */
     private void setupShowChatButton() {
         checkShowChatButtonVisibility();
-        mShowChatButton.setOnClickListener(view -> {
-            if (!isVideoInterfaceShowing()) {
-                showVideoInterface();
-                delayHiding();
-            }
-
-            setLandscapeChat(!landscapeChatVisible);
-        });
+        mShowChatButton.setOnClickListener(view -> setLandscapeChat(!landscapeChatVisible));
     }
 
     /**
@@ -931,25 +758,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     private void showSeekDialog() {
-        DialogService.getSeekDialog(getActivity(), (dialog, which) -> {
-                    if (which == DialogAction.NEGATIVE)
-                        return;
-
-                    View customView = dialog.getCustomView();
-                    if (customView == null) return;
-                    MaterialNumberPicker hourPicker = customView.findViewById(R.id.hour_picker);
-                    MaterialNumberPicker minutePicker = customView.findViewById(R.id.minute_picker);
-                    MaterialNumberPicker secondPicker = customView.findViewById(R.id.second_picker);
-
-                    seeking = true;
-                    mProgressBar.setProgress((hourPicker.getValue() * 3600 + minutePicker.getValue() * 60 + secondPicker.getValue()) * 1000);
-                    seeking = false;
-                    streamFragmentCallback.onSeek();
-                    ChatManager.updateVodProgress(currentProgress, true);
-                },
-                currentProgress / 1000,
-                vodLength)
-                .show();
+        DialogService.getSeekDialog(getActivity(), player).show();
     }
 
     @Override
@@ -1056,8 +865,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
         };
 
-        mVideoWrapper.setOnTouchListener(touchListener);
-        mClickInterceptor.setOnTouchListener(touchListener);
+        mOverlay.setOnTouchListener(touchListener);
     }
 
     private void setLandscapeChat(boolean visible) {
@@ -1079,7 +887,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         //auto.setVisibility(View.GONE); // Auto does not work on chromecast
         mVideoView.setVisibility(View.INVISIBLE);
         mBufferingView.setVisibility(View.GONE);
-        previewInbackGround = false;
         castingTextView.setVisibility(View.VISIBLE);
         //castingTextView.setText(R.string.stream_chromecast_connecting);
         showVideoInterface();
@@ -1091,7 +898,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mVideoView.setVisibility(View.VISIBLE);
         Service.bringToBack(mPreview);
         mBufferingView.setVisibility(View.VISIBLE);
-        previewInbackGround = true;
         castingTextView.setVisibility(View.INVISIBLE);
         showVideoInterface();
     }
@@ -1159,24 +965,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     /**
-     * Checks if the user is currently in progress of watching a VOD. If so seek forward to where the user left off.
-     */
-    private void checkVodProgress() {
-        if (vodId != null) {
-            if (currentProgress == 0) {
-                currentProgress = settings.getVodProgress(vodId) * 1000;
-                ChatManager.updateVodProgress(currentProgress, true);
-                player.seekTo(currentProgress);
-                Log.d(LOG_TAG, "Current progress: " + currentProgress);
-            } else {
-                ChatManager.updateVodProgress(currentProgress, false);
-                player.seekTo(currentProgress);
-                Log.d(LOG_TAG, "Seeking to " + currentProgress);
-            }
-        }
-    }
-
-    /**
      * Call to make sure the UI is shown correctly
      */
     private void updateUI() {
@@ -1186,41 +974,26 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     /**
-     * This makes sure that the System UI automatically hides when the user changes focus by opening the navigation drawer.
-     */
-    public void onWindowFocusChanged(boolean hasFocus) {
-        Log.d(LOG_TAG, "WindowFocusChanged to " + hasFocus + " - isLandscape " + isLandscape);
-        setAndroidUiMode();
-    }
-
-    /**
-     * Sets the System UI visibility so that the status- and navigation bar automatically hides if the app is current in fullscreen or in landscape.
-     * But they will automatically show when the user touches the screen.
+     * Sets the System UI visibility so that the status- and navigation bar automatically hides if the app is current in landscape.
+     * But they will automatically show when the user swipes the screen.
      */
     private void setAndroidUiMode() {
         if (getActivity() == null) {
             return;
         }
 
-        View decorView = getActivity().getWindow().getDecorView();
-        if (isLandscape || isFullscreen) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide navigation bar
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN // Hide Status bar
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
-            } else {
-                decorView.setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide navigation bar
-                                | View.SYSTEM_UI_FLAG_FULLSCREEN // Hide Status bar
-
-                );
-            }
-
-        } else {
-            decorView.setSystemUiVisibility(0); // Remove all flags.
+        Window window = getActivity().getWindow();
+        View decorView = window.getDecorView();
+        WindowInsetsControllerCompat windowInsetsController = ViewCompat.getWindowInsetsController(decorView);
+        if (windowInsetsController == null) {
+            return;
         }
+
+        WindowCompat.setDecorFitsSystemWindows(window, !isLandscape);
+
+        windowInsetsController.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        if (isLandscape) windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+        else windowInsetsController.show(WindowInsetsCompat.Type.systemBars());
     }
 
     private void setVideoViewLayout() {
@@ -1241,13 +1014,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     /**
-     * Delays the hiding for the Video control interface.
-     */
-    private void delayHiding() {
-        delayAnimationHandler.postDelayed(hideAnimationRunnable, HIDE_ANIMATION_DELAY);
-    }
-
-    /**
      * Checks if the video interface is fully showing
      */
     public boolean isVideoInterfaceShowing() {
@@ -1260,7 +1026,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private void hideVideoInterface() {
         if (mToolbar != null && !audioViewVisible && !chatOnlyViewVisible) {
             mVideoInterface.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-            changeVideoControlClickablity(false);
         }
     }
 
@@ -1269,22 +1034,16 @@ public class StreamFragment extends Fragment implements Player.Listener {
      */
     private void showVideoInterface() {
         int MaintoolbarY = 0, CtrlToolbarY = 0;
-        if ((isFullscreen || isLandscape) && isDeviceBelowKitkat()) {
+        if (isLandscape && isDeviceBelowKitkat()) {
             MaintoolbarY = getStatusBarHeight();
         }
-        if ((isFullscreen || isLandscape) && Service.isTablet(getContext()) && isDeviceBelowKitkat()) {
+        if (isLandscape && Service.isTablet(getContext()) && isDeviceBelowKitkat()) {
             CtrlToolbarY = getNavigationBarHeight();
         }
 
         mControlToolbar.setTranslationY(-CtrlToolbarY);
         mToolbar.setTranslationY(MaintoolbarY);
         mVideoInterface.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
-        changeVideoControlClickablity(true);
-    }
-
-    private void changeVideoControlClickablity(boolean clickable) {
-        mClickInterceptor.setVisibility(clickable ? View.GONE : View.VISIBLE);
-        mClickInterceptor.setOnClickListener(view -> mVideoWrapper.performClick());
     }
 
     /**
@@ -1297,7 +1056,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             int mainPadding = originalMainToolbarPadding;
             int delta = getNavigationBarHeight();
 
-            if ((isFullscreen || isLandscape) && !Service.isTablet(getContext())) {
+            if (isLandscape && !Service.isTablet(getContext())) {
                 ctrlPadding += delta;
                 mainPadding += delta;
             }
@@ -1335,31 +1094,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     /**
      * If the device isn't currently in fullscreen a request is sent to turn the device into landscape.
-     * Otherwise if the device is in fullscreen then is releases the lock by requesting for an unspecified orientation
-     * After and update to the VideoView layout is requested.
+     * Otherwise if the device is in fullscreen then is releases the lock by requesting for portrait
      */
     public void toggleFullscreen() {
-        isFullscreen = !isFullscreen;
-        if (isFullscreen) {
-            requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
-        } else {
-            requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-        updateFullscreenButtonState();
-        setVideoViewLayout();
-    }
-
-    /**
-     * Sets the icon drawable of the fullscreen button depending on the current state.
-     * If the app is currently in full screen an "exit fullscreen" icon will appear,
-     * else and "enter fullscreen" icon will.
-     */
-    private void updateFullscreenButtonState() {
-        if (isFullscreen) {
-            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen_exit);
-        } else {
-            mFullScreenButton.setImageResource(R.drawable.ic_fullscreen);
-        }
+        requireActivity().setRequestedOrientation(isLandscape ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
     }
 
     /**
@@ -1390,7 +1128,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     /**
-     * Starts and Aync task that fetches all available Stream URLs for a stream,
+     * Starts an Async task that fetches all available Stream URLs for a stream,
      * then tries to start stream with the latest user defined quality setting.
      * If no URLs are available for the stream, the user is notified.
      */
@@ -1452,12 +1190,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * Stops the buffering and notifies the user that the stream could not be played
      */
     private void playbackFailed() {
-        mBufferingView.stop();
-        if (vodId == null) {
-            showSnackbar(getString(R.string.stream_playback_failed), getString(R.string.retry), v -> startStreamWithTask());
-        } else {
-            showSnackbar(getString(R.string.vod_playback_failed), getString(R.string.retry), v -> startStreamWithTask());
-        }
+        showSnackbar(getString(vodId == null ? R.string.stream_playback_failed : R.string.vod_playback_failed), getString(R.string.retry), v -> startStreamWithTask());
     }
 
     private void showSnackbar(String message) {
@@ -1503,10 +1236,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 .build();
 
         currentMediaItem = mediaItem;
-        player.setMediaItem(mediaItem);
+        player.setMediaItem(mediaItem, false);
         player.prepare();
 
-        checkVodProgress();
         player.play();
     }
 
@@ -1750,7 +1482,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mVideoView.setVisibility(View.INVISIBLE);
             mBufferingView.start();
             //mBufferingView.setVisibility(View.GONE);
-            previewInbackGround = false;
             castingTextView.setVisibility(View.VISIBLE);
             castingTextView.setText(R.string.stream_audio_only_active);
 
@@ -1768,7 +1499,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mVideoView.setVisibility(View.VISIBLE);
             mBufferingView.setVisibility(View.VISIBLE);
             Service.bringToBack(mPreview);
-            previewInbackGround = true;
             castingTextView.setVisibility(View.INVISIBLE);
 
             showQualities();
@@ -1828,7 +1558,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private void initChatOnlyView() {
         if (!chatOnlyViewVisible) {
             chatOnlyViewVisible = true;
-            if (isFullscreen) {
+            if (isLandscape) {
                 toggleFullscreen();
             }
 
