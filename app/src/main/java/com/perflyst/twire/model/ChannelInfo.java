@@ -1,5 +1,6 @@
 package com.perflyst.twire.model;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,6 +12,7 @@ import com.google.common.base.Optional;
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.service.SubscriptionsDbHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -208,5 +210,21 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
     @Override
     public int getPlaceHolder(Context context) {
         return R.drawable.ic_profile_template_300p;
+    }
+
+    @Override
+    public void refreshPreview(Context context, Runnable callback) {
+        TwireApplication.backgroundPoster.post(() -> {
+            ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(getUserId(), context);
+
+            if (logoURL != mChannelInfo.getLogoURL()) {
+                logoURL = mChannelInfo.getLogoURL();
+                callback.run();
+
+                var values = new ContentValues();
+                values.put(SubscriptionsDbHelper.COLUMN_LOGO_URL, logoURL.toString());
+                Service.updateStreamerInfoDbWithValues(values, context, getUserId());
+            }
+        });
     }
 }

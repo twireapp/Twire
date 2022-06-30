@@ -13,4 +13,7 @@ public interface MainElement {
     String getLowPreview();
 
     int getPlaceHolder(Context context);
+
+    default void refreshPreview(Context context, Runnable callback) {
+    }
 }

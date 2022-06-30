@@ -689,8 +689,8 @@ public class Service {
         return result;
     }
 
-    private static void updateStreamerInfoDbWithValues(ContentValues values, Context context, String streamerName) {
-        updateStreamerInfoDbWithValues(values, context, SubscriptionsDbHelper.COLUMN_STREAMER_NAME + "=?", new String[]{streamerName});
+    public static void updateStreamerInfoDbWithValues(ContentValues values, Context context, Integer id) {
+        updateStreamerInfoDbWithValues(values, context, SubscriptionsDbHelper.COLUMN_ID + "=?", new String[]{String.valueOf(id)});
     }
 
     private static void updateStreamerInfoDbWithValues(ContentValues values, Context context, String whereClause, String[] whereArgs) {

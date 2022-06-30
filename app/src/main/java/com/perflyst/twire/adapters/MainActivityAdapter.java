@@ -183,6 +183,11 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
             @Override
             public void onLoadCleared(@Nullable Drawable placeholder) {
             }
+
+            @Override
+            public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                element.refreshPreview(context, () -> loadImagePreview(element.getMediumPreview(), element, viewHolder));
+            }
         };
 
         creator.into(mTarget);
