@@ -14,7 +14,6 @@ import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -147,7 +146,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private Runnable fetchViewCountRunnable;
     private StyledPlayerView mVideoView;
     private ExoPlayer player;
-    private MediaSource currentMediaSource;
+    private MediaItem currentMediaItem;
     private Toolbar mToolbar;
     private ConstraintLayout mVideoInterface;
     private RelativeLayout mControlToolbar;
@@ -217,6 +216,16 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private Integer triesForNextBest = 0;
     private boolean pictureInPictureEnabled; // Tracks if PIP is enabled including the animation.
     private MediaSessionCompat mediaSession;
+
+    private static final DefaultHttpDataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory()
+            .setUserAgent("Twire")
+            .setDefaultRequestProperties(new HashMap<>() {{
+                put("Referer", "https://player.twitch.tv");
+                put("Origin", "https://player.twitch.tv");
+            }});
+
+    private static final MediaSource.Factory mediaSourceFactory = new HlsMediaSource.Factory(dataSourceFactory)
+            .setPlaylistParserFactory(new LLHlsPlaylistParserFactory());
 
     public static StreamFragment newInstance(Bundle args) {
         StreamFragment fragment = new StreamFragment();
@@ -536,7 +545,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     private void initializePlayer() {
         if (player == null) {
-            player = new ExoPlayer.Builder(getContext()).build();
+            player = new ExoPlayer.Builder(getContext(), mediaSourceFactory).build();
             player.addListener(this);
             mVideoView.setPlayer(player);
 
@@ -546,8 +555,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 player.setSeekParameters(SeekParameters.CLOSEST_SYNC);
             }
 
-            if (currentMediaSource != null) {
-                player.setMediaSource(currentMediaSource);
+            if (currentMediaItem != null) {
+                player.setMediaItem(currentMediaItem);
                 player.prepare();
             }
 
@@ -1488,23 +1497,13 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * Sets the URL to the VideoView and ChromeCast and starts playback.
      */
     private void playUrl(String url) {
-        DefaultHttpDataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory()
-                .setUserAgent(getString(R.string.app_name))
-                .setDefaultRequestProperties(new HashMap<String, String>() {{
-                    put("Referer", "https://player.twitch.tv");
-                    put("Origin", "https://player.twitch.tv");
-                }});
-
         MediaItem mediaItem = new MediaItem.Builder()
                 .setLiveConfiguration(new MediaItem.LiveConfiguration.Builder().setTargetOffsetMs(1000).build())
                 .setUri(url)
                 .build();
 
-        MediaSource mediaSource = new HlsMediaSource.Factory(dataSourceFactory)
-                .setPlaylistParserFactory(new LLHlsPlaylistParserFactory())
-                .createMediaSource(mediaItem);
-        currentMediaSource = mediaSource;
-        player.setMediaSource(mediaSource);
+        currentMediaItem = mediaItem;
+        player.setMediaItem(mediaItem);
         player.prepare();
 
         checkVodProgress();
@@ -1512,18 +1511,13 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     private void playWithExternalPlayer() {
-        Toast errorToast = Toast.makeText(getContext(), R.string.error_external_playback_failed, Toast.LENGTH_LONG);
-        if (qualityURLs == null) {
-            errorToast.show();
+        if (currentMediaItem.localConfiguration == null) {
+            Toast.makeText(getContext(), R.string.error_external_playback_failed, Toast.LENGTH_LONG).show();
             return;
         }
 
-        String castQuality = GetLiveStreamURL.QUALITY_AUTO;
-        updateSelectedQuality(castQuality);
-        String url = qualityURLs.get(castQuality).URL;
-
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(url), "video/*");
+        intent.setDataAndType(currentMediaItem.localConfiguration.uri, "video/*");
         startActivity(Intent.createChooser(intent, getString(R.string.stream_external_play_using)));
     }
 
