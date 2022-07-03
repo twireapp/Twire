@@ -245,7 +245,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
      * Notifies observers that item has been removed
      */
     private void checkSize() {
-        int MAX_MESSAGES = 500;
+        int MAX_MESSAGES = 150;
         if (messages.size() > MAX_MESSAGES) {
             int messagesOverLimit = messages.size() - MAX_MESSAGES;
             for (int i = 0; i < messagesOverLimit; i++) {
