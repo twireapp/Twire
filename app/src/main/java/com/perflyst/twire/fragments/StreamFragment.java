@@ -330,6 +330,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mActivity = (AppCompatActivity) getActivity();
         mClickInterceptor = mRootView.findViewById(R.id.click_interceptor);
 
+        landscapeChatVisible = settings.isChatInLandscapeEnabled();
+
         setupToolbar();
         setupSpinner();
         setupProfileBottomSheet();
@@ -1227,7 +1229,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
         if (isLandscape && !pictureInPictureEnabled) {
-            layoutWrapper.width = mShowChatButton.getRotation() == 0 ? ConstraintLayout.LayoutParams.MATCH_CONSTRAINT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
+            layoutWrapper.width = !landscapeChatVisible ? ConstraintLayout.LayoutParams.MATCH_CONSTRAINT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
             layoutWrapper.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT;
         } else {
             layoutWrapper.width = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT;
