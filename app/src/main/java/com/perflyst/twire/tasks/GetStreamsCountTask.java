@@ -11,16 +11,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 /**
  * Created by Sebastian Rask on 26-06-2016.
  */
 public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
     private final Settings settings;
-    private final Delegate delegate;
+    private final Consumer<Integer> delegate;
     private final Context context;
 
-    public GetStreamsCountTask(Context context, Delegate delegate) {
+    public GetStreamsCountTask(Context context, Consumer<Integer> delegate) {
         this.settings = new Settings(context);
         this.context = context;
         this.delegate = delegate;
@@ -93,10 +94,6 @@ public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
     @Override
     protected void onPostExecute(Integer integer) {
         super.onPostExecute(integer);
-        delegate.TaskFinished(integer);
-    }
-
-    public interface Delegate {
-        void TaskFinished(int count);
+        delegate.accept(integer);
     }
 }

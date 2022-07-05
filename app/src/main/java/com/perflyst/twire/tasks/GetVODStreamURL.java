@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -21,7 +23,7 @@ import okhttp3.RequestBody;
 public class GetVODStreamURL extends GetLiveStreamURL {
     private final String LOG_TAG = getClass().getSimpleName();
 
-    public GetVODStreamURL(AsyncResponse aCallback) {
+    public GetVODStreamURL(Consumer<Map<String, Quality>> aCallback) {
         super(aCallback);
     }
 

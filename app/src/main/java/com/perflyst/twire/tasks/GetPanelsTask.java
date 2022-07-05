@@ -6,6 +6,7 @@ import com.perflyst.twire.model.Panel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by Sebastian Rask on 24-02-2017.
@@ -14,9 +15,9 @@ import java.util.List;
 public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
 
     private final String mStreamerName;
-    private final Delegate mDelegate;
+    private final Consumer<List<Panel>> mDelegate;
 
-    public GetPanelsTask(String mStreamerName, Delegate mDelegate) {
+    public GetPanelsTask(String mStreamerName, Consumer<List<Panel>> mDelegate) {
         this.mStreamerName = mStreamerName;
         this.mDelegate = mDelegate;
     }
@@ -69,10 +70,6 @@ public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
     @Override
     protected void onPostExecute(List<Panel> s) {
         super.onPostExecute(s);
-        mDelegate.onPanelsFetched(s);
-    }
-
-    public interface Delegate {
-        void onPanelsFetched(List<Panel> result);
+        mDelegate.accept(s);
     }
 }

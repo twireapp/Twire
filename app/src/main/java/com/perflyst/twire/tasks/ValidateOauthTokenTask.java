@@ -1,5 +1,9 @@
 package com.perflyst.twire.tasks;
 
+import static com.perflyst.twire.service.Service.SimpleResponse;
+import static com.perflyst.twire.service.Service.isNetworkConnectedThreadOnly;
+import static com.perflyst.twire.service.Service.makeRequest;
+
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -7,22 +11,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
+import java.util.function.Consumer;
 
 import okhttp3.Request;
-
-import static com.perflyst.twire.service.Service.SimpleResponse;
-import static com.perflyst.twire.service.Service.isNetworkConnectedThreadOnly;
-import static com.perflyst.twire.service.Service.makeRequest;
 
 /**
  * Created by Sebastian Rask on 10-05-2016.
  */
 public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthTokenTask.TokenValidation> {
-    private final ValidationDelegate delegate;
+    private final Consumer<TokenValidation> delegate;
     private final String oauthToken;
     private final WeakReference<Context> context;
 
-    public ValidateOauthTokenTask(ValidationDelegate delegate, String oauthToken, Context context) {
+    public ValidateOauthTokenTask(Consumer<TokenValidation> delegate, String oauthToken, Context context) {
         this.delegate = delegate;
         this.oauthToken = oauthToken;
         this.context = new WeakReference<>(context);
@@ -66,17 +67,13 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
     @Override
     protected void onPostExecute(TokenValidation tokenValidation) {
         super.onPostExecute(tokenValidation);
-        delegate.onFinished(tokenValidation);
+        delegate.accept(tokenValidation);
     }
 
     @Override
     protected void onCancelled(TokenValidation validation) {
         super.onCancelled(validation);
-        delegate.onFinished(null);
-    }
-
-    public interface ValidationDelegate {
-        void onFinished(TokenValidation validation);
+        delegate.accept(null);
     }
 
     public static class TokenValidation {

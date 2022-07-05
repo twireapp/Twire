@@ -107,10 +107,10 @@ import com.rey.material.widget.ProgressView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class StreamFragment extends Fragment implements Player.Listener {
     private static int totalVerticalInset;
@@ -141,7 +141,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private HeadsetPlugIntentReceiver headsetIntentReceiver;
     private Settings settings;
     private SleepTimer sleepTimer;
-    private LinkedHashMap<String, Quality> qualityURLs;
+    private Map<String, Quality> qualityURLs;
     private boolean isLandscape = false, previewInbackGround = false;
     private Runnable fetchViewCountRunnable;
     private StyledPlayerView mVideoView;
@@ -1395,7 +1395,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * If no URLs are available for the stream, the user is notified.
      */
     private void startStreamWithTask() {
-        GetLiveStreamURL.AsyncResponse callback = url -> {
+        Consumer<Map<String, Quality>> callback = url -> {
             try {
                 if (!url.isEmpty()) {
                     updateQualitySelections(url);
@@ -1428,7 +1428,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * If the task is successful the quality selector views' click listeners will be updated.
      */
     private void updateQualitySelectorsWithTask() {
-        GetLiveStreamURL.AsyncResponse delegate = url -> {
+        Consumer<Map<String, Quality>> delegate = url -> {
             try {
                 if (!url.isEmpty()) {
                     updateQualitySelections(url);
@@ -1563,7 +1563,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     /**
      * Adds the available qualities for a stream to the spinner menu
      */
-    private void updateQualitySelections(LinkedHashMap<String, Quality> availableQualities) {
+    private void updateQualitySelections(Map<String, Quality> availableQualities) {
         for (TextView view : QualityOptions.values()) {
             mQualityWrapper.removeView((MaterialRippleLayout) view.getParent());
         }

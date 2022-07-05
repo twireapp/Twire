@@ -11,18 +11,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Created by Sebastian Rask Jepsen on 07/08/16.
  */
 public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage> {
-    private final Callback callback;
+    private final Consumer<ChatMessage> callback;
     private final List<Emote> customEmotes, twitchEmotes, subscriberEmotes;
     private final ChatManager chatManager;
     private final String message;
     private final HashMap<String, Integer> wordOccurrences;
 
-    public ConstructChatMessageTask(Callback callback, List<Emote> customEmotes, List<Emote> twitchEmotes, List<Emote> subscriberEmotes, ChatManager chatManager, String message) {
+    public ConstructChatMessageTask(Consumer<ChatMessage> callback, List<Emote> customEmotes, List<Emote> twitchEmotes, List<Emote> subscriberEmotes, ChatManager chatManager, String message) {
         this.callback = callback;
         this.customEmotes = customEmotes;
         this.twitchEmotes = twitchEmotes;
@@ -54,7 +55,7 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
     @Override
     protected void onPostExecute(ChatMessage chatMessage) {
         super.onPostExecute(chatMessage);
-        callback.onMessageConstructed(chatMessage);
+        callback.accept(chatMessage);
     }
 
     private ArrayList<ChatEmote> getMessageChatEmotes() {
@@ -95,9 +96,5 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
         }
 
         return result;
-    }
-
-    public interface Callback {
-        void onMessageConstructed(ChatMessage chatMessage);
     }
 }

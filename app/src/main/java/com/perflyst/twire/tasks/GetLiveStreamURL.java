@@ -13,7 +13,9 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,9 +31,9 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     public static final String QUALITY_SOURCE = "chunked";
     public static final String QUALITY_AUTO = "auto";
     private final String LOG_TAG = getClass().getSimpleName();
-    private final AsyncResponse callback;
+    private final Consumer<Map<String, Quality>> callback;
 
-    public GetLiveStreamURL(AsyncResponse aCallback) {
+    public GetLiveStreamURL(Consumer<Map<String, Quality>> aCallback) {
         callback = aCallback;
     }
 
@@ -98,7 +100,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
 
     @Override
     protected void onPostExecute(LinkedHashMap<String, Quality> result) {
-        callback.finished(result);
+        callback.accept(result);
     }
 
     LinkedHashMap<String, Quality> parseM3U8(String urlToRead) {
@@ -132,9 +134,5 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         } catch (UnsupportedEncodingException ignore) {
             return s;
         }
-    }
-
-    public interface AsyncResponse {
-        void finished(LinkedHashMap<String, Quality> url);
     }
 }
