@@ -137,7 +137,7 @@ public class ChatManager implements Runnable {
     @Override
     public void run() {
         Log.d(LOG_TAG, "Trying to start chat " + channel.getLogin() + " for user " + user);
-        mEmoteManager.loadCustomEmotes(() -> onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CUSTOM_EMOTES_FETCHED)));
+        mEmoteManager.loadCustomEmotes(() -> onUpdate(UpdateType.ON_CUSTOM_EMOTES_FETCHED));
 
         readBadges("https://badges.twitch.tv/v1/badges/global/display", globalBadges);
         readBadges("https://badges.twitch.tv/v1/badges/channels/" + channel.getUserId() + "/display", channelBadges);
@@ -150,14 +150,9 @@ public class ChatManager implements Runnable {
         }
     }
 
-    protected void onProgressUpdate(ProgressUpdate... values) {
-        final ProgressUpdate update = values[0];
-        final ProgressUpdate.UpdateType type = update.getUpdateType();
+    protected void onUpdate(UpdateType type) {
         TwireApplication.uiThreadPoster.post(() -> {
             switch (type) {
-                case ON_MESSAGE:
-                    callback.onMessage(update.getMessage());
-                    break;
                 case ON_CONNECTED:
                     callback.onConnected();
                     break;
@@ -180,6 +175,10 @@ public class ChatManager implements Runnable {
                     break;
             }
         });
+    }
+
+    protected void onMessage(ChatMessage message) {
+        TwireApplication.uiThreadPoster.post(() -> callback.onMessage(message));
     }
 
 
@@ -228,17 +227,17 @@ public class ChatManager implements Runnable {
                 } else if (line.contains("004 " + user + " :")) {
                     Log.d(LOG_TAG, "<" + line);
                     Log.d(LOG_TAG, "Connected >> " + user + " ~ irc.twitch.tv");
-                    onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTED));
+                    onUpdate(UpdateType.ON_CONNECTED);
                     sendRawMessage("CAP REQ :twitch.tv/tags twitch.tv/commands");
                     sendRawMessage("JOIN #" + channel.getLogin() + "\r\n");
                 } else if (line.startsWith("PING")) { // Twitch wants to know if we are still here. Send PONG and Server info back
                     handlePing(line);
                 } else if (line.toLowerCase().contains("disconnected")) {
                     Log.e(LOG_TAG, "Disconnected - trying to reconnect");
-                    onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
+                    onUpdate(UpdateType.ON_RECONNECTING);
                     connect(address, port); //ToDo: Test if chat keeps playing if connection is lost
                 } else if (line.contains("NOTICE * :Error logging in")) {
-                    onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTION_FAILED));
+                    onUpdate(UpdateType.ON_CONNECTION_FAILED);
                 } else {
                     Log.d(LOG_TAG, "<" + line);
                 }
@@ -249,9 +248,9 @@ public class ChatManager implements Runnable {
         } catch (IOException e) {
             e.printStackTrace();
 
-            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTION_FAILED));
+            onUpdate(UpdateType.ON_CONNECTION_FAILED);
             SystemClock.sleep(2500);
-            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
+            onUpdate(UpdateType.ON_RECONNECTING);
             connect(address, port);
         }
     }
@@ -269,7 +268,7 @@ public class ChatManager implements Runnable {
     private void processVodChat() {
         try {
             synchronized (vodLock) {
-                onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTED));
+                onUpdate(UpdateType.ON_CONNECTED);
 
                 // Make sure that current progress has been set.
                 vodLock.wait();
@@ -292,12 +291,12 @@ public class ChatManager implements Runnable {
 
                         if (result.isEmpty()) {
                             reconnecting = true;
-                            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
+                            onUpdate(UpdateType.ON_RECONNECTING);
                             SystemClock.sleep(2500);
                             continue;
                         } else if (reconnecting) {
                             reconnecting = false;
-                            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTED));
+                            onUpdate(UpdateType.ON_CONNECTED);
                         }
 
                         JSONObject commentsObject = new JSONObject(result);
@@ -369,7 +368,7 @@ public class ChatManager implements Runnable {
                     //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
                     ChatMessage chatMessage = new ChatMessage(body, displayName, color, getBadges(badges), emotes, false);
-                    onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
+                    onMessage(chatMessage);
 
                     downloadedComments.poll();
                 }
@@ -377,9 +376,9 @@ public class ChatManager implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
 
-            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_CONNECTION_FAILED));
+            onUpdate(UpdateType.ON_CONNECTION_FAILED);
             SystemClock.sleep(2500);
-            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_RECONNECTING));
+            onUpdate(UpdateType.ON_RECONNECTING);
             processVodChat();
         }
     }
@@ -431,7 +430,7 @@ public class ChatManager implements Runnable {
                 break;
         }
 
-        onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_ROOMSTATE_CHANGE));
+        onUpdate(UpdateType.ON_ROOMSTATE_CHANGE);
     }
 
     /**
@@ -456,7 +455,7 @@ public class ChatManager implements Runnable {
 
         // If the one of the roomstate types have changed notify the chatfragment
         if (roomstateChanged) {
-            onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_ROOMSTATE_CHANGE));
+            onUpdate(UpdateType.ON_ROOMSTATE_CHANGE);
         }
     }
 
@@ -506,7 +505,7 @@ public class ChatManager implements Runnable {
             chatMessage.setHighlight(true);
         }
 
-        onProgressUpdate(new ProgressUpdate(ProgressUpdate.UpdateType.ON_MESSAGE, chatMessage));
+        onMessage(chatMessage);
     }
 
     /**
@@ -670,39 +669,14 @@ public class ChatManager implements Runnable {
         void onEmoteSetsFetched(String[] emoteSets);
     }
 
-    /**
-     * Class used for determining which callback to make in the AsyncTasks OnProgressUpdate
-     */
-    protected static class ProgressUpdate {
-        private final UpdateType updateType;
-        private ChatMessage message;
-
-        ProgressUpdate(UpdateType type) {
-            updateType = type;
-        }
-
-        ProgressUpdate(UpdateType type, ChatMessage aMessage) {
-            updateType = type;
-            message = aMessage;
-        }
-
-        UpdateType getUpdateType() {
-            return updateType;
-        }
-
-        public ChatMessage getMessage() {
-            return message;
-        }
-
-        public enum UpdateType {
-            ON_MESSAGE,
-            ON_CONNECTING,
-            ON_RECONNECTING,
-            ON_CONNECTED,
-            ON_CONNECTION_FAILED,
-            ON_ROOMSTATE_CHANGE,
-            ON_CUSTOM_EMOTES_FETCHED
-        }
+    public enum UpdateType {
+        ON_MESSAGE,
+        ON_CONNECTING,
+        ON_RECONNECTING,
+        ON_CONNECTED,
+        ON_CONNECTION_FAILED,
+        ON_ROOMSTATE_CHANGE,
+        ON_CUSTOM_EMOTES_FETCHED
     }
 }
 
