@@ -6,46 +6,37 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.adapters.SettingsCategoryAdapter;
+import com.perflyst.twire.databinding.ActivitySettingsBinding;
 import com.perflyst.twire.model.SettingsCategory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class SettingsActivity extends ThemeActivity implements SettingsCategoryAdapter.CategoryCallback {
-
-    @BindView(R.id.settings_category_list)
-    protected RecyclerView mCategoryList;
-
-    @BindView(R.id.settings_toolbar)
-    protected Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        ButterKnife.bind(this);
 
-        setSupportActionBar(mToolbar);
+        ActivitySettingsBinding binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.settingsToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         SettingsCategoryAdapter mAdapter = new SettingsCategoryAdapter(constructSettingsCategories(), this);
 
-        mCategoryList.setAdapter(mAdapter);
-        mCategoryList.setLayoutManager(new LinearLayoutManager(getBaseContext()));
-        mCategoryList.setItemAnimator(new DefaultItemAnimator());
+        binding.settingsCategoryList.setAdapter(mAdapter);
+        binding.settingsCategoryList.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+        binding.settingsCategoryList.setItemAnimator(new DefaultItemAnimator());
     }
 
     @Override

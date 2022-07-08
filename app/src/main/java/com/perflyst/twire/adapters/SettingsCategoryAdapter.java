@@ -14,9 +14,6 @@ import com.perflyst.twire.model.SettingsCategory;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 /**
  * Created by Sebastian Rask on 16-05-2017.
  */
@@ -59,18 +56,18 @@ public class SettingsCategoryAdapter extends RecyclerView.Adapter<SettingsCatego
     }
 
     public static class SettingsCategoryViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.txt_category_title)
         protected TextView mTitleView;
 
-        @BindView(R.id.txt_category_summary)
         protected TextView mSummaryView;
 
-        @BindView(R.id.img_category_icon)
         protected ImageView mCategoryIconView;
 
         SettingsCategoryViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this, itemView);
+
+            mTitleView = itemView.findViewById(R.id.txt_category_title);
+            mSummaryView = itemView.findViewById(R.id.txt_category_summary);
+            mCategoryIconView = itemView.findViewById(R.id.img_category_icon);
         }
     }
 }

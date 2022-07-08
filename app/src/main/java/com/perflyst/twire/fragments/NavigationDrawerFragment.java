@@ -35,31 +35,22 @@ import com.perflyst.twire.activities.main.TopStreamsActivity;
 import com.perflyst.twire.activities.settings.SettingsActivity;
 import com.perflyst.twire.activities.settings.SettingsGeneralActivity;
 import com.perflyst.twire.activities.setup.LoginActivity;
+import com.perflyst.twire.databinding.FragmentNavigationDrawerBinding;
 import com.perflyst.twire.misc.TooltipWindow;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetStreamsCountTask;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class NavigationDrawerFragment extends Fragment {
 
     private final String LOG_TAG = getClass().getSimpleName();
-    @BindView(R.id.streams_count)
+    private FragmentNavigationDrawerBinding binding;
     protected TextView mStreamsCount;
-    @BindView(R.id.streams_count_wrapper)
     protected FrameLayout mStreamsCountWrapper;
-    @BindView(R.id.drawer_container)
     protected View containerView;
-    @BindView(R.id.txt_app_name)
     protected TextView mAppTitleView;
-    @BindView(R.id.txt_twitch_displayname)
     protected TextView mUserNameTextView;
-    @BindView(R.id.img_app_icon)
     protected ImageView mAppIcon;
-    @BindView(R.id.img_drawer_banner)
-    protected ImageView mTopImage;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private Intent mIntent;
@@ -74,15 +65,21 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View mRoot = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        ButterKnife.bind(this, mRoot);
+        binding = FragmentNavigationDrawerBinding.inflate(inflater, container, false);
+
+        mStreamsCount = binding.streamsCount;
+        mStreamsCountWrapper = binding.streamsCountWrapper;
+        containerView = binding.drawerContainer;
+        mAppTitleView = binding.txtAppName;
+        mUserNameTextView = binding.txtTwitchDisplayname;
+        mAppIcon = binding.imgAppIcon;
 
         mSettings = new Settings(getActivity());
 
-        initHeaderImage(mTopImage);
+        initHeaderImage(binding.imgDrawerBanner);
         fetchAndSetOnlineSteamsCount();
 
-        return mRoot;
+        return binding.getRoot();
     }
 
     @Override
@@ -99,6 +96,12 @@ public class NavigationDrawerFragment extends Fragment {
         if (themeTip != null && themeTip.isTooltipShown()) {
             themeTip.dismissTooltip();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
     private void fetchAndSetOnlineSteamsCount() {

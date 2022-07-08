@@ -51,6 +51,7 @@ import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.adapters.ChatAdapter;
 import com.perflyst.twire.chat.ChatManager;
+import com.perflyst.twire.databinding.FragmentEmoteGridBinding;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
@@ -70,9 +71,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 
 interface EmoteKeyboardDelegate {
@@ -911,9 +909,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
     public static class EmoteGridFragment extends Fragment {
         private final String LOG_TAG = getClass().getSimpleName();
-        @BindView(R.id.emote_recyclerview)
         protected AutoSpanRecyclerView mEmoteRecyclerView;
-        @BindView(R.id.promoted_emotes_recyclerview)
         protected AutoSpanRecyclerView mPromotedEmotesRecyclerView;
         private EmoteFragmentType fragmentType;
         private EmoteAdapter mAdapter;
@@ -939,8 +935,10 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View mRootView = inflater.inflate(R.layout.fragment_emote_grid, null);
-            ButterKnife.bind(this, mRootView);
+            FragmentEmoteGridBinding binding = FragmentEmoteGridBinding.inflate(inflater);
+
+            mEmoteRecyclerView = binding.emoteRecyclerview;
+            mPromotedEmotesRecyclerView = binding.promotedEmotesRecyclerview;
 
             mEmoteRecyclerView.setBehaviour(new EmoteAutoSpanBehaviour());
             mPromotedEmotesRecyclerView.setBehaviour(new EmoteAutoSpanBehaviour());
@@ -974,7 +972,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
             }
 
-            return mRootView;
+            return binding.getRoot();
         }
 
         private void addSubscriberEmotes() {

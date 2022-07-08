@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +27,7 @@ import com.perflyst.twire.adapters.ChannelsAdapter;
 import com.perflyst.twire.adapters.GamesAdapter;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
+import com.perflyst.twire.databinding.ActivitySearchBinding;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.ChannelInfo;
@@ -52,9 +51,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 
 public class SearchActivity extends ThemeActivity {
     private static final int POSITION_STREAMS = 0;
@@ -62,24 +58,20 @@ public class SearchActivity extends ThemeActivity {
     private static final int POSITION_GAMES = 2;
     private static final int TOTAL_COUNT = 3;
     private final String LOG_TAG = getClass().getSimpleName();
-    @BindView(R.id.search_viewPager2)
-    protected ViewPager2 mViewPager2;
-    @BindView(R.id.ic_back_arrow)
-    protected ImageView mBackIcon;
-    @BindView(R.id.edit_text_search)
-    protected EditText mSearchText;
+    private ActivitySearchBinding binding;
     private String query;
     private SearchFragment mStreamsFragment, mChannelsFragment, mGamesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        ButterKnife.bind(this);
+
+        binding = ActivitySearchBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         setUpTabs();
 
-        mSearchText.addTextChangedListener(new TextWatcher() {
+        binding.editTextSearch.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -99,7 +91,7 @@ public class SearchActivity extends ThemeActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
         });
-        mBackIcon.setOnClickListener(v -> onBackPressed());
+        binding.icBackArrow.setOnClickListener(v -> onBackPressed());
     }
 
     @Override
@@ -109,6 +101,8 @@ public class SearchActivity extends ThemeActivity {
     }
 
     private void setUpTabs() {
+        ViewPager2 mViewPager2 = binding.searchViewPager2;
+
         // Set up the ViewPager2 with the sections adapter.
         mViewPager2.setAdapter(new SearchStateAdapter(this));
 
@@ -295,9 +289,7 @@ public class SearchActivity extends ThemeActivity {
 
     public static abstract class SearchFragment<E extends Comparable<E> & MainElement> extends Fragment implements LazyFetchingActivity<E> {
         protected MainActivityAdapter<E, ?> mAdapter;
-        @BindView(R.id.span_recyclerview)
         protected AutoSpanRecyclerView mRecyclerView;
-        @BindView(R.id.circle_progress)
         protected ProgressView mProgressView;
         String query = null;
         private LazyFetchingOnScrollListener<E> lazyFetchingOnScrollListener;
@@ -314,7 +306,9 @@ public class SearchActivity extends ThemeActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_search, container, false);
-            ButterKnife.bind(this, rootView);
+
+            mRecyclerView = rootView.findViewById(R.id.span_recyclerview);
+            mProgressView = rootView.findViewById(R.id.circle_progress);
 
             lazyFetchingOnScrollListener = new LazyFetchingOnScrollListener<>("SearchFragment", this);
 

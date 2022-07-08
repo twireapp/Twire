@@ -9,13 +9,11 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -25,6 +23,7 @@ import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
+import com.perflyst.twire.databinding.ActivityMainBinding;
 import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.fragments.NavigationDrawerFragment;
 import com.perflyst.twire.misc.TooltipWindow;
@@ -39,48 +38,31 @@ import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.rey.material.widget.ProgressView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 
 public abstract class MainActivity<E extends Comparable<E> & MainElement> extends ThemeActivity {
     private static final String FIRST_VISIBLE_ELEMENT_POSITION = "firstVisibleElementPosition";
     protected final String LOG_TAG = getClass().getSimpleName();
 
-    @BindView(R.id.followed_channels_drawer_layout)
-    protected DrawerLayout mDrawerLayout;
+    private ActivityMainBinding binding;
 
-    @BindView(R.id.progress_view)
     protected ProgressView mProgressView;
 
-    @BindView(R.id.swipe_container)
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
-    @BindView(R.id.main_list)
     protected AutoSpanRecyclerView mRecyclerView;
 
-    @BindView(R.id.toolbar_shadow)
     protected View mToolbarShadow;
 
-    @BindView(R.id.icon_container)
     protected View mCircleIconWrapper;
 
-    @BindView(R.id.txt_title)
     protected TextView mTitleView;
 
-    @BindView(R.id.error_view)
     protected TextView mErrorView;
 
-    @BindView(R.id.emote_error_view)
     protected TextView mErrorEmoteView;
 
-    @BindView(R.id.img_icon)
-    protected ImageView mIcon;
-
-    @BindView(R.id.main_toolbar)
     protected Toolbar mMainToolbar;
 
-    @BindView(R.id.main_decorative_toolbar)
     protected Toolbar mDecorativeToolbar;
     protected MainActivityAdapter<E, ?> mAdapter;
     protected NavigationDrawerFragment mDrawerFragment;
@@ -129,8 +111,20 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     @Override
     protected void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        mProgressView = binding.progressView;
+        mSwipeRefreshLayout = binding.swipeContainer;
+        mRecyclerView = binding.mainList;
+        mToolbarShadow = binding.toolbarShadow;
+        mCircleIconWrapper = binding.iconContainer;
+        mTitleView = binding.txtTitle;
+        mErrorView = binding.errorView;
+        mErrorEmoteView = binding.emoteErrorView;
+        mMainToolbar = binding.mainToolbar;
+        mDecorativeToolbar = binding.mainDecorativeToolbar;
 
         mDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
         settings = new Settings(getBaseContext());
@@ -165,7 +159,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
             initActivityAnimation();
         }
 
-        Service.increaseNavigationDrawerEdge(mDrawerLayout);
+        Service.increaseNavigationDrawerEdge(binding.followedChannelsDrawerLayout);
 
         checkForTip();
         checkForUpdate();
@@ -250,8 +244,8 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
      * Set the title and icon that is used to identify this activity and the content of its list
      */
     protected void initTitleAndIcon() {
-        mIcon.setImageResource(getActivityIconRes());
-        //mIcon.setImageDrawable(getResources().getDrawable());
+        binding.imgIcon.setImageResource(getActivityIconRes());
+        //binding.imgIcon.setImageDrawable(getResources().getDrawable());
         mTitleView.setText(getActivityTitleRes());
     }
 

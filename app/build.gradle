@@ -43,6 +43,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -81,10 +85,6 @@ dependencies {
 
     //https://github.com/google/gson/blob/master/CHANGELOG.md
     implementation "com.google.code.gson:gson:2.8.7"
-
-    //https://github.com/JakeWharton/butterknife/blob/master/CHANGELOG.md
-    implementation "com.jakewharton:butterknife:10.2.3"
-    annotationProcessor "com.jakewharton:butterknife-compiler:10.2.3"
 
     //https://github.com/ozodrukh/CircularReveal/releases
     implementation("com.github.ozodrukh:CircularReveal:1.3.1@aar") { transitive = true }
