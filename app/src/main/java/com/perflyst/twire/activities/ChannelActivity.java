@@ -43,6 +43,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.adapters.VODAdapter;
@@ -605,70 +606,30 @@ public class ChannelActivity extends ThemeActivity {
 
         @Override
         public void notifyUserNoElementsAdded() {
+            if (mAdapter.getItemCount() > 0) return;
 
+            TwireApplication.uiThreadPoster.post(() -> {
+                if (mErrorEmote != null && mErrorText != null) {
+                    showError();
+                    showError = true;
+                }
+            });
         }
-
-        private boolean archive_done = false;
-        private boolean highlight_done = false;
 
         @Override
         public List<VideoOnDemand> getVisualElements() throws JSONException {
-            String type = broadcasts ? "archive" : "highlight";
-
             List<VideoOnDemand> result = new ArrayList<>();
 
-            if (type == "archive" && archive_done || type == "highlight" && highlight_done) {
-                return result;
-            }
-
-            if (type == "archive") {
-                archive_done = true;
-            } else if (type == "highlight") {
-                highlight_done = true;
-            }
-
-            ArrayList<String> vods = new ArrayList<>();
-            int fetch = 1;
-            // this takes around 1.5 Seconds on WIFI with 120 Vods
-            while (fetch == 1) {
-                JSONObject vodsTopObject = new JSONObject(Service.urlToJSONStringHelix(getUrl(), getContext()));
-                JSONArray temp_vods = vodsTopObject.getJSONArray("data");
-                for (int x=0; x < temp_vods.length(); x++) {
-                    vods.add(temp_vods.getString(x));
-                }
-
-                // check if the request returns a cursor for our pagination system
-                if (vodsTopObject.getJSONObject("pagination").has("cursor")) {
-                    // set our pagination cursor and keep fetching data
-                    if (pagination == vodsTopObject.getJSONObject("pagination").getString("cursor")) {
-                        pagination = "";
-                        fetch = 0;
-                    }
-                    pagination = vodsTopObject.getJSONObject("pagination").getString("cursor");
-                } else {
-                    // there is no cursor = no more data
-                    pagination = "";
-                    fetch = 0;
-                }
-            }
-
-            setMaxElementsToFetch(vods.size());
-            for (int i = 0; i < vods.size(); i++) {
-                JSONObject temp_object = new JSONObject(vods.get(i));
-                VideoOnDemand vod = JSONService.getVod(temp_object);
+            JSONObject vodsTopObject = new JSONObject(Service.urlToJSONStringHelix(getUrl(), getContext()));
+            JSONArray data = vodsTopObject.getJSONArray("data");
+            for (int i = 0; i < data.length(); i++) {
+                VideoOnDemand vod = JSONService.getVod(data.getJSONObject(i));
                 vod.setChannelInfo(channelInfo);
-                vod.setBroadcast(this.broadcasts);
+                vod.setBroadcast(broadcasts);
                 result.add(vod);
             }
 
-            if (vods.size() <= 0 && getActivity() != null) {
-                getActivity().runOnUiThread(() -> {
-                    if (mErrorEmote != null && mErrorText != null) {
-                        showError();
-                        showError = true;
-                    }
-                });
-            }
+            setCursor(vodsTopObject.getJSONObject("pagination").getString("cursor"));
 
             return result;
         }
