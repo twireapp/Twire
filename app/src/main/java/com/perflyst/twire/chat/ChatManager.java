@@ -325,7 +325,15 @@ public class ChatManager implements Runnable {
                         comment = downloadedComments.peek();
                     }
 
-                    if (seek || comment == null) {
+                    // If there are there's no comment, we've reached the end of the comments.
+                    if (comment == null) {
+                        // We've got nothing to do until the user seeks.
+                        while (!seek) {
+                            vodLock.wait();
+                        }
+                    }
+
+                    if (seek) {
                         continue;
                     }
 
