@@ -83,7 +83,7 @@
     <string name="welcome_text_line_two">Twire</string>
     <string name="welcome_text_line_one">Добро пожаловать в</string>
     <string name="title_activity_welcome">Настройка Twire</string>
-    <string name="my_streams_cell_current_viewers">%d зрителей</string>
+    <string name="my_streams_cell_current_viewers">%,d зрителей</string>
     <string name="my_streams_preview_image">Превью прямого эфира</string>
     <string name="chat_status_connection_failed">Соединение не удалось</string>
     <string name="chat_status_reconnecting">Переподключение…</string>
@@ -97,7 +97,6 @@
     <string name="error_external_playback_failed">Не удалось отправить URL-адрес внешнему проигрывателю</string>
     <string name="preview_game_viewers">1337 зрителей</string>
     <string name="preview_game_title">Название игры</string>
-    <string name="game_viewers">%s зрителей</string>
     <string name="preview_stream_game_and_viewers">1337 зрителей - Название игры</string>
     <string name="preview_stream_display_name">Имя</string>
     <string name="preview_stream_title">Название трансляции</string>
@@ -109,8 +108,7 @@
     <string name="card_style_expanded">Развернуть</string>
     <string name="card_style_normal">Нормально</string>
     <string name="card_style_minimal">Свернуть</string>
-    <string name="vod_streams_card_stream_views">%s просмотров</string>
-    <string name="vod_views">%d просмотров</string>
+    <string name="vod_views">%,d просмотров</string>
     <string name="title_activity_vod">Видео по запросу</string>
     <string name="vod_playback_failed">Не удалось воспроизвести видео по запросу. Попробуйте другое качество.</string>
     <string name="stream_backward">Назад на 10 секунд</string>
@@ -139,7 +137,6 @@
     <string name="title_activity_streamer_info">Канал</string>
     <string name="yesterday">Вчера</string>
     <string name="today">Сегодня</string>
-    <string name="percent">%d %%</string>
     <string name="pause">Пауза</string>
     <string name="play">Играть</string>
     <string name="vods">Видео</string>
@@ -160,7 +157,6 @@
     <string name="stop">СТОП</string>
     <string name="start">СТАРТ</string>
     <string name="done">ГОТОВО</string>
-    <string name="ok">ОК</string>
     <string name="my_channels_activity_label">Подписчики</string>
     <string name="confirm_text_line_one">Подождите!</string>
     <string name="login_user_cancel_action">Готово</string>

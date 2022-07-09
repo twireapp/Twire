@@ -50,14 +50,13 @@
     <string name="login_invalid_token_text_line_two">logga in igen</string>
     <string name="login_invalid_token_text_line_one">Tyvärr måste du</string>
     <string name="login_on_success_message">Hej, %s</string>
-    <string name="my_streams_cell_current_viewers">%d tittare</string>
+    <string name="my_streams_cell_current_viewers">%,d tittare</string>
     <string name="chat_status_reconnecting">Återansluter…</string>
     <string name="chat_status_connecting">Ansluter till chatt…</string>
     <string name="chat_send_message_hint">Skriv meddelande</string>
     <string name="my_channels_activity_label">Följer</string>
     <string name="error_nothing_found">Det finns inget här</string>
     <string name="preview_game_title">Spelets titel</string>
-    <string name="game_viewers">%s tittare</string>
     <string name="preview_stream_online_since">00:30:00</string>
     <string name="preview_stream_display_name">Namn</string>
     <string name="preview_stream_title">Strömmens titel</string>
@@ -88,7 +87,6 @@
     <string name="title_activity_streamer_info">Kanal</string>
     <string name="yesterday">Igår</string>
     <string name="today">Idag</string>
-    <string name="percent">%d %%</string>
     <string name="pause">Pausa</string>
     <string name="play">Spela</string>
     <string name="vods">Videor</string>
@@ -100,7 +98,6 @@
     <string name="stop">STOPP</string>
     <string name="start">START</string>
     <string name="done">KLAR</string>
-    <string name="ok">OK</string>
     <string name="login_user_no_internet_action">FÖRSÖK IGEN</string>
     <string name="login_text_line_two">Logga först in på Twitch.</string>
     <string name="welcome_text_line_two">Twire</string>
@@ -155,8 +152,7 @@
     <string name="tip_navigate">Klicka för att navigera</string>
     <string name="streams_tab">STRÖMMAR</string>
     <string name="content_desc_twitchProfileBanner_imageView">Användarens specificerade profilbanderoll</string>
-    <string name="vod_streams_card_stream_views">%s visningar</string>
-    <string name="vod_views">%d visningar</string>
+    <string name="vod_views">%,d visningar</string>
     <string name="skip_silence">Hoppa över tystnad</string>
     <string name="settings_general_image_proxy_url_button">Spara</string>
     <string name="gen_dialog_export_follows_action">Exportera</string>

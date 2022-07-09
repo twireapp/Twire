@@ -68,7 +68,7 @@
     <string name="login_text_line_one">Rozpocznijmy konfigurację!</string>
     <string name="welcome_text_line_one">Witaj w</string>
     <string name="title_activity_welcome">Konfiguracja Twire</string>
-    <string name="my_streams_cell_current_viewers">%d widzów</string>
+    <string name="my_streams_cell_current_viewers">%,d widzów</string>
     <string name="my_streams_preview_image">Podgląd kanału na żywo</string>
     <string name="chat_status_connection_failed">Połączenie Przerwane</string>
     <string name="chat_status_reconnecting">Ponowne łączenie…</string>
@@ -83,7 +83,6 @@
     <string name="error_external_playback_failed">Nie udało się przesłać linku do odtwarzacza zewnętrznego</string>
     <string name="preview_game_viewers">1337 widzów</string>
     <string name="preview_game_title">Tytuł gry</string>
-    <string name="game_viewers">%s widzów</string>
     <string name="preview_stream_game_and_viewers">1337 widzów - Tytuł gry</string>
     <string name="preview_stream_display_name">Tytuł</string>
     <string name="preview_stream_title">Tytuł tranmisji</string>
@@ -94,8 +93,7 @@
     <string name="card_size_small">Mały</string>
     <string name="card_style_expanded">Rozszerzony</string>
     <string name="card_style_normal">Normalny</string>
-    <string name="vod_streams_card_stream_views">%s wyświetleń</string>
-    <string name="vod_views">%d wyświetleń</string>
+    <string name="vod_views">%,d wyświetleń</string>
     <string name="title_activity_vod">Filmy</string>
     <string name="vod_playback_failed">Nieudało się odtworzyć VOD. Spróbuj je odtworzyć w innej jakości.</string>
     <string name="stream_backward">Cofnij o 10 sekund</string>
@@ -145,7 +143,6 @@
     <string name="title_activity_streamer_info">Kanał</string>
     <string name="yesterday">Wczoraj</string>
     <string name="today">Dzisiaj</string>
-    <string name="percent">%d %%</string>
     <string name="pause">Pauza</string>
     <string name="play">Odtwarzaj</string>
     <string name="vods">Filmy</string>
@@ -166,7 +163,6 @@
     <string name="stop">STOP</string>
     <string name="start">START</string>
     <string name="done">GOTOWE</string>
-    <string name="ok">OK</string>
     <string name="playback_speed">%.2f</string>
     <string name="playback_speed_display">×%.2f</string>
     <string name="chat_enable_ssl">Używaj SSL do połączenia</string>

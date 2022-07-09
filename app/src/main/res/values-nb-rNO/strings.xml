@@ -78,7 +78,7 @@
     <string name="welcome_text_line_two">Twire</string>
     <string name="welcome_text_line_one">Velkommen til</string>
     <string name="title_activity_welcome">Twire-oppsett</string>
-    <string name="my_streams_cell_current_viewers">%d seere</string>
+    <string name="my_streams_cell_current_viewers">%,d seere</string>
     <string name="my_streams_preview_image">Forhåndsvisning av sanntidskanalen</string>
     <string name="chat_status_connection_failed">Tilkobling mislyktes</string>
     <string name="chat_status_reconnecting">Kobler til igjen…</string>
@@ -93,7 +93,6 @@
     <string name="error_external_playback_failed">Klarte ikke å sende nettadresse til ekstern avspiller</string>
     <string name="preview_game_viewers">1337 seere</string>
     <string name="preview_game_title">Spilltittel</string>
-    <string name="game_viewers">%s seere</string>
     <string name="preview_stream_game_and_viewers">1337 seere - spilltittel</string>
     <string name="preview_stream_display_name">Navn</string>
     <string name="preview_stream_title">Strømmingstittel</string>
@@ -105,8 +104,7 @@
     <string name="card_style_expanded">Utvidet</string>
     <string name="card_style_normal">Normal</string>
     <string name="card_style_minimal">Sammenfoldet</string>
-    <string name="vod_streams_card_stream_views">%s visninger</string>
-    <string name="vod_views">%d visninger</string>
+    <string name="vod_views">%,d visninger</string>
     <string name="title_activity_vod">Video på forespørsel</string>
     <string name="vod_playback_failed">Klarte ikke å spille VOD. Prøv i annen kvalitet.</string>
     <string name="stream_backward">Tilbake 10 sekunder</string>
@@ -136,7 +134,6 @@
     <string name="title_activity_streamer_info">Kanal</string>
     <string name="yesterday">I går</string>
     <string name="today">I dag</string>
-    <string name="percent">%d %%</string>
     <string name="pause">Pause</string>
     <string name="play">Spill</string>
     <string name="vods">Videoer</string>
@@ -157,7 +154,6 @@
     <string name="stop">Stopp</string>
     <string name="start">Start</string>
     <string name="done">Ferdig</string>
-    <string name="ok">OK</string>
     <string name="appearance_streams_style_title">Strøm-stil</string>
     <string name="chat_landscape_width">Bredde for sludring i liggende retning</string>
     <string name="chat_landscape_swipe">Dra for vise sludring i liggende retning</string>

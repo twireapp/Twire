@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="ok">OK</string>
+<resources  xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <string name="done">DONE</string>
     <string name="start">START</string>
     <string name="stop">STOP</string>
@@ -21,7 +20,6 @@
     <string name="vods">Videos</string>
     <string name="play">Play</string>
     <string name="pause">Pause</string>
-    <string name="percent">%d %%</string>
 
     <!-- Time -->
     <string name="today">Today</string>
@@ -88,8 +86,7 @@
     <string name="vod_playback_failed">Failed to play VOD. Try another quality.</string>
     <string name="title_activity_vod">Video On Demand</string>
     <string name="intent_vod" translatable="false">intent_vod</string>
-    <string name="vod_views">%d views</string>
-    <string name="vod_streams_card_stream_views">%s views</string>
+    <string name="vod_views">%,d views</string>
 
     <!-- Fonts -->
     <string name="font_roboto_regular" translatable="false">sans-serif</string>
@@ -114,7 +111,6 @@
     <string name="preview_stream_online_since">00:30:00</string>
 
     <!-- Game Card -->
-    <string name="game_viewers">%s viewers</string>
     <string name="preview_game_title">Game title</string>
     <string name="preview_game_viewers">1337 viewers</string>
 
@@ -147,7 +143,7 @@
     <!-- My Streams activity -->
     <string name="my_streams_activity_title" translatable="false">@string/navigation_drawer_my_streams_title</string>
     <string name="my_streams_preview_image">Preview of the live channel</string>
-    <string name="my_streams_cell_current_viewers">%d viewers</string>
+    <string name="my_streams_cell_current_viewers">%,d viewers</string>
 
     <!-- Top Streams Activity -->
     <string name="top_streams_activity_title" translatable="false">@string/navigation_drawer_top_streams_title</string>

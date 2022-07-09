@@ -47,7 +47,6 @@
     <string name="card_style_minimal">Sbalený</string>
     <string name="stream_seek_dialog_title">Hledat</string>
     <string name="streamerInfo_highlights_tab">Momenty</string>
-    <string name="percent">%s %%</string>
     <string name="true_night_theme_name">Pravá noc</string>
     <string name="night_theme_name">Noc</string>
     <string name="black_theme_name">Černá</string>
@@ -90,17 +89,16 @@
     <string name="login_user_no_internet">K nastavení Twire budeš potřebovat připojení k internetu.</string>
     <string name="login_user_cancel">Musíš se přihlásit, abys mohl(a) používat Twire, ale…</string>
     <string name="login_text_line_two">Nejprve se přihlaš na svůj Twitch účet.</string>
-    <string name="my_streams_cell_current_viewers">%d diváků</string>
+    <string name="my_streams_cell_current_viewers">%,d diváků</string>
     <string name="my_streams_preview_image">Náhled vysílajícího kanálu</string>
     <string name="chat_status_reconnecting">Připojování…</string>
     <string name="chat_status_connected">Připraveno k chatování</string>
     <string name="my_channels_activity_label">Následující</string>
     <string name="no_server_response_message">Jejda. Zdá se, že Twitch servery neodpovídají. Obnovit\?</string>
     <string name="preview_game_viewers">1337 diváků</string>
-    <string name="game_viewers">%s diváků</string>
     <string name="preview_stream_game_and_viewers">1337 diváků - Název hry</string>
     <string name="card_style_expanded">Rozšířený</string>
-    <string name="vod_views">%d zhlédnutí</string>
+    <string name="vod_views">%,d zhlédnutí</string>
     <string name="vod_playback_failed">Přehrávání záznamu se nezdařilo. Zkuste jinou kvalitu.</string>
     <string name="stream_viewers">Diváci</string>
     <string name="stream_sleep_timer_started_minutes_only">Časovač vypnutí byl spuštěn. Stream bude pozastaven za %d minut(y).</string>
@@ -161,8 +159,6 @@
     <string name="card_size_normal">Normální</string>
     <string name="card_size_small">Malý</string>
     <string name="card_style_normal">Normální</string>
-    <string name="vod_streams_card_stream_views">%s zhlédnutí</string>
     <string name="stream_backward">Přetočit o 10 sekund dozadu</string>
-    <string name="ok">OK</string>
     <string name="title_activity_vod">Záznam</string>
 </resources>

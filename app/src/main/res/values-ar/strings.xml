@@ -5,9 +5,8 @@
     <string name="cancel">ألغ</string>
     <string name="stop">أوقف</string>
     <string name="done">تم</string>
-    <string name="ok">موافق</string>
     <string name="welcome_text_line_one">مرحبًا بك في</string>
-    <string name="my_streams_cell_current_viewers">%d مشاهد</string>
+    <string name="my_streams_cell_current_viewers">%,d مشاهد</string>
     <string name="chat_status_connection_failed">فشل الاتصال</string>
     <string name="chat_status_reconnecting">يعيد الاتصال…</string>
     <string name="chat_send_message_hint">اكتب رسالة</string>
@@ -16,7 +15,6 @@
     <string name="error_nothing_found">لا شيء هنا</string>
     <string name="error_external_playback_failed">فشل ارسال رابط الفيديو للمشغل الخارجي</string>
     <string name="preview_game_title">اسم اللعبة</string>
-    <string name="game_viewers">%s مشاهد</string>
     <string name="preview_stream_display_name">الاسم</string>
     <string name="preview_stream_title">عنوان البث</string>
     <string name="default_stream_title">%1$s يلعب %2$s</string>
@@ -26,8 +24,7 @@
     <string name="card_style_expanded">موسع</string>
     <string name="card_style_normal">عادي</string>
     <string name="card_style_minimal">مطوي</string>
-    <string name="vod_streams_card_stream_views">%s مشاهدة</string>
-    <string name="vod_views">%d مشاهدة</string>
+    <string name="vod_views">%,d مشاهدة</string>
     <string name="vod_playback_failed">فشل تشفيل الفيديو، جرب جودة أخرى.</string>
     <string name="stream_show_chat">اعرض المحادثة</string>
     <string name="stream_viewers">المشاهدون</string>
@@ -52,7 +49,6 @@
     <string name="title_activity_streamer_info">قناة</string>
     <string name="yesterday">أمس</string>
     <string name="today">اليوم</string>
-    <string name="percent">%d %%</string>
     <string name="pause">ألبث</string>
     <string name="play">شغّل</string>
     <string name="vods">فيديوهات</string>

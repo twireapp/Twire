@@ -86,7 +86,7 @@
     <string name="welcome_text_line_two">Twire</string>
     <string name="welcome_text_line_one">Bem vindo ao</string>
     <string name="title_activity_welcome">Configurar Twire</string>
-    <string name="my_streams_cell_current_viewers">%d assistindo</string>
+    <string name="my_streams_cell_current_viewers">%,d assistindo</string>
     <string name="my_streams_preview_image">Preview do canal ao vivo</string>
     <string name="chat_status_connection_failed">Falha na conexão</string>
     <string name="chat_status_reconnecting">Reconectando…</string>
@@ -101,7 +101,6 @@
     <string name="error_external_playback_failed">Falha ao enviar endereço para o player externo</string>
     <string name="preview_game_viewers">1337 assistindo</string>
     <string name="preview_game_title">Título do jogo</string>
-    <string name="game_viewers">%s assistindo</string>
     <string name="preview_stream_game_and_viewers">1337 assistindo - Título do jogo</string>
     <string name="preview_stream_display_name">Nome</string>
     <string name="preview_stream_title">Título da Stream</string>
@@ -113,8 +112,7 @@
     <string name="card_style_expanded">Expandido</string>
     <string name="card_style_normal">Normal</string>
     <string name="card_style_minimal">Retraído</string>
-    <string name="vod_streams_card_stream_views">%s visualizações</string>
-    <string name="vod_views">%d visualizações</string>
+    <string name="vod_views">%,d visualizações</string>
     <string name="title_activity_vod">Video On Demand</string>
     <string name="vod_playback_failed">Falha ao reproduzir VOD. Tente outra qualidade.</string>
     <string name="stream_backward">Voltar 10 segundos</string>
@@ -143,7 +141,6 @@
     <string name="title_activity_streamer_info">Canal</string>
     <string name="yesterday">Ontem</string>
     <string name="today">Hoje</string>
-    <string name="percent">%d %%</string>
     <string name="pause">Pausar</string>
     <string name="play">Reproduzir</string>
     <string name="vods">vídeo</string>
@@ -151,7 +148,6 @@
     <string name="content_desc_twitchLogo_imageView">Imagem do logo da Twitch do streamer</string>
     <string name="content_desc_twitchProfileBanner_imageView">Banner de perfil especificado pelo usuário</string>
     <string name="subscription_card_displayName">Nome</string>
-    <string name="ok">OK</string>
     <string name="drawer_close">Fechar</string>
     <string name="drawer_open">Abrir</string>
     <string name="settings_activity_title">Configurações</string>

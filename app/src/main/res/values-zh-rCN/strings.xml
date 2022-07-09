@@ -29,7 +29,7 @@
     <string name="welcome_text_line_two">Twire</string>
     <string name="welcome_text_line_one">欢迎使用</string>
     <string name="title_activity_welcome">设置Twire</string>
-    <string name="my_streams_cell_current_viewers">%d 人观看中</string>
+    <string name="my_streams_cell_current_viewers">%,d 人观看中</string>
     <string name="my_streams_preview_image">直播预览图</string>
     <string name="chat_status_connection_failed">连接失败</string>
     <string name="chat_status_reconnecting">重新连接中…</string>
@@ -45,7 +45,6 @@
     <string name="error_external_playback_failed">发送播放链接至外部播放器失败</string>
     <string name="preview_game_viewers">1337 人观看中</string>
     <string name="preview_game_title">游戏名称</string>
-    <string name="game_viewers">%s 人观看中</string>
     <string name="preview_stream_game_and_viewers">1337 人观看中 - 游戏名称</string>
     <string name="preview_stream_display_name">名称</string>
     <string name="preview_stream_title">视频标题</string>
@@ -57,8 +56,7 @@
     <string name="card_style_expanded">详细</string>
     <string name="card_style_normal">正常</string>
     <string name="card_style_minimal">精简</string>
-    <string name="vod_streams_card_stream_views">%s次观看</string>
-    <string name="vod_views">%d次观看</string>
+    <string name="vod_views">%,d次观看</string>
     <string name="title_activity_vod">点播视频</string>
     <string name="vod_playback_failed">视频播放失败。请尝试切换画质。</string>
     <string name="stream_backward">跳转至10秒后</string>
@@ -151,7 +149,6 @@
     <string name="today">今天</string>
     <string name="enable_all">全部启用</string>
     <string name="disable_all">全部禁用</string>
-    <string name="percent">%d %%</string>
     <string name="pause">暂停</string>
     <string name="play">播放</string>
     <string name="vods">视频</string>
@@ -160,7 +157,6 @@
     <string name="content_desc_twitchProfileBanner_imageView">用户自订横幅</string>
     <string name="subscription_card_displayName">名称</string>
     <string name="drawer_close">关闭</string>
-    <string name="ok">好</string>
     <string name="hours_short">小时</string>
     <string name="minutes_short">分钟</string>
     <string name="drawer_open">打开</string>

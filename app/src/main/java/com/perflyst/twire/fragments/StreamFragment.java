@@ -91,6 +91,7 @@ import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.OnlineSince;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
 import com.perflyst.twire.misc.ResizeWidthAnimation;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.model.SleepTimer;
@@ -417,7 +418,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
 
             if (args != null && args.containsKey(getString(R.string.stream_fragment_viewers)) && settings.getStreamPlayerShowViewerCount()) {
-                mCurrentViewersView.setText(String.valueOf(args.getInt(getString(R.string.stream_fragment_viewers))));
+                Utils.setNumber(mCurrentViewersView, args.getInt(getString(R.string.stream_fragment_viewers)));
                 startFetchingViewers();
             } else {
                 mCurrentViewersView.setVisibility(View.GONE);
@@ -833,7 +834,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                             try {
                                 Log.d(LOG_TAG, "Fetching viewers");
 
-                                mCurrentViewersView.setText(String.valueOf(currentViewers));
+                                Utils.setNumber(mCurrentViewersView, currentViewers);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -1076,7 +1077,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mBufferingView.setVisibility(View.GONE);
         previewInbackGround = false;
         castingTextView.setVisibility(View.VISIBLE);
-        //castingTextView.setText(getString(R.string.stream_chromecast_connecting));
+        //castingTextView.setText(R.string.stream_chromecast_connecting);
         showVideoInterface();
     }
 
@@ -1631,8 +1632,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         TwireApplication.backgroundPoster.post(() -> {
             ChannelInfo channelInfo = Service.getStreamerInfoFromUserId(mUserInfo.getUserId(), getContext());
             TwireApplication.uiThreadPoster.post(() -> {
-                channelInfo.getFollowers(getContext(), followers -> mFollowers.setText(String.valueOf(followers.or(0))));
-                mViewers.setText(String.valueOf(channelInfo.getViews()));
+                channelInfo.getFollowers(getContext(), followers -> Utils.setNumber(mFollowers, followers.or(0)));
+                Utils.setNumber(mViewers, channelInfo.getViews());
 
                 setupFollowButton(mFollowButton, channelInfo);
             });
@@ -1642,7 +1643,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mProfileBottomSheet.dismiss();
 
             final Intent intent = new Intent(getContext(), ChannelActivity.class);
-            intent.putExtra(getContext().getResources().getString(R.string.channel_info_intent_object), mUserInfo);
+            intent.putExtra(getContext().getString(R.string.channel_info_intent_object), mUserInfo);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             getContext().startActivity(intent);
@@ -1752,7 +1753,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             //mBufferingView.setVisibility(View.GONE);
             previewInbackGround = false;
             castingTextView.setVisibility(View.VISIBLE);
-            castingTextView.setText(getString(R.string.stream_audio_only_active));
+            castingTextView.setText(R.string.stream_audio_only_active);
 
             showVideoInterface();
             updateSelectedQuality(null);

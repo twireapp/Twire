@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
 
@@ -68,7 +69,7 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         String[] sizes = getResources().getStringArray(R.array.ChatSize);
         emoteSizeSummary.setText(sizes[settings.getEmoteSize() - 1]);
         messageSizeSummary.setText(sizes[settings.getMessageSize() - 1]);
-        chatLandscapeWidthSummary.setText(String.format(getString(R.string.percent), settings.getChatLandscapeWidth()));
+        Utils.setPercent(chatLandscapeWidthSummary, settings.getChatLandscapeWidth());
 
         // Chat enabled in landscape
         updateSummary(chatLandscapeToggle, chatLandscapeToggleSummary, settings.isChatInLandscapeEnabled());

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ok">OK</string>
     <string name="done">FATTO</string>
     <string name="start">AVVIA</string>
     <string name="stop">FERMA</string>
@@ -21,7 +20,6 @@
     <string name="vods">Video</string>
     <string name="play">Riproduci</string>
     <string name="pause">Pausa</string>
-    <string name="percent">%d %%</string>
     <!-- Time -->
     <string name="today">Oggi</string>
     <string name="yesterday">Ieri</string>
@@ -50,8 +48,7 @@
     <!-- VOD activity -->
     <string name="vod_playback_failed">Impossibile riprodurre VOD. Prova con un\'altra qualità.</string>
     <string name="title_activity_vod">Video On Demand</string>
-    <string name="vod_views">%d visualizzazioni</string>
-    <string name="vod_streams_card_stream_views">%s visualizzazioni</string>
+    <string name="vod_views">%,d visualizzazioni</string>
     <!-- Fonts -->
     <!-- Cards -->
     <string name="card_style_minimal">Ridotto</string>
@@ -67,7 +64,6 @@
     <string name="preview_stream_display_name">Nome</string>
     <string name="preview_stream_game_and_viewers">1337 spettatori - Titolo gioco</string>
     <!-- Game Card -->
-    <string name="game_viewers">%s spettatori</string>
     <string name="preview_game_title">Titolo gioco</string>
     <string name="preview_game_viewers">1337 spettatori</string>
     <!-- Top Games Activity -->
@@ -89,7 +85,7 @@
     <!-- ChannelInfo activity -->
     <!-- My Streams activity -->
     <string name="my_streams_preview_image">Anteprima del canale live</string>
-    <string name="my_streams_cell_current_viewers">%d spettatori</string>
+    <string name="my_streams_cell_current_viewers">%,d spettatori</string>
     <!-- Top Streams Activity -->
     <!-- Featured Streams Activity -->
     <!-- Online Streams Status -->

@@ -17,7 +17,6 @@
     <string name="games_tab">LUDOJ</string>
     <string name="options">Opcioj</string>
     <string name="menu_options">Opcioj</string>
-    <string name="percent">%d%%</string>
     <string name="pause">Paŭzigi</string>
     <string name="play">Ludi</string>
     <string name="vods">Filmoj</string>
@@ -39,7 +38,6 @@
     <string name="stop">ĈESIGI</string>
     <string name="start">KOMENCI</string>
     <string name="done">FARITE</string>
-    <string name="ok">BONE</string>
     <string name="streamerInfo_broadcasts_tab">Dissendoj</string>
     <string name="chat_only">Nur babilo</string>
     <string name="stream_viewers">Spektantoj</string>
@@ -55,7 +53,7 @@
     <string name="card_style_normal">Ordinara</string>
     <string name="card_style_expanded">Etendita</string>
     <string name="preview_stream_game_and_viewers">1337 spektantoj - Titolo de ludo</string>
-    <string name="vod_views">%d spektoj</string>
+    <string name="vod_views">%,d spektoj</string>
     <string name="my_channels_activity_label">Abonante</string>
     <string name="error_nothing_found">Jen nenio ĉi tie</string>
     <string name="preview_stream_title">Titolo de dissendo</string>
@@ -64,7 +62,7 @@
     <string name="chat_status_connection_failed">Konekto malsukcesis</string>
     <string name="chat_send_message_hint">Tajpu mesaĝon</string>
     <string name="chat_status_connected">Preta por babili</string>
-    <string name="my_streams_cell_current_viewers">%d spektantoj</string>
+    <string name="my_streams_cell_current_viewers">%,d spektantoj</string>
     <string name="welcome_text_line_one">Bonvenon al</string>
     <string name="welcome_text_line_two">Twire</string>
     <string name="login_user_no_internet_action">REPROVI</string>
@@ -84,7 +82,6 @@
     <string name="router_unknown_error">Okazis nekonata eraro.</string>
     <string name="tip_navigate">Alklaku por navigi</string>
     <string name="chat_message_option_duplicate">Duplikata mesaĝo</string>
-    <string name="game_viewers">%s spektantoj</string>
     <string name="menu_profile">Profilo</string>
     <string name="preview_game_viewers">1337 spektantoj</string>
     <string name="chat_status_reconnecting">Rekonektante…</string>
@@ -94,7 +91,6 @@
     <string name="menu_external">Uzi eksteran spektilon</string>
     <string name="streamerInfo_description">Sen priskribo</string>
     <string name="available_qualities">Agordoj pri kvalito</string>
-    <string name="vod_streams_card_stream_views">%s spektoj</string>
     <string name="settings_general_image_proxy_url_button">Konservi</string>
     <string name="gen_dialog_login_or_out_login_action">SALUTI</string>
     <string name="gen_dialog_login_or_out_logout_action">ADIAŬI</string>

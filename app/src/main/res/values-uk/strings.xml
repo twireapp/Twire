@@ -88,7 +88,7 @@
     <string name="welcome_text_line_one">Вітаємо у</string>
     <string name="welcome_text_line_two">Twire</string>
     <string name="title_activity_welcome">Налаштування Twire</string>
-    <string name="my_streams_cell_current_viewers">%d глядачів</string>
+    <string name="my_streams_cell_current_viewers">%,d глядачів</string>
     <string name="my_streams_preview_image">Попередній перегляд прямого етеру</string>
     <string name="chat_status_connection_failed">З\'єднання втрачено</string>
     <string name="chat_status_connected">Під\'єднано до чату</string>
@@ -102,7 +102,6 @@
     <string name="error_external_playback_failed">Не вдалося відправити посилання до зовнішнього програвача</string>
     <string name="preview_game_viewers">1337 глядачів</string>
     <string name="preview_game_title">Назва гри</string>
-    <string name="game_viewers">%s глядачів</string>
     <string name="preview_stream_game_and_viewers">1337 глядачів - Назва гри</string>
     <string name="preview_stream_display_name">Ім\'я</string>
     <string name="preview_stream_title">Назва трансляції</string>
@@ -114,8 +113,7 @@
     <string name="card_style_minimal">Згорнутий</string>
     <string name="card_style_expanded">Розширений</string>
     <string name="card_style_normal">Звичайний</string>
-    <string name="vod_streams_card_stream_views">%s переглядів</string>
-    <string name="vod_views">%d переглядів</string>
+    <string name="vod_views">%,d переглядів</string>
     <string name="title_activity_vod">Відео за запитом</string>
     <string name="vod_playback_failed">Неможливо відтворити запис. Спробуйте іншу якість.</string>
     <string name="stream_backward">Назад на 10 секунд</string>
@@ -145,7 +143,6 @@
     <string name="title_activity_streamer_info">Канал</string>
     <string name="yesterday">Вчора</string>
     <string name="today">Сьогодні</string>
-    <string name="percent">%d %%</string>
     <string name="pause">Павза</string>
     <string name="play">Відтворити</string>
     <string name="vods">Відео</string>
@@ -166,7 +163,6 @@
     <string name="stop">ЗУПИНИТИ</string>
     <string name="start">ПОЧАТИ</string>
     <string name="done">ГОТОВО</string>
-    <string name="ok">ОК</string>
     <string name="chat_enable_ssl">Використовувати SSL для з\'єднання</string>
     <string name="playback_speed">%.2f</string>
     <string name="playback_speed_display">х%.2f</string>

@@ -49,6 +49,7 @@ import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.adapters.VODAdapter;
 import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.VideoOnDemand;
 import com.perflyst.twire.service.JSONService;
@@ -115,8 +116,8 @@ public class ChannelActivity extends ThemeActivity {
         assert info != null;
 
         streamerInfoName.setText(info.getDisplayName());
-        info.getFollowers(getApplicationContext(), followers -> streamerFollowers.setText(getReadableInt(followers.or(0))));
-        streamerViewers.setText(getReadableInt(info.getViews()));
+        info.getFollowers(getApplicationContext(), followers -> Utils.setNumber(streamerFollowers, followers.or(0)));
+        Utils.setNumber(streamerViewers, info.getViews());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             streamerImage.setTransitionName(getString(R.string.streamerInfo_transition));
@@ -381,27 +382,6 @@ public class ChannelActivity extends ThemeActivity {
                     }
                 })
                 .start();
-    }
-
-    /**
-     * Make an int more readable by separating every third number by a space.
-     * Example: 1000000 becomes "1 000 000"
-     */
-    private String getReadableInt(int number) {
-        StringBuilder result = new StringBuilder();
-        String numberAsString = number + "";
-        int x = 1;
-        for (int i = numberAsString.length() - 1; i >= 0; i--) {
-            result.insert(0, numberAsString.charAt(i));
-
-            if (x % 3 == 0 && i != numberAsString.length() - 1) {
-                result.insert(0, " ");
-            }
-
-            x++;
-        }
-
-        return result.toString();
     }
 
     public static abstract class ChannelFragment extends Fragment {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="start">KEZDÉS</string>
-    <string name="ok">OK</string>
     <string name="done">KÉSZ</string>
     <string name="cancel">MÉGSE</string>
     <string name="stop">LEÁLLÍTÁS</string>
@@ -18,7 +17,6 @@
     <string name="vods">Videók</string>
     <string name="play">Lejátszás</string>
     <string name="pause">Szünet</string>
-    <string name="percent">%d %%</string>
     <string name="today">Ma</string>
     <string name="streamerInfo_desc_tab">Leírás</string>
     <string name="streamerInfo_broadcasts_tab">Közvetítések</string>
@@ -45,8 +43,7 @@
     <string name="playback_speed_display">×%.2f</string>
     <string name="playback_speed">%.2f</string>
     <string name="vod_playback_failed">A VOD lejátszása nem sikerült. Próbálj egy másik minőséget.</string>
-    <string name="vod_views">%d megtekintés</string>
-    <string name="vod_streams_card_stream_views">%s megtekintés</string>
+    <string name="vod_views">%,d megtekintés</string>
     <string name="card_style_minimal">Összecsukva</string>
     <string name="card_style_normal">Normál</string>
     <string name="card_style_expanded">Kibontva</string>
@@ -55,7 +52,6 @@
     <string name="default_stream_title">%1$s a következővel játszik: %2$s</string>
     <string name="preview_stream_display_name">Név</string>
     <string name="preview_stream_online_since">00:30:00</string>
-    <string name="game_viewers">%s néző</string>
     <string name="preview_game_title">Játék neve</string>
     <string name="preview_stream_game_and_viewers">1337 néző - Játék neve</string>
     <string name="error_external_playback_failed">URL küldése a külső lejátszónak nem sikerült</string>
@@ -70,7 +66,7 @@
     <string name="chat_status_reconnecting">Újracsatlakozás…</string>
     <string name="chat_status_connection_failed">Csatlakozás sikertelen</string>
     <string name="my_streams_preview_image">Élő csatorna előnézete</string>
-    <string name="my_streams_cell_current_viewers">%d néző</string>
+    <string name="my_streams_cell_current_viewers">%,d néző</string>
     <string name="title_activity_welcome">Twire beállítása</string>
     <string name="welcome_text_line_one">Üdvözöl a</string>
     <string name="welcome_text_line_two">Twire</string>

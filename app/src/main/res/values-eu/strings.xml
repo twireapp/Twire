@@ -38,12 +38,10 @@
     <string name="chat_landscape_width">Txat horizontalaren zabalera</string>
     <string name="gen_dialog_login_or_out_content">Beste kontu batekin saioa hasi nahi duzu\? edo besterik gabe %s kontutik irten\?</string>
     <string name="settings_appearance_summary">Gaia, txartelen estiloa, txartelen tamaina</string>
-    <string name="my_streams_cell_current_viewers">%d ikusle</string>
+    <string name="my_streams_cell_current_viewers">%,d ikusle</string>
     <string name="no_server_response_message">Badirudi Twitchen zerbitzariek ez dutela erantzuten. Berriro saiatu\?</string>
     <string name="preview_game_viewers">1337 ikusle</string>
-    <string name="game_viewers">%s ikusle</string>
     <string name="preview_stream_game_and_viewers">1337 ikusle - Jokoaren izenburua</string>
-    <string name="percent">%d %%</string>
     <string name="no_elements_added_notice">Ezin izan dira %s aurkitu</string>
     <string name="content_desc_twitchProfileBanner_imageView">Erabiltzaileak ezarritako profileko bannerra</string>
     <string name="changelog_show_after_update">Erakutsi eguneraketen aldaketak</string>
@@ -110,8 +108,7 @@
     <string name="card_size_small">Txikia</string>
     <string name="card_style_normal">Normala</string>
     <string name="vod_playback_failed">Ezin izan da bideoa erreproduzitu. Saiatu beste bideo kalitate batekin.</string>
-    <string name="vod_streams_card_stream_views">%s ikustaldi</string>
-    <string name="vod_views">%d ikustaldi</string>
+    <string name="vod_views">%,d ikustaldi</string>
     <string name="appearance_streamer_style_title">Kanalen estiloa</string>
     <string name="menu_external">Erabili kanpo erreproduzigailua</string>
     <string name="appearance_streams_style_title">Zuzenekoen estiloa</string>
@@ -159,7 +156,6 @@
     <string name="stop">GELDITU</string>
     <string name="start">HASI</string>
     <string name="done">EGINDA</string>
-    <string name="ok">ADOS</string>
     <string name="card_style_minimal">Kolapsatuta</string>
     <string name="card_style_expanded">Hedatua</string>
     <string name="login_invalid_token_text_line_one">Zoritxarrez, zuk</string>

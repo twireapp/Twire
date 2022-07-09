@@ -102,7 +102,7 @@ public class DialogService {
                 .title(R.string.gen_start_page)
                 .items(arrayResource)
                 .itemsCallbackSingleChoice(indexOfPage, listCallbackSingleChoice)
-                .positiveText(R.string.ok)
+                .positiveText(android.R.string.ok)
                 .negativeText(R.string.cancel)
                 .onNegative((dialog, which) -> dialog.dismiss())
                 .build();

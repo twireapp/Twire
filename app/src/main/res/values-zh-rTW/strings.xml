@@ -44,9 +44,8 @@
     <string name="login_on_success_message">您好，%s</string>
     <string name="login_user_cancel_action">知道了</string>
     <string name="login_text_line_two">首先，請登入Twitch。</string>
-    <string name="my_streams_cell_current_viewers">%d 人觀看中</string>
-    <string name="vod_streams_card_stream_views">%s 次觀看</string>
-    <string name="vod_views">%d 次觀看</string>
+    <string name="my_streams_cell_current_viewers">%,d 人觀看中</string>
+    <string name="vod_views">%,d 次觀看</string>
     <string name="title_activity_vod">隨選視訊</string>
     <string name="gen_language_filter">以語言過濾最熱門直播</string>
     <string name="navigation_drawer_settings_title">設定</string>
@@ -77,7 +76,6 @@
     <string name="changelog_show_after_update">每次更新後顯示更新日誌</string>
     <string name="stream_playback_failed">影片播放失敗，請嘗試其他影片質素。</string>
     <string name="vod_playback_failed">隨選視訊播放失敗。請嘗試其他影片質素。</string>
-    <string name="ok">是的</string>
     <string name="stream_fullscreen">全螢幕</string>
     <string name="preview_stream_title">影片標題</string>
     <string name="minutes_short">分鐘</string>
@@ -86,7 +84,6 @@
     <string name="no_server_response_message">糟糕，Twitch伺服器沒有回應。重新載入？</string>
     <string name="preview_game_viewers">1337 人觀看中</string>
     <string name="preview_game_title">遊戲名稱</string>
-    <string name="game_viewers">%s 人觀看中</string>
     <string name="preview_stream_game_and_viewers">1337 人觀看中 - 遊戲名稱</string>
     <string name="preview_stream_display_name">名稱</string>
     <string name="default_stream_title">%1$s 正在玩 %2$s</string>
@@ -116,7 +113,6 @@
     <string name="title_activity_streamer_info">頻道</string>
     <string name="yesterday">昨日</string>
     <string name="today">今日</string>
-    <string name="percent">%d %%</string>
     <string name="pause">暫停</string>
     <string name="play">播放</string>
     <string name="vods">影片</string>

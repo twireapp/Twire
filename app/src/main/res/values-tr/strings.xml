@@ -26,7 +26,6 @@
     <string name="streamerInfo_broadcasts_tab">Yayınlar</string>
     <string name="streamerInfo_desc_tab">Açıklama</string>
     <string name="title_activity_streamer_info">Kanal</string>
-    <string name="percent">%d %%</string>
     <string name="pause">Duraklat</string>
     <string name="play">Oyna</string>
     <string name="vods">Videolar</string>
@@ -47,7 +46,6 @@
     <string name="stop">DURDUR</string>
     <string name="start">BAŞLAT</string>
     <string name="done">OLDU</string>
-    <string name="ok">TAMAM</string>
     <string name="drawer_open">Aç</string>
     <string name="minutes_short">m</string>
     <string name="changelog_show_after_update">Bir güncellemeden sonra değişim kaydını göster</string>
@@ -139,7 +137,7 @@
     <string name="welcome_text_line_two">Twire</string>
     <string name="welcome_text_line_one">Hoşgeldiniz</string>
     <string name="title_activity_welcome">Twire kurulumu</string>
-    <string name="my_streams_cell_current_viewers">%d izleyici</string>
+    <string name="my_streams_cell_current_viewers">%,d izleyici</string>
     <string name="my_streams_preview_image">Canlı kanalın önizlemesi</string>
     <string name="chat_status_connection_failed">Sohbete bağlanma başarısız oldu</string>
     <string name="chat_status_reconnecting">Yeniden bağlanıyor…</string>
@@ -154,7 +152,6 @@
     <string name="error_external_playback_failed">URL harici oynatıcıya gönderilemedi</string>
     <string name="preview_game_viewers">1337 izleyici</string>
     <string name="preview_game_title">Oyun adı</string>
-    <string name="game_viewers">%s izleyici</string>
     <string name="preview_stream_online_since">00:30:00</string>
     <string name="preview_stream_game_and_viewers">1337 izleyici - Oyun adı</string>
     <string name="preview_stream_display_name">İsim</string>
@@ -167,8 +164,7 @@
     <string name="card_style_expanded">Genişletilmiş</string>
     <string name="card_style_normal">Normal</string>
     <string name="card_style_minimal">Daraltılmış</string>
-    <string name="vod_streams_card_stream_views">%s görüntülemeler</string>
-    <string name="vod_views">%d görüntülemeler</string>
+    <string name="vod_views">%,d görüntülemeler</string>
     <string name="title_activity_vod">İstenilen Video</string>
     <string name="vod_playback_failed">VOD oynatılamadı. Başka bir kalite deneyin.</string>
     <string name="playback_speed">%.2f</string>

@@ -55,14 +55,12 @@
     <string name="stop">LOPETA</string>
     <string name="start">ALOITA</string>
     <string name="done">VALMIS</string>
-    <string name="ok">OK</string>
     <string name="chat_message_option_mention">Mainitse</string>
     <string name="no_server_response_message">Oho, Twitchin palvelimet eivät näytä vastaavan. Yritä uudelleen\?</string>
     <string name="error_nothing_found">Täällä ei ole mitään</string>
     <string name="error_external_playback_failed">URL:n lähetys ulkoiselle soittimelle epäonnistui</string>
     <string name="preview_game_viewers">1337 katsojaa</string>
     <string name="preview_game_title">Pelin otsikko</string>
-    <string name="game_viewers">%s katsojaa</string>
     <string name="preview_stream_game_and_viewers">1337 katsojaa - Pelin otsikko</string>
     <string name="preview_stream_display_name">Nimi</string>
     <string name="preview_stream_title">Lähetyksen otsikko</string>
@@ -74,8 +72,7 @@
     <string name="card_style_minimal">Pienennetty</string>
     <string name="card_style_expanded">Laajennettu</string>
     <string name="card_style_normal">Normaali</string>
-    <string name="vod_streams_card_stream_views">%s katsomiskertaa</string>
-    <string name="vod_views">%d katsomiskertaa</string>
+    <string name="vod_views">%,d katsomiskertaa</string>
     <string name="title_activity_vod">Videotallenne</string>
     <string name="stream_backward">Taaksepäin 10 sekunttia</string>
     <string name="stream_forward">Eteenpäin 10 sekunttia</string>
@@ -91,7 +88,7 @@
     <string name="title_activity_live_stream">Live-lähetys</string>
     <string name="chat_send_message_hint">Kirjoita viesti</string>
     <string name="my_streams_preview_image">Esikatselu live-kanavasta</string>
-    <string name="my_streams_cell_current_viewers">%d katsojaa</string>
+    <string name="my_streams_cell_current_viewers">%,d katsojaa</string>
     <string name="login_on_success_message">Hei %s</string>
     <string name="login_user_no_internet_action">KOKEILE UUDESTAAN</string>
     <string name="login_user_no_internet">Tarvitset nettiyhteyden saadaksesi Twiren toimimaan.</string>
@@ -161,7 +158,6 @@
     <string name="streamerInfo_desc_tab">Kuvaus</string>
     <string name="title_activity_streamer_info">Kanava</string>
     <string name="yesterday">Eilen</string>
-    <string name="percent">%d%%</string>
     <string name="enable_all">Laita kaikki päälle</string>
     <string name="disable_all">Laita kaikki pois päältä</string>
     <string name="no_elements_added_notice">%s ei löytynyt</string>

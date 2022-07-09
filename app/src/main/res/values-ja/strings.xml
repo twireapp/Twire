@@ -87,7 +87,7 @@
     <string name="welcome_text_line_two">にようこそ</string>
     <string name="welcome_text_line_one">Twire</string>
     <string name="title_activity_welcome">Twire セットアップ</string>
-    <string name="my_streams_cell_current_viewers">%d 人が視聴中</string>
+    <string name="my_streams_cell_current_viewers">%,d 人が視聴中</string>
     <string name="my_streams_preview_image">動画のサムネイル</string>
     <string name="chat_status_connection_failed">接続に失敗しました</string>
     <string name="chat_status_reconnecting">再接続中…</string>
@@ -102,7 +102,6 @@
     <string name="error_external_playback_failed">外部プレイヤーへの URL 送信に失敗しました</string>
     <string name="preview_game_viewers">1337 人が視聴中</string>
     <string name="preview_game_title">ゲームタイトル</string>
-    <string name="game_viewers">%s 人が視聴中</string>
     <string name="preview_stream_game_and_viewers">1337 人が視聴中 - ゲームタイトル</string>
     <string name="preview_stream_display_name">名前</string>
     <string name="preview_stream_title">ストリームタイトル</string>
@@ -114,8 +113,7 @@
     <string name="card_style_expanded">拡張</string>
     <string name="card_style_normal">普通</string>
     <string name="card_style_minimal">簡略</string>
-    <string name="vod_streams_card_stream_views">%s 回視聴</string>
-    <string name="vod_views">%d 回視聴</string>
+    <string name="vod_views">%,d 回視聴</string>
     <string name="title_activity_vod">ビデオオンデマンド</string>
     <string name="vod_playback_failed">VOD の再生に失敗しました。他の画質を試してください。</string>
     <string name="stream_backward">10秒巻き戻す</string>
@@ -145,7 +143,6 @@
     <string name="title_activity_streamer_info">チャンネル</string>
     <string name="yesterday">昨日</string>
     <string name="today">今日</string>
-    <string name="percent">%d %%</string>
     <string name="pause">一時停止</string>
     <string name="play">再生</string>
     <string name="vods">動画</string>
@@ -166,5 +163,4 @@
     <string name="stop">停止</string>
     <string name="start">開始</string>
     <string name="done">完了</string>
-    <string name="ok">OK</string>
 </resources>
