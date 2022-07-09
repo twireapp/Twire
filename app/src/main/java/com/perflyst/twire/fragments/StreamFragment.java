@@ -1629,7 +1629,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         TwireApplication.backgroundPoster.post(() -> {
             ChannelInfo channelInfo = Service.getStreamerInfoFromUserId(mUserInfo.getUserId(), getContext());
             TwireApplication.uiThreadPoster.post(() -> {
-                channelInfo.getFollowers(getContext(), followers -> Utils.setNumber(mFollowers, followers.or(0)));
+                channelInfo.getFollowers(getContext(), followers -> Utils.setNumber(mFollowers, followers), 0);
                 Utils.setNumber(mViewers, channelInfo.getViews());
 
                 setupFollowButton(mFollowButton, channelInfo);

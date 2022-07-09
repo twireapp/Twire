@@ -754,12 +754,12 @@ public class Service {
 
 
         streamer.getFollowers(context, followers -> {
-            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, followers.or(0));
+            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, followers);
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(context);
             SQLiteDatabase db = helper.getWritableDatabase();
             db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
             db.close();
-        });
+        }, 0);
     }
 
     public static void clearStreamerInfoDb(Context context) {

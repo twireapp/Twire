@@ -116,7 +116,7 @@ public class ChannelActivity extends ThemeActivity {
         assert info != null;
 
         streamerInfoName.setText(info.getDisplayName());
-        info.getFollowers(getApplicationContext(), followers -> Utils.setNumber(streamerFollowers, followers.or(0)));
+        info.getFollowers(getApplicationContext(), followers -> Utils.setNumber(streamerFollowers, followers), 0);
         Utils.setNumber(streamerViewers, info.getViews());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

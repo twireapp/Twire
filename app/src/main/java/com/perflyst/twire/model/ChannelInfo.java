@@ -6,9 +6,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
-import com.google.common.base.Optional;
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.service.Service;
@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 
 /**
  * Created by Sebastian Rask on 30-01-2015.
@@ -63,7 +64,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
             }
         }
     };
-    private Optional<Integer> followers;
+    @Nullable private Integer followers;
     private final int views;
     private String streamDescription;
     private URL logoURL;
@@ -74,7 +75,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
     public ChannelInfo(UserInfo userInfo, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL) {
         super(userInfo.getUserId(), userInfo.getLogin(), userInfo.getDisplayName());
         this.streamDescription = streamDescription;
-        this.followers = followers == -1 ? Optional.absent() : Optional.of(followers);
+        this.followers = followers == -1 ? null : followers;
         this.views = views;
         this.logoURL = logoURL;
         this.videoBannerURL = videoBannerURL;
@@ -95,7 +96,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
                 this.getLogin(),
                 this.getDisplayName(),
                 this.streamDescription,
-                String.valueOf(this.followers.or(-1)),
+                String.valueOf(Objects.requireNonNullElse(this.followers, -1)),
                 String.valueOf(this.views),
                 null, //this.logoURL.toString(),
                 null, //this.videoBannerURL.toString(),
@@ -151,15 +152,16 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
         this.streamDescription = streamDescription;
     }
 
-    public void getFollowers(Context context, Consumer<Optional<Integer>> callback) {
+    public void getFollowers(Context context, Consumer<Integer> callback, int defaultValue) {
         TwireApplication.backgroundPoster.post(() -> {
             fetchFollowers(context);
-            TwireApplication.uiThreadPoster.post(() -> callback.accept(followers));
+            TwireApplication.uiThreadPoster.post(() -> callback.accept(Objects.requireNonNullElse(followers, defaultValue)));
         });
     }
 
-    public Optional<Integer> fetchFollowers(Context context) {
-        if (followers.isPresent()) {
+    @Nullable
+    public Integer fetchFollowers(Context context) {
+        if (followers != null) {
             return followers;
         }
 
@@ -167,11 +169,11 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
 
         try {
             JSONObject fullDataObject = new JSONObject(userFollows);
-            followers = Optional.of(fullDataObject.getInt("total"));
+            followers = fullDataObject.getInt("total");
             return followers;
         } catch (JSONException e) {
             e.printStackTrace();
-            return Optional.absent();
+            return null;
         }
     }
 
