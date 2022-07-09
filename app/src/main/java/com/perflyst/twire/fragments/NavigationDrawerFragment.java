@@ -240,9 +240,9 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void checkUserLogin() {
         if (mSettings.isLoggedIn()) {
-            mUserNameTextView.setText(getResources().getString(R.string.navigation_drawer_logged_in_textview, mSettings.getGeneralTwitchDisplayName()));
+            mUserNameTextView.setText(getString(R.string.navigation_drawer_logged_in_textview, mSettings.getGeneralTwitchDisplayName()));
         } else {
-            mUserNameTextView.setText(getString(R.string.navigation_drawer_not_logged_in));
+            mUserNameTextView.setText(R.string.navigation_drawer_not_logged_in);
         }
     }
 

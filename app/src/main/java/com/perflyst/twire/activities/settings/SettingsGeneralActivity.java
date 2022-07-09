@@ -1,7 +1,5 @@
 package com.perflyst.twire.activities.settings;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -81,11 +79,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
 
     private void updateSummary(CheckedTextView checkView, TextView summary, boolean isEnabled) {
         checkView.setChecked(isEnabled);
-        if (isEnabled) {
-            summary.setText(getString(R.string.enabled));
-        } else {
-            summary.setText(getString(R.string.disabled));
-        }
+        summary.setText(isEnabled ? R.string.enabled : R.string.disabled);
     }
 
     private void updateSummaries() {
@@ -106,7 +100,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
         if (settings.isLoggedIn()) {
             twitchNameView.setText(settings.getGeneralTwitchDisplayName());
         } else {
-            twitchNameView.setText(getString(R.string.gen_not_logged_in));
+            twitchNameView.setText(R.string.gen_not_logged_in);
         }
     }
 

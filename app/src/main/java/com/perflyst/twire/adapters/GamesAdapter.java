@@ -102,8 +102,8 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
         Game gameClicked = getElements().get(itemPosition);
 
         Intent intent = new Intent(getContext(), GameActivity.class);
-        intent.putExtra(getContext().getResources().getString(R.string.game_intent_key), gameClicked);
-        //intent.putExtra(getContext().getResources().getString(R.string.game_intent_image_key), Service.getDrawableByteArray(viewHolder.getGamePreview().getDrawable()));
+        intent.putExtra(getContext().getString(R.string.game_intent_key), gameClicked);
+        //intent.putExtra(getContext().getString(R.string.game_intent_image_key), Service.getDrawableByteArray(viewHolder.getGamePreview().getDrawable()));
 
         if (mActivity == null) {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

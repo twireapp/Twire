@@ -122,7 +122,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
             ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(userInfo.getUserId(), getContext());
 
             Intent intent = new Intent(getContext(), ChannelActivity.class);
-            intent.putExtra(getContext().getResources().getString(R.string.channel_info_intent_object), mChannelInfo);
+            intent.putExtra(getContext().getString(R.string.channel_info_intent_object), mChannelInfo);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             getContext().startActivity(intent);
@@ -167,7 +167,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
         viewHolder.vPreviewImage.getLayoutParams().width = metrics.widthPixels;
 
-        String viewers = getContext().getResources().getString(R.string.my_streams_cell_current_viewers, element.getCurrentViewers());
+        String viewers = getContext().getString(R.string.my_streams_cell_current_viewers, element.getCurrentViewers());
         String gameAndViewers = viewers + " - " + element.getGame();
 
         viewHolder.vDisplayName.setText(element.getUserInfo().getDisplayName());

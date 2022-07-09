@@ -62,11 +62,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private void updateSummary(CheckedTextView checkView, TextView summary, boolean isEnabled) {
         checkView.setChecked(isEnabled);
-        if (isEnabled) {
-            summary.setText(getString(R.string.enabled));
-        } else {
-            summary.setText(getString(R.string.disabled));
-        }
+        summary.setText(isEnabled ? R.string.enabled : R.string.disabled);
     }
 
     private void updateSummaries() {

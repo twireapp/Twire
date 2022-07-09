@@ -66,21 +66,21 @@ public class DialogService {
 
     public static MaterialDialog getSettingsWipeFollowsDialog(Activity activity) {
         return getBaseThemedDialog(activity)
-                .content(activity.getString(R.string.gen_dialog_wipe_follows_content))
+                .content(R.string.gen_dialog_wipe_follows_content)
                 .positiveText(R.string.gen_dialog_wipe_follows_action)
                 .negativeText(R.string.cancel).build();
     }
 
     public static MaterialDialog getSettingsExportFollowsDialog(Activity activity) {
         return getBaseThemedDialog(activity)
-                .content(activity.getString(R.string.gen_dialog_export_follows_content))
+                .content(R.string.gen_dialog_export_follows_content)
                 .positiveText(R.string.gen_dialog_export_follows_action)
                 .negativeText(R.string.cancel).build();
     }
 
     public static MaterialDialog getSettingsImportFollowsDialog(Activity activity) {
         return getBaseThemedDialog(activity)
-                .content(activity.getString(R.string.gen_dialog_import_follows_content))
+                .content(R.string.gen_dialog_import_follows_content)
                 .positiveText(R.string.gen_dialog_import_follows_action)
                 .negativeText(R.string.cancel).build();
     }

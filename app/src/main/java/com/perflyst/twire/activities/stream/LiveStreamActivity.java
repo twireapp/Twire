@@ -55,9 +55,9 @@ public class LiveStreamActivity extends StreamActivity {
     protected Bundle getStreamArguments() {
 
         Intent intent = getIntent();
-        UserInfo mUserInfo = intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
-        int currentViewers = intent.getIntExtra(getResources().getString(R.string.intent_key_stream_viewers), -1);
-        long currentStartTime = intent.getLongExtra(getResources().getString(R.string.intent_key_stream_start_time), 0);
+        UserInfo mUserInfo = intent.getParcelableExtra(getString(R.string.intent_key_streamer_info));
+        int currentViewers = intent.getIntExtra(getString(R.string.intent_key_stream_viewers), -1);
+        long currentStartTime = intent.getLongExtra(getString(R.string.intent_key_stream_start_time), 0);
 
         Bundle args = new Bundle();
         args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mUserInfo);

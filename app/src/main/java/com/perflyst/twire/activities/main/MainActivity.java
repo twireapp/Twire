@@ -253,7 +253,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     protected void initTitleAndIcon() {
         mIcon.setImageResource(getActivityIconRes());
         //mIcon.setImageDrawable(getResources().getDrawable());
-        mTitleView.setText(getString(getActivityTitleRes()));
+        mTitleView.setText(getActivityTitleRes());
     }
 
     /**
@@ -368,11 +368,11 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     public void initActivityAnimation() {
         Intent intent = this.getIntent();
         fromToolbarPosition = intent.getFloatExtra(
-                this.getResources().getString(R.string.decorative_toolbar_position_y), -1
+                getString(R.string.decorative_toolbar_position_y), -1
         );
 
         fromMainToolbarPosition = intent.getFloatExtra(
-                this.getResources().getString(R.string.main_toolbar_position_y), -1
+                getString(R.string.main_toolbar_position_y), -1
         );
 
         // If the position is equal to the default value,
@@ -401,12 +401,12 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
         final int lastVisibleItemPosition = manager.findLastVisibleItemPosition();
 
         aIntent.putExtra(
-                this.getResources().getString(R.string.decorative_toolbar_position_y),
+                getString(R.string.decorative_toolbar_position_y),
                 mDecorativeToolbar.getTranslationY()
         );
 
         aIntent.putExtra(
-                this.getResources().getString(R.string.main_toolbar_position_y),
+                getString(R.string.main_toolbar_position_y),
                 mMainToolbar.getTranslationY()
         );
 

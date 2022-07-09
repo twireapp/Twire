@@ -1643,10 +1643,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mProfileBottomSheet.dismiss();
 
             final Intent intent = new Intent(getContext(), ChannelActivity.class);
-            intent.putExtra(getContext().getString(R.string.channel_info_intent_object), mUserInfo);
+            intent.putExtra(getString(R.string.channel_info_intent_object), mUserInfo);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            getContext().startActivity(intent);
+            startActivity(intent);
         });
 
         setupPanels(mPanelsRecyclerView);

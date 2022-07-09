@@ -107,7 +107,7 @@ public class DeepLinkActivity extends AppCompatActivity {
                 ChannelInfo info = Service.getStreamerInfoFromUserId(Integer.parseInt(userID), this);
                 if (info != null) {
                     intent = new Intent(this, ChannelActivity.class);
-                    intent.putExtra(getResources().getString(R.string.channel_info_intent_object), info);
+                    intent.putExtra(getString(R.string.channel_info_intent_object), info);
                 }
             }
         }

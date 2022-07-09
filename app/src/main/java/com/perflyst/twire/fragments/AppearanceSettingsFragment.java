@@ -168,7 +168,7 @@ public class AppearanceSettingsFragment extends Fragment {
             /*
             TextView gameViewers = previewView.findViewById(R.id.game_viewers);
             if (gameViewers.getText().equals("")) {
-                gameViewers.setText(getString(R.string.preview_game_viewers));
+                gameViewers.setText(R.string.preview_game_viewers);
             }
              */
 

@@ -84,7 +84,7 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
         // Create intent for opening StreamerInfo activity. Send the StreamerInfo object with
         // the intent, and flag it to make sure it creates a new task on the history stack
         final Intent intent = new Intent(getContext(), ChannelActivity.class);
-        intent.putExtra(getContext().getResources().getString(R.string.channel_info_intent_object), item);
+        intent.putExtra(getContext().getString(R.string.channel_info_intent_object), item);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

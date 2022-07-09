@@ -297,11 +297,11 @@ public class Settings {
     }
 
     private String getDefaultStartUpPageTitle() {
-        return context.getResources().getString(R.string.navigation_drawer_my_streams_title);
+        return context.getString(R.string.navigation_drawer_my_streams_title);
     }
 
     public String getDefaultNotLoggedInStartUpPageTitle() {
-        return context.getResources().getString(R.string.navigation_drawer_top_streams_title);
+        return context.getString(R.string.navigation_drawer_top_streams_title);
     }
 
     /**
@@ -415,7 +415,7 @@ public class Settings {
      */
     public String getTheme() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getString(this.THEME_CHOSEN, context.getResources().getString(R.string.blue_theme_name));
+        return preferences.getString(this.THEME_CHOSEN, context.getString(R.string.blue_theme_name));
     }
 
     public boolean isDarkTheme() {

@@ -19,7 +19,7 @@ public class VODActivity extends StreamActivity {
 
     public static Intent createVODIntent(VideoOnDemand video, Context context, boolean transition) {
         Intent intent = new Intent(context, VODActivity.class);
-        intent.putExtra(context.getResources().getString(R.string.intent_vod), video);
+        intent.putExtra(context.getString(R.string.intent_vod), video);
         intent.putExtra(context.getString(R.string.stream_shared_transition), transition);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
@@ -40,7 +40,7 @@ public class VODActivity extends StreamActivity {
     protected Bundle getStreamArguments() {
         if (mVod == null) {
             Intent intent = getIntent();
-            mVod = intent.getParcelableExtra(getResources().getString(R.string.intent_vod));
+            mVod = intent.getParcelableExtra(getString(R.string.intent_vod));
         }
 
         Bundle args = new Bundle();

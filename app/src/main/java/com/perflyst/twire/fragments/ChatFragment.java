@@ -177,7 +177,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mRecyclerView.setLayoutManager(llm);
         mRecyclerView.setItemAnimator(null);
 
-        mUserInfo = requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo));// intent.getParcelableExtra(getResources().getString(R.string.intent_key_streamer_info));
+        mUserInfo = requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo));// intent.getParcelableExtra(getString(R.string.intent_key_streamer_info));
         vodID = requireArguments().getString(getString(R.string.stream_fragment_vod_id));
 
         if (!settings.isLoggedIn() || vodID != null || !settings.getChatAccountConnect()) {
@@ -216,7 +216,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             public void onConnecting() {
                 if (isFragmentActive()) {
                     ChatFragment.this.showChatStatusBar();
-                    mChatStatus.setText(getString(R.string.chat_status_connecting));
+                    mChatStatus.setText(R.string.chat_status_connecting);
                 }
             }
 
@@ -224,7 +224,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             public void onReconnecting() {
                 if (isFragmentActive()) {
                     ChatFragment.this.showChatStatusBar();
-                    mChatStatus.setText(getString(R.string.chat_status_reconnecting));
+                    mChatStatus.setText(R.string.chat_status_reconnecting);
                 }
             }
 
@@ -234,7 +234,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     Log.d(LOG_TAG, "Chat connected");
                     this.connected = true;
                     ChatFragment.this.showThenHideChatStatusBar();
-                    mChatStatus.setText(getString(R.string.chat_status_connected));
+                    mChatStatus.setText(R.string.chat_status_connected);
                 }
             }
 
@@ -243,7 +243,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 if (isFragmentActive()) {
                     this.connected = false;
                     ChatFragment.this.showChatStatusBar();
-                    mChatStatus.setText(getString(R.string.chat_status_connection_failed));
+                    mChatStatus.setText(R.string.chat_status_connection_failed);
                 }
             }
 

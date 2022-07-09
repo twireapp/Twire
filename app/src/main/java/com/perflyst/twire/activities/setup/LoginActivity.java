@@ -174,8 +174,8 @@ public class LoginActivity extends SetupBaseActivity {
             isPartOfSetup = getIntent().getBooleanExtra(getString(R.string.login_intent_part_of_setup), true);
 
             if (getIntent().hasExtra(getString(R.string.login_intent_token_not_valid)) && getIntent().getBooleanExtra(getString(R.string.login_intent_token_not_valid), false)) {
-                mLoginTextLineOne.setText(getString(R.string.login_invalid_token_text_line_one));
-                mLoginTextLineTwo.setText(getString(R.string.login_invalid_token_text_line_two));
+                mLoginTextLineOne.setText(R.string.login_invalid_token_text_line_one);
+                mLoginTextLineTwo.setText(R.string.login_invalid_token_text_line_two);
             }
         }
     }
@@ -244,8 +244,8 @@ public class LoginActivity extends SetupBaseActivity {
 
         new Handler().postDelayed(() -> mSnackbar
                 .duration(0)
-                .text(getResources().getString(R.string.login_user_no_internet))
-                .actionText(getResources().getString(R.string.login_user_no_internet_action))
+                .text(R.string.login_user_no_internet)
+                .actionText(R.string.login_user_no_internet_action)
                 .actionClickListener((sb, actionId) -> {
                     mContinueFABContainer.setClickable(true);
                     loginWebView.loadUrl(LOGIN_URL);
@@ -258,8 +258,8 @@ public class LoginActivity extends SetupBaseActivity {
         int SNACKBAR_DURATION = 8 * 1000;
         mSnackbar
                 .duration(SNACKBAR_DURATION)
-                .text(getResources().getString(R.string.login_user_cancel))
-                .actionText(getResources().getString(R.string.login_user_cancel_action))
+                .text(R.string.login_user_cancel)
+                .actionText(R.string.login_user_cancel_action)
                 .actionClickListener((sb, actionId) -> sb.dismiss());
 
 
@@ -631,7 +631,7 @@ public class LoginActivity extends SetupBaseActivity {
     private void showSuccessAnimation() {
         Log.d(LOG_TAG, "Showing Success Animation");
         mSuccessMessage.setText(
-                getResources().getString(R.string.login_on_success_message, new Settings(getBaseContext()).getGeneralTwitchDisplayName())
+                getString(R.string.login_on_success_message, new Settings(getBaseContext()).getGeneralTwitchDisplayName())
         );
         final AnimationSet mCircleShadowAnimations = getSuccessAnimation(mSuccessCircleShadow);
         final AnimationSet mIconAnimations = getSuccessAnimation(mSuccessIcon);

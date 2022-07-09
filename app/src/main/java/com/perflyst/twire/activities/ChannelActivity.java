@@ -112,7 +112,7 @@ public class ChannelActivity extends ThemeActivity {
 
         // Get the StreamerInfo object sent with the intent to open this activity
         Intent intent = getIntent();
-        info = intent.getParcelableExtra(getResources().getString(R.string.channel_info_intent_object));
+        info = intent.getParcelableExtra(getString(R.string.channel_info_intent_object));
         assert info != null;
 
         streamerInfoName.setText(info.getDisplayName());
@@ -181,7 +181,7 @@ public class ChannelActivity extends ThemeActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mAppBar.setExpanded(tab.getText() != null &&
-                        tab.getText().equals(getResources().getString(R.string.streamerInfo_desc_tab)), true);
+                        tab.getText().equals(getString(R.string.streamerInfo_desc_tab)), true);
                 mViewPager2.setCurrentItem(tab.getPosition(), true);
             }
 
