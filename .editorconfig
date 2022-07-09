@@ -6,3 +6,6 @@ charset = utf-8
 indent_style = space
 insert_final_newline = true
 trim_trailing_whitespace = true
+
+[app/src/main/res/values*/strings.xml]
+insert_final_newline = false
