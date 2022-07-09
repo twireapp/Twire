@@ -47,7 +47,6 @@ import butterknife.ButterKnife;
 
 public class NavigationDrawerFragment extends Fragment {
 
-
     private final String LOG_TAG = getClass().getSimpleName();
     @BindView(R.id.streams_count)
     protected TextView mStreamsCount;

@@ -56,7 +56,7 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
         final String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
-        final String URL = "https://api.twitch.tv/helix/streams?first=" + getLimit() + (pagination != "" ? "&after=" + pagination : "") + languageFilter;
+        final String URL = "https://api.twitch.tv/helix/streams?first=" + getLimit() + (!pagination.isEmpty() ? "&after=" + pagination : "") + languageFilter;
 
         List<StreamInfo> mResultList = new ArrayList<>();
         String jsonString = Service.urlToJSONStringHelix(URL, this);

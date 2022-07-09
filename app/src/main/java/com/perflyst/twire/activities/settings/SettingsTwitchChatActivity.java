@@ -89,7 +89,6 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         onBackPressed();
         return super.onOptionsItemSelected(item);
     }

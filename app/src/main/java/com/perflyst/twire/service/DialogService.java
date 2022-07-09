@@ -38,7 +38,6 @@ public class DialogService {
                 .title(R.string.theme_dialog_title)
                 .adapter(adapter, (dialog1, itemView, which, text) -> {
                     String theme = adapter.getItem(which).getContent().toString();
-                    dialog1.dismiss();
 
                     new Settings(activity).setTheme(theme);
                     if (!theme.equals(CURRENT_THEME)) {
@@ -104,7 +103,6 @@ public class DialogService {
                 .itemsCallbackSingleChoice(indexOfPage, listCallbackSingleChoice)
                 .positiveText(android.R.string.ok)
                 .negativeText(R.string.cancel)
-                .onNegative((dialog, which) -> dialog.dismiss())
                 .build();
     }
 
@@ -178,12 +176,11 @@ public class DialogService {
     }
 
     public static MaterialDialog getChoosePlayerTypeDialog(Activity activity, @StringRes int dialogTitle, @ArrayRes int array, int currentSize, MaterialDialog.ListCallbackSingleChoice callbackSingleChoice) {
-        int indexOfPage = currentSize;
         String[] playerTypes = activity.getResources().getStringArray(array);
 
         return getBaseThemedDialog(activity)
                 .title(dialogTitle)
-                .itemsCallbackSingleChoice(indexOfPage, callbackSingleChoice)
+                .itemsCallbackSingleChoice(currentSize, callbackSingleChoice)
                 .items(playerTypes)
                 .positiveText(R.string.done)
                 .build();
@@ -246,7 +243,6 @@ public class DialogService {
                 .customView(R.layout.dialog_slider, false)
                 .positiveText(R.string.done)
                 .negativeText(R.string.cancel)
-                .autoDismiss(true)
                 .onNegative(onCancelCallback)
                 .build();
 

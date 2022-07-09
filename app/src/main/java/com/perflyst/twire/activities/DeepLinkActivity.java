@@ -1,5 +1,7 @@
 package com.perflyst.twire.activities;
 
+import static java.lang.Integer.parseInt;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,8 +25,6 @@ import org.json.JSONObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
-
-import static java.lang.Integer.parseInt;
 
 public class DeepLinkActivity extends AppCompatActivity {
     private int errorMessage = R.string.router_unknown_error;

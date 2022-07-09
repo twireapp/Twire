@@ -178,7 +178,6 @@ public class FontFitTextView extends AppCompatTextView {
      * Resize the text size with default width and height
      */
     public void resizeText() {
-
         int heightLimit = getHeight() - getPaddingBottom() - getPaddingTop();
         int widthLimit = getWidth() - getPaddingLeft() - getPaddingRight();
         resizeText(widthLimit, heightLimit);

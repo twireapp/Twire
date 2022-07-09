@@ -63,7 +63,6 @@ public class RoundedImageView extends AppCompatImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         Drawable drawable = getDrawable();
 
         if (drawable == null) {

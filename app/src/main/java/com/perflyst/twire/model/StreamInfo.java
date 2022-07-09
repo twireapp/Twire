@@ -10,7 +10,7 @@ import com.perflyst.twire.R;
 
 
 public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelable {
-    public static final Parcelable.Creator<StreamInfo> CREATOR = new ClassLoaderCreator<StreamInfo>() {
+    public static final Parcelable.Creator<StreamInfo> CREATOR = new ClassLoaderCreator<>() {
         @Override
         public StreamInfo createFromParcel(Parcel parcel, ClassLoader classLoader) {
             return new StreamInfo(parcel);

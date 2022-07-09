@@ -209,7 +209,7 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private Target<Bitmap> getNightThemeTarget() {
-        return new CustomTarget<Bitmap>() {
+        return new CustomTarget<>() {
             @Override
             public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
                 streamerImage.setImageBitmap(bitmap);
@@ -223,7 +223,7 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private Target<Bitmap> getLightThemeTarget() {
-        return new CustomTarget<Bitmap>() {
+        return new CustomTarget<>() {
             @Override
             public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
                 streamerImage.setImageBitmap(bitmap);
@@ -526,7 +526,7 @@ public class ChannelActivity extends ThemeActivity {
 
         private String getUrl() {
             String type = broadcasts ? "archive" : "highlight";
-            return "https://api.twitch.tv/helix/videos?user_id=" + channelInfo.getUserId() + "&first=" + getLimit() + "&type=" + type + (pagination != "" ? "&after=" + pagination : "");
+            return "https://api.twitch.tv/helix/videos?user_id=" + channelInfo.getUserId() + "&first=" + getLimit() + "&type=" + type + (!pagination.isEmpty() ? "&after=" + pagination : "");
         }
 
         @Override

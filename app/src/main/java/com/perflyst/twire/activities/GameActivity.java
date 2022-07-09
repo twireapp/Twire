@@ -1,5 +1,7 @@
 package com.perflyst.twire.activities;
 
+import static com.perflyst.twire.misc.Utils.getSystemLanguage;
+
 import android.content.Intent;
 
 import com.perflyst.twire.R;
@@ -20,11 +22,8 @@ import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.perflyst.twire.misc.Utils.getSystemLanguage;
 
 public class GameActivity extends LazyMainActivity<StreamInfo> {
     private Game game;
@@ -69,7 +68,7 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException, UnsupportedEncodingException {
         String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
 
-        String url = "https://api.twitch.tv/helix/streams?game_id=" + game.getGameId() + "&first=" + getLimit() + (pagination != "" ? "&after=" + pagination : "") + languageFilter;
+        String url = "https://api.twitch.tv/helix/streams?game_id=" + game.getGameId() + "&first=" + getLimit() + (!pagination.isEmpty() ? "&after=" + pagination : "") + languageFilter;
 
         List<StreamInfo> mResultList = new ArrayList<>();
         String jsonString = Service.urlToJSONStringHelix(url, this);

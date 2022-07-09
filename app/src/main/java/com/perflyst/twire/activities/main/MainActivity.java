@@ -225,7 +225,6 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-
         int firstVisibleElement = mRecyclerView.getManager().findFirstCompletelyVisibleItemPosition() == 0
                 ? mRecyclerView.getManager().findFirstVisibleItemPosition()
                 : mRecyclerView.getManager().findFirstCompletelyVisibleItemPosition();

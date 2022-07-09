@@ -6,11 +6,13 @@ import android.os.Parcelable;
 
 import com.perflyst.twire.R;
 
+import java.util.Objects;
+
 /**
  * Created by Sebastian Rask Jepsen on 11-08-2015.
  */
 public class Game implements Comparable<Game>, MainElement, Parcelable {
-    public static final Parcelable.Creator<Game> CREATOR = new ClassLoaderCreator<Game>() {
+    public static final Parcelable.Creator<Game> CREATOR = new ClassLoaderCreator<>() {
         @Override
         public Game createFromParcel(Parcel source) {
             return new Game(source);
@@ -121,7 +123,7 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
 
         Game game = (Game) o;
 
-        return !(gameTitle != null ? !gameTitle.equals(game.gameTitle) : game.gameTitle != null);
+        return Objects.equals(gameTitle, game.gameTitle);
 
     }
 

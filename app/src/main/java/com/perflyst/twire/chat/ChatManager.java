@@ -9,8 +9,8 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.perflyst.twire.TwireApplication;
 import com.google.common.collect.ImmutableSetMultimap;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.model.Badge;
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
@@ -39,7 +39,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
-import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 public class ChatManager implements Runnable {
@@ -193,7 +192,6 @@ public class ChatManager implements Runnable {
     private void connect(String address, int port) {
         try {
             Log.d("Chat connecting to", address + ":" + port);
-            @SuppressWarnings("resource")
             Socket socket;
             // if we don`t use the SSL Port then create a default socket
             if (port != twitchChatPortsecure) {
@@ -201,8 +199,8 @@ public class ChatManager implements Runnable {
             } else {
                 // if we use the SSL Port then create a SSL Socket
                 // https://stackoverflow.com/questions/13874387/create-app-with-sslsocket-java
-                SSLSocketFactory factory=(SSLSocketFactory) SSLSocketFactory.getDefault();
-                socket=(SSLSocket) factory.createSocket(address, port);
+                SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+                socket = factory.createSocket(address, port);
             }
 
             writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));

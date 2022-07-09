@@ -60,6 +60,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -556,7 +557,6 @@ public class Service {
     }
 
     public static ChannelInfo getStreamerInfoFromUserId(int streamerId, Context context) throws NullPointerException {
-
         ChannelInfo channelInfo = null;
         try {
             JSONObject info = new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/users?id=" + streamerId, context)).getJSONArray("data").getJSONObject(0);

@@ -18,14 +18,4 @@ public class EmoteGridRecyclerView extends AutoSpanRecyclerView {
     public EmoteGridRecyclerView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-/*
-    @Override
-    protected String getSizeName() {
-        return "";
-    }
-
-    @Override
-    protected int getElementWidth(Context context) {
-    }
-*/
 }

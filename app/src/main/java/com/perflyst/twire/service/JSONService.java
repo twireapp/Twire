@@ -25,7 +25,7 @@ public class JSONService {
     private static final String LOG_TAG = JSONService.class.getSimpleName();
 
     // based on https://github.com/twurple/twurple/blob/6d3ca508fe0a21fadd77b63b62d0df66b9150f97/packages/api/src/api/helix/video/HelixVideo.ts#L175
-    public static int getVodLenght(String length) {
+    public static int getVodLength(String length) {
         int all = 0;
         String[] letters = {
           "h",
@@ -38,9 +38,9 @@ public class JSONService {
                 1
         };
         String[] regex = {
-                "[0-9]{1,}[h]",
-                "[0-9]{1,}[m]",
-                "[0-9]{1,}[s]"
+                "[0-9]+[h]",
+                "[0-9]+[m]",
+                "[0-9]+[s]"
         };
 
         for (int i=0; i < regex.length; i++) {
@@ -67,7 +67,7 @@ public class JSONService {
 
         String gameTitle = "";
 
-        return new VideoOnDemand(vodObject.getString(TITLE_STRING), gameTitle, vodObject.getString(PREVIEW_URL_IMAGE).replace("%{width}", "320").replace("%{height}", "180"), vodObject.getString(VIDEO_ID_STRING), vodObject.getString(CHANNEL_NAME_STRING), vodObject.getString(CHANNEL_DISPLAY_NAME_STRING), vodObject.getInt(VIDEO_VIEWS_INT), getVodLenght(vodObject.getString(VIDEO_LENGTH_INT)), vodObject.has(RECORDED_DATE_STRING) ? vodObject.getString(RECORDED_DATE_STRING) : "");
+        return new VideoOnDemand(vodObject.getString(TITLE_STRING), gameTitle, vodObject.getString(PREVIEW_URL_IMAGE).replace("%{width}", "320").replace("%{height}", "180"), vodObject.getString(VIDEO_ID_STRING), vodObject.getString(CHANNEL_NAME_STRING), vodObject.getString(CHANNEL_DISPLAY_NAME_STRING), vodObject.getInt(VIDEO_VIEWS_INT), getVodLength(vodObject.getString(VIDEO_LENGTH_INT)), vodObject.has(RECORDED_DATE_STRING) ? vodObject.getString(RECORDED_DATE_STRING) : "");
     }
 
     public static UserInfo getUserInfo(JSONObject userObject) throws JSONException {

@@ -53,7 +53,6 @@ public class LiveStreamActivity extends StreamActivity {
 
     @Override
     protected Bundle getStreamArguments() {
-
         Intent intent = getIntent();
         UserInfo mUserInfo = intent.getParcelableExtra(getString(R.string.intent_key_streamer_info));
         int currentViewers = intent.getIntExtra(getString(R.string.intent_key_stream_viewers), -1);

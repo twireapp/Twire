@@ -17,7 +17,7 @@ import java.util.Calendar;
  * Created by Sebastian Rask on 16-06-2016.
  */
 public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, MainElement {
-    public static final Parcelable.Creator<VideoOnDemand> CREATOR = new ClassLoaderCreator<VideoOnDemand>() {
+    public static final Parcelable.Creator<VideoOnDemand> CREATOR = new ClassLoaderCreator<>() {
         @Override
         public VideoOnDemand createFromParcel(Parcel source) {
             return new VideoOnDemand(source);

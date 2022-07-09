@@ -197,12 +197,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     @Override
     public void onStart() {
         super.onStart();
-        final ChatFragment instance = this;
         chatManager = new ChatManager(getContext(), mUserInfo, vodID, new ChatManager.ChatCallback() {
             private boolean connected = false;
 
             private boolean isFragmentActive() {
-                return !instance.isDetached() && instance.isAdded();
+                return !isDetached() && isAdded();
             }
 
             @Override
@@ -857,7 +856,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         View v = LayoutInflater.from(getContext()).inflate(R.layout.chat_message_options, null);
         bottomSheetDialog = new BottomSheetDialog(requireContext());
         bottomSheetDialog.setContentView(v);
-        final BottomSheetBehavior behavior = BottomSheetBehavior.from((View) v.getParent());
+        final BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) v.getParent());
         behavior.setPeekHeight(getContext().getResources().getDisplayMetrics().heightPixels / 3);
 
         bottomSheetDialog.setOnDismissListener(dialogInterface -> behavior.setState(BottomSheetBehavior.STATE_COLLAPSED));

@@ -57,12 +57,12 @@ public class ChangelogDialogFragment extends DialogFragment {
                 Utils.appendSpan(builder, text, new RelativeSizeSpan(1.5f), new StyleSpan(Typeface.BOLD));
                 firstHeader = false;
             } else {
-                Map<Character, Integer> colorMap = new HashMap<Character, Integer>() {{
+                Map<Character, Integer> colorMap = new HashMap<>() {{
                     put('A', R.color.green_600);
                     put('C', R.color.yellow_600);
                     put('F', R.color.purple_600);
                 }};
-                Map<Character, Integer> drawableMap = new HashMap<Character, Integer>() {{
+                Map<Character, Integer> drawableMap = new HashMap<>() {{
                     put('A', R.drawable.ic_add_circle);
                     put('C', R.drawable.ic_edit);
                     put('F', R.drawable.ic_bug_fix);

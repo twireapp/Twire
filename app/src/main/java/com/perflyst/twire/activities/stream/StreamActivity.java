@@ -1,5 +1,8 @@
 package com.perflyst.twire.activities.stream;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -35,9 +38,6 @@ import com.perflyst.twire.service.Settings;
 
 import java.util.List;
 import java.util.Set;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 public abstract class StreamActivity extends ThemeActivity implements StreamFragment.StreamFragmentListener {
     private final String LOG_TAG = getClass().getSimpleName();

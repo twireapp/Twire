@@ -1,9 +1,10 @@
 package com.perflyst.twire.adapters;
 
+import static com.perflyst.twire.misc.Utils.appendSpan;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -41,12 +42,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
-import static com.perflyst.twire.misc.Utils.appendSpan;
-
 /**
  * Created by SebastianRask on 03-03-2016.
  */
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHolder> implements Drawable.Callback {
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHolder> {
     private final String LOG_TAG = getClass().getSimpleName();
     private final List<ChatMessage> messages;
     private final ChatRecyclerView mRecyclerView;
@@ -81,7 +80,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             final ChatMessage message = messages.get(position);
             if (message.getMessage().equals("Test")) {
                 Log.d(LOG_TAG, "Binding Message for user");
-                Log.d(LOG_TAG, "Message: " + message.toString());
+                Log.d(LOG_TAG, "Message: " + message);
             }
 
             if (message.getName() == null) {
@@ -232,7 +231,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             checkSize();
             mRecyclerView.scrollToPosition(messages.size() - 1);
         }
-        Log.d(LOG_TAG, "Adding Message " + message.getMessage());
+        Log.v(LOG_TAG, "Adding Message " + message.getMessage());
     }
 
     public void clear() {
@@ -254,29 +253,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                 notifyItemRemoved(0);
             }
         }
-    }
-
-    @Override
-    public void invalidateDrawable(@NonNull Drawable drawable) {
-        Log.d(LOG_TAG, "Invalidate drawable");
-/*
-        if (drawable instanceof GifDrawable) {
-            GifDrawable gifDrawable = (GifDrawable) drawable;
-            gifDrawable.stop();
-            Log.d(LOG_TAG, "Stopping drawable");
-        }
-*/
-    }
-
-    @Override
-    public void scheduleDrawable(@NonNull Drawable drawable, @NonNull Runnable runnable, long l) {
-        Log.d(LOG_TAG, "Schedule drawable");
-
-    }
-
-    @Override
-    public void unscheduleDrawable(@NonNull Drawable drawable, @NonNull Runnable runnable) {
-        Log.d(LOG_TAG, "Unschedule drawable");
     }
 
     public interface ChatAdapterCallback {

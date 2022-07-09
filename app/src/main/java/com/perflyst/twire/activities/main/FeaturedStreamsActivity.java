@@ -68,7 +68,7 @@ public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
         List<StreamInfo> resultList = new ArrayList<>();
 
         //Indentation is meant to mimic the structure of the JSON code
-        final String URL = "https://api.twitch.tv/helix/streams?first=" + getLimit() + (pagination != "" ? "&after=" + pagination : "");
+        final String URL = "https://api.twitch.tv/helix/streams?first=" + getLimit() + (!pagination.isEmpty() ? "&after=" + pagination : "");
 
         String jsonString = Service.urlToJSONStringHelix(URL, this);
         JSONObject fullDataObject = new JSONObject(jsonString);

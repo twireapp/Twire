@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Created by Sebastian Rask Jepsen on 28/07/16.
@@ -143,7 +144,7 @@ public class Emote implements Comparable<Emote>, Serializable {
         if (isTextEmote != emote.isTextEmote) return false;
         if (emoteUrl != null ? !emoteUrl.equals(emote.getEmoteUrl(1)) : emote.getEmoteUrl(1) != null)
             return false;
-        return emoteKeyword != null ? emoteKeyword.equals(emote.emoteKeyword) : emote.emoteKeyword == null;
+        return Objects.equals(emoteKeyword, emote.emoteKeyword);
     }
 
     @Override

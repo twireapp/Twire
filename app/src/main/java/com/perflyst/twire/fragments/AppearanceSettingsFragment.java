@@ -25,19 +25,8 @@ public class AppearanceSettingsFragment extends Fragment {
     private ImageView themeSummaryColor;
     private Settings settings;
 
-    public AppearanceSettingsFragment() {
-        // Required empty public constructor
-    }
-
     public static AppearanceSettingsFragment newInstance() {
-
         return new AppearanceSettingsFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -99,7 +88,6 @@ public class AppearanceSettingsFragment extends Fragment {
         streamSizeSummary.setText(settings.getAppearanceStreamSize());
         gameSizeSummary.setText(settings.getAppearanceGameSize());
         streamerSizeSummary.setText(settings.getAppearanceChannelSize());
-
     }
 
     private Drawable getColorPreviewFromTheme(String themeTitle) {
@@ -123,7 +111,6 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void onClickStreamStyle() {
         DialogService.getChooseStreamCardStyleDialog(getActivity(), (title, index, previewView) -> {
-
             View sharedPadding = previewView.findViewById(R.id.shared_padding);
             ImageView view1 = previewView.findViewById(R.id.image_stream_preview);
             view1.setImageResource(R.drawable.preview_stream);
@@ -152,7 +139,6 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void onClickGameStyle() {
         DialogService.getChooseGameCardStyleDialog(getActivity(), (title, index, previewView) -> {
-
             View sharedPadding = previewView.findViewById(R.id.shared_padding);
             ImageView view1 = previewView.findViewById(R.id.image_game_preview);
             view1.setImageResource(R.drawable.preview_game);
@@ -193,7 +179,6 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void onClickStreamerStyle() {
         DialogService.getChooseStreamerCardStyleDialog(getActivity(), (title, index, previewView) -> {
-
             View nameView = previewView.findViewById(R.id.displayName);
             ImageView streamerLogo = previewView.findViewById(R.id.profileLogoImageView);
             streamerLogo.setImageResource(R.drawable.preview_streamer);
@@ -254,5 +239,4 @@ public class AppearanceSettingsFragment extends Fragment {
                 }
         ).show();
     }
-
 }

@@ -111,16 +111,12 @@ public class SettingsGeneralActivity extends ThemeActivity {
     public void onClickTwitchName(View v) {
         if (settings.isLoggedIn()) {
             MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialog(this, settings.getGeneralTwitchDisplayName());
-            dialog.getBuilder().onPositive((dialog1, which) -> {
-                dialog1.dismiss();
-                navigateToLogin();
-            });
+            dialog.getBuilder().onPositive((dialog1, which) -> navigateToLogin());
 
             dialog.getBuilder().onNegative((dialog12, which) -> {
                 settings.setLogin(false);
                 initTwitchDisplayName();
                 initStartPageText();
-                dialog12.dismiss();
             });
 
             dialog.show();
@@ -171,13 +167,10 @@ public class SettingsGeneralActivity extends ThemeActivity {
     public void onClickWipeFollows(View v) {
         MaterialDialog dialog = DialogService.getSettingsWipeFollowsDialog(this);
         dialog.getBuilder().onPositive((dialog1, which) -> {
-            dialog1.dismiss();
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
             helper.onWipe(helper.getWritableDatabase(), settings.isLoggedIn());
             Toast infoToast = Toast.makeText(getBaseContext(), getString(R.string.gen_toast_wipe_database), Toast.LENGTH_SHORT);
             infoToast.show();
-        }).onNegative((dialog2, which) -> {
-            dialog2.dismiss();
         }).show();
     }
 
@@ -186,26 +179,20 @@ public class SettingsGeneralActivity extends ThemeActivity {
     public void onExport(View v) {
         MaterialDialog dialog = DialogService.getSettingsExportFollowsDialog(this);
         dialog.getBuilder().onPositive((dialog1, which) -> {
-            dialog1.dismiss();
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
             int exported = helper.onExport(helper.getWritableDatabase());
             Toast infoToast = Toast.makeText(getBaseContext(), String.format(getString(R.string.gen_toast_export_database), exported), Toast.LENGTH_SHORT);
             infoToast.show();
-        }).onNegative((dialog2, which) -> {
-            dialog2.dismiss();
         }).show();
     }
 
     public void onImport(View v) {
         MaterialDialog dialog = DialogService.getSettingsImportFollowsDialog(this);
         dialog.getBuilder().onPositive((dialog1, which) -> {
-            dialog1.dismiss();
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
             int imported = helper.onImport(helper.getWritableDatabase());
             Toast infoToast = Toast.makeText(getBaseContext(), String.format(getString(R.string.gen_toast_import_database), imported), Toast.LENGTH_SHORT);
             infoToast.show();
-        }).onNegative((dialog2, which) -> {
-            dialog2.dismiss();
         }).show();
     }
 

@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import android.os.Environment;
 import android.util.Log;
 
@@ -235,7 +234,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 channels.put("Channels", channelstoExport);
                 String jsonStr = channels.toString();
                 Log.d("Export String", jsonStr);
-                
+
                 create(mContext, EXPORT_NAME, jsonStr);
                 return channelstoExport.length();
             } catch (JSONException e) {

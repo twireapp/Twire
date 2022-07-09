@@ -282,5 +282,4 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
         }
     }
 
-
 }

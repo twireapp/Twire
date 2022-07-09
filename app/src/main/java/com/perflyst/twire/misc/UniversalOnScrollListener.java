@@ -179,10 +179,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
                     // Make sure the toolbar is half-way showed or hid if the user scrolls fast down while the toolbar is naturally getting hidden
                     mToolbarShadow.setTranslationY(0);
                     mMainToolbar.setTranslationY(0);
-
                 } else {
-
-
                     // As long as the toolbar is not fully shown - Subtract the scroll amount from the Y-position
                     if (toolbarTranslationY < 0) {
                         // Make sure the toolbar can't get further down than intended

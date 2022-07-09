@@ -276,7 +276,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         Bundle args = getArguments();
         setHasOptionsMenu(true);
         settings = new Settings(getActivity());
@@ -751,7 +750,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             releasePlayer();
         }
 
-        ChatManager.instance.setPreviousProgress();
+        ChatManager.setPreviousProgress();
     }
 
     @Override
@@ -858,7 +857,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * Sets the correct visibility and the onclicklistener
      */
     private void setupShowChatButton() {
-
         checkShowChatButtonVisibility();
         mShowChatButton.setOnClickListener(view -> {
             if (!isVideoInterfaceShowing()) {
@@ -996,64 +994,68 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     private void setupLandscapeChat() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && settings.isChatLandscapeSwipeable() && settings.isChatInLandscapeEnabled()) {
-            final int width = getScreenRect(getActivity()).height();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !settings.isChatLandscapeSwipeable() || !settings.isChatInLandscapeEnabled()) {
+            return;
+        }
 
-            View.OnTouchListener touchListener = new View.OnTouchListener() {
-                private int downPosition = width;
-                private int widthOnDown = width;
+        final int width = getScreenRect(getActivity()).height();
 
-                public boolean onTouch(View view, MotionEvent event) {
-                    if (isLandscape) {
-                        final int X = (int) event.getRawX();
-                        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                            case MotionEvent.ACTION_DOWN:
-                                // If the user taps while the wrapper is in the resizing animation, cancel it.
-                                mVideoWrapper.clearAnimation();
+        View.OnTouchListener touchListener = new View.OnTouchListener() {
+            private int downPosition = width;
+            private int widthOnDown = width;
 
-                                ConstraintLayout.LayoutParams lParams = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
-                                if (lParams.width > 0)
-                                    widthOnDown = lParams.width;
-
-                                downPosition = (int) event.getRawX();
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                int upPosition = (int) event.getRawX();
-                                int deltaPosition = upPosition - downPosition;
-
-                                if (Math.abs(deltaPosition) < 20) {
-                                    setLandscapeChat(landscapeChatVisible);
-                                    return false;
-                                }
-
-                                setLandscapeChat(upPosition < downPosition);
-
-                                break;
-                            case MotionEvent.ACTION_MOVE:
-                                ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
-                                int newWidth;
-
-                                if (X > downPosition) { // Swiping right
-                                    newWidth = widthOnDown + X - downPosition;
-                                } else { // Swiping left
-                                    newWidth = widthOnDown - (downPosition - X);
-                                }
-
-                                layoutParams.width = Math.max(Math.min(newWidth, width), width - getLandscapeChatTargetWidth());
-
-                                mVideoWrapper.setLayoutParams(layoutParams);
-                                break;
-
-                        }
-                        rootView.invalidate();
-                    }
+            public boolean onTouch(View view, MotionEvent event) {
+                if (!isLandscape) {
                     return false;
                 }
-            };
 
-            mVideoWrapper.setOnTouchListener(touchListener);
-            mClickInterceptor.setOnTouchListener(touchListener);
-        }
+                final int X = (int) event.getRawX();
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        // If the user taps while the wrapper is in the resizing animation, cancel it.
+                        mVideoWrapper.clearAnimation();
+
+                        ConstraintLayout.LayoutParams lParams = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
+                        if (lParams.width > 0)
+                            widthOnDown = lParams.width;
+
+                        downPosition = (int) event.getRawX();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        int upPosition = (int) event.getRawX();
+                        int deltaPosition = upPosition - downPosition;
+
+                        if (Math.abs(deltaPosition) < 20) {
+                            setLandscapeChat(landscapeChatVisible);
+                            return false;
+                        }
+
+                        setLandscapeChat(upPosition < downPosition);
+
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
+                        int newWidth;
+
+                        if (X > downPosition) { // Swiping right
+                            newWidth = widthOnDown + X - downPosition;
+                        } else { // Swiping left
+                            newWidth = widthOnDown - (downPosition - X);
+                        }
+
+                        layoutParams.width = Math.max(Math.min(newWidth, width), width - getLandscapeChatTargetWidth());
+
+                        mVideoWrapper.setLayoutParams(layoutParams);
+                        break;
+
+                }
+                rootView.invalidate();
+                return false;
+            }
+        };
+
+        mVideoWrapper.setOnTouchListener(touchListener);
+        mClickInterceptor.setOnTouchListener(touchListener);
     }
 
     private void setLandscapeChat(boolean visible) {
@@ -1233,12 +1235,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
         mVideoWrapper.setLayoutParams(layoutWrapper);
 
-        AspectRatioFrameLayout contentFrame = mVideoWrapper.findViewById(R.id.exo_content_frame);
-        if (isLandscape) {
-            contentFrame.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
-        } else {
-            contentFrame.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
-        }
+        mVideoView.setResizeMode(isLandscape ? AspectRatioFrameLayout.RESIZE_MODE_FIT : AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
     }
 
     /**
@@ -1382,7 +1379,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 updateSelectedQuality(quality);
                 showPauseIcon();
                 Log.d(LOG_TAG, "Starting Stream With a quality on " + quality + " for " + mUserInfo.getDisplayName());
-                Log.d(LOG_TAG, "URLS: " + qualityURLs.keySet().toString());
+                Log.d(LOG_TAG, "URLS: " + qualityURLs.keySet());
             } else if (!qualityURLs.isEmpty()) {
                 Log.d(LOG_TAG, "Quality unavailable for this stream -  " + quality + ". Trying next best");
                 tryNextBestQuality(quality);
@@ -1592,7 +1589,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private void setQualityOnClick(final TextView qualityView, String quality) {
         qualityView.setOnClickListener(v -> {
             // don´t set audio only mode as default
-            if (quality != "audio_only") {
+            if (!quality.equals("audio_only")) {
                 settings.setPrefStreamQuality(quality);
             }
             // don`t allow to change the Quality when using audio only Mode
@@ -1604,8 +1601,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         });
     }
 
-    private BottomSheetBehavior getDefaultBottomSheetBehaviour(View bottomSheetView) {
-        BottomSheetBehavior behavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
+    private BottomSheetBehavior<View> getDefaultBottomSheetBehaviour(View bottomSheetView) {
+        BottomSheetBehavior<View> behavior = BottomSheetBehavior.from((View) bottomSheetView.getParent());
         behavior.setPeekHeight(requireActivity().getResources().getDisplayMetrics().heightPixels / 3);
         return behavior;
     }
@@ -1614,7 +1611,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         View v = LayoutInflater.from(requireContext()).inflate(R.layout.stream_profile_preview, null);
         mProfileBottomSheet = new BottomSheetDialog(requireContext());
         mProfileBottomSheet.setContentView(v);
-        final BottomSheetBehavior behavior = getDefaultBottomSheetBehaviour(v);
+        final BottomSheetBehavior<View> behavior = getDefaultBottomSheetBehaviour(v);
 
         mProfileBottomSheet.setOnDismissListener(dialogInterface -> behavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
 
