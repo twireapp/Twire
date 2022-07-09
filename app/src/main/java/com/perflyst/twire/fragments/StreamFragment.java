@@ -1455,9 +1455,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private void playbackFailed() {
         mBufferingView.stop();
         if (vodId == null) {
-            showSnackbar(getString(R.string.stream_playback_failed), "Retry", v -> startStreamWithTask());
+            showSnackbar(getString(R.string.stream_playback_failed), getString(R.string.retry), v -> startStreamWithTask());
         } else {
-            showSnackbar(getString(R.string.vod_playback_failed), "Retry", v -> startStreamWithTask());
+            showSnackbar(getString(R.string.vod_playback_failed), getString(R.string.retry), v -> startStreamWithTask());
         }
     }
 
