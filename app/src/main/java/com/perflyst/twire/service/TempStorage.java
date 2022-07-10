@@ -2,7 +2,7 @@ package com.perflyst.twire.service;
 
 import com.perflyst.twire.model.ChannelInfo;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -26,7 +26,7 @@ public class TempStorage {
         getLoadedStreamers().add(aStreamer);
     }
 
-    public static void addLoadedStreamer(List<ChannelInfo> aStreamerList) {
+    public static void addLoadedStreamer(Collection<ChannelInfo> aStreamerList) {
         getLoadedStreamers().addAll(aStreamerList);
     }
 

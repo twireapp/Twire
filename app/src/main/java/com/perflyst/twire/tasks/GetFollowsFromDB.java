@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.perflyst.twire.activities.FollowingFetcher;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -24,14 +23,8 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
     private final String LOG_TAG = getClass().getSimpleName();
     private final GetTwitchUserFollows twitchUserFollows;
     private WeakReference<Context> baseContext;
-    private FollowingFetcher mFollowingFetcher;
 
     public GetFollowsFromDB() {
-        twitchUserFollows = new GetTwitchUserFollows();
-    }
-
-    public GetFollowsFromDB(FollowingFetcher aActivity) {
-        mFollowingFetcher = aActivity;
         twitchUserFollows = new GetTwitchUserFollows();
     }
 
@@ -48,20 +41,8 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
 
     protected void onPostExecute(Map<String, ChannelInfo> subscriptions) {
         if (subscriptions != null && subscriptions.size() > 0) {
-            for (Map.Entry<String, ChannelInfo> entry : subscriptions.entrySet()) {
-                TempStorage.addLoadedStreamer(entry.getValue()); // Add the streamers to the static list field to ensure we don't waste time and resources getting the streamers from the database again.
-                if (mFollowingFetcher != null) {
-                    mFollowingFetcher.addStreamer(entry.getValue());
-                }
-            }
-
-            if (mFollowingFetcher != null) {
-                mFollowingFetcher.notifyFinishedAdding();
-            }
-        }
-
-        if (mFollowingFetcher != null && mFollowingFetcher.isEmpty()) {
-            mFollowingFetcher.showErrorView();
+            // Add the streamers to the static list field to ensure we don't waste time and resources getting the streamers from the database again.
+            TempStorage.addLoadedStreamer(subscriptions.values());
         }
 
         twitchUserFollows.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Settings(baseContext.get()).getGeneralTwitchName(), this.baseContext.get());
