@@ -225,11 +225,11 @@
     <dimen name="game_card_elevation">2dp</dimen>
     <dimen name="game_card_width">100dp</dimen>
     <dimen name="game_card_name_height">40dp</dimen>
-    <dimen name="game_template_width">272dp</dimen>
-    <dimen name="game_template_height">380dp</dimen>
-    <dimen name="game_preview_max_height">220dp</dimen>
-    <dimen name="game_preview_width">117dp</dimen>
-    <dimen name="game_preview_height">150dp</dimen>
+    <dimen name="game_template_width">300dp</dimen>
+    <dimen name="game_template_height">400dp</dimen>
+    <dimen name="game_preview_max_height">240dp</dimen>
+    <dimen name="game_preview_width">150dp</dimen>
+    <dimen name="game_preview_height">200dp</dimen>
 
     <!-- Streamer cards -->
     <dimen name="subscription_card_margin">0dp</dimen>
