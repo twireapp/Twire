@@ -713,13 +713,17 @@ public class Service {
         return db.isOpen() && !db.isReadOnly() && !db.isDbLockedByCurrentThread();
     }
 
-    public static boolean deleteStreamerInfoFromDB(Context context, Integer streamerId) {
+    public static boolean deleteStreamerInfoFromDB(Context context, ChannelInfo channelInfo) {
         SubscriptionsDbHelper mDbHelper = new SubscriptionsDbHelper(context);
         SQLiteDatabase db = mDbHelper.getWritableDatabase(); // Get the data repository in write mode
 
         boolean result = false;
+        int streamerId = channelInfo.getUserId();
         if (!isUserTwitch(streamerId, context)) {
             result = db.delete(SubscriptionsDbHelper.TABLE_NAME, SubscriptionsDbHelper.COLUMN_ID + " = '" + streamerId + "'", null) > 0;
+
+            if (result)
+                TempStorage.removeLoadedStreamer(channelInfo);
         }
 
         db.close();
@@ -760,6 +764,8 @@ public class Service {
             db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
             db.close();
         }, 0);
+
+        TempStorage.addLoadedStreamer(streamer);
     }
 
     public static void clearStreamerInfoDb(Context context) {

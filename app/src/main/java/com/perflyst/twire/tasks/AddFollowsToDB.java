@@ -88,9 +88,6 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
             cursor.close();
             */
 
-            // Add the subscription to the list of loaded subscriptions to ensure we still load it when we switch between activities
-            TempStorage.addLoadedStreamer(subToAdd);
-
             // The StreamerInfo to the result list
             subsAdded.add(subToAdd);
 

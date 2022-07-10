@@ -51,7 +51,7 @@ public class FollowHandler {
     }
 
     public void unfollowStreamer() {
-        Service.deleteStreamerInfoFromDB(mContext, mChannelInfo.getUserId());
+        Service.deleteStreamerInfoFromDB(mContext, mChannelInfo);
     }
 
     public interface Delegate {

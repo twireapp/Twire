@@ -23,11 +23,11 @@ public class TempStorage {
     }
 
     public static void addLoadedStreamer(ChannelInfo aStreamer) {
-        getLoadedStreamers().add(aStreamer);
+        getLoadedStreamers().addIfAbsent(aStreamer);
     }
 
     public static void addLoadedStreamer(Collection<ChannelInfo> aStreamerList) {
-        getLoadedStreamers().addAll(aStreamerList);
+        getLoadedStreamers().addAllAbsent(aStreamerList);
     }
 
     public static void removeLoadedStreamer(ChannelInfo aStreamer) {
