@@ -174,10 +174,16 @@ public class JSONService {
         final String PREVIEW_OBJECT_KEY = "box_art_url";
         final String GAME_ID_KEY = "id";
 
+        String preview = game.getString(PREVIEW_OBJECT_KEY);
+
+        // For some unknown reason, Twitch doesn't include the template when searching games.
+        // They always return "52x72", so we'll need to add the template back in.
+        preview = preview.replace("52x72", "{width}x{height}");
+
         String gameTitle = game.getString(TITLE_STRING_KEY);
-        String smallPreview = game.getString(PREVIEW_OBJECT_KEY).replace("{width}", "52").replace("{height}", "72");
-        String mediumPreview = game.getString(PREVIEW_OBJECT_KEY).replace("{width}", "136").replace("{height}", "190");
-        String largePreview = game.getString(PREVIEW_OBJECT_KEY).replace("{width}", "272").replace("{height}", "380");
+        String smallPreview = preview.replace("{width}", "52").replace("{height}", "72");
+        String mediumPreview = preview.replace("{width}", "136").replace("{height}", "190");
+        String largePreview = preview.replace("{width}", "272").replace("{height}", "380");
 
         int game_ID = game.getInt(GAME_ID_KEY);
 
