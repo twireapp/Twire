@@ -181,9 +181,9 @@ public class JSONService {
         preview = preview.replace("52x72", "{width}x{height}");
 
         String gameTitle = game.getString(TITLE_STRING_KEY);
-        String smallPreview = preview.replace("{width}", "52").replace("{height}", "72");
-        String mediumPreview = preview.replace("{width}", "136").replace("{height}", "190");
-        String largePreview = preview.replace("{width}", "272").replace("{height}", "380");
+        String smallPreview = preview.replace("{width}", "150").replace("{height}", "200");
+        String mediumPreview = preview.replace("{width}", "300").replace("{height}", "400");
+        String largePreview = preview.replace("{width}", "600").replace("{height}", "800");
 
         int game_ID = game.getInt(GAME_ID_KEY);
 
