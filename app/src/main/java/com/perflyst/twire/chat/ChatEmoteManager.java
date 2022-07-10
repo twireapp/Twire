@@ -132,14 +132,16 @@ class ChatEmoteManager {
             String ffzResponse = enabled_ffz ? Service.urlToJSONString(FFZ_CHANNEL_URL) : "";
             if (!ffzResponse.isEmpty()) {
                 JSONObject channelTopObject = new JSONObject(ffzResponse);
-                JSONObject channelSets = channelTopObject.getJSONObject(SETS);
-                for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext(); ) {
-                    JSONArray emoticons = channelSets.getJSONObject(iterator.next()).getJSONArray(EMOTICONS);
-                    for (int emoteIndex = 0; emoteIndex < emoticons.length(); emoteIndex++) {
-                        Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
-                        emote.setCustomChannelEmote(true);
-                        customChannel.add(emote);
-                        result.put(emote.getKeyword(), emote);
+                if (!channelTopObject.has("error")) {
+                    JSONObject channelSets = channelTopObject.getJSONObject(SETS);
+                    for (Iterator<String> iterator = channelSets.keys(); iterator.hasNext(); ) {
+                        JSONArray emoticons = channelSets.getJSONObject(iterator.next()).getJSONArray(EMOTICONS);
+                        for (int emoteIndex = 0; emoteIndex < emoticons.length(); emoteIndex++) {
+                            Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
+                            emote.setCustomChannelEmote(true);
+                            customChannel.add(emote);
+                            result.put(emote.getKeyword(), emote);
+                        }
                     }
                 }
             }
