@@ -227,7 +227,7 @@ public class NavigationDrawerFragment extends Fragment {
                                     final DrawerLayout mDrawerLayout, final View mDrawerView) {
         mViewToListen.setOnClickListener(v -> {
             Intent intent = new Intent(mFromActivity, mToClass);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION); // We don't want to use a transition animation
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT); // We don't want to use a transition animation
 
             mIntent = intent;
 
