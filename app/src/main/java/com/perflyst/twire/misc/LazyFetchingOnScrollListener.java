@@ -32,15 +32,9 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
     }
 
     @Override
-    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-        super.onScrollStateChanged(recyclerView, newState);
-        checkForNewElements(recyclerView);
-    }
-
-    @Override
     public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
-        checkForNewElements(recyclerView);
+        if (dy > 0) checkForNewElements(recyclerView);
     }
 
     public void resetAndFetch(RecyclerView recyclerView) {
@@ -67,15 +61,8 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
         if (getElementsTask.getStatus() != AsyncTask.Status.RUNNING && mAdapter.getItemCount() < maxElementsToFetchTotal) {
             GridLayoutManager lm = (GridLayoutManager) recyclerView.getLayoutManager();
 
-            int lastViewPosition = lm.findLastVisibleItemPosition();
-            int spanCount = lm.getSpanCount();
-            int itemCount = mAdapter.getItemCount();
-            final double FETCH_WHEN_BELOW_FIVE = 5;
-            final double NUMBER_OF_ROWS = Math.ceil(itemCount / (spanCount * 1.0)); // Round UP to the nearest Integer
-            final double LAST_ROW_VISIBLE = Math.ceil(lastViewPosition / (spanCount * 1.0)); // Round UP to the nearest Integer
-
-            // If the Second to last or the last row is visible, then fetch more game objects.
-            if (LAST_ROW_VISIBLE >= NUMBER_OF_ROWS - FETCH_WHEN_BELOW_FIVE) {
+            // If there are only two rows left, then fetch more.
+            if (lm.findLastCompletelyVisibleItemPosition() >= lm.getItemCount() - lm.getSpanCount() * 2 - 1) {
                 getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 mLazyFetchingActivity.startProgress();
             }
