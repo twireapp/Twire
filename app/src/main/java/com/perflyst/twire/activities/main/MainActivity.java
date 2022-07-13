@@ -504,6 +504,8 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
                     fromMainToolbarPosition
             );
 
+           fromToolbarPosition = -1;
+
             return true;
         }
         return false;
