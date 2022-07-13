@@ -48,7 +48,6 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
 
     @Override
     public void addToAdapter(List<Game> aGamesList) {
-        mOnScrollListener.checkForNewElements(mRecyclerView);
         mAdapter.addList(aGamesList);
         Log.i(LOG_TAG, "Adding Top Games: " + aGamesList.size());
     }

@@ -58,7 +58,6 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     public void addToAdapter(List<StreamInfo> streamsToAdd) {
-        mOnScrollListener.checkForNewElements(mRecyclerView);
         mAdapter.addList(streamsToAdd);
     }
 

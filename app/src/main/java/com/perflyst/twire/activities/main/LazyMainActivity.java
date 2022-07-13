@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.snackbar.Snackbar;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
@@ -56,6 +58,14 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
         );
         mScrollListener = mOnScrollListener;
         mRecyclerView.addOnScrollListener(mScrollListener);
+
+        // After adding elements, check we should fetching more to properly fill the UI.
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                mOnScrollListener.checkForNewElements(mRecyclerView);
+            }
+        });
 
         GetVisualElementsTask<T> getElementsTask = new GetVisualElementsTask<>(this);
         getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

@@ -51,7 +51,6 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     public void addToAdapter(List<StreamInfo> aObjectList) {
-        mOnScrollListener.checkForNewElements(mRecyclerView);
         mAdapter.addList(aObjectList);
         Log.i(LOG_TAG, "Adding Top Streams: " + aObjectList.size());
     }

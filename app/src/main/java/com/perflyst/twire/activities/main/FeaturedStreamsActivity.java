@@ -52,7 +52,6 @@ public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     public void addToAdapter(List<StreamInfo> aObjectList) {
-        mOnScrollListener.checkForNewElements(mRecyclerView);
         mAdapter.addList(aObjectList);
         Log.i(LOG_TAG, "Adding Featured Streams: " + aObjectList.size());
     }
