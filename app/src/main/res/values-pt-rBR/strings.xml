@@ -192,4 +192,6 @@
     <string name="gen_toast_export_database">%1$x Seguidores Exportados</string>
     <string name="gen_toast_wipe_database">Seguidores Limpos</string>
     <string name="gen_toast_import_database">%1$x Seguidores Importados</string>
+    <string name="mute">Mudo</string>
+    <string name="retry">Repetir</string>
 </resources>
