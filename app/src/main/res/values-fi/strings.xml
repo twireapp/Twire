@@ -187,4 +187,16 @@
     <string name="menu_playback">Toiston asetukset</string>
     <string name="playback_speed">%.2f</string>
     <string name="playback_speed_display">×%.2f</string>
+    <string name="gen_dialog_wipe_follows_content">Haluatko pyyhkiä kaikki seuraavat\?</string>
+    <string name="gen_dialog_wipe_follows_action">Pyyhi</string>
+    <string name="gen_dialog_export_follows_content">Haluatko viedä kaikki seuraavat\?</string>
+    <string name="gen_dialog_export_follows_action">Vie</string>
+    <string name="gen_dialog_import_follows_content">Haluatko tuoda kaikki seuraavat\?</string>
+    <string name="gen_dialog_import_follows_action">Tuo</string>
+    <string name="gen_twitch_follows">Pyyhi kaikki seuraavat</string>
+    <string name="gen_export_database">Vie kaikki seuraavasti</string>
+    <string name="gen_import_database">Tuo seuraavat</string>
+    <string name="gen_toast_wipe_database">Seuraavat pyyhkitty</string>
+    <string name="gen_toast_export_database">Vietiin %1$x seuraavaa</string>
+    <string name="gen_toast_import_database">Tuotiin %1$x seuraavaa</string>
 </resources>
