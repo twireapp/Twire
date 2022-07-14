@@ -3,6 +3,7 @@ package com.perflyst.twire.tasks;
 import android.util.Log;
 
 import com.perflyst.twire.misc.SecretKeys;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.service.Service;
 
@@ -53,7 +54,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
             e.printStackTrace();
         }
 
-        String vodURL = String.format("http://usher.twitch.tv/vod/%s?allow_source=true&nauthsig=%s&nauth=%s", vodId, signature, safeEncode(token));
+        String vodURL = String.format("http://usher.twitch.tv/vod/%s?allow_source=true&nauthsig=%s&nauth=%s", vodId, signature, Utils.safeEncode(token));
         Log.d(LOG_TAG, "HSL Playlist URL: " + vodURL);
         return parseM3U8(vodURL);
     }

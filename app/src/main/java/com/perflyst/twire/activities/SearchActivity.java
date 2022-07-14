@@ -30,6 +30,7 @@ import com.perflyst.twire.adapters.GamesAdapter;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.Game;
 import com.perflyst.twire.model.MainElement;
@@ -83,7 +84,7 @@ public class SearchActivity extends ThemeActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(LOG_TAG, "Text changed. Resetting fragments");
-                String newQuery = s.toString().replace(" ", "%20");
+                String newQuery = Utils.safeEncode(s.toString());
                 mChannelsFragment.reset(newQuery);
                 mStreamsFragment.reset(newQuery);
                 mGamesFragment.reset(newQuery);

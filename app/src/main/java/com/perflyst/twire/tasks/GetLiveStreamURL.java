@@ -4,14 +4,13 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.misc.SecretKeys;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.service.Service;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -92,7 +91,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
                 "&allow_source=true" +
                 "&type=any" +
                 "&fast_bread=true" +
-                "&p=%s", streamerName, safeEncode(token), signature, "" + new Random().nextInt(6));
+                "&p=%s", streamerName, Utils.safeEncode(token), signature, "" + new Random().nextInt(6));
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
         return parseM3U8(streamUrl);
@@ -126,13 +125,5 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         }
 
         return resultList;
-    }
-
-    String safeEncode(String s) {
-        try {
-            return URLEncoder.encode(s, "utf-8");
-        } catch (UnsupportedEncodingException ignore) {
-            return s;
-        }
     }
 }

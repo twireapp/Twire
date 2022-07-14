@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.annotation.FloatRange;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -43,5 +45,13 @@ public class Utils {
      */
     public static void setPercent(TextView textView, @FloatRange(from=0, to=1) double percent) {
         textView.setText(NumberFormat.getPercentInstance().format(percent));
+    }
+
+    public static String safeEncode(String s) {
+        try {
+            return URLEncoder.encode(s, "utf-8");
+        } catch (UnsupportedEncodingException ignore) {
+            return s;
+        }
     }
 }
