@@ -377,7 +377,13 @@ public class SearchActivity extends ThemeActivity {
         }
 
         protected void setCursorFromResponse(JSONObject response) throws JSONException {
-            setCursor(response.getJSONObject("pagination").getString("cursor"));
+            JSONObject pagination = response.optJSONObject("pagination");
+            if (pagination != null) {
+                String cursor = pagination.optString("cursor");
+                if (cursor.isEmpty()) {
+                    setCursor(cursor);
+                }
+            }
         }
 
         @Override
