@@ -192,4 +192,5 @@
     <string name="gen_dialog_wipe_follows_content">Вы хотите стереть все подписки\?</string>
     <string name="gen_dialog_wipe_follows_action">Стереть</string>
     <string name="gen_dialog_import_follows_content">Вы хотите импортировать все подписки\?</string>
+    <string name="mute">Отключить звук</string>
 </resources>
