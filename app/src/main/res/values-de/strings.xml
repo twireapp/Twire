@@ -231,4 +231,6 @@
     <string name="gen_import_database">Folgende importieren</string>
     <string name="gen_toast_wipe_database">Folgende gelöscht</string>
     <string name="gen_toast_import_database">%1$x Folgende importiert</string>
+    <string name="mute">Stumm</string>
+    <string name="retry">Wiederholen</string>
 </resources>
