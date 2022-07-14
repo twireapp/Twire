@@ -167,4 +167,29 @@
     <string name="playback_speed">%.2f</string>
     <string name="playback_speed_display">х%.2f</string>
     <string name="menu_speed">Швидкість програвання</string>
+    <string name="gen_dialog_wipe_follows_content">Бажаєте видалити усі підписки\?</string>
+    <string name="gen_dialog_wipe_follows_action">Видалити</string>
+    <string name="gen_dialog_export_follows_content">Бажаєте експортувати усі свої підписки\?</string>
+    <string name="gen_dialog_export_follows_action">Експортувати</string>
+    <string name="gen_dialog_import_follows_content">Бажаєте імпортувати усі свої підписки\?</string>
+    <string name="gen_dialog_import_follows_action">Імпортувати</string>
+    <string name="gen_twitch_follows">Видалити усі підписки</string>
+    <string name="gen_export_database">Експортувати усі підписки</string>
+    <string name="gen_import_database">Імпортувати підписки</string>
+    <string name="gen_toast_wipe_database">Видалити підписки</string>
+    <string name="gen_toast_export_database">Експортовано %1$x підписок</string>
+    <string name="gen_toast_import_database">Імпортовано %1$x підписок</string>
+    <string name="chat_enable_account_connect">При\'єднайтеся зі своєю обліковкою</string>
+    <string name="player_show_runtime">Показувати тривалість трансляції</string>
+    <string name="skip_silence">Пропустити тишу</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="settings_general_image_proxy_url_button">Зберегти</string>
+    <string name="settings_general_image_proxy_url_example">Приклад проксі: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_emote_ffz">Ввімкнути FrankerFaceZ (FFZ) емотики</string>
+    <string name="chat_enable_emote_bttv">Ввімкнути BetterTTV (BTTV) емотики</string>
+    <string name="player_type">Тип програвача</string>
+    <string name="menu_playback">Параметри програвання</string>
+    <string name="settings_general_image_proxy">Використовувати проксі для зображень</string>
+    <string name="chat_enable_emote_seventv">Ввімкнути 7TV емотики</string>
+    <string name="menu_share">Поділитися</string>
 </resources>
