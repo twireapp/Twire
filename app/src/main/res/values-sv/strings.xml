@@ -159,4 +159,12 @@
     <string name="gen_dialog_import_follows_action">Importera</string>
     <string name="menu_share">Dela</string>
     <string name="vod_playback_failed">Uppspelning av VOD misslyckades. Testa en annan kvalitet.</string>
+    <string name="settings_chat_name_summary">Emote-storlek, meddelandestorlek</string>
+    <string name="settings_general_image_proxy_url_example">Exempel Proxy: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="settings_general_image_proxy">Använd bild-proxy</string>
+    <string name="gen_dialog_wipe_follows_action">Rensa</string>
+    <string name="card_size_huge">MAX</string>
+    <string name="menu_playback">Uppspelningsinställningar</string>
+    <string name="title_activity_vod">Video On Demand</string>
+    <string name="my_streams_preview_image">Förhandsvisning av live-kanal</string>
 </resources>
