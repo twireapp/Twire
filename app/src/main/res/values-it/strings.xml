@@ -217,4 +217,19 @@
     <string name="chat_enable_emote_bttv">Attiva Emote BetterTTV (BTTV)</string>
     <string name="chat_enable_emote_ffz">Attiva Emote FrankerFaceZ (FFZ)</string>
     <string name="chat_enable_emote_seventv">Attiva Emote 7TV</string>
+    <string name="gen_dialog_wipe_follows_action">Elimina</string>
+    <string name="gen_dialog_wipe_follows_content">Eliminare tutti i canali seguiti\?</string>
+    <string name="gen_dialog_export_follows_content">Esportare tutti i canali seguiti\?</string>
+    <string name="gen_dialog_export_follows_action">Esporta</string>
+    <string name="gen_twitch_follows">Elimina tutti i canali seguiti</string>
+    <string name="gen_export_database">Esporta tutti i canali seguiti</string>
+    <string name="gen_import_database">Importa i canali seguiti</string>
+    <string name="gen_toast_wipe_database">Canali seguiti eliminati</string>
+    <string name="gen_toast_export_database">Esportati %1$x canali seguiti</string>
+    <string name="gen_toast_import_database">Importati %1$x canali seguiti</string>
+    <string name="gen_dialog_import_follows_content">Importare tutti i canali seguiti\?</string>
+    <string name="skip_silence">Salta silenzio</string>
+    <string name="menu_playback">Impostazioni riproduzione</string>
+    <string name="gen_dialog_import_follows_action">Importa</string>
+    <string name="mute">Silenzia</string>
 </resources>
