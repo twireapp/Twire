@@ -210,10 +210,10 @@
     <string name="chat_enable_account_connect">Se connecter avec votre compte</string>
     <string name="menu_share">Partager</string>
     <string name="preview_stream_online_since">00:30:00</string>
-    <string name="chat_enable_emote_bttv">Activer BetterTTV (BTTV) Emotes</string>
+    <string name="chat_enable_emote_bttv">Activer les Emotes BetterTTV (BTTV)</string>
     <string name="menu_speed">Vitesse de lecture</string>
-    <string name="chat_enable_emote_ffz">Activer FrankerFaceZ (FFZ) Emotes</string>
-    <string name="chat_enable_emote_seventv">Activer 7TV Emotes</string>
+    <string name="chat_enable_emote_ffz">Activer les Emotes FrankerFaceZ (FFZ)</string>
+    <string name="chat_enable_emote_seventv">Activer les Emotes 7TV</string>
     <string name="settings_general_image_proxy">Utiliser un proxy d\'image</string>
     <string name="player_show_runtime">Afficher la progression du flux</string>
     <string name="player_type">Type de lecture de flux</string>
@@ -221,4 +221,14 @@
     <string name="menu_playback">Préférences de lecture</string>
     <string name="gen_dialog_export_follows_action">Exporter</string>
     <string name="gen_dialog_import_follows_action">Importer</string>
+    <string name="gen_dialog_wipe_follows_content">Voulez-vous effacer toutes les streameurs suivis \?</string>
+    <string name="gen_dialog_wipe_follows_action">Effacer</string>
+    <string name="gen_dialog_export_follows_content">Voulez-vous exporter tous vos streameurs suivis \?</string>
+    <string name="gen_dialog_import_follows_content">Voulez-vous importer tous vos streameurs suivis \?</string>
+    <string name="gen_twitch_follows">Effacer tous vos streameurs suivis</string>
+    <string name="gen_export_database">Exporter tous vos streameurs suivis</string>
+    <string name="gen_import_database">Importer tous vos streameurs suivis</string>
+    <string name="gen_toast_wipe_database">Streameurs suivis effacés</string>
+    <string name="gen_toast_export_database">%1$x streameurs exportés</string>
+    <string name="gen_toast_import_database">%1$x streameurs suivis importés</string>
 </resources>
