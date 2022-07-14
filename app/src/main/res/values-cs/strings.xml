@@ -161,4 +161,34 @@
     <string name="card_style_normal">Normální</string>
     <string name="stream_backward">Přetočit o 10 sekund dozadu</string>
     <string name="title_activity_vod">Záznam</string>
+    <string name="gen_dialog_wipe_follows_action">Vymazat</string>
+    <string name="gen_dialog_export_follows_content">Přejete si exportovat všechny sledované\?</string>
+    <string name="gen_dialog_export_follows_action">Exportovat</string>
+    <string name="gen_dialog_import_follows_content">Přejete si importovat všechny sledované\?</string>
+    <string name="gen_dialog_import_follows_action">Importovat</string>
+    <string name="gen_twitch_follows">Vymazat všechny sledované</string>
+    <string name="gen_export_database">Exportovat všechny sledované</string>
+    <string name="gen_toast_wipe_database">Sledující byli smazáni</string>
+    <string name="gen_toast_export_database">Exportováno %1$x sledovaných</string>
+    <string name="chat_enable_account_connect">Připojování s vaším účtem</string>
+    <string name="player_show_runtime">Ukázat dobu streamu</string>
+    <string name="player_type">Typ přehrávače</string>
+    <string name="menu_playback">Nastavení přehrávání</string>
+    <string name="preview_stream_online_since">00:30:00</string>
+    <string name="skip_silence">Přeskočit ticho</string>
+    <string name="login_invalid_token_text_line_one">Bohužel se</string>
+    <string name="login_invalid_token_text_line_two">musíte znovu přihlásit</string>
+    <string name="chat_enable_emote_bttv">Povolit BetterTTV (BTTV) emoty</string>
+    <string name="chat_enable_emote_ffz">Povolit FrankerFaceZ (FFZ) emoty</string>
+    <string name="chat_enable_emote_seventv">Povolit 7TV emoty</string>
+    <string name="playback_speed_display">×%.2f</string>
+    <string name="playback_speed">%.2f</string>
+    <string name="gen_dialog_wipe_follows_content">Přejete si vymazat všechny sledované\?</string>
+    <string name="gen_import_database">Importovat všechny sledované</string>
+    <string name="gen_toast_import_database">Importováno %1$x sledovaných</string>
+    <string name="settings_general_image_proxy">Použít proxy pro obrázky</string>
+    <string name="settings_general_image_proxy_url_button">Uložit</string>
+    <string name="settings_general_image_proxy_url_example">Příklad proxy: https://external-content.duckduckgo.com/iu/\?u=</string>
+    <string name="chat_enable_ssl">Použít SSL pro připojení</string>
+    <string name="menu_share">Sdílet</string>
 </resources>
