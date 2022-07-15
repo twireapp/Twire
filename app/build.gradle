@@ -1,14 +1,14 @@
 apply plugin: "com.android.application"
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     buildToolsVersion "30.0.3"
     ndkVersion "22.1.7171670"
 
     defaultConfig {
         applicationId "com.perflyst.twire"
         minSdkVersion 16
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 526
         versionName "2.10.2"
 
