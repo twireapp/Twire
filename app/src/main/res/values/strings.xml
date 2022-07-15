@@ -309,6 +309,22 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.10.3</item>
+        <item>A Add low latency support.</item>
+        <item>C Make landscape chat visible by default.</item>
+        <item>C Improve app performance. (especially during VODs)</item>
+        <item>A Add animated 7TV Emotes.</item>
+        <item>F Fix VOD chat not loading.</item>
+        <item>C Make broadcasts and highlights load much faster.</item>
+        <item>C Improve picture in picture transition.</item>
+        <item>F Fix game search not working.</item>
+        <item>F Fix 7TV settings not being saved.</item>
+        <item>C Share the current quality to the external player.</item>
+        <item>F Fix refreshing animation playing when nothing is refreshing.</item>
+        <item>F Fix followed streamer\'s profiles getting out of date.</item>
+        <item>F Fix being able to partially move landscape chat.</item>
+        <item>C Update Korean, French, Finnish, Portuguese (Brazil), Swedish, Turkish, Ukrainian, Italian, Polish, German, Russian, and Czech translations.</item>
+
         <item>V 2.10.2</item>
         <item>C Migrate to the new Twitch API.</item>
         <item>A Add local follows.</item>
