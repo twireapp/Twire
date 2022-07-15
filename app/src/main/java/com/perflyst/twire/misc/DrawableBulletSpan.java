@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class DrawableBulletSpan extends BulletSpan {
-    final float scaleFactor = 0.6f;
+    final float scaleFactor = 0.65f;
     private final int mGap;
     private final Drawable mDrawable;
 
