@@ -18,12 +18,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
-import com.perflyst.twire.activities.main.MyChannelsActivity;
-import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.setup.LoginActivity;
 import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.service.DialogService;
-import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.service.SubscriptionsDbHelper;
 
@@ -88,12 +85,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
     }
 
     private void initStartPageText() {
-        String startUpPageTitle = settings.getStartPage();
-        Class startUpPageClass = Service.getClassFromStartPageTitle(this, startUpPageTitle);
-        if (!settings.isLoggedIn() && (startUpPageClass == MyStreamsActivity.class || startUpPageClass == MyChannelsActivity.class)) {
-            startUpPageTitle = settings.getDefaultNotLoggedInStartUpPageTitle();
-        }
-        startPageSubText.setText(startUpPageTitle);
+        startPageSubText.setText(settings.getStartPage());
     }
 
     private void initTwitchDisplayName() {
@@ -116,7 +108,6 @@ public class SettingsGeneralActivity extends ThemeActivity {
             dialog.getBuilder().onNegative((dialog12, which) -> {
                 settings.setLogin(false);
                 initTwitchDisplayName();
-                initStartPageText();
             });
 
             dialog.show();

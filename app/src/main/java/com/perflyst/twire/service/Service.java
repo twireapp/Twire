@@ -206,30 +206,13 @@ public class Service {
     }
 
     /**
-     * Returns an intent with the right destination activity for when the user is logged in.
+     * Returns an intent with the right destination activity.
      *
      * @param context The context from which the method is called
      * @return The intent
      */
-    public static Intent getLoggedInIntent(Context context) {
+    public static Intent getStartPageIntent(Context context) {
         Class startPageClass = getClassFromStartPageTitle(context, new Settings(context).getStartPage());
-        return new Intent(context, startPageClass);
-    }
-
-    /**
-     * Returns an intent with the right destination activity for when the user is NOT logged in.
-     *
-     * @param context The context from which the method is called
-     * @return The intent
-     */
-
-    public static Intent getNotLoggedInIntent(Context context) {
-        Settings settings = new Settings(context);
-        Class startPageClass = getClassFromStartPageTitle(context, settings.getStartPage());
-        if (startPageClass == MyStreamsActivity.class ||
-                startPageClass == MyChannelsActivity.class) {
-            startPageClass = getClassFromStartPageTitle(context, settings.getDefaultNotLoggedInStartUpPageTitle());
-        }
         return new Intent(context, startPageClass);
     }
 

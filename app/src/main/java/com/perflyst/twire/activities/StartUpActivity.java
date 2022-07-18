@@ -24,10 +24,9 @@ public class StartUpActivity extends ThemeActivity {
         final boolean isSetup = settings.isSetup();
         Intent intent;
         if (isSetup) {
-            intent = Service.getNotLoggedInIntent(getBaseContext());
+            intent = Service.getStartPageIntent(getBaseContext());
             if (settings.isLoggedIn()) {
                 validateToken();
-                intent = Service.getLoggedInIntent(getBaseContext());
             }
 
             if (!settings.isNotificationsDisabled()) {

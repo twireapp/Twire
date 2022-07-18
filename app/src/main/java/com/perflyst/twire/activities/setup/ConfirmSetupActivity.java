@@ -102,7 +102,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
 
     private void navigateToNextActivity() {
         hasTransitioned = true;
-        this.startActivity(Service.getLoggedInIntent(getBaseContext()));
+        this.startActivity(Service.getStartPageIntent(getBaseContext()));
         this.overridePendingTransition(0, 0);
     }
 

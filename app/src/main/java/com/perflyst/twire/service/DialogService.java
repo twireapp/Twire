@@ -87,8 +87,7 @@ public class DialogService {
     }
 
     public static MaterialDialog getChooseStartUpPageDialog(Activity activity, String currentlySelectedPageTitle, MaterialDialog.ListCallbackSingleChoice listCallbackSingleChoice) {
-        final Settings settings = new Settings(activity);
-        @ArrayRes int arrayResource = settings.isLoggedIn() ? R.array.StartupPages : R.array.StartupPagesNoLogin;
+        @ArrayRes int arrayResource = R.array.StartupPages;
 
         int indexOfPage = 0;
         String[] androidStrings = activity.getResources().getStringArray(arrayResource);

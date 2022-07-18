@@ -8,12 +8,6 @@
         <item>@string/navigation_drawer_top_games_title</item>
     </string-array>
 
-    <string-array name="StartupPagesNoLogin">
-        <item>@string/navigation_drawer_featured_title</item>
-        <item>@string/navigation_drawer_top_streams_title</item>
-        <item>@string/navigation_drawer_top_games_title</item>
-    </string-array>
-
     <string-array name="StreamsCardStyles">
         <item>@string/card_style_minimal</item>
         <item>@string/card_style_normal</item>

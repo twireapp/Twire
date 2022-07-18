@@ -408,7 +408,7 @@ public class LoginActivity extends SetupBaseActivity {
         if (LoginActivity.loadingFollows()) {
             this.startActivity(new Intent(getBaseContext(), ConfirmSetupActivity.class));
         } else {
-            this.startActivity(Service.getLoggedInIntent(getBaseContext()));
+            this.startActivity(Service.getStartPageIntent(getBaseContext()));
         }
         this.overridePendingTransition(0, 0);
     }
@@ -447,7 +447,7 @@ public class LoginActivity extends SetupBaseActivity {
                 transitionAnimationWhite = whiteTransitionAnimation;
                 new Settings(getBaseContext()).setSetup(true);
                 new Settings(getBaseContext()).setLogin(false);
-                Intent intent = Service.getNotLoggedInIntent(getBaseContext());
+                Intent intent = Service.getStartPageIntent(getBaseContext());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
             }
