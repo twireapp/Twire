@@ -62,7 +62,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
 
                 SimpleResponse response = makeRequest(request);
                 if (response == null)
-                    return null;
+                    return new ArrayList<>();
 
                 JSONObject page = new JSONObject(response.body);
                 JSONArray follows = page.getJSONArray("data");
