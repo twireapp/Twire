@@ -1,5 +1,10 @@
 package com.perflyst.twire.fragments;
 
+import static com.google.android.exoplayer2.Player.EVENT_PLAYBACK_STATE_CHANGED;
+import static com.google.android.exoplayer2.Player.EVENT_PLAY_WHEN_READY_CHANGED;
+import static com.google.android.exoplayer2.Player.STATE_BUFFERING;
+import static com.google.android.exoplayer2.Player.STATE_READY;
+
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
@@ -34,7 +39,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsets;
-import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
@@ -354,8 +358,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mRootView.findViewById(R.id.exo_position).setOnClickListener(v -> showSeekDialog());
         }
 
-        keepScreenOn();
-
         if (autoPlay || vodId != null) {
             startStreamWithQuality(settings.getPrefStreamQuality());
         }
@@ -465,6 +467,14 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     /* Player.Listener implementation */
     @Override
+    public void onEvents(@NonNull Player player, Player.Events events) {
+        if (!events.containsAny(EVENT_PLAY_WHEN_READY_CHANGED, EVENT_PLAYBACK_STATE_CHANGED)) return;
+
+        int playbackState = player.getPlaybackState();
+        requireView().setKeepScreenOn(player.getPlayWhenReady() && (playbackState == STATE_READY || playbackState == STATE_BUFFERING));
+    }
+
+    @Override
     public void onPlayerError(@NonNull PlaybackException exception) {
         Log.e(LOG_TAG, "Something went wrong playing the stream for " + mUserInfo.getDisplayName() + " - Exception: " + exception);
 
@@ -475,14 +485,12 @@ public class StreamFragment extends Fragment implements Player.Listener {
     public void onPlayWhenReadyChanged(boolean isPlaying, int _ignored) {
         if (isPlaying) {
             showPauseIcon();
-            keepScreenOn();
 
             if (!isAudioOnlyModeEnabled() && vodId == null) {
                 player.seekToDefaultPosition(); // Go forward to live
             }
         } else {
             showPlayIcon();
-            releaseScreenOn();
         }
     }
 
@@ -1254,20 +1262,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     private void registerAudioOnlyDelegate() {
-    }
-
-    /**
-     * Notifies the system that the screen though not timeout and fade to black.
-     */
-    private void keepScreenOn() {
-        getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-    }
-
-    /**
-     * Notifies the system that the screen can now time out.
-     */
-    private void releaseScreenOn() {
-        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
     private void updateSelectedQuality(String quality) {
