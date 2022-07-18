@@ -39,10 +39,7 @@ import com.perflyst.twire.misc.TooltipWindow;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetStreamsCountTask;
 
-import java.util.List;
-
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 
 public class NavigationDrawerFragment extends Fragment {
@@ -62,8 +59,6 @@ public class NavigationDrawerFragment extends Fragment {
     protected ImageView mAppIcon;
     @BindView(R.id.img_drawer_banner)
     protected ImageView mTopImage;
-    @BindViews({R.id.my_streams_container, R.id.my_channels_container})
-    List<View> mUserRequiredViews;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private Intent mIntent;

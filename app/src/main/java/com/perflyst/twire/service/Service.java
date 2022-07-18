@@ -60,7 +60,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
@@ -185,35 +184,26 @@ public class Service {
     }
 
     /**
-     * Returns the class related to the user-selected startup page
-     *
-     * @param context The Context from which the method is called
-     * @return The Class of the startup activity
-     */
-    public static Class getClassFromStartPageTitle(Context context, String title) {
-        Class result = MyStreamsActivity.class;
-        if (title.equals(context.getString(R.string.navigation_drawer_featured_title))) {
-            result = FeaturedStreamsActivity.class;
-        } else if (title.equals(context.getString(R.string.navigation_drawer_follows_title))) {
-            result = MyChannelsActivity.class;
-        } else if (title.equals(context.getString(R.string.navigation_drawer_top_streams_title))) {
-            result = TopStreamsActivity.class;
-        } else if (title.equals(context.getString(R.string.navigation_drawer_top_games_title))) {
-            result = TopGamesActivity.class;
-        }
-
-        return result;
-    }
-
-    /**
      * Returns an intent with the right destination activity.
      *
      * @param context The context from which the method is called
      * @return The intent
      */
     public static Intent getStartPageIntent(Context context) {
-        Class startPageClass = getClassFromStartPageTitle(context, new Settings(context).getStartPage());
-        return new Intent(context, startPageClass);
+        String title = new Settings(context).getStartPage();
+
+        Class<?> activityClass = MyStreamsActivity.class;
+        if (title.equals(context.getString(R.string.navigation_drawer_featured_title))) {
+            activityClass = FeaturedStreamsActivity.class;
+        } else if (title.equals(context.getString(R.string.navigation_drawer_follows_title))) {
+            activityClass = MyChannelsActivity.class;
+        } else if (title.equals(context.getString(R.string.navigation_drawer_top_streams_title))) {
+            activityClass = TopStreamsActivity.class;
+        } else if (title.equals(context.getString(R.string.navigation_drawer_top_games_title))) {
+            activityClass = TopGamesActivity.class;
+        }
+
+        return new Intent(context, activityClass);
     }
 
     /**
