@@ -1,15 +1,17 @@
-apply plugin: "com.android.application"
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    namespace 'com.perflyst.twire'
-    compileSdkVersion 33
-    buildToolsVersion "30.0.3"
-    ndkVersion "22.1.7171670"
+    namespace "com.perflyst.twire"
+    compileSdk 33
+    buildToolsVersion "32.0.0"
+    ndkVersion "25.0.8775105"
 
     defaultConfig {
         applicationId "com.perflyst.twire"
-        minSdkVersion 16
-        targetSdkVersion 33
+        minSdk 16
+        targetSdk 33
         versionCode 531
         versionName "2.10.7"
 
@@ -76,9 +78,10 @@ dependencies {
 
     //https://github.com/bumptech/glide/releases
     def glideVersion = "4.12.0"
-    implementation "com.github.zjupure:webpdecoder:2.0.${glideVersion}"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
+    //https://github.com/zjupure/GlideWebpDecoder
+    implementation "com.github.zjupure:webpdecoder:2.0.$glideVersion"
 
     //https://github.com/balysv/material-ripple/blob/master/CHANGELOG.md
     implementation "com.balysv:material-ripple:1.0.2"
