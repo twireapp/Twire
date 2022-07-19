@@ -21,13 +21,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
@@ -379,19 +377,6 @@ public class Service {
     }
 
     public static void startNotifications(Context context) {
-    }
-
-    public static void isTranslucentActionbar(String LOG_TAG, Context context, Toolbar toolbar, Activity activity) {
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
-            Log.d(LOG_TAG, "Settings translucent status bar");
-
-            double statusBarHeight = Math.ceil(25 * context.getResources().getDisplayMetrics().density);
-
-            Window w = activity.getWindow(); // in Activity's onCreate() for instance
-            //w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            toolbar.getLayoutParams().height = (int) (context.getResources().getDimension(R.dimen.main_toolbar_height) + statusBarHeight);
-        }
     }
 
     /**

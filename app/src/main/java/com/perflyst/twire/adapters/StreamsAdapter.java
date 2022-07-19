@@ -3,7 +3,6 @@ package com.perflyst.twire.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,20 +94,14 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
             return;
         }
 
-        boolean deviceHasLollipop = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
         StreamInfo item = getElements().get(itemPosition);
-        Intent intent = LiveStreamActivity.createLiveStreamIntent(item, deviceHasLollipop, getContext());
+        Intent intent = LiveStreamActivity.createLiveStreamIntent(item, true, getContext());
 
-        if (deviceHasLollipop) {
-            View sharedView = view.findViewById(R.id.image_stream_preview);
-            sharedView.setTransitionName(getContext().getString(R.string.stream_preview_transition));
-            final ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation(activity, sharedView, getContext().getString(R.string.stream_preview_transition));
-            activity.startActivity(intent, options.toBundle());
-        } else {
-            getContext().startActivity(intent);
-            activity.overridePendingTransition(R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim);
-        }
+        View sharedView = view.findViewById(R.id.image_stream_preview);
+        sharedView.setTransitionName(getContext().getString(R.string.stream_preview_transition));
+        final ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(activity, sharedView, getContext().getString(R.string.stream_preview_transition));
+        activity.startActivity(intent, options.toBundle());
     }
 
     @Override

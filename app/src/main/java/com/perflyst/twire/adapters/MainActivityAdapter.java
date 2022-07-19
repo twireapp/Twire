@@ -3,7 +3,6 @@ package com.perflyst.twire.adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.bumptech.glide.request.transition.Transition;
 import com.bumptech.glide.signature.ObjectKey;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.PreviewTarget;
-import com.perflyst.twire.misc.RoundedTopTransformation;
 import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.service.AnimationService;
 import com.perflyst.twire.service.Settings;
@@ -45,7 +43,6 @@ import java.util.concurrent.TimeUnit;
  */
 public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         T extends MainActivityAdapter.ElementsViewHolder> extends RecyclerView.Adapter<T> {
-    private final boolean isBelowLollipop;
     private final HashMap<CharSequence, PreviewTarget> mTargets;
     private final AutoSpanRecyclerView mRecyclerView;
     private final int translateLength, cardWidth;
@@ -70,7 +67,6 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         topMargin = (int) context.getResources().getDimension(getTopMarginResource());
         cardWidth = calculateCardWidth();
         translateLength = context.getResources().getDisplayMetrics().heightPixels - topMargin;
-        isBelowLollipop = Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP;
         sortElements = true;
         animateInsert = true;
         mOnClickListener = this::handleElementOnClick;
@@ -154,13 +150,6 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
                 // Fade from placeholder image to loaded image over 300ms with cross fade
                 .transition(BitmapTransitionOptions.withWrapped(new DrawableCrossFadeFactory
                         .Builder(300).setCrossFadeEnabled(true).build()));
-        if (isBelowLollipop) {
-            /* On platforms before Lollipop the CardView that holds the preview image does not
-             * clip its children that intersect with rounded corners. Round the image corners so
-             * the rounded corners still appear. */
-            creator = creator.transform(new RoundedTopTransformation(
-                    context.getResources().getDimension(getCornerRadiusResource())));
-        }
         PreviewTarget mTarget = new PreviewTarget() {
             private boolean loaded = false;
 

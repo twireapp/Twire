@@ -7,7 +7,6 @@ package com.perflyst.twire.misc;
 import android.app.ActionBar.LayoutParams;
 import android.content.Context;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Gravity;
@@ -112,9 +111,7 @@ public class TooltipWindow {
 
         tipWindow.setContentView(contentView);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            tipWindow.setElevation(1f);
-        }
+        tipWindow.setElevation(1f);
 
         int[] screen_pos = new int[2];
         anchor.getLocationOnScreen(screen_pos);

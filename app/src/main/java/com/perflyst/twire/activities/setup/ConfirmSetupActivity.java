@@ -1,7 +1,6 @@
 package com.perflyst.twire.activities.setup;
 
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -133,9 +132,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
         int dy = Math.max(cy, mTransitionViewWhite.getHeight() - cy);
         float finalRadius = (float) Math.hypot(dx, dy);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            mTransitionViewWhite.isAttachedToWindow();
-        }
+        mTransitionViewWhite.isAttachedToWindow();
 
         final SupportAnimator blueTransitionAnimation =
                 ViewAnimationUtils.createCircularReveal(mTransitionViewWhite, cx, cy, 0, finalRadius);
@@ -273,7 +270,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
                 }
             };
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && !mTransitionViewWhite.isAttachedToWindow()) {
+            if (!mTransitionViewWhite.isAttachedToWindow()) {
                 animator.onAnimationEnd();
                 return;
             }

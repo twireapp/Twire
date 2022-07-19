@@ -18,7 +18,6 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -234,23 +233,16 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (activity != null) {
             Display display = activity.getWindowManager().getDefaultDisplay();
             DisplayMetrics metrics = new DisplayMetrics();
-            Point size = new Point();
             int width, height;
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && activity.isInMultiWindowMode() && !activity.isInPictureInPictureMode() && !pipDisabling) {
-                    display.getMetrics(metrics);
-                } else {
-                    display.getRealMetrics(metrics);
-                }
-
-                width = metrics.widthPixels;
-                height = metrics.heightPixels;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && activity.isInMultiWindowMode() && !activity.isInPictureInPictureMode() && !pipDisabling) {
+                display.getMetrics(metrics);
             } else {
-                display.getSize(size);
-                width = size.x;
-                height = size.y;
+                display.getRealMetrics(metrics);
             }
+
+            width = metrics.widthPixels;
+            height = metrics.heightPixels;
 
             return new Rect(0, 0, Math.min(width, height), Math.max(width, height) - totalVerticalInset);
         }
@@ -962,7 +954,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     private void setupLandscapeChat() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || !settings.isChatLandscapeSwipeable() || !settings.isChatInLandscapeEnabled()) {
+        if (!settings.isChatLandscapeSwipeable() || !settings.isChatInLandscapeEnabled()) {
             return;
         }
 
@@ -1078,7 +1070,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     .into(mPreview);
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && intent.getBooleanExtra(getString(R.string.stream_shared_transition), false)) {
+        if (intent.getBooleanExtra(getString(R.string.stream_shared_transition), false)) {
             mPreview.setTransitionName(getString(R.string.stream_preview_transition));
 
             final View[] viewsToHide = {mToolbar, mControlToolbar};
@@ -1202,10 +1194,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      */
     private void showVideoInterface() {
         int MaintoolbarY = 0, CtrlToolbarY = 0;
-        if (isLandscape && isDeviceBelowKitkat()) {
-            MaintoolbarY = getStatusBarHeight();
-        }
-        if (isLandscape && Service.isTablet(getContext()) && isDeviceBelowKitkat()) {
+        if (isLandscape && Service.isTablet(getContext())) {
             CtrlToolbarY = getNavigationBarHeight();
         }
 
@@ -1219,7 +1208,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * Otherwise the icons would be covered my the navigationbar
      */
     private void keepControlIconsInView() {
-        if (isDeviceBelowKitkat() || settings.getStreamPlayerShowNavigationBar()) {
+        if (settings.getStreamPlayerShowNavigationBar()) {
             int ctrlPadding = originalCtrlToolbarPadding;
             int mainPadding = originalMainToolbarPadding;
             int delta = getNavigationBarHeight();
@@ -1811,15 +1800,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         rotate.setDuration(PLAY_PAUSE_ANIMATION_DURATION);
         rotate.setInterpolator(new AccelerateDecelerateInterpolator());
         mPlayPauseWrapper.startAnimation(rotate);
-    }
-
-    /**
-     * Checks if the device is below SDK API 19 (Kitkat)
-     *
-     * @return the result
-     */
-    private boolean isDeviceBelowKitkat() {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT;
     }
 
     private void showPauseIcon() {

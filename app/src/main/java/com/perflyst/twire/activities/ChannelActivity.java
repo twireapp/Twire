@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -114,11 +113,7 @@ public class ChannelActivity extends ThemeActivity {
         streamerInfoName.setText(info.getDisplayName());
         info.getFollowers(getApplicationContext(), followers -> Utils.setNumber(streamerFollowers, followers), 0);
         Utils.setNumber(streamerViewers, info.getViews());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            streamerImage.setTransitionName(getString(R.string.streamerInfo_transition));
-        }
-
+        streamerImage.setTransitionName(getString(R.string.streamerInfo_transition));
         setUpTabs();
         initStreamerImageAndColors();
         initiateFAB();
@@ -263,11 +258,9 @@ public class ChannelActivity extends ThemeActivity {
                     mFab.setBackgroundTintList(ColorStateList.valueOf(compositeNewColor));
                     mTabLayout.setSelectedTabIndicatorColor(compositeNewColor);
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        Window window = getWindow();
-                        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                        window.setStatusBarColor(newColorDark);
-                    }
+                    Window window = getWindow();
+                    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                    window.setStatusBarColor(newColorDark);
                 }
             }
 

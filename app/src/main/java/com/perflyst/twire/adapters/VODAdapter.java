@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.content.Intent;
-import android.os.Build;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -96,31 +95,26 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         } else {
             Intent intent = VODActivity.createVODIntent(item, getContext(), true);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                intent.putExtra(getContext().getString(R.string.stream_preview_url), item.getMediumPreview());
-                intent.putExtra(getContext().getString(R.string.stream_preview_alpha), hasVodBeenWatched(item.getVideoId()) ? VOD_WATCHED_IMAGE_ALPHA : 1.0f);
+            intent.putExtra(getContext().getString(R.string.stream_preview_url), item.getMediumPreview());
+            intent.putExtra(getContext().getString(R.string.stream_preview_alpha), hasVodBeenWatched(item.getVideoId()) ? VOD_WATCHED_IMAGE_ALPHA : 1.0f);
 
-                final View sharedView = view.findViewById(R.id.image_stream_preview);
-                sharedView.setTransitionName(getContext().getString(R.string.stream_preview_transition));
-                final ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(activity, sharedView, getContext().getString(R.string.stream_preview_transition));
+            final View sharedView = view.findViewById(R.id.image_stream_preview);
+            sharedView.setTransitionName(getContext().getString(R.string.stream_preview_transition));
+            final ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(activity, sharedView, getContext().getString(R.string.stream_preview_transition));
 
-                activity.setExitSharedElementCallback(new SharedElementCallback() {
-                    @SuppressLint("NewApi")
-                    @Override
-                    public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-                        super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+            activity.setExitSharedElementCallback(new SharedElementCallback() {
+                @SuppressLint("NewApi")
+                @Override
+                public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                    super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
 
-                        sharedView.animate().alpha(VOD_WATCHED_IMAGE_ALPHA).setDuration(300).start();
-                        activity.setExitSharedElementCallback(null);
-                    }
-                });
+                    sharedView.animate().alpha(VOD_WATCHED_IMAGE_ALPHA).setDuration(300).start();
+                    activity.setExitSharedElementCallback(null);
+                }
+            });
 
-                activity.startActivity(intent, options.toBundle());
-            } else {
-                getContext().startActivity(intent);
-                activity.overridePendingTransition(R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim);
-            }
+            activity.startActivity(intent, options.toBundle());
         }
     }
 

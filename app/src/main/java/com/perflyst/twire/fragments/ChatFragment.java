@@ -8,7 +8,6 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -331,7 +330,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     }
 
     private void setupTransition() {
-        if (Build.VERSION.SDK_INT >= 21 && getActivity() != null)
+        if (getActivity() != null)
             getActivity().getWindow().getReturnTransition().addListener(new Transition.TransitionListener() {
 
                 @Override

@@ -1,11 +1,9 @@
 package com.perflyst.twire.adapters;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,35 +85,27 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
         intent.putExtra(getContext().getString(R.string.channel_info_intent_object), item);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            View sharedView = view.findViewById(R.id.profileLogoImageView);
-            sharedView.setTransitionName(getContext().getString(R.string.streamerInfo_transition));
-            final ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation(activity, sharedView, getContext().getString(R.string.streamerInfo_transition));
+        View sharedView = view.findViewById(R.id.profileLogoImageView);
+        sharedView.setTransitionName(getContext().getString(R.string.streamerInfo_transition));
+        final ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(activity, sharedView, getContext().getString(R.string.streamerInfo_transition));
 
-            activity.setExitSharedElementCallback(new SharedElementCallback() {
-                @SuppressLint("NewApi")
-                @Override
-                public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-                    super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+        activity.setExitSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
 
-                    if (!sharedElements.isEmpty() && sharedElements.get(0) != null && previewTarget != null) {
-                        View element = sharedElements.get(0);
-                        Animation anim = new RoundImageAnimation(element.getWidth() / 2, 0, (ImageView) element, previewTarget.getPreview());
-                        anim.setDuration(200);
-                        anim.setInterpolator(new DecelerateInterpolator());
-                        view.startAnimation(anim);
-                    }
-                    activity.setExitSharedElementCallback(null);
+                if (!sharedElements.isEmpty() && sharedElements.get(0) != null && previewTarget != null) {
+                    View element = sharedElements.get(0);
+                    Animation anim = new RoundImageAnimation(element.getWidth() / 2, 0, (ImageView) element, previewTarget.getPreview());
+                    anim.setDuration(200);
+                    anim.setInterpolator(new DecelerateInterpolator());
+                    view.startAnimation(anim);
                 }
-            });
-            activity.startActivity(intent, options.toBundle());
-        } else {
-            getContext().startActivity(intent);
-            if (activity != null) {
-                activity.overridePendingTransition(R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim);
+                activity.setExitSharedElementCallback(null);
             }
-        }
+        });
+        activity.startActivity(intent, options.toBundle());
     }
 
     @Override

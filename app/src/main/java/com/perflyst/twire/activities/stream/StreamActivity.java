@@ -60,18 +60,14 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.black));
-            getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.black));
-        }
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.black));
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.black));
 
         if (savedInstanceState == null) {
             FragmentManager fm = getSupportFragmentManager();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setEnterTransition(constructTransitions());
-                getWindow().setReturnTransition(constructTransitions());
-            }
+            getWindow().setEnterTransition(constructTransitions());
+            getWindow().setReturnTransition(constructTransitions());
 
             // If the Fragment is non-null, then it is currently being
             // retained across a configuration change.
@@ -149,7 +145,6 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private TransitionSet constructTransitions() {
         int[] slideTargets = {R.id.ChatRecyclerView, R.id.chat_input, R.id.chat_input_divider};
 
@@ -270,7 +265,7 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
 
     @Override
     public void finish() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mBackstackLost) {
+        if (mBackstackLost) {
             navToLauncherTask(getApplicationContext());
             finishAndRemoveTask();
         } else {
@@ -278,7 +273,6 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void navToLauncherTask(@NonNull Context appContext) {
         ActivityManager activityManager = ContextCompat.getSystemService(appContext, ActivityManager.class);
         // iterate app tasks available and navigate to launcher task (browse task)

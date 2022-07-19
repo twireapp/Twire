@@ -45,7 +45,6 @@ public class SettingsGeneralActivity extends ThemeActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        //Service.isTranslucentActionbar(LOG_TAG, getBaseContext(), toolbar, this);
         twitchNameView = findViewById(R.id.general_current_twitch_name);
         startPageSubText = findViewById(R.id.start_page_sub_text);
         filterTopStreamsByLanguageView = findViewById(R.id.language_filter_title);

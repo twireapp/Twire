@@ -247,12 +247,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
     private String read(Context context, String fileName) {
         try {
             ContextWrapper cw = new ContextWrapper(context);
-            File directory;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-            } else {
-                directory = android.os.Environment.getExternalStorageDirectory();
-            }
+            File directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
             File importfile = new File(directory, fileName);
             FileInputStream fis = new FileInputStream(importfile);
             InputStreamReader isr = new InputStreamReader(fis);
@@ -273,12 +268,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
     private void create(Context context, String fileName, String jsonString) {
         try {
             ContextWrapper cw = new ContextWrapper(context);
-            File directory;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-            } else {
-                directory = android.os.Environment.getExternalStorageDirectory();
-            }
+            File directory = cw.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
             File exportfile = new File(directory, fileName);
             FileOutputStream fos = new FileOutputStream(exportfile);
             fos.write(jsonString.getBytes());
