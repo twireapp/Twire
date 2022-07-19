@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/circle_for_activity_icon"
+                android:src="@drawable/circle_for_activity_icon"
                 app:tint="?attr/colorPrimaryDark" />
 
             <ImageView
@@ -63,7 +63,7 @@
                 android:layout_width="@dimen/main_activity_icon_size"
                 android:layout_height="@dimen/main_activity_icon_size"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_person"
+                android:src="@drawable/ic_person"
                 app:tint="?attr/mainActivityIconColor" />
 
         </FrameLayout>

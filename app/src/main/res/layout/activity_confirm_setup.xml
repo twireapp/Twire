@@ -19,7 +19,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/login_icon_margin_top"
-            app:srcCompat="@drawable/ic_settings"
+            android:src="@drawable/ic_settings"
             app:tint="@color/colorSetupSecond" />
 
         <!-- Container for the Login instructions -->
@@ -90,7 +90,7 @@
                 android:layout_width="@dimen/welcome_continue_arrow_diameter"
                 android:layout_height="@dimen/welcome_continue_arrow_diameter"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_arrow_forward"
+                android:src="@drawable/ic_arrow_forward"
                 app:tint="@color/colorSetupMain" />
 
             <com.rey.material.widget.ProgressView

@@ -11,22 +11,22 @@
         android:layout_width="@dimen/toolbar_icon_size"
         android:layout_height="@dimen/toolbar_icon_size"
         android:contentDescription="@string/stream_backward"
+        android:src="@drawable/ic_replay_10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/play_pause_wrapper"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/ic_replay_10" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/exo_ffwd"
         android:layout_width="@dimen/toolbar_icon_size"
         android:layout_height="@dimen/toolbar_icon_size"
         android:contentDescription="@string/stream_forward"
+        android:src="@drawable/ic_forward_10"
         app:layout_constraintStart_toEndOf="@+id/play_pause_wrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/ic_forward_10" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
         android:id="@+id/show_chat_button"
@@ -34,10 +34,10 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:contentDescription="@string/stream_show_chat"
+        android:src="@drawable/ic_chevron_left"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/ic_chevron_left"
         tools:ignore="RtlHardcoded" />
 
     <RelativeLayout
@@ -63,7 +63,7 @@
             android:paddingTop="@dimen/toolbar_icon_padding"
             android:paddingRight="@dimen/toolbar_icon_padding"
             android:paddingBottom="@dimen/toolbar_icon_padding"
-            app:srcCompat="@drawable/ic_settings"
+            android:src="@drawable/ic_settings"
             app:tint="@android:color/white" />
 
         <ImageView
@@ -78,7 +78,7 @@
             android:paddingTop="@dimen/toolbar_icon_padding"
             android:paddingRight="@dimen/toolbar_icon_padding"
             android:paddingBottom="@dimen/toolbar_icon_padding"
-            app:srcCompat="@drawable/ic_fullscreen"
+            android:src="@drawable/ic_fullscreen"
             app:tint="@android:color/white" />
 
         <TextView
@@ -92,7 +92,6 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/toolbar_viewers_text_size"
             android:drawablePadding="@dimen/toolbar_icon_margin"
-            app:drawableLeftCompat="@drawable/ic_runtime"
             app:drawableStartCompat="@drawable/ic_runtime"
             tools:text="1:23:45"
             tools:ignore="RelativeOverlap" />
@@ -116,7 +115,6 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/toolbar_viewers_text_size"
             android:drawablePadding="@dimen/toolbar_icon_margin"
-            app:drawableLeftCompat="@drawable/ic_group"
             app:drawableStartCompat="@drawable/ic_group"
             tools:text="12345" />
 
@@ -225,11 +223,11 @@
             android:layout_height="0dp"
             android:alpha="1"
             android:contentDescription="@string/play"
+            android:src="@drawable/ic_play_arrow"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@drawable/ic_play_arrow"
             app:tint="@android:color/white" />
 
         <ImageView
@@ -238,11 +236,11 @@
             android:layout_height="0dp"
             android:alpha="0"
             android:contentDescription="@string/pause"
+            android:src="@drawable/ic_pause"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:srcCompat="@drawable/ic_pause"
             app:tint="@android:color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

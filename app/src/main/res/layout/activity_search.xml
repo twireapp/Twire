@@ -50,7 +50,7 @@
                             android:paddingStart="@dimen/search_back_arrow_start_padding"
                             android:paddingLeft="@dimen/search_back_arrow_start_padding"
                             android:paddingRight="@dimen/search_back_arrow_start_padding"
-                            app:srcCompat="@drawable/ic_arrow_back"
+                            android:src="@drawable/ic_arrow_back"
                             app:tint="?attr/searchActivityUpIconColor" />
 
                         <EditText
@@ -80,7 +80,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="@dimen/search_icon_padding"
-                app:srcCompat="@drawable/ic_search"
+                android:src="@drawable/ic_search"
                 app:tint="?attr/searchActivityUpIconColor" />
 
         </androidx.appcompat.widget.Toolbar>

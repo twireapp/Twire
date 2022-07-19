@@ -100,7 +100,7 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                             android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
-                            app:srcCompat="@drawable/ic_person"
+                            android:src="@drawable/ic_person"
                             app:tint="@color/white" />
                     </LinearLayout>
                 </FrameLayout>
@@ -129,7 +129,7 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
                             android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
-                            app:srcCompat="@drawable/ic_visibility"
+                            android:src="@drawable/ic_visibility"
                             app:tint="@color/white" />
                     </LinearLayout>
                 </FrameLayout>
@@ -165,8 +165,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_margin="@dimen/streamerInfo_fab_margin"
-            android:tint="@color/white"
-            app:srcCompat="@drawable/ic_favorite" />
+            android:src="@drawable/ic_favorite"
+            android:tint="@color/white" />
     </RelativeLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
