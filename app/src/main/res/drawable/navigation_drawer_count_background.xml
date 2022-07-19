@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle"
-    android:tint="?attr/colorAccent">
-    <solid android:color="#000" />
+    android:shape="rectangle">
+    <solid android:color="?attr/colorAccent" />
     <corners
         android:bottomLeftRadius="90dp"
         android:bottomRightRadius="90dp"

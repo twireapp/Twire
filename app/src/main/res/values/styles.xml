@@ -1,9 +1,24 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="AppTheme.Base" />
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="android:windowContentTransitions">true</item>
+
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+
+        <item name="android:statusBarColor">@color/primaryDark</item>
+
+        <item name="android:windowEnterTransition">@android:transition/slide_right</item>
+        <item name="android:windowExitTransition">@android:transition/slide_left</item>
+
+        <item name="android:windowSharedElementEnterTransition">@transition/change_image_transform
+        </item>
+        <item name="android:windowSharedElementExitTransition">@transition/change_image_transform
+        </item>
+    </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
+        <item name="android:windowContentTransitions">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primaryDark</item>
@@ -278,16 +293,12 @@
     </style>
 
     <style name="text_settings">
-        <item name="android:layout_marginEnd" tools:targetApi="jelly_bean_mr1">
-            @dimen/settings_text_right_margin
-        </item>
+        <item name="android:layout_marginEnd">@dimen/settings_text_right_margin</item>
         <item name="android:layout_marginRight">@dimen/settings_text_right_margin</item>
-        <item name="android:layout_marginStart" tools:targetApi="jelly_bean_mr1">
-            @dimen/settings_text_left_margin
-        </item>
+        <item name="android:layout_marginStart">@dimen/settings_text_left_margin</item>
         <item name="android:layout_marginLeft">@dimen/settings_text_left_margin</item>
         <item name="android:layout_centerInParent">true</item>
-        <item name="android:layout_alignParentStart" tools:targetApi="jelly_bean_mr1">true</item>
+        <item name="android:layout_alignParentStart">true</item>
         <item name="android:layout_alignParentLeft">true</item>
     </style>
 
