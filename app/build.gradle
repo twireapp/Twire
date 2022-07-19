@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.perflyst.twire"
-        minSdk 16
+        minSdk 21
         targetSdk 33
         versionCode 531
         versionName "2.10.7"
