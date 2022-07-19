@@ -1,6 +1,7 @@
 package com.perflyst.twire.adapters;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.app.SharedElementCallback;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityOptionsCompat;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ChannelActivity;
@@ -87,8 +87,8 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
 
         View sharedView = view.findViewById(R.id.profileLogoImageView);
         sharedView.setTransitionName(getContext().getString(R.string.streamerInfo_transition));
-        final ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(activity, sharedView, getContext().getString(R.string.streamerInfo_transition));
+        final ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                activity, sharedView, getContext().getString(R.string.streamerInfo_transition));
 
         activity.setExitSharedElementCallback(new SharedElementCallback() {
             @Override

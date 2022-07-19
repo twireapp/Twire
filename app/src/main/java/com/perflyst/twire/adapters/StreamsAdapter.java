@@ -2,6 +2,7 @@ package com.perflyst.twire.adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityOptionsCompat;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
@@ -99,8 +99,8 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
 
         View sharedView = view.findViewById(R.id.image_stream_preview);
         sharedView.setTransitionName(getContext().getString(R.string.stream_preview_transition));
-        final ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(activity, sharedView, getContext().getString(R.string.stream_preview_transition));
+        final ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                activity, sharedView, getContext().getString(R.string.stream_preview_transition));
         activity.startActivity(intent, options.toBundle());
     }
 

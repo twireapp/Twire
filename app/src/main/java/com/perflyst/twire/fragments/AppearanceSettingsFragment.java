@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -101,7 +101,7 @@ public class AppearanceSettingsFragment extends Fragment {
             drawableRes = R.drawable.circle_theme_night_chooser;
         }
 
-        return ContextCompat.getDrawable(requireContext(), drawableRes);
+        return AppCompatResources.getDrawable(requireContext(), drawableRes);
     }
 
     private void onClickThemeColor() {

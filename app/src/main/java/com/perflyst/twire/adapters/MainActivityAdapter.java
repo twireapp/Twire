@@ -16,7 +16,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -145,8 +145,8 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
                 .signature(new ObjectKey(
                         System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(5)))
                 // Image to show while loading, on failure, or if previewURL is null
-                .placeholder(
-                        ContextCompat.getDrawable(context, element.getPlaceHolder(getContext())))
+                .placeholder(AppCompatResources.getDrawable(
+                        context, element.getPlaceHolder(getContext())))
                 // Fade from placeholder image to loaded image over 300ms with cross fade
                 .transition(BitmapTransitionOptions.withWrapped(new DrawableCrossFadeFactory
                         .Builder(300).setCrossFadeEnabled(true).build()));

@@ -85,7 +85,7 @@ public class LayoutSelector {
                                 Service.getColorAttribute(R.attr.colorAccent, R.color.accent, activity), //Enabled
                         }
                 );
-                CompoundButtonCompat.setButtonTintList(radioButton, colorStateList);
+                radioButton.setButtonTintList(colorStateList);
             }
 
 

@@ -13,10 +13,10 @@ import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
@@ -86,7 +86,7 @@ public class ChangelogDialogFragment extends DialogFragment {
 
         assert dialog.getCustomView() != null;
         View customView = dialog.getCustomView();
-        AppCompatTextView textView = customView.findViewById(R.id.changelog_text);
+        TextView textView = customView.findViewById(R.id.changelog_text);
         textView.setText(builder);
 
         CheckedTextView checkedTextView = customView.findViewById(R.id.show_next_update);
