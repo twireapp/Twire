@@ -1,10 +1,7 @@
 package com.perflyst.twire;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-
-import androidx.multidex.MultiDex;
-import androidx.multidex.MultiDexApplication;
+import android.app.Application;
 
 import com.perflyst.twire.utils.TLSSocketFactoryCompat;
 import com.techyourchance.threadposter.BackgroundThreadPoster;
@@ -18,7 +15,7 @@ import java.security.Security;
  * Created by SebastianRask on 20-02-2016.
  */
 @SuppressLint("StaticFieldLeak") // It is alright to store application context statically
-public class TwireApplication extends MultiDexApplication {
+public class TwireApplication extends Application {
     public static final boolean isCrawlerUpdate = false; //ToDo remember to disable for crawler updates
 
     public static final UiThreadPoster uiThreadPoster = new UiThreadPoster();
@@ -33,11 +30,5 @@ public class TwireApplication extends MultiDexApplication {
         // custom SSLSocketFactory.
         Security.insertProviderAt(Conscrypt.newProvider(), 1);
         TLSSocketFactoryCompat.setAsDefault();
-    }
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
     }
 }
