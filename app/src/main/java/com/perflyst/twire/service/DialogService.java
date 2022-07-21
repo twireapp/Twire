@@ -40,6 +40,7 @@ public class DialogService {
                 .title(R.string.theme_dialog_title)
                 .adapter(adapter, (dialog1, itemView, which, text) -> {
                     String theme = adapter.getItem(which).getContent().toString();
+                    dialog1.dismiss();
 
                     new Settings(activity).setTheme(theme);
                     if (!theme.equals(CURRENT_THEME)) {
