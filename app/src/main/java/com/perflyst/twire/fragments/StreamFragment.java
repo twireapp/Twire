@@ -494,9 +494,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onSurfaceSizeChanged(int width, int height) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
+
         Rect videoRect = new Rect();
         mVideoView.getVideoSurfaceView().getGlobalVisibleRect(videoRect);
 
