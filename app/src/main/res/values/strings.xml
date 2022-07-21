@@ -183,7 +183,7 @@
     <!-- Settings -->
     <string name="settings_general_name">General</string>
     <string name="settings_general_name_summary">Twitch account, startup page</string>
-    <string name="settings_general_image_proxy">Use an Image Proxy</string>
+    <string name="settings_general_image_proxy">Use an image proxy</string>
     <string name="settings_general_image_proxy_url_button">Save</string>
     <string name="settings_general_image_proxy_url_example">Example Proxy: https://external-content.duckduckgo.com/iu/?u=</string>
     <string name="settings_stream_player_name">Stream player</string>
@@ -198,8 +198,8 @@
     <string name="gen_dialog_login_or_out_content">Do you want to log into a new account or log out as %s?</string>
     <string name="gen_dialog_login_or_out_login_action">LOG IN</string>
     <string name="gen_dialog_login_or_out_logout_action">LOG OUT</string>
-    <string name="gen_twitch_name">Twitch Username</string>
-    <string name="gen_start_page">Startup Page</string>
+    <string name="gen_twitch_name">Twitch username</string>
+    <string name="gen_start_page">Startup page</string>
     <string name="gen_reset_tips">Reset tutorial tips</string>
     <string name="gen_tips_have_been_reset">Tutorial tips have been reset</string>
     <string name="gen_language_filter">Filter top streams by language</string>
@@ -228,7 +228,7 @@
     <string name="chat_size_medium">Medium</string>
     <string name="chat_size_high">Large</string>
     <string name="chat_enable_ssl">Use SSL for the connection</string>
-    <string name="chat_enable_account_connect">Connect using your Account</string>
+    <string name="chat_enable_account_connect">Connect using your account</string>
 
     <!-- Chat Emote Settings -->
     <string name="chat_enable_emote_bttv">Enable BetterTTV (BTTV) Emotes</string>
@@ -239,8 +239,8 @@
     <string name="player_show_viewercount">Show viewer count</string>
     <string name="player_show_navigation">Reveal navigation bar on click</string>
     <string name="player_auto_player">Continue playback when returning</string>
-    <string name="player_show_runtime">Show the Stream Runtime</string>
-    <string name="player_type">Stream Player Type</string>
+    <string name="player_show_runtime">Show the stream runtime</string>
+    <string name="player_type">Stream player type</string>
 
     <!-- Appearance settings -->
     <string name="appearance_theme_color_title">Theme</string>
