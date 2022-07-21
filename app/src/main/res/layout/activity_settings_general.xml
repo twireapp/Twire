@@ -278,17 +278,30 @@
                 android:layout_height="@dimen/settings_divider_height"
                 android:background="?attr/dividerColor" />
 
+            <TextView
+                style="@style/settings_header_style"
+                android:text="@string/gen_local_follows_header"
+                android:textAppearance="@style/settings_header_text_style" />
+
+            <TextView
+                style="@style/text_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gen_local_follows_summary"
+                android:textAppearance="@style/sub_text_settings" />
+
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
+                    android:orientation="vertical"
                     android:onClick="onClickWipeFollows">
 
                     <TextView
@@ -299,7 +312,14 @@
                         android:text="@string/gen_twitch_follows"
                         android:textAppearance="@style/text_settings_title" />
 
-                </RelativeLayout>
+                    <TextView
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gen_wipe_summary"
+                        android:textAppearance="@style/sub_text_settings" />
+
+                </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <View
@@ -312,12 +332,13 @@
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
+                    android:orientation="vertical"
                     android:onClick="onExport">
 
                     <TextView
@@ -327,7 +348,14 @@
                         android:text="@string/gen_export_database"
                         android:textAppearance="@style/text_settings_title" />
 
-                </RelativeLayout>
+                    <TextView
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gen_export_summary"
+                        android:textAppearance="@style/sub_text_settings" />
+
+                </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <View
@@ -340,12 +368,13 @@
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
+                    android:orientation="vertical"
                     android:onClick="onImport">
 
                     <TextView
@@ -355,7 +384,14 @@
                         android:text="@string/gen_import_database"
                         android:textAppearance="@style/text_settings_title" />
 
-                </RelativeLayout>
+                    <TextView
+                        style="@style/text_settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/gen_import_summary"
+                        android:textAppearance="@style/sub_text_settings" />
+
+                </LinearLayout>
             </com.balysv.materialripple.MaterialRippleLayout>
 
             <View
