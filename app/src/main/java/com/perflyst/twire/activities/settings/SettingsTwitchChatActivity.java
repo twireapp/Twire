@@ -65,7 +65,7 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         String[] sizes = getResources().getStringArray(R.array.ChatSize);
         emoteSizeSummary.setText(sizes[settings.getEmoteSize() - 1]);
         messageSizeSummary.setText(sizes[settings.getMessageSize() - 1]);
-        Utils.setPercent(chatLandscapeWidthSummary, settings.getChatLandscapeWidth());
+        Utils.setPercent(chatLandscapeWidthSummary, settings.getChatLandscapeWidth() / 100f);
 
         // Chat enabled in landscape
         updateSummary(chatLandscapeToggle, chatLandscapeToggleSummary, settings.isChatInLandscapeEnabled());
