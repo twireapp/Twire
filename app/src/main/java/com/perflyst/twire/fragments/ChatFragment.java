@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -40,9 +41,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
+import com.github.twitch4j.chat.events.roomstate.ChannelStatesEvent;
+import com.github.twitch4j.chat.events.roomstate.Robot9000Event;
+import com.github.twitch4j.chat.events.roomstate.SlowModeEvent;
+import com.github.twitch4j.chat.events.roomstate.SubscribersOnlyEvent;
+import com.github.twitch4j.client.websocket.domain.WebsocketConnectionState;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
+import com.google.common.collect.ImmutableMap;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.adapters.ChatAdapter;
@@ -162,6 +169,12 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mChatAdapter = new ChatAdapter(mRecyclerView, getActivity(), this);
         mChatStatusBar = mRootView.findViewById(R.id.chat_status_bar);
 
+        roomStateMap = ImmutableMap.of(
+                SlowModeEvent.class, mSlowmodeIcon,
+                Robot9000Event.class, mR9KIcon,
+                SubscribersOnlyEvent.class, mSubonlyIcon
+        );
+
         mEmoteKeyboardButton = mRootView.findViewById(R.id.chat_emote_keyboard_ic);
         mEmoteChatBackspace = mRootView.findViewById(R.id.emote_backspace);
         emoteKeyboardContainer = mRootView.findViewById(R.id.emote_keyboard_container);
@@ -190,10 +203,22 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         setupKeyboardShowListener();
 
         setupTransition();
+        return mRootView;
+    }
 
+    private static final Map<WebsocketConnectionState, Integer> connectionMap = ImmutableMap.of(
+            WebsocketConnectionState.DISCONNECTED, R.string.chat_status_connection_failed,
+            WebsocketConnectionState.CONNECTING, R.string.chat_status_connecting,
+            WebsocketConnectionState.CONNECTED, R.string.chat_status_connected,
+            WebsocketConnectionState.LOST, R.string.chat_status_reconnecting
+    );
+
+    private Map<Class<? extends ChannelStatesEvent>, ImageView> roomStateMap;
+
+    @Override
+    public void onStart() {
+        super.onStart();
         chatManager = new ChatManager(getContext(), mUserInfo, vodID, new ChatManager.ChatCallback() {
-            private boolean connected = false;
-
             private boolean isFragmentActive() {
                 return !isDetached() && isAdded();
             }
@@ -208,58 +233,42 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             public void onClear(String target) {
                 if (!isFragmentActive()) return;
 
-                mChatAdapter.clear(target);
-            }
-
-            @Override
-            public void onConnecting() {
-                if (isFragmentActive()) {
-                    ChatFragment.this.showChatStatusBar();
-                    mChatStatus.setText(R.string.chat_status_connecting);
+                if (target == null) {
+                    mChatAdapter.clear();
+                } else {
+                    mChatAdapter.clear(target);
                 }
             }
 
             @Override
-            public void onReconnecting() {
-                if (isFragmentActive()) {
-                    ChatFragment.this.showChatStatusBar();
-                    mChatStatus.setText(R.string.chat_status_reconnecting);
-                }
+            public void onConnectionChanged(WebsocketConnectionState state) {
+                if (!isFragmentActive())
+                    return;
+
+                @StringRes
+                Integer message = connectionMap.get(state);
+                if (message == null)
+                    return;
+
+                showChatStatusBar();
+                mChatStatus.setText(message);
+
+                // If connected, show then hide the status bar.
+                if (state == WebsocketConnectionState.CONNECTED) hideChatStatusBar();
             }
 
             @Override
-            public void onConnected() {
-                if (isFragmentActive()) {
-                    Timber.d("Chat connected");
-                    this.connected = true;
-                    ChatFragment.this.showThenHideChatStatusBar();
-                    mChatStatus.setText(R.string.chat_status_connected);
-                }
-            }
+            public void onRoomStateChange(ChannelStatesEvent event) {
+                if (!isFragmentActive())
+                    return;
 
-            @Override
-            public void onConnectionFailed() {
-                if (isFragmentActive()) {
-                    this.connected = false;
-                    ChatFragment.this.showChatStatusBar();
-                    mChatStatus.setText(R.string.chat_status_connection_failed);
-                }
-            }
+                ImageView icon = roomStateMap.getOrDefault(event.getClass(), null);
+                if (icon == null)
+                    return;
 
-            @Override
-            public void onRoomstateChange(boolean isR9K, boolean isSlow, boolean isSubsOnly) {
-                if (isFragmentActive()) {
-                    if (this.connected) {
-                        ChatFragment.this.showThenHideChatStatusBar();
-                    } else {
-                        ChatFragment.this.showChatStatusBar();
-                    }
-
-                    Timber.d("Roomstate has changed");
-                    this.roomStateIconChange(isR9K, mR9KIcon);
-                    this.roomStateIconChange(isSlow, mSlowmodeIcon);
-                    this.roomStateIconChange(isSubsOnly, mSubonlyIcon);
-                }
+                Timber.d("Roomstate has changed");
+                icon.setVisibility(event.isActive() ? View.VISIBLE : View.GONE);
+                ChatFragment.this.showThenHideChatStatusBar();
             }
 
             @Override
@@ -274,31 +283,14 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             }
 
             @Override
-            public void onEmoteSetsFetched(String[] emoteSets) {
+            public void onEmoteSetsFetched(List<String> emoteSets) {
                 GetTwitchEmotesTask getTwitchEmotesTask = new GetTwitchEmotesTask(emoteSets, (twitchEmotes, subscriberEmotes) -> {
                     twitchEmotesLoaded(twitchEmotes);
                     subscriberEmotesLoaded(subscriberEmotes, (EmotesPagerAdapter) mEmoteViewPager.getAdapter());
                 });
                 Execute.background(getTwitchEmotesTask);
             }
-
-            private void roomStateIconChange(boolean isOn, ImageView icon) {
-                if (isFragmentActive()) {
-                    if (!isOn) {
-                        icon.setVisibility(View.GONE);
-                    } else {
-                        icon.setVisibility(View.VISIBLE);
-                    }
-                }
-            }
         });
-
-        return mRootView;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
 
         Execute.background(chatManager);
 

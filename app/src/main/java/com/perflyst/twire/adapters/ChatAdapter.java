@@ -244,7 +244,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     public void clear(String target) {
         for (int i = messages.size() - 1; i >= 0; i--) {
             ChatMessage message = messages.get(i);
-            if (!message.getName().equals(target) && !message.getID().equals(target)) {
+            if (!message.getID().equals(target)) {
                 continue;
             }
 

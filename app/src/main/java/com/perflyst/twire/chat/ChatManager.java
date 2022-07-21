@@ -8,16 +8,29 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.util.SparseArray;
 
+import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
+import com.github.philippheuer.events4j.core.EventManager;
+import com.github.philippheuer.events4j.simple.SimpleEventHandler;
+import com.github.philippheuer.events4j.simple.domain.EventSubscriber;
+import com.github.twitch4j.chat.TwitchChat;
+import com.github.twitch4j.chat.TwitchChatBuilder;
+import com.github.twitch4j.chat.events.ChatConnectionStateEvent;
+import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
+import com.github.twitch4j.chat.events.channel.ClearChatEvent;
+import com.github.twitch4j.chat.events.channel.DeleteMessageEvent;
+import com.github.twitch4j.chat.events.channel.UserStateEvent;
+import com.github.twitch4j.chat.events.roomstate.ChannelStatesEvent;
+import com.github.twitch4j.client.websocket.domain.WebsocketConnectionState;
 import com.github.twitch4j.helix.domain.ChatBadge;
 import com.github.twitch4j.helix.domain.ChatBadgeSet;
 import com.github.twitch4j.helix.domain.ChatBadgeSetList;
+import com.github.twitch4j.helix.domain.NamedUserChatColor;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.netflix.hystrix.HystrixCommand;
 import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.model.Badge;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
-import com.perflyst.twire.model.IRCMessage;
 import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -27,12 +40,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,9 +47,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Random;
-
-import javax.net.ssl.SSLSocketFactory;
 
 import timber.log.Timber;
 
@@ -54,34 +58,25 @@ public class ChatManager implements Runnable {
     private String cursor = "";
     private boolean seek = false;
     private double previousProgress;
-    private final String user;
-    private final String password;
+    private final OAuth2Credential account;
     private final UserInfo channel;
     private final String vodId;
     private final ChatCallback callback;
     private final ChatEmoteManager mEmoteManager;
     private Map<String, Map<String, Badge>> globalBadges = new HashMap<>();
     private Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
-    // Default Twitch Chat connect IP/domain and port
-    private String twitchChatServer = "irc.chat.twitch.tv";
-    // Port 6667 for unsecure connection | 6697 for SSL
-    private int twitchChatPortunsecure = 6667;
-    private int twitchChatPortsecure = 6697;
-    private int twitchChatPort;
+    private final String twitchChatServer;
 
     private final Object vodLock = new Object();
     private double nextCommentOffset = 0;
 
-    private BufferedWriter writer;
     private boolean isStopping;
     // Data about the user and how to display his/hers message
     private String userDisplayName;
     private String userColor;
     private Map<String, String> userBadges;
-    // Data about room state
-    private boolean chatIsR9kmode;
-    private boolean chatIsSlowmode;
-    private boolean chatIsSubsonlymode;
+
+    private TwitchChat twitchChat;
 
     public ChatManager(Context aContext, UserInfo aChannel, String aVodId, ChatCallback aCallback) {
         instance = this;
@@ -94,26 +89,19 @@ public class ChatManager implements Runnable {
             // ... use their credentials
             Timber.d("Using user credentials for chat login.");
 
-            user = appSettings.getGeneralTwitchName();
-            password = "oauth:" + appSettings.getGeneralTwitchAccessToken();
+            account = TwireApplication.credential;
         } else {
             // ... else: use anonymous credentials
             Timber.d("Using anonymous credentials for chat login.");
 
-            user = "justinfan" + getRandomNumber(10000, 99999);
-            password = "SCHMOOPIIE";
+            account = null;
         }
 
         channel = aChannel;
         vodId = aVodId;
         callback = aCallback;
 
-        //Set the Port Setting
-        if (appSettings.getChatEnableSSL())
-            twitchChatPort = twitchChatPortsecure;
-        else {
-            twitchChatPort = twitchChatPortunsecure;
-        }
+        twitchChatServer = appSettings.getChatEnableSSL() ? TwitchChat.TWITCH_WEB_SOCKET_SERVER : "ws://irc-ws.chat.twitch.tv:80";
         Timber.d("Use SSL Chat Server: %s", appSettings.getChatEnableSSL());
 
         nextCommentOffset = 0;
@@ -139,51 +127,31 @@ public class ChatManager implements Runnable {
     @Override
     public void run() {
         isStopping = false;
-        Timber.d("Trying to start chat " + channel.getLogin() + " for user " + user);
-        mEmoteManager.loadCustomEmotes(() -> onUpdate(UpdateType.ON_CUSTOM_EMOTES_FETCHED));
+        Timber.d("Trying to start chat %s", channel.getLogin());
+        mEmoteManager.loadCustomEmotes(() ->
+                Execute.ui(() ->
+                        callback.onCustomEmoteIdFetched(mEmoteManager.getChannelCustomEmotes(), mEmoteManager.getGlobalCustomEmotes())
+                )
+        );
 
         globalBadges = readBadges(TwireApplication.helix.getGlobalChatBadges(null));
         channelBadges = readBadges(TwireApplication.helix.getChannelChatBadges(null, channel.getUserId()));
         readFFZBadges();
 
         if (vodId == null) {
-            connect(twitchChatServer, twitchChatPort);
+            connect();
         } else {
             processVodChat();
         }
     }
 
-    protected void onUpdate(UpdateType type) {
-        Execute.ui(() -> {
-            switch (type) {
-                case ON_CONNECTED:
-                    callback.onConnected();
-                    break;
-                case ON_CONNECTING:
-                    callback.onConnecting();
-                    break;
-                case ON_CONNECTION_FAILED:
-                    callback.onConnectionFailed();
-                    break;
-                case ON_RECONNECTING:
-                    callback.onReconnecting();
-                    break;
-                case ON_ROOMSTATE_CHANGE:
-                    callback.onRoomstateChange(chatIsR9kmode, chatIsSlowmode, chatIsSubsonlymode);
-                    break;
-                case ON_CUSTOM_EMOTES_FETCHED:
-                    callback.onCustomEmoteIdFetched(
-                            mEmoteManager.getChannelCustomEmotes(), mEmoteManager.getGlobalCustomEmotes()
-                    );
-                    break;
-            }
-        });
-    }
-
-    protected void onMessage(ChatMessage message) {
+    private void onMessage(ChatMessage message) {
         Execute.ui(() -> callback.onMessage(message));
     }
 
+    private void onState(WebsocketConnectionState state) {
+        Execute.ui(() -> callback.onConnectionChanged(state));
+    }
 
     /**
      * Connect to twitch with the users twitch name and oauth key.
@@ -193,68 +161,16 @@ public class ChatManager implements Runnable {
      * Inserts emotes, subscriber, turbo and mod drawables into messages. Also Colors the message username by the user specified color.
      * When a message has been parsed it is sent via the callback interface.
      */
-    private void connect(String address, int port) {
-        try {
-            Timber.d("Chat connecting to " + address + ":" + port);
-            Socket socket;
-            // if we don`t use the SSL Port then create a default socket
-            if (port != twitchChatPortsecure) {
-                socket = new Socket(address, port);
-            } else {
-                // if we use the SSL Port then create a SSL Socket
-                // https://stackoverflow.com/questions/13874387/create-app-with-sslsocket-java
-                SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-                socket = factory.createSocket(address, port);
-            }
+    private void connect() {
+        twitchChat = TwitchChatBuilder.builder()
+                .withChatAccount(account)
+                .withBaseUrl(twitchChatServer)
+                .build();
 
-            writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        twitchChat.joinChannel(channel.getLogin());
 
-            writer.write("PASS " + password + "\r\n");
-            writer.write("NICK " + user + "\r\n");
-            writer.write("USER " + user + " \r\n");
-            writer.flush();
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (isStopping) {
-                    leaveChannel();
-                    Timber.d("Stopping chat for %s", channel.getLogin());
-                    break;
-                }
-
-                IRCMessage ircMessage = IRCMessage.parse(line);
-                if (ircMessage != null) {
-                    handleIRC(ircMessage);
-                } else if (line.contains("004 " + user + " :")) {
-                    Timber.d("<%s", line);
-                    Timber.d("Connected >> " + user + " ~ irc.twitch.tv");
-                    onUpdate(UpdateType.ON_CONNECTED);
-                    sendRawMessage("CAP REQ :twitch.tv/tags twitch.tv/commands");
-                    sendRawMessage("JOIN #" + channel.getLogin() + "\r\n");
-                } else if (line.startsWith("PING")) { // Twitch wants to know if we are still here. Send PONG and Server info back
-                    handlePing(line);
-                } else if (line.toLowerCase().contains("disconnected")) {
-                    Timber.e("Disconnected - trying to reconnect");
-                    onUpdate(UpdateType.ON_RECONNECTING);
-                    connect(address, port); //ToDo: Test if chat keeps playing if connection is lost
-                } else if (line.contains("NOTICE * :Error logging in")) {
-                    onUpdate(UpdateType.ON_CONNECTION_FAILED);
-                } else {
-                    Timber.d("<%s", line);
-                }
-            }
-
-            // If we reach this line then the socket closed but chat wasn't stopped, so reconnect.
-            if (!isStopping) connect(address, port);
-        } catch (IOException e) {
-            e.printStackTrace();
-
-            onUpdate(UpdateType.ON_CONNECTION_FAILED);
-            SystemClock.sleep(2500);
-            onUpdate(UpdateType.ON_RECONNECTING);
-            connect(address, port);
-        }
+        EventManager eventManager = twitchChat.getEventManager();
+        eventManager.getEventHandler(SimpleEventHandler.class).registerListener(this);
     }
 
     private static class VODComment {
@@ -269,7 +185,9 @@ public class ChatManager implements Runnable {
 
     private void processVodChat() {
         try {
-            onUpdate(UpdateType.ON_CONNECTED);
+            synchronized (vodLock) {
+                onState(WebsocketConnectionState.CONNECTED);
+            }
 
             // Make sure that current progress has been set.
             synchronized (vodLock) {
@@ -298,12 +216,12 @@ public class ChatManager implements Runnable {
 
                     if (dataObject == null) {
                         reconnecting = true;
-                        onUpdate(UpdateType.ON_RECONNECTING);
+                        onState(WebsocketConnectionState.RECONNECTING);
                         SystemClock.sleep(2500);
                         continue;
                     } else if (reconnecting) {
                         reconnecting = false;
-                        onUpdate(UpdateType.ON_CONNECTED);
+                        onState(WebsocketConnectionState.CONNECTED);
                     }
 
                     if (dataObject.getJSONObject("video").isNull("comments")) {
@@ -417,139 +335,59 @@ public class ChatManager implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
 
-            onUpdate(UpdateType.ON_CONNECTION_FAILED);
+            onState(WebsocketConnectionState.LOST);
             SystemClock.sleep(2500);
-            onUpdate(UpdateType.ON_RECONNECTING);
             processVodChat();
         }
 
         currentProgress = -1;
     }
 
-    public void handleIRC(IRCMessage message) {
-        switch (message.command) {
-            case "PRIVMSG":
-            case "USERNOTICE":
-                handleMessage(message);
-                break;
-            case "USERSTATE":
-                if (userDisplayName == null)
-                    handleUserstate(message);
-                break;
-            case "ROOMSTATE":
-                handleRoomstate(message);
-                break;
-            case "NOTICE":
-                handleNotice(message);
-                break;
-            case "CLEARCHAT":
-                Execute.ui(() -> callback.onClear(message.content));
-                break;
-            case "CLEARMSG":
-                Execute.ui(() -> callback.onClear(message.tags.get("target-msg-id")));
-                break;
-            case "JOIN":
-                break;
-            default:
-                Timber.e("Unhandled command type: %s", message.command);
-                break;
-        }
-    }
-
-    private void handleNotice(IRCMessage message) {
-        String msgId = message.tags.get("msg-id");
-        switch (msgId) {
-            case "subs_on":
-                chatIsSubsonlymode = true;
-                break;
-            case "subs_off":
-                chatIsSubsonlymode = false;
-                break;
-            case "slow_on":
-                chatIsSlowmode = true;
-                break;
-            case "slow_off":
-                chatIsSlowmode = false;
-                break;
-            case "r9k_on":
-                chatIsR9kmode = true;
-                break;
-            case "r9k_off":
-                chatIsR9kmode = false;
-                break;
-        }
-
-        onUpdate(UpdateType.ON_ROOMSTATE_CHANGE);
+    @EventSubscriber
+    private void handleSocketState(ChatConnectionStateEvent state) {
+        onState(state.getState());
     }
 
     /**
-     * Parses the received line and gets the roomstate.
-     * If the roomstate has changed since last check variables are changed and the chatfragment is notified
+     * Handles the room state by notifying the chatfragment
      */
-    private void handleRoomstate(IRCMessage message) {
-        boolean roomstateChanged = false;
-
-        if (message.tags.get("r9k") != null) {
-            chatIsR9kmode = message.tags.get("r9k").equals("1");
-            roomstateChanged = true;
-        }
-        if (message.tags.get("slow") != null) {
-            chatIsSlowmode = !message.tags.get("slow").equals("0");
-            roomstateChanged = true;
-        }
-        if (message.tags.get("subs-only") != null) {
-            chatIsSubsonlymode = message.tags.get("subs-only").equals("1");
-            roomstateChanged = true;
-        }
-
-        // If the one of the roomstate types have changed notify the chatfragment
-        if (roomstateChanged) {
-            onUpdate(UpdateType.ON_ROOMSTATE_CHANGE);
-        }
+    @EventSubscriber
+    private void handleRoomState(ChannelStatesEvent event) {
+        Execute.ui(() -> callback.onRoomStateChange(event));
     }
 
     /**
-     * Parses the received line and saves data such as the users color, if the user is mod, subscriber or turbouser
+     * Handles the event and saves data such as the users color, display name, and emotes
      */
-    private void handleUserstate(IRCMessage message) {
-        userBadges = new HashMap<>();
-        String badgeString = message.tags.get("badges");
-        if (badgeString != null && !badgeString.isEmpty()) {
-            for (String badge : badgeString.split(",")) {
-                String[] parts = badge.split("/");
-                userBadges.put(parts[0], parts[1]);
-            }
-        }
+    @EventSubscriber
+    private void handleUserState(UserStateEvent event) {
+        if (userDisplayName != null)
+            return;
 
-        userColor = message.tags.get("color");
-        userDisplayName = message.tags.get("display-name");
-        callback.onEmoteSetsFetched(message.tags.get("emote-sets").split(","));
+        userBadges = event.getMessageEvent().getBadges();
+        userColor = event.getColor().orElse("");
+        userDisplayName = event.getDisplayName().orElse("");
+        callback.onEmoteSetsFetched(event.getEmoteSets());
     }
 
     /**
      * Parses and builds retrieved messages.
      * Sends build message back via callback.
      */
-    private void handleMessage(IRCMessage message) {
-        Map<String, String> tags = message.tags;
-        Map<String, String> badges = new HashMap<>();
-        String badgesString = tags.get("badges");
-        if (badgesString != null) {
-            for (String badge : badgesString.split(",")) {
-                String[] parts = badge.split("/");
-                badges.put(parts[0], parts[1]);
-            }
-        }
-        String color = tags.get("color");
-        String displayName = tags.get("display-name");
-        String content = message.content;
-        Map<Integer, Emote> emotes = mEmoteManager.findTwitchEmotes(message.tags.get("emotes"), content);
+    @EventSubscriber
+    private void handleMessage(ChannelMessageEvent message) {
+        var messageEvent = message.getMessageEvent();
+        Map<String, String> badges = messageEvent.getBadges();
+        String displayName = message.getUser().getName();
+        String color = messageEvent.getTagValue("color").orElse(randomColor(displayName));
+        String content = message.getMessage();
+        Map<Integer, Emote> emotes = mEmoteManager.findTwitchEmotes(messageEvent.getTagValue("emotes").orElse(""), content);
         emotes.putAll(mEmoteManager.findCustomEmotes(content));
         //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
         ChatMessage chatMessage = new ChatMessage(content, displayName, color, getBadges(badges), emotes, false);
-        chatMessage.setID(tags.get("id"));
-        chatMessage.systemMessage = tags.getOrDefault("system-msg", "");
+        chatMessage.setID(message.getEventId());
+        chatMessage.systemMessage = messageEvent.getTagValue("system-msg").orElse("");
 
         if (content.contains("@" + getUserDisplayName())) {
             Timber.d("Highlighting message with mention: %s", content);
@@ -559,24 +397,19 @@ public class ChatManager implements Runnable {
         onMessage(chatMessage);
     }
 
-    /**
-     * Sends a PONG with the connected twitch server, as specified by Twitch IRC API.
-     */
-    private void handlePing(String line) throws IOException {
-        writer.write("PONG " + line.substring(5) + "\r\n");
-        writer.flush();
+    private String randomColor(String username) {
+        NamedUserChatColor[] colors = NamedUserChatColor.values();
+        return colors[username.hashCode() % colors.length].getHexCode();
     }
 
-    /**
-     * Sends an non manipulated String message to Twitch.
-     */
-    private void sendRawMessage(String message) {
-        try {
-            writer.write(message + " \r\n");
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @EventSubscriber
+    private void handleClearChat(ClearChatEvent event) {
+        callback.onClear(null);
+    }
+
+    @EventSubscriber
+    private void handleClearMessage(DeleteMessageEvent event) {
+        callback.onClear(event.getMsgId());
     }
 
     /**
@@ -584,6 +417,9 @@ public class ChatManager implements Runnable {
      */
     public void stop() {
         isStopping = true;
+
+        if (twitchChat != null)
+            twitchChat.close();
 
         synchronized (vodLock) {
             vodLock.notify();
@@ -596,21 +432,7 @@ public class ChatManager implements Runnable {
      * @param message The message that will be sent
      */
     public void sendMessage(final String message) {
-        try {
-            if (writer != null) {
-                writer.write("PRIVMSG #" + channel.getLogin() + " :" + message + "\r\n");
-                writer.flush();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Leaves the current hashChannel
-     */
-    private void leaveChannel() {
-        sendRawMessage("PART #" + channel.getLogin());
+        twitchChat.sendMessage(channel.getLogin(), message);
     }
 
     private Map<String, Map<String, Badge>> readBadges(HystrixCommand<ChatBadgeSetList> request) {
@@ -696,38 +518,18 @@ public class ChatManager implements Runnable {
         return badgeObjects;
     }
 
-    private int getRandomNumber(int min, int max) {
-        return new Random().nextInt(max - min + 1) + min;
-    }
-
     public interface ChatCallback {
         void onMessage(ChatMessage message);
 
         void onClear(String target);
 
-        void onConnecting();
+        void onConnectionChanged(WebsocketConnectionState state);
 
-        void onReconnecting();
-
-        void onConnected();
-
-        void onConnectionFailed();
-
-        void onRoomstateChange(boolean isR9K, boolean isSlow, boolean isSubsOnly);
+        void onRoomStateChange(ChannelStatesEvent state);
 
         void onCustomEmoteIdFetched(List<Emote> channel, List<Emote> global);
 
-        void onEmoteSetsFetched(String[] emoteSets);
-    }
-
-    public enum UpdateType {
-        ON_MESSAGE,
-        ON_CONNECTING,
-        ON_RECONNECTING,
-        ON_CONNECTED,
-        ON_CONNECTION_FAILED,
-        ON_ROOMSTATE_CHANGE,
-        ON_CUSTOM_EMOTES_FETCHED
+        void onEmoteSetsFetched(List<String> emoteSets);
     }
 }
 

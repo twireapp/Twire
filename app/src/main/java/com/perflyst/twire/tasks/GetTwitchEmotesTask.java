@@ -16,17 +16,17 @@ import timber.log.Timber;
  */
 public class GetTwitchEmotesTask implements Runnable {
     private final Delegate delegate;
-    private final String[] emoteSets;
+    private final List<String> emoteSets;
     private final List<Emote> twitchEmotes = new ArrayList<>();
     private final List<Emote> subscriberEmotes = new ArrayList<>();
 
-    public GetTwitchEmotesTask(String[] emoteSets, Delegate delegate) {
+    public GetTwitchEmotesTask(List<String> emoteSets, Delegate delegate) {
         this.emoteSets = emoteSets;
         this.delegate = delegate;
     }
 
     public void run() {
-        var emotes = TwireApplication.helix.getEmoteSets(null, List.of(emoteSets)).execute().getEmotes();
+        var emotes = TwireApplication.helix.getEmoteSets(null, emoteSets).execute().getEmotes();
 
         for (var emoteData : emotes) {
             Emote emote = Emote.Twitch(emoteData.getName(), emoteData.getId());
