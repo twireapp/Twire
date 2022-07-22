@@ -660,7 +660,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             setMentionSuggestions(new ArrayList<>());
         });
         mSendText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
-            if (actionId == EditorInfo.IME_ACTION_SEND) {
+            // actionId will be EditorInfo.IME_NULL when pressing the enter key.
+            if (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_NULL) {
                 sendMessage();
                 return true;
             }
