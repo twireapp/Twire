@@ -144,7 +144,7 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
             return;
         }
 
-        if (getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
+        if (mStreamFragment.getPlayWhenReady() && getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
             enterPictureInPictureMode();
         }
     }

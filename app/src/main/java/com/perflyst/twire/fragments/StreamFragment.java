@@ -465,6 +465,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
     }
 
+    public boolean getPlayWhenReady() {
+        return player.getPlayWhenReady();
+    }
+
     /* Player.Listener implementation */
     @Override
     public void onEvents(@NonNull Player player, Player.Events events) {
@@ -492,29 +496,13 @@ public class StreamFragment extends Fragment implements Player.Listener {
         } else {
             showPlayIcon();
         }
+
+        updatePIPParameters();
     }
 
     @Override
     public void onSurfaceSizeChanged(int width, int height) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
-
-        Rect videoRect = new Rect();
-        mVideoView.getVideoSurfaceView().getGlobalVisibleRect(videoRect);
-
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            videoRect.left += totalVerticalInset;
-            videoRect.right += totalVerticalInset;
-        }
-
-        PictureInPictureParams.Builder builder = new PictureInPictureParams.Builder()
-                .setAspectRatio(new Rational(16, 9))
-                .setSourceRectHint(videoRect);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            builder.setAutoEnterEnabled(true);
-        }
-
-        mActivity.setPictureInPictureParams(builder.build());
+        updatePIPParameters();
     }
 
     @Override
@@ -534,6 +522,28 @@ public class StreamFragment extends Fragment implements Player.Listener {
     @Override
     public void onIsPlayingChanged(boolean isPlaying) {
         if (isPlaying) vodRunnable.run();
+    }
+
+    public void updatePIPParameters() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
+
+        Rect videoRect = new Rect();
+        mVideoView.getVideoSurfaceView().getGlobalVisibleRect(videoRect);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            videoRect.left += totalVerticalInset;
+            videoRect.right += totalVerticalInset;
+        }
+
+        PictureInPictureParams.Builder builder = new PictureInPictureParams.Builder()
+                .setAspectRatio(new Rational(16, 9))
+                .setSourceRectHint(videoRect);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            builder.setAutoEnterEnabled(player.getPlayWhenReady());
+        }
+
+        mActivity.setPictureInPictureParams(builder.build());
     }
 
     public void backPressed() {
