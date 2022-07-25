@@ -784,7 +784,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         optionsMenuItem = menu.findItem(R.id.menu_item_options);
-        optionsMenuItem.setVisible(false);
+        optionsMenuItem.setVisible(chatOnlyViewVisible);
         optionsMenuItem.setOnMenuItemClickListener(menuItem -> {
             if (mQualityButton != null) {
                 mQualityButton.performClick();
@@ -1477,7 +1477,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         mChatOnlySelector.setOnClickListener(view -> {
             mQualityBottomSheet.dismiss();
-            chatOnlyClicked();
+            setChatOnlyView(!chatOnlyViewVisible);
         });
     }
 
@@ -1551,67 +1551,62 @@ public class StreamFragment extends Fragment implements Player.Listener {
         disableAudioOnlyView();
     }
 
-    private void chatOnlyClicked() {
-        mChatOnlySelector.setChecked(!mChatOnlySelector.isChecked());
-        if (mChatOnlySelector.isChecked()) {
-            initChatOnlyView();
-        } else {
-            disableChatOnlyView();
-        }
+    private void setChatOnlyView(boolean enabled) {
+        if (chatOnlyViewVisible == enabled) return;
+
+        chatOnlyViewVisible = enabled;
+
+        mChatOnlySelector.setChecked(chatOnlyViewVisible);
+        if (chatOnlyViewVisible) initChatOnlyView();
+        else disableChatOnlyView();
     }
 
     private void initChatOnlyView() {
-        if (!chatOnlyViewVisible) {
-            chatOnlyViewVisible = true;
-            if (isLandscape) {
-                toggleFullscreen();
-            }
-
-            requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-            videoHeightBeforeChatOnly = mVideoWrapper.getHeight();
-            ResizeHeightAnimation heightAnimation = new ResizeHeightAnimation(mVideoWrapper, (int) getResources().getDimension(R.dimen.main_toolbar_height));
-            heightAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-            heightAnimation.setDuration(240);
-            mVideoWrapper.startAnimation(heightAnimation);
-
-            mPlayPauseWrapper.setVisibility(View.GONE);
-            mControlToolbar.setVisibility(View.GONE);
-            mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, requireContext()));
-
-            releasePlayer();
-            optionsMenuItem.setVisible(true);
-
-            showVideoInterface();
-            updateSelectedQuality(null);
-            hideQualities();
+        if (isLandscape) {
+            toggleFullscreen();
         }
+
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        videoHeightBeforeChatOnly = mVideoWrapper.getHeight();
+        ResizeHeightAnimation heightAnimation = new ResizeHeightAnimation(mVideoWrapper, (int) getResources().getDimension(R.dimen.main_toolbar_height));
+        heightAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        heightAnimation.setDuration(240);
+        mVideoWrapper.startAnimation(heightAnimation);
+
+        mPlayPauseWrapper.setVisibility(View.GONE);
+        mControlToolbar.setVisibility(View.GONE);
+        mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, requireContext()));
+
+        releasePlayer();
+        if (optionsMenuItem != null) optionsMenuItem.setVisible(true);
+
+        showVideoInterface();
+        updateSelectedQuality(null);
+        hideQualities();
     }
 
     private void disableChatOnlyView() {
-        if (chatOnlyViewVisible) {
-            chatOnlyViewVisible = false;
-            requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
-            ResizeHeightAnimation heightAnimation = new ResizeHeightAnimation(mVideoWrapper, videoHeightBeforeChatOnly);
-            heightAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-            heightAnimation.setDuration(240);
-            heightAnimation.setFillAfter(false);
-            mVideoWrapper.startAnimation(heightAnimation);
+        ResizeHeightAnimation heightAnimation = new ResizeHeightAnimation(mVideoWrapper, videoHeightBeforeChatOnly);
+        heightAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+        heightAnimation.setDuration(240);
+        heightAnimation.setFillAfter(false);
+        mVideoWrapper.startAnimation(heightAnimation);
 
-            mControlToolbar.setVisibility(View.VISIBLE);
-            mPlayPauseWrapper.setVisibility(View.VISIBLE);
-            mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.streamToolbarColor, R.color.black_transparent, requireActivity()));
+        mControlToolbar.setVisibility(View.VISIBLE);
+        mPlayPauseWrapper.setVisibility(View.VISIBLE);
+        mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.streamToolbarColor, R.color.black_transparent, requireActivity()));
 
-            if (!castingViewVisible) {
-                initializePlayer();
-                startStreamWithQuality(settings.getPrefStreamQuality());
-            }
-
-            optionsMenuItem.setVisible(false);
-
-            showVideoInterface();
+        if (!castingViewVisible) {
+            initializePlayer();
+            startStreamWithQuality(settings.getPrefStreamQuality());
         }
+
+        optionsMenuItem.setVisible(false);
+
+        showVideoInterface();
     }
 
     @Override
