@@ -625,7 +625,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         Log.d(LOG_TAG, "Stream Fragment Stopped");
         super.onStop();
 
-        if (!castingViewVisible && !audioViewVisible) {
+        if (!castingViewVisible && !audioViewVisible && player != null) {
             player.pause();
         }
 
