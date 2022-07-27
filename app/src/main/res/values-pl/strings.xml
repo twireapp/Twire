@@ -41,8 +41,8 @@
     <string name="gen_language_filter">Filtruj najpopularniejsze transmisje według języka</string>
     <string name="gen_tips_have_been_reset">Zresetowano wskazówki z tutoriala</string>
     <string name="gen_reset_tips">Zresetuj wskazówki z tutoriala</string>
-    <string name="gen_start_page">Strona Startowa</string>
-    <string name="gen_twitch_name">Nazwa użytkownika</string>
+    <string name="gen_start_page">Strona startowa</string>
+    <string name="gen_twitch_name">Nazwa użytkownika Twitcha</string>
     <string name="gen_dialog_login_or_out_logout_action">WYLOGUJ SIĘ</string>
     <string name="gen_dialog_login_or_out_login_action">ZALOGUJ SIĘ</string>
     <string name="gen_dialog_login_or_out_content">Chcesz zalogować się na nowe konto lub wylogować się z konta %s\?</string>
@@ -170,9 +170,9 @@
     <string name="player_show_runtime">Pokazuj długość trwania transmisji</string>
     <string name="preview_stream_online_since">00:30:00</string>
     <string name="player_type">Typ odtwarzacza</string>
-    <string name="settings_general_image_proxy">Używaj Proxy dla obrazów</string>
+    <string name="settings_general_image_proxy">Używaj proxy dla obrazów</string>
     <string name="settings_general_image_proxy_url_button">Zapisz</string>
-    <string name="chat_enable_account_connect">Połącz się używając Konta</string>
+    <string name="chat_enable_account_connect">Połącz się używając konta</string>
     <string name="settings_general_image_proxy_url_example">Przykładowe Proxy: https://external-content.duckduckgo.com/iu/\?u=</string>
     <string name="menu_share">Udostępnij</string>
     <string name="chat_enable_emote_bttv">Włącz Emotki BetterTTV (BTTV)</string>
@@ -194,4 +194,9 @@
     <string name="gen_toast_import_database">Zaimportowano %1$x Obserwacji</string>
     <string name="mute">Wycisz</string>
     <string name="retry">Ponów</string>
+    <string name="gen_local_follows_summary">Użytkownicy obserwowani w Twire są zapisani lokalnie i nie są wysyłani do Twitcha.</string>
+    <string name="gen_export_summary">Eksport zawiera obserwacje lokalne i z Twitcha.</string>
+    <string name="gen_import_summary">To nie doda obserwacji na Twitchu.</string>
+    <string name="gen_local_follows_header">Lokalne obserwacje</string>
+    <string name="gen_wipe_summary">To nie wyczyści obserwacji na Twitchu.</string>
 </resources>
