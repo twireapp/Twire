@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="gen_start_page">起始页面</string>
-    <string name="gen_twitch_name">Twitch用户名</string>
+    <string name="gen_twitch_name">Twitch 用户名</string>
     <string name="gen_dialog_login_or_out_logout_action">登出</string>
     <string name="gen_dialog_login_or_out_content">您想登录其他账号或登出 %s 吗？</string>
     <string name="gen_dialog_login_or_out_login_action">登录</string>
