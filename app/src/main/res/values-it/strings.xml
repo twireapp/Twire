@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="done">FATTO</string>
+    <string name="done">FINITO</string>
     <string name="start">AVVIA</string>
     <string name="stop">FERMA</string>
     <string name="cancel">ANNULLA</string>
@@ -9,7 +9,7 @@
     <string name="disabled">Disabilitato</string>
     <string name="minutes_short">m</string>
     <string name="hours_short">h</string>
-    <string name="action_settings">Impoostazioni</string>
+    <string name="action_settings">Impostazioni</string>
     <string name="settings_activity_title">Impostazioni</string>
     <string name="drawer_open">Aperto</string>
     <string name="drawer_close">Chiuso</string>
@@ -26,7 +26,7 @@
     <!-- ChannelActivity -->
     <string name="streamerInfo_desc_tab">Descrizione</string>
     <string name="streamerInfo_broadcasts_tab">Trasmissioni</string>
-    <string name="streamerInfo_highlights_tab">In Evidenza</string>
+    <string name="streamerInfo_highlights_tab">In evidenza</string>
     <string name="streamerInfo_description">Nessuna descrizione trovata</string>
     <!-- UniformMainActivity -->
     <!-- LiveStreamActivity -->
@@ -158,7 +158,7 @@
     <string name="streamers_tab">STREAMER</string>
     <string name="games_tab">GIOCHI</string>
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_featured_title">Stream in Primo Piano</string>
+    <string name="navigation_drawer_featured_title">Stream in primo piano</string>
     <string name="navigation_drawer_my_streams_title">I miei stream</string>
     <string name="navigation_drawer_top_streams_title">Migliori stream</string>
     <string name="navigation_drawer_follows_title">Streamer seguiti</string>
@@ -206,30 +206,36 @@
     <string name="playback_speed">%.2f</string>
     <string name="playback_speed_display">×%.2f</string>
     <string name="menu_speed">Velocità di Riproduzione</string>
-    <string name="player_type">Tipo di Lettore Stream</string>
-    <string name="player_show_runtime">Mostra Tempo di Esecuzione dello Stream</string>
+    <string name="player_type">Tipo di lettore stream</string>
+    <string name="player_show_runtime">Mostra tempo di esecuzione dello stream</string>
     <string name="preview_stream_online_since">00:30:00</string>
     <string name="menu_share">Condividi</string>
     <string name="settings_general_image_proxy_url_example">Proxy Esempio: https://external-content.duckduckgo.com/iu/\?u=</string>
-    <string name="settings_general_image_proxy">Usa Proxy per le Immagini</string>
+    <string name="settings_general_image_proxy">Usa proxy per le immagini</string>
     <string name="settings_general_image_proxy_url_button">Salva</string>
     <string name="chat_enable_account_connect">Connettiti usando il tuo account</string>
     <string name="chat_enable_emote_bttv">Attiva Emote BetterTTV (BTTV)</string>
     <string name="chat_enable_emote_ffz">Attiva Emote FrankerFaceZ (FFZ)</string>
     <string name="chat_enable_emote_seventv">Attiva Emote 7TV</string>
     <string name="gen_dialog_wipe_follows_action">Elimina</string>
-    <string name="gen_dialog_wipe_follows_content">Eliminare tutti i canali seguiti\?</string>
+    <string name="gen_dialog_wipe_follows_content">Eliminare tutti gli utenti seguiti\?</string>
     <string name="gen_dialog_export_follows_content">Esportare tutti i canali seguiti\?</string>
     <string name="gen_dialog_export_follows_action">Esporta</string>
     <string name="gen_twitch_follows">Elimina tutti i canali seguiti</string>
-    <string name="gen_export_database">Esporta tutti i canali seguiti</string>
-    <string name="gen_import_database">Importa i canali seguiti</string>
-    <string name="gen_toast_wipe_database">Canali seguiti eliminati</string>
-    <string name="gen_toast_export_database">Esportati %1$x canali seguiti</string>
-    <string name="gen_toast_import_database">Importati %1$x canali seguiti</string>
-    <string name="gen_dialog_import_follows_content">Importare tutti i canali seguiti\?</string>
+    <string name="gen_export_database">Esporta tutti gli utenti seguiti</string>
+    <string name="gen_import_database">Importa gli utenti seguiti</string>
+    <string name="gen_toast_wipe_database">Utenti seguiti eliminati</string>
+    <string name="gen_toast_export_database">Esportati %1$x utenti seguiti</string>
+    <string name="gen_toast_import_database">Importati %1$x utenti seguiti</string>
+    <string name="gen_dialog_import_follows_content">Importare tutti gli utenti seguiti\?</string>
     <string name="skip_silence">Salta silenzio</string>
     <string name="menu_playback">Impostazioni riproduzione</string>
     <string name="gen_dialog_import_follows_action">Importa</string>
     <string name="mute">Silenzia</string>
+    <string name="retry">Riprova</string>
+    <string name="gen_local_follows_header">Segui localmente</string>
+    <string name="gen_local_follows_summary">Gli utenti seguiti in Twire vengono memorizzati localmente e non inviati a Twitch.</string>
+    <string name="gen_wipe_summary">Questo non cancellerà gli utenti seguiti su Twitch.</string>
+    <string name="gen_export_summary">Le esportazioni includono sia gli utenti seguiti localmente sia quelli di Twitch.</string>
+    <string name="gen_import_summary">Questo non aggiungerà utenti seguiti a Twitch.</string>
 </resources>
