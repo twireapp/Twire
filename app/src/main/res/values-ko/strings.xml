@@ -197,4 +197,9 @@
     <string name="confirm_text_line_two">Twitch 팔로우 목록을 받아야 해요.</string>
     <string name="settings_general_name">일반</string>
     <string name="settings_general_name_summary">Twitch 계정, 시작 페이지</string>
+    <string name="gen_local_follows_header">로컬 팔로우</string>
+    <string name="gen_local_follows_summary">Twire에서 팔로우한 사용자가 여기에만 저장되고 Twitch에 반영되지 않습니다.</string>
+    <string name="gen_wipe_summary">Twitch에서 한 팔로우를 모두 지우지는 않습니다.</string>
+    <string name="gen_export_summary">로컬 및 Twitch 팔로우를 포함해 내보냅니다.</string>
+    <string name="gen_import_summary">Twitch에 팔로우를 반영하지는 않습니다.</string>
 </resources>
