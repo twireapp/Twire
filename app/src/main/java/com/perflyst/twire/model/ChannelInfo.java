@@ -219,7 +219,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
         TwireApplication.backgroundPoster.post(() -> {
             ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(getUserId(), context);
 
-            if (logoURL != mChannelInfo.getLogoURL()) {
+            if (mChannelInfo != null && logoURL != mChannelInfo.getLogoURL()) {
                 logoURL = mChannelInfo.getLogoURL();
                 callback.run();
 
