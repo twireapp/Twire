@@ -1,1 +1,1 @@
-Supports VODs with chat replay, custom emotes (BTTV, FFZ and 7TV) and Picture in Picture mode.
+Supports VODs with chat replay, custom emotes (BTTV, FFZ and 7TV) and picture-in-picture mode.
