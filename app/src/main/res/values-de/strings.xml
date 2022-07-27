@@ -2,13 +2,13 @@
 <resources>
     <string name="done">FERTIG</string>
     <string name="start">START</string>
-    <string name="stop">STOP</string>
+    <string name="stop">STOPP</string>
     <string name="cancel">ABBRECHEN</string>
     <string name="resume">FORTSETZEN</string>
     <string name="enabled">Aktiviert</string>
     <string name="disabled">Deaktiviert</string>
-    <string name="minutes_short">m</string>
-    <string name="hours_short">h</string>
+    <string name="minutes_short">Min.</string>
+    <string name="hours_short">Std.</string>
     <string name="action_settings">Einstellungen</string>
     <string name="settings_activity_title">Einstellungen</string>
     <string name="drawer_open">Öffnen</string>
@@ -26,7 +26,7 @@
     <!-- ChannelActivity -->
     <string name="streamerInfo_desc_tab">Beschreibung</string>
     <string name="streamerInfo_broadcasts_tab">Sendungen</string>
-    <string name="streamerInfo_highlights_tab">Highlights</string>
+    <string name="streamerInfo_highlights_tab">Höhepunkte</string>
     <string name="streamerInfo_description">Keine Beschreibung gefunden</string>
     <!-- UniformMainActivity -->
     <!-- LiveStreamActivity -->
@@ -41,8 +41,8 @@
     <string name="quality_auto">Auto</string>
     <!-- StreamFragment -->
     <string name="stream_sleep_timer_stopped">Sleep Timer gestoppt</string>
-    <string name="stream_sleep_timer_started">Sleep Timer wurde gestartet. Der Stream wird in %1$d Stunden und %2$d Minuten angehalten.</string>
-    <string name="stream_sleep_timer_started_minutes_only">Sleep Timer wurde gestartet. Der Stream wird in %d Minuten angehalten.</string>
+    <string name="stream_sleep_timer_started">Schaltuhr wurde gestartet. Der Stream wird in %1$d Stunden und %2$d Minuten angehalten.</string>
+    <string name="stream_sleep_timer_started_minutes_only">Schaltuhr wurde gestartet. Der Stream wird in %d Minuten angehalten.</string>
     <string name="stream_sleep_timer_title">Sleep Timer</string>
     <string name="stream_audio_only_active">Nur Audio wiedergeben</string>
     <!-- VOD activity -->
@@ -170,7 +170,7 @@
     <string name="navigation_drawer_not_logged_in">Nicht eingeloggt</string>
     <!-- Menu Actions -->
     <!-- Theme Dialog -->
-    <string name="theme_dialog_title">Designs</string>
+    <string name="theme_dialog_title">Farbschema</string>
     <string name="blue_theme_name">Blau</string>
     <string name="purple_theme_name">Violett</string>
     <string name="black_theme_name">Schwarz</string>
@@ -193,7 +193,7 @@
     <string name="router_unknown_error">Ein unbekannter Fehler ist aufgetreten.</string>
     <string name="router_activity_label">Mit Twire abspielen</string>
     <string name="gen_open_changelog">Änderungsprotokoll anzeigen</string>
-    <string name="gen_language_filter">Top-Streams nach Sprache filtern</string>
+    <string name="gen_language_filter">Top Streams nach Sprache filtern</string>
     <string name="stream_forward">10 Sekunden vorwärts</string>
     <string name="stream_backward">10 Sekunden rückwärts</string>
     <string name="stream_show_chat">Chat anzeigen</string>
