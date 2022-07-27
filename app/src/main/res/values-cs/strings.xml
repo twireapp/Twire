@@ -170,7 +170,7 @@
     <string name="gen_export_database">Exportovat všechny sledované</string>
     <string name="gen_toast_wipe_database">Sledující byli smazáni</string>
     <string name="gen_toast_export_database">Exportováno %1$x sledovaných</string>
-    <string name="chat_enable_account_connect">Připojování s vaším účtem</string>
+    <string name="chat_enable_account_connect">Připojit se s vaším účtem</string>
     <string name="player_show_runtime">Ukázat dobu streamu</string>
     <string name="player_type">Typ přehrávače</string>
     <string name="menu_playback">Nastavení přehrávání</string>
@@ -191,4 +191,11 @@
     <string name="settings_general_image_proxy_url_example">Příklad proxy: https://external-content.duckduckgo.com/iu/\?u=</string>
     <string name="chat_enable_ssl">Použít SSL pro připojení</string>
     <string name="menu_share">Sdílet</string>
+    <string name="retry">Zkusit znovu</string>
+    <string name="mute">Ztlumit</string>
+    <string name="gen_local_follows_header">Lokální sledování</string>
+    <string name="gen_local_follows_summary">Uživatelé sledovaní ve Twire jsou ukládáni lokálně a nejsou odesíláni na Twitch.</string>
+    <string name="gen_wipe_summary">Toto nevymaže sledování na Twitchi.</string>
+    <string name="gen_export_summary">Exporty zahrnují lokální a Twitch sledování.</string>
+    <string name="gen_import_summary">Toto nepřidá sledování do Twitche.</string>
 </resources>
