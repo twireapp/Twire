@@ -121,6 +121,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class StreamFragment extends Fragment implements Player.Listener {
+    private static final int SHOW_TIMEOUT = 3000;
     private static int totalVerticalInset;
     private static boolean pipDisabling; // Tracks the PIP disabling animation.
     private final String LOG_TAG = getClass().getSimpleName();
@@ -170,6 +171,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private MenuItem optionsMenuItem;
     private LinearLayout mQualityWrapper;
     private View mOverlay;
+    private StyledPlayerControlView controlView;
 
     private final Runnable vodRunnable = new Runnable() {
         @Override
@@ -314,12 +316,12 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         initializePlayer();
 
-        StyledPlayerControlView controlView = mVideoView.findViewById(R.id.exo_controller);
+        controlView = mVideoView.findViewById(R.id.exo_controller);
 
         controlView.setShowFastForwardButton(vodId != null);
         controlView.setShowRewindButton(vodId != null);
 
-        controlView.setShowTimeoutMs(3000);
+        controlView.setShowTimeoutMs(SHOW_TIMEOUT);
         controlView.setAnimationEnabled(false);
 
         controlView.addVisibilityListener(visibility -> {
@@ -1559,6 +1561,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mChatOnlySelector.setChecked(chatOnlyViewVisible);
         if (chatOnlyViewVisible) initChatOnlyView();
         else disableChatOnlyView();
+
+        controlView.setShowTimeoutMs(chatOnlyViewVisible ? -1 : SHOW_TIMEOUT);
+        controlView.show();
     }
 
     private void initChatOnlyView() {
@@ -1581,7 +1586,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         releasePlayer();
         if (optionsMenuItem != null) optionsMenuItem.setVisible(true);
 
-        showVideoInterface();
         updateSelectedQuality(null);
         hideQualities();
     }
@@ -1605,8 +1609,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
 
         optionsMenuItem.setVisible(false);
-
-        showVideoInterface();
     }
 
     @Override
