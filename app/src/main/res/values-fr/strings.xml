@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="done">APPLIQUER</string>
+    <string name="done">TERMINÉ</string>
     <string name="start">DÉMARRER</string>
     <string name="stop">ARRÊTER</string>
     <string name="cancel">ANNULER</string>
     <string name="resume">RELANCER</string>
-    <string name="enabled">Activer</string>
-    <string name="disabled">Désactiver</string>
-    <string name="minutes_short">m</string>
+    <string name="enabled">Activé</string>
+    <string name="disabled">Désactivé</string>
+    <string name="minutes_short">min</string>
     <string name="hours_short">h</string>
     <string name="action_settings">Paramètres</string>
     <string name="settings_activity_title">Paramètres</string>
@@ -121,7 +121,7 @@
     <string name="gen_dialog_login_or_out_content">Voulez-vous vous connecter à un nouveau compte ou vous déconnecter en tant que %s ?</string>
     <string name="gen_dialog_login_or_out_login_action">SE CONNECTER</string>
     <string name="gen_dialog_login_or_out_logout_action">SE DÉCONNECTER</string>
-    <string name="gen_twitch_name">Identifiant Twitch</string>
+    <string name="gen_twitch_name">Nom d\'utilisateur Twitch</string>
     <string name="gen_start_page">Page d\'accueil</string>
     <string name="gen_reset_tips">Redémarrer le didacticiel</string>
     <string name="gen_tips_have_been_reset">Le didacticiel a été réinitialisé</string>
@@ -159,11 +159,11 @@
     <string name="streamers_tab">STREAMEURS</string>
     <string name="games_tab">JEUX</string>
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_featured_title">Streams Vedettes</string>
-    <string name="navigation_drawer_my_streams_title">Mes Streams</string>
-    <string name="navigation_drawer_top_streams_title">Top Streams</string>
-    <string name="navigation_drawer_follows_title">Streameurs Suivis</string>
-    <string name="navigation_drawer_top_games_title">Top Jeux</string>
+    <string name="navigation_drawer_featured_title">Streams vedettes</string>
+    <string name="navigation_drawer_my_streams_title">Mes streams</string>
+    <string name="navigation_drawer_top_streams_title">Meilleurs streams</string>
+    <string name="navigation_drawer_follows_title">Streameurs suivis</string>
+    <string name="navigation_drawer_top_games_title">Meilleurs jeux</string>
     <string name="navigation_drawer_search_title">Rechercher</string>
     <string name="navigation_drawer_settings_title">Paramètres</string>
     <string name="navigation_drawer_logged_in_textview">Connecté(e) en tant que %s</string>
@@ -231,4 +231,11 @@
     <string name="gen_toast_wipe_database">Streameurs suivis effacés</string>
     <string name="gen_toast_export_database">%1$x streameurs exportés</string>
     <string name="gen_toast_import_database">%1$x streameurs suivis importés</string>
+    <string name="retry">Réessayer</string>
+    <string name="mute">Muet</string>
+    <string name="gen_export_summary">Les exports contiennent les suivis locaux et sur Twitch.</string>
+    <string name="gen_local_follows_summary">Les utilisateurs suivis sur Twire sont enregistrés localement et ne seront pas envoyés sur Twitch.</string>
+    <string name="gen_local_follows_header">Suivis locaux</string>
+    <string name="gen_import_summary">Cela n\'ajoutera pas de suivi sur Twitch.</string>
+    <string name="gen_wipe_summary">Cela ne supprimera pas les suivis sur Twitch.</string>
 </resources>
