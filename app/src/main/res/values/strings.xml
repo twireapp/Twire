@@ -313,6 +313,17 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.10.4</item>
+        <item>F Fix crash on devices not running Android Oreo.</item>
+        <item>C Don\'t go into PIP mode when paused.</item>
+        <item>C Don\'t keep screen on when there is nothing to play.</item>
+        <item>C Remove login requirement for startup pages.</item>
+        <item>F Fix chat only mode crashing.</item>
+        <item>F Fix crash when a followed streamer couldn\'t be found.</item>
+        <item>F Fix chat width being displayed incorrectly in settings.</item>
+        <item>F Fix exception when fetching follows.</item>
+        <item>C Update Korean, French, Italian, Polish, German, Chinese (Simplified), Czech, and Norwegian Bokmål translations.</item>
+
         <item>V 2.10.3</item>
         <item>A Add low latency support.</item>
         <item>C Make landscape chat visible by default.</item>
