@@ -1,0 +1,1 @@
+Støtter video på forespørsel med sludringsopptak, egendefinerte smilefjes (BTTV, FFZ og 7TV) og bilde-i-bilde -modus.
