@@ -51,6 +51,7 @@ import android.widget.Toast;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -394,6 +395,22 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
 
         return mRootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean("chatOnlyViewVisible", chatOnlyViewVisible);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            setChatOnlyView(savedInstanceState.getBoolean("chatOnlyViewVisible", false));
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
