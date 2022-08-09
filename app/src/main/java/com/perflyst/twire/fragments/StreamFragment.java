@@ -540,7 +540,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     @Override
     public void onIsPlayingChanged(boolean isPlaying) {
-        if (isPlaying) vodRunnable.run();
+        if (vodId != null && isPlaying) vodRunnable.run();
     }
 
     public void updatePIPParameters() {
