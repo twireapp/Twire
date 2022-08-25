@@ -528,9 +528,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
     public void onPositionDiscontinuity(@NonNull Player.PositionInfo oldPosition, @NonNull Player.PositionInfo newPosition, int reason) {
         if (vodId == null || reason != Player.DISCONTINUITY_REASON_SEEK) return;
 
-        boolean seekBackwards = oldPosition.positionMs > newPosition.positionMs;
-        ChatManager.updateVodProgress(newPosition.positionMs, seekBackwards);
-        if (seekBackwards) streamFragmentCallback.onSeek();
+        ChatManager.updateVodProgress(newPosition.positionMs, true);
+        if (oldPosition.positionMs > newPosition.positionMs) streamFragmentCallback.onSeek();
     }
 
     @Override
