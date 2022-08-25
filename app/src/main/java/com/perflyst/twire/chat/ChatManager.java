@@ -317,21 +317,19 @@ public class ChatManager implements Runnable {
                             break;
                         }
 
-                        if (commentsObject.has("_next"))
+                        if (commentsObject.has("_next")) {
                             cursor = commentsObject.getString("_next");
+                        } else if (downloadedComments.isEmpty()) {
+                            // We've reached the end of the comments, nothing to do until the user seeks.
+                            while (!seek) {
+                                vodLock.wait();
+                            }
+                        }
 
                         comment = downloadedComments.peek();
                     }
 
-                    // If there are there's no comment, we've reached the end of the comments.
-                    if (comment == null) {
-                        // We've got nothing to do until the user seeks.
-                        while (!seek) {
-                            vodLock.wait();
-                        }
-                    }
-
-                    if (seek) {
+                    if (seek || comment == null) {
                         continue;
                     }
 
