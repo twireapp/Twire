@@ -495,7 +495,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
     /* Player.Listener implementation */
     @Override
     public void onEvents(@NonNull Player player, Player.Events events) {
-        if (!events.containsAny(EVENT_PLAY_WHEN_READY_CHANGED, EVENT_PLAYBACK_STATE_CHANGED)) return;
+        // Don't change the "keep screen on" state when chat only is enabled.
+        if (!events.containsAny(EVENT_PLAY_WHEN_READY_CHANGED, EVENT_PLAYBACK_STATE_CHANGED) || chatOnlyViewVisible) return;
 
         int playbackState = player.getPlaybackState();
         requireView().setKeepScreenOn(player.getPlayWhenReady() && (playbackState == STATE_READY || playbackState == STATE_BUFFERING));
@@ -1584,6 +1585,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         controlView.setShowTimeoutMs(chatOnlyViewVisible ? -1 : SHOW_TIMEOUT);
         controlView.show();
+
+        requireView().setKeepScreenOn(chatOnlyViewVisible);
     }
 
     private void initChatOnlyView() {
