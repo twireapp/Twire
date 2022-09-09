@@ -417,6 +417,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private DisplayCutout getDisplayCutout() {
         Activity activity = getActivity();
         if (activity != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                return activity.getWindowManager().getDefaultDisplay().getCutout();
+            }
+
             WindowInsets windowInsets = activity.getWindow().getDecorView().getRootWindowInsets();
             if (windowInsets != null) {
                 return windowInsets.getDisplayCutout();
