@@ -60,5 +60,8 @@ jobs:
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 29
+          target: aosp_atd
+          api-level: 30
+          arch: x86
+          channel: canary
           script: ./gradlew connectedCheck
