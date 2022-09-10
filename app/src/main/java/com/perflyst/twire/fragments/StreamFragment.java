@@ -58,7 +58,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
@@ -1025,11 +1024,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
 
         Window window = getActivity().getWindow();
-        View decorView = window.getDecorView();
-        WindowInsetsControllerCompat windowInsetsController = ViewCompat.getWindowInsetsController(decorView);
-        if (windowInsetsController == null) {
-            return;
-        }
+        WindowInsetsControllerCompat windowInsetsController = WindowCompat.getInsetsController(window, rootView);
 
         WindowCompat.setDecorFitsSystemWindows(window, !isLandscape);
 
