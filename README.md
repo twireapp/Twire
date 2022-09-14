@@ -1,13 +1,12 @@
-# Twire
+<h1><img style="vertical-align: bottom; height: 1.25em;" src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png"> Twire</h1>
+
 [![Latest GitHub release](https://img.shields.io/github/v/release/twireapp/Twire)](https://github.com/twireapp/Twire/releases/)
 [![Translation status](https://hosted.weblate.org/widgets/twire/-/svg-badge.svg)](https://hosted.weblate.org/engage/twire/)
 
-![Logo](https://raw.githubusercontent.com/twireapp/Twire/master/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png)
-
-
-This is a fork of the [Pocket Plays for Twitch](https://github.com/SebastianRask/Pocket-Plays-for-Twitch) Android application. More information [in this issue](https://github.com/SebastianRask/Pocket-Plays-for-Twitch/issues/1).
 
 Twire is an open source, ad-free Twitch browser and stream player for Android. Supports VODs with chat replay, custom emotes (BTTV, FFZ and 7TV) and Picture in Picture mode.
+
+This is a fork of the [Pocket Plays for Twitch](https://github.com/SebastianRask/Pocket-Plays-for-Twitch) Android application. More information [in this issue](https://github.com/SebastianRask/Pocket-Plays-for-Twitch/issues/1).
 
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
@@ -17,7 +16,10 @@ Twire is an open source, ad-free Twitch browser and stream player for Android. S
 
 ## Screenshots
 
-<img src="https://raw.githubusercontent.com/diluteoxygen/Twire/master/Twire%20Previews/Nav%20Bar.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/diluteoxygen/Twire/master/Twire%20Previews/My%20Streams.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/diluteoxygen/Twire/master/Twire%20Previews/Player.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/diluteoxygen/Twire/master/Twire%20Previews/Player%20Settings.png?raw=true" style="width: 23%;margin:16px;" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1_my_streams.png" style="width: 23%;margin:0.5%;" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2_player.png" style="width: 23%;margin:0.5%;" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3_player_settings.png" style="width: 23%;margin:0.5%;" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4_navigation.png" style="width: 23%;margin:0.5%;" />
 
 *previews taken with True Night theme enabled*
 
