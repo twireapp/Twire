@@ -86,4 +86,7 @@ jobs:
           api-level: 30
           arch: x86
           channel: canary
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
           script: ./gradlew connectedCheck
