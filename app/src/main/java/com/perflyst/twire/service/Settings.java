@@ -808,7 +808,7 @@ public class Settings {
 
     public boolean getChatEnableSSL() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.CHAT_ENABLE_SSL, false);
+        return preferences.getBoolean(this.CHAT_ENABLE_SSL, true);
     }
 
     public void setChatEnableSSL(boolean SSL) {
