@@ -166,7 +166,6 @@
     <string name="chat_enable_ssl">Використовувати SSL для з\'єднання</string>
     <string name="playback_speed">%.2f</string>
     <string name="playback_speed_display">х%.2f</string>
-    <string name="menu_speed">Швидкість програвання</string>
     <string name="gen_dialog_wipe_follows_content">Бажаєте видалити усі підписки\?</string>
     <string name="gen_dialog_wipe_follows_action">Видалити</string>
     <string name="gen_dialog_export_follows_content">Бажаєте експортувати усі свої підписки\?</string>

@@ -211,7 +211,6 @@
     <string name="menu_share">Partager</string>
     <string name="preview_stream_online_since">00:30:00</string>
     <string name="chat_enable_emote_bttv">Activer les Emotes BetterTTV (BTTV)</string>
-    <string name="menu_speed">Vitesse de lecture</string>
     <string name="chat_enable_emote_ffz">Activer les Emotes FrankerFaceZ (FFZ)</string>
     <string name="chat_enable_emote_seventv">Activer les Emotes 7TV</string>
     <string name="settings_general_image_proxy">Utiliser un proxy d\'image</string>

@@ -17,8 +17,6 @@
     <string name="confirm_text_line_two">我们正在获取您关注的主播。</string>
     <string name="confirm_text_line_one">坐稳啦！</string>
     <string name="skip_text">跳过</string>
-    <string name="login_unvalid_token_text_line_two">您需要重新登录</string>
-    <string name="login_unvalid_token_text_line_one">很抱歉</string>
     <string name="login_on_success_message">您好，%s</string>
     <string name="login_user_no_internet_action">重试</string>
     <string name="login_user_no_internet">您需要网络连接以完成初始化。</string>
@@ -39,7 +37,6 @@
     <string name="title_activity_live_stream">直播</string>
     <string name="stream_playback_failed">视频播放失败，请尝试切换画质。</string>
     <string name="my_channels_activity_label">关注中</string>
-    <string name="my_channels_error_none_found">无粉丝</string>
     <string name="no_server_response_message">糟糕，Twitch服务器没有响应。刷新一下？</string>
     <string name="error_nothing_found">这里空空如也</string>
     <string name="error_external_playback_failed">发送播放链接至外部播放器失败</string>
@@ -65,7 +62,6 @@
     <string name="stream_viewers">观众</string>
     <string name="stream_fullscreen">全屏</string>
     <string name="stream_audio_only_active">只播放音频中</string>
-    <string name="stream_no_audio_only">抱歉，此直播没有提供只播放音频的选项</string>
     <string name="stream_seek_dialog_title">跳转至</string>
     <string name="stream_sleep_timer_title">定时停止播放</string>
     <string name="stream_sleep_timer_started_minutes_only">已开启定时停止播放，将于 %d 分钟后暂停播放。</string>
@@ -94,7 +90,6 @@
     <string name="navigation_drawer_settings_title">设置</string>
     <string name="navigation_drawer_search_title">搜索</string>
     <string name="navigation_drawer_top_games_title">热门游戏</string>
-    <string name="navigation_drawer_my_games_title">我的游戏</string>
     <string name="navigation_drawer_follows_title">已关注</string>
     <string name="navigation_drawer_featured_title">推荐直播</string>
     <string name="navigation_drawer_top_streams_title">热门直播</string>
@@ -130,7 +125,6 @@
     <string name="gen_tips_have_been_reset">页面提示已重置</string>
     <string name="gen_reset_tips">重置页面提示</string>
     <string name="stream_sleep_timer_stopped">暂停定时停止播放</string>
-    <string name="quality_audio">仅音频</string>
     <string name="quality_auto">自动</string>
     <string name="available_qualities">画质设置</string>
     <string name="chat_only">只显示聊天</string>
@@ -147,8 +141,6 @@
     <string name="title_activity_streamer_info">频道</string>
     <string name="yesterday">昨天</string>
     <string name="today">今天</string>
-    <string name="enable_all">全部启用</string>
-    <string name="disable_all">全部禁用</string>
     <string name="pause">暂停</string>
     <string name="play">播放</string>
     <string name="vods">视频</string>
@@ -174,7 +166,6 @@
     <string name="login_invalid_token_text_line_one">很不幸，你</string>
     <string name="playback_speed">%.2f</string>
     <string name="playback_speed_display">×%.2f</string>
-    <string name="menu_speed">回放速度</string>
     <string name="player_show_runtime">显示流运行时间</string>
     <string name="preview_stream_online_since">00:30:00</string>
     <string name="player_type">流播放器类型</string>

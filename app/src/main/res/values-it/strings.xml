@@ -205,7 +205,6 @@
     <string name="chat_enable_ssl">Usa SSL per la connessione</string>
     <string name="playback_speed">%.2f</string>
     <string name="playback_speed_display">×%.2f</string>
-    <string name="menu_speed">Velocità di Riproduzione</string>
     <string name="player_type">Tipo di lettore stream</string>
     <string name="player_show_runtime">Mostra tempo di esecuzione dello stream</string>
     <string name="preview_stream_online_since">00:30:00</string>

@@ -171,7 +171,6 @@
     <string name="player_show_runtime">Erakutsi Zuzeneko gauzatzeko denbora</string>
     <string name="player_type">Zuzeneko erreproduzitzaile mota</string>
     <string name="menu_share">Partekatu</string>
-    <string name="menu_speed">Erreprodukzio-abiadura</string>
     <string name="playback_speed_display">×%.2f</string>
     <string name="playback_speed">%.2f</string>
     <string name="preview_stream_online_since">00:30:00</string>

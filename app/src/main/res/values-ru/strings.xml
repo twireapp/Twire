@@ -166,7 +166,6 @@
     <string name="chat_enable_ssl">Использовать SSL для подключения</string>
     <string name="playback_speed">%.2f</string>
     <string name="playback_speed_display">×%.2f</string>
-    <string name="menu_speed">Скорость проигрывания</string>
     <string name="player_type">Тип проигрывателя стрима</string>
     <string name="player_show_runtime">Показать продолжительность стрима</string>
     <string name="preview_stream_online_since">00:30:00</string>

@@ -37,7 +37,6 @@
     <string name="stream_backward">10초 뒤로</string>
     <string name="vod_playback_failed">다시보기를 재생하는 데 실패했습니다. 다른 품질로 시도하십시오.</string>
     <string name="vod_views">조회수 %,d회</string>
-    <string name="vod_streams_card_stream_views">조회수 %s</string>
     <string name="card_style_expanded">펼침</string>
     <string name="card_size_small">작게</string>
     <string name="card_size_large">크게</string>
@@ -45,7 +44,6 @@
     <string name="card_size_huge">최대</string>
     <string name="preview_stream_title">방송 제목</string>
     <string name="preview_stream_game_and_viewers">시청자 1337명 - 게임 제목</string>
-    <string name="game_viewers">시청자 %s명</string>
     <string name="stream_playback_failed">방송을 재생하는 데 실패했습니다. 다른 품질로 시도하십시오.</string>
     <string name="my_channels_activity_label">팔로잉</string>
     <string name="title_activity_live_stream">생방송</string>
@@ -58,7 +56,6 @@
     <string name="start">시작</string>
     <string name="disabled">꺼짐</string>
     <string name="pause">정지</string>
-    <string name="ok">확인</string>
     <string name="stop">정지</string>
     <string name="cancel">취소</string>
     <string name="hours_short">시간</string>
@@ -68,7 +65,6 @@
     <string name="minutes_short">분</string>
     <string name="vods">동영상</string>
     <string name="play">재생</string>
-    <string name="percent">%d%%</string>
     <string name="menu_options">설정</string>
     <string name="stream_sleep_timer_stopped">수면 타이머 멈춤</string>
     <string name="menu_share">공유</string>

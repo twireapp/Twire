@@ -77,7 +77,6 @@
     <string name="available_qualities">Kvalitetsinställningar</string>
     <string name="chat_only">Bara chatt</string>
     <string name="audio_only">Bara ljud</string>
-    <string name="menu_speed">Uppspelningshastighet</string>
     <string name="menu_external">Använd extern spelare</string>
     <string name="menu_profile">Profil</string>
     <string name="streamerInfo_description">Ingen beskrivning hittades</string>

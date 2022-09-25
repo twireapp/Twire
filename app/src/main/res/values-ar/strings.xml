@@ -73,7 +73,6 @@
     <string name="stream_backward">ارجع 10 ثوان</string>
     <string name="stream_forward">تقدم 10 ثوان</string>
     <string name="stream_audio_only_active">شغّل الصوت فقط</string>
-    <string name="menu_speed">سرعة التشغيل</string>
     <string name="subscription_card_displayName">الاسم</string>
     <string name="stream_seek_dialog_title">انتقل الى</string>
 </resources>

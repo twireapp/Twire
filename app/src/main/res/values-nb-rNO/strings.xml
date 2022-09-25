@@ -165,7 +165,6 @@
     <string name="login_invalid_token_text_line_one">Beklageligvis må du</string>
     <string name="chat_enable_ssl">Bruk SSL for tilkoblingen</string>
     <string name="player_show_runtime">Vis forløpt avspillingstid</string>
-    <string name="menu_speed">Avspillingshastighet</string>
     <string name="player_type">Avspillertype for strøm</string>
     <string name="menu_share">Del</string>
     <string name="settings_general_image_proxy_url_example">Eksempel-mellomtjener: https://external-content.duckduckgo.com/iu/\?u=</string>

@@ -42,7 +42,6 @@
     <string name="stream_sleep_timer_started_minutes_only">Uniajastin käynnistetty. Striimi keskeytetään %d minuutin kuluttua.</string>
     <string name="stream_sleep_timer_started">Uniajastin käynnistetty. Striimi keskeytetään %1$d tunnissa ja %2$d minuutissa.</string>
     <string name="stream_sleep_timer_stopped">Uniajastin pysäytetty</string>
-    <string name="quality_audio">Pelkkä ääni</string>
     <string name="quality_auto">Automaattinen</string>
     <string name="available_qualities">Laatuasetukset</string>
     <string name="chat_only">Vain chat</string>
@@ -80,10 +79,8 @@
     <string name="stream_viewers">Katsojat</string>
     <string name="stream_fullscreen">Kokonäytö</string>
     <string name="stream_audio_only_active">Soitetaan vain ääntä</string>
-    <string name="stream_no_audio_only">Pahoittelut, pelkän äänen käyttö ei ole mahdollista tässä lähetyksessä</string>
     <string name="stream_seek_dialog_title">Mene kohtaan</string>
     <string name="stream_sleep_timer_title">Uniajastin</string>
-    <string name="my_channels_error_none_found">Seurattuja kanavia ei löytynyt</string>
     <string name="my_channels_activity_label">Seuratut</string>
     <string name="title_activity_live_stream">Live-lähetys</string>
     <string name="chat_send_message_hint">Kirjoita viesti</string>
@@ -97,9 +94,7 @@
     <string name="login_text_line_two">Kirjaudu ensin Twitchiin.</string>
     <string name="login_text_line_one">Laitetaan sinut kuntoon!</string>
     <string name="title_activity_welcome">Twiren asettelu</string>
-    <string name="login_unvalid_token_text_line_one">Valitettavasti sinun</string>
     <string name="skip_text">OHITA</string>
-    <string name="login_unvalid_token_text_line_two">pitää kirjautua uudestaan</string>
     <string name="chat_landscape_width_dialog">Chatin leveys</string>
     <string name="chat_landscape_width">Chatin leveys sivuttain käännettynä</string>
     <string name="chat_landscape_swipe">Näytä chat raahaamalla sivuttain käännettynä</string>
@@ -144,7 +139,6 @@
     <string name="games_tab">PELIT</string>
     <string name="streams_tab">LÄHETYKSET</string>
     <string name="navigation_drawer_top_games_title">Suosituimmat kategoriat</string>
-    <string name="navigation_drawer_my_games_title">Minun pelit</string>
     <string name="chat_message_option_block">Estä</string>
     <string name="audio_only">Vain ääni</string>
     <string name="options">Asetukset</string>
@@ -158,8 +152,6 @@
     <string name="streamerInfo_desc_tab">Kuvaus</string>
     <string name="title_activity_streamer_info">Kanava</string>
     <string name="yesterday">Eilen</string>
-    <string name="enable_all">Laita kaikki päälle</string>
-    <string name="disable_all">Laita kaikki pois päältä</string>
     <string name="no_elements_added_notice">%s ei löytynyt</string>
     <string name="hours_short">t</string>
     <string name="minutes_short">m</string>
