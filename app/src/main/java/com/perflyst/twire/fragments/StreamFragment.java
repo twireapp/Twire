@@ -532,9 +532,12 @@ public class StreamFragment extends Fragment implements Player.Listener {
     public void onPositionDiscontinuity(@NonNull Player.PositionInfo oldPosition, @NonNull Player.PositionInfo newPosition, int reason) {
         if (vodId == null || reason != Player.DISCONTINUITY_REASON_SEEK) return;
 
-        boolean seekBackwards = oldPosition.positionMs > newPosition.positionMs;
-        ChatManager.updateVodProgress(newPosition.positionMs, seekBackwards);
-        if (seekBackwards) streamFragmentCallback.onSeek();
+        long oldMs = oldPosition.positionMs;
+        long newMs = newPosition.positionMs;
+        // A seek is when we've gone backwards or we go more than 10 seconds forward.
+        boolean seek = oldMs > newMs || newMs - oldMs > 10000;
+        if (seek) streamFragmentCallback.onSeek();
+        ChatManager.updateVodProgress(newMs, seek);
     }
 
     @Override
