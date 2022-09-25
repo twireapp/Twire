@@ -2,6 +2,7 @@ package com.perflyst.twire.views.recyclerviews;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,9 @@ import com.perflyst.twire.R;
  */
 public class ChatRecyclerView extends RecyclerView {
     private int amountScrolled = 0;
+
+    private TextView chatPaused;
+    private boolean lastScrolled = false;
 
     public ChatRecyclerView(Context context) {
         super(context);
@@ -34,6 +38,11 @@ public class ChatRecyclerView extends RecyclerView {
         return amountScrolled < min;
     }
 
+    public void setChatPaused(TextView chatPaused) {
+        this.chatPaused = chatPaused;
+        chatPaused.setOnClickListener((v) -> smoothScrollToPosition(this.getAdapter().getItemCount() - 1));
+    }
+
     @Override
     public void scrollToPosition(int position) {
         super.scrollToPosition(position);
@@ -47,6 +56,14 @@ public class ChatRecyclerView extends RecyclerView {
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 amountScrolled += dy;
+
+                if (chatPaused == null) return;
+
+                boolean scrolled = isScrolled();
+                if (scrolled != lastScrolled) {
+                    chatPaused.animate().alpha(scrolled ? 1 : 0).start();
+                    lastScrolled = scrolled;
+                }
             }
         });
     }

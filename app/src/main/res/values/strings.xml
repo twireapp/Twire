@@ -131,11 +131,14 @@
     <!-- Live Stream Activity -->
     <string name="stream_playback_failed">Failed to play stream. Try another quality.</string>
     <string name="title_activity_live_stream">Live stream</string>
+
+    <!-- Chat fragment -->
     <string name="chat_send_message_hint">Type message</string>
     <string name="chat_status_connecting">Connecting to Chat…</string>
     <string name="chat_status_connected">Ready to Chat</string>
     <string name="chat_status_reconnecting">Reconnecting…</string>
     <string name="chat_status_connection_failed">Connection Failed</string>
+    <string name="chat_paused">Chat paused due to scroll.</string>
 
     <!-- ChannelInfo activity -->
     <string name="channel_info_intent_object" translatable="false">STREAMERINFO_INTENT_OBJECT</string>

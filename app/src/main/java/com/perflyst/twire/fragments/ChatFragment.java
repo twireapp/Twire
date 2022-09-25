@@ -176,6 +176,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mRecyclerView.setAdapter(mChatAdapter);
         mRecyclerView.setLayoutManager(llm);
         mRecyclerView.setItemAnimator(null);
+        mRecyclerView.setChatPaused(mRootView.findViewById(R.id.chat_paused));
 
         mUserInfo = requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo));// intent.getParcelableExtra(getString(R.string.intent_key_streamer_info));
         vodID = requireArguments().getString(getString(R.string.stream_fragment_vod_id));
@@ -206,7 +207,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             @Override
             public void onMessage(ChatMessage message) {
-                mRecyclerView.bringToFront();
                 if (isFragmentActive())
                     addMessage(message);
             }
