@@ -5,6 +5,8 @@ import static com.google.android.exoplayer2.Player.EVENT_PLAY_WHEN_READY_CHANGED
 import static com.google.android.exoplayer2.Player.STATE_BUFFERING;
 import static com.google.android.exoplayer2.Player.STATE_READY;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
@@ -1066,7 +1068,19 @@ public class StreamFragment extends Fragment implements Player.Listener {
      */
     private void hideVideoInterface() {
         if (mToolbar != null && !audioViewVisible && !chatOnlyViewVisible) {
-            mVideoInterface.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+            mVideoInterface.animate().alpha(0f).setInterpolator(new AccelerateDecelerateInterpolator()).setListener(new AnimatorListenerAdapter() {
+                // ExoPlayer will hide the UI immediately
+                // Set it visible again for the animation
+                @Override
+                public void onAnimationStart(Animator animation) {
+                    controlView.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    controlView.setVisibility(View.INVISIBLE);
+                }
+            }).start();
         }
     }
 
@@ -1084,7 +1098,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         mControlToolbar.setTranslationY(-CtrlToolbarY);
         mToolbar.setTranslationY(MaintoolbarY);
-        mVideoInterface.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).start();
+        mVideoInterface.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).setListener(null).start();
     }
 
     /**
