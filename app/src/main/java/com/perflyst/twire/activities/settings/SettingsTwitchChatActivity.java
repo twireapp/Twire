@@ -163,7 +163,7 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
                     updateSummaries();
                 },
                 landscapeWidth,
-                25,
+                10,
                 60,
                 getString(R.string.chat_landscape_width_dialog)
         ).show();
