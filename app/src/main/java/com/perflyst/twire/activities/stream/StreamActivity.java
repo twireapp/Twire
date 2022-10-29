@@ -46,6 +46,7 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
     private Settings settings;
     private boolean mBackstackLost;
     private boolean onStopCalled;
+    private int initialOrientation;
 
     protected abstract int getLayoutResource();
 
@@ -62,6 +63,8 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
 
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.black));
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+
+        initialOrientation = getResources().getConfiguration().orientation;
 
         if (savedInstanceState == null) {
             FragmentManager fm = getSupportFragmentManager();
@@ -111,7 +114,9 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
 
         // Eww >(
         if (mStreamFragment != null) {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            boolean isCurrentlyLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+            boolean wasInitiallyLandscape = initialOrientation == Configuration.ORIENTATION_LANDSCAPE;
+            if (isCurrentlyLandscape && !wasInitiallyLandscape) {
                 mStreamFragment.toggleFullscreen();
             } else if (mStreamFragment.chatOnlyViewVisible) {
                 this.finish();
