@@ -264,6 +264,12 @@ public class ChatManager implements Runnable {
     }
 
     private void processVodChat() {
+        // Very crude disabling of the function, because Twitch changed their API and this makes the app freeze up
+        onUpdate(UpdateType.ON_CONNECTION_FAILED);
+        if(true)
+            return;
+
+
         try {
             synchronized (vodLock) {
                 onUpdate(UpdateType.ON_CONNECTED);
