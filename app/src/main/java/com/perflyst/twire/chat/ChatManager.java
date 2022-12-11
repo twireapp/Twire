@@ -45,7 +45,7 @@ public class ChatManager implements Runnable {
     public static ChatManager instance = null;
 
     public static ImmutableSetMultimap<String, Badge> ffzBadgeMap;
-    private static double currentProgress;
+    private static double currentProgress = -1;
     private static String cursor = "";
     private static boolean seek = false;
     private static double previousProgress;
@@ -264,118 +264,124 @@ public class ChatManager implements Runnable {
     }
 
     private void processVodChat() {
+        currentProgress = -1;
+
         try {
+            onUpdate(UpdateType.ON_CONNECTED);
+
+            // Make sure that current progress has been set.
             synchronized (vodLock) {
-                onUpdate(UpdateType.ON_CONNECTED);
+                while (currentProgress == -1) vodLock.wait();
+            }
 
-                // Make sure that current progress has been set.
-                vodLock.wait();
+            Queue<VODComment> downloadedComments = new LinkedList<>();
+            boolean reconnecting = false;
+            boolean justSeeked = false;
+            while (!isStopping) {
+                if (seek) {
+                    seek = false;
+                    cursor = "";
+                    downloadedComments.clear();
+                    previousProgress = 0;
+                    justSeeked = true;
+                }
 
-                Queue<VODComment> downloadedComments = new LinkedList<>();
-                boolean reconnecting = false;
-                boolean justSeeked = false;
-                while (!isStopping) {
-                    if (seek) {
-                        seek = false;
-                        cursor = "";
-                        downloadedComments.clear();
-                        previousProgress = 0;
-                        justSeeked = true;
+                VODComment comment = downloadedComments.peek();
+                if (comment == null) {
+                    String result = Service.urlToJSONString("https://api.twitch.tv/v5/videos/" + vodId + "/comments?cursor=" + cursor + "&content_offset_seconds=" + currentProgress, false);
+
+                    if (result.isEmpty()) {
+                        reconnecting = true;
+                        onUpdate(UpdateType.ON_RECONNECTING);
+                        SystemClock.sleep(2500);
+                        continue;
+                    } else if (reconnecting) {
+                        reconnecting = false;
+                        onUpdate(UpdateType.ON_CONNECTED);
                     }
 
-                    VODComment comment = downloadedComments.peek();
-                    if (comment == null) {
-                        String result = Service.urlToJSONString("https://api.twitch.tv/v5/videos/" + vodId + "/comments?cursor=" + cursor + "&content_offset_seconds=" + currentProgress, false);
+                    JSONObject commentsObject = new JSONObject(result);
+                    JSONArray comments = commentsObject.getJSONArray("comments");
 
-                        if (result.isEmpty()) {
-                            reconnecting = true;
-                            onUpdate(UpdateType.ON_RECONNECTING);
-                            SystemClock.sleep(2500);
+                    for (int i = 0; i < comments.length(); i++) {
+                        JSONObject commentJSON = comments.getJSONObject(i);
+                        double contentOffset = commentJSON.getDouble("content_offset_seconds");
+                        // Don't show previous comments and don't show comments that came before the current progress unless we just seeked.
+                        if (contentOffset < previousProgress || contentOffset < currentProgress && !justSeeked)
                             continue;
-                        } else if (reconnecting) {
-                            reconnecting = false;
-                            onUpdate(UpdateType.ON_CONNECTED);
-                        }
 
-                        JSONObject commentsObject = new JSONObject(result);
-                        JSONArray comments = commentsObject.getJSONArray("comments");
+                        downloadedComments.add(new VODComment(contentOffset, commentJSON));
+                    }
 
-                        for (int i = 0; i < comments.length(); i++) {
-                            JSONObject commentJSON = comments.getJSONObject(i);
-                            double contentOffset = commentJSON.getDouble("content_offset_seconds");
-                            // Don't show previous comments and don't show comments that came before the current progress unless we just seeked.
-                            if (contentOffset < previousProgress || contentOffset < currentProgress && !justSeeked)
-                                continue;
+                    justSeeked = false;
 
-                            downloadedComments.add(new VODComment(contentOffset, commentJSON));
-                        }
+                    // Assumption: If the VOD has no comments and no previous or next comments, there are no comments on the VOD.
+                    if (comments.length() == 0 && !commentsObject.has("_next") && !commentsObject.has("_prev")) {
+                        break;
+                    }
 
-                        justSeeked = false;
-
-                        // Assumption: If the VOD has no comments and no previous or next comments, there are no comments on the VOD.
-                        if (comments.length() == 0 && !commentsObject.has("_next") && !commentsObject.has("_prev")) {
-                            break;
-                        }
-
-                        if (commentsObject.has("_next")) {
-                            cursor = commentsObject.getString("_next");
-                        } else if (downloadedComments.isEmpty()) {
-                            // We've reached the end of the comments, nothing to do until the user seeks.
+                    if (commentsObject.has("_next")) {
+                        cursor = commentsObject.getString("_next");
+                    } else if (downloadedComments.isEmpty()) {
+                        // We've reached the end of the comments, nothing to do until the user seeks.
+                        synchronized (vodLock) {
                             while (!seek) {
                                 vodLock.wait();
                             }
                         }
-
-                        comment = downloadedComments.peek();
                     }
 
-                    if (seek || comment == null) {
-                        continue;
-                    }
-
-                    nextCommentOffset = comment.contentOffset;
-                    if (currentProgress < nextCommentOffset) vodLock.wait();
-
-                    JSONObject commenter = comment.data.getJSONObject("commenter");
-                    JSONObject message = comment.data.getJSONObject("message");
-
-                    Map<String, String> badges = new HashMap<>();
-                    if (message.has("user_badges")) {
-                        JSONArray userBadgesArray = message.getJSONArray("user_badges");
-                        for (int j = 0; j < userBadgesArray.length(); j++) {
-                            JSONObject userBadge = userBadgesArray.getJSONObject(j);
-                            badges.put(userBadge.getString("_id"), userBadge.getString("version"));
-                        }
-                    }
-
-                    String color = message.has("user_color") ? message.getString("user_color") : null;
-                    String displayName = commenter.getString("display_name");
-                    String body = message.getString("body");
-
-                    List<ChatEmote> emotes = new ArrayList<>();
-                    if (message.has("emoticons")) {
-                        JSONArray emoticonsArray = message.getJSONArray("emoticons");
-                        for (int j = 0; j < emoticonsArray.length(); j++) {
-                            JSONObject emoticon = emoticonsArray.getJSONObject(j);
-                            int begin = emoticon.getInt("begin");
-                            int end = emoticon.getInt("end") + 1;
-                            // In some cases, Twitch gets the indexes of emotes wrong so we have to ignore any emotes that go over the length of the message.
-                            if (end > body.length())
-                                continue;
-
-                            String keyword = body.substring(begin, end);
-                            emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[]{begin}));
-                        }
-                    }
-                    emotes.addAll(mEmoteManager.findCustomEmotes(body));
-
-                    //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
-
-                    ChatMessage chatMessage = new ChatMessage(body, displayName, color, getBadges(badges), emotes, false);
-                    onMessage(chatMessage);
-
-                    downloadedComments.poll();
+                    comment = downloadedComments.peek();
                 }
+
+                if (seek || comment == null) {
+                    continue;
+                }
+
+                nextCommentOffset = comment.contentOffset;
+                synchronized (vodLock) {
+                    while (currentProgress < nextCommentOffset && !seek) vodLock.wait();
+                }
+
+                JSONObject commenter = comment.data.getJSONObject("commenter");
+                JSONObject message = comment.data.getJSONObject("message");
+
+                Map<String, String> badges = new HashMap<>();
+                if (message.has("user_badges")) {
+                    JSONArray userBadgesArray = message.getJSONArray("user_badges");
+                    for (int j = 0; j < userBadgesArray.length(); j++) {
+                        JSONObject userBadge = userBadgesArray.getJSONObject(j);
+                        badges.put(userBadge.getString("_id"), userBadge.getString("version"));
+                    }
+                }
+
+                String color = message.has("user_color") ? message.getString("user_color") : null;
+                String displayName = commenter.getString("display_name");
+                String body = message.getString("body");
+
+                List<ChatEmote> emotes = new ArrayList<>();
+                if (message.has("emoticons")) {
+                    JSONArray emoticonsArray = message.getJSONArray("emoticons");
+                    for (int j = 0; j < emoticonsArray.length(); j++) {
+                        JSONObject emoticon = emoticonsArray.getJSONObject(j);
+                        int begin = emoticon.getInt("begin");
+                        int end = emoticon.getInt("end") + 1;
+                        // In some cases, Twitch gets the indexes of emotes wrong so we have to ignore any emotes that go over the length of the message.
+                        if (end > body.length())
+                            continue;
+
+                        String keyword = body.substring(begin, end);
+                        emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[]{begin}));
+                    }
+                }
+                emotes.addAll(mEmoteManager.findCustomEmotes(body));
+
+                //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
+
+                ChatMessage chatMessage = new ChatMessage(body, displayName, color, getBadges(badges), emotes, false);
+                onMessage(chatMessage);
+
+                downloadedComments.poll();
             }
         } catch (Exception e) {
             e.printStackTrace();
