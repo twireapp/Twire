@@ -11,6 +11,7 @@ import android.util.SparseArray;
 
 import com.google.common.collect.ImmutableSetMultimap;
 import com.perflyst.twire.TwireApplication;
+import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.model.Badge;
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
@@ -41,12 +42,15 @@ import java.util.Random;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 public class ChatManager implements Runnable {
     public static ChatManager instance = null;
 
     public static ImmutableSetMultimap<String, Badge> ffzBadgeMap;
     private static double currentProgress;
-    private static String cursor = "";
     private static boolean seek = false;
     private static double previousProgress;
     private final String LOG_TAG = getClass().getSimpleName();
@@ -130,7 +134,6 @@ public class ChatManager implements Runnable {
 
     public static void setPreviousProgress() {
         previousProgress = currentProgress;
-        cursor = "";
     }
 
     @Override
@@ -263,13 +266,25 @@ public class ChatManager implements Runnable {
         }
     }
 
+    private String vodChatFormatQuery(String videoID, long contentOffsetSeconds) {
+        return  "[\n" +
+                "    {\n" +
+                "        \"operationName\": \"VideoCommentsByOffsetOrCursor\",\n" +
+                "        \"variables\": {\n" +
+                "            \"videoID\": \"" + videoID + "\",\n" +
+                "            \"contentOffsetSeconds\": " + contentOffsetSeconds + "\n" +
+                "        },\n" +
+                "        \"extensions\": {\n" +
+                "            \"persistedQuery\": {\n" +
+                "                \"version\": 1,\n" +
+                "                \"sha256Hash\": \"b70a3591ff0f4e0313d126c6a1502d79a1c02baebb288227c582044aa76adf6a\"\n" +
+                "            }\n" +
+                "        }\n" +
+                "    }\n" +
+                "]";
+    }
+
     private void processVodChat() {
-        // Very crude disabling of the function, because Twitch changed their API and this makes the app freeze up
-        onUpdate(UpdateType.ON_CONNECTION_FAILED);
-        if(true)
-            return;
-
-
         try {
             synchronized (vodLock) {
                 onUpdate(UpdateType.ON_CONNECTED);
@@ -283,7 +298,6 @@ public class ChatManager implements Runnable {
                 while (!isStopping) {
                     if (seek) {
                         seek = false;
-                        cursor = "";
                         downloadedComments.clear();
                         previousProgress = 0;
                         justSeeked = true;
@@ -291,24 +305,37 @@ public class ChatManager implements Runnable {
 
                     VODComment comment = downloadedComments.peek();
                     if (comment == null) {
-                        String result = Service.urlToJSONString("https://api.twitch.tv/v5/videos/" + vodId + "/comments?cursor=" + cursor + "&content_offset_seconds=" + currentProgress, false);
+                        Request request = new Request.Builder()
+                                .url("https://gql.twitch.tv/gql")
+                                .header("Client-ID", SecretKeys.TWITCH_WEB_CLIENT_ID)
+                                .post(RequestBody.create(MediaType.get("application/json"), vodChatFormatQuery(vodId, Math.round(currentProgress))))
+                                .build();
+
+                        String result = Service.urlToJSONString(request);
 
                         if (result.isEmpty()) {
                             reconnecting = true;
                             onUpdate(UpdateType.ON_RECONNECTING);
-                            SystemClock.sleep(2500);
+                            vodLock.wait();
                             continue;
                         } else if (reconnecting) {
                             reconnecting = false;
                             onUpdate(UpdateType.ON_CONNECTED);
                         }
 
-                        JSONObject commentsObject = new JSONObject(result);
-                        JSONArray comments = commentsObject.getJSONArray("comments");
+                        JSONArray responseArray = new JSONArray(result);
+
+                        JSONObject commentsObject = responseArray
+                                .getJSONObject(0)
+                                .getJSONObject("data")
+                                .getJSONObject("video")
+                                .getJSONObject("comments");
+
+                        JSONArray comments = commentsObject.getJSONArray("edges");
 
                         for (int i = 0; i < comments.length(); i++) {
-                            JSONObject commentJSON = comments.getJSONObject(i);
-                            double contentOffset = commentJSON.getDouble("content_offset_seconds");
+                            JSONObject commentJSON = comments.getJSONObject(i).getJSONObject("node");
+                            double contentOffset = commentJSON.getDouble("contentOffsetSeconds");
                             // Don't show previous comments and don't show comments that came before the current progress unless we just seeked.
                             if (contentOffset < previousProgress || contentOffset < currentProgress && !justSeeked)
                                 continue;
@@ -319,13 +346,13 @@ public class ChatManager implements Runnable {
                         justSeeked = false;
 
                         // Assumption: If the VOD has no comments and no previous or next comments, there are no comments on the VOD.
-                        if (comments.length() == 0 && !commentsObject.has("_next") && !commentsObject.has("_prev")) {
+                        if (comments.length() == 0 &&
+                                !commentsObject.getJSONObject("pageInfo").getBoolean("hasNextPage") &&
+                                !commentsObject.getJSONObject("pageInfo").getBoolean("hasPreviousPage")) {
                             break;
                         }
 
-                        if (commentsObject.has("_next")) {
-                            cursor = commentsObject.getString("_next");
-                        } else if (downloadedComments.isEmpty()) {
+                        if (downloadedComments.isEmpty()) {
                             // We've reached the end of the comments, nothing to do until the user seeks.
                             while (!seek) {
                                 vodLock.wait();
@@ -346,31 +373,31 @@ public class ChatManager implements Runnable {
                     JSONObject message = comment.data.getJSONObject("message");
 
                     Map<String, String> badges = new HashMap<>();
-                    if (message.has("user_badges")) {
-                        JSONArray userBadgesArray = message.getJSONArray("user_badges");
+                    if (message.has("userBadges")) {
+                        JSONArray userBadgesArray = message.getJSONArray("userBadges");
                         for (int j = 0; j < userBadgesArray.length(); j++) {
                             JSONObject userBadge = userBadgesArray.getJSONObject(j);
-                            badges.put(userBadge.getString("_id"), userBadge.getString("version"));
+                            badges.put(userBadge.getString("setID"), userBadge.getString("version"));
                         }
                     }
 
-                    String color = message.has("user_color") ? message.getString("user_color") : null;
-                    String displayName = commenter.getString("display_name");
-                    String body = message.getString("body");
+                    String color = message.isNull("userColor") ? "#000000" : message.getString("userColor");
+                    String displayName = commenter.getString("displayName");
 
+                    String body = "";
                     List<ChatEmote> emotes = new ArrayList<>();
-                    if (message.has("emoticons")) {
-                        JSONArray emoticonsArray = message.getJSONArray("emoticons");
-                        for (int j = 0; j < emoticonsArray.length(); j++) {
-                            JSONObject emoticon = emoticonsArray.getJSONObject(j);
-                            int begin = emoticon.getInt("begin");
-                            int end = emoticon.getInt("end") + 1;
-                            // In some cases, Twitch gets the indexes of emotes wrong so we have to ignore any emotes that go over the length of the message.
-                            if (end > body.length())
-                                continue;
+                    JSONArray messageFragments = message.getJSONArray("fragments");
 
-                            String keyword = body.substring(begin, end);
-                            emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[]{begin}));
+                    for (int i = 0; i < messageFragments.length(); i++) {
+                        JSONObject fragmentJSON = messageFragments.getJSONObject(i);
+                        body += fragmentJSON.getString("text");
+
+                        if (!fragmentJSON.isNull("emote")) {
+                            JSONObject emoticon = fragmentJSON.getJSONObject("emote");
+                            int begin = emoticon.getInt("from");
+
+                            String keyword = fragmentJSON.getString("text");
+                            emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("emoteID")), new int[]{begin}));
                         }
                     }
                     emotes.addAll(mEmoteManager.findCustomEmotes(body));
@@ -386,8 +413,6 @@ public class ChatManager implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
 
-            onUpdate(UpdateType.ON_CONNECTION_FAILED);
-            SystemClock.sleep(2500);
             onUpdate(UpdateType.ON_RECONNECTING);
             processVodChat();
         }
