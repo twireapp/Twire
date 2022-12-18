@@ -2,10 +2,8 @@ package com.perflyst.twire.tasks;
 
 import android.util.Log;
 
-import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.Quality;
-import com.perflyst.twire.service.Service;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,10 +11,6 @@ import org.json.JSONObject;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * Created by Sebastian Rask on 18-06-2016.
@@ -31,23 +25,16 @@ public class GetVODStreamURL extends GetLiveStreamURL {
     @Override
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String vodId = params[0];
-        String PlayerType = params[1];
+        String playerType = params[1];
         String signature = "";
         String token = "";
 
-        Request request = new Request.Builder()
-                .url("https://gql.twitch.tv/gql")
-                .header("Client-ID", SecretKeys.TWITCH_WEB_CLIENT_ID)
-                .post(RequestBody.create(MediaType.get("application/json"), formatQuery(false, vodId, PlayerType)))
-                .build();
-
-        String resultString = Service.urlToJSONString(request);
-        if (resultString == null)
+        JSONObject dataObject = getToken(false, vodId, playerType);
+        if (dataObject == null)
             return new LinkedHashMap<>();
 
         try {
-            JSONObject resultJSON = new JSONObject(resultString);
-            JSONObject tokenJSON = resultJSON.getJSONObject("data").getJSONObject("videoPlaybackAccessToken");
+            JSONObject tokenJSON = dataObject.getJSONObject("videoPlaybackAccessToken");
             token = tokenJSON.getString("value");
             signature = tokenJSON.getString("signature");
         } catch (JSONException e) {

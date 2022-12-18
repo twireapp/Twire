@@ -3,7 +3,6 @@ package com.perflyst.twire.tasks;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.service.Service;
@@ -11,6 +10,7 @@ import com.perflyst.twire.service.Service;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
@@ -18,9 +18,7 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import okhttp3.MediaType;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 
 /**
  * Async task. Gets the required access token for a specific streamer. Then starts the streamers live stream.
@@ -36,45 +34,29 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         callback = aCallback;
     }
 
-    protected String formatQuery(boolean isLive, String channelOrVod, String PlayerType) {
-        return "{\n" +
-                "    \"operationName\": \"PlaybackAccessToken\",\n" +
-                "    \"extensions\": {\n" +
-                "        \"persistedQuery\": {\n" +
-                "            \"version\": 1,\n" +
-                "            \"sha256Hash\": \"0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712\"\n" +
-                "        }\n" +
-                "    },\n" +
-                "    \"variables\": {\n" +
-                "        \"isLive\": " + isLive + ",\n" +
-                "        \"login\": \"" + (isLive ? channelOrVod : "") + "\",\n" +
-                "        \"isVod\": " + !isLive + ",\n" +
-                "        \"vodID\": \"" + (!isLive ? channelOrVod : "") + "\",\n" +
-                "        \"playerType\": \""+ PlayerType + "\"\n" +
-                "    }\n" +
-                "}";
+    protected JSONObject getToken(boolean isLive, String channelOrVod, String playerType) {
+        return Service.graphQL("PlaybackAccessToken", "0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712", new HashMap<>() {{
+            put("isLive", isLive);
+            put("isVod", !isLive);
+            put("login", isLive ? channelOrVod : "");
+            put("vodID", !isLive ? channelOrVod : "");
+            put("playerType", playerType);
+        }});
     }
 
     @Override
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String streamerName = params[0];
-        String PlayerType = params[1];
+        String playerType = params[1];
         String signature = "";
         String token = "";
 
-        Request request = new Request.Builder()
-                .url("https://gql.twitch.tv/gql")
-                .header("Client-ID", SecretKeys.TWITCH_WEB_CLIENT_ID)
-                .post(RequestBody.create(MediaType.get("application/json"), formatQuery(true, streamerName, PlayerType)))
-                .build();
-
-        String resultString = Service.urlToJSONString(request);
-        if (resultString == null)
+        JSONObject dataObject = getToken(true, streamerName, playerType);
+        if (dataObject == null)
             return new LinkedHashMap<>();
 
         try {
-            JSONObject resultJSON = new JSONObject(resultString);
-            JSONObject tokenJSON = resultJSON.getJSONObject("data").getJSONObject("streamPlaybackAccessToken");
+            JSONObject tokenJSON = dataObject.getJSONObject("streamPlaybackAccessToken");
             token = tokenJSON.getString("value");
             signature = tokenJSON.getString("signature");
 

@@ -49,6 +49,7 @@ import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.UserInfo;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -64,8 +65,10 @@ import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 /**
@@ -498,6 +501,27 @@ public class Service {
                 .build();
 
         return urlToJSONString(request);
+    }
+
+    public static JSONObject graphQL(String operation, String hash, Map<String, Object> variables) {
+        String query = "[{\"operationName\":\"" + operation + "\",\"variables\":" + new JSONObject(variables) + ",\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"" + hash + "\"}}}]";
+
+        Request request = new Request.Builder()
+                .url("https://gql.twitch.tv/gql")
+                .header("Client-ID", SecretKeys.TWITCH_WEB_CLIENT_ID)
+                .post(RequestBody.create(MediaType.get("application/json"), query))
+                .build();
+
+        String result = urlToJSONString(request);
+        if (result == null) return null;
+
+        try {
+            JSONArray array = new JSONArray(result);
+            return array.getJSONObject(0).getJSONObject("data");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static String urlToJSONString(Request request) {
