@@ -10,17 +10,13 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,11 +69,13 @@ import androidx.transition.TransitionManager;
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SeekParameters;
+import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -143,7 +141,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private UserInfo mUserInfo;
     private String vodId;
     private long startTime;
-    private HeadsetPlugIntentReceiver headsetIntentReceiver;
     private Settings settings;
     private SleepTimer sleepTimer;
     private Map<String, Quality> qualityURLs;
@@ -366,11 +363,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             startStreamWithQuality(settings.getPrefStreamQuality());
         }
 
-        headsetIntentReceiver = new HeadsetPlugIntentReceiver();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            requireActivity().registerReceiver(headsetIntentReceiver, new IntentFilter(AudioManager.ACTION_HEADSET_PLUG));
-        }
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             mRootView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
@@ -436,6 +428,11 @@ public class StreamFragment extends Fragment implements Player.Listener {
             player = new ExoPlayer.Builder(getContext(), mediaSourceFactory)
                     .setSeekBackIncrementMs(10000)
                     .setSeekForwardIncrementMs(10000)
+                    .setHandleAudioBecomingNoisy(true)
+                    .setAudioAttributes(new AudioAttributes.Builder()
+                            .setUsage(C.USAGE_MEDIA)
+                            .setContentType(C.CONTENT_TYPE_MOVIE)
+                            .build(), true)
                     .build();
             player.addListener(this);
             mVideoView.setPlayer(player);
@@ -664,9 +661,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     @Override
     public void onDestroy() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && getActivity() != null) {
-            getActivity().unregisterReceiver(headsetIntentReceiver);
-        }
         Log.d(LOG_TAG, "Destroying");
         if (fetchViewCountRunnable != null) {
             fetchViewCountHandler.removeCallbacks(fetchViewCountRunnable);
@@ -1721,31 +1715,5 @@ public class StreamFragment extends Fragment implements Player.Listener {
         void onSeek();
 
         void refreshLayout();
-    }
-
-    /**
-     * Broadcast class for detecting when the user plugs or unplug a headset.
-     */
-    private class HeadsetPlugIntentReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-                int state = intent.getIntExtra("state", -1);
-                switch (state) {
-                    case 0:
-                        if (player.isPlaying()) {
-                            Log.d(LOG_TAG, "Chat, pausing from headsetPlug");
-                            showVideoInterface();
-                            player.pause();
-                        }
-                        break;
-                    case 1:
-                        showVideoInterface();
-                        break;
-                    default:
-
-                }
-            }
-        }
     }
 }
