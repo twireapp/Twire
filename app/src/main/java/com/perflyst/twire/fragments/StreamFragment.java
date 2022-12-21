@@ -33,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -171,6 +172,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private LinearLayout mQualityWrapper;
     private View mOverlay;
     private StyledPlayerControlView controlView;
+    private OrientationEventListener orientationListener;
 
     private final Runnable vodRunnable = new Runnable() {
         @Override
@@ -386,6 +388,31 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 }
             });
         }
+
+        // Enabled after the user toggles the fullscreen mode
+        // Unlocks the orientation of the screen after the user rotates to the new orientation
+        orientationListener = new OrientationEventListener(getActivity()) {
+            @Override
+            public void onOrientationChanged(int orientation) {
+                int estimatedOrientation = close(orientation, 0, 180, 360) ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT :
+                        close(orientation, 90, 270) ? ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE :
+                                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+                int requestedOrientation = requireActivity().getRequestedOrientation();
+                if (estimatedOrientation == requestedOrientation) {
+                    requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                    orientationListener.disable();
+                }
+            }
+
+            private boolean close(int current, int... targets) {
+                for (int target : targets) {
+                    if (Math.abs(current - target) < 15)
+                        return true;
+                }
+
+                return false;
+            }
+        };
 
         return mRootView;
     }
@@ -1146,7 +1173,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * Otherwise if the device is in fullscreen then is releases the lock by requesting for portrait
      */
     public void toggleFullscreen() {
-        requireActivity().setRequestedOrientation(isLandscape ? ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+        requireActivity().setRequestedOrientation(isLandscape ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        orientationListener.enable();
     }
 
     /**
