@@ -64,6 +64,7 @@
 
     <string name="stream_fragment_autoplay" translatable="false">streamAutoPlay</string>
     <string name="stream_fragment_vod_id" translatable="false">stream_vod_id</string>
+    <string name="stream_fragment_title" translatable="false">streamTitle</string>
     <string name="stream_preview_transition" translatable="false">SharedViewPreviewTransition</string>
     <string name="stream_preview_url" translatable="false">stream_image_preview</string>
     <string name="stream_shared_transition" translatable="false">stream_has_shared_transition</string>

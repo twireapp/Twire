@@ -4,6 +4,7 @@ import static com.google.android.exoplayer2.Player.EVENT_PLAYBACK_STATE_CHANGED;
 import static com.google.android.exoplayer2.Player.EVENT_PLAY_WHEN_READY_CHANGED;
 import static com.google.android.exoplayer2.Player.STATE_BUFFERING;
 import static com.google.android.exoplayer2.Player.STATE_READY;
+import static com.perflyst.twire.misc.Utils.appendSpan;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -22,6 +23,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -141,6 +145,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             landscapeChatVisible = false;
     private UserInfo mUserInfo;
     private String vodId;
+    private String title;
     private long startTime;
     private Settings settings;
     private SleepTimer sleepTimer;
@@ -151,6 +156,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private ExoPlayer player;
     private MediaItem currentMediaItem;
     private Toolbar mToolbar;
+    private TextView mTitleText;
     private ConstraintLayout mVideoInterface;
     private RelativeLayout mControlToolbar;
     private ConstraintLayout mVideoWrapper;
@@ -258,6 +264,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mUserInfo = args.getParcelable(getString(R.string.stream_fragment_streamerInfo));
             vodId = args.getString(getString(R.string.stream_fragment_vod_id));
             autoPlay = args.getBoolean(getString(R.string.stream_fragment_autoplay));
+            title = args.getString(getString(R.string.stream_fragment_title));
         }
 
         final View mRootView = inflater.inflate(R.layout.fragment_stream, container, false);
@@ -284,6 +291,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         rootView = (ViewGroup) mRootView;
         mVideoInterface = mRootView.findViewById(R.id.video_interface);
         mToolbar = mRootView.findViewById(R.id.main_toolbar);
+        mTitleText = mRootView.findViewById(R.id.toolbar_title);
         mControlToolbar = mRootView.findViewById(R.id.control_toolbar_wrapper);
         mVideoWrapper = mRootView.findViewById(R.id.video_wrapper);
         mVideoView = mRootView.findViewById(R.id.VideoView);
@@ -1686,11 +1694,22 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mToolbar.setPadding(0, 0, Service.dpToPixels(requireActivity(), 5), 0);
         setHasOptionsMenu(true);
         mActivity.setSupportActionBar(mToolbar);
-        ActionBar actionBar = mActivity.getSupportActionBar();
-        if (actionBar != null) actionBar.setTitle(mUserInfo.getDisplayName());
-        mActivity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //mActivity.getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         mToolbar.bringToFront();
+
+        ActionBar actionBar = mActivity.getSupportActionBar();
+        if (actionBar == null) {
+            return;
+        }
+
+        final SpannableStringBuilder builder = new SpannableStringBuilder();
+        builder.append(mUserInfo.getDisplayName());
+        if (title != null) {
+            int secondaryColor = Service.getColorAttribute(R.attr.secondaryTextColor, R.color.white_text_secondary, requireContext());
+            appendSpan(builder, "\n" + title, new ForegroundColorSpan(secondaryColor), new RelativeSizeSpan(0.75f));
+        }
+        mTitleText.setText(builder);
+        actionBar.setTitle("");
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     /**

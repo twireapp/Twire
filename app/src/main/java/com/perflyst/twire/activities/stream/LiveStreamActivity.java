@@ -38,6 +38,7 @@ public class LiveStreamActivity extends StreamActivity {
         liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_start_time), stream.getStartedAt());
         liveStreamIntent.putExtra(context.getString(R.string.stream_preview_url), stream.getMediumPreview());
         liveStreamIntent.putExtra(context.getString(R.string.stream_shared_transition), sharedTransition);
+        liveStreamIntent.putExtra(context.getString(R.string.stream_fragment_title), stream.getTitle());
         return liveStreamIntent;
     }
 
@@ -57,12 +58,14 @@ public class LiveStreamActivity extends StreamActivity {
         UserInfo mUserInfo = intent.getParcelableExtra(getString(R.string.intent_key_streamer_info));
         int currentViewers = intent.getIntExtra(getString(R.string.intent_key_stream_viewers), -1);
         long currentStartTime = intent.getLongExtra(getString(R.string.intent_key_stream_start_time), 0);
+        String title = intent.getStringExtra(getString(R.string.stream_fragment_title));
 
         Bundle args = new Bundle();
         args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mUserInfo);
         args.putInt(getString(R.string.stream_fragment_viewers), currentViewers);
         args.putLong(getString(R.string.stream_fragment_start_time), currentStartTime);
         args.putBoolean(getString(R.string.stream_fragment_autoplay), true);
+        args.putString(getString(R.string.stream_fragment_title), title);
         return args;
     }
 
