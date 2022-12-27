@@ -311,6 +311,10 @@
     <string name="router_nonexistent_user">That user doesn\'t exist.</string>
     <string name="router_channel_error">Failed to load the channel.</string>
 
+    <!-- Notifications -->
+    <string name="player_channel_name">Player</string>
+    <string name="player_channel_description">Twire\'s player</string>
+
     <!-- Changelog -->
     <string name="changelog_title">Changelog</string>
     <string name="changelog_show_after_update">Show changelog after an update</string>

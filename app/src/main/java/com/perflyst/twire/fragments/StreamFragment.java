@@ -16,8 +16,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -73,6 +75,7 @@ import androidx.transition.TransitionManager;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -85,6 +88,7 @@ import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.PlayerNotificationManager;
 import com.google.android.exoplayer2.ui.StyledPlayerControlView;
 import com.google.android.exoplayer2.ui.StyledPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
@@ -127,6 +131,9 @@ import java.util.function.Consumer;
 
 public class StreamFragment extends Fragment implements Player.Listener {
     private static final int SHOW_TIMEOUT = 3000;
+    private static final int PLAYER_NOTIFICATION_ID = 1;
+    private static final String PLAYER_NOTIFICATION_CHANNEL = "twirePlayer";
+
     private static int totalVerticalInset;
     private static boolean pipDisabling; // Tracks the PIP disabling animation.
     private final String LOG_TAG = getClass().getSimpleName();
@@ -154,6 +161,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private Runnable fetchViewCountRunnable;
     private StyledPlayerView mVideoView;
     private ExoPlayer player;
+    private PlayerNotificationManager playerNotificationManager;
     private MediaItem currentMediaItem;
     private Toolbar mToolbar;
     private TextView mTitleText;
@@ -505,6 +513,65 @@ public class StreamFragment extends Fragment implements Player.Listener {
             MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
             mediaSessionConnector.setPlayer(player);
             mediaSession.setActive(true);
+
+            playerNotificationManager = new PlayerNotificationManager.Builder(getContext(), PLAYER_NOTIFICATION_ID, PLAYER_NOTIFICATION_CHANNEL)
+                    .setChannelNameResourceId(R.string.player_channel_name)
+                    .setChannelDescriptionResourceId(R.string.player_channel_description)
+                    .setSmallIconResourceId(R.drawable.ic_notification)
+                    .setMediaDescriptionAdapter(new MediaAdapter())
+                    .build();
+
+            playerNotificationManager.setMediaSessionToken(mediaSession.getSessionToken());
+            playerNotificationManager.setPlayer(player);
+        }
+    }
+
+    class MediaAdapter implements PlayerNotificationManager.MediaDescriptionAdapter {
+        private Bitmap previewCached;
+
+        @Override
+        public CharSequence getCurrentContentTitle(Player player) {
+            return title;
+        }
+
+        @Nullable
+        @Override
+        public PendingIntent createCurrentContentIntent(Player player) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getCurrentContentText(Player player) {
+            return mUserInfo.getDisplayName();
+        }
+
+        @Nullable
+        @Override
+        public Bitmap getCurrentLargeIcon(Player player, PlayerNotificationManager.BitmapCallback callback) {
+            final Intent intent = requireActivity().getIntent();
+            String imageUrl = intent.getStringExtra(getString(R.string.stream_preview_url));
+
+            if (previewCached == null) {
+                Glide.with(requireContext())
+                        .asBitmap()
+                        .load(imageUrl)
+                        .signature(new ObjectKey(System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(5))) // Refresh preview images every 5 minutes
+                        .into(new CustomTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
+                                callback.onBitmap(resource);
+                                previewCached = resource;
+                            }
+
+                            @Override
+                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                                previewCached = null;
+                            }
+                        });
+            }
+
+            return previewCached;
         }
     }
 
@@ -516,6 +583,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 settings.setVodProgress(vodId, player);
             }
 
+            playerNotificationManager.setPlayer(null);
             player.release();
             player = null;
         }
