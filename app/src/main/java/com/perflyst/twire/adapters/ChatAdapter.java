@@ -6,16 +6,15 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
 import android.util.Patterns;
+import android.util.TypedValue;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +52,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     private final Settings settings;
     private final ChatAdapterCallback mCallback;
     private final boolean isNightTheme;
+    private final float textSize;
 
     public ChatAdapter(ChatRecyclerView aRecyclerView, Activity aContext, ChatAdapterCallback aCallback) {
         messages = new ArrayList<>();
@@ -62,6 +62,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         settings = new Settings(context);
 
         isNightTheme = settings.isDarkTheme();
+        textSize = aContext.getResources().getDimension(R.dimen.chat_message_text_size) * getTextScale();
     }
 
     @Override
@@ -122,7 +123,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                 holder.message.setBackgroundColor(Service.getColorAttribute(R.attr.colorAccent, R.color.accent, context));
             }
 
-            builder.setSpan(new RelativeSizeSpan(getTextSize()), 0, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            holder.message.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             holder.message.setText(builder);
             holder.message.setMovementMethod(LinkMovementMethod.getInstance());
             holder.message.setOnClickListener(view -> mCallback.onMessageClicked(builder, message.getName(), message.getMessage()));
@@ -176,7 +177,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         }
     }
 
-    private float getTextSize() {
+    private float getTextScale() {
         int settingsSize = settings.getMessageSize();
         switch (settingsSize) {
             case 1:
