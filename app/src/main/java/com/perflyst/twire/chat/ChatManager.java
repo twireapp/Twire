@@ -112,6 +112,9 @@ public class ChatManager implements Runnable {
             twitchChatPort = twitchChatPortunsecure;
         }
         Log.d(LOG_TAG, "Use SSL Chat Server: " + appSettings.getChatEnableSSL());
+
+        currentProgress = -1;
+        nextCommentOffset = 0;
     }
 
     public static void updateVodProgress(long aCurrentProgress, boolean aSeek) {
@@ -264,8 +267,6 @@ public class ChatManager implements Runnable {
     }
 
     private void processVodChat() {
-        currentProgress = -1;
-
         try {
             onUpdate(UpdateType.ON_CONNECTED);
 
@@ -288,9 +289,13 @@ public class ChatManager implements Runnable {
 
                 VODComment comment = downloadedComments.peek();
                 if (comment == null) {
-                    String result = Service.urlToJSONString("https://api.twitch.tv/v5/videos/" + vodId + "/comments?cursor=" + cursor + "&content_offset_seconds=" + currentProgress, false);
+                    JSONObject dataObject = Service.graphQL("VideoCommentsByOffsetOrCursor", "b70a3591ff0f4e0313d126c6a1502d79a1c02baebb288227c582044aa76adf6a", new HashMap<>() {{
+                        put("videoID", vodId);
+                        if (cursor.isEmpty()) put("contentOffsetSeconds", (int) currentProgress);
+                        else put("cursor", cursor);
+                    }});
 
-                    if (result.isEmpty()) {
+                    if (dataObject == null) {
                         reconnecting = true;
                         onUpdate(UpdateType.ON_RECONNECTING);
                         SystemClock.sleep(2500);
@@ -300,14 +305,20 @@ public class ChatManager implements Runnable {
                         onUpdate(UpdateType.ON_CONNECTED);
                     }
 
-                    JSONObject commentsObject = new JSONObject(result);
-                    JSONArray comments = commentsObject.getJSONArray("comments");
+                    if (dataObject.getJSONObject("video").isNull("comments")) continue;
+
+                    JSONObject commentsObject = dataObject.getJSONObject("video").getJSONObject("comments");
+                    JSONArray comments = commentsObject.getJSONArray("edges");
 
                     for (int i = 0; i < comments.length(); i++) {
-                        JSONObject commentJSON = comments.getJSONObject(i);
-                        double contentOffset = commentJSON.getDouble("content_offset_seconds");
+                        JSONObject commentJSON = comments.getJSONObject(i).getJSONObject("node");
+                        int contentOffset = commentJSON.getInt("contentOffsetSeconds");
                         // Don't show previous comments and don't show comments that came before the current progress unless we just seeked.
                         if (contentOffset < previousProgress || contentOffset < currentProgress && !justSeeked)
+                            continue;
+
+                        // Sometimes the commenter is null, Twitch doesn't show them so we won't either.
+                        if (commentJSON.isNull("commenter"))
                             continue;
 
                         downloadedComments.add(new VODComment(contentOffset, commentJSON));
@@ -315,13 +326,15 @@ public class ChatManager implements Runnable {
 
                     justSeeked = false;
 
+                    JSONObject pageInfo = commentsObject.getJSONObject("pageInfo");
+                    boolean hasNextPage = pageInfo.getBoolean("hasNextPage");
                     // Assumption: If the VOD has no comments and no previous or next comments, there are no comments on the VOD.
-                    if (comments.length() == 0 && !commentsObject.has("_next") && !commentsObject.has("_prev")) {
+                    if (comments.length() == 0 && !hasNextPage && !pageInfo.getBoolean("hasPreviousPage")) {
                         break;
                     }
 
-                    if (commentsObject.has("_next")) {
-                        cursor = commentsObject.getString("_next");
+                    if (hasNextPage) {
+                        cursor = comments.getJSONObject(comments.length() - 1).getString("cursor");
                     } else if (downloadedComments.isEmpty()) {
                         // We've reached the end of the comments, nothing to do until the user seeks.
                         synchronized (vodLock) {
@@ -347,33 +360,33 @@ public class ChatManager implements Runnable {
                 JSONObject message = comment.data.getJSONObject("message");
 
                 Map<String, String> badges = new HashMap<>();
-                if (message.has("user_badges")) {
-                    JSONArray userBadgesArray = message.getJSONArray("user_badges");
+                if (message.has("userBadges")) {
+                    JSONArray userBadgesArray = message.getJSONArray("userBadges");
                     for (int j = 0; j < userBadgesArray.length(); j++) {
                         JSONObject userBadge = userBadgesArray.getJSONObject(j);
-                        badges.put(userBadge.getString("_id"), userBadge.getString("version"));
+                        badges.put(userBadge.getString("setID"), userBadge.getString("version"));
                     }
                 }
 
-                String color = message.has("user_color") ? message.getString("user_color") : null;
-                String displayName = commenter.getString("display_name");
-                String body = message.getString("body");
+                String color = !message.isNull("userColor") ? message.getString("userColor") : null;
+                String displayName = commenter.getString("displayName");
 
+                StringBuilder bodyBuilder = new StringBuilder();
+                JSONArray fragments = message.getJSONArray("fragments");
                 List<ChatEmote> emotes = new ArrayList<>();
-                if (message.has("emoticons")) {
-                    JSONArray emoticonsArray = message.getJSONArray("emoticons");
-                    for (int j = 0; j < emoticonsArray.length(); j++) {
-                        JSONObject emoticon = emoticonsArray.getJSONObject(j);
-                        int begin = emoticon.getInt("begin");
-                        int end = emoticon.getInt("end") + 1;
-                        // In some cases, Twitch gets the indexes of emotes wrong so we have to ignore any emotes that go over the length of the message.
-                        if (end > body.length())
-                            continue;
+                for (int i = 0; i < fragments.length(); i++) {
+                    JSONObject fragment = fragments.getJSONObject(i);
+                    String text = fragment.getString("text");
 
-                        String keyword = body.substring(begin, end);
-                        emotes.add(new ChatEmote(Emote.Twitch(keyword, emoticon.getString("_id")), new int[]{begin}));
+                    JSONObject emote = fragment.optJSONObject("emote");
+                    if (emote != null) {
+                        emotes.add(new ChatEmote(Emote.Twitch(text, emote.getString("emoteID")), new int[] { bodyBuilder.length() }));
                     }
+
+                    bodyBuilder.append(text);
                 }
+
+                String body = bodyBuilder.toString();
                 emotes.addAll(mEmoteManager.findCustomEmotes(body));
 
                 //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
