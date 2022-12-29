@@ -866,6 +866,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         TextView mMention = v.findViewById(R.id.text_mention);
         TextView mDuplicateMessage = v.findViewById(R.id.text_duplicate_message);
 
+        if (vodID != null) {
+            mMention.setVisibility(View.GONE);
+            mDuplicateMessage.setVisibility(View.GONE);
+        }
+
         mMessage.setText(formattedMessage);
         mMention.setOnClickListener(view -> {
             insertSendText("@" + userName);
