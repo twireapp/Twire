@@ -1068,7 +1068,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && intent.getBooleanExtra(getString(R.string.stream_shared_transition), false)) {
             mPreview.setTransitionName(getString(R.string.stream_preview_transition));
 
-            final View[] viewsToHide = {mVideoView, mToolbar, mControlToolbar};
+            final View[] viewsToHide = {mToolbar, mControlToolbar};
             for (View view : viewsToHide) {
                 view.setVisibility(View.INVISIBLE);
             }
@@ -1141,7 +1141,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         layoutParams.height = isLandscape ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT;
 
         ConstraintLayout.LayoutParams layoutWrapper = (ConstraintLayout.LayoutParams) mVideoWrapper.getLayoutParams();
-        if (isLandscape && !pictureInPictureEnabled) {
+        boolean landscapeLayout = isLandscape && !pictureInPictureEnabled;
+        if (landscapeLayout) {
             layoutWrapper.width = !landscapeChatVisible ? ConstraintLayout.LayoutParams.MATCH_CONSTRAINT : getScreenRect(getActivity()).height() - getLandscapeChatTargetWidth();
             layoutWrapper.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT;
         } else {
@@ -1151,6 +1152,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mVideoWrapper.setLayoutParams(layoutWrapper);
 
         mVideoView.setResizeMode(isLandscape ? AspectRatioFrameLayout.RESIZE_MODE_FIT : AspectRatioFrameLayout.RESIZE_MODE_FIXED_WIDTH);
+
+        ((ConstraintLayout.LayoutParams) mVideoView.getLayoutParams()).dimensionRatio = landscapeLayout ? null : "16:9";
     }
 
     /**
