@@ -1,13 +1,13 @@
 package com.perflyst.twire.views.recyclerviews;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.perflyst.twire.R;
 
 /**
  * Created by Sebastian Rask on 30-03-2016.
@@ -34,8 +34,7 @@ public class ChatRecyclerView extends RecyclerView {
     }
 
     public boolean isScrolled() {
-        float min = -1 * getContext().getResources().getDimension(R.dimen.chat_message_text_size);
-        return amountScrolled < min;
+        return amountScrolled > 1;
     }
 
     public void setChatPaused(TextView chatPaused) {
@@ -44,9 +43,10 @@ public class ChatRecyclerView extends RecyclerView {
     }
 
     @Override
-    public void scrollToPosition(int position) {
-        super.scrollToPosition(position);
-        amountScrolled = 0;
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        if (!isScrolled() && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) scrollToPosition(getAdapter().getItemCount() - 1);
     }
 
     private void setScrolledListener() {
@@ -55,7 +55,8 @@ public class ChatRecyclerView extends RecyclerView {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                amountScrolled += dy;
+                LinearLayoutManager layoutManager = (LinearLayoutManager) getLayoutManager();
+                amountScrolled = layoutManager.getItemCount() - layoutManager.findLastCompletelyVisibleItemPosition() - 1;
 
                 if (chatPaused == null) return;
 
