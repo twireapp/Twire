@@ -198,7 +198,8 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     @Override
     public void onStart() {
         super.onStart();
-        chatManager = new ChatManager(getContext(), mUserInfo, vodID, new ChatManager.ChatCallback() {
+        chatManager = new ChatManager(getContext(), mUserInfo, vodID, new ChatManager.ChatCallback()
+        {
             private boolean connected = false;
 
             private boolean isFragmentActive() {
@@ -209,6 +210,13 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             public void onMessage(ChatMessage message) {
                 if (isFragmentActive())
                     addMessage(message);
+            }
+
+            @Override
+            public void onClear(String target) {
+                if (!isFragmentActive()) return;
+
+                mChatAdapter.clear(target);
             }
 
             @Override

@@ -14,6 +14,7 @@ public class ChatMessage {
     private final List<Badge> badges;
     private final List<ChatEmote> emotes;
     private boolean highlight;
+    private String id = null;
 
     public ChatMessage(String message, String name, String color, List<Badge> badges, List<ChatEmote> emotes, boolean highlight) {
         this.message = message;
@@ -64,6 +65,14 @@ public class ChatMessage {
 
     public void setHighlight(boolean highlight) {
         this.highlight = highlight;
+    }
+
+    public String getID() {
+        return id;
+    }
+
+    public void setID(String id) {
+        this.id = id;
     }
 
     @Override

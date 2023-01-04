@@ -422,6 +422,12 @@ public class ChatManager implements Runnable {
             case "NOTICE":
                 handleNotice(message);
                 break;
+            case "CLEARCHAT":
+                TwireApplication.uiThreadPoster.post(() -> callback.onClear(message.content));
+                break;
+            case "CLEARMSG":
+                TwireApplication.uiThreadPoster.post(() -> callback.onClear(message.tags.get("target-msg-id")));
+                break;
             case "JOIN":
                 break;
             default:
@@ -522,6 +528,7 @@ public class ChatManager implements Runnable {
         //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
         ChatMessage chatMessage = new ChatMessage(content, displayName, color, getBadges(badges), emotes, false);
+        chatMessage.setID(tags.get("id"));
 
         if (content.contains("@" + getUserDisplayName())) {
             Log.d(LOG_TAG, "Highlighting message with mention: " + content);
@@ -676,6 +683,8 @@ public class ChatManager implements Runnable {
 
     public interface ChatCallback {
         void onMessage(ChatMessage message);
+
+        void onClear(String target);
 
         void onConnecting();
 

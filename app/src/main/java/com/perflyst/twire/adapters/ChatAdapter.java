@@ -241,6 +241,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         notifyItemRangeRemoved(0, size);
     }
 
+    public void clear(String target) {
+        for (int i = messages.size() - 1 ; i >= 0; i--) {
+            ChatMessage message = messages.get(i);
+            if (!message.getName().equals(target) && !message.getID().equals(target)) {
+                continue;
+            }
+
+            messages.remove(i);
+            notifyItemRemoved(i);
+        }
+    }
+
     /**
      * Checks if the data structure contains more items that the specified max amount, if so. Remove the first item in the structure.
      * Notifies observers that item has been removed
