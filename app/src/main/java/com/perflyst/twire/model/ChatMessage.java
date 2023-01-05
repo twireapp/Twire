@@ -24,6 +24,8 @@ public class ChatMessage {
         this.emotes = emotes;
         this.highlight = highlight;
 
+        if (ChatManager.ffzBadgeMap == null) return;
+
         // Load any special FFZ badges the user has
         for (Badge badge : ChatManager.ffzBadgeMap.get(name.toLowerCase())) {
             if (badge.replaces != null) {
