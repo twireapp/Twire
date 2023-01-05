@@ -1,0 +1,1 @@
+Podporuje VOD s přehráváním chatu, vlastní emotikony (BTTV, FFZ a 7TV) a režim obrazu v obraze.
