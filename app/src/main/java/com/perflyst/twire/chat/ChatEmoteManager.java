@@ -76,6 +76,8 @@ class ChatEmoteManager {
             String bttvChannelResponse = enabled_bttv ? Service.urlToJSONString(BTTV_CHANNEL_URL) : "";
             if (!bttvChannelResponse.isEmpty()) {
                 JSONObject topChannelEmotes = new JSONObject(bttvChannelResponse);
+                if (topChannelEmotes.has("message")) return;
+
                 JSONArray channelEmotes = topChannelEmotes.getJSONArray(CHANNEL_EMOTE_ARRAY);
 
                 // Append shared emotes
