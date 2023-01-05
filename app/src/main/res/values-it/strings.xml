@@ -237,4 +237,5 @@
     <string name="gen_wipe_summary">Questo non cancellerà gli utenti seguiti su Twitch.</string>
     <string name="gen_export_summary">Le esportazioni includono sia gli utenti seguiti localmente sia quelli di Twitch.</string>
     <string name="gen_import_summary">Questo non aggiungerà utenti seguiti a Twitch.</string>
+    <string name="chat_paused">Chat in pausa a causa dello scorrimento.</string>
 </resources>

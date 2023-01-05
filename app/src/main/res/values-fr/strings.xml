@@ -32,7 +32,7 @@
     <!-- LiveStreamActivity -->
     <string name="menu_external">Utiliser un lecteur externe</string>
     <string name="menu_profile">Profil</string>
-    <string name="menu_sleep">Minuterie d\'arrêt programmée</string>
+    <string name="menu_sleep">Minuterie d\'arrêt programmé</string>
     <string name="menu_options">Options</string>
     <string name="options">Options</string>
     <string name="audio_only">Audio uniquement</string>
@@ -43,7 +43,7 @@
     <string name="stream_sleep_timer_stopped">La minuterie d\'arrêt est interrompue</string>
     <string name="stream_sleep_timer_started">La minuterie d\'arrêt a démarré. Le stream sera interrompu dans %1$d heures et %2$d minutes.</string>
     <string name="stream_sleep_timer_started_minutes_only">La minuterie d\'arrêt a démarré. Le stream sera interrompu dans %d minutes.</string>
-    <string name="stream_sleep_timer_title">Minuterie d\'arrêt programmée</string>
+    <string name="stream_sleep_timer_title">Minuterie d\'arrêt programmé</string>
     <string name="stream_audio_only_active">Lecture audio uniquement</string>
     <!-- VOD activity -->
     <string name="vod_playback_failed">Échec de la lecture de la vidéo. Essayez une autre qualité.</string>
@@ -125,7 +125,7 @@
     <string name="gen_start_page">Page d\'accueil</string>
     <string name="gen_reset_tips">Redémarrer le didacticiel</string>
     <string name="gen_tips_have_been_reset">Le didacticiel a été réinitialisé</string>
-    <string name="gen_language_filter">Filtrer les top streams par langue</string>
+    <string name="gen_language_filter">Filtrer les meilleurs streams par langue</string>
     <!-- Chat Settings -->
     <string name="chat_emote_size">Taille des émotes</string>
     <string name="chat_message_size">Taille des messages</string>
@@ -148,7 +148,7 @@
     <string name="appearance_streams_size_title">Taille des streams</string>
     <string name="appearance_game_size_title">Taille des jeux</string>
     <string name="appearance_streamer_size_title">Taille des streameurs</string>
-    <string name="appearance_stream_header">Streams</string>
+    <string name="appearance_stream_header">Flux</string>
     <string name="appearance_streamer_header">Streameurs</string>
     <string name="appearance_game_header">Jeux</string>
     <!-- Notifications settings -->
@@ -232,9 +232,10 @@
     <string name="gen_toast_import_database">%1$x streameurs suivis importés</string>
     <string name="retry">Réessayer</string>
     <string name="mute">Muet</string>
-    <string name="gen_export_summary">Les exports contiennent les suivis locaux et sur Twitch.</string>
+    <string name="gen_export_summary">Les exports contiennent les chaînes enregistrées localement et celles sur Twitch.</string>
     <string name="gen_local_follows_summary">Les utilisateurs suivis sur Twire sont enregistrés localement et ne seront pas envoyés sur Twitch.</string>
     <string name="gen_local_follows_header">Suivis locaux</string>
     <string name="gen_import_summary">Cela n\'ajoutera pas de suivi sur Twitch.</string>
-    <string name="gen_wipe_summary">Cela ne supprimera pas les suivis sur Twitch.</string>
+    <string name="gen_wipe_summary">Cela n\'effacera pas vos chaînes suivis sur Twitch.</string>
+    <string name="chat_paused">Chat en pause en raison du défilement.</string>
 </resources>

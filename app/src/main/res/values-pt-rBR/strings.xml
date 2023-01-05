@@ -193,4 +193,10 @@
     <string name="gen_toast_import_database">%1$x Seguidores Importados</string>
     <string name="mute">Mudo</string>
     <string name="retry">Repetir</string>
+    <string name="gen_import_summary">Isso não adicionará seguidores na Twitch.</string>
+    <string name="gen_local_follows_header">Seguidores locais</string>
+    <string name="gen_wipe_summary">Isso não limpará os seguidores na Twitch.</string>
+    <string name="gen_export_summary">As exportações incluem os seguidores locais e da Twitch.</string>
+    <string name="gen_local_follows_summary">Os usuários seguidos no Twire são armazenados localmente e não enviados à Twitch.</string>
+    <string name="chat_paused">Bate-papo pausado devido à rolagem.</string>
 </resources>

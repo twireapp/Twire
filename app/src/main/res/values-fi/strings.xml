@@ -34,7 +34,7 @@
     <string name="changelog_title">Muutosloki</string>
     <string name="router_channel_error">Kanavan lataaminen epäonnistui.</string>
     <string name="router_nonexistent_user">Käyttäjää ei ole olemassa.</string>
-    <string name="router_vod_error">VOD:n lataaminen epäonnistui.</string>
+    <string name="router_vod_error">Tallenteen lataaminen epäonnistui.</string>
     <string name="router_error_dialog_title">URL virhe</string>
     <string name="router_unknown_error">Tuntematon virhe.</string>
     <string name="router_activity_label">Toista Twirellä</string>
@@ -191,4 +191,6 @@
     <string name="gen_toast_wipe_database">Seuraavat pyyhkitty</string>
     <string name="gen_toast_export_database">Vietiin %1$x seuraavaa</string>
     <string name="gen_toast_import_database">Tuotiin %1$x seuraavaa</string>
+    <string name="retry">Yritä uudestaan</string>
+    <string name="mute">Mykistä</string>
 </resources>

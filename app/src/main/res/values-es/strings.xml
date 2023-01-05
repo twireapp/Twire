@@ -206,7 +206,36 @@
     <string name="preview_stream_online_since">00:30:00</string>
     <string name="settings_general_image_proxy_url_button">Guardar</string>
     <string name="settings_general_image_proxy_url_example">Proxy de ejemplo: https://external-content.duckduckgo.com/iu/\?u=</string>
-    <string name="menu_playback">Ajustes de reproduccion</string>
+    <string name="menu_playback">Ajustes de reproducción</string>
     <string name="playback_speed_display">×%.2f</string>
     <string name="playback_speed">%.2f</string>
+    <string name="gen_dialog_wipe_follows_action">Borrar</string>
+    <string name="gen_toast_import_database">%1$x seguimientos importados</string>
+    <string name="gen_toast_export_database">%1$x seguimientos exportados</string>
+    <string name="settings_general_image_proxy">Utilizar un proxy para imágenes</string>
+    <string name="gen_local_follows_summary">Los usuarios seguidos en Twire se almacenan localmente y no se envían a Twitch.</string>
+    <string name="gen_export_summary">Las exportaciones incluyen el seguimiento local y de Twitch.</string>
+    <string name="chat_enable_emote_bttv">Activar los emotes de BetterTTV (BTTV)</string>
+    <string name="chat_enable_emote_ffz">Activar los emotes de FrankerFaceZ (FFZ)</string>
+    <string name="retry">Reintentar</string>
+    <string name="gen_dialog_wipe_follows_content">¿Quieres borrar todo lo que sigues\?</string>
+    <string name="gen_dialog_export_follows_content">¿Quieres exportar todo lo que sigues\?</string>
+    <string name="gen_dialog_export_follows_action">Exportar</string>
+    <string name="gen_dialog_import_follows_content">¿Quiere importar todo lo que sigues\?</string>
+    <string name="gen_dialog_import_follows_action">Importar</string>
+    <string name="player_show_runtime">Mostrar el tiempo de ejecución del flujo</string>
+    <string name="player_type">Tipo de reproductor de streaming</string>
+    <string name="menu_share">Compartir</string>
+    <string name="gen_twitch_follows">Borrar todos los seguimientos</string>
+    <string name="gen_export_database">Exportar todo lo que sigues</string>
+    <string name="gen_import_database">Importar seguimientos</string>
+    <string name="gen_toast_wipe_database">Seguimientos borrados</string>
+    <string name="chat_enable_account_connect">Conectarte con tu cuenta</string>
+    <string name="chat_enable_emote_seventv">Activar los emotes de 7TV</string>
+    <string name="mute">Silenciar</string>
+    <string name="gen_local_follows_header">Seguimientos locales</string>
+    <string name="gen_wipe_summary">Esto no borrará los seguimientos en Twitch.</string>
+    <string name="gen_import_summary">Esto no añadirá seguimientos a Twitch.</string>
+    <string name="chat_enable_ssl">Usar SSL para la conexión</string>
+    <string name="chat_paused">Chat pausado debido a desplazamiento.</string>
 </resources>

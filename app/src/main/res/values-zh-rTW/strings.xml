@@ -164,7 +164,7 @@
     <string name="skip_silence">跳過靜音部份</string>
     <string name="login_invalid_token_text_line_one">很抱歉，您</string>
     <string name="login_invalid_token_text_line_two">將需重新登入</string>
-    <string name="chat_enable_account_connect">以 Twitch 帳戶連接至聊天室</string>
+    <string name="chat_enable_account_connect">以 Twitch 帳戶連接</string>
     <string name="player_show_runtime">顯示直播上線時間</string>
     <string name="chat_enable_emote_seventv">啟用 7TV 貼圖</string>
     <string name="menu_playback">播放設定</string>
@@ -179,4 +179,24 @@
     <string name="menu_share">分享</string>
     <string name="playback_speed_display">×%.2f</string>
     <string name="playback_speed">%.2f</string>
+    <string name="retry">重試</string>
+    <string name="mute">靜音</string>
+    <string name="gen_dialog_wipe_follows_content">您要清除所有追隨者嗎\?</string>
+    <string name="gen_dialog_wipe_follows_action">清除</string>
+    <string name="gen_import_database">匯入追隨</string>
+    <string name="gen_toast_import_database">匯入 %1$x 追隨</string>
+    <string name="chat_paused">聊天室因為滑鼠滾動暫停更新.</string>
+    <string name="gen_dialog_import_follows_action">匯入</string>
+    <string name="gen_local_follows_header">當地追隨</string>
+    <string name="gen_dialog_export_follows_content">您要輸出所有追隨者嗎\?</string>
+    <string name="gen_export_database">匯出所有追隨</string>
+    <string name="gen_dialog_export_follows_action">匯出</string>
+    <string name="gen_dialog_import_follows_content">您要匯入所有追隨者嗎\?</string>
+    <string name="gen_toast_export_database">匯出 %1$x 追隨</string>
+    <string name="gen_wipe_summary">這不會清除所有Twitch上的追隨.</string>
+    <string name="gen_export_summary">匯出檔案包含本地端和Twitch的追隨.</string>
+    <string name="gen_twitch_follows">清除所有追隨</string>
+    <string name="gen_local_follows_summary">使用 Twire 追隨的用戶被儲存在本地端，未被發送至Twitch.</string>
+    <string name="gen_import_summary">這不會為您的Twitch增加追隨.</string>
+    <string name="gen_toast_wipe_database">清除的追隨</string>
 </resources>

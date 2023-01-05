@@ -192,4 +192,11 @@
     <string name="gen_dialog_wipe_follows_action">Стереть</string>
     <string name="gen_dialog_import_follows_content">Вы хотите импортировать все подписки\?</string>
     <string name="mute">Отключить звук</string>
+    <string name="retry">Повторить</string>
+    <string name="gen_local_follows_summary">Информация о подписках на пользователей в Twire, хранится локально и не отправляется в Twitch.</string>
+    <string name="gen_export_summary">Экспорт включает локальные и Twitch подписки.</string>
+    <string name="gen_wipe_summary">Это не приведет к удалению подписок в Twitch.</string>
+    <string name="chat_paused">Чат приостановлен из-за прокрутки.</string>
+    <string name="gen_local_follows_header">Локальные подписки</string>
+    <string name="gen_import_summary">Это не добавит подписки на Twitch.</string>
 </resources>

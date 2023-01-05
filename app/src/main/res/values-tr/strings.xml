@@ -48,7 +48,7 @@
     <string name="drawer_open">Aç</string>
     <string name="minutes_short">dk</string>
     <string name="changelog_show_after_update">Güncellemeden sonra değişim günlüğünü göster</string>
-    <string name="changelog_title">Değişim kaydı</string>
+    <string name="changelog_title">Değişim günlüğü</string>
     <string name="router_channel_error">Kanal yüklenemedi.</string>
     <string name="router_nonexistent_user">Bu kullanıcı mevcut değil.</string>
     <string name="router_vod_error">VOD yüklenemedi.</string>
@@ -59,7 +59,7 @@
     <string name="chat_message_option_block">Engelle</string>
     <string name="chat_message_option_duplicate">Yinelenen mesaj</string>
     <string name="chat_message_option_mention">Bahset</string>
-    <string name="tip_navigate">Gezinmek için tıklatın</string>
+    <string name="tip_navigate">Gezinmek için tıklayın</string>
     <string name="true_night_theme_name">Gerçek gece</string>
     <string name="night_theme_name">Gece</string>
     <string name="black_theme_name">Siyah</string>
@@ -117,7 +117,7 @@
     <string name="settings_chat_name">Twitch sohbeti</string>
     <string name="settings_appearance_summary">Tema, kart biçimi, kart boyutu</string>
     <string name="settings_appearance_name">Görünüm</string>
-    <string name="settings_stream_player_summary">Mevcut izleyici sayısı, oynatıcı davranışı</string>
+    <string name="settings_stream_player_summary">Şu anki izleyici sayısı, oynatıcı davranışı</string>
     <string name="settings_stream_player_name">Yayın oynatıcısı</string>
     <string name="settings_general_name_summary">Twitch hesabı, başlangıç sayfası</string>
     <string name="settings_general_name">Genel</string>
@@ -134,7 +134,7 @@
     <string name="login_text_line_two">İlk önce Twitch\'e giriş yapın.</string>
     <string name="login_text_line_one">Hadi seni hazır yapalım!</string>
     <string name="welcome_text_line_two">Twire</string>
-    <string name="welcome_text_line_one">Hoşgeldiniz</string>
+    <string name="welcome_text_line_one">Hoş geldiniz</string>
     <string name="title_activity_welcome">Twire kurulumu</string>
     <string name="my_streams_cell_current_viewers">%,d izleyici</string>
     <string name="my_streams_preview_image">Canlı kanalın önizlemesi</string>
@@ -193,4 +193,10 @@
     <string name="gen_dialog_import_follows_action">İçe aktar</string>
     <string name="mute">Sustur</string>
     <string name="retry">Yeniden dene</string>
+    <string name="gen_local_follows_summary">Twire\'da takip edilen kullanıcılar yerel olarak saklanır ve Twitch\'e gönderilmez.</string>
+    <string name="gen_local_follows_header">Yerel takip</string>
+    <string name="gen_wipe_summary">Twitch\'teki takipçileri silmeyecektir.</string>
+    <string name="gen_export_summary">Dışa aktarım yerel ve Twitch takiplerini içerir.</string>
+    <string name="gen_import_summary">Twitch\'e takipçi eklemez.</string>
+    <string name="chat_paused">Kaydırma nedeniyle sohbet duraklatıldı.</string>
 </resources>

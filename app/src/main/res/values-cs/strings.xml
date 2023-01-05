@@ -198,4 +198,5 @@
     <string name="gen_wipe_summary">Toto nevymaže sledování na Twitchi.</string>
     <string name="gen_export_summary">Exporty zahrnují lokální a Twitch sledování.</string>
     <string name="gen_import_summary">Toto nepřidá sledování do Twitche.</string>
+    <string name="chat_paused">Chat pozastaven kvůli posunu.</string>
 </resources>

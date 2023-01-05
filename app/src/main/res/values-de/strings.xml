@@ -149,7 +149,7 @@
     <string name="appearance_game_size_title">Spielgröße</string>
     <string name="appearance_streamer_size_title">Streamer-Größe</string>
     <string name="appearance_stream_header">Streams</string>
-    <string name="appearance_streamer_header">Streamers</string>
+    <string name="appearance_streamer_header">Streamer</string>
     <string name="appearance_game_header">Spiele</string>
     <!-- Notifications settings -->
     <!-- Game Activitiy -->
@@ -199,7 +199,7 @@
     <string name="stream_show_chat">Chat anzeigen</string>
     <string name="stream_viewers">Zuschauer</string>
     <string name="stream_fullscreen">Vollbild</string>
-    <string name="title_activity_streamer_info">Channel</string>
+    <string name="title_activity_streamer_info">Kanal</string>
     <string name="router_nonexistent_user">Dieser Nutzer existiert nicht.</string>
     <string name="login_invalid_token_text_line_two">dich erneut anmelden</string>
     <string name="login_invalid_token_text_line_one">Leider musst du</string>
@@ -232,4 +232,10 @@
     <string name="gen_toast_import_database">%1$x Folgende importiert</string>
     <string name="mute">Stumm</string>
     <string name="retry">Wiederholen</string>
+    <string name="gen_local_follows_summary">Gefolgte Nutzer auf Twire werden lokal gespeichert und nicht an Twitch gesendet.</string>
+    <string name="gen_wipe_summary">Dies wird die Follower auf Twitch nicht entfernen.</string>
+    <string name="gen_export_summary">Exporte beinhalten lokale und Twitch Follower.</string>
+    <string name="gen_import_summary">Dies wird keine Follower auf Twitch hinzufügen.</string>
+    <string name="gen_local_follows_header">Lokale Follows</string>
+    <string name="chat_paused">Chat wurde aufgrund des Scrollens angehalten.</string>
 </resources>

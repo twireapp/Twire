@@ -177,4 +177,6 @@
     <string name="chat_enable_emote_bttv">BetterTTVko (BTTV) emoteak aktibatu</string>
     <string name="chat_enable_emote_ffz">Aktibatu FrankerFaceZ (FFZ) emoteak</string>
     <string name="chat_enable_emote_seventv">Aktibatu 7TV emoteak</string>
+    <string name="retry">Saiatu berriro</string>
+    <string name="menu_playback">Erreprodukzio-ezarpenak</string>
 </resources>
