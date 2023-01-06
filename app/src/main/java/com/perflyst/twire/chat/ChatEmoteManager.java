@@ -48,7 +48,7 @@ class ChatEmoteManager {
      * This must not be called on main UI thread
      */
     void loadCustomEmotes(EmoteFetchCallback callback) {
-        Map<String, Emote> result = new HashMap<>();
+        emoteKeywordToEmote = new HashMap<>();
 
         // Emote Settings
         boolean enabled_bttv = settings.getChatEmoteBTTV();
@@ -69,7 +69,7 @@ class ChatEmoteManager {
                 for (int i = 0; i < globalEmotes.length(); i++) {
                     Emote emote = ToBTTV(globalEmotes.getJSONObject(i));
                     customGlobal.add(emote);
-                    result.put(emote.getKeyword(), emote);
+                    emoteKeywordToEmote.put(emote.getKeyword(), emote);
                 }
             }
 
@@ -91,7 +91,7 @@ class ChatEmoteManager {
                     Emote emote = ToBTTV(channelEmotes.getJSONObject(i));
                     emote.setCustomChannelEmote(true);
                     customChannel.add(emote);
-                    result.put(emote.getKeyword(), emote);
+                    emoteKeywordToEmote.put(emote.getKeyword(), emote);
                 }
             }
         } catch (JSONException e) {
@@ -127,7 +127,7 @@ class ChatEmoteManager {
                 for (int emoteIndex = 0; emoteIndex < emoticons.length(); emoteIndex++) {
                     Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
                     customGlobal.add(emote);
-                    result.put(emote.getKeyword(), emote);
+                    emoteKeywordToEmote.put(emote.getKeyword(), emote);
                 }
             }
 
@@ -142,7 +142,7 @@ class ChatEmoteManager {
                             Emote emote = ToFFZ(emoticons.getJSONObject(emoteIndex));
                             emote.setCustomChannelEmote(true);
                             customChannel.add(emote);
-                            result.put(emote.getKeyword(), emote);
+                            emoteKeywordToEmote.put(emote.getKeyword(), emote);
                         }
                     }
                 }
@@ -167,7 +167,7 @@ class ChatEmoteManager {
                     Emote emote = To7TV(seventvemotesglobal.getJSONObject(i));
                     emote.setCustomChannelEmote(false);
                     customChannel.add(emote);
-                    result.put(emote.getKeyword(), emote);
+                    emoteKeywordToEmote.put(emote.getKeyword(), emote);
                 }
             }
 
@@ -188,14 +188,12 @@ class ChatEmoteManager {
                     Emote emote = To7TV(seventvemoteschannel.getJSONObject(i));
                     emote.setCustomChannelEmote(true);
                     customChannel.add(emote);
-                    result.put(emote.getKeyword(), emote);
+                    emoteKeywordToEmote.put(emote.getKeyword(), emote);
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        emoteKeywordToEmote = result;
 
         try {
             callback.onEmoteFetched();
