@@ -272,7 +272,7 @@ public class ChatManager implements Runnable {
 
             // Make sure that current progress has been set.
             synchronized (vodLock) {
-                while (currentProgress == -1) vodLock.wait();
+                while (currentProgress == -1 && !isStopping) vodLock.wait();
             }
 
             Queue<VODComment> downloadedComments = new LinkedList<>();
@@ -338,7 +338,7 @@ public class ChatManager implements Runnable {
                     } else if (downloadedComments.isEmpty()) {
                         // We've reached the end of the comments, nothing to do until the user seeks.
                         synchronized (vodLock) {
-                            while (!seek) {
+                            while (!seek && !isStopping) {
                                 vodLock.wait();
                             }
                         }
@@ -353,7 +353,7 @@ public class ChatManager implements Runnable {
 
                 nextCommentOffset = comment.contentOffset;
                 synchronized (vodLock) {
-                    while (currentProgress < nextCommentOffset && !seek) vodLock.wait();
+                    while (currentProgress < nextCommentOffset && !seek && !isStopping) vodLock.wait();
                 }
 
                 JSONObject commenter = comment.data.getJSONObject("commenter");
@@ -563,6 +563,10 @@ public class ChatManager implements Runnable {
      */
     public void stop() {
         isStopping = true;
+
+        synchronized (vodLock) {
+            vodLock.notify();
+        }
     }
 
     /**
