@@ -113,7 +113,6 @@ public class ChatManager implements Runnable {
         }
         Log.d(LOG_TAG, "Use SSL Chat Server: " + appSettings.getChatEnableSSL());
 
-        currentProgress = -1;
         nextCommentOffset = 0;
     }
 
@@ -404,6 +403,8 @@ public class ChatManager implements Runnable {
             onUpdate(UpdateType.ON_RECONNECTING);
             processVodChat();
         }
+
+        currentProgress = -1;
     }
 
     public void handleIRC(IRCMessage message) {
