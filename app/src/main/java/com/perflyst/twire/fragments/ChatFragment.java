@@ -677,6 +677,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         });
 
         final Pattern mentionPattern = Pattern.compile("@(\\w+)$");
+        final Pattern emotePattern = Pattern.compile(":(\\w+)$");
         mSendText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -697,6 +698,29 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
                 if (userName != null && !userName.isEmpty()) {
                     setMentionSuggestions(mChatAdapter.getNamesThatMatches(userName));
+                } else {
+                    setMentionSuggestions(new ArrayList<>());
+                }
+                
+                
+                mInputMatcher = emotePattern.matcher(getSendText());
+
+                String emoteName = null;
+                while (mInputMatcher.find()) {
+                    emoteName = mInputMatcher.group(1);
+                }
+
+                if (emoteName != null && !emoteName.isEmpty() && customEmotes != null) {
+                    List<String> result = new ArrayList<>();
+
+                    for (Emote emote : customEmotes) {
+                        if (emote.getKeyword().toLowerCase().matches("\\w*" + emoteName.toLowerCase() + "\\w*") && !result.contains(emote.getKeyword())) {
+                            result.add(emote.getKeyword());
+                        }
+                    }
+
+                    Collections.sort(result);
+                    setMentionSuggestions(result);
                 } else {
                     setMentionSuggestions(new ArrayList<>());
                 }
