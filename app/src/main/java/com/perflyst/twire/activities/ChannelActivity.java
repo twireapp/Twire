@@ -47,6 +47,7 @@ import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.adapters.VODAdapter;
+import com.perflyst.twire.fragments.ChatFragment;
 import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
 import com.perflyst.twire.misc.Utils;
@@ -71,10 +72,6 @@ public class ChannelActivity extends ThemeActivity {
     private static final String fragmentStreamerInfoArg = "streamerInfoArg",
             fragmentVodsBroadCastsOnlyArg = "vodsBroadcastsOnlyArg",
             fragmentVodsStreamerInfoArg = "streamerNameArg";
-    private final static int POSITION_DESC = 0;
-    private final static int POSITION_BROADCASTS = 1;
-    private final static int POSITION_HIGHLIGHTS = 2;
-    private final static int TOTAL_COUNT = 3;
     private final int SHOW_FAB_DELAY = 300;
     private ChannelInfo info;
     private ImageView streamerImage;
@@ -85,7 +82,6 @@ public class ChannelActivity extends ThemeActivity {
     private AppBarLayout mAppBar;
     private FloatingActionButton mFab;
     private int COLOR_FADE_DURATION = 0;
-    private ChannelFragment mDescriptionFragment, mBroadcastsFragment, mHighlightsFragment;
     private FollowHandler mFollowHandler;
 
     @Override
@@ -162,20 +158,13 @@ public class ChannelActivity extends ThemeActivity {
     private void setUpTabs() {
         mViewPager2.setAdapter(new ChannelStateAdapter(this));
 
-        new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> {
-            switch (position) {
-                default: // Deliberate fall-through to description tab
-                case POSITION_DESC:
-                    tab.setText(R.string.streamerInfo_desc_tab);
-                    break;
-                case POSITION_BROADCASTS:
-                    tab.setText(R.string.streamerInfo_broadcasts_tab);
-                    break;
-                case POSITION_HIGHLIGHTS:
-                    tab.setText(R.string.streamerInfo_highlights_tab);
-                    break;
-            }
-        }).attach();
+        int[] tabTitles = new int[] {
+                R.string.streamerInfo_desc_tab,
+                R.string.streamerInfo_broadcasts_tab,
+                R.string.streamerInfo_highlights_tab,
+                R.string.streamerInfo_chat_tab
+        };
+        new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> tab.setText(tabTitles[position])).attach();
 
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -616,31 +605,31 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private class ChannelStateAdapter extends FragmentStateAdapter {
+        private Fragment[] tabFragments;
 
         ChannelStateAdapter(final FragmentActivity fa) {
             super(fa);
-            mDescriptionFragment = InfoFragment.newInstance(info);
-            mBroadcastsFragment = VodFragment.newInstance(true, info);
-            mHighlightsFragment = VodFragment.newInstance(false, info);
+
+            ChannelFragment mDescriptionFragment = InfoFragment.newInstance(info);
+            ChannelFragment mBroadcastsFragment = VodFragment.newInstance(true, info);
+            ChannelFragment mHighlightsFragment = VodFragment.newInstance(false, info);
+
+            Bundle chatBundle = new Bundle();
+            chatBundle.putParcelable(getString(R.string.stream_fragment_streamerInfo), info);
+            ChatFragment mChatFragment = ChatFragment.getInstance(chatBundle);
+
+            tabFragments = new Fragment[] {mDescriptionFragment, mBroadcastsFragment, mHighlightsFragment, mChatFragment};
         }
 
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            switch (position) {
-                default: // Deliberate fall-through to description tab
-                case POSITION_DESC:
-                    return mDescriptionFragment;
-                case POSITION_BROADCASTS:
-                    return mBroadcastsFragment;
-                case POSITION_HIGHLIGHTS:
-                    return mHighlightsFragment;
-            }
+            return tabFragments[position];
         }
 
         @Override
         public int getItemCount() {
-            return TOTAL_COUNT;
+            return tabFragments.length;
         }
     }
 }

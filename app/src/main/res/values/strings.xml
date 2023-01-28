@@ -31,6 +31,7 @@
     <string name="streamerInfo_desc_tab">Description</string>
     <string name="streamerInfo_broadcasts_tab">Broadcasts</string>
     <string name="streamerInfo_highlights_tab">Highlights</string>
+    <string name="streamerInfo_chat_tab">Chat</string>
     <string name="streamerInfo_transition" translatable="false">streamerInfoPicTrans</string>
     <string name="streamerInfo_description">No description found</string>
 

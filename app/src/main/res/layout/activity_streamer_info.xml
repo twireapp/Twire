@@ -141,7 +141,8 @@
             android:id="@+id/streamer_info_tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimaryDark" />
+            android:background="?attr/colorPrimaryDark"
+            app:tabMode="scrollable" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
