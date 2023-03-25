@@ -4,7 +4,6 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -17,8 +16,6 @@ import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.adapters.SettingsCategoryAdapter;
 import com.perflyst.twire.model.SettingsCategory;
 
-import net.nrask.srjneeds.SRJAdapter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCallback<SettingsCategoryAdapter.SettingsCategoryViewHolder> {
+public class SettingsActivity extends ThemeActivity implements SettingsCategoryAdapter.CategoryCallback {
 
     @BindView(R.id.settings_category_list)
     protected RecyclerView mCategoryList;
@@ -44,9 +41,7 @@ public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCa
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        SettingsCategoryAdapter mAdapter = new SettingsCategoryAdapter();
-        mAdapter.setItemCallback(this);
-        mAdapter.addItems(constructSettingsCategories());
+        SettingsCategoryAdapter mAdapter = new SettingsCategoryAdapter(constructSettingsCategories(), this);
 
         mCategoryList.setAdapter(mAdapter);
         mCategoryList.setLayoutManager(new LinearLayoutManager(getBaseContext()));
@@ -67,9 +62,7 @@ public class SettingsActivity extends ThemeActivity implements SRJAdapter.ItemCa
     }
 
     @Override
-    public void onItemClicked(View view, SettingsCategoryAdapter.SettingsCategoryViewHolder settingsCategoryViewHolder) {
-        SettingsCategory category = settingsCategoryViewHolder.getData();
-
+    public void onCategoryClicked(SettingsCategory category) {
         ActivityOptions settingsAnim = ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim); // First animation is how the new activity enters - Second is how the current activity exits
         startActivity(category.getIntent(), settingsAnim.toBundle());
     }
