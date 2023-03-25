@@ -122,7 +122,6 @@
         <activity
             android:name=".activities.StartUpActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/StartUpTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
