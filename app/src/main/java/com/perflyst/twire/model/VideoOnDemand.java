@@ -8,10 +8,8 @@ import androidx.annotation.NonNull;
 
 import com.perflyst.twire.R;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 
 /**
  * Created by Sebastian Rask on 16-06-2016.
@@ -43,7 +41,7 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
     private final int views;
     private final int length;
     private boolean isBroadcast;
-    private Calendar recordedAt;
+    private ZonedDateTime recordedAt;
     private ChannelInfo channelInfo;
 
     public VideoOnDemand(String videoTitle, String gameTitle, String previewUrl, String videoId,
@@ -98,10 +96,8 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
 
     private void setRecordedAtDate(String recordedAtString) {
         try {
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            this.recordedAt = Calendar.getInstance();
-            this.recordedAt.setTime(formatter.parse(recordedAtString.split("T")[0]));
-        } catch (ParseException e) {
+            this.recordedAt = ZonedDateTime.parse(recordedAtString);
+        } catch (DateTimeParseException e) {
             e.printStackTrace();
         }
     }
@@ -158,13 +154,13 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         return length;
     }
 
-    public Calendar getRecordedAt() {
+    public ZonedDateTime getRecordedAt() {
         return recordedAt;
     }
 
     @Override
     public int compareTo(@NonNull VideoOnDemand another) {
-        return (int) (recordedAt.getTimeInMillis() - another.recordedAt.getTimeInMillis());
+        return recordedAt.compareTo(another.recordedAt);
     }
 
     @Override

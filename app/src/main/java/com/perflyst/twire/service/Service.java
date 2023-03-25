@@ -108,17 +108,6 @@ public class Service {
     }
 
     /**
-     * Checks if two calendar objects have the same day of the year
-     *
-     * @param one I think it's pretty obvious
-     * @param two what these two objects are for
-     * @return True if the day is the same, otherwise false
-     */
-    public static boolean isCalendarSameDay(Calendar one, Calendar two) {
-        return one.get(Calendar.YEAR) == two.get(Calendar.YEAR) && one.get(Calendar.DAY_OF_YEAR) == two.get(Calendar.DAY_OF_YEAR);
-    }
-
-    /**
      * Makes a timestamp from a length in seconds.
      *
      * @param videoLengthInSeconds Length in seconds

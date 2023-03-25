@@ -23,9 +23,9 @@ import com.perflyst.twire.model.VideoOnDemand;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
-import java.util.Calendar;
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Sebastian Rask on 16-06-2016.
@@ -189,9 +189,10 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
 
     private String getFormattedLengthAndTime(VideoOnDemand vod) {
         String time;
-        Calendar now = Calendar.getInstance(), vodDate = vod.getRecordedAt();
+        ZonedDateTime now = ZonedDateTime.now(), vodDate = vod.getRecordedAt();
 
-        long daysAgo = TimeUnit.MILLISECONDS.toDays(now.getTimeInMillis() - vodDate.getTimeInMillis());
+        long daysAgo = Duration.between(vodDate, now).toDays();
+        long milliseconds = vodDate.toInstant().toEpochMilli();
         if (daysAgo <= 0) {
             // today
             time = getContext().getString(R.string.today);
@@ -200,11 +201,11 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
             time = getContext().getString(R.string.yesterday);
         } else if (daysAgo <= 7) {
             // a week ago -> show weekday only
-            time = DateUtils.formatDateTime(getContext(), vodDate.getTimeInMillis(), DateUtils.FORMAT_SHOW_WEEKDAY);
+            time = DateUtils.formatDateTime(getContext(), milliseconds, DateUtils.FORMAT_SHOW_WEEKDAY);
         } else {
             // if more than a week ago and less than a year -> show day and month only
             // if over a year ago -> show full date
-            time = DateUtils.formatDateTime(getContext(), vodDate.getTimeInMillis(), DateUtils.FORMAT_SHOW_DATE);
+            time = DateUtils.formatDateTime(getContext(), milliseconds, DateUtils.FORMAT_SHOW_DATE);
         }
 
         return time + " - " + Service.calculateTwitchVideoLength(vod.getLength());
