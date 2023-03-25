@@ -36,6 +36,7 @@ import com.perflyst.twire.activities.settings.SettingsActivity;
 import com.perflyst.twire.activities.settings.SettingsGeneralActivity;
 import com.perflyst.twire.activities.setup.LoginActivity;
 import com.perflyst.twire.misc.TooltipWindow;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetStreamsCountTask;
 
@@ -115,7 +116,7 @@ public class NavigationDrawerFragment extends Fragment {
         alphaAnimation.setDuration(240);
         alphaAnimation.setFillAfter(true);
         mStreamsCountWrapper.startAnimation(alphaAnimation);
-        mStreamsCount.setText(Integer.toString(count));
+        Utils.setNumber(mStreamsCount, count);
     }
 
     public void setUp(DrawerLayout drawerLayout, Toolbar toolbar) {
