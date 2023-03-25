@@ -633,7 +633,7 @@ public class ChatManager implements Runnable {
                 JSONObject urlsObject = badgeJSON.getJSONObject("urls");
                 for (Iterator<String> iterator = urlsObject.keys(); iterator.hasNext(); ) {
                     String size = iterator.next();
-                    urls.put(Integer.parseInt(size), "https:" + urlsObject.getString(size));
+                    urls.put(Integer.parseInt(size), urlsObject.getString(size));
                 }
 
                 Badge badge = new Badge(badgeJSON.getString("name"), urls, badgeJSON.getString("color"), badgeJSON.isNull("replaces") ? null : badgeJSON.getString("replaces"));
