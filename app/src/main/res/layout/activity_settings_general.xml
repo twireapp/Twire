@@ -248,7 +248,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:ems="10"
-                        android:hint="API url"
+                        android:hint="@string/settings_general_image_proxy_url_placeholder"
                         android:inputType="textUri"
                         android:selectAllOnFocus="true" />
 
