@@ -224,10 +224,14 @@ class ChatEmoteManager {
     }
 
     private Emote To7TV(JSONObject emoteObject) throws JSONException {
-        final String EMOTE_ID = "id";
-        final String EMOTE_WORD = "name";
+        JSONArray urls = emoteObject.getJSONArray("urls");
+        HashMap<Integer, String> urlMap = new HashMap<>();
+        for (int i = 0; i < urls.length(); i++) {
+            JSONArray pair = urls.getJSONArray(i);
+            urlMap.put(pair.getInt(0), pair.getString(1));
+        }
 
-        return Emote.SevenTV(emoteObject.getString(EMOTE_WORD), emoteObject.getString(EMOTE_ID));
+        return Emote.SevenTV(emoteObject.getString("name"), urlMap);
     }
 
     /**

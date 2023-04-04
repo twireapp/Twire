@@ -46,8 +46,8 @@ public class Emote implements Comparable<Emote>, Serializable {
         return new Emote(keyword, urlMap);
     }
 
-    public static Emote SevenTV(String keyword, String id) {
-        return new Emote(keyword, "https://cdn.7tv.app/emote/" + id + "/", "@size", "x");
+    public static Emote SevenTV(String keyword, HashMap<Integer, String> urlMap) {
+        return new Emote(keyword, urlMap);
     }
 
     public boolean isCustomChannelEmote() {
