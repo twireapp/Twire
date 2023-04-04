@@ -355,6 +355,9 @@ public class ChatManager implements Runnable {
                     while (currentProgress < nextCommentOffset && !seek && !isStopping) vodLock.wait();
                 }
 
+                // If the user seeked, don't display this comment since it would now be an old comment.
+                if (seek) continue;
+
                 JSONObject commenter = comment.data.getJSONObject("commenter");
                 JSONObject message = comment.data.getJSONObject("message");
 
