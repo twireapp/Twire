@@ -1,5 +1,6 @@
 package com.perflyst.twire.fragments;
 
+import static android.provider.Settings.System.*;
 import static com.google.android.exoplayer2.Player.EVENT_PLAYBACK_STATE_CHANGED;
 import static com.google.android.exoplayer2.Player.EVENT_PLAY_WHEN_READY_CHANGED;
 import static com.google.android.exoplayer2.Player.STATE_BUFFERING;
@@ -1253,7 +1254,11 @@ public class StreamFragment extends Fragment implements Player.Listener {
      */
     public void toggleFullscreen() {
         requireActivity().setRequestedOrientation(isLandscape ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        orientationListener.enable();
+
+        // If the user is using auto-rotation, we'll need to unlock the orientation once the device is rotated.
+        if (getInt(getContext().getContentResolver(), ACCELEROMETER_ROTATION, 0) == 1) {
+            orientationListener.enable();
+        }
     }
 
     /**
