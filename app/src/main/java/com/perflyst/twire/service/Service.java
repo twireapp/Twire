@@ -195,7 +195,9 @@ public class Service {
             activityClass = TopGamesActivity.class;
         }
 
-        return new Intent(context, activityClass);
+        Intent intent = new Intent(context, activityClass);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        return intent;
     }
 
     /**
