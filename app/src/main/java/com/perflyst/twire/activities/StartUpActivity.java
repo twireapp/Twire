@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.setup.LoginActivity;
@@ -19,6 +20,10 @@ public class StartUpActivity extends ThemeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_up);
+
+        // Don't dismiss the splash screen
+        final View content = findViewById(android.R.id.content);
+        content.getViewTreeObserver().addOnPreDrawListener(() -> false);
 
         final Settings settings = new Settings(getBaseContext());
         final boolean isSetup = settings.isSetup();
