@@ -220,7 +220,7 @@ class ChatEmoteManager {
             urlMap.put(Integer.parseInt(key), urls.getString(key));
         }
 
-        return Emote.FFZ(emoteObject.getString(EMOTE_NAME), urlMap);
+        return new Emote(emoteObject.getString(EMOTE_NAME), urlMap);
     }
 
     private Emote To7TV(JSONObject emoteObject) throws JSONException {
@@ -231,7 +231,7 @@ class ChatEmoteManager {
             urlMap.put(pair.getInt(0), pair.getString(1));
         }
 
-        return Emote.SevenTV(emoteObject.getString("name"), urlMap);
+        return new Emote(emoteObject.getString("name"), urlMap);
     }
 
     /**

@@ -34,20 +34,11 @@ public class Emote implements Comparable<Emote>, Serializable {
     }
 
     public static Emote Twitch(String keyword, String id) {
-        // TODO: Check the theme and use the correct URL.
         return new Emote(keyword, "https://static-cdn.jtvnw.net/emoticons/v2/" + id + "/default/", "@theme", "/", "@size", ".0");
     }
 
     public static Emote BTTV(String keyword, String id) {
         return new Emote(keyword, "https://cdn.betterttv.net/emote/" + id + "/", "@size", "x");
-    }
-
-    public static Emote FFZ(String keyword, HashMap<Integer, String> urlMap) {
-        return new Emote(keyword, urlMap);
-    }
-
-    public static Emote SevenTV(String keyword, HashMap<Integer, String> urlMap) {
-        return new Emote(keyword, urlMap);
     }
 
     public boolean isCustomChannelEmote() {
