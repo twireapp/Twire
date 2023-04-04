@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -78,14 +79,19 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
 
                         mDrawable = resource;
 
-                        textView.setText(builder);
+                        if (resource.getIntrinsicWidth() != assumedSize) {
+                            textView.setText(builder);
+                            Log.d("EmoteShift", "Got " + resource.getIntrinsicWidth() + " but assumed " + assumedSize + " (" + url + ")");
+                        } else {
+                            textView.invalidate();
+                        }
                     }
 
 
                     @Override
                     public void onLoadFailed(Drawable resource) {
                         mDrawable = resource;
-                        textView.setText(builder);
+                        textView.invalidate();
                     }
 
                     @Override
@@ -95,7 +101,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
                         }
 
                         mDrawable = placeholder;
-                        textView.setText(builder);
+                        textView.invalidate();
                     }
                 });
     }
