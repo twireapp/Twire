@@ -217,7 +217,7 @@ class ChatEmoteManager {
         HashMap<Integer, String> urlMap = new HashMap<>();
         for (Iterator<String> iterator = urls.keys(); iterator.hasNext(); ) {
             String key = iterator.next();
-            urlMap.put(Integer.parseInt(key), "https:" + urls.getString(key));
+            urlMap.put(Integer.parseInt(key), urls.getString(key));
         }
 
         return Emote.FFZ(emoteObject.getString(EMOTE_NAME), urlMap);
