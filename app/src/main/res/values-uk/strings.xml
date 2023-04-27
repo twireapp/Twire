@@ -62,7 +62,7 @@
     <string name="gen_language_filter">Цідити популярні трансляції за мовою</string>
     <string name="gen_tips_have_been_reset">Повчаючі підказки скинуто</string>
     <string name="gen_start_page">Початкова сторінка</string>
-    <string name="gen_twitch_name">Прізвисько у Twitch</string>
+    <string name="gen_twitch_name">Нікнейм у Twitch</string>
     <string name="gen_dialog_login_or_out_logout_action">ВИЙТИ</string>
     <string name="gen_dialog_login_or_out_login_action">ЗАЙТИ</string>
     <string name="gen_not_logged_in">Натисніть для того щоб увійти</string>
@@ -178,7 +178,7 @@
     <string name="gen_toast_wipe_database">Видалити підписки</string>
     <string name="gen_toast_export_database">Експортовано %1$x підписок</string>
     <string name="gen_toast_import_database">Імпортовано %1$x підписок</string>
-    <string name="chat_enable_account_connect">При\'єднайтеся зі своєю обліковкою</string>
+    <string name="chat_enable_account_connect">При\'єднайтеся зі свого аккаунту</string>
     <string name="player_show_runtime">Показувати тривалість трансляції</string>
     <string name="skip_silence">Пропустити тишу</string>
     <string name="preview_stream_online_since">00:30:00</string>
@@ -191,4 +191,14 @@
     <string name="settings_general_image_proxy">Використовувати проксі для зображень</string>
     <string name="chat_enable_emote_seventv">Ввімкнути 7TV емотики</string>
     <string name="menu_share">Поділитися</string>
+    <string name="retry">Повторити</string>
+    <string name="mute">Заглушити</string>
+    <string name="gen_import_summary">Це не додасть підписки на Twitch.</string>
+    <string name="player_channel_name">Програвач</string>
+    <string name="player_channel_description">Програвач Twire</string>
+    <string name="chat_paused">Чат призупинено через прокрутку.</string>
+    <string name="gen_wipe_summary">Це не зітре підписки на Twitch.</string>
+    <string name="gen_local_follows_header">Локальні підписки</string>
+    <string name="gen_local_follows_summary">Підписки в Twire збережені локально и не були збережені в Twitch.</string>
+    <string name="gen_export_summary">Експортувати враховуючи локальні та підписки Twitch.</string>
 </resources>
