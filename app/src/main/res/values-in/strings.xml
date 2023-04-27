@@ -55,4 +55,9 @@
     <string name="playback_speed_display">×%.2f</string>
     <string name="stream_forward">Maju 10 detik</string>
     <string name="vod_playback_failed">Gagal memutar VOD. Coba kualitas lain.</string>
+    <string name="card_style_minimal">Tutup</string>
+    <string name="card_style_expanded">Diperluas</string>
+    <string name="vod_views">%,d tampilan</string>
+    <string name="preview_stream_game_and_viewers">1337 penonton - Judul game</string>
+    <string name="preview_stream_online_since">00:30:00</string>
 </resources>
