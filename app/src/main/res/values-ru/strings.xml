@@ -199,4 +199,6 @@
     <string name="chat_paused">Чат приостановлен из-за прокрутки.</string>
     <string name="gen_local_follows_header">Локальные подписки</string>
     <string name="gen_import_summary">Это не добавит подписки на Twitch.</string>
+    <string name="player_channel_name">Плеер</string>
+    <string name="player_channel_description">Плеер Twire</string>
 </resources>
