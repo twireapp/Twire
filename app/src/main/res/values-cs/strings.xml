@@ -29,7 +29,7 @@
     <string name="disabled">Vypnuto</string>
     <string name="enabled">Zapnuto</string>
     <string name="content_desc_twitchProfileBanner_imageView">Uživatelem zadaný banner profilu</string>
-    <string name="changelog_show_after_update">Zobrazit seznam změn po aktualizaci</string>
+    <string name="changelog_show_after_update">Po aktualizaci zobrazit změny</string>
     <string name="changelog_title">Seznam změn</string>
     <string name="router_channel_error">Načtení kanálu se nezdařilo.</string>
     <string name="router_nonexistent_user">Tento uživatel neexistuje.</string>
@@ -41,7 +41,7 @@
     <string name="chat_message_option_block">Zablokovat</string>
     <string name="chat_message_option_duplicate">Zkopírovat zprávu</string>
     <string name="chat_message_option_mention">Zmínka</string>
-    <string name="tip_navigate">Klikni pro navigaci</string>
+    <string name="tip_navigate">Klepněte pro navigaci</string>
     <string name="confirm_text_line_two">Jenom potřebujeme získat tvoje sledující z Twitche.</string>
     <string name="default_stream_title">%1$s hraje %2$s</string>
     <string name="card_style_minimal">Sbalený</string>
@@ -54,7 +54,7 @@
     <string name="blue_theme_name">Modrá</string>
     <string name="appearance_theme_color_title">Motiv</string>
     <string name="theme_dialog_title">Motivy</string>
-    <string name="navigation_drawer_not_logged_in">Nejsi přihlášen</string>
+    <string name="navigation_drawer_not_logged_in">Nejste přihlášeni</string>
     <string name="navigation_drawer_logged_in_textview">Přihlášen jako %s</string>
     <string name="navigation_drawer_settings_title">Nastavení</string>
     <string name="navigation_drawer_search_title">Hledat</string>
@@ -77,7 +77,7 @@
     <string name="appearance_game_style_title">Styl hry</string>
     <string name="appearance_streams_style_title">Styl streamu</string>
     <string name="player_auto_player">Pokračovat v přehrávání při návratu</string>
-    <string name="player_show_navigation">Odhalit navigační panel po kliknutí</string>
+    <string name="player_show_navigation">Po klepnutí zobrazit navigační panel</string>
     <string name="player_show_viewercount">Zobrazit počet diváků</string>
     <string name="chat_size_high">Velká</string>
     <string name="chat_size_small">Malá</string>
@@ -88,7 +88,7 @@
     <string name="login_user_no_internet_action">ZKUS TO ZNOVU</string>
     <string name="login_user_no_internet">K nastavení Twire budeš potřebovat připojení k internetu.</string>
     <string name="login_user_cancel">Musíš se přihlásit, abys mohl(a) používat Twire, ale…</string>
-    <string name="login_text_line_two">Nejprve se přihlaš na svůj Twitch účet.</string>
+    <string name="login_text_line_two">Nejprve se přihlaste na Twitch.</string>
     <string name="my_streams_cell_current_viewers">%,d diváků</string>
     <string name="my_streams_preview_image">Náhled vysílajícího kanálu</string>
     <string name="chat_status_reconnecting">Připojování…</string>
@@ -128,7 +128,7 @@
     <string name="gen_dialog_login_or_out_logout_action">ODHLÁSIT SE</string>
     <string name="gen_dialog_login_or_out_login_action">PŘIHLÁSIT SE</string>
     <string name="gen_dialog_login_or_out_content">Chcete se přihlásit k novému účtu nebo se odhlásit jako %s\?</string>
-    <string name="gen_not_logged_in">Klikni pro přihlášení</string>
+    <string name="gen_not_logged_in">Klepněte pro přihlášení</string>
     <string name="settings_chat_name_summary">Velikost emotů, velikost zpráv</string>
     <string name="settings_chat_name">Twitch chat</string>
     <string name="settings_appearance_summary">Motiv, styl karty, velikost karty</string>
@@ -199,4 +199,8 @@
     <string name="gen_export_summary">Exporty zahrnují lokální a Twitch sledování.</string>
     <string name="gen_import_summary">Toto nepřidá sledování do Twitche.</string>
     <string name="chat_paused">Chat pozastaven kvůli posunu.</string>
+    <string name="player_channel_name">Přehrávač</string>
+    <string name="player_channel_description">Přehrávač Twire</string>
+    <string name="streamerInfo_chat_tab">Chat</string>
+    <string name="settings_general_image_proxy_url_placeholder">URL API</string>
 </resources>
