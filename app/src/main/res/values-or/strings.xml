@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="minutes_short">ମି</string>
+    <string name="hours_short">ଘ</string>
+    <string name="settings_activity_title">ସେଟିଂ</string>
+    <string name="subscription_card_displayName">ନାମ</string>
+    <string name="vods">ଵିଡ଼ିଓ</string>
+    <string name="today">ଆଜି</string>
+    <string name="yesterday">ଗତକାଲି</string>
+    <string name="streamerInfo_desc_tab">ଵର୍ଣ୍ଣନା</string>
+    <string name="menu_profile">ପ୍ରୋଫାଇଲ୍</string>
+    <string name="menu_options">ଵିକଳ୍ପ</string>
+    <string name="options">ଵିକଳ୍ପ</string>
+    <string name="audio_only">କେଵଳ ଅଡ଼ିଓ</string>
+    <string name="quality_auto">ସ୍ୱତଃ</string>
+    <string name="streamerInfo_description">କୌଣସି ଵର୍ଣ୍ଣନା ମିଳିଲାନି</string>
+    <string name="playback_speed_display">%.2fଗୁଣ</string>
+    <string name="playback_speed">%.2f</string>
+    <string name="stream_backward">୧୦ ସେକେଣ୍ଡ ପଛକୁ</string>
+    <string name="welcome_text_line_one">Twireକୁ</string>
+    <string name="login_user_cancel_action">ବୁଝିଗଲି</string>
+    <string name="welcome_text_line_two">ସ୍ୱାଗତ</string>
+    <string name="login_user_no_internet_action">ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ</string>
+    <string name="skip_text">ବାଦ୍ ଦିଅ</string>
+    <string name="preview_game_title">ଖେଳ ଆଖ୍ୟା</string>
+    <string name="appearance_theme_color_title">ଥିମ୍</string>
+    <string name="navigation_drawer_search_title">ସନ୍ଧାନ</string>
+    <string name="navigation_drawer_settings_title">ସେଟିଂ</string>
+    <string name="theme_dialog_title">ଥିମ୍</string>
+    <string name="blue_theme_name">ନୀଳ</string>
+    <string name="purple_theme_name">ବାଇଗଣୀ</string>
+    <string name="black_theme_name">କଳା</string>
+    <string name="night_theme_name">ରାତ୍ରି</string>
+    <string name="player_channel_name">ଚାଳକ</string>
+    <string name="player_channel_description">Twireର ଚାଳକ</string>
+    <string name="done">ହେଲା</string>
+    <string name="action_settings">ସେଟିଂ</string>
+    <string name="available_qualities">ଗୁଣଵତ୍ତା ସେଟିଂ</string>
+    <string name="stream_fullscreen">ପୂର୍ଣ୍ଣସ୍କ୍ରୀନ୍</string>
+    <string name="preview_stream_display_name">ନାମ</string>
+    <string name="settings_general_name">ସାଧାରଣ</string>
+    <string name="menu_external">ବହିଃ-ଚାଳକ ଵ୍ୟଵହାର କରିବା</string>
+    <string name="stream_forward">୧୦ ସେକେଣ୍ଡ ଆଗକୁ</string>
+</resources>
