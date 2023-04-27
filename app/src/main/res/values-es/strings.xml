@@ -116,7 +116,7 @@
     <!-- Settings -->
     <string name="settings_general_name">General</string>
     <string name="settings_general_name_summary">Cuenta de Twitch, página de inicio</string>
-    <string name="settings_stream_player_name">Reproducir transmisiones</string>
+    <string name="settings_stream_player_name">Reproductor de la transmisión</string>
     <string name="settings_stream_player_summary">Conteo del visor actual, Comportamiento del reproductor</string>
     <string name="settings_appearance_name">Apariencia</string>
     <string name="settings_appearance_summary">Tema, estilo y tamaño de carta</string>
@@ -226,9 +226,9 @@
     <string name="player_show_runtime">Mostrar el tiempo de ejecución del flujo</string>
     <string name="player_type">Tipo de reproductor de streaming</string>
     <string name="menu_share">Compartir</string>
-    <string name="gen_twitch_follows">Borrar todos los seguimientos</string>
-    <string name="gen_export_database">Exportar todo lo que sigues</string>
-    <string name="gen_import_database">Importar seguimientos</string>
+    <string name="gen_twitch_follows">Eilminar todos los seguidos</string>
+    <string name="gen_export_database">Exportar todos los seguidos</string>
+    <string name="gen_import_database">Importar seguidos</string>
     <string name="gen_toast_wipe_database">Seguimientos borrados</string>
     <string name="chat_enable_account_connect">Conectarte con tu cuenta</string>
     <string name="chat_enable_emote_seventv">Activar los emotes de 7TV</string>
@@ -238,4 +238,8 @@
     <string name="gen_import_summary">Esto no añadirá seguimientos a Twitch.</string>
     <string name="chat_enable_ssl">Usar SSL para la conexión</string>
     <string name="chat_paused">Chat pausado debido a desplazamiento.</string>
+    <string name="player_channel_description">Reproductor para Twire</string>
+    <string name="player_channel_name">Reproducir</string>
+    <string name="streamerInfo_chat_tab">Chat</string>
+    <string name="settings_general_image_proxy_url_placeholder">URL de la API</string>
 </resources>

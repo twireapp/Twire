@@ -1,0 +1,1 @@
+Admite VOD con reproducción de chat, gestos personalizados (BTTV, FFZ y 7TV) y modo de imagen en imagen.
