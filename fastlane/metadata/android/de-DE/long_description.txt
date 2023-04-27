@@ -1,0 +1,1 @@
+Unterstützt VODs mit Chat-Wiedergabe, benutzerdefinierten Emotes (BTTV, FFZ und 7TV) und Bild-in-Bild-Modus.

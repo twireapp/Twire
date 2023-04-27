@@ -231,11 +231,15 @@
     <string name="gen_toast_wipe_database">Folgende gelöscht</string>
     <string name="gen_toast_import_database">%1$x Folgende importiert</string>
     <string name="mute">Stumm</string>
-    <string name="retry">Wiederholen</string>
+    <string name="retry">Erneut versuchen</string>
     <string name="gen_local_follows_summary">Gefolgte Nutzer auf Twire werden lokal gespeichert und nicht an Twitch gesendet.</string>
     <string name="gen_wipe_summary">Dies wird die Follower auf Twitch nicht entfernen.</string>
     <string name="gen_export_summary">Exporte beinhalten lokale und Twitch Follower.</string>
     <string name="gen_import_summary">Dies wird keine Follower auf Twitch hinzufügen.</string>
     <string name="gen_local_follows_header">Lokale Follows</string>
     <string name="chat_paused">Chat wurde aufgrund des Scrollens angehalten.</string>
+    <string name="player_channel_description">Twires Player</string>
+    <string name="player_channel_name">Player</string>
+    <string name="streamerInfo_chat_tab">Chat</string>
+    <string name="settings_general_image_proxy_url_placeholder">API-URL</string>
 </resources>
