@@ -25,6 +25,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -86,6 +87,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
+import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
@@ -513,6 +515,16 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     pendingIntent);
             MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
             mediaSessionConnector.setPlayer(player);
+            mediaSessionConnector.setQueueNavigator(new TimelineQueueNavigator(mediaSession) {
+                @NonNull
+                @Override
+                public MediaDescriptionCompat getMediaDescription(Player player, int windowIndex) {
+                    return new MediaDescriptionCompat.Builder()
+                            .setTitle(title)
+                            .setSubtitle(mUserInfo.getDisplayName())
+                            .build();
+                }
+            });
             mediaSession.setActive(true);
 
             playerNotificationManager = new PlayerNotificationManager.Builder(getContext(), PLAYER_NOTIFICATION_ID, PLAYER_NOTIFICATION_CHANNEL)
@@ -532,7 +544,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         @Override
         public CharSequence getCurrentContentTitle(Player player) {
-            return title;
+            return null;
         }
 
         @Nullable
@@ -544,7 +556,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         @Nullable
         @Override
         public CharSequence getCurrentContentText(Player player) {
-            return mUserInfo.getDisplayName();
+            return null;
         }
 
         @Nullable
