@@ -323,21 +323,32 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.10.6</item>
+        <item>F Fix streams and VODs not playing.</item>
+        <item>A Open chat from channel profile.</item>
+        <item>F Fix 7TV emotes.</item>
+        <item>F Fix FFZ emotes and badges.</item>
+        <item>F Fix orientation lock with the fullscreen button.</item>
+        <item>F Fix media session.</item>
+        <item>F Fix going back from setup process.</item>
+        <item>F Make stream count localized.</item>
+        <item>F Make placeholder translatable.</item>
+
         <item>V 2.10.5</item>
-        <item>F Fix VOD chat locking up</item>
-        <item>A Handle timeouts and deleted messages</item>
-        <item>A Add media player notification</item>
-        <item>A Show stream title while watching stream</item>
-        <item>A Add indicator when chat is paused due to scrolling</item>
-        <item>A Other media will now pause when starting content</item>
-        <item>A Add themed app icon</item>
-        <item>C Hide message options that don\'t apply to VODs</item>
-        <item>C Implement better fullscreen toggle</item>
-        <item>F Fix stream UI not fading out</item>
-        <item>F Fix the navigation bar not being hidden in fullscreen</item>
-        <item>C Enable SSL by default</item>
-        <item>C Keep screen awake when \'Chat Only\' enabled</item>
-        <item>C Lower max messages to 150</item>
+        <item>F Fix VOD chat locking up.</item>
+        <item>A Handle timeouts and deleted messages.</item>
+        <item>A Add media player notification.</item>
+        <item>A Show stream title while watching stream.</item>
+        <item>A Add indicator when chat is paused due to scrolling.</item>
+        <item>A Other media will now pause when starting content.</item>
+        <item>A Add themed app icon.</item>
+        <item>C Hide message options that don\'t apply to VODs.</item>
+        <item>C Implement better fullscreen toggle.</item>
+        <item>F Fix stream UI not fading out.</item>
+        <item>F Fix the navigation bar not being hidden in fullscreen.</item>
+        <item>C Enable SSL by default.</item>
+        <item>C Keep screen awake when \'Chat Only\' enabled.</item>
+        <item>C Lower max messages to 150.</item>
 
         <item>V 2.10.4</item>
         <item>F Fix crash on devices not running Android Oreo.</item>
