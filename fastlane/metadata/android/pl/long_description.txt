@@ -1,1 +1,1 @@
-Wspiera odtwarzanie VOD z powtórka czatu, wspiera niestandardowe emotki (BTTV,FFZ i 7TV) oraz tryb obrazu w obrazie.
+Wspiera odtwarzanie VOD z powtórką czatu, wspiera niestandardowe emotki (BTTV,FFZ i 7TV) oraz tryb obrazu w obrazie.
