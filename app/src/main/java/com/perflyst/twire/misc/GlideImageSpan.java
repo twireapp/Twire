@@ -6,7 +6,6 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -26,8 +25,8 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
     private Drawable mDrawable;
     private Animatable animatable;
 
-    public GlideImageSpan(Context context, String url, TextView textView, SpannableStringBuilder builder, int assumedSize, float scale, String backgroundColor) {
-        this(context, url, textView, builder, assumedSize, scale);
+    public GlideImageSpan(Context context, String url, TextView textView, int assumedSize, float scale, String backgroundColor) {
+        this(context, url, textView, assumedSize, scale);
 
         if (backgroundColor == null)
             return;
@@ -39,7 +38,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
         layerDrawable.setId(1, 1);
     }
 
-    public GlideImageSpan(Context context, String url, TextView textView, SpannableStringBuilder builder, int assumedSize, float scale) {
+    public GlideImageSpan(Context context, String url, TextView textView, int assumedSize, float scale) {
         super(new BlankDrawable());
 
         this.textView = textView;
@@ -80,7 +79,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
                         mDrawable = resource;
 
                         if (resource.getIntrinsicWidth() != assumedSize) {
-                            textView.setText(builder);
+                            textView.setText(textView.getText());
                             Log.d("EmoteShift", "Got " + resource.getIntrinsicWidth() + " but assumed " + assumedSize + " (" + url + ")");
                         } else {
                             textView.invalidate();

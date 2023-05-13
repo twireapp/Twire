@@ -90,7 +90,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
             final SpannableStringBuilder builder = new SpannableStringBuilder();
             for (Badge badge : message.getBadges()) {
-                final GlideImageSpan badgeSpan = new GlideImageSpan(context, badge.getUrl(2), holder.message, builder, 36, 1, badge.color);
+                final GlideImageSpan badgeSpan = new GlideImageSpan(context, badge.getUrl(2), holder.message, 36, 1, badge.color);
                 appendSpan(builder, "  ", badgeSpan).append(" ");
             }
 
@@ -113,7 +113,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                     int emoteSize = settings.getEmoteSize();
                     int emotePixels = emoteSize == 1 ? 28 : emoteSize == 2 ? 56 : 112;
 
-                    final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize, isNightTheme), holder.message, builder, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
+                    final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize, isNightTheme), holder.message, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
 
                     builder.setSpan(emoteSpan, fromPosition + beforeMessage.length(), toPosition + 1 + beforeMessage.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 }
