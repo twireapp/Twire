@@ -19,7 +19,8 @@
                 style="@style/stream_settings_item"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:textIsSelectable="true" />
 
             <TextView
                 android:id="@+id/text_mention"

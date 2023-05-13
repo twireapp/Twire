@@ -10,5 +10,4 @@
     android:scrollbars="none"
     android:scrollHorizontally="false"
     android:textColor="@color/black"
-    android:textSize="@dimen/chat_message_text_size"
-    android:textIsSelectable="true" />
+    android:textSize="@dimen/chat_message_text_size" />
