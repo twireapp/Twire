@@ -304,7 +304,10 @@ public class ChatManager implements Runnable {
                         onUpdate(UpdateType.ON_CONNECTED);
                     }
 
-                    if (dataObject.getJSONObject("video").isNull("comments")) continue;
+                    if (dataObject.getJSONObject("video").isNull("comments")) {
+                        cursor = "";
+                        continue;
+                    }
 
                     JSONObject commentsObject = dataObject.getJSONObject("video").getJSONObject("comments");
                     JSONArray comments = commentsObject.getJSONArray("edges");
