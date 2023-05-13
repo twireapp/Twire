@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -70,8 +69,6 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
                         if (resource instanceof Animatable) {
                             animatable = (Animatable) resource;
                             resource.setCallback(instance);
-
-                            instance.textView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
                             animatable.start();
                         }
