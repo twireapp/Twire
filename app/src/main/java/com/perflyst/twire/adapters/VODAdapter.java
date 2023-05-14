@@ -91,6 +91,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         final int itemPosition = getRecyclerView().getChildAdapterPosition(view);
         VideoOnDemand item = getElements().get(itemPosition);
         if (activity instanceof VODActivity) {
+            activity.getIntent().putExtra(getContext().getString(R.string.stream_shared_transition), false);
             ((VODActivity) activity).startNewVOD(item);
         } else {
             Intent intent = VODActivity.createVODIntent(item, getContext(), true);
