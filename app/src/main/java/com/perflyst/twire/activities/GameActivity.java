@@ -61,18 +61,17 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
         mAdapter.addList(streamsToAdd);
     }
 
-    private String pagination = "";
-
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException, UnsupportedEncodingException {
         String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
 
-        String url = "https://api.twitch.tv/helix/streams?game_id=" + game.getGameId() + "&first=" + getLimit() + (!pagination.isEmpty() ? "&after=" + pagination : "") + languageFilter;
+        String url = "https://api.twitch.tv/helix/streams?game_id=" + game.getGameId() + "&first=" + getLimit() + (getCursor() != null ? "&after=" + getCursor() : "") + languageFilter;
 
         List<StreamInfo> mResultList = new ArrayList<>();
         String jsonString = Service.urlToJSONStringHelix(url, this);
         JSONObject fullDataObject = new JSONObject(jsonString);
         JSONArray topStreamsArray = fullDataObject.getJSONArray("data");
+        setCursor(fullDataObject.getJSONObject("pagination").getString("cursor"));
 
         for (int i = 0; i < topStreamsArray.length(); i++) {
             JSONObject streamObject = topStreamsArray.getJSONObject(i);

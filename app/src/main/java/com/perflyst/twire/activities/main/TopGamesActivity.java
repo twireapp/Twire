@@ -57,18 +57,16 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
         return new GamesAdapter(recyclerView, getBaseContext(), this);
     }
 
-    public String pagination = "";
-
     @Override
     public List<Game> getVisualElements() throws JSONException {
         List<Game> resultList = new ArrayList<>();
 
         //Indentation is meant to mimic the structure of the JSON code
-        final String URL = "https://api.twitch.tv/helix/games/top?first=" + getLimit() + (!pagination.isEmpty() ? "&after=" + pagination : "");
+        final String URL = "https://api.twitch.tv/helix/games/top?first=" + getLimit() + (getCursor() != null ? "&after=" + getCursor() : "");
         String jsonString = Service.urlToJSONStringHelix(URL, this);
         JSONObject fullDataObject = new JSONObject(jsonString);
         JSONArray gamesArray = fullDataObject.getJSONArray("data");
-        this.pagination = fullDataObject.getJSONObject("pagination").getString("cursor");
+        setCursor(fullDataObject.getJSONObject("pagination").getString("cursor"));
 
         for (int i = 0; i < gamesArray.length(); i++) {
             // Get all the JSON objects we need to get all the required data.

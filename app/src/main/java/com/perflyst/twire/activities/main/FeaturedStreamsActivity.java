@@ -59,19 +59,17 @@ public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
     /**
      * Methods for functionality and for controlling the SwipeRefreshLayout
      */
-
-    private String pagination = "";
-
     @Override
     public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
         List<StreamInfo> resultList = new ArrayList<>();
 
         //Indentation is meant to mimic the structure of the JSON code
-        final String URL = "https://api.twitch.tv/helix/streams?first=" + getLimit() + (!pagination.isEmpty() ? "&after=" + pagination : "");
+        final String URL = "https://api.twitch.tv/helix/streams?first=" + getLimit() + (getCursor() != null ? "&after=" + getCursor() : "");
 
         String jsonString = Service.urlToJSONStringHelix(URL, this);
         JSONObject fullDataObject = new JSONObject(jsonString);
         JSONArray topFeaturedArray = fullDataObject.getJSONArray("data");
+        setCursor(fullDataObject.getJSONObject("pagination").getString("cursor"));
 
         for (int i = 0; i < topFeaturedArray.length(); i++) {
             // Get all the JSON objects we need to get all the required data.
