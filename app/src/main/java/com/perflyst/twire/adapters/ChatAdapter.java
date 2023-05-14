@@ -79,11 +79,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     public void onBindViewHolder(@NonNull final ContactViewHolder holder, int position) {
         try {
             final ChatMessage message = messages.get(position);
-            if (message.getMessage().equals("Test")) {
-                Log.d(LOG_TAG, "Binding Message for user");
-                Log.d(LOG_TAG, "Message: " + message);
-            }
-
             if (message.getName() == null) {
                 return;
             }
