@@ -369,7 +369,11 @@ public class ChatManager implements Runnable {
                     JSONArray userBadgesArray = message.getJSONArray("userBadges");
                     for (int j = 0; j < userBadgesArray.length(); j++) {
                         JSONObject userBadge = userBadgesArray.getJSONObject(j);
-                        badges.put(userBadge.getString("setID"), userBadge.getString("version"));
+                        String setID = userBadge.getString("setID");
+                        String version = userBadge.getString("version");
+                        if (setID.isEmpty() || version.isEmpty()) continue;
+
+                        badges.put(setID, version);
                     }
                 }
 
@@ -677,6 +681,7 @@ public class ChatManager implements Runnable {
         if (globalSet != null && globalSet.get(version) != null)
             return globalSet.get(version);
 
+        Log.e(LOG_TAG, "Badge failed to load: \"" + badgeSet + "\" \"" + version + "\"");
         return null;
     }
 
