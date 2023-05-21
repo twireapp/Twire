@@ -323,6 +323,15 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.10.7</item>
+        <item>F Fix VOD chat only displaying one page of comments.</item>
+        <item>A Add chat notifications (subs, gifts, etc).</item>
+        <item>F Fix pagination not resetting in some results.</item>
+        <item>F Fix missing pagination in some results.</item>
+        <item>F Fix starting a new VOD when already watching one.</item>
+        <item>C Make chat messages not text selectable to improve performance. Text can be selected after clicking on the message.</item>
+        <item>F Fix messages not displaying if badges were broken.</item>
+
         <item>V 2.10.6</item>
         <item>F Fix streams and VODs not playing.</item>
         <item>A Open chat from channel profile.</item>
