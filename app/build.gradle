@@ -30,6 +30,12 @@ android {
             versionNameSuffix "-DEBUG"
             resValue "string", "app_name", "Twire Debug"
         }
+
+        applicationVariants.all { variant ->
+            variant.outputs.all {
+                outputFileName = "Twire-${variant.versionName}.apk"
+            }
+        }
     }
 
     lint {
