@@ -143,21 +143,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         }
     }
 
-    public List<String> getNamesThatMatches(String match) {
-        if (match.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        List<String> result = new ArrayList<>();
-
+    public void getNamesThatMatches(String match, List<String> suggestions) {
         for (ChatMessage message : messages) {
-            if (message.getName().toLowerCase().matches("^" + match.toLowerCase() + "\\w+") && !result.contains(message.getName())) {
-                result.add(message.getName());
+            String name = message.getName();
+            if (name.toLowerCase().matches("^" + match + "\\w+") && !suggestions.contains(name)) {
+                suggestions.add(name);
             }
         }
 
-        Collections.sort(result);
-        return result;
+        Collections.sort(suggestions);
     }
 
     private void checkForLink(String message, SpannableStringBuilder spanBuilder) {

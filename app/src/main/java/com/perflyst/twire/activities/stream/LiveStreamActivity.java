@@ -92,26 +92,22 @@ public class LiveStreamActivity extends StreamActivity {
 
     @Override
     public void onBackPressed() {
-        setMentionSuggestions(new ArrayList<>(), null);
+        setSuggestions(new ArrayList<>(), null);
         super.onBackPressed();
     }
 
-    public void setMentionSuggestions(List<String> mentionSuggestions, @Nullable final Rect inputRect) {
+    public void setSuggestions(List<String> suggestions, @Nullable final Rect inputRect) {
         if (mMentionAdapter == null) {
             return;
         }
 
-        mMentionAdapter.setSuggestions(mentionSuggestions);
+        mMentionAdapter.setSuggestions(suggestions);
 
         if (inputRect == null) {
             return;
         }
 
-        if (mentionSuggestions.isEmpty()) {
-            mMentionContainer.setVisibility(View.GONE);
-        } else {
-            mMentionContainer.setVisibility(View.VISIBLE);
-        }
+        mMentionContainer.setVisibility(suggestions.isEmpty() ? View.GONE : View.VISIBLE);
 
         mMentionContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -139,7 +135,7 @@ public class LiveStreamActivity extends StreamActivity {
 
     private void setupMentionSuggestionRecyclerView() {
         mMentionAdapter = new MentionAdapter(suggestion -> {
-            LiveStreamActivity.this.setMentionSuggestions(new ArrayList<>(), null);
+            LiveStreamActivity.this.setSuggestions(new ArrayList<>(), null);
             if (mChatFragment == null) {
                 return;
             }

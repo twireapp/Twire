@@ -1,5 +1,6 @@
 package com.perflyst.twire.adapters;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class MentionAdapter extends RecyclerView.Adapter<MentionAdapter.Suggesti
         return mentionSuggestions.size();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setSuggestions(List<String> suggestions) {
         mentionSuggestions = suggestions;
         notifyDataSetChanged();

@@ -66,10 +66,13 @@ import com.perflyst.twire.views.recyclerviews.ChatRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.EmoteAutoSpanBehaviour;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 interface EmoteKeyboardDelegate {
@@ -662,7 +665,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             if (keyboardState == KeyboardState.SOFT)
                 setKeyboardState(KeyboardState.CLOSED);
 
-            setMentionSuggestions(new ArrayList<>());
+            setSuggestions(new ArrayList<>());
         });
         mSendText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
             // actionId will be EditorInfo.IME_NULL when pressing the enter key.
@@ -673,8 +676,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             return false;
         });
 
-        final Pattern mentionPattern = Pattern.compile("@(\\w+)$");
-        final Pattern emotePattern = Pattern.compile(":(\\w+)$");
+        final Pattern lastWordPattern = Pattern.compile("(.)([^ ]+)$");
         mSendText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -686,41 +688,27 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
             @Override
             public void afterTextChanged(Editable editable) {
-                Matcher mInputMatcher = mentionPattern.matcher(getSendText());
+                List<String> suggestions = new ArrayList<>();
 
-                String userName = null;
-                while (mInputMatcher.find()) {
-                    userName = mInputMatcher.group(1);
-                }
-
-                if (userName != null && !userName.isEmpty()) {
-                    setMentionSuggestions(mChatAdapter.getNamesThatMatches(userName));
-                } else {
-                    setMentionSuggestions(new ArrayList<>());
-                }
-                
-                
-                mInputMatcher = emotePattern.matcher(getSendText());
-
-                String emoteName = null;
-                while (mInputMatcher.find()) {
-                    emoteName = mInputMatcher.group(1);
-                }
-
-                if (emoteName != null && !emoteName.isEmpty() && customEmotes != null) {
-                    List<String> result = new ArrayList<>();
-
-                    for (Emote emote : customEmotes) {
-                        if (emote.getKeyword().toLowerCase().matches("\\w*" + emoteName.toLowerCase() + "\\w*") && !result.contains(emote.getKeyword())) {
-                            result.add(emote.getKeyword());
-                        }
+                Matcher matcher = lastWordPattern.matcher(getSendText());
+                if (matcher.matches()) {
+                    String firstCharacter = matcher.group(1);
+                    String lastWord = matcher.group(2).toLowerCase();
+                    if (firstCharacter.equals("@")) {
+                        mChatAdapter.getNamesThatMatches(lastWord, suggestions);
+                    } else if (firstCharacter.equals(":") && customEmotes != null) {
+                        suggestions = Stream.of(customEmotes, customEmotes, twitchEmotes, subscriberEmotes)
+                                .flatMap(Collection::stream)
+                                .map(Emote::getKeyword)
+                                .filter(keyword -> keyword.toLowerCase().contains(lastWord))
+                                .distinct()
+                                .limit(10)
+                                .sorted()
+                                .collect(Collectors.toList());
                     }
-
-                    Collections.sort(result);
-                    setMentionSuggestions(result);
-                } else {
-                    setMentionSuggestions(new ArrayList<>());
                 }
+
+                setSuggestions(suggestions);
             }
         });
 
@@ -759,11 +747,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mSendText.setSelection(newInputText.length());
     }
 
-    private void setMentionSuggestions(List<String> suggestions) {
+    private void setSuggestions(List<String> suggestions) {
         if (getActivity() instanceof LiveStreamActivity && getActivity() != null) {
             Rect mInputRect = new Rect();
             mSendText.getGlobalVisibleRect(mInputRect);
-            ((LiveStreamActivity) getActivity()).setMentionSuggestions(suggestions, mInputRect);
+            ((LiveStreamActivity) getActivity()).setSuggestions(suggestions, mInputRect);
         }
     }
 
