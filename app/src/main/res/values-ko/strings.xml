@@ -199,4 +199,6 @@
     <string name="gen_export_summary">로컬 및 Twitch 팔로우를 포함해 내보냅니다.</string>
     <string name="gen_import_summary">Twitch에 팔로우를 반영하지는 않습니다.</string>
     <string name="chat_paused">스크롤해서 채팅이 멈췄습니다.</string>
+    <string name="settings_general_image_proxy_url_placeholder">API url</string>
+    <string name="streamerInfo_chat_tab">채팅</string>
 </resources>
