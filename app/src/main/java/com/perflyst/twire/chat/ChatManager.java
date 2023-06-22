@@ -79,9 +79,11 @@ public class ChatManager implements Runnable {
     private boolean chatIsSlowmode;
     private boolean chatIsSubsonlymode;
 
+    private Context context;
+
     public ChatManager(Context aContext, UserInfo aChannel, String aVodId, ChatCallback aCallback) {
         instance = this;
-
+        this.context = aContext;
         Settings appSettings = new Settings(aContext);
         mEmoteManager = new ChatEmoteManager(aChannel, appSettings);
 
@@ -140,8 +142,8 @@ public class ChatManager implements Runnable {
         Log.d(LOG_TAG, "Trying to start chat " + channel.getLogin() + " for user " + user);
         mEmoteManager.loadCustomEmotes(() -> onUpdate(UpdateType.ON_CUSTOM_EMOTES_FETCHED));
 
-        readBadges("https://badges.twitch.tv/v1/badges/global/display", globalBadges);
-        readBadges("https://badges.twitch.tv/v1/badges/channels/" + channel.getUserId() + "/display", channelBadges);
+        readBadges("https://api.twitch.tv/helix/chat/badges/global/", globalBadges);
+        readBadges("https://api.twitch.tv/helix/chat/badges?broadcaster_id=" + channel.getUserId(), channelBadges);
         readFFZBadges();
 
         if (vodId == null) {
@@ -606,17 +608,17 @@ public class ChatManager implements Runnable {
 
     private void readBadges(String url, Map<String, Map<String, Badge>> badgeMap) {
         try {
-            JSONObject globalBadgeSets = new JSONObject(Service.urlToJSONString(url)).getJSONObject("badge_sets");
-            for (Iterator<String> it = globalBadgeSets.keys(); it.hasNext(); ) {
-                String badgeSet = it.next();
+            JSONArray globalBadgeArray = new JSONObject(Service.urlToJSONStringHelix(url, context)).getJSONArray("data");
+            for (int i = 0; i < globalBadgeArray.length(); i++ ) {
+                String badgeSet = globalBadgeArray.getJSONObject(i).getString("set_id");
                 Map<String, Badge> versionMap = new HashMap<>();
 
                 badgeMap.put(badgeSet, versionMap);
 
-                JSONObject versions = globalBadgeSets.getJSONObject(badgeSet).getJSONObject("versions");
-                for (Iterator<String> iter = versions.keys(); iter.hasNext(); ) {
-                    String version = iter.next();
-                    JSONObject versionObject = versions.getJSONObject(version);
+                JSONArray versions = globalBadgeArray.getJSONObject(i).getJSONArray("versions");
+                for (int j = 0; j < versions.length(); j++) {
+                    JSONObject versionObject = versions.getJSONObject(j);
+                    String version = versionObject.getString("id");
                     SparseArray<String> urls = new SparseArray<>();
                     urls.put(1, versionObject.getString("image_url_1x"));
                     urls.put(2, versionObject.getString("image_url_2x"));
