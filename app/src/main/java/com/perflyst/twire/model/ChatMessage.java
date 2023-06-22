@@ -32,7 +32,7 @@ public class ChatMessage {
         for (Badge badge : ChatManager.ffzBadgeMap.get(name.toLowerCase())) {
             if (badge.replaces != null) {
                 for (int i = 0; i < badges.size(); i++) {
-                    if (badges.get(i).name.equals(badge.replaces)) {
+                    if (badges.get(i) != null && badges.get(i).name.equals(badge.replaces)) {
                         badges.set(i, badge);
                         break;
                     }
