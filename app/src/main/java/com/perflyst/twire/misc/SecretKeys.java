@@ -7,4 +7,6 @@ public class SecretKeys {
     public static final String NO_LOG_IN_ACCESS_TOKEN = "";
 
     public static final String TWITCH_WEB_CLIENT_ID = "kimne78kx3ncx6brgo4mv6wki5h1ko";
+
+    public static final String TWITCH_GRAPHQL_ID = "kd1unb4b3q4t58fwlpcbzcbnm76a8fp";
 }

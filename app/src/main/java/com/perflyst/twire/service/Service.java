@@ -483,7 +483,7 @@ public class Service {
 
         Request request = new Request.Builder()
                 .url("https://gql.twitch.tv/gql")
-                .header("Client-ID", SecretKeys.TWITCH_WEB_CLIENT_ID)
+                .header("Client-ID", SecretKeys.TWITCH_GRAPHQL_ID)
                 .post(RequestBody.create(MediaType.get("application/json"), query))
                 .build();
 
