@@ -138,7 +138,7 @@ public class AnimationService {
         moveMainToolbarAnimation.setDuration(duration);
         moveMainToolbarAnimation.setFillAfter(true);
 
-        aMainToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, aActivity));
+        aMainToolbar.setBackgroundColor(Service.getColorAttribute(androidx.appcompat.R.attr.colorPrimary, R.color.primary, aActivity));
         aMainToolbar.startAnimation(moveMainToolbarAnimation);
         aDecorativeToolbar.startAnimation(moveToolbarAnimation);
     }

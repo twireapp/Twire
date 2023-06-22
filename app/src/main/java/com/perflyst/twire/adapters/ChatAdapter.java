@@ -128,7 +128,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             }
 
             if (message.isHighlight()) {
-                holder.message.setBackgroundColor(Service.getColorAttribute(R.attr.colorAccent, R.color.accent, context));
+                holder.message.setBackgroundColor(Service.getColorAttribute(androidx.appcompat.R.attr.colorAccent, R.color.accent, context));
             }
 
             holder.message.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);

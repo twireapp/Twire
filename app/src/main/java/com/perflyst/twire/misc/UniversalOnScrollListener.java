@@ -158,7 +158,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
 
                         isToolbarTransparent = false;
 
-                        mMainToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, mActivity));
+                        mMainToolbar.setBackgroundColor(Service.getColorAttribute(androidx.appcompat.R.attr.colorPrimary, R.color.primary, mActivity));
                         mToolbarShadow.startAnimation(mShowShadowAnimation);
                     }
                 }
@@ -238,7 +238,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
             // Animations for showing and hiding the toolbar.
             // The animation changes the color of the toolbar from a transparent blue to the full blue.
             // Currently only the fade animation is being used.
-            int colorTo = Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, mActivity);
+            int colorTo = Service.getColorAttribute(androidx.appcompat.R.attr.colorPrimary, R.color.primary, mActivity);
             Integer colorFrom = Color.argb(0, Color.red(colorTo), Color.green(colorTo), Color.blue(colorTo));
 
             // Show Animation

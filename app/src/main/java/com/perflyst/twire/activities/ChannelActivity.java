@@ -213,8 +213,8 @@ public class ChannelActivity extends ThemeActivity {
                 streamerImage.setImageBitmap(bitmap);
 
                 Palette palette = Palette.from(bitmap).generate();
-                int defaultColor = Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, getBaseContext());
-                int defaultDarkColor = Service.getColorAttribute(R.attr.colorPrimaryDark, R.color.primaryDark, getBaseContext());
+                int defaultColor = Service.getColorAttribute(androidx.appcompat.R.attr.colorPrimary, R.color.primary, getBaseContext());
+                int defaultDarkColor = Service.getColorAttribute(androidx.appcompat.R.attr.colorPrimaryDark, R.color.primaryDark, getBaseContext());
 
                 int vibrant = palette.getVibrantColor(defaultColor);
                 int vibrantDark = palette.getDarkVibrantColor(defaultColor);

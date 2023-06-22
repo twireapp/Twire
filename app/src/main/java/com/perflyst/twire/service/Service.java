@@ -316,7 +316,7 @@ public class Service {
     public static int getAccentColor(Context mContext) {
         TypedValue typedValue = new TypedValue();
 
-        TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[]{R.attr.colorAccent});
+        TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[]{androidx.appcompat.R.attr.colorAccent});
         int color = a.getColor(0, 0);
 
         a.recycle();

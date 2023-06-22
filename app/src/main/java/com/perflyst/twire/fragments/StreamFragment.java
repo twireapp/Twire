@@ -328,7 +328,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         initializePlayer();
 
-        controlView = mVideoView.findViewById(R.id.exo_controller);
+        controlView = mVideoView.findViewById(com.google.android.exoplayer2.ui.R.id.exo_controller);
 
         controlView.setShowFastForwardButton(vodId != null);
         controlView.setShowRewindButton(vodId != null);
@@ -1435,7 +1435,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             if (v.equals(selected)) {
                 v.setBackgroundColor(Service.getColorAttribute(R.attr.navigationDrawerHighlighted, R.color.grey_300, getContext()));
             } else {
-                v.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.transparent));
+                v.setBackgroundColor(ContextCompat.getColor(getContext(), com.balysv.materialripple.R.color.transparent));
             }
         }
     }
@@ -1724,7 +1724,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         mPlayPauseWrapper.setVisibility(View.GONE);
         mControlToolbar.setVisibility(View.GONE);
-        mToolbar.setBackgroundColor(Service.getColorAttribute(R.attr.colorPrimary, R.color.primary, requireContext()));
+        mToolbar.setBackgroundColor(Service.getColorAttribute(androidx.appcompat.R.attr.colorPrimary, R.color.primary, requireContext()));
 
         releasePlayer();
         if (optionsMenuItem != null) optionsMenuItem.setVisible(true);

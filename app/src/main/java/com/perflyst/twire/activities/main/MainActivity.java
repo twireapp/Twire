@@ -136,7 +136,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
         if (getSupportActionBar() != null) getSupportActionBar().setTitle("");
         mMainToolbar.setPadding(0, 0, Service.dpToPixels(getBaseContext(), 5), 0); // to make sure the cast icon is aligned 16 dp from the right edge.
         mMainToolbar.bringToFront();
-        mMainToolbar.setBackgroundColor(ContextCompat.getColor(this, R.color.transparent));
+        mMainToolbar.setBackgroundColor(ContextCompat.getColor(this, com.balysv.materialripple.R.color.transparent));
         mToolbarShadow.bringToFront();
         mToolbarShadow.setAlpha(0f);
         mTitleView.bringToFront();

@@ -15,7 +15,6 @@ import androidx.annotation.AttrRes;
 import androidx.annotation.DimenRes;
 import androidx.annotation.LayoutRes;
 import androidx.appcompat.widget.AppCompatRadioButton;
-import androidx.core.widget.CompoundButtonCompat;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.Service;
@@ -82,7 +81,7 @@ public class LayoutSelector {
                         new int[]{
 
                                 Color.GRAY, //Disabled
-                                Service.getColorAttribute(R.attr.colorAccent, R.color.accent, activity), //Enabled
+                                Service.getColorAttribute(androidx.appcompat.R.attr.colorAccent, R.color.accent, activity), //Enabled
                         }
                 );
                 radioButton.setButtonTintList(colorStateList);
