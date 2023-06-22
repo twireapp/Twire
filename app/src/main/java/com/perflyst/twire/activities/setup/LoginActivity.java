@@ -27,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.perflyst.twire.R;
-import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetFollowsFromDB;
@@ -124,12 +123,7 @@ public class LoginActivity extends SetupBaseActivity {
         float textPosition = (int) (2.5 * (Service.getScreenHeight(this) / 5));
         mLoginTextContainer.setY(textPosition);
         mSuccessMessage.setY(textPosition);
-        mContinueFABContainer.setOnClickListener(v -> {
-            showLoginView();
-
-            if (TwireApplication.isCrawlerUpdate)
-                showSkippingAnimation();
-        });
+        mContinueFABContainer.setOnClickListener(v -> showLoginView());
 
         Service.bringToBack(mTransitionViewWhite);
         Service.bringToBack(mTransitionViewBlue);
