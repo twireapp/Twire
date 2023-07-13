@@ -323,6 +323,14 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.10.8</item>
+        <item>A Add rudimentary emote autocomplete.</item>
+        <item>F Video comments should load without needing to reconnect.</item>
+        <item>F Fix badges not loading and causing a crash.</item>
+        <item>C Bump minimum Android version to Android Lollipop 5.0.</item>
+        <item>C Reduce minimum chat size threshold for large tablets.</item>
+        <item>C Close stream on navigation back if initial orientation is landscape.</item>
+
         <item>V 2.10.7</item>
         <item>F Fix VOD chat only displaying one page of comments.</item>
         <item>A Add chat notifications (subs, gifts, etc).</item>
@@ -462,14 +470,5 @@
         <item>F Fix thumbnails not displaying correctly before Android 5.0.</item>
         <item>F Fix some controls being hidden on Night and True night themes.</item>
         <item>C Use semantic versioning again.</item>
-
-        <item>V 2.519</item>
-        <item>A The video now gets tinted to improve the visibility of controls.</item>
-        <item>F BTTV emotes should be working again.</item>
-        <item>A Top streams and games now only show streams in your system language.</item>
-        <item>F Chat messages won\'t glitch out at the end of a VOD.</item>
-        <item>F The app icon should be working for older version of Android.</item>
-        <item>C Improved Spanish translations.</item>
-        <item>C Caching improvements.</item>
     </string-array>
 </resources>
