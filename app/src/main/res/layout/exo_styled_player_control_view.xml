@@ -203,7 +203,7 @@
             android:maxLines="3"
             android:ellipsize="end"
             android:textSize="16dp"
-            android:textColor="?attr/textColor" />
+            android:textColor="@color/white" />
 
     </androidx.appcompat.widget.Toolbar>
 

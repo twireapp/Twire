@@ -1781,7 +1781,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         final SpannableStringBuilder builder = new SpannableStringBuilder();
         builder.append(mUserInfo.getDisplayName());
         if (title != null) {
-            int secondaryColor = Service.getColorAttribute(R.attr.secondaryTextColor, R.color.white_text_secondary, requireContext());
+            int secondaryColor = ContextCompat.getColor(requireContext(), R.color.white_text_secondary);
             appendSpan(builder, "\n" + title, new ForegroundColorSpan(secondaryColor), new RelativeSizeSpan(0.75f));
         }
         mTitleText.setText(builder);
