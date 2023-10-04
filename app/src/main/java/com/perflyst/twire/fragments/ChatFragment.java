@@ -386,7 +386,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
      */
     private void hideChatStatusBar() {
         if (this.chatStatusBarShowing) {
-            ResizeHeightAnimation heightAnimation = new ResizeHeightAnimation(this.mChatStatusBar, (int) getResources().getDimension(R.dimen.chat_input_divider_height));
+            ResizeHeightAnimation heightAnimation = new ResizeHeightAnimation(this.mChatStatusBar, 0);
             heightAnimation.setStartOffset(1000);
             heightAnimation.setDuration(140);
             heightAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
