@@ -7,6 +7,9 @@ import static com.perflyst.twire.service.Service.makeRequest;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.perflyst.twire.utils.Constants;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,6 +54,23 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
             String result = response.body;
             JSONObject topObject = new JSONObject(result);
             String user_id = topObject.has(USER_ID_STRING) ? topObject.getString(USER_ID_STRING) : null;
+
+            // Validate that all required scopes are present
+            JSONArray scopes = topObject.getJSONArray("scopes");
+            for (String required_scope : Constants.TWITCH_SCOPES) {
+                boolean scope_found = false;
+                for (int i = 0; i < scopes.length(); i++) {
+                    if (scopes.getString(i).equals(required_scope)) {
+                        scope_found = true;
+                        break;
+                    }
+                }
+
+                if (!scope_found) {
+                    // The token is invalid because it lacks the required scopes.
+                    return new TokenValidation(null);
+                }
+            }
 
             return new TokenValidation(user_id);
         } catch (JSONException e) {
