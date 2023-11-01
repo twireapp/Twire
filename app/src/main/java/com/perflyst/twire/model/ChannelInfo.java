@@ -165,7 +165,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
             return followers;
         }
 
-        String userFollows = Service.urlToJSONStringHelix("https://api.twitch.tv/helix/users/follows?first=1&to_id=" + getUserId(), context);
+        String userFollows = Service.urlToJSONStringHelix("https://api.twitch.tv/helix/channels/followers?first=1&broadcaster_id=" + getUserId(), context);
 
         try {
             JSONObject fullDataObject = new JSONObject(userFollows);
