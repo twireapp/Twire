@@ -32,6 +32,7 @@ import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetFollowsFromDB;
 import com.perflyst.twire.tasks.HandlerUserLoginTask;
 import com.perflyst.twire.utils.AnimationListenerAdapter;
+import com.perflyst.twire.utils.Constants;
 import com.rey.material.widget.ProgressView;
 import com.rey.material.widget.SnackBar;
 
@@ -45,7 +46,7 @@ public class LoginActivity extends SetupBaseActivity {
             "?client_id=" +  Service.getApplicationClientID() +
             "&redirect_uri=http%3A%2F%2Flocalhost/oauth_authorizing" +
             "&response_type=token" +
-            "&scope=user:read:email%20user:edit:follows%20user:read:subscriptions%20chat:edit%20chat:read%20user:read:follows";
+            "&scope=" + String.join("%20", Constants.TWITCH_SCOPES);
     private final int SHOW_WEBVIEW_ANIMATION_DURATION = 900;
     private final int SHOW_SUCCESS_ICON_DURATION = 800;
     private final int REVEAL_ANIMATION_DURATION = 650;
