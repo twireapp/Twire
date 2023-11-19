@@ -5,7 +5,6 @@ plugins {
 android {
     namespace "com.perflyst.twire"
     compileSdk 33
-    buildToolsVersion "32.0.0"
     ndkVersion "25.0.8775105"
 
     defaultConfig {
