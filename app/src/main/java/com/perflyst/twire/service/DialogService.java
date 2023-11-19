@@ -1,6 +1,7 @@
 package com.perflyst.twire.service;
 
 import android.app.Activity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -238,14 +239,31 @@ public class DialogService {
         minutePicker.setValue(currentProgress / 60 % 60);
         secondPicker.setValue(currentProgress % 60);
 
+        if (maxProgress > 60 * 60) minutePicker.setWrapSelectorWheel(true);
+        if (maxProgress > 60) secondPicker.setWrapSelectorWheel(true);
+
         NumberPicker.OnValueChangeListener updateTime = (a, b, c) -> newTime = (hourPicker.getValue() * 3600L + minutePicker.getValue() * 60L + secondPicker.getValue()) * 1000;
         hourPicker.setOnValueChangedListener(updateTime);
-        minutePicker.setOnValueChangedListener(updateTime);
-        secondPicker.setOnValueChangedListener(updateTime);
+        linkPickers(minutePicker, hourPicker, updateTime);
+        linkPickers(secondPicker, minutePicker, updateTime);
 
         newTime = player.getCurrentPosition();
 
         return dialog;
+    }
+
+    private static void linkPickers(NumberPicker source, NumberPicker destination, NumberPicker.OnValueChangeListener changeListener) {
+        source.setOnValueChangedListener((picker, old_value, new_value) -> {
+            // If we overflow the picker, increment the next picker.
+            if (old_value == 59 && new_value == 0) scrollPicker(destination, true);
+            // If we underflow the picker, decrement the next picker.
+            else if (old_value == 0 && new_value == 59) scrollPicker(destination, false);
+            changeListener.onValueChange(picker, old_value, new_value);
+        });
+    }
+
+    private static void scrollPicker(NumberPicker numberPicker, boolean increment) {
+        numberPicker.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, increment ? KeyEvent.KEYCODE_DPAD_DOWN : KeyEvent.KEYCODE_DPAD_UP));
     }
 
     public static MaterialDialog getSliderDialog(Activity activity, MaterialDialog.SingleButtonCallback onCancelCallback, Slider.OnPositionChangeListener sliderChangeListener, int startValue, int minValue, int maxValue, String title) {
