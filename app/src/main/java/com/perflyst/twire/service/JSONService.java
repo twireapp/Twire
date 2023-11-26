@@ -74,9 +74,9 @@ public class JSONService {
         // Twitch doesn't keep their field names consistent, so we need to make them consistent.
         if (userObject.has("broadcaster_login")) { // Search uses id, broadcaster_login, display_name
             return new UserInfo(
-                    userObject.getInt("id"),
+                    userObject.getInt("broadcaster_id"),
                     userObject.getString("broadcaster_login"),
-                    userObject.getString("display_name")
+                    userObject.getString("broadcaster_name")
             );
         } else if (userObject.has("login")) { // Users uses id, login, display_name
             return new UserInfo(
