@@ -45,7 +45,7 @@ public class LoginActivity extends SetupBaseActivity {
             "?client_id=" +  Service.getApplicationClientID() +
             "&redirect_uri=http%3A%2F%2Flocalhost/oauth_authorizing" +
             "&response_type=token" +
-            "&scope=user:read:email%20user:edit:follows%20user:read:subscriptions%20chat:edit%20chat:read";
+            "&scope=user:read:email%20user:edit:follows%20user:read:subscriptions%20chat:edit%20chat:read%20user:read:follows";
     private final int SHOW_WEBVIEW_ANIMATION_DURATION = 900;
     private final int SHOW_SUCCESS_ICON_DURATION = 800;
     private final int REVEAL_ANIMATION_DURATION = 650;
