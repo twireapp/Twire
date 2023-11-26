@@ -49,7 +49,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
 
         int userId = mSettings.getGeneralTwitchUserID();
 
-        final String BASE_URL = "https://api.twitch.tv/helix/users/follows?first=100&from_id=" + userId + "&after=";
+        final String BASE_URL = "https://api.twitch.tv/helix/channels/followed?first=100&user_id=" + userId + "&after=";
 
         // Get all the userIds of a users follows
         try {
@@ -69,7 +69,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
 
                 for (int i = 0; i < follows.length(); i++) {
                     JSONObject follow = follows.getJSONObject(i);
-                    userSubs.add(follow.getInt("to_id"));
+                    userSubs.add(follow.getInt("broadcaster_id"));
                 }
 
                 JSONObject pagination = page.getJSONObject("pagination");
