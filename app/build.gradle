@@ -76,11 +76,11 @@ dependencies {
     implementation "com.google.android.material:material:1.4.0"
 
     //https://github.com/bumptech/glide/releases
-    def glideVersion = "4.12.0"
+    def glideVersion = "4.14.2"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
     //https://github.com/zjupure/GlideWebpDecoder
-    implementation "com.github.zjupure:webpdecoder:2.0.$glideVersion"
+    implementation "com.github.zjupure:webpdecoder:2.6.$glideVersion"
 
     //https://github.com/balysv/material-ripple/blob/master/CHANGELOG.md
     implementation "com.balysv:material-ripple:1.0.2"
