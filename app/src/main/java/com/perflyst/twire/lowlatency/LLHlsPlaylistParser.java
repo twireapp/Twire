@@ -15,9 +15,9 @@
  */
 package com.perflyst.twire.lowlatency;
 
-import static com.google.android.exoplayer2.util.Assertions.checkNotNull;
-import static com.google.android.exoplayer2.util.Assertions.checkState;
-import static com.google.android.exoplayer2.util.Util.castNonNull;
+import static androidx.media3.common.util.Assertions.checkNotNull;
+import static androidx.media3.common.util.Assertions.checkState;
+import static androidx.media3.common.util.Util.castNonNull;
 
 import android.net.Uri;
 import android.text.TextUtils;
@@ -25,29 +25,29 @@ import android.util.Base64;
 
 import androidx.annotation.Nullable;
 
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.ParserException;
-import com.google.android.exoplayer2.drm.DrmInitData;
-import com.google.android.exoplayer2.drm.DrmInitData.SchemeData;
-import com.google.android.exoplayer2.extractor.mp4.PsshAtomUtil;
-import com.google.android.exoplayer2.metadata.Metadata;
-import com.google.android.exoplayer2.source.hls.HlsTrackMetadataEntry;
-import com.google.android.exoplayer2.source.hls.HlsTrackMetadataEntry.VariantInfo;
-import com.google.android.exoplayer2.source.hls.playlist.HlsMediaPlaylist;
-import com.google.android.exoplayer2.source.hls.playlist.HlsMediaPlaylist.Part;
-import com.google.android.exoplayer2.source.hls.playlist.HlsMediaPlaylist.RenditionReport;
-import com.google.android.exoplayer2.source.hls.playlist.HlsMediaPlaylist.Segment;
-import com.google.android.exoplayer2.source.hls.playlist.HlsMultivariantPlaylist;
-import com.google.android.exoplayer2.source.hls.playlist.HlsMultivariantPlaylist.Rendition;
-import com.google.android.exoplayer2.source.hls.playlist.HlsMultivariantPlaylist.Variant;
-import com.google.android.exoplayer2.source.hls.playlist.HlsPlaylist;
-import com.google.android.exoplayer2.upstream.ParsingLoadable;
-import com.google.android.exoplayer2.util.Assertions;
-import com.google.android.exoplayer2.util.Log;
-import com.google.android.exoplayer2.util.MimeTypes;
-import com.google.android.exoplayer2.util.UriUtil;
-import com.google.android.exoplayer2.util.Util;
+import androidx.media3.common.C;
+import androidx.media3.common.Format;
+import androidx.media3.common.ParserException;
+import androidx.media3.common.DrmInitData;
+import androidx.media3.common.DrmInitData.SchemeData;
+import androidx.media3.extractor.mp4.PsshAtomUtil;
+import androidx.media3.common.Metadata;
+import androidx.media3.exoplayer.hls.HlsTrackMetadataEntry;
+import androidx.media3.exoplayer.hls.HlsTrackMetadataEntry.VariantInfo;
+import androidx.media3.exoplayer.hls.playlist.HlsMediaPlaylist;
+import androidx.media3.exoplayer.hls.playlist.HlsMediaPlaylist.Part;
+import androidx.media3.exoplayer.hls.playlist.HlsMediaPlaylist.RenditionReport;
+import androidx.media3.exoplayer.hls.playlist.HlsMediaPlaylist.Segment;
+import androidx.media3.exoplayer.hls.playlist.HlsMultivariantPlaylist;
+import androidx.media3.exoplayer.hls.playlist.HlsMultivariantPlaylist.Rendition;
+import androidx.media3.exoplayer.hls.playlist.HlsMultivariantPlaylist.Variant;
+import androidx.media3.exoplayer.hls.playlist.HlsPlaylist;
+import androidx.media3.exoplayer.upstream.ParsingLoadable;
+import androidx.media3.common.util.Assertions;
+import androidx.media3.common.util.Log;
+import androidx.media3.common.MimeTypes;
+import androidx.media3.common.util.UriUtil;
+import androidx.media3.common.util.Util;
 import com.google.common.collect.Iterables;
 
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;

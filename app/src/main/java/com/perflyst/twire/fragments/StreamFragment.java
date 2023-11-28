@@ -1,10 +1,11 @@
 package com.perflyst.twire.fragments;
 
-import static android.provider.Settings.System.*;
-import static com.google.android.exoplayer2.Player.EVENT_PLAYBACK_STATE_CHANGED;
-import static com.google.android.exoplayer2.Player.EVENT_PLAY_WHEN_READY_CHANGED;
-import static com.google.android.exoplayer2.Player.STATE_BUFFERING;
-import static com.google.android.exoplayer2.Player.STATE_READY;
+import static android.provider.Settings.System.ACCELEROMETER_ROTATION;
+import static android.provider.Settings.System.getInt;
+import static androidx.media3.common.Player.EVENT_PLAYBACK_STATE_CHANGED;
+import static androidx.media3.common.Player.EVENT_PLAY_WHEN_READY_CHANGED;
+import static androidx.media3.common.Player.STATE_BUFFERING;
+import static androidx.media3.common.Player.STATE_READY;
 import static com.perflyst.twire.misc.Utils.appendSpan;
 
 import android.animation.Animator;
@@ -12,7 +13,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -24,8 +24,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.media.MediaDescriptionCompat;
-import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -58,6 +57,7 @@ import android.widget.Toast;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.OptIn;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,7 +68,24 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
-import androidx.media.session.MediaButtonReceiver;
+import androidx.media3.common.AudioAttributes;
+import androidx.media3.common.C;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.MediaMetadata;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.Player;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.Util;
+import androidx.media3.datasource.DefaultHttpDataSource;
+import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.exoplayer.SeekParameters;
+import androidx.media3.exoplayer.hls.HlsMediaSource;
+import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.session.MediaSession;
+import androidx.media3.ui.AspectRatioFrameLayout;
+import androidx.media3.ui.PlayerControlView;
+import androidx.media3.ui.PlayerNotificationManager;
+import androidx.media3.ui.PlayerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.Fade;
@@ -78,23 +95,6 @@ import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.signature.ObjectKey;
-import com.google.android.exoplayer2.C;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.PlaybackException;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SeekParameters;
-import com.google.android.exoplayer2.audio.AudioAttributes;
-import com.google.android.exoplayer2.ext.mediasession.MediaSessionConnector;
-import com.google.android.exoplayer2.ext.mediasession.TimelineQueueNavigator;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
-import com.google.android.exoplayer2.ui.PlayerNotificationManager;
-import com.google.android.exoplayer2.ui.StyledPlayerControlView;
-import com.google.android.exoplayer2.ui.StyledPlayerView;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -131,6 +131,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+@OptIn(markerClass = UnstableApi.class)
 public class StreamFragment extends Fragment implements Player.Listener {
     private static final int SHOW_TIMEOUT = 3000;
     private static final int PLAYER_NOTIFICATION_ID = 1;
@@ -161,7 +162,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private Map<String, Quality> qualityURLs;
     private boolean isLandscape = false;
     private Runnable fetchViewCountRunnable;
-    private StyledPlayerView mVideoView;
+    private PlayerView mVideoView;
     private ExoPlayer player;
     private PlayerNotificationManager playerNotificationManager;
     private MediaItem currentMediaItem;
@@ -187,7 +188,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private MenuItem optionsMenuItem;
     private LinearLayout mQualityWrapper;
     private View mOverlay;
-    private StyledPlayerControlView controlView;
+    private PlayerControlView controlView;
     private OrientationEventListener orientationListener;
 
     private final Runnable vodRunnable = new Runnable() {
@@ -206,7 +207,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private int videoHeightBeforeChatOnly;
     private Integer triesForNextBest = 0;
     private boolean pictureInPictureEnabled; // Tracks if PIP is enabled including the animation.
-    private MediaSessionCompat mediaSession;
+    private MediaSession mediaSession;
 
     private static final DefaultHttpDataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory()
             .setUserAgent("Twire")
@@ -328,7 +329,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         initializePlayer();
 
-        controlView = mVideoView.findViewById(com.google.android.exoplayer2.ui.R.id.exo_controller);
+        controlView = mVideoView.findViewById(androidx.media3.ui.R.id.exo_controller);
 
         controlView.setShowFastForwardButton(vodId != null);
         controlView.setShowRewindButton(vodId != null);
@@ -336,7 +337,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         controlView.setShowTimeoutMs(SHOW_TIMEOUT);
         controlView.setAnimationEnabled(false);
 
-        controlView.addVisibilityListener(visibility -> {
+        mVideoView.setControllerVisibilityListener((PlayerView.ControllerVisibilityListener) visibility -> {
             if (visibility == View.VISIBLE) {
                 showVideoInterface();
             } else {
@@ -469,7 +470,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     .setHandleAudioBecomingNoisy(true)
                     .setAudioAttributes(new AudioAttributes.Builder()
                             .setUsage(C.USAGE_MEDIA)
-                            .setContentType(C.CONTENT_TYPE_MOVIE)
+                            .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
                             .build(), true)
                     .build();
             player.addListener(this);
@@ -487,38 +488,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 player.prepare();
             }
 
-            PendingIntent pendingIntent = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            {
-                Intent mediaButtonIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-                pendingIntent = PendingIntent.getBroadcast(
-                        getContext(),
-                        0, mediaButtonIntent,
-                        PendingIntent.FLAG_IMMUTABLE
-                );
-            }
-
-            ComponentName mediaButtonReceiver = new ComponentName(
-                    getContext(), MediaButtonReceiver.class);
-            mediaSession = new MediaSessionCompat(
-                    getContext(),
-                    getContext().getPackageName(),
-                    mediaButtonReceiver,
-                    pendingIntent);
-            MediaSessionConnector mediaSessionConnector = new MediaSessionConnector(mediaSession);
-            mediaSessionConnector.setPlayer(player);
-            mediaSessionConnector.setQueueNavigator(new TimelineQueueNavigator(mediaSession) {
-                @NonNull
-                @Override
-                public MediaDescriptionCompat getMediaDescription(Player player, int windowIndex) {
-                    return new MediaDescriptionCompat.Builder()
-                            .setTitle(title)
-                            .setSubtitle(mUserInfo.getDisplayName())
-                            .build();
-                }
-            });
-            mediaSession.setActive(true);
-
+            mediaSession = new MediaSession.Builder(getContext(), player).build();
             playerNotificationManager = new PlayerNotificationManager.Builder(getContext(), PLAYER_NOTIFICATION_ID, PLAYER_NOTIFICATION_CHANNEL)
                     .setChannelNameResourceId(R.string.player_channel_name)
                     .setChannelDescriptionResourceId(R.string.player_channel_description)
@@ -526,7 +496,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     .setMediaDescriptionAdapter(new MediaAdapter())
                     .build();
 
-            playerNotificationManager.setMediaSessionToken(mediaSession.getSessionToken());
+            playerNotificationManager.setMediaSessionToken(mediaSession.getSessionCompatToken());
             playerNotificationManager.setPlayer(player);
         }
     }
@@ -536,7 +506,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         @Override
         public CharSequence getCurrentContentTitle(Player player) {
-            return null;
+            return player.getMediaMetadata().title;
         }
 
         @Nullable
@@ -548,7 +518,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         @Nullable
         @Override
         public CharSequence getCurrentContentText(Player player) {
-            return null;
+            return player.getMediaMetadata().artist;
         }
 
         @Nullable
@@ -1392,9 +1362,19 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * Sets the URL to the VideoView and ChromeCast and starts playback.
      */
     private void playUrl(String url) {
+        Bundle extras = new Bundle();
+        if (vodId == null) {
+            extras.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1);
+        }
+
         MediaItem mediaItem = new MediaItem.Builder()
                 .setLiveConfiguration(new MediaItem.LiveConfiguration.Builder().setTargetOffsetMs(1000).build())
                 .setUri(url)
+                .setMediaMetadata(new MediaMetadata.Builder()
+                        .setTitle(title)
+                        .setArtist(mUserInfo.getDisplayName())
+                        .setExtras(extras)
+                        .build())
                 .build();
 
         currentMediaItem = mediaItem;

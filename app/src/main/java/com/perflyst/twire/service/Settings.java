@@ -6,7 +6,7 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
-import com.google.android.exoplayer2.Player;
+import androidx.media3.common.Player;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.perflyst.twire.R;

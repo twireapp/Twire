@@ -8,14 +8,16 @@ import android.widget.TextView;
 
 import androidx.annotation.ArrayRes;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.OptIn;
 import androidx.annotation.StringRes;
+import androidx.media3.common.Player;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.exoplayer.ExoPlayer;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.Player;
 import com.perflyst.twire.R;
 import com.perflyst.twire.views.LayoutSelector;
 import com.rey.material.widget.CheckedTextView;
@@ -286,6 +288,7 @@ public class DialogService {
         return dialog;
     }
 
+    @OptIn(markerClass = UnstableApi.class)
     public static MaterialDialog getPlaybackDialog(Activity activity, ExoPlayer player) {
         MaterialDialog dialog = getBaseThemedDialog(activity)
                 .title(R.string.menu_playback)
