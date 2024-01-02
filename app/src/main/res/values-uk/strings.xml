@@ -201,4 +201,6 @@
     <string name="gen_local_follows_header">Локальні підписки</string>
     <string name="gen_local_follows_summary">Підписки в Twire збережені локально и не були збережені в Twitch.</string>
     <string name="gen_export_summary">Експортувати враховуючи локальні та підписки Twitch.</string>
+    <string name="settings_general_image_proxy_url_placeholder">URL-адреса API</string>
+    <string name="streamerInfo_chat_tab">Чат</string>
 </resources>

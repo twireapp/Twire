@@ -240,4 +240,6 @@
     <string name="chat_paused">Chat en pause en raison du défilement.</string>
     <string name="player_channel_description">Lecteur de Twire</string>
     <string name="player_channel_name">Lecteur</string>
+    <string name="settings_general_image_proxy_url_placeholder">URL de l\'API</string>
+    <string name="streamerInfo_chat_tab">Chat</string>
 </resources>

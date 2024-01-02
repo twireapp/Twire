@@ -201,4 +201,6 @@
     <string name="gen_import_summary">Это не добавит подписки на Twitch.</string>
     <string name="player_channel_name">Плеер</string>
     <string name="player_channel_description">Плеер Twire</string>
+    <string name="settings_general_image_proxy_url_placeholder">ссылка API</string>
+    <string name="streamerInfo_chat_tab">Чат</string>
 </resources>

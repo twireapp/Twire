@@ -168,8 +168,8 @@
     <string name="settings_general_image_proxy_url_example">Proxyaren adibide bat: https://external-content.duckduckgo.com/iu/\?u=</string>
     <string name="chat_enable_ssl">Erabili SSL konektatzeko</string>
     <string name="chat_enable_account_connect">Konektatu zure kontuarekin</string>
-    <string name="player_show_runtime">Erakutsi Zuzeneko gauzatzeko denbora</string>
-    <string name="player_type">Zuzeneko erreproduzitzaile mota</string>
+    <string name="player_show_runtime">Erakutsi fluxuaren exekuzio-denbora</string>
+    <string name="player_type">Streaming erreproduzitzaile mota</string>
     <string name="menu_share">Partekatu</string>
     <string name="playback_speed_display">×%.2f</string>
     <string name="playback_speed">%.2f</string>
@@ -179,4 +179,27 @@
     <string name="chat_enable_emote_seventv">Aktibatu 7TV emoteak</string>
     <string name="retry">Saiatu berriro</string>
     <string name="menu_playback">Erreprodukzio-ezarpenak</string>
+    <string name="gen_dialog_export_follows_action">Esportatu</string>
+    <string name="gen_twitch_follows">Jarraipen guztiak ezabatu</string>
+    <string name="gen_export_database">Esportatu jarraipen guztiak</string>
+    <string name="settings_general_image_proxy_url_placeholder">API-ren URLa</string>
+    <string name="gen_import_summary">Horrek ez dio jarraipenik gehituko Twitch-i.</string>
+    <string name="gen_local_follows_header">Tokiko jarraipenak</string>
+    <string name="gen_dialog_import_follows_content">Inportatu nahi duzu jarraitzen duzun guztia\?</string>
+    <string name="gen_dialog_wipe_follows_content">Jarraipen guztiak ezabatu nahi dituzu\?</string>
+    <string name="gen_dialog_wipe_follows_action">Ezabatu</string>
+    <string name="gen_toast_import_database">Inportatutako %1$x jarraipenak</string>
+    <string name="skip_silence">Isiltasuna alde batera utzi</string>
+    <string name="chat_paused">Txat pausatua desplazamenduaren ondorioz.</string>
+    <string name="gen_dialog_export_follows_content">Esportatu nahi duzu jarraitzen duzun guztia\?</string>
+    <string name="gen_dialog_import_follows_action">Inportatu</string>
+    <string name="mute">Isilarazi</string>
+    <string name="player_channel_description">Twire-ko erreproduzitzailea</string>
+    <string name="gen_import_database">Inportatu jarraipenak</string>
+    <string name="player_channel_name">Erreproduzitzailea</string>
+    <string name="gen_toast_wipe_database">Ezabatutako jarraipenak</string>
+    <string name="gen_wipe_summary">Honek ez ditu jarraipenak ezabatuko Twitch-en.</string>
+    <string name="gen_toast_export_database">Esportatutako %1$x jarraipenak</string>
+    <string name="gen_export_summary">Esportazioek tokiko eta Twitch-en jarraipena barne hartzen dute.</string>
+    <string name="gen_local_follows_summary">Twire-n jarraitzen diren erabiltzaileak zure memoria lokalean gordetzen dira eta ez dira Twitch-era bidaltzen.</string>
 </resources>
