@@ -91,7 +91,6 @@ public class ChannelActivity extends ThemeActivity {
         // Get the various handles of view and layouts that is part of this view
         streamerImage = findViewById(R.id.profileImageView);
         TextView streamerInfoName = findViewById(R.id.twitch_name);
-        TextView streamerViewers = findViewById(R.id.txt_viewers);
         TextView streamerFollowers = findViewById(R.id.txt_followers);
         toolbar = findViewById(R.id.StreamerInfo_Toolbar);
         additionalToolbar = findViewById(R.id.additional_toolbar);
@@ -112,7 +111,6 @@ public class ChannelActivity extends ThemeActivity {
 
         streamerInfoName.setText(info.getDisplayName());
         info.getFollowers(getApplicationContext(), followers -> Utils.setNumber(streamerFollowers, followers), 0);
-        Utils.setNumber(streamerViewers, info.getViews());
         streamerImage.setTransitionName(getString(R.string.streamerInfo_transition));
         setUpTabs();
         initStreamerImageAndColors();

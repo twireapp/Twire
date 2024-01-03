@@ -104,35 +104,6 @@
                             app:tint="@color/white" />
                     </LinearLayout>
                 </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/txt_viewers"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/text_streamer_info"
-                            android:textSize="@dimen/streamerInfo_views_size" />
-
-                        <ImageView
-                            android:layout_width="@dimen/streamerInfo_additional_info_icon_size"
-                            android:layout_height="@dimen/streamerInfo_additional_info_icon_size"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="@dimen/streamerInfo_stat_icons_padding"
-                            android:layout_marginRight="@dimen/streamerInfo_stat_icons_padding"
-                            android:src="@drawable/ic_visibility"
-                            app:tint="@color/white" />
-                    </LinearLayout>
-                </FrameLayout>
             </LinearLayout>
 
         </RelativeLayout>
