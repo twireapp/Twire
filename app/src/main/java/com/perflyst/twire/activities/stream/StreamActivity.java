@@ -74,14 +74,14 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
 
             // If the Fragment is non-null, then it is currently being
             // retained across a configuration change.
-            if (mStreamFragment == null) {
-                mStreamFragment = StreamFragment.newInstance(getStreamArguments());
-                fm.beginTransaction().replace(getVideoContainerResource(), mStreamFragment, getString(R.string.stream_fragment_tag)).commit();
-            }
-
             if (mChatFragment == null) {
                 mChatFragment = ChatFragment.getInstance(getStreamArguments());
                 fm.beginTransaction().replace(R.id.chat_fragment, mChatFragment).commit();
+            }
+
+            if (mStreamFragment == null) {
+                mStreamFragment = StreamFragment.newInstance(getStreamArguments());
+                fm.beginTransaction().replace(getVideoContainerResource(), mStreamFragment, getString(R.string.stream_fragment_tag)).commit();
             }
         }
 

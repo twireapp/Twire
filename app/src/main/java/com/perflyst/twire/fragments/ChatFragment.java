@@ -192,12 +192,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         setupKeyboardShowListener();
 
         setupTransition();
-        return mRootView;
-    }
 
-    @Override
-    public void onStart() {
-        super.onStart();
         chatManager = new ChatManager(getContext(), mUserInfo, vodID, new ChatManager.ChatCallback()
         {
             private boolean connected = false;
@@ -300,6 +295,13 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
             }
         });
+
+        return mRootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         TwireApplication.backgroundPoster.post(chatManager);
 

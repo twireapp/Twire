@@ -195,7 +195,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         public void run() {
             if (player == null) return;
 
-            ChatManager.updateVodProgress(player.getCurrentPosition(), false);
+            ChatManager.instance.updateVodProgress(player.getCurrentPosition(), false);
 
             if (player.isPlaying()) vodHandler.postDelayed(this, 1000);
         }
@@ -644,7 +644,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         // A seek is when we've gone backwards or we go more than 10 seconds forward.
         boolean seek = oldMs > newMs || newMs - oldMs > 10000;
         if (seek) streamFragmentCallback.onSeek();
-        ChatManager.updateVodProgress(newMs, seek);
+        ChatManager.instance.updateVodProgress(newMs, seek);
     }
 
     @Override
@@ -750,7 +750,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             releasePlayer();
         }
 
-        ChatManager.setPreviousProgress();
+        ChatManager.instance.setPreviousProgress();
     }
 
     @Override

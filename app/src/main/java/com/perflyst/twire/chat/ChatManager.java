@@ -45,10 +45,10 @@ public class ChatManager implements Runnable {
     public static ChatManager instance = null;
 
     public static ImmutableSetMultimap<String, Badge> ffzBadgeMap;
-    private static double currentProgress = -1;
-    private static String cursor = "";
-    private static boolean seek = false;
-    private static double previousProgress;
+    private double currentProgress = -1;
+    private String cursor = "";
+    private boolean seek = false;
+    private double previousProgress;
     private final String LOG_TAG = getClass().getSimpleName();
     private final String user;
     private final String password;
@@ -118,27 +118,26 @@ public class ChatManager implements Runnable {
         nextCommentOffset = 0;
     }
 
-    public static void updateVodProgress(long aCurrentProgress, boolean aSeek) {
+    public void updateVodProgress(long aCurrentProgress, boolean aSeek) {
         currentProgress = aCurrentProgress / 1000f;
         seek |= aSeek;
 
-        if (instance == null) return;
-
         // Only notify the thread when there's work to do.
-        if (!aSeek && currentProgress < instance.nextCommentOffset) return;
+        if (!aSeek && currentProgress < nextCommentOffset) return;
 
-        synchronized (instance.vodLock) {
-            instance.vodLock.notify();
+        synchronized (vodLock) {
+            vodLock.notify();
         }
     }
 
-    public static void setPreviousProgress() {
+    public void setPreviousProgress() {
         previousProgress = currentProgress;
         cursor = "";
     }
 
     @Override
     public void run() {
+        isStopping = false;
         Log.d(LOG_TAG, "Trying to start chat " + channel.getLogin() + " for user " + user);
         mEmoteManager.loadCustomEmotes(() -> onUpdate(UpdateType.ON_CUSTOM_EMOTES_FETCHED));
 
@@ -268,7 +267,7 @@ public class ChatManager implements Runnable {
     }
 
     private void processVodChat() {
-        try {
+                try {
             onUpdate(UpdateType.ON_CONNECTED);
 
             // Make sure that current progress has been set.
