@@ -323,6 +323,14 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
+        <item>V 2.10.9</item>
+        <item>F Fix empty "My Streams" page</item>
+        <item>F Get followers from new Twitch API</item>
+        <item>C Remove viewer count from channel page</item>
+        <item>A Allow the minute and second pickers to wrap around</item>
+        <item>F Make the chat status bar hide completely</item>
+        <item>F Fix stream title color</item>
+
         <item>V 2.10.8</item>
         <item>A Add rudimentary emote autocomplete.</item>
         <item>F Video comments should load without needing to reconnect.</item>
@@ -456,19 +464,5 @@
         <item>C Update French, German, Italian and Spanish translations.</item>
         <item>F Fix the changelog button not changing according to the theme.</item>
         <item>F Fix the theme preview color for True night.</item>
-
-        <item>V 2.9.0</item>
-        <item>A New setting to enable/disable filtering of the top streams by language.</item>
-        <item>A Handle stream and VOD URLs.</item>
-        <item>A Messages that mention you will now be highlighted.</item>
-        <item>A Changelog will be displayed on each new version.</item>
-        <item>C Attempt to remove ads from streams.</item>
-        <item>F Fix login token not being validated correctly. Twire will properly warn you if you need to log in again.</item>
-        <item>F Fix the stream rewinding when opening the app from Picture in Picture mode.</item>
-        <item>F Fix the chat being the wrong size when opening the app from Picture in Picture mode.</item>
-        <item>F Fix emotes not being parsed correctly on your own messages.</item>
-        <item>F Fix thumbnails not displaying correctly before Android 5.0.</item>
-        <item>F Fix some controls being hidden on Night and True night themes.</item>
-        <item>C Use semantic versioning again.</item>
     </string-array>
 </resources>
