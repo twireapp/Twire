@@ -109,18 +109,14 @@
                 android:layout_height="match_parent" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <com.rey.material.widget.ProgressView
+        <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progress_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            app:lpd_inAnimDuration="50000"
-            app:lpd_outAnimDuration="50000"
-            app:lpd_verticalAlign="bottom"
-            app:pv_autostart="false"
-            app:pv_circular="false"
-            app:pv_progressMode="indeterminate"
-            app:pv_progressStyle="@style/Material.Drawable.LinearProgress" />
+            android:indeterminate="true"
+            app:showAnimationBehavior="outward"
+            app:hideAnimationBehavior="inward" />
 
         <com.perflyst.twire.views.FontFitTextView
             android:id="@+id/emote_error_view"

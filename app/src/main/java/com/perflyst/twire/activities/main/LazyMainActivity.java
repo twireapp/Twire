@@ -69,6 +69,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
 
         GetVisualElementsTask<T> getElementsTask = new GetVisualElementsTask<>(this);
         getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        startProgress();
     }
 
     @Override
@@ -118,12 +119,12 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
 
     @Override
     public void startProgress() {
-        mProgressView.start();
+        mProgressView.show();
     }
 
     @Override
     public void stopProgress() {
-        mProgressView.stop();
+        mProgressView.hide();
     }
 
     @Override

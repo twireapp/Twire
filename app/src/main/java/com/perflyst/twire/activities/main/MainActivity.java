@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.perflyst.twire.BuildConfig;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
@@ -36,7 +37,6 @@ import com.perflyst.twire.tasks.ScrollToStartPositionTask;
 import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
-import com.rey.material.widget.ProgressView;
 
 
 public abstract class MainActivity<E extends Comparable<E> & MainElement> extends ThemeActivity {
@@ -45,7 +45,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
 
     private ActivityMainBinding binding;
 
-    protected ProgressView mProgressView;
+    protected LinearProgressIndicator mProgressView;
 
     protected SwipeRefreshLayout mSwipeRefreshLayout;
 
