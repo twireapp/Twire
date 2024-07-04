@@ -333,7 +333,7 @@ public class ChatManager implements Runnable {
                 downloadedComments.poll();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
 
             onState(WebsocketConnectionState.LOST);
             SystemClock.sleep(2500);
@@ -480,7 +480,7 @@ public class ChatManager implements Runnable {
 
             ffzBadgeMap = mapBuilder.build();
         } catch (JSONException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
     }
 

@@ -124,7 +124,7 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
                 try {
                     mStreamFragment.backPressed();
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                 }
                 this.overrideTransition();
             }

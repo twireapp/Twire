@@ -135,7 +135,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         } catch (Exception e) {
             //In case twitch doesn't comply to their own API.
             Timber.d("Failed to show Message");
-            e.printStackTrace();
+            Timber.e(e);
         }
     }
 

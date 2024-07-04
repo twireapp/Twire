@@ -499,7 +499,7 @@ public abstract class MainActivity<E> extends ThemeActivity {
                         MainActivity.super.onBackPressed();
                         overridePendingTransition(0, 0);
                     } catch (IllegalStateException e) {
-                        e.printStackTrace();
+                        Timber.e(e);
                     }
                 }
             };

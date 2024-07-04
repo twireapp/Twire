@@ -16,18 +16,32 @@ import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.model.VideoOnDemand;
 import com.perflyst.twire.service.DialogService;
+import com.perflyst.twire.service.ReportErrors;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.service.Settings;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Queue;
 import java.util.regex.Matcher;
+
+import io.sentry.Sentry;
+import io.sentry.SentryEvent;
+import timber.log.Timber;
 
 public class DeepLinkActivity extends AppCompatActivity {
     private int errorMessage = R.string.router_unknown_error;
+    public static final Queue<SentryEvent> SENTRY_EVENTS = new LinkedList<>();
 
     @Override
     public void onCreate(Bundle savedInstance) {
         super.onCreate(savedInstance);
+
+        if (getIntent().hasExtra("reportErrors")) {
+            reportErrorDialog();
+            return;
+        }
 
         Uri data = getUri(getIntent());
         List<String> params = new LinkedList<>(data.getPathSegments());
@@ -45,7 +59,7 @@ public class DeepLinkActivity extends AppCompatActivity {
             try {
                 intent = getNewIntent(params, paramSize);
             } catch (Exception exception) {
-                exception.printStackTrace();
+                Timber.e(exception);
             }
 
             if (intent == null) {
@@ -55,6 +69,32 @@ public class DeepLinkActivity extends AppCompatActivity {
             }
         }).start();
     }
+
+    private void reportErrorDialog() {
+        if (SENTRY_EVENTS.isEmpty()) return;
+
+        DialogService.getBaseThemedDialog(this)
+                .title(R.string.report_error_title)
+                .content(R.string.report_error_description)
+                .positiveText(R.string.report_error_always)
+                .negativeText(R.string.report_error_never)
+                .onAny((_dialog, action) -> {
+                    switch (action) {
+                        case POSITIVE:
+                            Settings.setReportErrors(ReportErrors.ALWAYS);
+                            while (!SENTRY_EVENTS.isEmpty())
+                                Sentry.captureEvent(Objects.requireNonNull(SENTRY_EVENTS.poll()));
+                            break;
+                        case NEGATIVE:
+                            Settings.setReportErrors(ReportErrors.NEVER);
+                            SENTRY_EVENTS.clear();
+                            break;
+                    }
+
+                    finish();
+                }).build().show();
+    }
+
 
     Intent getNewIntent(List<String> params, int paramSize) throws Exception {
         if (paramSize == 2 && params.get(0).equals("videos")) { // twitch.tv/videos/<id>

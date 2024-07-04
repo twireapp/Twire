@@ -21,6 +21,7 @@ import com.perflyst.twire.activities.setup.LoginActivity;
 import com.perflyst.twire.databinding.ActivitySettingsGeneralBinding;
 import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.service.DialogService;
+import com.perflyst.twire.service.ReportErrors;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.service.SubscriptionsDbHelper;
 
@@ -29,7 +30,7 @@ import java.util.regex.Matcher;
 import timber.log.Timber;
 
 public class SettingsGeneralActivity extends ThemeActivity {
-    private TextView twitchNameView, startPageSubText, general_image_proxy_summary;
+    private TextView twitchNameView, startPageSubText, general_image_proxy_summary, errorReportSubText;
     private CheckedTextView filterTopStreamsByLanguageView, general_image_proxy;
     private EditText mImageProxyUrl;
 
@@ -52,6 +53,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
         general_image_proxy_summary = findViewById(R.id.general_image_proxy_summary);
         general_image_proxy = findViewById(R.id.general_image_proxy);
         mImageProxyUrl = findViewById(R.id.image_proxy_url_input);
+        errorReportSubText = binding.errorReportSubText;
 
         updateSummaries();
 
@@ -69,6 +71,13 @@ public class SettingsGeneralActivity extends ThemeActivity {
         binding.wipeFollowsButton.setOnClickListener(this::onClickWipeFollows);
         binding.exportFollowsButton.setOnClickListener(this::onExport);
         binding.importFollowsButton.setOnClickListener(this::onImport);
+        binding.errorReportButton.setOnClickListener((_view) -> {
+            DialogService.getChooseDialog(this, (R.string.report_error_title), R.array.ErrorReportOptions, Settings.getReportErrors().ordinal(), (dialog, view, which, text) -> {
+                Settings.setReportErrors(ReportErrors.getEntries().get(which));
+                updateSummaries();
+                return false;
+            }).show();
+        });
     }
 
     @Override
@@ -92,6 +101,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
     private void updateSummaries() {
         updateSummary(general_image_proxy, general_image_proxy_summary, Settings.getGeneralUseImageProxy());
         mImageProxyUrl.setText(Settings.getImageProxyUrl());
+        errorReportSubText.setText(Settings.getReportErrors().getStringRes());
     }
 
     private void initStartPageText() {

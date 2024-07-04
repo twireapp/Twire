@@ -79,7 +79,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 Settings.setUsersNotToNotifyWhenLive(getUsersNotToNotify(db));
             }
         } catch (SQLiteException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
 
@@ -171,7 +171,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
             }
             return channels.length();
         } catch (JSONException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         return 0;
     }
@@ -219,7 +219,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 tempchannel.put("IS_TWITCH", isTwitch);
                 channelstoExport.put(tempchannel);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Timber.e(e);
             }
         }
         cursor.close();
@@ -234,7 +234,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 create(mContext, EXPORT_NAME, jsonStr);
                 return channelstoExport.length();
             } catch (JSONException e) {
-                e.printStackTrace();
+                Timber.e(e);
             }
         }
         return 0;
@@ -268,7 +268,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
             fos.write(jsonString.getBytes());
             fos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
     }
 }

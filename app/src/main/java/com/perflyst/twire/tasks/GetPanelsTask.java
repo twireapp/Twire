@@ -55,7 +55,7 @@ public class GetPanelsTask implements Callable<List<Panel>> {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         */
 

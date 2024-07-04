@@ -60,4 +60,8 @@
         <item>custom</item>
     </string-array>
 
+    <string-array name="ErrorReportOptions">
+        <item>@string/report_error_always</item>
+        <item>@string/report_error_never</item>
+    </string-array>
 </resources>

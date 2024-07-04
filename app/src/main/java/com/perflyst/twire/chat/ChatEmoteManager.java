@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import timber.log.Timber;
+
 /**
  * Created by sebastian on 26/07/2017.
  */
@@ -93,7 +95,7 @@ class ChatEmoteManager {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         // FFZ emotes
@@ -146,7 +148,7 @@ class ChatEmoteManager {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         // 7TV emotes
@@ -183,13 +185,13 @@ class ChatEmoteManager {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         try {
             callback.onEmoteFetched();
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
     }
 
