@@ -298,7 +298,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                         customEmoteInfoLoaded(channel, global);
                     }
                 } catch (IllegalAccessError e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                 }
             }
 
@@ -799,7 +799,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                                 lastBottom = r.bottom;
                             }
                         } catch (IllegalStateException e) {
-                            e.printStackTrace();
+                            Timber.e(e);
                         }
                     }
                 });
@@ -836,7 +836,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             addMessage(chatMessage);
             Timber.d("Message added");
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         setKeyboardState(KeyboardState.CLOSED);

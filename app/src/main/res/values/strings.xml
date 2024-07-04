@@ -321,6 +321,13 @@
     <string name="changelog_title">Changelog</string>
     <string name="changelog_show_after_update">Show changelog after an update</string>
 
+    <!-- Error Reporting -->
+    <string name="report_error_never">Never</string>
+    <string name="report_error_always">Always</string>
+    <string name="report_error_ask">Ask Before</string>
+    <string name="report_error_description">Yikes, an error has occurred! If you would like us to fix this error, consider reporting this error to us. Along with the error, we will send your app version and Android version. No personal information is sent.</string>
+    <string name="report_error_title">Report Errors</string>
+
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. Only the last 10 versions will be kept. -->
     <string name="changelog_lines">"
         V 2.11.0

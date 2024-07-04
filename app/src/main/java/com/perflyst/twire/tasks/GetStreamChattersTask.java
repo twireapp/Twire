@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
+import timber.log.Timber;
+
 /**
  * Created by Sebastian Rask on 22-01-2017.
  */
@@ -27,7 +29,7 @@ public class GetStreamChattersTask implements Callable<ArrayList<String>> {
 
             return null;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         return null;
     }

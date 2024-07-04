@@ -40,7 +40,7 @@ public class SleepTimer {
                         sleepTimerHandler.postDelayed(this, 1000 * 60);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                     Timber.e("Sleep Timer runnable failed");
                 }
             }

@@ -3,6 +3,7 @@ package com.perflyst.twire.service
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.annotation.StringRes
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
@@ -20,6 +21,7 @@ import java.util.Arrays
 /**
  * Created by SebastianRask on 29-04-2015.
  */
+@SuppressLint("StaticFieldLeak")
 object Settings {
     private val MAP_TYPE: Type = object : TypeToken<ArrayList<Emote>>() {
     }.type
@@ -543,6 +545,12 @@ object Settings {
         "https://external-content.duckduckgo.com/iu/?u="
     )
 
+    @JvmStatic
+    var reportErrors by Pref(
+        "reportErrors",
+        ReportErrors.ASK
+    )
+
     private class Pref<T>(
         val key: String,
         val default: () -> T,
@@ -562,6 +570,13 @@ object Settings {
                 is Long -> preferences.getLong(key, defaultValue) as T
                 is Float -> preferences.getFloat(key, defaultValue) as T
                 is String -> preferences.getString(key, defaultValue) as T
+                is Enum<*> -> {
+                    val stringValue =
+                        preferences.getString(key, defaultValue.name) ?: defaultValue.name
+                    return (defaultValue.javaClass.enumConstants?.first { it.name == stringValue }
+                        ?: defaultValue) as T
+                }
+
                 else -> throw IllegalArgumentException("Unsupported type")
             }
         }
@@ -573,9 +588,16 @@ object Settings {
                 is Long -> preferences.edit { putLong(key, value) }
                 is Float -> preferences.edit { putFloat(key, value) }
                 is String -> preferences.edit { putString(key, value) }
+                is Enum<*> -> preferences.edit { putString(key, value.name) }
                 else -> throw IllegalArgumentException("Unsupported type")
             }
             onChange?.invoke()
         }
     }
+}
+
+enum class ReportErrors(@StringRes val stringRes: Int) {
+    ALWAYS(R.string.report_error_always),
+    NEVER(R.string.report_error_never),
+    ASK(R.string.report_error_ask)
 }

@@ -100,7 +100,7 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Timber.e(e);
             }
         }
 

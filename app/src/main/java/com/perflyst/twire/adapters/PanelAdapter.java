@@ -22,6 +22,8 @@ import com.perflyst.twire.model.Panel;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by Sebastian Rask on 24-02-2017.
  */
@@ -75,7 +77,7 @@ public class PanelAdapter extends RecyclerView.Adapter<PanelAdapter.PanelViewHol
                     mTabs.build().launchUrl(mActivity, Uri.parse(link));
 
                 } catch (ActivityNotFoundException e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                 }
             });
         }

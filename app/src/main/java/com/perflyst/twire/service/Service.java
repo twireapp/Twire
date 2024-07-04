@@ -312,7 +312,7 @@ public class Service {
 
             return (ImageButton) navButtonField.get(toolbar);
         } catch (IllegalAccessException | NoSuchFieldException e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         return null;
@@ -387,7 +387,7 @@ public class Service {
             JSONArray array = new JSONArray(result);
             return array.getJSONObject(0).getJSONObject("data");
         } catch (JSONException e) {
-            e.printStackTrace();
+            Timber.e(e);
             return null;
         }
     }
@@ -472,7 +472,7 @@ public class Service {
 
 
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                 }
 
                 // Create new StreamerInfo object from data fetched from database
@@ -541,7 +541,7 @@ public class Service {
 
             db.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
     }
 

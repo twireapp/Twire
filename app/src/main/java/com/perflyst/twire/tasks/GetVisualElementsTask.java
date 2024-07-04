@@ -22,7 +22,7 @@ public class GetVisualElementsTask<T> implements Callable<List<T>> {
         try {
             resultList.addAll(mLazyActivity.getVisualElements());
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
 
         Execute.ui(() -> {

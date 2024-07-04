@@ -50,6 +50,13 @@
             android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H"
             android:value="598.0dip" />
 
+        <meta-data
+            android:name="io.sentry.dsn"
+            android:value="https://e8f9feac1614405d807e29f743d8cffc@glitchtip.samfun.dev/4" />
+        <meta-data
+            android:name="io.sentry.auto-init"
+            android:value="false" />
+
         <activity
             android:name=".activities.stream.LiveStreamActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"

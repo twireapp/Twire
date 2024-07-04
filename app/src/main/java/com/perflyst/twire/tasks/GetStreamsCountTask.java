@@ -9,6 +9,8 @@ import com.perflyst.twire.model.UserInfo;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.Callable;
 
+import timber.log.Timber;
+
 /**
  * Created by Sebastian Rask on 26-06-2016.
  */
@@ -32,7 +34,7 @@ public class GetStreamsCountTask implements Callable<Integer> {
 
             return total;
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e);
         }
         return -1;
     }

@@ -704,7 +704,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                         if (currentViewers > -1)
                             Utils.setNumber(mCurrentViewersView, currentViewers);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Timber.e(e);
                     }
                 });
 
@@ -1188,7 +1188,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     playbackFailed();
                 }
             } catch (IllegalStateException | NullPointerException e) {
-                e.printStackTrace();
+                Timber.e(e);
             }
         };
 

@@ -24,6 +24,7 @@ import java.lang.ref.WeakReference;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
+import timber.log.Timber;
 
 public class ConfirmSetupActivity extends SetupBaseActivity {
     private final int REVEAL_ANIMATION_DURATION = 650;
@@ -251,7 +252,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
                 try {
                     Thread.sleep(200);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Timber.e(e);
                 }
             }
 
