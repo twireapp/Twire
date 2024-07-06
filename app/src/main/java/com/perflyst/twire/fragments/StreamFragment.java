@@ -11,15 +11,14 @@ import static com.perflyst.twire.misc.Utils.appendSpan;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.app.PictureInPictureParams;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,23 +67,17 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
-import androidx.media3.common.AudioAttributes;
-import androidx.media3.common.C;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
 import androidx.media3.common.PlaybackException;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
-import androidx.media3.datasource.DefaultHttpDataSource;
-import androidx.media3.exoplayer.ExoPlayer;
-import androidx.media3.exoplayer.SeekParameters;
-import androidx.media3.exoplayer.hls.HlsMediaSource;
-import androidx.media3.exoplayer.source.MediaSource;
-import androidx.media3.session.MediaSession;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionCommand;
+import androidx.media3.session.SessionToken;
 import androidx.media3.ui.AspectRatioFrameLayout;
 import androidx.media3.ui.PlayerControlView;
-import androidx.media3.ui.PlayerNotificationManager;
 import androidx.media3.ui.PlayerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -93,18 +86,20 @@ import androidx.transition.TransitionManager;
 
 import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.perflyst.twire.PlaybackService;
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.StreamActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.chat.ChatManager;
-import com.perflyst.twire.lowlatency.LLHlsPlaylistParserFactory;
 import com.perflyst.twire.misc.FollowHandler;
 import com.perflyst.twire.misc.OnlineSince;
 import com.perflyst.twire.misc.ResizeHeightAnimation;
@@ -134,8 +129,6 @@ import java.util.function.Consumer;
 @OptIn(markerClass = UnstableApi.class)
 public class StreamFragment extends Fragment implements Player.Listener {
     private static final int SHOW_TIMEOUT = 3000;
-    private static final int PLAYER_NOTIFICATION_ID = 1;
-    private static final String PLAYER_NOTIFICATION_CHANNEL = "twirePlayer";
 
     private static int totalVerticalInset;
     private static boolean pipDisabling; // Tracks the PIP disabling animation.
@@ -163,8 +156,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private boolean isLandscape = false;
     private Runnable fetchViewCountRunnable;
     private PlayerView mVideoView;
-    private ExoPlayer player;
-    private PlayerNotificationManager playerNotificationManager;
+    private MediaController player;
+    private ListenableFuture<MediaController> controllerFuture;
     private MediaItem currentMediaItem;
     private Toolbar mToolbar;
     private TextView mTitleText;
@@ -207,17 +200,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private int videoHeightBeforeChatOnly;
     private Integer triesForNextBest = 0;
     private boolean pictureInPictureEnabled; // Tracks if PIP is enabled including the animation.
-    private MediaSession mediaSession;
-
-    private static final DefaultHttpDataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory()
-            .setUserAgent("Twire")
-            .setDefaultRequestProperties(new HashMap<>() {{
-                put("Referer", "https://player.twitch.tv");
-                put("Origin", "https://player.twitch.tv");
-            }});
-
-    private static final MediaSource.Factory mediaSourceFactory = new HlsMediaSource.Factory(dataSourceFactory)
-            .setPlaylistParserFactory(new LLHlsPlaylistParserFactory());
 
     public static StreamFragment newInstance(Bundle args) {
         StreamFragment fragment = new StreamFragment();
@@ -464,102 +446,44 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     private void initializePlayer() {
         if (player == null) {
-            player = new ExoPlayer.Builder(getContext(), mediaSourceFactory)
-                    .setSeekBackIncrementMs(10000)
-                    .setSeekForwardIncrementMs(10000)
-                    .setHandleAudioBecomingNoisy(true)
-                    .setAudioAttributes(new AudioAttributes.Builder()
-                            .setUsage(C.USAGE_MEDIA)
-                            .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
-                            .build(), true)
-                    .build();
-            player.addListener(this);
-            mVideoView.setPlayer(player);
+            SessionToken sessionToken = new SessionToken(getContext(), new ComponentName(getContext(), PlaybackService.class));
+            controllerFuture = new MediaController.Builder(getContext(), sessionToken).buildAsync();
+            StreamFragment streamFragment = this;
+            Futures.addCallback(controllerFuture, new FutureCallback<>() {
+                @Override
+                public void onSuccess(MediaController result) {
+                    player = result;
+                    player.addListener(streamFragment);
+                    mVideoView.setPlayer(player);
 
-            if (vodId != null) {
-                player.setPlaybackSpeed(settings.getPlaybackSpeed());
-                player.setSkipSilenceEnabled(settings.getSkipSilence());
-                player.setSeekParameters(SeekParameters.CLOSEST_SYNC);
-                player.seekTo(settings.getVodProgress(vodId) * 1000L);
-            }
+                    if (vodId != null) {
+                        player.setPlaybackSpeed(settings.getPlaybackSpeed());
+                        PlaybackService.sendSkipSilenceUpdate(player);
+                        player.seekTo(settings.getVodProgress(vodId) * 1000L);
+                    }
 
-            if (currentMediaItem != null) {
-                player.setMediaItem(currentMediaItem, false);
-                player.prepare();
-            }
+                    if (currentMediaItem != null) {
+                        player.setMediaItem(currentMediaItem, false);
+                        player.prepare();
+                    }
+                }
 
-            mediaSession = new MediaSession.Builder(getContext(), player).build();
-            playerNotificationManager = new PlayerNotificationManager.Builder(getContext(), PLAYER_NOTIFICATION_ID, PLAYER_NOTIFICATION_CHANNEL)
-                    .setChannelNameResourceId(R.string.player_channel_name)
-                    .setChannelDescriptionResourceId(R.string.player_channel_description)
-                    .setSmallIconResourceId(R.drawable.ic_notification)
-                    .setMediaDescriptionAdapter(new MediaAdapter())
-                    .build();
-
-            playerNotificationManager.setMediaSessionToken(mediaSession.getSessionCompatToken());
-            playerNotificationManager.setPlayer(player);
-        }
-    }
-
-    class MediaAdapter implements PlayerNotificationManager.MediaDescriptionAdapter {
-        private Bitmap previewCached;
-
-        @Override
-        public CharSequence getCurrentContentTitle(Player player) {
-            return player.getMediaMetadata().title;
-        }
-
-        @Nullable
-        @Override
-        public PendingIntent createCurrentContentIntent(Player player) {
-            return null;
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getCurrentContentText(Player player) {
-            return player.getMediaMetadata().artist;
-        }
-
-        @Nullable
-        @Override
-        public Bitmap getCurrentLargeIcon(Player player, PlayerNotificationManager.BitmapCallback callback) {
-            final Intent intent = requireActivity().getIntent();
-            String imageUrl = intent.getStringExtra(getString(R.string.stream_preview_url));
-
-            if (previewCached == null) {
-                Glide.with(requireContext())
-                        .asBitmap()
-                        .load(imageUrl)
-                        .signature(new ObjectKey(System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(5))) // Refresh preview images every 5 minutes
-                        .into(new CustomTarget<Bitmap>() {
-                            @Override
-                            public void onResourceReady(@NonNull Bitmap resource, @Nullable com.bumptech.glide.request.transition.Transition<? super Bitmap> transition) {
-                                callback.onBitmap(resource);
-                                previewCached = resource;
-                            }
-
-                            @Override
-                            public void onLoadCleared(@Nullable Drawable placeholder) {
-                                previewCached = null;
-                            }
-                        });
-            }
-
-            return previewCached;
+                @Override
+                public void onFailure(@NonNull Throwable t) {
+                    Log.e(LOG_TAG, "Failed to create MediaController", t);
+                }
+            }, ContextCompat.getMainExecutor(getContext()));
         }
     }
 
     private void releasePlayer() {
         if (player != null) {
-            mediaSession.release();
-
             if (vodId != null) {
                 settings.setVodProgress(vodId, player);
             }
 
-            playerNotificationManager.setPlayer(null);
-            player.release();
+            player.clearMediaItems();
+            MediaController.releaseFuture(controllerFuture);
             player = null;
         }
     }
@@ -575,7 +499,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (!events.containsAny(EVENT_PLAY_WHEN_READY_CHANGED, EVENT_PLAYBACK_STATE_CHANGED) || chatOnlyViewVisible) return;
 
         int playbackState = player.getPlaybackState();
-        requireView().setKeepScreenOn(player.getPlayWhenReady() && (playbackState == STATE_READY || playbackState == STATE_BUFFERING));
+        View view = getView();
+        if (view != null) return;
+        view.setKeepScreenOn(player.getPlayWhenReady() && (playbackState == STATE_READY || playbackState == STATE_BUFFERING));
     }
 
     @Override
@@ -628,7 +554,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     public void updatePIPParameters() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || player == null) return;
 
         Rect videoRect = new Rect();
         mVideoView.getVideoSurfaceView().getGlobalVisibleRect(videoRect);
@@ -651,6 +577,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     public void backPressed() {
         mVideoView.setVisibility(View.INVISIBLE);
+        releasePlayer();
     }
 
     @Override
@@ -716,25 +643,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (mProfileBottomSheet != null)
             mProfileBottomSheet.dismiss();
 
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
-        }
-
         ChatManager.instance.setPreviousProgress();
-    }
-
-    @Override
-    public void onStop() {
-        Log.d(LOG_TAG, "Stream Fragment Stopped");
-        super.onStop();
-
-        if (!castingViewVisible && !audioViewVisible && player != null) {
-            player.pause();
-        }
-
-        if (Util.SDK_INT > 23) {
-            releasePlayer();
-        }
     }
 
     @Override
@@ -1322,6 +1231,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * Stops the buffering and notifies the user that the stream could not be played
      */
     private void playbackFailed() {
+        if (getContext() == null) return;
+
         showSnackbar(getString(vodId == null ? R.string.stream_playback_failed : R.string.vod_playback_failed), getString(R.string.retry), v -> startStreamWithTask());
     }
 
@@ -1367,6 +1278,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
             extras.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1);
         }
 
+        // Grab the preview image from the intent and give it to the media metadata
+        Intent intent = requireActivity().getIntent();
+        String uriString = intent.getStringExtra(getString(R.string.stream_preview_url));
+
         MediaItem mediaItem = new MediaItem.Builder()
                 .setLiveConfiguration(new MediaItem.LiveConfiguration.Builder().setTargetOffsetMs(1000).build())
                 .setUri(url)
@@ -1374,6 +1289,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                         .setTitle(title)
                         .setArtist(mUserInfo.getDisplayName())
                         .setExtras(extras)
+                        .setArtworkUri(uriString != null ? Uri.parse(uriString) : null)
                         .build())
                 .build();
 

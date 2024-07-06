@@ -12,12 +12,13 @@ import androidx.annotation.OptIn;
 import androidx.annotation.StringRes;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
-import androidx.media3.exoplayer.ExoPlayer;
+import androidx.media3.session.MediaController;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListAdapter;
 import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
+import com.perflyst.twire.PlaybackService;
 import com.perflyst.twire.R;
 import com.perflyst.twire.views.LayoutSelector;
 import com.rey.material.widget.CheckedTextView;
@@ -289,7 +290,7 @@ public class DialogService {
     }
 
     @OptIn(markerClass = UnstableApi.class)
-    public static MaterialDialog getPlaybackDialog(Activity activity, ExoPlayer player) {
+    public static MaterialDialog getPlaybackDialog(Activity activity, MediaController player) {
         MaterialDialog dialog = getBaseThemedDialog(activity)
                 .title(R.string.menu_playback)
                 .customView(R.layout.dialog_playback, false)
@@ -322,7 +323,7 @@ public class DialogService {
         skipSilenceView.setOnClickListener((view) -> {
             boolean newState = !settings.getSkipSilence();
             settings.setSkipSilence(newState);
-            player.setSkipSilenceEnabled(newState);
+            PlaybackService.sendSkipSilenceUpdate(player);
             skipSilenceView.setChecked(newState);
         });
 
