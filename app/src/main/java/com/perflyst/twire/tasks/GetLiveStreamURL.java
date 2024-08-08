@@ -48,6 +48,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
     protected LinkedHashMap<String, Quality> doInBackground(String... params) {
         String streamerName = params[0];
         String playerType = params[1];
+        String proxy = params[2];
         String signature = "";
         String token = "";
 
@@ -74,6 +75,11 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
                 "&type=any" +
                 "&fast_bread=true" +
                 "&p=%s", streamerName, Utils.safeEncode(token), signature, "" + new Random().nextInt(6));
+
+        if (!proxy.isEmpty()) {
+            String parameters = streamerName + ".m3u8?allow_source=true&allow_audio_only=true&fast_bread=true";
+            streamUrl = proxy + "/playlist/" + Utils.safeEncode(parameters);
+        }
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
         return parseM3U8(streamUrl);

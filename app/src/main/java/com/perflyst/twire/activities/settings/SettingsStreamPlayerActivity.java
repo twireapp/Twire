@@ -15,10 +15,13 @@ import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private Settings settings;
-    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mShowRuntimeSummary, mPlayerTypeSummary;
+    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mShowRuntimeSummary, mPlayerTypeSummary, mPlayerProxySummary;
     private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mShowRuntimeView;
 
     @Override
@@ -32,6 +35,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         mShowRuntimeView = findViewById(R.id.player_show_runtime);
         mAutoPlaybackView = findViewById(R.id.player_auto_continue_playback_title);
         mPlayerTypeSummary = findViewById(R.id.player_type_summary);
+        mPlayerProxySummary = findViewById(R.id.player_proxy_summary);
 
         mShowViewCountSummary = findViewById(R.id.player_show_viewercount_title_summary);
         mShowRuntimeSummary = findViewById(R.id.player_show_runtime_summary);
@@ -68,6 +72,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
     private void updateSummaries() {
         String[] types = getResources().getStringArray(R.array.PlayerType);
         mPlayerTypeSummary.setText(types[settings.getStreamPlayerType()]);
+        mPlayerProxySummary.setText(convertProxyOption(settings.getStreamPlayerProxy()));
         updateSummary(mShowViewCountView, mShowViewCountSummary, settings.getStreamPlayerShowViewerCount());
         updateSummary(mShowRuntimeView, mShowRuntimeSummary, settings.getStreamPlayerRuntime());
         updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, settings.getStreamPlayerShowNavigationBar());
@@ -104,4 +109,39 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         dialog.show();
     }
 
+    private String convertProxyOption(String option) {
+        if (option.equals("custom")) return getString(R.string.player_proxy_custom);
+        else if (option.isEmpty()) return getString(R.string.disabled);
+        else return option;
+    }
+
+    public void onClickPlayerProxy(View _view) {
+        List<String> proxies = Arrays.asList(getResources().getStringArray(R.array.PlayerProxies));
+        int selectedIndex = proxies.indexOf(settings.getStreamPlayerProxy());
+        // Since the custom proxy is not in the presets, we need to select the custom option
+        if (selectedIndex == -1) {
+            selectedIndex = proxies.size() - 1;
+        }
+
+        DialogService.getBaseThemedDialog(this)
+                .title(R.string.player_proxy)
+                .items(proxies.stream().map(this::convertProxyOption).toArray(String[]::new))
+                .itemsCallbackSingleChoice(selectedIndex, (dialog, itemView, which, text) -> {
+                    if (which == proxies.size() - 1) {
+                        DialogService.getBaseThemedDialog(this)
+                                .title(R.string.player_proxy_custom)
+                                .input("https://example.com", settings.getStreamPlayerProxy(), false, (dialog1, input) -> {
+                                    settings.setStreamPlayerProxy(input.toString());
+                                    updateSummaries();
+                                })
+                                .show();
+                    } else {
+                        settings.setStreamPlayerProxy(proxies.get(which));
+                        updateSummaries();
+                    }
+
+                    return true;
+                })
+                .show();
+    }
 }

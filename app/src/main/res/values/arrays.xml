@@ -45,4 +45,20 @@
         <item>picture-by-picture</item>
     </string-array>
 
+    <string-array name="PlayerProxies">
+        <item />
+        <item>https://lb-eu.cdn-perfprod.com</item>
+        <item>https://lb-eu2.cdn-perfprod.com</item>
+        <item>https://lb-eu3.cdn-perfprod.com</item>
+        <item>https://lb-eu4.cdn-perfprod.com</item>
+        <item>https://lb-eu5.cdn-perfprod.com</item>
+        <item>https://lb-na.cdn-perfprod.com</item>
+        <item>https://lb-as.cdn-perfprod.com</item>
+        <item>https://lb-sa.cdn-perfprod.com</item>
+        <item>https://eu.luminous.dev</item>
+        <item>https://eu2.luminous.dev</item>
+        <item>https://as.luminous.dev</item>
+        <item>custom</item>
+    </string-array>
+
 </resources>

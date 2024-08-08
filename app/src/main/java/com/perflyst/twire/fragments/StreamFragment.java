@@ -74,7 +74,6 @@ import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
 import androidx.media3.common.util.Util;
 import androidx.media3.session.MediaController;
-import androidx.media3.session.SessionCommand;
 import androidx.media3.session.SessionToken;
 import androidx.media3.ui.AspectRatioFrameLayout;
 import androidx.media3.ui.PlayerControlView;
@@ -1195,7 +1194,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         if (vodId == null) {
             GetLiveStreamURL task = new GetLiveStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mUserInfo.getLogin(), types[settings.getStreamPlayerType()]);
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mUserInfo.getLogin(), types[settings.getStreamPlayerType()], settings.getStreamPlayerProxy());
         } else {
             GetLiveStreamURL task = new GetVODStreamURL(callback);
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId, types[settings.getStreamPlayerType()]);
