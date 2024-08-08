@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.sentry.Sentry;
+
 /**
  * Created by sebastian on 26/07/2017.
  */
@@ -95,7 +97,7 @@ class ChatEmoteManager {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         // FFZ emotes
@@ -148,7 +150,7 @@ class ChatEmoteManager {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         // 7TV emotes
@@ -192,13 +194,13 @@ class ChatEmoteManager {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         try {
             callback.onEmoteFetched();
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 

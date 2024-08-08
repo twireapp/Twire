@@ -39,6 +39,8 @@ import com.perflyst.twire.service.Settings;
 import java.util.List;
 import java.util.Set;
 
+import io.sentry.Sentry;
+
 public abstract class StreamActivity extends ThemeActivity implements StreamFragment.StreamFragmentListener {
     private final String LOG_TAG = getClass().getSimpleName();
     public StreamFragment mStreamFragment;
@@ -126,7 +128,7 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
                 try {
                     mStreamFragment.backPressed();
                 } catch (NullPointerException e) {
-                    e.printStackTrace();
+                    Sentry.captureException(e);
                 }
                 this.overrideTransition();
             }

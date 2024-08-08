@@ -125,6 +125,8 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import io.sentry.Sentry;
+
 @OptIn(markerClass = UnstableApi.class)
 public class StreamFragment extends Fragment implements Player.Listener {
     private static final int SHOW_TIMEOUT = 3000;
@@ -698,7 +700,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
                                 Utils.setNumber(mCurrentViewersView, currentViewers);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                Sentry.captureException(e);
                             }
                         }, mUserInfo.getUserId(), getContext()
                 );
@@ -1186,7 +1188,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     playbackFailed();
                 }
             } catch (IllegalStateException | NullPointerException e) {
-                e.printStackTrace();
+                Sentry.captureException(e);
             }
         };
 
@@ -1213,7 +1215,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     qualityURLs = url;
                 }
             } catch (IllegalStateException | NullPointerException e) {
-                e.printStackTrace();
+                Sentry.captureException(e);
             }
         };
 

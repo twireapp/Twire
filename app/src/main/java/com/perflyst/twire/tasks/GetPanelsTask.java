@@ -60,7 +60,7 @@ public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
         */
 

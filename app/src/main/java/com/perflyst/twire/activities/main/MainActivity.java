@@ -38,6 +38,8 @@ import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 
+import io.sentry.Sentry;
+
 
 public abstract class MainActivity<E extends Comparable<E> & MainElement> extends ThemeActivity {
     private static final String FIRST_VISIBLE_ELEMENT_POSITION = "firstVisibleElementPosition";
@@ -469,7 +471,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
                         MainActivity.super.onBackPressed();
                         overridePendingTransition(0, 0);
                     } catch (IllegalStateException e) {
-                        e.printStackTrace();
+                        Sentry.captureException(e);
                     }
                 }
             };

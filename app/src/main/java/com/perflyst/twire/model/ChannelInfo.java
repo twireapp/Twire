@@ -21,6 +21,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
 
+import io.sentry.Sentry;
+
 /**
  * Created by Sebastian Rask on 30-01-2015.
  * This class is designed to hold all relevant information about a twitch user/streamer
@@ -59,7 +61,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
             try {
                 return new URL(text);
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                Sentry.captureException(e);
                 return null;
             }
         }
@@ -172,7 +174,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
             followers = fullDataObject.getInt("total");
             return followers;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
             return null;
         }
     }

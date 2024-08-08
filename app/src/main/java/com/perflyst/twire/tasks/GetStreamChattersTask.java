@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import io.sentry.Sentry;
+
 /**
  * Created by Sebastian Rask on 22-01-2017.
  */
@@ -31,7 +33,7 @@ public class GetStreamChattersTask extends AsyncTask<Void, Void, ArrayList<Strin
 
             return null;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
         return null;
     }

@@ -41,6 +41,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import io.sentry.Sentry;
+
 /**
  * Created by SebastianRask on 03-03-2016.
  */
@@ -139,7 +141,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         } catch (Exception e) {
             //In case twitch doesn't comply to their own API.
             Log.d(LOG_TAG, "Failed to show Message");
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 

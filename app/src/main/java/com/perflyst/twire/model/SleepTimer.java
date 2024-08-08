@@ -11,6 +11,8 @@ import com.perflyst.twire.R;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
 
+import io.sentry.Sentry;
+
 /**
  * Created by Sebastian Rask Jepsen on 22/07/16.
  */
@@ -42,7 +44,7 @@ public class SleepTimer {
                         sleepTimerHandler.postDelayed(this, 1000 * 60);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Sentry.captureException(e);
                     Log.e(LOG_TAG, "Sleep Timer runnable failed");
                 }
             }

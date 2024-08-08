@@ -11,6 +11,8 @@ import com.perflyst.twire.R;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 
+import io.sentry.Sentry;
+
 /**
  * Created by Sebastian Rask on 16-06-2016.
  */
@@ -98,7 +100,7 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         try {
             this.recordedAt = ZonedDateTime.parse(recordedAtString);
         } catch (DateTimeParseException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 
