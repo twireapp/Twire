@@ -500,7 +500,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         int playbackState = player.getPlaybackState();
         View view = getView();
-        if (view != null) return;
+        if (view == null) return;
         view.setKeepScreenOn(player.getPlayWhenReady() && (playbackState == STATE_READY || playbackState == STATE_BUFFERING));
     }
 
