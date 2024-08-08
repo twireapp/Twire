@@ -66,7 +66,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
             e.printStackTrace();
         }
 
-        String streamUrl = String.format("http://usher.ttvnw.net/api/channel/hls/%s.m3u8" +
+        String streamUrl = String.format("https://usher.ttvnw.net/api/channel/hls/%s.m3u8" +
                 "?player=twitchweb&" +
                 "&token=%s" +
                 "&sig=%s" +

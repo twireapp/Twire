@@ -41,7 +41,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
             e.printStackTrace();
         }
 
-        String vodURL = String.format("http://usher.ttvnw.net/vod/%s?allow_source=true&nauthsig=%s&nauth=%s", vodId, signature, Utils.safeEncode(token));
+        String vodURL = String.format("https://usher.ttvnw.net/vod/%s?allow_source=true&nauthsig=%s&nauth=%s", vodId, signature, Utils.safeEncode(token));
         Log.d(LOG_TAG, "HSL Playlist URL: " + vodURL);
         return parseM3U8(vodURL);
     }
