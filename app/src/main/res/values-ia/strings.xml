@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="done">FACITE</string>
+    <string name="start">INITIAR</string>
+    <string name="stop">STOPPAR</string>
+    <string name="resume">RESUMER</string>
+    <string name="enabled">Activate</string>
+    <string name="disabled">Disactivate</string>
+    <string name="retry">Retentar</string>
+    <string name="minutes_short">m</string>
+    <string name="hours_short">h</string>
+    <string name="action_settings">Parametros</string>
+    <string name="subscription_card_displayName">Nomine</string>
+    <string name="content_desc_twitchLogo_imageView">Imagine de logo del streamer de Twitch</string>
+    <string name="vods">Videos</string>
+    <string name="play">Reproducer</string>
+    <string name="pause">Pausar</string>
+    <string name="today">Hodie</string>
+    <string name="yesterday">Heri</string>
+    <string name="title_activity_streamer_info">Canal</string>
+    <string name="streamerInfo_desc_tab">Description</string>
+    <string name="streamerInfo_highlights_tab">Eminente</string>
+    <string name="streamerInfo_description">Nulle description trovate</string>
+    <string name="menu_profile">Profilo</string>
+    <string name="menu_sleep">Temporisator de somno</string>
+    <string name="menu_share">Compartir</string>
+    <string name="menu_playback">Parametros de reproduction</string>
+    <string name="menu_options">Optiones</string>
+    <string name="options">Optiones</string>
+    <string name="audio_only">Solmente audio</string>
+    <string name="mute">Silentiar</string>
+    <string name="available_qualities">Parametros de qualitate</string>
+    <string name="quality_auto">Auto</string>
+    <string name="stream_sleep_timer_stopped">Temporisator de somno stoppate</string>
+    <string name="cancel">CANCELLAR</string>
+    <string name="settings_activity_title">Parametros</string>
+    <string name="drawer_open">Aperir</string>
+    <string name="drawer_close">Clauder</string>
+</resources>
