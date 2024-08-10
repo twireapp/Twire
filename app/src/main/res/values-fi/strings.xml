@@ -105,7 +105,7 @@
     <string name="gen_language_filter">Suodata suosituimmat lähetykset kielen perusteella</string>
     <string name="gen_reset_tips">Nollaa opasvinkit</string>
     <string name="gen_start_page">Aloitussivu</string>
-    <string name="gen_twitch_name">Twitch Käyttäjänimi</string>
+    <string name="gen_twitch_name">Tyhjennä käyttäjänimi</string>
     <string name="gen_dialog_login_or_out_logout_action">KIRJAUDU ULOS</string>
     <string name="gen_dialog_login_or_out_login_action">KIRJAUDU SISÄÄN</string>
     <string name="gen_dialog_login_or_out_content">Haluatko kirjautua uuteen tiliin vai kirjautua ulos tililtä %s\?</string>
@@ -170,7 +170,7 @@
     <string name="settings_general_image_proxy_url_button">Tallenna</string>
     <string name="settings_general_image_proxy_url_example">Välityspalvelimen esimerkki: https://external-content.duckduckgo.com/iu/\?u=</string>
     <string name="chat_enable_ssl">Käytä SSL:ää yhteyden muodostamisessa</string>
-    <string name="chat_enable_account_connect">Yhdistä käyttämällä Tiliäsi</string>
+    <string name="chat_enable_account_connect">Yhdistä käyttämällä tiliäsi</string>
     <string name="chat_enable_emote_ffz">Käytä FrankerFaceZ (FFZ) hymiöitä</string>
     <string name="chat_enable_emote_seventv">Käytä 7TV hymiöitä</string>
     <string name="player_type">Lähetyksen soittimen tyyppi</string>
@@ -193,4 +193,14 @@
     <string name="gen_toast_import_database">Tuotiin %1$x seuraavaa</string>
     <string name="retry">Yritä uudestaan</string>
     <string name="mute">Mykistä</string>
+    <string name="gen_wipe_summary">Tämä ei pyyhi seuraajia Twitchissä.</string>
+    <string name="player_proxy">Suoratoiston välityspalvelin</string>
+    <string name="gen_local_follows_header">Paikallisesti seuraa</string>
+    <string name="player_proxy_custom">Mukautettu välityspalvelin</string>
+    <string name="streamerInfo_chat_tab">Pikakeskustelu</string>
+    <string name="chat_paused">Pikakeskustelu keskeytetty vierityksen vuoksi.</string>
+    <string name="gen_local_follows_summary">Käyttäjät, joita seurataan Twiressä, tallennetaan paikallisesti, eikä niitä lähetetä Twitchiin.</string>
+    <string name="gen_export_summary">Vienti sisältää paikallisen ja Twitchin seuraavat.</string>
+    <string name="gen_import_summary">Tämä ei lisää seuraajia Twitchiin.</string>
+    <string name="settings_general_image_proxy_url_placeholder">API-URL</string>
 </resources>
