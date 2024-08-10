@@ -203,4 +203,6 @@
     <string name="gen_local_follows_summary">Användare som följs i Twire lagras lokalt och skickas inte till Twitch.</string>
     <string name="streamerInfo_chat_tab">Chatt</string>
     <string name="chat_enable_emote_seventv">Aktivera 7TV Emotes</string>
+    <string name="player_proxy">Ström proxy</string>
+    <string name="player_proxy_custom">Anpassad proxy</string>
 </resources>
