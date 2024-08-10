@@ -242,4 +242,6 @@
     <string name="player_channel_name">Reproducir</string>
     <string name="streamerInfo_chat_tab">Chat</string>
     <string name="settings_general_image_proxy_url_placeholder">URL de la API</string>
+    <string name="player_proxy">Servidor proxy para streaming</string>
+    <string name="player_proxy_custom">Servidor proxy personalizado</string>
 </resources>
