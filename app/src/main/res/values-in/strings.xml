@@ -98,4 +98,28 @@
     <string name="welcome_text_line_one">Selamat datang di</string>
     <string name="login_invalid_token_text_line_one">Sayangnya Anda</string>
     <string name="login_invalid_token_text_line_two">harus masuk lagi</string>
+    <string name="skip_text">Lewati</string>
+    <string name="confirm_text_line_two">Ini akan ditampilkan kepada pengguna saat Twire mendapatkan saluran yang pengguna ikuti. \"Kami\" akan mengacu pada Twire menggunakan bentuk jamak.</string>
+    <string name="settings_general_name">General</string>
+    <string name="settings_stream_player_name">Pemutar saluran</string>
+    <string name="settings_general_image_proxy_url_button">Simpan</string>
+    <string name="settings_general_image_proxy_url_example">Contoh Proxy: https://external-content.duckduckgo.com/iu/?u=</string>
+    <string name="gen_dialog_login_or_out_logout_action">Keluar</string>
+    <string name="gen_twitch_name">Username Twitch</string>
+    <string name="gen_start_page">Halaman Awal</string>
+    <string name="gen_reset_tips">Atur ulang tips bantuan</string>
+    <string name="settings_appearance_name">Tampilan</string>
+    <string name="gen_not_logged_in">Klik untuk masuk</string>
+    <string name="gen_dialog_login_or_out_content">Apakah anda akan masuk ke akun baru atau keluar sebagai %s?</string>
+    <string name="gen_tips_have_been_reset">Tips tutorial berhasil di atur ulang</string>
+    <string name="gen_language_filter">Saring top saluran berdasarkan bahasa</string>
+    <string name="confirm_text_line_one">Tunggu Sebentar!</string>
+    <string name="settings_general_name_summary">Akun Twitch, halaman awal</string>
+    <string name="settings_general_image_proxy">Gunakan gambar proxy</string>
+    <string name="settings_chat_name">Chat Twitch</string>
+    <string name="settings_general_image_proxy_url_placeholder">API url</string>
+    <string name="settings_stream_player_summary">Jumlah penonton sekarang, perilaku pemutar</string>
+    <string name="settings_appearance_summary">Tema, gaya kartu, ukuran kartu</string>
+    <string name="settings_chat_name_summary">Ukuran Emoji, ukuran pesan</string>
+    <string name="gen_dialog_login_or_out_login_action">Masuk</string>
 </resources>
