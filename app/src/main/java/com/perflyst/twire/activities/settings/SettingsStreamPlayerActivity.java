@@ -21,8 +21,8 @@ import java.util.List;
 public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private Settings settings;
-    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mShowRuntimeSummary, mPlayerTypeSummary, mPlayerProxySummary;
-    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mShowRuntimeView;
+    private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mLockedPlaybackSummary, mShowRuntimeSummary, mPlayerTypeSummary, mPlayerProxySummary;
+    private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mLockedPlaybackView, mShowRuntimeView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         mShowViewCountView = findViewById(R.id.player_show_viewercount_title);
         mShowRuntimeView = findViewById(R.id.player_show_runtime);
         mAutoPlaybackView = findViewById(R.id.player_auto_continue_playback_title);
+        mLockedPlaybackView = findViewById(R.id.player_locked_playback_title);
         mPlayerTypeSummary = findViewById(R.id.player_type_summary);
         mPlayerProxySummary = findViewById(R.id.player_proxy_summary);
 
@@ -41,6 +42,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         mShowRuntimeSummary = findViewById(R.id.player_show_runtime_summary);
         mShowNavigationBarSummary = findViewById(R.id.player_show_navigation_summary);
         mAutoPlaybackSummary = findViewById(R.id.player_auto_continue_playback_summary);
+        mLockedPlaybackSummary = findViewById(R.id.player_locked_playback_summary);
 
         final Toolbar toolbar = findViewById(R.id.settings_player_toolbar);
         setSupportActionBar(toolbar);
@@ -77,6 +79,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         updateSummary(mShowRuntimeView, mShowRuntimeSummary, settings.getStreamPlayerRuntime());
         updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, settings.getStreamPlayerShowNavigationBar());
         updateSummary(mAutoPlaybackView, mAutoPlaybackSummary, settings.getStreamPlayerAutoContinuePlaybackOnReturn());
+        updateSummary(mLockedPlaybackView, mLockedPlaybackSummary, settings.getStreamPlayerLockedPlayback());
     }
 
     public void onClickShowNavigationBar(View v) {
@@ -96,6 +99,11 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     public void onClickAutoPlayback(View v) {
         settings.setStreamPlayerAutoContinuePlaybackOnReturn(!settings.getStreamPlayerAutoContinuePlaybackOnReturn());
+        updateSummaries();
+    }
+
+    public void onClickLockedPlayback(View v) {
+        settings.setStreamPlayerLockedPlayback(!settings.getStreamPlayerLockedPlayback());
         updateSummaries();
     }
 
