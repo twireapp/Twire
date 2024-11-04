@@ -1,5 +1,6 @@
 package com.perflyst.twire.adapters;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -109,7 +110,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
                 public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
                     super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
 
-                    sharedView.animate().alpha(VOD_WATCHED_IMAGE_ALPHA).setDuration(300).start();
+                    notifyItemChanged(itemPosition);
                     activity.setExitSharedElementCallback(null);
                 }
             });
@@ -169,9 +170,9 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
             viewHolder.vProgressBar.setVisibility(View.VISIBLE);
             viewHolder.vProgressBar.setPadding(0, 0, 0, 0);
 
-            viewHolder.vPreviewImage.setAlpha(VOD_WATCHED_IMAGE_ALPHA);
+            viewHolder.vPreviewImage.animate().alpha(VOD_WATCHED_IMAGE_ALPHA).setDuration(300).start();
             viewHolder.vProgressBar.setMax(element.getLength());
-            viewHolder.vProgressBar.setProgress(vodProgress);
+            ObjectAnimator.ofInt(viewHolder.vProgressBar, "progress", vodProgress).setDuration(300).start();
         } else {
             viewHolder.vProgressBar.setVisibility(View.INVISIBLE);
             viewHolder.vPreviewImage.setAlpha(1f);
