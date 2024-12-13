@@ -126,7 +126,7 @@
     <string name="appearance_streams_size_title">Lähetyksen koko</string>
     <string name="appearance_game_size_title">Pelin koko</string>
     <string name="appearance_streamer_size_title">Kanavan koko</string>
-    <string name="appearance_stream_header">Lähetykset</string>
+    <string name="appearance_stream_header">Virrat</string>
     <string name="appearance_streamer_header">Kanavat</string>
     <string name="appearance_game_header">Pelit</string>
     <string name="chat_message_option_duplicate">Monista viesti</string>
@@ -147,7 +147,7 @@
     <string name="menu_external">Käytä ulkoista soitinta</string>
     <string name="streamerInfo_description">Kuvausta ei löytynyt</string>
     <string name="streamerInfo_highlights_tab">Kohokohdat</string>
-    <string name="streamerInfo_broadcasts_tab">Lähetykset</string>
+    <string name="streamerInfo_broadcasts_tab">Laajalähetykset</string>
     <string name="streamerInfo_desc_tab">Kuvaus</string>
     <string name="title_activity_streamer_info">Kanava</string>
     <string name="yesterday">Eilen</string>
