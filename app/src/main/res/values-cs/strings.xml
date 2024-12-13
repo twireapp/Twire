@@ -200,4 +200,6 @@
     <string name="chat_paused">Chat pozastaven kvůli posunu.</string>
     <string name="streamerInfo_chat_tab">Chat</string>
     <string name="settings_general_image_proxy_url_placeholder">URL API</string>
+    <string name="player_proxy_custom">Vlastní proxy</string>
+    <string name="player_proxy">Proxy streamu</string>
 </resources>
