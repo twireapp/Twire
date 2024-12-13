@@ -160,13 +160,13 @@
     <!-- Game Activitiy -->
     <!-- Search Activity -->
     <string name="search_hint">Buscar</string>
-    <string name="streams_tab">TRANSMISIONES</string>
+    <string name="streams_tab">DIRECTOS</string>
     <string name="streamers_tab">STREAMERS</string>
     <string name="games_tab">JUEGOS</string>
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_my_streams_title">Nuevos streams</string>
-    <string name="navigation_drawer_top_streams_title">Trans. populares</string>
-    <string name="navigation_drawer_follows_title">Streamers Seguidos</string>
+    <string name="navigation_drawer_my_streams_title">Directos suscripciones</string>
+    <string name="navigation_drawer_top_streams_title">Directos tendencia español</string>
+    <string name="navigation_drawer_follows_title">Suscripciones</string>
     <string name="navigation_drawer_top_games_title">Juegos populares</string>
     <string name="navigation_drawer_search_title">Buscar</string>
     <string name="navigation_drawer_settings_title">Ajustes</string>
