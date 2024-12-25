@@ -8,6 +8,8 @@ import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.sentry.Sentry;
+
 public class GetVisualElementsTask<T> extends AsyncTask<Void, Void, List<T>> {
     private final LazyFetchingActivity<T> mLazyActivity;
     private final String LOG_TAG = getClass().getSimpleName();
@@ -24,7 +26,7 @@ public class GetVisualElementsTask<T> extends AsyncTask<Void, Void, List<T>> {
         try {
             resultList = mLazyActivity.getVisualElements();
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         return resultList;

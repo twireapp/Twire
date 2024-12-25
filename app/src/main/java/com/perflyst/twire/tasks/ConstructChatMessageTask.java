@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
 
+import io.sentry.Sentry;
+
 /**
  * Created by Sebastian Rask Jepsen on 07/08/16.
  */
@@ -46,7 +48,7 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
                     false
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         return null;

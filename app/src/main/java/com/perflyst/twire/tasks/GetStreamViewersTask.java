@@ -11,6 +11,8 @@ import org.json.JSONObject;
 
 import java.util.function.Consumer;
 
+import io.sentry.Sentry;
+
 /**
  * Created by Sebastian Rask on 17-09-2016.
  */
@@ -38,7 +40,7 @@ public class GetStreamViewersTask extends AsyncTask<Void, Void, Integer> {
 
             return streamObject.getInt(VIEWERS_INT);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
         return -1;
     }

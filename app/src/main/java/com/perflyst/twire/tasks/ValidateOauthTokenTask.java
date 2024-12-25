@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
+import io.sentry.Sentry;
 import okhttp3.Request;
 
 /**
@@ -74,7 +75,7 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
 
             return new TokenValidation(user_id);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         if (isNetworkConnectedThreadOnly(context.get())) {

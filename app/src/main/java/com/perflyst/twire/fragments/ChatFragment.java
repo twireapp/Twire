@@ -74,6 +74,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import io.sentry.Sentry;
+
 
 interface EmoteKeyboardDelegate {
     void onEmoteClicked(Emote clickedEmote, View view);
@@ -272,7 +274,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                         customEmoteInfoLoaded(channel, global);
                     }
                 } catch (IllegalAccessError e) {
-                    e.printStackTrace();
+                    Sentry.captureException(e);
                 }
             }
 
@@ -790,7 +792,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                                 lastBottom = r.bottom;
                             }
                         } catch (IllegalStateException e) {
-                            e.printStackTrace();
+                            Sentry.captureException(e);
                         }
                     }
                 });
@@ -817,7 +819,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                             addMessage(chatMessage);
                             Log.d(LOG_TAG, "Message added");
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            Sentry.captureException(e);
                         }
                     }
                 },

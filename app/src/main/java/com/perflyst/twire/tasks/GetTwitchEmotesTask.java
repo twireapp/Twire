@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.sentry.Sentry;
+
 /**
  * Created by idealMJ on 29/07/16.
  */
@@ -53,7 +55,7 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
         Collections.sort(twitchEmotes);
         return null;

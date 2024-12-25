@@ -13,6 +13,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import io.sentry.Sentry;
+
 /**
  * Created by Sebastian Rask on 26-06-2016.
  */
@@ -86,7 +88,7 @@ public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
             // return the length of the array
             return final_array.length();
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
         return -1;
     }

@@ -41,6 +41,8 @@ import java.util.Random;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import io.sentry.Sentry;
+
 public class ChatManager implements Runnable {
     public static ChatManager instance = null;
 
@@ -247,7 +249,7 @@ public class ChatManager implements Runnable {
             // If we reach this line then the socket closed but chat wasn't stopped, so reconnect.
             if (!isStopping) connect(address, port);
         } catch (IOException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
 
             onUpdate(UpdateType.ON_CONNECTION_FAILED);
             SystemClock.sleep(2500);
@@ -407,7 +409,7 @@ public class ChatManager implements Runnable {
                 downloadedComments.poll();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
 
             onUpdate(UpdateType.ON_CONNECTION_FAILED);
             SystemClock.sleep(2500);
@@ -567,7 +569,7 @@ public class ChatManager implements Runnable {
             writer.write(message + " \r\n");
             writer.flush();
         } catch (IOException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 
@@ -594,7 +596,7 @@ public class ChatManager implements Runnable {
                 writer.flush();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 
@@ -627,7 +629,7 @@ public class ChatManager implements Runnable {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 
@@ -657,7 +659,7 @@ public class ChatManager implements Runnable {
 
             ffzBadgeMap = mapBuilder.build();
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 

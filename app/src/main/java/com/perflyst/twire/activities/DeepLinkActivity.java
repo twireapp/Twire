@@ -26,6 +26,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import io.sentry.Sentry;
+
 public class DeepLinkActivity extends AppCompatActivity {
     private int errorMessage = R.string.router_unknown_error;
 
@@ -49,7 +51,7 @@ public class DeepLinkActivity extends AppCompatActivity {
             try {
                 intent = getNewIntent(params, paramSize);
             } catch (Exception exception) {
-                exception.printStackTrace();
+                Sentry.captureException(exception);
             }
 
             if (intent == null) {

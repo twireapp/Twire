@@ -62,6 +62,7 @@ import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
+import io.sentry.Sentry;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -340,7 +341,7 @@ public class Service {
 
             mEdgeSize.setInt(draggerObj, edgeSize); //optimal value as for me, you may set any constant in dp
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 
@@ -406,9 +407,9 @@ public class Service {
 
             return (ImageButton) navButtonField.get(toolbar);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         return null;
@@ -494,7 +495,7 @@ public class Service {
             JSONArray array = new JSONArray(result);
             return array.getJSONObject(0).getJSONObject("data");
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
             return null;
         }
     }
@@ -609,7 +610,7 @@ public class Service {
 
 
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    Sentry.captureException(e);
                 }
 
                 // Create new StreamerInfo object from data fetched from database
@@ -677,7 +678,7 @@ public class Service {
 
             db.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 

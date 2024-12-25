@@ -12,6 +12,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import io.sentry.Sentry;
+
 /**
  * Created by Sebastian Rask on 18-06-2016.
  */
@@ -38,7 +40,7 @@ public class GetVODStreamURL extends GetLiveStreamURL {
             token = tokenJSON.getString("value");
             signature = tokenJSON.getString("signature");
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         String vodURL = String.format("https://usher.ttvnw.net/vod/%s?allow_source=true&nauthsig=%s&nauth=%s", vodId, signature, Utils.safeEncode(token));

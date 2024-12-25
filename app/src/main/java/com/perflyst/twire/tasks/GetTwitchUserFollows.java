@@ -21,6 +21,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import io.sentry.Sentry;
 import okhttp3.Request;
 
 /**
@@ -116,7 +117,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Sentry.captureException(e);
             }
         }
 

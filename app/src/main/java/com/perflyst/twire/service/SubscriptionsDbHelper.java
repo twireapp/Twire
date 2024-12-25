@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import io.sentry.Sentry;
+
 /**
  * Created by SebastianRask on 27-01-2015.
  * Helper for creating and maintaining our database for StreamerInfo objects
@@ -79,7 +81,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 new Settings(mContext).setUsersNotToNotifyWhenLive(getUsersNotToNotify(db));
             }
         } catch (SQLiteException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
 
@@ -172,7 +174,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
             }
             return channels.length();
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
         return 0;
     }
@@ -223,7 +225,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 tempchannel.put("IS_TWITCH", isTwitch);
                 channelstoExport.put(tempchannel);
             } catch (JSONException e) {
-                e.printStackTrace();
+                Sentry.captureException(e);
             }
         }
         cursor.close();
@@ -238,7 +240,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 create(mContext, EXPORT_NAME, jsonStr);
                 return channelstoExport.length();
             } catch (JSONException e) {
-                e.printStackTrace();
+                Sentry.captureException(e);
             }
         }
         return 0;
@@ -274,7 +276,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
             fos.write(jsonString.getBytes());
             fos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
     }
 }

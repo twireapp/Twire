@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.sentry.Sentry;
 import okhttp3.Request;
 
 /**
@@ -63,7 +64,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
 
             Log.d("ACCESS_TOKEN_STRING", token);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Sentry.captureException(e);
         }
 
         String streamUrl = String.format("https://usher.ttvnw.net/api/channel/hls/%s.m3u8" +
