@@ -642,6 +642,20 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     @Override
+    public void onStop() {
+        Log.d(LOG_TAG, "Stream Fragment Stopped");
+        super.onStop();
+
+        if (!castingViewVisible && !audioViewVisible && player != null && !settings.getStreamPlayerLockedPlayback()) {
+            player.pause();
+        }
+
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         Log.d(LOG_TAG, "Destroying");
         if (fetchViewCountRunnable != null) {
