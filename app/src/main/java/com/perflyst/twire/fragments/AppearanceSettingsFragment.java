@@ -1,7 +1,6 @@
 package com.perflyst.twire.fragments;
 
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
@@ -76,8 +74,8 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void initSummaries() {
         // Theme Summary
-        themeSummary.setText(settings.getTheme());
-        themeSummaryColor.setImageDrawable(getColorPreviewFromTheme(settings.getTheme()));
+        themeSummary.setText(settings.getTheme().name);
+        themeSummaryColor.setImageDrawable(AppCompatResources.getDrawable(requireContext(), settings.getTheme().chooser));
 
         // Style Summary
         streamsStyleSummary.setText(settings.getAppearanceStreamStyle());
@@ -88,20 +86,6 @@ public class AppearanceSettingsFragment extends Fragment {
         streamSizeSummary.setText(settings.getAppearanceStreamSize());
         gameSizeSummary.setText(settings.getAppearanceGameSize());
         streamerSizeSummary.setText(settings.getAppearanceChannelSize());
-    }
-
-    private Drawable getColorPreviewFromTheme(String themeTitle) {
-        @DrawableRes int drawableRes = R.drawable.circle_theme_blue_chooser;
-
-        if (themeTitle.equals(getString(R.string.purple_theme_name))) {
-            drawableRes = R.drawable.circle_theme_purple_chooser;
-        } else if (themeTitle.equals(getString(R.string.black_theme_name))) {
-            drawableRes = R.drawable.circle_theme_black_chooser;
-        } else if (themeTitle.equals(getString(R.string.night_theme_name)) || themeTitle.equals(getString(R.string.true_night_theme_name))) {
-            drawableRes = R.drawable.circle_theme_night_chooser;
-        }
-
-        return AppCompatResources.getDrawable(requireContext(), drawableRes);
     }
 
     private void onClickThemeColor() {

@@ -20,6 +20,7 @@ import com.afollestad.materialdialogs.simplelist.MaterialSimpleListItem;
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
 import com.perflyst.twire.PlaybackService;
 import com.perflyst.twire.R;
+import com.perflyst.twire.model.Theme;
 import com.perflyst.twire.views.LayoutSelector;
 import com.rey.material.widget.CheckedTextView;
 import com.rey.material.widget.Slider;
@@ -31,19 +32,14 @@ import java.util.Arrays;
  */
 public class DialogService {
     public static MaterialDialog getThemeDialog(final Activity activity) {
-        final String CURRENT_THEME = new Settings(activity).getTheme();
+        final Theme CURRENT_THEME = new Settings(activity).getTheme();
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(activity);
-        final MaterialSimpleListItem blueTheme = getThemeDialogAdapterItem(R.string.blue_theme_name, R.drawable.circle_theme_blue_chooser, activity);
-        final MaterialSimpleListItem purpleTheme = getThemeDialogAdapterItem(R.string.purple_theme_name, R.drawable.circle_theme_purple_chooser, activity);
-        final MaterialSimpleListItem blackTheme = getThemeDialogAdapterItem(R.string.black_theme_name, R.drawable.circle_theme_black_chooser, activity);
-        final MaterialSimpleListItem nightTheme = getThemeDialogAdapterItem(R.string.night_theme_name, R.drawable.circle_theme_night_chooser, activity);
-        final MaterialSimpleListItem trueNightTheme = getThemeDialogAdapterItem(R.string.true_night_theme_name, R.drawable.circle_theme_black_chooser, activity);
-        adapter.addAll(blueTheme, purpleTheme, blackTheme, nightTheme, trueNightTheme);
+        adapter.addAll(Arrays.stream(Theme.values()).map(theme -> getThemeDialogAdapterItem(theme.name, theme.chooser, activity)).toList());
 
         final MaterialDialog.Builder dialog = getBaseThemedDialog(activity)
                 .title(R.string.theme_dialog_title)
                 .adapter(adapter, (dialog1, itemView, which, text) -> {
-                    String theme = adapter.getItem(which).getContent().toString();
+                    Theme theme = Theme.values()[which];
                     dialog1.dismiss();
 
                     new Settings(activity).setTheme(theme);
@@ -188,6 +184,15 @@ public class DialogService {
                 .title(dialogTitle)
                 .itemsCallbackSingleChoice(currentSize, callbackSingleChoice)
                 .items(playerTypes)
+                .positiveText(R.string.done)
+                .build();
+    }
+
+    public static MaterialDialog getChooseDialog(Activity activity, @StringRes int dialogTitle, @ArrayRes int array, int selectedIndex, MaterialDialog.ListCallbackSingleChoice callbackSingleChoice) {
+        return getBaseThemedDialog(activity)
+                .title(dialogTitle)
+                .itemsCallbackSingleChoice(selectedIndex, callbackSingleChoice)
+                .items(array)
                 .positiveText(R.string.done)
                 .build();
     }

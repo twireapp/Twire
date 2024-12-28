@@ -11,10 +11,12 @@ import com.google.gson.reflect.TypeToken;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.model.Emote;
+import com.perflyst.twire.model.Theme;
 import com.perflyst.twire.tasks.GetLiveStreamURL;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by SebastianRask on 29-04-2015.
@@ -102,6 +104,18 @@ public class Settings {
                 editor.putBoolean(this.STREAM_PLAYER_AUTO_PLAYBACK, preferences.getBoolean(key, true));
                 editor.remove(key);
             }
+        }
+
+        // Migrate theme to use enums instead of the translated theme name
+        String oldTheme = preferences.getString(this.THEME_CHOSEN, Theme.BLUE.toString());
+        try {
+            Theme.valueOf(oldTheme);
+        } catch (IllegalArgumentException e) {
+            Theme newTheme = Arrays.stream(Theme.values())
+                    .filter(theme -> getContext().getString(theme.name).equals(oldTheme))
+                    .findFirst()
+                    .orElse(Theme.BLUE);
+            setTheme(newTheme);
         }
 
         editor.apply();
@@ -421,19 +435,20 @@ public class Settings {
     /**
      * Theme
      */
-    public String getTheme() {
+    public Theme getTheme() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getString(this.THEME_CHOSEN, context.getString(R.string.blue_theme_name));
+        String themeId = preferences.getString(this.THEME_CHOSEN, Theme.BLUE.toString());
+        return Theme.valueOf(themeId);
     }
 
     public boolean isDarkTheme() {
-        String theme = getTheme();
-        return theme.equals(context.getString(R.string.night_theme_name)) || theme.equals(context.getString(R.string.true_night_theme_name));
+        Theme theme = getTheme();
+        return theme == Theme.NIGHT || theme == Theme.TRUE_NIGHT;
     }
 
-    public void setTheme(String theme) {
+    public void setTheme(Theme theme) {
         SharedPreferences.Editor editor = getEditor();
-        editor.putString(this.THEME_CHOSEN, theme);
+        editor.putString(this.THEME_CHOSEN, theme.toString());
         editor.commit();
     }
 
