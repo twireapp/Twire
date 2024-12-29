@@ -10,7 +10,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.model.ChannelInfo;
+import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
+import com.perflyst.twire.service.SubscriptionsDbHelper;
 import com.perflyst.twire.service.TempStorage;
 
 import org.json.JSONArray;
@@ -89,9 +91,21 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         ArrayList<Integer> loadedStreamerIds = new ArrayList<>();
         ArrayList<ChannelInfo> streamersToAddToDB = new ArrayList<>();
 
-        // Get and save the streamerName of the already loadedStreamers
-        for (ChannelInfo si : TempStorage.getLoadedStreamers())
-            loadedStreamerIds.add(si.getUserId());
+        try (SubscriptionsDbHelper helper = new SubscriptionsDbHelper(baseContext.get())) {
+            for (ChannelInfo si : TempStorage.getLoadedStreamers())
+            {
+                int streamerId = si.getUserId();
+                // If the streamer was followed by the user on Twitch but is no longer followed, remove it from the database
+                if (!userSubs.contains(streamerId) && Service.isUserTwitch(streamerId, baseContext.get())) {
+                    helper.getWritableDatabase().delete(SubscriptionsDbHelper.TABLE_NAME, SubscriptionsDbHelper.COLUMN_ID + " = ?", new String[] {String.valueOf(streamerId)});
+                    TempStorage.removeLoadedStreamer(si);
+                    continue;
+                }
+
+                // Get and save the streamerName of the already loadedStreamers
+                loadedStreamerIds.add(streamerId);
+            }
+        }
 
         // Find the Twitch userIds that the app hasn't already loaded. Add it to the list of userIds that will be added to the database
         ArrayList<Integer> IdsToAddToDB = new ArrayList<>();
