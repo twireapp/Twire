@@ -4,7 +4,6 @@ package com.perflyst.twire.fragments;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -40,6 +39,7 @@ import com.perflyst.twire.misc.TooltipWindow;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetStreamsCountTask;
+import com.perflyst.twire.utils.Execute;
 
 public class NavigationDrawerFragment extends Fragment {
 
@@ -107,12 +107,12 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void fetchAndSetOnlineSteamsCount() {
-        GetStreamsCountTask getStreamsCountTask = new GetStreamsCountTask(getContext(), count -> {
+        GetStreamsCountTask getStreamsCountTask = new GetStreamsCountTask(getContext());
+        Execute.background(getStreamsCountTask, count -> {
             if (count >= 0 && mStreamsCountWrapper != null && mStreamsCount != null) {
                 showAndSetStreamCount(count);
             }
         });
-        getStreamsCountTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void showAndSetStreamCount(int count) {

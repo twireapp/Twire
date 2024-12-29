@@ -1,7 +1,5 @@
 package com.perflyst.twire.tasks;
 
-import android.os.AsyncTask;
-
 import com.perflyst.twire.chat.ChatManager;
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
@@ -11,20 +9,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.concurrent.Callable;
 
 /**
  * Created by Sebastian Rask Jepsen on 07/08/16.
  */
-public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage> {
-    private final Consumer<ChatMessage> callback;
+public class ConstructChatMessageTask implements Callable<ChatMessage> {
     private final List<Emote> customEmotes, twitchEmotes, subscriberEmotes;
     private final ChatManager chatManager;
     private final String message;
     private final HashMap<String, Integer> wordOccurrences;
 
-    public ConstructChatMessageTask(Consumer<ChatMessage> callback, List<Emote> customEmotes, List<Emote> twitchEmotes, List<Emote> subscriberEmotes, ChatManager chatManager, String message) {
-        this.callback = callback;
+    public ConstructChatMessageTask(List<Emote> customEmotes, List<Emote> twitchEmotes, List<Emote> subscriberEmotes, ChatManager chatManager, String message) {
         this.customEmotes = customEmotes;
         this.twitchEmotes = twitchEmotes;
         this.subscriberEmotes = subscriberEmotes;
@@ -33,8 +29,7 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
         this.wordOccurrences = new HashMap<>();
     }
 
-    @Override
-    protected ChatMessage doInBackground(Void... voids) {
+    public ChatMessage call() {
         try {
 
             return new ChatMessage(
@@ -50,12 +45,6 @@ public class ConstructChatMessageTask extends AsyncTask<Void, Void, ChatMessage>
         }
 
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(ChatMessage chatMessage) {
-        super.onPostExecute(chatMessage);
-        callback.accept(chatMessage);
     }
 
     private ArrayList<ChatEmote> getMessageChatEmotes() {

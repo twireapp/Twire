@@ -7,7 +7,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
@@ -282,7 +281,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     twitchEmotesLoaded(twitchEmotes);
                     subscriberEmotesLoaded(subscriberEmotes, (EmotesPagerAdapter) mEmoteViewPager.getAdapter());
                 }, getContext());
-                getTwitchEmotesTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                Execute.background(getTwitchEmotesTask);
             }
 
             private void roomStateIconChange(boolean isOn, ImageView icon) {
@@ -811,29 +810,28 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         Log.d(LOG_TAG, "Sending Message: " + message);
         ConstructChatMessageTask getMessageTask = new ConstructChatMessageTask(
-                chatMessage -> {
-                    if (chatMessage != null) {
-                        try {
-                            addMessage(chatMessage);
-                            Log.d(LOG_TAG, "Message added");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
                 customEmotes,
                 twitchEmotes,
                 subscriberEmotes,
                 chatManager,
                 message
         );
-        getMessageTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        Execute.background(getMessageTask, chatMessage -> {
+            if (chatMessage != null) {
+                try {
+                    addMessage(chatMessage);
+                    Log.d(LOG_TAG, "Message added");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         setKeyboardState(KeyboardState.CLOSED);
         mSendText.setText("");
 
         SendMessageTask sendMessageTask = new SendMessageTask(chatManager, message);
-        sendMessageTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        Execute.background(sendMessageTask);
     }
 
     /**

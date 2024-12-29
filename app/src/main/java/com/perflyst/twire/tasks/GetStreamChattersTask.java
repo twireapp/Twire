@@ -1,29 +1,25 @@
 package com.perflyst.twire.tasks;
 
-import android.os.AsyncTask;
-
 import com.perflyst.twire.service.Service;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 /**
  * Created by Sebastian Rask on 22-01-2017.
  */
 
-public class GetStreamChattersTask extends AsyncTask<Void, Void, ArrayList<String>> {
-    private final GetStreamChattersTaskDelegate delegate;
+public class GetStreamChattersTask implements Callable<ArrayList<String>> {
     private final String mStreamTwitchName;
 
-    public GetStreamChattersTask(GetStreamChattersTaskDelegate delegate, String mStreamTwitchName) {
-        this.delegate = delegate;
+    public GetStreamChattersTask(String mStreamTwitchName) {
         this.mStreamTwitchName = mStreamTwitchName;
     }
 
-    @Override
-    protected ArrayList<String> doInBackground(Void... voids) {
+    public ArrayList<String> call() {
         try {
             final String BASE_URL = "https://tmi.twitch.tv/group/user/" + mStreamTwitchName + "/chatters";
 
@@ -34,21 +30,5 @@ public class GetStreamChattersTask extends AsyncTask<Void, Void, ArrayList<Strin
             e.printStackTrace();
         }
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(ArrayList<String> chatters) {
-        super.onPostExecute(chatters);
-        if (chatters != null) {
-            delegate.onChattersFetched(chatters);
-        } else {
-            delegate.onChattersFetchFailed();
-        }
-    }
-
-    public interface GetStreamChattersTaskDelegate {
-        void onChattersFetched(ArrayList<String> chatters);
-
-        void onChattersFetchFailed();
     }
 }

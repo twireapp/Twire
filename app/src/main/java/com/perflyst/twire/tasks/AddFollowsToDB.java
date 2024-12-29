@@ -3,7 +3,6 @@ package com.perflyst.twire.tasks;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.model.ChannelInfo;
@@ -23,17 +22,18 @@ import java.util.TreeMap;
  * Precondition: This task requires two inputs. First input should be an ArrayList of streamerInfo objects you want to add to the database.
  * The second should be the BaseContext
  */
-public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
+public class AddFollowsToDB implements Runnable {
     private final String LOG_TAG = getClass().getSimpleName();
     private final WeakReference<Context> baseContext;
+    private final ArrayList<ChannelInfo> subsToAdd;
 
-    public AddFollowsToDB(Context baseContext) {
+    public AddFollowsToDB(Context baseContext, ArrayList<ChannelInfo> subsToAdd) {
         this.baseContext = new WeakReference<>(baseContext);
+        this.subsToAdd = subsToAdd;
     }
 
-    protected ArrayList<ChannelInfo> doInBackground(Object... params) {
+    public void run() {
         @SuppressWarnings("unchecked")
-        ArrayList<ChannelInfo> subsToAdd = (ArrayList<ChannelInfo>) params[0];
         ArrayList<ChannelInfo> subsAdded = new ArrayList<>();
         Map<String, ChannelInfo> subsToCheck = new TreeMap<>();
 
@@ -102,26 +102,8 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
         }
         db.close();
 
-        return subsAdded;
-    }
-
-    protected void onPostExecute(ArrayList<ChannelInfo> result) {
-        if (result != null) {
-            TempStorage.addLoadedStreamer(result);
-            Log.d(LOG_TAG, "Count of streamers added: " + result.size());
-            Log.d(LOG_TAG, "Streamers (" + result + ") added to database");
-        }
-    }
-
-    @Override
-    protected void onCancelled(ArrayList<ChannelInfo> channelInfo) {
-        super.onCancelled(channelInfo);
-        Log.e(LOG_TAG, "CANCELLED");
-    }
-
-    @Override
-    protected void onCancelled() {
-        super.onCancelled();
-        Log.e(LOG_TAG, "CANCELLED");
+        TempStorage.addLoadedStreamer(subsAdded);
+        Log.d(LOG_TAG, "Count of streamers added: " + subsAdded.size());
+        Log.d(LOG_TAG, "Streamers (" + subsAdded + ") added to database");
     }
 }

@@ -1,49 +1,30 @@
 package com.perflyst.twire.tasks;
 
-import android.os.AsyncTask;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.misc.UniversalOnScrollListener;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.Callable;
 
 /**
  * Created by Sebastian Rask on 14-04-2016.
  */
-public class ScrollToStartPositionTask extends AsyncTask<Void, Void, Void> {
-    private final PositionCallBack callBack;
+public class ScrollToStartPositionTask implements Callable<Void> {
     private final WeakReference<RecyclerView> recyclerView;
     private final UniversalOnScrollListener mScrollListener;
 
-    public ScrollToStartPositionTask(PositionCallBack callBack, RecyclerView recyclerView, UniversalOnScrollListener mScrollListener) {
-        this.callBack = callBack;
+    public ScrollToStartPositionTask(RecyclerView recyclerView, UniversalOnScrollListener mScrollListener) {
         this.recyclerView = new WeakReference<>(recyclerView);
         this.mScrollListener = mScrollListener;
     }
 
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
+    public Void call() {
         recyclerView.get().smoothScrollToPosition(0);
-    }
 
-    @Override
-    protected Void doInBackground(Void... params) {
         while (mScrollListener.getAmountScrolled() != 0) {
 
         }
-
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        callBack.positionReached();
-    }
-
-    public interface PositionCallBack {
-        void positionReached();
     }
 }

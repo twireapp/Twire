@@ -9,23 +9,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * Created by Sebastian Rask on 18-06-2016.
  */
 public class GetVODStreamURL extends GetLiveStreamURL {
     private final String LOG_TAG = getClass().getSimpleName();
+    private final String vodId;
 
-    public GetVODStreamURL(Consumer<Map<String, Quality>> aCallback) {
-        super(aCallback);
+    public GetVODStreamURL(String vodId, String playerType) {
+        super(null, playerType, null);
+
+        this.vodId = vodId;
     }
 
     @Override
-    protected LinkedHashMap<String, Quality> doInBackground(String... params) {
-        String vodId = params[0];
-        String playerType = params[1];
+    public LinkedHashMap<String, Quality> call() {
         String signature = "";
         String token = "";
 

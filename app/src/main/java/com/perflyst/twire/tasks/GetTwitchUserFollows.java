@@ -6,7 +6,6 @@ import static com.perflyst.twire.service.Service.getStreamerInfoFromUserId;
 import static com.perflyst.twire.service.Service.makeRequest;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.model.ChannelInfo;
@@ -14,6 +13,7 @@ import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.service.SubscriptionsDbHelper;
 import com.perflyst.twire.service.TempStorage;
+import com.perflyst.twire.utils.Execute;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Request;
@@ -31,7 +32,7 @@ import okhttp3.Request;
  * Returns an ArrayList of stream names
  */
 
-public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
+public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
     private final String LOG_TAG = getClass().getSimpleName();
     private final long timerStart = System.currentTimeMillis();
     private final WeakReference<Context> baseContext;
@@ -40,8 +41,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         this.baseContext = new WeakReference<>(baseContext);
     }
 
-    @Override
-    protected ArrayList<ChannelInfo> doInBackground(Object... params) {
+    public ArrayList<ChannelInfo> call() {
         ArrayList<Integer> userSubs = new ArrayList<>();
 
         String currentCursor = "";
@@ -142,23 +142,18 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
             streamersToAddToDB.addAll(thread.getStreamers());
         }
 
-        return streamersToAddToDB;
-    }
-
-    @Override
-    protected void onPostExecute(ArrayList<ChannelInfo> streamersToAddToDB) {
         // If there are any streamers to add to the DB - Create a task and do so.
         if (!streamersToAddToDB.isEmpty()) {
             Log.d(LOG_TAG, "Starting task to add " + streamersToAddToDB.size() + " to the db");
-            Object[] arrayTemp = {streamersToAddToDB, baseContext.get()};
-            AddFollowsToDB addFollowsToDBTask = new AddFollowsToDB(baseContext.get());
-            addFollowsToDBTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, arrayTemp);
+            Execute.background(new AddFollowsToDB(baseContext.get(), streamersToAddToDB));
         } else {
             Log.d(LOG_TAG, "Found no new streamers to add to the database");
         }
 
         long duration = System.currentTimeMillis() - this.timerStart;
         Log.d(LOG_TAG, "Completed task in " + TimeUnit.MILLISECONDS.toSeconds(duration) + " seconds");
+
+        return streamersToAddToDB;
     }
 
     private class StreamerInfoFromIdsThread extends Thread {

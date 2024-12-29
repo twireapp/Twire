@@ -1,7 +1,6 @@
 package com.perflyst.twire.activities;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +11,7 @@ import com.perflyst.twire.activities.setup.WelcomeActivity;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.ValidateOauthTokenTask;
+import com.perflyst.twire.utils.Execute;
 
 public class StartUpActivity extends ThemeActivity {
     private final String LOG_TAG = getClass().getSimpleName();
@@ -45,7 +45,8 @@ public class StartUpActivity extends ThemeActivity {
     }
 
     private void validateToken() {
-        ValidateOauthTokenTask validateTask = new ValidateOauthTokenTask(validation -> {
+        ValidateOauthTokenTask validateTask = new ValidateOauthTokenTask(new Settings(getBaseContext()).getGeneralTwitchAccessToken(), getBaseContext());
+        Execute.background(validateTask, validation -> {
             if (validation != null && !validation.isTokenValid()) {
                 Log.e(LOG_TAG, "Token invalid");
                 Intent loginIntent = new Intent(getBaseContext(), LoginActivity.class);
@@ -55,7 +56,6 @@ public class StartUpActivity extends ThemeActivity {
 
                 getBaseContext().startActivity(loginIntent);
             }
-        }, new Settings(getBaseContext()).getGeneralTwitchAccessToken(), getBaseContext());
-        validateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        });
     }
 }

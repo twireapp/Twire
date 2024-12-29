@@ -1,6 +1,5 @@
 package com.perflyst.twire.activities.main;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -11,6 +10,7 @@ import com.perflyst.twire.R;
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
 import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.tasks.GetVisualElementsTask;
+import com.perflyst.twire.utils.Execute;
 
 /**
  * Main Activity that loads it's content only when it is needed.
@@ -68,7 +68,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
         });
 
         GetVisualElementsTask<T> getElementsTask = new GetVisualElementsTask<>(this);
-        getElementsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        Execute.background(getElementsTask);
         startProgress();
     }
 

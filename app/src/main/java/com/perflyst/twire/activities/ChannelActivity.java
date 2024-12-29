@@ -6,7 +6,6 @@ import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -432,8 +431,8 @@ public class ChannelActivity extends ThemeActivity {
             mPanelsRecyclerView.setAdapter(mPanelsAdapter);
             mPanelsRecyclerView.setLayoutManager(llm);
 
-            GetPanelsTask mTask = new GetPanelsTask(info.getLogin(), mPanelsAdapter::addPanels);
-            mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            GetPanelsTask mTask = new GetPanelsTask(info.getLogin());
+            Execute.background(mTask, mPanelsAdapter::addPanels);
         }
     }
 

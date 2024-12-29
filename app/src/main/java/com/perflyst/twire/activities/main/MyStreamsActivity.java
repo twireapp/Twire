@@ -1,6 +1,5 @@
 package com.perflyst.twire.activities.main;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.common.base.Joiner;
@@ -65,8 +64,7 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
             channels = new ArrayList<>(TempStorage.getLoadedStreamers());
         } else {
             GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB(this);
-            subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
-            channels = new ArrayList<>(subscriptionsTask.get().values());
+            channels = new ArrayList<>(subscriptionsTask.call().values());
         }
 
         // loop over all the channels in the DB in chunks of 100

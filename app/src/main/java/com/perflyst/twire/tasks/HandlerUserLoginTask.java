@@ -1,12 +1,12 @@
 package com.perflyst.twire.tasks;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.activities.setup.LoginActivity;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
+import com.perflyst.twire.utils.Execute;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,23 +16,20 @@ import java.lang.ref.WeakReference;
 /**
  * Created by SebastianRask on 03-11-2015.
  */
-public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
+public class HandlerUserLoginTask implements Runnable {
     private final String LOG_TAG = getClass().getSimpleName();
-    private Settings mSettings;
-    private String token;
-    private WeakReference<LoginActivity> mLoginActivity;
+    private final Settings mSettings;
+    private final String token;
+    private final WeakReference<LoginActivity> mLoginActivity;
 
-    @Override
-    protected void onPreExecute() {
-
+    public HandlerUserLoginTask(Context context, String token, LoginActivity mLoginActivity) {
+        this.mSettings = new Settings(context);
+        this.token = token;
+        this.mLoginActivity = new WeakReference<>(mLoginActivity);
     }
 
-    @Override
-    protected Object[] doInBackground(Object... params) {
-        mSettings = new Settings((Context) params[0]);
-        token = (String) params[1];
-        mLoginActivity = new WeakReference<>((LoginActivity) params[2]);
-
+    public void run() {
+        Object[] mUserInfo = null;
         try {
             // the User is fetched by the Bearer token
             String BASE_USER_INFO_URL = "https://api.twitch.tv/helix/users";
@@ -61,7 +58,7 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
             String USER_ID_INT = "id";
             int mID = baseJSON.getInt(USER_ID_INT);
 
-            return new Object[]{
+            mUserInfo = new Object[]{
                     mDisplayName,
                     mUserName,
                     mUserBio,
@@ -78,11 +75,6 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
             Log.e(LOG_TAG, "CAUGHT EXCEPTION " + e.getMessage() + " WHILE HANDLING USER LOGIN");
         }
 
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Object[] mUserInfo) {
         if (mUserInfo != null) {
             mSettings.setGeneralTwitchAccessToken(token);
             mSettings.setGeneralTwitchDisplayName((String) mUserInfo[0]);
@@ -102,7 +94,7 @@ public class HandlerUserLoginTask extends AsyncTask<Object, Void, Object[]> {
             if (mUserInfo[6] != null)
                 mSettings.setGeneralTwitchUserUpdatedDate((String) mUserInfo[6]);
 
-            mLoginActivity.get().handleLoginSuccess();
+            Execute.ui(() -> mLoginActivity.get().handleLoginSuccess());
         }
     }
 }

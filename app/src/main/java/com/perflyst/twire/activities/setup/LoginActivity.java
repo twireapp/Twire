@@ -2,7 +2,6 @@ package com.perflyst.twire.activities.setup;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -33,6 +32,7 @@ import com.perflyst.twire.tasks.GetFollowsFromDB;
 import com.perflyst.twire.tasks.HandlerUserLoginTask;
 import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.perflyst.twire.utils.Constants;
+import com.perflyst.twire.utils.Execute;
 import com.rey.material.widget.ProgressView;
 import com.rey.material.widget.SnackBar;
 
@@ -148,8 +148,8 @@ public class LoginActivity extends SetupBaseActivity {
 
     private void setupPrelaunchLogin() {
         findViewById(R.id.btn_prelaunch_login).setOnClickListener(v -> {
-            HandlerUserLoginTask handleTask = new HandlerUserLoginTask();
-            handleTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext(), new Settings(this).getGeneralTwitchAccessToken(), LoginActivity.this);
+            HandlerUserLoginTask handleTask = new HandlerUserLoginTask(getBaseContext(), new Settings(this).getGeneralTwitchAccessToken(), LoginActivity.this);
+            Execute.background(handleTask);
         });
     }
 
@@ -222,7 +222,7 @@ public class LoginActivity extends SetupBaseActivity {
 
         // Seb you wonderful man. - Seb from the future
         subscriptionsTask = new GetFollowsFromDB(this);
-        subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
+        Execute.background(subscriptionsTask);
     }
 
     public void handleNoInternet() {
@@ -342,8 +342,8 @@ public class LoginActivity extends SetupBaseActivity {
                             // set the access token here so the following request works
                             new Settings(getBaseContext()).setGeneralTwitchAccessToken(mAccessToken);
 
-                            HandlerUserLoginTask handleTask = new HandlerUserLoginTask();
-                            handleTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext(), mAccessToken, LoginActivity.this);
+                            HandlerUserLoginTask handleTask = new HandlerUserLoginTask(getBaseContext(), mAccessToken, LoginActivity.this);
+                            Execute.background(handleTask);
 
                             CookieManager cm = CookieManager.getInstance();
                             cm.removeAllCookie();

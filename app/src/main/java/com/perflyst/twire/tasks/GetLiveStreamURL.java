@@ -1,6 +1,5 @@
 package com.perflyst.twire.tasks;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.perflyst.twire.misc.Utils;
@@ -14,7 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Consumer;
+import java.util.concurrent.Callable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,14 +23,19 @@ import okhttp3.Request;
  * Async task. Gets the required access token for a specific streamer. Then starts the streamers live stream.
  * Requires to be executed with the username of the streamer and a reference to the VideoView
  */
-public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<String, Quality>> {
+public class GetLiveStreamURL implements Callable<Map<String, Quality>> {
     public static final String QUALITY_SOURCE = "chunked";
     public static final String QUALITY_AUTO = "auto";
     private final String LOG_TAG = getClass().getSimpleName();
-    private final Consumer<Map<String, Quality>> callback;
 
-    public GetLiveStreamURL(Consumer<Map<String, Quality>> aCallback) {
-        callback = aCallback;
+    private final String streamerName;
+    protected final String playerType;
+    private final String proxy;
+
+    public GetLiveStreamURL(String streamerName, String playerType, String proxy) {
+        this.streamerName = streamerName;
+        this.playerType = playerType;
+        this.proxy = proxy;
     }
 
     protected JSONObject getToken(boolean isLive, String channelOrVod, String playerType) {
@@ -44,11 +48,7 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
         }});
     }
 
-    @Override
-    protected LinkedHashMap<String, Quality> doInBackground(String... params) {
-        String streamerName = params[0];
-        String playerType = params[1];
-        String proxy = params[2];
+    public Map<String, Quality> call() {
         String signature = "";
         String token = "";
 
@@ -83,11 +83,6 @@ public class GetLiveStreamURL extends AsyncTask<String, Void, LinkedHashMap<Stri
 
         Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
         return parseM3U8(streamUrl);
-    }
-
-    @Override
-    protected void onPostExecute(LinkedHashMap<String, Quality> result) {
-        callback.accept(result);
     }
 
     LinkedHashMap<String, Quality> parseM3U8(String urlToRead) {

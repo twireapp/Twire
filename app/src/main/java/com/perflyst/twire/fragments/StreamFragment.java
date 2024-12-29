@@ -19,7 +19,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -671,21 +670,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
         Runnable fetchChattersRunnable = new Runnable() {
             @Override
             public void run() {
-                GetStreamChattersTask task = new GetStreamChattersTask(
-                        new GetStreamChattersTask.GetStreamChattersTaskDelegate() {
-                            @Override
-                            public void onChattersFetched(ArrayList<String> chatters) {
+                GetStreamChattersTask task = new GetStreamChattersTask(mUserInfo.getLogin());
 
-                            }
-
-                            @Override
-                            public void onChattersFetchFailed() {
-
-                            }
-                        }, mUserInfo.getLogin()
-                );
-
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                Execute.background(task, chatters -> {});
 
                 if (!StreamFragment.this.isDetached()) {
                     fetchChattersHandler.postDelayed(this, fetchChattersDelay);
@@ -703,19 +690,16 @@ public class StreamFragment extends Fragment implements Player.Listener {
         fetchViewCountRunnable = new Runnable() {
             @Override
             public void run() {
-                GetStreamViewersTask task = new GetStreamViewersTask(
-                        currentViewers -> {
-                            try {
-                                Log.d(LOG_TAG, "Fetching viewers");
+                GetStreamViewersTask task = new GetStreamViewersTask(mUserInfo.getUserId(), getContext());
+                Execute.background(task, currentViewers -> {
+                    try {
+                        Log.d(LOG_TAG, "Fetching viewers");
 
-                                Utils.setNumber(mCurrentViewersView, currentViewers);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }, mUserInfo.getUserId(), getContext()
-                );
-
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                        if (currentViewers > -1) Utils.setNumber(mCurrentViewersView, currentViewers);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
 
                 if (!StreamFragment.this.isDetached()) {
                     fetchViewCountHandler.postDelayed(this, fetchViewCountDelay);
@@ -1205,36 +1189,11 @@ public class StreamFragment extends Fragment implements Player.Listener {
         String[] types = getResources().getStringArray(R.array.PlayerType);
 
         if (vodId == null) {
-            GetLiveStreamURL task = new GetLiveStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mUserInfo.getLogin(), types[settings.getStreamPlayerType()], settings.getStreamPlayerProxy());
+            GetLiveStreamURL task = new GetLiveStreamURL(mUserInfo.getLogin(), types[settings.getStreamPlayerType()], settings.getStreamPlayerProxy());
+            Execute.background(task, callback);
         } else {
-            GetLiveStreamURL task = new GetVODStreamURL(callback);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId, types[settings.getStreamPlayerType()]);
-        }
-    }
-
-    /**
-     * Connects to the Twitch API to fetch the live stream url and quality selection urls.
-     * If the task is successful the quality selector views' click listeners will be updated.
-     */
-    private void updateQualitySelectorsWithTask() {
-        Consumer<Map<String, Quality>> delegate = url -> {
-            try {
-                if (!url.isEmpty()) {
-                    updateQualitySelections(url);
-                    qualityURLs = url;
-                }
-            } catch (IllegalStateException | NullPointerException e) {
-                e.printStackTrace();
-            }
-        };
-
-        if (vodId == null) {
-            GetLiveStreamURL task = new GetLiveStreamURL(delegate);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mUserInfo.getLogin());
-        } else {
-            GetLiveStreamURL task = new GetVODStreamURL(delegate);
-            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, vodId.substring(1));
+            GetLiveStreamURL task = new GetVODStreamURL(vodId, types[settings.getStreamPlayerType()]);
+            Execute.background(task, callback);
         }
     }
 
@@ -1488,8 +1447,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         recyclerView.setAdapter(mPanelAdapter);
 
-        GetPanelsTask mTask = new GetPanelsTask(mUserInfo.getLogin(), mPanelAdapter::addPanels);
-        mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        GetPanelsTask mTask = new GetPanelsTask(mUserInfo.getLogin());
+        Execute.background(mTask, mPanelAdapter::addPanels);
     }
 
     /**

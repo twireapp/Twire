@@ -5,7 +5,6 @@ import static com.perflyst.twire.service.Service.isNetworkConnectedThreadOnly;
 import static com.perflyst.twire.service.Service.makeRequest;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.perflyst.twire.utils.Constants;
 
@@ -14,26 +13,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
-import java.util.function.Consumer;
+import java.util.concurrent.Callable;
 
 import okhttp3.Request;
 
 /**
  * Created by Sebastian Rask on 10-05-2016.
  */
-public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthTokenTask.TokenValidation> {
-    private final Consumer<TokenValidation> delegate;
+public class ValidateOauthTokenTask implements Callable<ValidateOauthTokenTask.TokenValidation> {
     private final String oauthToken;
     private final WeakReference<Context> context;
 
-    public ValidateOauthTokenTask(Consumer<TokenValidation> delegate, String oauthToken, Context context) {
-        this.delegate = delegate;
+    public ValidateOauthTokenTask(String oauthToken, Context context) {
         this.oauthToken = oauthToken;
         this.context = new WeakReference<>(context);
     }
 
-    @Override
-    protected TokenValidation doInBackground(Void... params) {
+    public TokenValidation call() {
         String url = "https://id.twitch.tv/oauth2/validate";
 
         try {
@@ -82,18 +78,6 @@ public class ValidateOauthTokenTask extends AsyncTask<Void, Void, ValidateOauthT
         } else {
             return null;
         }
-    }
-
-    @Override
-    protected void onPostExecute(TokenValidation tokenValidation) {
-        super.onPostExecute(tokenValidation);
-        delegate.accept(tokenValidation);
-    }
-
-    @Override
-    protected void onCancelled(TokenValidation validation) {
-        super.onCancelled(validation);
-        delegate.accept(null);
     }
 
     public static class TokenValidation {

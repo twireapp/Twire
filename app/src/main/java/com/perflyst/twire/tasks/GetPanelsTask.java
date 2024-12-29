@@ -1,29 +1,24 @@
 package com.perflyst.twire.tasks;
 
-import android.os.AsyncTask;
-
 import com.perflyst.twire.model.Panel;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.concurrent.Callable;
 
 /**
  * Created by Sebastian Rask on 24-02-2017.
  */
 
-public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
+public class GetPanelsTask implements Callable<List<Panel>> {
 
     private final String mStreamerName;
-    private final Consumer<List<Panel>> mDelegate;
 
-    public GetPanelsTask(String mStreamerName, Consumer<List<Panel>> mDelegate) {
+    public GetPanelsTask(String mStreamerName) {
         this.mStreamerName = mStreamerName;
-        this.mDelegate = mDelegate;
     }
 
-    @Override
-    protected List<Panel> doInBackground(Void... voids) {
+    public List<Panel> call() {
         List<Panel> result = new ArrayList<>();
 
         // This code is commented out because the /panels API has been removed.
@@ -65,11 +60,5 @@ public class GetPanelsTask extends AsyncTask<Void, Void, List<Panel>> {
         */
 
         return result;
-    }
-
-    @Override
-    protected void onPostExecute(List<Panel> s) {
-        super.onPostExecute(s);
-        mDelegate.accept(s);
     }
 }

@@ -1,6 +1,5 @@
 package com.perflyst.twire.activities.setup;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -18,6 +17,7 @@ import android.widget.TextView;
 import com.perflyst.twire.R;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.utils.AnimationListenerAdapter;
+import com.perflyst.twire.utils.Execute;
 import com.rey.material.widget.ProgressView;
 
 import java.lang.ref.WeakReference;
@@ -75,7 +75,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
         showTextLineAnimations(mLoginTextLineTwo, 2);
 
         CheckDataFetchingTask checkingTask = new CheckDataFetchingTask(this);
-        checkingTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        Execute.background(checkingTask);
     }
 
     @Override
@@ -238,7 +238,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
         mContinueIcon.startAnimation(mAnimations);
     }
 
-    private static class CheckDataFetchingTask extends AsyncTask<Void, Void, Void> {
+    private static class CheckDataFetchingTask implements Runnable {
         private final WeakReference<ConfirmSetupActivity> activity;
 
         public CheckDataFetchingTask(ConfirmSetupActivity activity) {
@@ -246,7 +246,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
         }
 
         @Override
-        protected Void doInBackground(Void... params) {
+        public void run() {
             while (LoginActivity.loadingFollows()) {
                 try {
                     Thread.sleep(200);
@@ -254,10 +254,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
                     e.printStackTrace();
                 }
             }
-            return null;
-        }
 
-        protected void onPostExecute(Void voi) {
             SupportAnimator.AnimatorListener animator = new SupportAnimator.AnimatorListener() {
                 @Override
                 public void onAnimationEnd() {

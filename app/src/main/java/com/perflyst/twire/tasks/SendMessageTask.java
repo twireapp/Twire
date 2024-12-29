@@ -1,13 +1,11 @@
 package com.perflyst.twire.tasks;
 
-import android.os.AsyncTask;
-
 import com.perflyst.twire.chat.ChatManager;
 
 /**
  * Created by Sebastian Rask Jepsen on 21/07/16.
  */
-public class SendMessageTask extends AsyncTask<Void, Void, Void> {
+public class SendMessageTask implements Runnable {
     private final ChatManager mBot;
     private final String message;
 
@@ -16,11 +14,9 @@ public class SendMessageTask extends AsyncTask<Void, Void, Void> {
         this.message = message;
     }
 
-    @Override
-    protected Void doInBackground(Void... voids) {
+    public void run() {
         if (mBot != null && message != null) {
             mBot.sendMessage(message);
         }
-        return null;
     }
 }

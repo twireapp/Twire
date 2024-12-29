@@ -1,12 +1,12 @@
 package com.perflyst.twire.tasks;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.util.Log;
 
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.utils.Execute;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by idealMJ on 29/07/16.
  */
-public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
+public class GetTwitchEmotesTask implements Runnable {
     private final String LOG_TAG = getClass().getSimpleName();
 
     private final WeakReference<Context> context;
@@ -35,8 +35,7 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
         this.context = new WeakReference<>(context);
     }
 
-    @Override
-    protected Void doInBackground(Void... voids) {
+    public void run() {
         try {
             String newUrl = "https://api.twitch.tv/helix/chat/emotes/set?emote_set_id=" + TextUtils.join("&emote_set_id=", emoteSets);
             JSONObject top = new JSONObject(Service.urlToJSONStringHelix(newUrl, context.get()));
@@ -56,14 +55,9 @@ public class GetTwitchEmotesTask extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
         }
         Collections.sort(twitchEmotes);
-        return null;
-    }
 
-    @Override
-    protected void onPostExecute(Void re) {
-        super.onPostExecute(re);
         Log.d("Chat", "Found twitch emotes: " + twitchEmotes.size());
-        delegate.onEmotesLoaded(twitchEmotes, subscriberEmotes);
+        Execute.ui(() -> delegate.onEmotesLoaded(twitchEmotes, subscriberEmotes));
     }
 
     public interface Delegate {

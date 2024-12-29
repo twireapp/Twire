@@ -1,7 +1,5 @@
 package com.perflyst.twire.activities.main;
 
-import android.os.AsyncTask;
-
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.ChannelsAdapter;
 import com.perflyst.twire.adapters.MainActivityAdapter;
@@ -53,8 +51,7 @@ public class MyChannelsActivity extends LazyMainActivity<ChannelInfo> {
         }
 
         GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB(this);
-        subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
 
-        return new ArrayList<>(subscriptionsTask.get().values());
+        return new ArrayList<>(subscriptionsTask.call().values());
     }
 }

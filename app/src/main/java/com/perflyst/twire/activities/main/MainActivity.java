@@ -1,7 +1,6 @@
 package com.perflyst.twire.activities.main;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -35,6 +34,7 @@ import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.ScrollToStartPositionTask;
 import com.perflyst.twire.utils.AnimationListenerAdapter;
+import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 
@@ -253,12 +253,12 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
      * Scrolls to the top of the recyclerview. When the position is reached refreshElements() is called
      */
     public void scrollToTopAndRefresh() {
-        ScrollToStartPositionTask scrollTask = new ScrollToStartPositionTask(() -> {
+        ScrollToStartPositionTask scrollTask = new ScrollToStartPositionTask(mRecyclerView, mScrollListener);
+        Execute.background(scrollTask, (ignore) -> {
             if (mRecyclerView != null && mAdapter != null) {
                 refreshElements();
             }
-        }, mRecyclerView, mScrollListener);
-        scrollTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        });
     }
 
     /**

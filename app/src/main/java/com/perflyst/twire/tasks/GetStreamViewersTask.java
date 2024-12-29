@@ -1,7 +1,6 @@
 package com.perflyst.twire.tasks;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.perflyst.twire.service.Service;
 
@@ -10,25 +9,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
-import java.util.function.Consumer;
+import java.util.concurrent.Callable;
 
 /**
  * Created by Sebastian Rask on 17-09-2016.
  */
-public class GetStreamViewersTask extends AsyncTask<Void, Void, Integer> {
-    private final Consumer<Integer> delegate;
+public class GetStreamViewersTask implements Callable<Integer> {
     private final int streamerUserId;
     private final WeakReference<Context> context;
 
 
-    public GetStreamViewersTask(Consumer<Integer> delegate, int streamerUserId, Context context) {
-        this.delegate = delegate;
+    public GetStreamViewersTask(int streamerUserId, Context context) {
         this.streamerUserId = streamerUserId;
         this.context = new WeakReference<>(context);
     }
 
-    @Override
-    protected Integer doInBackground(Void... voids) {
+    public Integer call() {
         try {
             final String URL = "https://api.twitch.tv/helix/streams?user_id=" + this.streamerUserId + "&first=1";
             final String VIEWERS_INT = "viewer_count";
@@ -42,13 +38,5 @@ public class GetStreamViewersTask extends AsyncTask<Void, Void, Integer> {
             e.printStackTrace();
         }
         return -1;
-    }
-
-    @Override
-    protected void onPostExecute(Integer integer) {
-        super.onPostExecute(integer);
-        if (integer > -1) {
-            delegate.accept(integer);
-        }
     }
 }
