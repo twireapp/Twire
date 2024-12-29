@@ -22,15 +22,15 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
     private final long timerStart = System.currentTimeMillis();
     private final String LOG_TAG = getClass().getSimpleName();
     private final GetTwitchUserFollows twitchUserFollows;
-    private WeakReference<Context> baseContext;
+    private final WeakReference<Context> baseContext;
 
-    public GetFollowsFromDB() {
-        twitchUserFollows = new GetTwitchUserFollows();
+    public GetFollowsFromDB(Context baseContext) {
+        this.baseContext = new WeakReference<>(baseContext);
+        twitchUserFollows = new GetTwitchUserFollows(baseContext);
     }
 
     protected Map<String, ChannelInfo> doInBackground(Context... params) {
         Log.d(LOG_TAG, "Entered GetFollowsFromDB");
-        baseContext = new WeakReference<>(params[0]);
 
         Map<String, ChannelInfo> resultList = Service.getStreamerInfoFromDB(baseContext.get());
         Log.d(LOG_TAG, resultList.size() + " streamers fetched from database");

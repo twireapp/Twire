@@ -20,6 +20,8 @@ import com.perflyst.twire.service.Service;
 import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.rey.material.widget.ProgressView;
 
+import java.lang.ref.WeakReference;
+
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
 
@@ -72,7 +74,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
         showTextLineAnimations(mLoginTextLineOne, 1);
         showTextLineAnimations(mLoginTextLineTwo, 2);
 
-        CheckDataFetchingTask checkingTask = new CheckDataFetchingTask();
+        CheckDataFetchingTask checkingTask = new CheckDataFetchingTask(this);
         checkingTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -236,7 +238,12 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
         mContinueIcon.startAnimation(mAnimations);
     }
 
-    private class CheckDataFetchingTask extends AsyncTask<Void, Void, Void> {
+    private static class CheckDataFetchingTask extends AsyncTask<Void, Void, Void> {
+        private final WeakReference<ConfirmSetupActivity> activity;
+
+        public CheckDataFetchingTask(ConfirmSetupActivity activity) {
+            this.activity = new WeakReference<>(activity);
+        }
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -254,7 +261,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
             SupportAnimator.AnimatorListener animator = new SupportAnimator.AnimatorListener() {
                 @Override
                 public void onAnimationEnd() {
-                    navigateToNextActivity();
+                    activity.get().navigateToNextActivity();
                 }
 
                 @Override
@@ -270,12 +277,12 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
                 }
             };
 
-            if (!mTransitionViewWhite.isAttachedToWindow()) {
+            if (!activity.get().mTransitionViewWhite.isAttachedToWindow()) {
                 animator.onAnimationEnd();
                 return;
             }
 
-            showTransitionAnimation().addListener(animator);
+            activity.get().showTransitionAnimation().addListener(animator);
         }
     }
 

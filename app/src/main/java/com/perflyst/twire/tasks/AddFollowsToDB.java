@@ -11,6 +11,7 @@ import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.service.SubscriptionsDbHelper;
 import com.perflyst.twire.service.TempStorage;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -24,6 +25,11 @@ import java.util.TreeMap;
  */
 public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
     private final String LOG_TAG = getClass().getSimpleName();
+    private final WeakReference<Context> baseContext;
+
+    public AddFollowsToDB(Context baseContext) {
+        this.baseContext = new WeakReference<>(baseContext);
+    }
 
     protected ArrayList<ChannelInfo> doInBackground(Object... params) {
         @SuppressWarnings("unchecked")
@@ -34,7 +40,7 @@ public class AddFollowsToDB extends AsyncTask<Object, Void, ArrayList<ChannelInf
 
         Log.v(LOG_TAG, "Entered " + LOG_TAG);
 
-        Context baseContext = (Context) params[1];
+        Context baseContext = this.baseContext.get();
         SubscriptionsDbHelper mDbHelper = new SubscriptionsDbHelper(baseContext);
 
         // Get the data repository in write mode

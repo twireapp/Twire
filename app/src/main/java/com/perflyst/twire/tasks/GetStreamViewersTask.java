@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.function.Consumer;
 
 /**
@@ -17,13 +18,13 @@ import java.util.function.Consumer;
 public class GetStreamViewersTask extends AsyncTask<Void, Void, Integer> {
     private final Consumer<Integer> delegate;
     private final int streamerUserId;
-    private final Context context;
+    private final WeakReference<Context> context;
 
 
     public GetStreamViewersTask(Consumer<Integer> delegate, int streamerUserId, Context context) {
         this.delegate = delegate;
         this.streamerUserId = streamerUserId;
-        this.context = context;
+        this.context = new WeakReference<>(context);
     }
 
     @Override
@@ -32,7 +33,7 @@ public class GetStreamViewersTask extends AsyncTask<Void, Void, Integer> {
             final String URL = "https://api.twitch.tv/helix/streams?user_id=" + this.streamerUserId + "&first=1";
             final String VIEWERS_INT = "viewer_count";
 
-            JSONObject topObject = new JSONObject(Service.urlToJSONStringHelix(URL, this.context));
+            JSONObject topObject = new JSONObject(Service.urlToJSONStringHelix(URL, this.context.get()));
             JSONArray steamArray = topObject.getJSONArray("data");
             JSONObject streamObject = steamArray.getJSONObject(0);
 

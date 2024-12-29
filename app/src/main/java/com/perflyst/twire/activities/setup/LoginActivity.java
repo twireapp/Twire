@@ -221,7 +221,7 @@ public class LoginActivity extends SetupBaseActivity {
         // OR if the user signs in to a new account.
 
         // Seb you wonderful man. - Seb from the future
-        subscriptionsTask = new GetFollowsFromDB();
+        subscriptionsTask = new GetFollowsFromDB(this);
         subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
     }
 

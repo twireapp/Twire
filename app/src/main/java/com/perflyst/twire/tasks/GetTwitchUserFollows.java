@@ -32,14 +32,17 @@ import okhttp3.Request;
 public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<ChannelInfo>> {
     private final String LOG_TAG = getClass().getSimpleName();
     private final long timerStart = System.currentTimeMillis();
-    private WeakReference<Context> baseContext;
+    private final WeakReference<Context> baseContext;
+
+    public GetTwitchUserFollows(Context baseContext) {
+        this.baseContext = new WeakReference<>(baseContext);
+    }
 
     @Override
     protected ArrayList<ChannelInfo> doInBackground(Object... params) {
         ArrayList<Integer> userSubs = new ArrayList<>();
 
         String currentCursor = "";
-        baseContext = new WeakReference<>((Context) params[1]);
 
         Settings mSettings = new Settings(baseContext.get());
 
@@ -134,7 +137,7 @@ public class GetTwitchUserFollows extends AsyncTask<Object, Void, ArrayList<Chan
         if (streamersToAddToDB.size() > 0) {
             Log.d(LOG_TAG, "Starting task to add " + streamersToAddToDB.size() + " to the db");
             Object[] arrayTemp = {streamersToAddToDB, baseContext.get()};
-            AddFollowsToDB addFollowsToDBTask = new AddFollowsToDB();
+            AddFollowsToDB addFollowsToDBTask = new AddFollowsToDB(baseContext.get());
             addFollowsToDBTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, arrayTemp);
         } else {
             Log.d(LOG_TAG, "Found no new streamers to add to the database");

@@ -64,7 +64,7 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
         if (TempStorage.hasLoadedStreamers()) {
             channels = new ArrayList<>(TempStorage.getLoadedStreamers());
         } else {
-            GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
+            GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB(this);
             subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, getBaseContext());
             channels = new ArrayList<>(subscriptionsTask.get().values());
         }

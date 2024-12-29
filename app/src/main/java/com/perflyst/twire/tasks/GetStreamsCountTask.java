@@ -10,6 +10,7 @@ import com.perflyst.twire.service.Settings;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -19,11 +20,11 @@ import java.util.function.Consumer;
 public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
     private final Settings settings;
     private final Consumer<Integer> delegate;
-    private final Context context;
+    private final WeakReference<Context> context;
 
     public GetStreamsCountTask(Context context, Consumer<Integer> delegate) {
         this.settings = new Settings(context);
-        this.context = context;
+        this.context = new WeakReference<>(context);
         this.delegate = delegate;
     }
 
@@ -34,7 +35,7 @@ public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
             String helix_url = "https://api.twitch.tv/helix/streams";
             String user_logins = "";
 
-            GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB();
+            GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB(context.get());
             subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, settings.getContext());
 
             ArrayList<String> requesturls = new ArrayList<>();
@@ -74,7 +75,7 @@ public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
             for (int i=0; i<requesturls.size(); i++) {
                 String temp_jsonString;
                 // request the url
-                temp_jsonString = Service.urlToJSONStringHelix(requesturls.get(i), context);
+                temp_jsonString = Service.urlToJSONStringHelix(requesturls.get(i), context.get());
                 JSONObject fullDataObject = new JSONObject(temp_jsonString);
                 // create the array
                 JSONArray temp_array = fullDataObject.getJSONArray(STREAMS_ARRAY);
