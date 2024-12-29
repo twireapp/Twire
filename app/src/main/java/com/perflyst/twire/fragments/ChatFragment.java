@@ -46,7 +46,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
 import com.perflyst.twire.R;
-import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.adapters.ChatAdapter;
 import com.perflyst.twire.chat.ChatManager;
@@ -60,6 +59,7 @@ import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.ConstructChatMessageTask;
 import com.perflyst.twire.tasks.GetTwitchEmotesTask;
 import com.perflyst.twire.tasks.SendMessageTask;
+import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.EditTextBackEvent;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.ChatRecyclerView;
@@ -303,7 +303,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     public void onStart() {
         super.onStart();
 
-        TwireApplication.backgroundPoster.post(chatManager);
+        Execute.background(chatManager);
 
         if (supportedTextEmotes == null) {
             supportedTextEmotes = new ArrayList<>();

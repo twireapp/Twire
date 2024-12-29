@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 
 import com.perflyst.twire.R;
-import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.misc.OnlineSince;
@@ -22,6 +21,7 @@ import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 import java.util.Comparator;
@@ -111,7 +111,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         StreamInfo item = getElements().get(itemPosition);
         UserInfo userInfo = item.getUserInfo();
 
-        TwireApplication.backgroundPoster.post(() -> {
+        Execute.background(() -> {
             ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(userInfo.getUserId(), getContext());
 
             Intent intent = new Intent(getContext(), ChannelActivity.class);

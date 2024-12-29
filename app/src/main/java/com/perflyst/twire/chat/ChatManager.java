@@ -10,7 +10,6 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.common.collect.ImmutableSetMultimap;
-import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.model.Badge;
 import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
@@ -19,6 +18,7 @@ import com.perflyst.twire.model.IRCMessage;
 import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
+import com.perflyst.twire.utils.Execute;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -153,7 +153,7 @@ public class ChatManager implements Runnable {
     }
 
     protected void onUpdate(UpdateType type) {
-        TwireApplication.uiThreadPoster.post(() -> {
+        Execute.ui(() -> {
             switch (type) {
                 case ON_CONNECTED:
                     callback.onConnected();
@@ -180,7 +180,7 @@ public class ChatManager implements Runnable {
     }
 
     protected void onMessage(ChatMessage message) {
-        TwireApplication.uiThreadPoster.post(() -> callback.onMessage(message));
+        Execute.ui(() -> callback.onMessage(message));
     }
 
 
@@ -435,10 +435,10 @@ public class ChatManager implements Runnable {
                 handleNotice(message);
                 break;
             case "CLEARCHAT":
-                TwireApplication.uiThreadPoster.post(() -> callback.onClear(message.content));
+                Execute.ui(() -> callback.onClear(message.content));
                 break;
             case "CLEARMSG":
-                TwireApplication.uiThreadPoster.post(() -> callback.onClear(message.tags.get("target-msg-id")));
+                Execute.ui(() -> callback.onClear(message.tags.get("target-msg-id")));
                 break;
             case "JOIN":
                 break;

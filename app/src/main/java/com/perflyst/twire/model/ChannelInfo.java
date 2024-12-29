@@ -10,9 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
 import com.perflyst.twire.R;
-import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.SubscriptionsDbHelper;
+import com.perflyst.twire.utils.Execute;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -153,10 +153,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
     }
 
     public void getFollowers(Context context, Consumer<Integer> callback, int defaultValue) {
-        TwireApplication.backgroundPoster.post(() -> {
-            fetchFollowers(context);
-            TwireApplication.uiThreadPoster.post(() -> callback.accept(Objects.requireNonNullElse(followers, defaultValue)));
-        });
+        Execute.background(() -> fetchFollowers(context), followers -> callback.accept(Objects.requireNonNullElse(followers, defaultValue)));
     }
 
     @Nullable
@@ -216,7 +213,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
 
     @Override
     public void refreshPreview(Context context, Runnable callback) {
-        TwireApplication.backgroundPoster.post(() -> {
+        Execute.background(() -> {
             ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(getUserId(), context);
 
             if (mChannelInfo != null && logoURL != mChannelInfo.getLogoURL()) {

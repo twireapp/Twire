@@ -94,7 +94,6 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.perflyst.twire.PlaybackService;
 import com.perflyst.twire.R;
-import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.activities.stream.StreamActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
@@ -116,6 +115,7 @@ import com.perflyst.twire.tasks.GetPanelsTask;
 import com.perflyst.twire.tasks.GetStreamChattersTask;
 import com.perflyst.twire.tasks.GetStreamViewersTask;
 import com.perflyst.twire.tasks.GetVODStreamURL;
+import com.perflyst.twire.utils.Execute;
 import com.rey.material.widget.ProgressView;
 
 import java.util.ArrayList;
@@ -1426,14 +1426,11 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         mNameView.setText(mUserInfo.getDisplayName());
 
-        TwireApplication.backgroundPoster.post(() -> {
-            ChannelInfo channelInfo = Service.getStreamerInfoFromUserId(mUserInfo.getUserId(), getContext());
-            TwireApplication.uiThreadPoster.post(() -> {
-                channelInfo.getFollowers(getContext(), followers -> Utils.setNumber(mFollowers, followers), 0);
-                Utils.setNumber(mViewers, channelInfo.getViews());
+        Execute.background(() -> Service.getStreamerInfoFromUserId(mUserInfo.getUserId(), getContext()), channelInfo -> {
+            channelInfo.getFollowers(getContext(), followers -> Utils.setNumber(mFollowers, followers), 0);
+            Utils.setNumber(mViewers, channelInfo.getViews());
 
-                setupFollowButton(mFollowButton, channelInfo);
-            });
+            setupFollowButton(mFollowButton, channelInfo);
         });
 
         mFullProfileButton.setOnClickListener(view -> {

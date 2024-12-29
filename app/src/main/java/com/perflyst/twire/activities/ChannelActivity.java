@@ -43,7 +43,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.perflyst.twire.R;
-import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.adapters.VODAdapter;
@@ -57,6 +56,7 @@ import com.perflyst.twire.service.JSONService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetPanelsTask;
+import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.VODAutoSpanBehaviour;
 import com.rey.material.widget.ProgressView;
@@ -573,7 +573,7 @@ public class ChannelActivity extends ThemeActivity {
         public void notifyUserNoElementsAdded() {
             if (mAdapter.getItemCount() > 0) return;
 
-            TwireApplication.uiThreadPoster.post(() -> {
+            Execute.ui(() -> {
                 if (mErrorEmote != null && mErrorText != null) {
                     showError();
                     showError = true;

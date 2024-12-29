@@ -114,9 +114,6 @@ dependencies {
     //https://github.com/google/guava/releases
     api 'com.google.guava:guava:31.0.1-android'
 
-    //https://github.com/techyourchance/thread-poster/releases
-    implementation 'com.techyourchance:threadposter:1.0.1'
-
     //Testing
     testImplementation "junit:junit:4.13.2"
     def androidXTestVersion = "1.4.0"
