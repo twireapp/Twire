@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true">
 
-                <com.perflyst.twire.views.RoundedImageView
+                <ImageView
                     android:id="@+id/profileImageView"
                     android:layout_width="@dimen/streamerInfo_logo_width"
                     android:layout_height="@dimen/streamerInfo_logo_width"

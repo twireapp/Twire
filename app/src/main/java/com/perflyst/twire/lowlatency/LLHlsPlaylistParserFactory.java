@@ -15,8 +15,10 @@
  */
 package com.perflyst.twire.lowlatency;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import androidx.media3.common.util.UnstableApi;
 import androidx.media3.exoplayer.hls.playlist.HlsMediaPlaylist;
 import androidx.media3.exoplayer.hls.playlist.HlsMultivariantPlaylist;
 import androidx.media3.exoplayer.hls.playlist.HlsPlaylist;
@@ -24,17 +26,19 @@ import androidx.media3.exoplayer.hls.playlist.HlsPlaylistParserFactory;
 import androidx.media3.exoplayer.upstream.ParsingLoadable;
 
 /** Default implementation for {@link HlsPlaylistParserFactory}. */
-public final class LLHlsPlaylistParserFactory implements HlsPlaylistParserFactory {
+@UnstableApi public final class LLHlsPlaylistParserFactory implements HlsPlaylistParserFactory {
 
+  @NonNull
   @Override
   public ParsingLoadable.Parser<HlsPlaylist> createPlaylistParser() {
     return new LLHlsPlaylistParser();
   }
 
+  @NonNull
   @Override
   public ParsingLoadable.Parser<HlsPlaylist> createPlaylistParser(
-      HlsMultivariantPlaylist multivariantPlaylist,
-      @Nullable HlsMediaPlaylist previousMediaPlaylist) {
+          @NonNull HlsMultivariantPlaylist multivariantPlaylist,
+          @Nullable HlsMediaPlaylist previousMediaPlaylist) {
     return new LLHlsPlaylistParser(multivariantPlaylist, previousMediaPlaylist);
   }
 }

@@ -40,7 +40,7 @@ public class GetFollowsFromDB extends AsyncTask<Context, Void, Map<String, Chann
     }
 
     protected void onPostExecute(Map<String, ChannelInfo> subscriptions) {
-        if (subscriptions != null && subscriptions.size() > 0) {
+        if (subscriptions != null && !subscriptions.isEmpty()) {
             // Add the streamers to the static list field to ensure we don't waste time and resources getting the streamers from the database again.
             TempStorage.addLoadedStreamer(subscriptions.values());
         }

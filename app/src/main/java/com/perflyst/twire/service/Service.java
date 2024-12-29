@@ -405,9 +405,7 @@ public class Service {
             navButtonField.setAccessible(true);
 
             return (ImageButton) navButtonField.get(toolbar);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
         }
 
@@ -653,8 +651,9 @@ public class Service {
         String query = "SELECT * FROM " + SubscriptionsDbHelper.TABLE_NAME + " WHERE " + SubscriptionsDbHelper.COLUMN_ID + "='" + streamerId + "';";
         boolean result = false;
         Cursor cursor = db.rawQuery(query, null);
+        int columnIndex = cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW);
         if (cursor.moveToFirst()) {
-            result = cursor.getInt(cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW)) > 0;
+            result = cursor.getInt(columnIndex) > 0;
         }
         cursor.close();
         db.close();

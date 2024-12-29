@@ -31,12 +31,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/show_viewercount_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickShowViewerCount">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/player_show_viewercount_title"
@@ -71,12 +71,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/show_runtime_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickShowRuntime">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/player_show_runtime"
@@ -111,12 +111,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/show_navigation_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickShowNavigationBar">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/player_show_navigation_title"
@@ -151,12 +151,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/auto_playback_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickAutoPlayback">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/player_auto_continue_playback_title"
@@ -191,12 +191,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/locked_playback_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickLockedPlayback">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/player_locked_playback_title"
@@ -231,12 +231,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/player_type_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickPlayerType">
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/player_type_title"
@@ -267,12 +267,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/player_proxy_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickPlayerProxy">
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/player_proxy_title"

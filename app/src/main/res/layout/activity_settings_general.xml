@@ -32,12 +32,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/twitch_name_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickTwitchName">
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/general_twitch_name"
@@ -68,12 +68,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/start_page_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickStartPage">
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/message_size_title"
@@ -105,12 +105,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/reset_tips_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickResetTips">
+                    android:gravity="center_vertical">
 
                     <TextView
                         style="@style/text_settings"
@@ -133,12 +133,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/language_filter_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickFiltersStreamsByLanguageEnable">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/language_filter_title"
@@ -166,12 +166,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/changelog_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickOpenChangelog">
+                    android:gravity="center_vertical">
 
                     <TextView
                         style="@style/text_settings"
@@ -194,12 +194,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/image_proxy_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickImageProxy">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/general_image_proxy"
@@ -268,7 +268,6 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/player_proxy_url_info"
                         android:layout_alignRight="@id/image_proxy_url_input"
-                        android:onClick="onClickImageProxyUrl"
                         android:text="@string/settings_general_image_proxy_url_button" />
 
                 </RelativeLayout>
@@ -297,13 +296,13 @@
                 app:mrl_rippleDelayClick="false">
 
                 <LinearLayout
+                    android:id="@+id/wipe_follows_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:onClick="onClickWipeFollows">
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/general_follows_wipe"
@@ -334,13 +333,13 @@
                 app:mrl_rippleDelayClick="false">
 
                 <LinearLayout
+                    android:id="@+id/export_follows_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:onClick="onExport">
+                    android:orientation="vertical">
 
                     <TextView
                         style="@style/text_settings"
@@ -370,13 +369,13 @@
                 app:mrl_rippleDelayClick="false">
 
                 <LinearLayout
+                    android:id="@+id/import_follows_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
                     android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:onClick="onImport">
+                    android:orientation="vertical">
 
                     <TextView
                         style="@style/text_settings"

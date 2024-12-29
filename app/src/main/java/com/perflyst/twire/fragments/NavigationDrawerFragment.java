@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.AnimRes;
-import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -63,13 +63,13 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentNavigationDrawerBinding.inflate(inflater, container, false);
 
         mStreamsCount = binding.streamsCount;
         mStreamsCountWrapper = binding.streamsCountWrapper;
-        containerView = binding.drawerContainer;
+        containerView = container;
         mAppTitleView = binding.txtAppName;
         mUserNameTextView = binding.txtTwitchDisplayname;
         mAppIcon = binding.imgAppIcon;
@@ -78,6 +78,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         initHeaderImage(binding.imgDrawerBanner);
         fetchAndSetOnlineSteamsCount();
+        setClickListeners();
+        checkUserLogin();
 
         return binding.getRoot();
     }
@@ -163,25 +165,21 @@ public class NavigationDrawerFragment extends Fragment {
 
         // This simple method gives us the burger icon for the toolbar
         mDrawerLayout.post(() -> mDrawerToggle.syncState());
-
-        setClickListeners();
-        checkUserLogin();
     }
 
     private void setClickListeners() {
         // OnClick listeners for the items
-        setOnClick(R.id.featured_streams_container, FeaturedStreamsActivity.class);
-        setOnClick(R.id.top_streams_container, TopStreamsActivity.class);
-        setOnClick(R.id.top_games_container, TopGamesActivity.class);
-        setOnClick(R.id.my_channels_container, MyChannelsActivity.class);
-        setOnClick(R.id.my_streams_container, MyStreamsActivity.class);
+        setOnClick(binding.featuredStreamsContainer, FeaturedStreamsActivity.class);
+        setOnClick(binding.topStreamsContainer, TopStreamsActivity.class);
+        setOnClick(binding.topGamesContainer, TopGamesActivity.class);
+        setOnClick(binding.myChannelsContainer, MyChannelsActivity.class);
+        setOnClick(binding.myStreamsContainer, MyStreamsActivity.class);
 
-        setInstantOnClick(R.id.search_container, SearchActivity.class, R.anim.slide_in_bottom_anim);
-        setInstantOnClick(R.id.settings_container, SettingsActivity.class, R.anim.slide_in_right_anim);
+        setInstantOnClick(binding.searchContainer, SearchActivity.class, R.anim.slide_in_bottom_anim);
+        setInstantOnClick(binding.settingsContainer, SettingsActivity.class, R.anim.slide_in_right_anim);
     }
 
-    private void setInstantOnClick(@IdRes int viewRes, final Class activityClass, @AnimRes final int inAnimation) {
-        View view = getActivity().findViewById(viewRes);
+    private void setInstantOnClick(View view, final Class activityClass, @AnimRes final int inAnimation) {
         view.setOnClickListener(view1 -> {
             Intent intent = new Intent(getActivity(), activityClass);
 
@@ -191,9 +189,7 @@ public class NavigationDrawerFragment extends Fragment {
         });
     }
 
-    private void setOnClick(@IdRes int viewID, Class aActivity) {
-        View view = getActivity().findViewById(viewID);
-
+    private void setOnClick(View view, Class aActivity) {
         if (getActivity().getClass() == aActivity) {
             // Get the attribute highlight color
             TypedValue a = new TypedValue();

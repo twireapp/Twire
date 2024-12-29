@@ -23,6 +23,7 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Base64;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import androidx.media3.common.C;
@@ -30,6 +31,7 @@ import androidx.media3.common.Format;
 import androidx.media3.common.ParserException;
 import androidx.media3.common.DrmInitData;
 import androidx.media3.common.DrmInitData.SchemeData;
+import androidx.media3.common.util.UnstableApi;
 import androidx.media3.extractor.mp4.PsshAtomUtil;
 import androidx.media3.common.Metadata;
 import androidx.media3.exoplayer.hls.HlsTrackMetadataEntry;
@@ -72,7 +74,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /** HLS playlists parsing logic. */
-public final class LLHlsPlaylistParser implements ParsingLoadable.Parser<HlsPlaylist> {
+@UnstableApi public final class LLHlsPlaylistParser implements ParsingLoadable.Parser<HlsPlaylist> {
 
     /** Exception thrown when merging a delta update fails. */
     public static final class DeltaUpdateException extends IOException {}
@@ -258,8 +260,9 @@ public final class LLHlsPlaylistParser implements ParsingLoadable.Parser<HlsPlay
         this.previousMediaPlaylist = previousMediaPlaylist;
     }
 
+    @NonNull
     @Override
-    public HlsPlaylist parse(Uri uri, InputStream inputStream) throws IOException {
+    public HlsPlaylist parse(@NonNull Uri uri, @NonNull InputStream inputStream) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         Queue<String> extraLines = new ArrayDeque<>();
         String line;

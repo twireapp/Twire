@@ -274,23 +274,23 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
 
         rootView = (ViewGroup) mRootView;
-        mVideoInterface = mRootView.findViewById(R.id.video_interface);
-        mToolbar = mRootView.findViewById(R.id.main_toolbar);
-        mTitleText = mRootView.findViewById(R.id.toolbar_title);
-        mControlToolbar = mRootView.findViewById(R.id.control_toolbar_wrapper);
-        mVideoWrapper = mRootView.findViewById(R.id.video_wrapper);
         mVideoView = mRootView.findViewById(R.id.VideoView);
-        mPlayPauseWrapper = mRootView.findViewById(R.id.play_pause_wrapper);
-        mPlayIcon = mRootView.findViewById(R.id.ic_play);
-        mPauseIcon = mRootView.findViewById(R.id.ic_pause);
-        mPreview = mRootView.findViewById(R.id.preview);
-        mQualityButton = mRootView.findViewById(R.id.settings_icon);
-        mFullScreenButton = mRootView.findViewById(R.id.fullscreen_icon);
-        mShowChatButton = mRootView.findViewById(R.id.show_chat_button);
-        castingTextView = mRootView.findViewById(R.id.chromecast_text);
-        mBufferingView = mRootView.findViewById(R.id.exo_buffering);
-        mCurrentViewersView = mRootView.findViewById(R.id.txtViewViewers);
-        mRuntime = mRootView.findViewById(R.id.txtViewRuntime);
+        mVideoInterface = mVideoView.findViewById(R.id.video_interface);
+        mToolbar = mVideoView.findViewById(R.id.main_toolbar);
+        mTitleText = mVideoView.findViewById(R.id.toolbar_title);
+        mControlToolbar = mVideoView.findViewById(R.id.control_toolbar_wrapper);
+        mVideoWrapper = mRootView.findViewById(R.id.video_wrapper);
+        mPlayPauseWrapper = mVideoView.findViewById(R.id.play_pause_wrapper);
+        mPlayIcon = mVideoView.findViewById(R.id.ic_play);
+        mPauseIcon = mVideoView.findViewById(R.id.ic_pause);
+        mPreview = mVideoView.findViewById(R.id.preview);
+        mQualityButton = mVideoView.findViewById(R.id.settings_icon);
+        mFullScreenButton = mVideoView.findViewById(R.id.fullscreen_icon);
+        mShowChatButton = mVideoView.findViewById(R.id.show_chat_button);
+        castingTextView = mVideoView.findViewById(R.id.chromecast_text);
+        mBufferingView = mVideoView.findViewById(R.id.exo_buffering);
+        mCurrentViewersView = mVideoView.findViewById(R.id.txtViewViewers);
+        mRuntime = mVideoView.findViewById(R.id.txtViewRuntime);
         mActivity = (AppCompatActivity) getActivity();
         mOverlay = mVideoView.getOverlayFrameLayout();
 
@@ -330,7 +330,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mOverlay.setOnClickListener(view -> mVideoView.performClick());
 
         if (vodId == null) {
-            View mTimeController = mRootView.findViewById(R.id.time_controller);
+            View mTimeController = mVideoView.findViewById(R.id.time_controller);
             mTimeController.setVisibility(View.INVISIBLE);
 
             if (!settings.getStreamPlayerRuntime()) {
@@ -351,7 +351,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             mCurrentViewersView.setVisibility(View.GONE);
             mRuntime.setVisibility(View.GONE);
 
-            mRootView.findViewById(R.id.exo_position).setOnClickListener(v -> showSeekDialog());
+            mVideoView.findViewById(R.id.exo_position).setOnClickListener(v -> showSeekDialog());
         }
 
         if (autoPlay || vodId != null) {
@@ -361,7 +361,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             mRootView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
                 @Override
-                public void onViewAttachedToWindow(View v) {
+                public void onViewAttachedToWindow(@NonNull View v) {
                     DisplayCutout displayCutout = getDisplayCutout();
                     if (displayCutout != null) {
                         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -377,7 +377,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 }
 
                 @Override
-                public void onViewDetachedFromWindow(View v) {
+                public void onViewDetachedFromWindow(@NonNull View v) {
                 }
             });
         }

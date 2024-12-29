@@ -35,7 +35,7 @@ public class TempStorage {
     }
 
     public static boolean hasLoadedStreamers() {
-        return getLoadedStreamers().size() > 0;
+        return !getLoadedStreamers().isEmpty();
     }
 
     public static boolean containsLoadedStreamer(ChannelInfo aStreamer) {

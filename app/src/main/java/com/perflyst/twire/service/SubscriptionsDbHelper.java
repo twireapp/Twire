@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -168,7 +167,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 } else {
                     db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
                 }
-
+                cursor.close();
             }
             return channels.length();
         } catch (JSONException e) {
@@ -258,8 +257,6 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 sb.append(line);
             }
             return sb.toString();
-        } catch (FileNotFoundException fileNotFound) {
-            return null;
         } catch (IOException ioException) {
             return null;
         }

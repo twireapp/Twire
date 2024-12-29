@@ -15,7 +15,7 @@
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/appearance_fragment"
         android:name="com.perflyst.twire.fragments.AppearanceSettingsFragment"
         android:layout_width="match_parent"

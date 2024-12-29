@@ -25,6 +25,7 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.palette.graphics.Palette;
@@ -194,7 +195,9 @@ public class ChannelActivity extends ThemeActivity {
         return new CustomTarget<>() {
             @Override
             public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-                streamerImage.setImageBitmap(bitmap);
+                var drawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+                drawable.setCircular(true);
+                streamerImage.setImageDrawable(drawable);
             }
 
             @Override
@@ -208,7 +211,9 @@ public class ChannelActivity extends ThemeActivity {
         return new CustomTarget<>() {
             @Override
             public void onResourceReady(@NonNull Bitmap bitmap, @Nullable Transition<? super Bitmap> transition) {
-                streamerImage.setImageBitmap(bitmap);
+                var drawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+                drawable.setCircular(true);
+                streamerImage.setImageDrawable(drawable);
 
                 Palette palette = Palette.from(bitmap).generate();
                 int defaultColor = Service.getColorAttribute(androidx.appcompat.R.attr.colorPrimary, R.color.primary, getBaseContext());
@@ -312,22 +317,22 @@ public class ChannelActivity extends ThemeActivity {
                 .setInterpolator(new AccelerateInterpolator())
                 .setListener(new Animator.AnimatorListener() {
                     @Override
-                    public void onAnimationStart(Animator animation) {
+                    public void onAnimationStart(@NonNull Animator animation) {
                         mFab.setClickable(false);
                     }
 
                     @Override
-                    public void onAnimationEnd(Animator animation) {
+                    public void onAnimationEnd(@NonNull Animator animation) {
                         mFab.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
+                    public void onAnimationCancel(@NonNull Animator animation) {
 
                     }
 
                     @Override
-                    public void onAnimationRepeat(Animator animation) {
+                    public void onAnimationRepeat(@NonNull Animator animation) {
 
                     }
                 })
@@ -342,22 +347,22 @@ public class ChannelActivity extends ThemeActivity {
                 .setInterpolator(new OvershootInterpolator())
                 .setListener(new Animator.AnimatorListener() {
                     @Override
-                    public void onAnimationStart(Animator animation) {
+                    public void onAnimationStart(@NonNull Animator animation) {
                         mFab.setVisibility(View.VISIBLE);
                     }
 
                     @Override
-                    public void onAnimationEnd(Animator animation) {
+                    public void onAnimationEnd(@NonNull Animator animation) {
                         mFab.setClickable(true);
                     }
 
                     @Override
-                    public void onAnimationCancel(Animator animation) {
+                    public void onAnimationCancel(@NonNull Animator animation) {
 
                     }
 
                     @Override
-                    public void onAnimationRepeat(Animator animation) {
+                    public void onAnimationRepeat(@NonNull Animator animation) {
 
                     }
                 })

@@ -89,7 +89,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         // Create array with values to send with intent - I think
         String[] toSend = {
                 String.valueOf(this.getUserId()),

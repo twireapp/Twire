@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
 import com.perflyst.twire.activities.setup.LoginActivity;
+import com.perflyst.twire.databinding.ActivitySettingsGeneralBinding;
 import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
@@ -36,7 +37,8 @@ public class SettingsGeneralActivity extends ThemeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_general);
+        var binding = ActivitySettingsGeneralBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         settings = new Settings(getBaseContext());
 
         final Toolbar toolbar = findViewById(R.id.settings_general_toolbar);
@@ -58,6 +60,17 @@ public class SettingsGeneralActivity extends ThemeActivity {
         initTwitchDisplayName();
         initStartPageText();
         initFilterTopsStreamsByLanguage();
+
+        binding.twitchNameButton.setOnClickListener(this::onClickTwitchName);
+        binding.startPageButton.setOnClickListener(this::onClickStartPage);
+        binding.resetTipsButton.setOnClickListener(this::onClickResetTips);
+        binding.languageFilterButton.setOnClickListener(this::onClickFiltersStreamsByLanguageEnable);
+        binding.changelogButton.setOnClickListener(this::onClickOpenChangelog);
+        binding.imageProxyButton.setOnClickListener(this::onClickImageProxy);
+        binding.imageProxyUrlButton.setOnClickListener(this::onClickImageProxyUrl);
+        binding.wipeFollowsButton.setOnClickListener(this::onClickWipeFollows);
+        binding.exportFollowsButton.setOnClickListener(this::onExport);
+        binding.importFollowsButton.setOnClickListener(this::onImport);
     }
 
     @Override

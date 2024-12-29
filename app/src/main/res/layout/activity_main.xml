@@ -133,7 +133,7 @@
 
 
     <!-- The navigation drawer-->
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/drawer_fragment"
         android:name="com.perflyst.twire.fragments.NavigationDrawerFragment"
         android:layout_width="@dimen/navigation_drawer_width"

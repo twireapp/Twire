@@ -154,7 +154,7 @@ public class JSONService {
             logoURL = new URL(channel.getString(LOGO_URL_STRING));
         }
 
-        if (!channel.getString(VIDEO_BANNER_URL_STRING).equals("")) {
+        if (!channel.getString(VIDEO_BANNER_URL_STRING).isEmpty()) {
             videoBannerURL = new URL(channel.getString(VIDEO_BANNER_URL_STRING));
         }
 

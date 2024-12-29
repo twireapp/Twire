@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
+import com.perflyst.twire.databinding.ActivitySettingsTwitchChatBinding;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
@@ -24,7 +25,8 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_twitch_chat);
+        var binding = ActivitySettingsTwitchChatBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         settings = new Settings(getBaseContext());
 
         final Toolbar toolbar = findViewById(R.id.settings_player_toolbar);
@@ -54,6 +56,17 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         chat_enable_account_connect = findViewById(R.id.chat_enable_account_connect);
 
         updateSummaries();
+
+        binding.emoteSizeButton.setOnClickListener(this::onClickEmoteSize);
+        binding.messageSizeButton.setOnClickListener(this::onClickMessageSize);
+        binding.landscapeEnableButton.setOnClickListener(this::onClickChatLandscapeEnable);
+        binding.landscapeSwipeButton.setOnClickListener(this::onClickChatLandscapeSwipeable);
+        binding.landscapeWidthButton.setOnClickListener(this::onClickChatLandScapeWidth);
+        binding.enableSslButton.setOnClickListener(this::onClickChatEnableSSL);
+        binding.accountConnectButton.setOnClickListener(this::onClickChatAccountConnect);
+        binding.emoteBttvButton.setOnClickListener(this::onClickChatEmoteBTTV);
+        binding.emoteFfzButton.setOnClickListener(this::onClickChatEmoteFFZ);
+        binding.emoteSeventvButton.setOnClickListener(this::onClickChatEmoteSEVENTV);
     }
 
     private void updateSummary(CheckedTextView checkView, TextView summary, boolean isEnabled) {

@@ -31,12 +31,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/emote_size_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickEmoteSize">
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/chat_emote_size_title"
@@ -67,12 +67,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/message_size_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickMessageSize">
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/message_size_title"
@@ -104,12 +104,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/landscape_enable_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickChatLandscapeEnable">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/chat_landscape_enable_title"
@@ -145,12 +145,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/landscape_swipe_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickChatLandscapeSwipeable">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/chat_landscape_swipe_title"
@@ -185,12 +185,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/landscape_width_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickChatLandScapeWidth">
+                    android:gravity="center_vertical">
 
                     <TextView
                         android:id="@+id/chat_landscape_title"
@@ -222,12 +222,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/enable_ssl_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickChatEnableSSL">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/chat_enable_ssl"
@@ -256,19 +256,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_divider_height"
                 android:background="?attr/dividerColor" />
-  
+
           <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/account_connect_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickChatAccountConnect">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/chat_enable_account_connect"
@@ -297,20 +297,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/settings_divider_height"
                 android:background="?attr/dividerColor" />
-          
-          
+
+
             <com.balysv.materialripple.MaterialRippleLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/emote_bttv_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickChatEmoteBTTV">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/chat_enable_emote_bttv"
@@ -346,12 +346,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/emote_ffz_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickChatEmoteFFZ">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/chat_enable_emote_ffz"
@@ -387,12 +387,12 @@
                 app:mrl_rippleDelayClick="false">
 
                 <RelativeLayout
+                    android:id="@+id/emote_seventv_button"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/settings_small_item_height"
                     android:clickable="true"
                     android:focusable="true"
-                    android:gravity="center_vertical"
-                    android:onClick="onClickChatEmoteSEVENTV">
+                    android:gravity="center_vertical">
 
                     <CheckedTextView
                         android:id="@+id/chat_enable_emote_seventv"

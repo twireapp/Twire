@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.ThemeActivity;
+import com.perflyst.twire.databinding.ActivitySettingsStreamPlayerBinding;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
 
@@ -27,7 +28,8 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_stream_player);
+        var binding = ActivitySettingsStreamPlayerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         settings = new Settings(getBaseContext());
         mShowNavigationBarView = findViewById(R.id.player_show_navigation_title);
@@ -52,6 +54,14 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         }
 
         updateSummaries();
+
+        binding.showViewercountButton.setOnClickListener(this::onClickShowViewerCount);
+        binding.showRuntimeButton.setOnClickListener(this::onClickShowRuntime);
+        binding.showNavigationButton.setOnClickListener(this::onClickShowNavigationBar);
+        binding.autoPlaybackButton.setOnClickListener(this::onClickAutoPlayback);
+        binding.lockedPlaybackButton.setOnClickListener(this::onClickLockedPlayback);
+        binding.playerTypeButton.setOnClickListener(this::onClickPlayerType);
+        binding.playerProxyButton.setOnClickListener(this::onClickPlayerProxy);
     }
 
     @Override

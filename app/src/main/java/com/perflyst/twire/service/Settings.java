@@ -938,7 +938,7 @@ public class Settings {
 
     public String getImageProxyUrl() {
         SharedPreferences preferences = getPreferences();
-        return String.valueOf(preferences.getString(this.GENERAL_IMAGE_PROXY_URL, "https://external-content.duckduckgo.com/iu/?u="));
+        return preferences.getString(this.GENERAL_IMAGE_PROXY_URL, "https://external-content.duckduckgo.com/iu/?u=");
     }
 
     public void setImageProxyUrl(String url) {

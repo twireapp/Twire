@@ -3,6 +3,7 @@ package com.perflyst.twire.tasks;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -36,7 +37,7 @@ public class GetStreamsCountTask extends AsyncTask<Void, Void, Integer> {
             String user_logins = "";
 
             GetFollowsFromDB subscriptionsTask = new GetFollowsFromDB(context.get());
-            subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, settings.getContext());
+            TwireApplication.uiThreadPoster.post(() -> subscriptionsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, settings.getContext()));
 
             ArrayList<String> requesturls = new ArrayList<>();
             boolean first_id = true;

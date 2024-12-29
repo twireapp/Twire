@@ -438,11 +438,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 }
             }
 
-            if (emotesToHide.size() > 0 && recentEmotesFragment.mAdapter != null) {
+            if (!emotesToHide.isEmpty() && recentEmotesFragment.mAdapter != null) {
                 recentEmotesFragment.mAdapter.hideEmotes();
             }
 
-            if (emotesToRemove.size() > 0 && recentEmotesFragment != null) {
+            if (!emotesToRemove.isEmpty() && recentEmotesFragment != null) {
                 recentEmotes.removeAll(emotesToRemove);
 
                 if (recentEmotesFragment.mAdapter != null) {
@@ -480,7 +480,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     }
 
     private void subscriberEmotesLoaded(List<Emote> subscriberEmotesLoaded, EmotesPagerAdapter adapter) {
-        if (subscriberEmotesLoaded.size() > 0 && adapter != null && getContext() != null) {
+        if (!subscriberEmotesLoaded.isEmpty() && adapter != null && getContext() != null) {
             Log.d(LOG_TAG, "Adding subscriber emotes: " + subscriberEmotesLoaded.size());
 
             Drawable icon = AppCompatResources.getDrawable(getContext(), R.drawable.ic_attach_money);
@@ -946,7 +946,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             FragmentEmoteGridBinding binding = FragmentEmoteGridBinding.inflate(inflater);
 
