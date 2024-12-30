@@ -2,8 +2,6 @@ package com.perflyst.twire.activities.main;
 
 import static com.perflyst.twire.misc.Utils.getSystemLanguage;
 
-import android.util.Log;
-
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
@@ -21,6 +19,8 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
@@ -47,7 +47,7 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public void addToAdapter(List<StreamInfo> streamsToAdd) {
         mAdapter.addList(streamsToAdd);
-        Log.i(LOG_TAG, "Adding Top Streams: " + streamsToAdd.size());
+        Timber.i("Adding Top Streams: %s", streamsToAdd.size());
     }
 
     @Override

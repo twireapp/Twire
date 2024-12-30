@@ -6,7 +6,6 @@ import static com.perflyst.twire.service.Service.getStreamerInfoFromUserId;
 import static com.perflyst.twire.service.Service.makeRequest;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.service.Service;
@@ -25,6 +24,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Request;
+import timber.log.Timber;
 
 /**
  * Connects to Twitch to retrieve a list of streamers that a specified user follow.
@@ -33,7 +33,6 @@ import okhttp3.Request;
  */
 
 public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
-    private final String LOG_TAG = getClass().getSimpleName();
     private final long timerStart = System.currentTimeMillis();
     private final WeakReference<Context> baseContext;
 
@@ -84,7 +83,7 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
                 currentCursor = pagination.getString("cursor");
             }
         } catch (JSONException e) {
-            Log.w(LOG_TAG, e.getMessage());
+            Timber.w(e);
         }
         // ------- Has now loaded all the user's followed streamers ----------
 
@@ -144,14 +143,14 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
 
         // If there are any streamers to add to the DB - Create a task and do so.
         if (!streamersToAddToDB.isEmpty()) {
-            Log.d(LOG_TAG, "Starting task to add " + streamersToAddToDB.size() + " to the db");
+            Timber.d("Starting task to add " + streamersToAddToDB.size() + " to the db");
             Execute.background(new AddFollowsToDB(baseContext.get(), streamersToAddToDB));
         } else {
-            Log.d(LOG_TAG, "Found no new streamers to add to the database");
+            Timber.d("Found no new streamers to add to the database");
         }
 
         long duration = System.currentTimeMillis() - this.timerStart;
-        Log.d(LOG_TAG, "Completed task in " + TimeUnit.MILLISECONDS.toSeconds(duration) + " seconds");
+        Timber.d("Completed task in " + TimeUnit.MILLISECONDS.toSeconds(duration) + " seconds");
 
         return streamersToAddToDB;
     }
@@ -173,7 +172,7 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
                 }
                 streamers.add(info);
             }
-            Log.d(LOG_TAG, "Thread - Adding " + streamers.size() + " streamers");
+            Timber.d("Thread - Adding " + streamers.size() + " streamers");
         }
 
         public ArrayList<ChannelInfo> getStreamers() {

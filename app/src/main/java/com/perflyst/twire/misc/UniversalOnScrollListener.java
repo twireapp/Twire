@@ -4,7 +4,6 @@ import android.animation.ArgbEvaluator;
 import android.animation.FloatEvaluator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -21,11 +20,12 @@ import com.perflyst.twire.service.Service;
 import com.perflyst.twire.utils.AnimationListenerAdapter;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
+import timber.log.Timber;
+
 /**
  * Created by Sebastian on 06-08-2015.
  */
 public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
-    private final String LOG_TAG;
     private final boolean isMainActivity;
     private final AppCompatActivity mActivity;
     private final Toolbar mMainToolbar;
@@ -42,8 +42,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
     private Animation mShowShadowAnimation;
     private Animation mFadeShadowAnimation;
 
-    public UniversalOnScrollListener(AppCompatActivity mActivity, Toolbar mMainToolbar, Toolbar mDecorativeToolbar, View mToolbarShadow, View mIconCircle, TextView mIconText, String LOG_TAG, boolean isMainActivity) {
-        this.LOG_TAG = LOG_TAG;
+    public UniversalOnScrollListener(AppCompatActivity mActivity, Toolbar mMainToolbar, Toolbar mDecorativeToolbar, View mToolbarShadow, View mIconCircle, TextView mIconText, boolean isMainActivity) {
         this.mActivity = mActivity;
         this.mMainToolbar = mMainToolbar;
         this.mDecorativeToolbar = mDecorativeToolbar;
@@ -218,7 +217,7 @@ public class UniversalOnScrollListener extends RecyclerView.OnScrollListener {
 
             if (amountScrolled < 0) {
                 amountScrolled = 0;
-                Log.w(LOG_TAG, "RESETTING SCROLLED");
+                Timber.w("RESETTING SCROLLED");
             }
         }
     }

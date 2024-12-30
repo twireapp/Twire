@@ -12,7 +12,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.util.Patterns;
 import android.util.TypedValue;
 import android.view.HapticFeedbackConstants;
@@ -40,11 +39,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 
+import timber.log.Timber;
+
 /**
  * Created by SebastianRask on 03-03-2016.
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHolder> {
-    private final String LOG_TAG = getClass().getSimpleName();
     private final List<ChatMessage> messages;
     private final ChatRecyclerView mRecyclerView;
     private final Activity context;
@@ -136,7 +136,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
         } catch (Exception e) {
             //In case twitch doesn't comply to their own API.
-            Log.d(LOG_TAG, "Failed to show Message");
+            Timber.d("Failed to show Message");
             e.printStackTrace();
         }
     }
@@ -232,7 +232,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             checkSize();
             mRecyclerView.scrollToPosition(messages.size() - 1);
         }
-        Log.v(LOG_TAG, "Adding Message " + message.getMessage());
+        Timber.v("Adding Message %s", message.getMessage());
     }
 
     public void clear() {

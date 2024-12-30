@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -21,12 +20,12 @@ import com.perflyst.twire.model.UserInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 /**
  * Created by Sebastian Rask on 18-06-2016.
  */
 public class LiveStreamActivity extends StreamActivity {
-
-    private final String LOG_TAG = getClass().getSimpleName();
     private RecyclerView mMentionRecyclerView;
     private MentionAdapter mMentionAdapter;
     private View mMentionContainer;
@@ -87,7 +86,7 @@ public class LiveStreamActivity extends StreamActivity {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "Live stream activity stopped");
+        Timber.d("Live stream activity stopped");
     }
 
     @Override

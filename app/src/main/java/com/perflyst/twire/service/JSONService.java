@@ -22,8 +22,6 @@ import java.util.regex.Pattern;
  * Created by Sebastian Rask on 25-04-2016.
  */
 public class JSONService {
-    private static final String LOG_TAG = JSONService.class.getSimpleName();
-
     // based on https://github.com/twurple/twurple/blob/6d3ca508fe0a21fadd77b63b62d0df66b9150f97/packages/api/src/api/helix/video/HelixVideo.ts#L175
     public static int getVodLength(String length) {
         int all = 0;

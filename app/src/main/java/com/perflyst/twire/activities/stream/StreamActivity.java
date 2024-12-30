@@ -15,7 +15,6 @@ import android.transition.Fade;
 import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,8 +38,9 @@ import com.perflyst.twire.service.Settings;
 import java.util.List;
 import java.util.Set;
 
+import timber.log.Timber;
+
 public abstract class StreamActivity extends ThemeActivity implements StreamFragment.StreamFragmentListener {
-    private final String LOG_TAG = getClass().getSimpleName();
     public StreamFragment mStreamFragment;
     public ChatFragment mChatFragment;
     private Settings settings;
@@ -236,7 +236,7 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
         if (landscape) {
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) findViewById(R.id.chat_landscape_fragment).getLayoutParams();
             lp.width = (int) (StreamFragment.getScreenRect(this).height() * (settings.getChatLandscapeWidth() / 100.0));
-            Log.d(LOG_TAG, "TARGET WIDTH: " + lp.width);
+            Timber.d("TARGET WIDTH: %s", lp.width);
             chat.setLayoutParams(lp);
         } else {
             chat.setLayoutParams(findViewById(R.id.chat_placement_wrapper).getLayoutParams());

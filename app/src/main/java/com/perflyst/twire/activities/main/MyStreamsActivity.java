@@ -1,7 +1,5 @@
 package com.perflyst.twire.activities.main;
 
-import android.util.Log;
-
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.perflyst.twire.R;
@@ -25,6 +23,8 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import timber.log.Timber;
 
 public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
 
@@ -51,7 +51,7 @@ public class MyStreamsActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public void addToAdapter(List<StreamInfo> aObjectList) {
         mAdapter.addList(aObjectList);
-        Log.i(LOG_TAG, "Adding Top Streams: " + aObjectList.size());
+        Timber.i("Adding Top Streams: %s", aObjectList.size());
     }
 
     @Override

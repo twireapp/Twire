@@ -1,7 +1,5 @@
 package com.perflyst.twire.tasks;
 
-import android.util.Log;
-
 import com.perflyst.twire.activities.setup.LoginActivity;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -12,11 +10,12 @@ import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 
+import timber.log.Timber;
+
 /**
  * Created by SebastianRask on 03-11-2015.
  */
 public class HandlerUserLoginTask implements Runnable {
-    private final String LOG_TAG = getClass().getSimpleName();
     private final WeakReference<LoginActivity> mLoginActivity;
 
     public HandlerUserLoginTask(LoginActivity mLoginActivity) {
@@ -29,7 +28,7 @@ public class HandlerUserLoginTask implements Runnable {
             // the User is fetched by the Bearer token
             String BASE_USER_INFO_URL = "https://api.twitch.tv/helix/users";
             String jsonString = Service.urlToJSONStringHelix(BASE_USER_INFO_URL, mLoginActivity.get());
-            Log.d(LOG_TAG, "JSON: " + jsonString);
+            Timber.d("JSON: %s", jsonString);
 
             JSONObject baseJSON = new JSONObject(jsonString).getJSONArray("data").getJSONObject(0);
             // This is the keys to get information from the JSONObject
@@ -67,7 +66,7 @@ public class HandlerUserLoginTask implements Runnable {
             };
 
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "CAUGHT EXCEPTION " + e.getMessage() + " WHILE HANDLING USER LOGIN");
+            Timber.e("CAUGHT EXCEPTION " + e.getMessage() + " WHILE HANDLING USER LOGIN");
         }
 
         if (mUserInfo != null) {

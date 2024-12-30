@@ -2,7 +2,6 @@ package com.perflyst.twire.activities.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,8 +26,9 @@ import com.perflyst.twire.service.SubscriptionsDbHelper;
 
 import java.util.regex.Matcher;
 
+import timber.log.Timber;
+
 public class SettingsGeneralActivity extends ThemeActivity {
-    private final String LOG_TAG = getClass().getSimpleName();
     private Settings settings;
     private TextView twitchNameView, startPageSubText, general_image_proxy_summary;
     private CheckedTextView filterTopStreamsByLanguageView, general_image_proxy;
@@ -211,10 +211,10 @@ public class SettingsGeneralActivity extends ThemeActivity {
         Matcher matcher = Patterns.WEB_URL.matcher(proxy_url);
         if (matcher.find()) {
             settings.setImageProxyUrl(proxy_url);
-            Log.d(LOG_TAG, "Setting as Image Proxy: " + proxy_url);
+            Timber.d("Setting as Image Proxy: %s", proxy_url);
             updateSummaries();
         } else {
-            Log.d(LOG_TAG, "Url looks wrong" + proxy_url);
+            Timber.d("Url looks wrong%s", proxy_url);
         }
     }
 

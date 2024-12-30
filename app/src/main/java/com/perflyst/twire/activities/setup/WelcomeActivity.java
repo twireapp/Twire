@@ -3,7 +3,6 @@ package com.perflyst.twire.activities.setup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -26,6 +25,7 @@ import com.perflyst.twire.utils.AnimationListenerAdapter;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
+import timber.log.Timber;
 
 
 public class WelcomeActivity extends SetupBaseActivity {
@@ -37,7 +37,6 @@ public class WelcomeActivity extends SetupBaseActivity {
     final int WELCOME_TEXT_ANIMATION_DURATION = 900;
     final int WELCOME_TEXT_ANIMATION_BASE_DELAY = 175;
     final int CONTINUE_FAB_ANIMATION_DURATION = 750;
-    private final String LOG_TAG = getClass().getSimpleName();
     private boolean hasTransitioned = false;
     private SupportAnimator transitionAnimationWhite = null;
     private SupportAnimator transitionAnimationBlue = null;
@@ -186,7 +185,7 @@ public class WelcomeActivity extends SetupBaseActivity {
             blueTransitionAnimation.start();
 
             new Handler().postDelayed(() -> {
-                Log.d(LOG_TAG, "Navigating To Login Activity");
+                Timber.d("Navigating To Login Activity");
                 navigateToLoginActivity();
             }, REVEAL_ANIMATION_DELAY + REVEAL_ANIMATION_DURATION);
 

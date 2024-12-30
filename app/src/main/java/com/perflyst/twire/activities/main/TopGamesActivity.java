@@ -1,7 +1,5 @@
 package com.perflyst.twire.activities.main;
 
-import android.util.Log;
-
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.GamesAdapter;
 import com.perflyst.twire.adapters.MainActivityAdapter;
@@ -18,6 +16,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 /**
  * Activity that loads and shows the top games on Twitch.
@@ -49,7 +49,7 @@ public class TopGamesActivity extends LazyMainActivity<Game> {
     @Override
     public void addToAdapter(List<Game> aGamesList) {
         mAdapter.addList(aGamesList);
-        Log.i(LOG_TAG, "Adding Top Games: " + aGamesList.size());
+        Timber.i("Adding Top Games: %s", aGamesList.size());
     }
 
     @Override

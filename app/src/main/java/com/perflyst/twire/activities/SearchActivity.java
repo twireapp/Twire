@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,13 +50,14 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import timber.log.Timber;
+
 
 public class SearchActivity extends ThemeActivity {
     private static final int POSITION_STREAMS = 0;
     private static final int POSITION_CHANNELS = 1;
     private static final int POSITION_GAMES = 2;
     private static final int TOTAL_COUNT = 3;
-    private final String LOG_TAG = getClass().getSimpleName();
     private ActivitySearchBinding binding;
     private String query;
     private SearchFragment mStreamsFragment, mChannelsFragment, mGamesFragment;
@@ -75,7 +75,7 @@ public class SearchActivity extends ThemeActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(LOG_TAG, "Text changed. Resetting fragments");
+                Timber.d("Text changed. Resetting fragments");
                 String newQuery = Utils.safeEncode(s.toString());
                 mChannelsFragment.reset(newQuery);
                 mStreamsFragment.reset(newQuery);
@@ -310,7 +310,7 @@ public class SearchActivity extends ThemeActivity {
             mRecyclerView = rootView.findViewById(R.id.span_recyclerview);
             mProgressView = rootView.findViewById(R.id.circle_progress);
 
-            lazyFetchingOnScrollListener = new LazyFetchingOnScrollListener<>("SearchFragment", this);
+            lazyFetchingOnScrollListener = new LazyFetchingOnScrollListener<>(this);
 
             setupRecyclerViewAndAdapter();
             checkForQuery();

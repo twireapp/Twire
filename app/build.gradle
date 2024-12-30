@@ -111,6 +111,9 @@ dependencies {
     //https://github.com/square/okhttp
     implementation "com.squareup.okhttp3:okhttp:3.12.13"
 
+    //https://github.com/JakeWharton/timber/
+    implementation "com.jakewharton.timber:timber:5.0.1"
+
     //https://github.com/google/guava/releases
     api 'com.google.guava:guava:31.0.1-android'
 

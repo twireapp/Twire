@@ -495,7 +495,7 @@ public class ChannelActivity extends ThemeActivity {
             mAdapter.setTopMargin((int) getResources().getDimension(R.dimen.search_new_adapter_top_margin));
             mAdapter.setSortElements(false);
             mAdapter.disableInsertAnimation();
-            LazyFetchingOnScrollListener<VideoOnDemand> lazyFetchingOnScrollListener = new LazyFetchingOnScrollListener<>("VodFragment", this);
+            LazyFetchingOnScrollListener<VideoOnDemand> lazyFetchingOnScrollListener = new LazyFetchingOnScrollListener<>(this);
             mRecyclerView.addOnScrollListener(lazyFetchingOnScrollListener);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setItemAnimator(null);

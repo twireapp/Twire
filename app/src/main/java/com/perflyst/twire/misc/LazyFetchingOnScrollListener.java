@@ -26,13 +26,13 @@ public class LazyFetchingOnScrollListener<T> extends UniversalOnScrollListener {
     private ListenableFuture<List<T>> getElementsTask;
 
 
-    public LazyFetchingOnScrollListener(AppCompatActivity mActivity, Toolbar mMainToolbar, Toolbar mDecorativeToolbar, View mToolbarShadow, View mIconCircle, TextView mIconText, String LOG_TAG, LazyFetchingActivity<T> aLazyFetchingActivity, boolean isMainActivity) {
-        super(mActivity, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mIconCircle, mIconText, LOG_TAG, isMainActivity);
+    public LazyFetchingOnScrollListener(AppCompatActivity mActivity, Toolbar mMainToolbar, Toolbar mDecorativeToolbar, View mToolbarShadow, View mIconCircle, TextView mIconText, LazyFetchingActivity<T> aLazyFetchingActivity, boolean isMainActivity) {
+        super(mActivity, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mIconCircle, mIconText, isMainActivity);
         this.mLazyFetchingActivity = aLazyFetchingActivity;
     }
 
-    public LazyFetchingOnScrollListener(String LOG_TAG, LazyFetchingActivity<T> aLazyFetchingActivity) {
-        this(null, null, null, null, null, null, LOG_TAG, aLazyFetchingActivity, false);
+    public LazyFetchingOnScrollListener(LazyFetchingActivity<T> aLazyFetchingActivity) {
+        this(null, null, null, null, null, null, aLazyFetchingActivity, false);
     }
 
     @Override

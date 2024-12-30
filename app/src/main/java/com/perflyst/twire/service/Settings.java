@@ -2,7 +2,6 @@ package com.perflyst.twire.service;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
@@ -17,6 +16,8 @@ import com.perflyst.twire.tasks.GetStreamURL;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import timber.log.Timber;
 
 /**
  * Created by SebastianRask on 29-04-2015.
@@ -475,7 +476,7 @@ public class Settings {
     public void setVodProgress(String VODid, long currentPosition) {
         int progress = (int) (currentPosition / 1000);
 
-        Log.d(getClass().getSimpleName(), "Saving Current Progress: " + progress);
+        Timber.d("Saving Current Progress: %s", progress);
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(this.STREAM_VOD_PROGRESS + VODid, progress);
         editor.commit();

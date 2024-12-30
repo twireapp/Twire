@@ -3,7 +3,6 @@ package com.perflyst.twire.model;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
 import com.github.stephenvinouze.materialnumberpickercore.MaterialNumberPicker;
@@ -11,11 +10,12 @@ import com.perflyst.twire.R;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
 
+import timber.log.Timber;
+
 /**
  * Created by Sebastian Rask Jepsen on 22/07/16.
  */
 public class SleepTimer {
-    private final String LOG_TAG = getClass().getSimpleName();
     private final Handler sleepTimerHandler;
     private final Runnable sleepTimerRunnable;
     private final SleepTimerDelegate delegate;
@@ -43,7 +43,7 @@ public class SleepTimer {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e(LOG_TAG, "Sleep Timer runnable failed");
+                    Timber.e("Sleep Timer runnable failed");
                 }
             }
         };

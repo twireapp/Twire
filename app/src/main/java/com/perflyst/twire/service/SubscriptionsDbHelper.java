@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,6 +20,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import timber.log.Timber;
 
 /**
  * Created by SebastianRask on 27-01-2015.
@@ -117,7 +118,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
         } else {
             query = "DELETE FROM " + SubscriptionsDbHelper.TABLE_NAME + ";";
         }
-        Log.d("query", query);
+        Timber.tag("query").d(query);
         db.execSQL(query);
     }
 
@@ -232,7 +233,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 JSONObject channels = new JSONObject();
                 channels.put("Channels", channelstoExport);
                 String jsonStr = channels.toString();
-                Log.d("Export String", jsonStr);
+                Timber.tag("Export String").d(jsonStr);
 
                 create(mContext, EXPORT_NAME, jsonStr);
                 return channelstoExport.length();

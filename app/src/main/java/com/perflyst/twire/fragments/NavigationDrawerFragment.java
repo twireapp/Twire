@@ -43,7 +43,6 @@ import com.perflyst.twire.utils.Execute;
 
 public class NavigationDrawerFragment extends Fragment {
 
-    private final String LOG_TAG = getClass().getSimpleName();
     private FragmentNavigationDrawerBinding binding;
     protected TextView mStreamsCount;
     protected FrameLayout mStreamsCountWrapper;

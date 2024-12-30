@@ -54,7 +54,7 @@ public abstract class LazyMainActivity<T extends Comparable<T> & MainElement> ex
         //  Set up the specialized OnScrollListener
         mRecyclerView.clearOnScrollListeners();
         mOnScrollListener = new LazyFetchingOnScrollListener<>(
-                this, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mCircleIconWrapper, mTitleView, LOG_TAG, this, true
+                this, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mCircleIconWrapper, mTitleView, this, true
         );
         mScrollListener = mOnScrollListener;
         mRecyclerView.addOnScrollListener(mScrollListener);

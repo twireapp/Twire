@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -38,6 +37,7 @@ import com.rey.material.widget.SnackBar;
 
 import io.codetail.animation.SupportAnimator;
 import io.codetail.animation.ViewAnimationUtils;
+import timber.log.Timber;
 
 public class LoginActivity extends SetupBaseActivity {
     private static GetFollowsFromDB subscriptionsTask;
@@ -52,7 +52,6 @@ public class LoginActivity extends SetupBaseActivity {
     private final int REVEAL_ANIMATION_DURATION = 650;
     private final int REVEAL_ANIMATION_DELAY = 200;
     private final int SHOW_SNACKBAR_DELAY = 200;
-    private final String LOG_TAG = getClass().getSimpleName();
     private boolean isWebViewShown = false,
             isWebViewHiding = false,
             hasTransitioned = false;
@@ -318,14 +317,14 @@ public class LoginActivity extends SetupBaseActivity {
                     public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                         if (failingUrl.equals(LOGIN_URL)) {
                             // The user has no internet connection
-                            Log.e(LOG_TAG, "The WebView failed to load URL - " + failingUrl);
+                            Timber.e("The WebView failed to load URL - %s", failingUrl);
                             handleNoInternet();
                         }
                     }
 
                     @Override
                     public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        Log.d(LOG_TAG, "shouldOverrideUrlLoading - " + url);
+                        Timber.d("shouldOverrideUrlLoading - %s", url);
 
                         // The user has successfully logged in
                         // Example:
@@ -334,7 +333,7 @@ public class LoginActivity extends SetupBaseActivity {
                         // r6z9er061caeq4sjq75ncv7goh27p8
                         if (url.contains("access_token") && url.contains("oauth_authorizing")) {
                             String mAccessToken = getAccessTokenFromURL(url);
-                            Log.d(LOG_TAG, "Access token received - " + mAccessToken);
+                            Timber.d("Access token received - %s", mAccessToken);
                             if (isWebViewShown) {
                                 hideLoginView();
                             }
@@ -352,12 +351,12 @@ public class LoginActivity extends SetupBaseActivity {
                             view.clearHistory();
                             view.clearFormData();
                         } else if (url.contains("The+user+denied+you+access")) {
-                            Log.d(LOG_TAG, "The user cancelled the login");
+                            Timber.d("The user cancelled the login");
                             // The user pressed "Cancel in the webview"
                             handleUserCancel();
                             return true;
                         } else if (!isPartOfSetup && url.contains("passport")) {
-                            /*Log.d(LOG_TAG, "CONTAINING PASSWORD");
+                            /*Timber.d("CONTAINING PASSWORD");
                             view.loadUrl(url);*/
                         }
 
@@ -546,7 +545,7 @@ public class LoginActivity extends SetupBaseActivity {
         blueTransitionAnimation.start();
 
         new Handler().postDelayed(() -> {
-            Log.d(LOG_TAG, "Navigating to NotificationActivity");
+            Timber.d("Navigating to NotificationActivity");
             navigateToNotificationActivity();
         }, REVEAL_ANIMATION_DELAY + REVEAL_ANIMATION_DURATION);
     }
@@ -624,7 +623,7 @@ public class LoginActivity extends SetupBaseActivity {
     }
 
     private void showSuccessAnimation() {
-        Log.d(LOG_TAG, "Showing Success Animation");
+        Timber.d("Showing Success Animation");
         mSuccessMessage.setText(
                 getString(R.string.login_on_success_message, new Settings(getBaseContext()).getGeneralTwitchDisplayName())
         );

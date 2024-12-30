@@ -28,7 +28,6 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.transition.Transition;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.Rational;
 import android.view.Display;
 import android.view.DisplayCutout;
@@ -123,13 +122,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import timber.log.Timber;
+
 @OptIn(markerClass = UnstableApi.class)
 public class StreamFragment extends Fragment implements Player.Listener {
     private static final int SHOW_TIMEOUT = 3000;
 
     private static int totalVerticalInset;
     private static boolean pipDisabling; // Tracks the PIP disabling animation.
-    private final String LOG_TAG = getClass().getSimpleName();
     private final Handler fetchViewCountHandler = new Handler(),
             fetchChattersHandler = new Handler(),
             vodHandler = new Handler();
@@ -466,7 +466,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
                 @Override
                 public void onFailure(@NonNull Throwable t) {
-                    Log.e(LOG_TAG, "Failed to create MediaController", t);
+                    Timber.e(t, "Failed to create MediaController");
                 }
             }, ContextCompat.getMainExecutor(getContext()));
         }
@@ -498,7 +498,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     @Override
     public void onPlayerError(@NonNull PlaybackException exception) {
-        Log.e(LOG_TAG, "Something went wrong playing the stream for " + mUserInfo.getDisplayName() + " - Exception: " + exception);
+        Timber.e("Something went wrong playing the stream for " + mUserInfo.getDisplayName() + " - Exception: " + exception);
 
         playbackFailed();
     }
@@ -624,7 +624,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     public void onPause() {
         super.onPause();
 
-        Log.d(LOG_TAG, "Stream Fragment paused");
+        Timber.d("Stream Fragment paused");
         if (pictureInPictureEnabled)
             return;
 
@@ -641,7 +641,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     @Override
     public void onStop() {
-        Log.d(LOG_TAG, "Stream Fragment Stopped");
+        Timber.d("Stream Fragment Stopped");
         super.onStop();
 
         if (!castingViewVisible && !audioViewVisible && player != null && !settings.getStreamPlayerLockedPlayback()) {
@@ -655,7 +655,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     @Override
     public void onDestroy() {
-        Log.d(LOG_TAG, "Destroying");
+        Timber.d("Destroying");
         if (fetchViewCountRunnable != null) {
             fetchViewCountHandler.removeCallbacks(fetchViewCountRunnable);
         }
@@ -692,7 +692,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 GetStreamViewersTask task = new GetStreamViewersTask(mUserInfo.getUserId(), getContext());
                 Execute.background(task, currentViewers -> {
                     try {
-                        Log.d(LOG_TAG, "Fetching viewers");
+                        Timber.d("Fetching viewers");
 
                         if (currentViewers > -1) Utils.setNumber(mCurrentViewersView, currentViewers);
                     } catch (Exception e) {
@@ -1153,10 +1153,10 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 showQualities();
                 updateSelectedQuality(quality);
                 showPauseIcon();
-                Log.d(LOG_TAG, "Starting Stream With a quality on " + quality + " for " + mUserInfo.getDisplayName());
-                Log.d(LOG_TAG, "URLS: " + qualityURLs.keySet());
+                Timber.d("Starting Stream With a quality on " + quality + " for " + mUserInfo.getDisplayName());
+                Timber.d("URLS: %s", qualityURLs.keySet());
             } else if (!qualityURLs.isEmpty()) {
-                Log.d(LOG_TAG, "Quality unavailable for this stream -  " + quality + ". Trying next best");
+                Timber.d("Quality unavailable for this stream -  " + quality + ". Trying next best");
                 tryNextBestQuality(quality);
             }
         }

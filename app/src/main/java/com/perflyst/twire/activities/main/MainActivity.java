@@ -2,7 +2,6 @@ package com.perflyst.twire.activities.main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -38,10 +37,11 @@ import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 
+import timber.log.Timber;
+
 
 public abstract class MainActivity<E extends Comparable<E> & MainElement> extends ThemeActivity {
     private static final String FIRST_VISIBLE_ELEMENT_POSITION = "firstVisibleElementPosition";
-    protected final String LOG_TAG = getClass().getSimpleName();
 
     private ActivityMainBinding binding;
 
@@ -150,7 +150,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(null); // We want to implement our own animations
         mRecyclerView.setHasFixedSize(true);
-        mScrollListener = new UniversalOnScrollListener(this, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mCircleIconWrapper, mTitleView, LOG_TAG, true);
+        mScrollListener = new UniversalOnScrollListener(this, mMainToolbar, mDecorativeToolbar, mToolbarShadow, mCircleIconWrapper, mTitleView, true);
         mRecyclerView.addOnScrollListener(mScrollListener);
 
         // Only animate when the view is first started, not when screen rotates
@@ -308,7 +308,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
                     }
                 });
             } catch (Exception e) {
-                Log.e(LOG_TAG, "Failed to Show ToolTip");
+                Timber.e("Failed to Show ToolTip");
             }
 
         }

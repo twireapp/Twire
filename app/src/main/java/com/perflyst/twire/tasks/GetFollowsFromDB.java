@@ -1,7 +1,6 @@
 package com.perflyst.twire.tasks;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.common.util.concurrent.ListenableFutureTask;
 import com.perflyst.twire.model.ChannelInfo;
@@ -15,6 +14,8 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
+import timber.log.Timber;
+
 /**
  * Connects to the internal database and extracts all the subscription streamer names. creates an
  * object getting all information about the stream and puts it in a list.
@@ -22,7 +23,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class GetFollowsFromDB implements Callable<Map<String, ChannelInfo>> {
     private final long timerStart = System.currentTimeMillis();
-    private final String LOG_TAG = getClass().getSimpleName();
     private final ListenableFutureTask<ArrayList<ChannelInfo>> twitchUserFollows;
     private final WeakReference<Context> baseContext;
 
@@ -32,11 +32,11 @@ public class GetFollowsFromDB implements Callable<Map<String, ChannelInfo>> {
     }
 
     public Map<String, ChannelInfo> call() {
-        Log.d(LOG_TAG, "Entered GetFollowsFromDB");
+        Timber.d("Entered GetFollowsFromDB");
 
         Map<String, ChannelInfo> resultList = Service.getStreamerInfoFromDB(baseContext.get());
-        Log.d(LOG_TAG, resultList.size() + " streamers fetched from database");
-        Log.d(LOG_TAG, resultList.toString());
+        Timber.d("%s streamers fetched from database", resultList.size());
+        Timber.d(resultList.toString());
 
         if (!resultList.isEmpty()) {
             // Add the streamers to the static list field to ensure we don't waste time and resources getting the streamers from the database again.
@@ -45,7 +45,7 @@ public class GetFollowsFromDB implements Callable<Map<String, ChannelInfo>> {
 
         Execute.background(twitchUserFollows);
         long duration = System.currentTimeMillis() - timerStart;
-        Log.d(LOG_TAG, "Completed task in " + TimeUnit.MILLISECONDS.toSeconds(duration) + " seconds");
+        Timber.d("Completed task in " + TimeUnit.MILLISECONDS.toSeconds(duration) + " seconds");
 
         return resultList;
     }

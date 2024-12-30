@@ -3,7 +3,6 @@ package com.perflyst.twire.tasks;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.service.Settings;
@@ -16,6 +15,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
+import timber.log.Timber;
+
 /**
  * Precondition: Current user subscriptions should already have been loaded from database
  * Adds a subscription to the internal database. The input should be a SubscriptionStreamerInfo object
@@ -23,7 +24,6 @@ import java.util.TreeMap;
  * The second should be the BaseContext
  */
 public class AddFollowsToDB implements Runnable {
-    private final String LOG_TAG = getClass().getSimpleName();
     private final WeakReference<Context> baseContext;
     private final ArrayList<ChannelInfo> subsToAdd;
 
@@ -38,7 +38,7 @@ public class AddFollowsToDB implements Runnable {
         Map<String, ChannelInfo> subsToCheck = new TreeMap<>();
 
 
-        Log.v(LOG_TAG, "Entered " + LOG_TAG);
+        Timber.v("Entered %s", this.getClass().getSimpleName());
 
         Context baseContext = this.baseContext.get();
         SubscriptionsDbHelper mDbHelper = new SubscriptionsDbHelper(baseContext);
@@ -46,16 +46,16 @@ public class AddFollowsToDB implements Runnable {
         // Get the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        Log.d(LOG_TAG, TempStorage.getLoadedStreamers().toString());
+        Timber.d(TempStorage.getLoadedStreamers().toString());
         // Loop over the provided list of StreamerInfo objects
         for (ChannelInfo subToAdd : subsToAdd) {
             if (subToAdd == null) {
-                Log.d(LOG_TAG, "StreamerInfo fed was null");
+                Timber.d("StreamerInfo fed was null");
                 continue;
             }
             // Make sure the streamer is not already in the database
             if (TempStorage.containsLoadedStreamer(subToAdd)) {
-                Log.d(LOG_TAG, "Streamer (" + subToAdd.getLogin() + ") already in database");
+                Timber.d("Streamer (" + subToAdd.getLogin() + ") already in database");
                 continue;
             }
 
@@ -103,7 +103,7 @@ public class AddFollowsToDB implements Runnable {
         db.close();
 
         TempStorage.addLoadedStreamer(subsAdded);
-        Log.d(LOG_TAG, "Count of streamers added: " + subsAdded.size());
-        Log.d(LOG_TAG, "Streamers (" + subsAdded + ") added to database");
+        Timber.d("Count of streamers added: %s", subsAdded.size());
+        Timber.d("Streamers (" + subsAdded + ") added to database");
     }
 }

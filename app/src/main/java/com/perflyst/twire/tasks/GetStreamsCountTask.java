@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.service.Service;
-import com.perflyst.twire.service.Settings;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

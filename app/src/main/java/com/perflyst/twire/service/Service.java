@@ -22,7 +22,6 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +66,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import timber.log.Timber;
 
 /**
  * Created by Sebastian Rask on 12-02-2015.
@@ -367,10 +367,10 @@ public class Service {
                 return urlc.getResponseCode() == 204 &&
                         urlc.getContentLength() == 0;
             } catch (IOException e) {
-                Log.e("SERVICE", "Error checking internet connection", e);
+                Timber.e(e, "Error checking internet connection");
             }
         } else {
-            Log.d("SERVICE", "No network available!");
+            Timber.d("No network available!");
         }
 
         return false;
@@ -505,8 +505,8 @@ public class Service {
         String result = response.body;
 
         if (result == null || result.isEmpty() || result.charAt(0) != '{' && result.charAt(0) != '[') {
-            Log.v("URL TO JSON STRING", request.url() + " did not successfully get read");
-            Log.v("URL TO JSON STRING", "Result of reading - " + result);
+            Timber.tag("URL TO JSON STRING").v("%s did not successfully get read", request.url());
+            Timber.tag("URL TO JSON STRING").v("Result of reading - %s", result);
         }
 
         return result;
@@ -550,9 +550,9 @@ public class Service {
             channelInfo = new ChannelInfo(JSONService.getUserInfo(info), description, -1, views, logoURL, videoBannerURL, profileBannerURL);
 
         } catch (JSONException e) {
-            Log.v("Service: ", e.getMessage());
+            Timber.v(e);
         } catch (MalformedURLException ef) {
-            Log.v("Service : ", ef.getMessage());
+            Timber.v(ef);
         }
 
         return channelInfo;
@@ -740,7 +740,7 @@ public class Service {
     }
 
     public static void clearStreamerInfoDb(Context context) {
-        Log.i("SERVICE", "CLEARING STREAMERINFO DATABASE");
+        Timber.i("CLEARING STREAMERINFO DATABASE");
         TempStorage.getLoadedStreamers().clear();
         SubscriptionsDbHelper helper = new SubscriptionsDbHelper(context);
         helper.onUpgrade(helper.getWritableDatabase(), SubscriptionsDbHelper.DATABASE_VERSION, SubscriptionsDbHelper.DATABASE_VERSION + 1);

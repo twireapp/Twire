@@ -1,7 +1,5 @@
 package com.perflyst.twire.activities.main;
 
-import android.util.Log;
-
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
@@ -19,6 +17,8 @@ import org.json.JSONObject;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import timber.log.Timber;
 
 public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
 
@@ -53,7 +53,7 @@ public class FeaturedStreamsActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public void addToAdapter(List<StreamInfo> aObjectList) {
         mAdapter.addList(aObjectList);
-        Log.i(LOG_TAG, "Adding Featured Streams: " + aObjectList.size());
+        Timber.i("Adding Featured Streams: %s", aObjectList.size());
     }
 
     /**

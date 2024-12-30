@@ -6,7 +6,6 @@ package com.perflyst.twire.chat;
 
 import android.content.Context;
 import android.os.SystemClock;
-import android.util.Log;
 import android.util.SparseArray;
 
 import com.google.common.collect.ImmutableSetMultimap;
@@ -40,6 +39,8 @@ import java.util.Random;
 
 import javax.net.ssl.SSLSocketFactory;
 
+import timber.log.Timber;
+
 public class ChatManager implements Runnable {
     public static ChatManager instance = null;
 
@@ -48,7 +49,6 @@ public class ChatManager implements Runnable {
     private String cursor = "";
     private boolean seek = false;
     private double previousProgress;
-    private final String LOG_TAG = getClass().getSimpleName();
     private final String user;
     private final String password;
     private final UserInfo channel;
@@ -86,17 +86,17 @@ public class ChatManager implements Runnable {
         Settings appSettings = new Settings(aContext);
         mEmoteManager = new ChatEmoteManager(aChannel, appSettings);
 
-        Log.d(LOG_TAG, "Login with main Account: " + appSettings.getChatAccountConnect());
+        Timber.d("Login with main Account: %s", appSettings.getChatAccountConnect());
 
         if (appSettings.isLoggedIn() && appSettings.getChatAccountConnect()) { // if user is logged in ...
             // ... use their credentials
-            Log.d(LOG_TAG, "Using user credentials for chat login.");
+            Timber.d("Using user credentials for chat login.");
 
             user = appSettings.getGeneralTwitchName();
             password = "oauth:" + appSettings.getGeneralTwitchAccessToken();
         } else {
             // ... else: use anonymous credentials
-            Log.d(LOG_TAG, "Using anonymous credentials for chat login.");
+            Timber.d("Using anonymous credentials for chat login.");
 
             user = "justinfan" + getRandomNumber(10000, 99999);
             password = "SCHMOOPIIE";
@@ -112,7 +112,7 @@ public class ChatManager implements Runnable {
         else {
             twitchChatPort = twitchChatPortunsecure;
         }
-        Log.d(LOG_TAG, "Use SSL Chat Server: " + appSettings.getChatEnableSSL());
+        Timber.d("Use SSL Chat Server: %s", appSettings.getChatEnableSSL());
 
         nextCommentOffset = 0;
     }
@@ -137,7 +137,7 @@ public class ChatManager implements Runnable {
     @Override
     public void run() {
         isStopping = false;
-        Log.d(LOG_TAG, "Trying to start chat " + channel.getLogin() + " for user " + user);
+        Timber.d("Trying to start chat " + channel.getLogin() + " for user " + user);
         mEmoteManager.loadCustomEmotes(() -> onUpdate(UpdateType.ON_CUSTOM_EMOTES_FETCHED));
 
         readBadges("https://api.twitch.tv/helix/chat/badges/global/", globalBadges);
@@ -193,7 +193,7 @@ public class ChatManager implements Runnable {
      */
     private void connect(String address, int port) {
         try {
-            Log.d("Chat connecting to", address + ":" + port);
+            Timber.d("Chat connecting to " + address + ":" + port);
             Socket socket;
             // if we don`t use the SSL Port then create a default socket
             if (port != twitchChatPortsecure) {
@@ -217,7 +217,7 @@ public class ChatManager implements Runnable {
             while ((line = reader.readLine()) != null) {
                 if (isStopping) {
                     leaveChannel();
-                    Log.d(LOG_TAG, "Stopping chat for " + channel.getLogin());
+                    Timber.d("Stopping chat for %s", channel.getLogin());
                     break;
                 }
 
@@ -225,21 +225,21 @@ public class ChatManager implements Runnable {
                 if (ircMessage != null) {
                     handleIRC(ircMessage);
                 } else if (line.contains("004 " + user + " :")) {
-                    Log.d(LOG_TAG, "<" + line);
-                    Log.d(LOG_TAG, "Connected >> " + user + " ~ irc.twitch.tv");
+                    Timber.d("<%s", line);
+                    Timber.d("Connected >> " + user + " ~ irc.twitch.tv");
                     onUpdate(UpdateType.ON_CONNECTED);
                     sendRawMessage("CAP REQ :twitch.tv/tags twitch.tv/commands");
                     sendRawMessage("JOIN #" + channel.getLogin() + "\r\n");
                 } else if (line.startsWith("PING")) { // Twitch wants to know if we are still here. Send PONG and Server info back
                     handlePing(line);
                 } else if (line.toLowerCase().contains("disconnected")) {
-                    Log.e(LOG_TAG, "Disconnected - trying to reconnect");
+                    Timber.e("Disconnected - trying to reconnect");
                     onUpdate(UpdateType.ON_RECONNECTING);
                     connect(address, port); //ToDo: Test if chat keeps playing if connection is lost
                 } else if (line.contains("NOTICE * :Error logging in")) {
                     onUpdate(UpdateType.ON_CONNECTION_FAILED);
                 } else {
-                    Log.d(LOG_TAG, "<" + line);
+                    Timber.d("<%s", line);
                 }
             }
 
@@ -442,7 +442,7 @@ public class ChatManager implements Runnable {
             case "JOIN":
                 break;
             default:
-                Log.e(LOG_TAG, "Unhandled command type: " + message.command);
+                Timber.e("Unhandled command type: %s", message.command);
                 break;
         }
     }
@@ -543,7 +543,7 @@ public class ChatManager implements Runnable {
         chatMessage.systemMessage = tags.getOrDefault("system-msg", "");
 
         if (content.contains("@" + getUserDisplayName())) {
-            Log.d(LOG_TAG, "Highlighting message with mention: " + content);
+            Timber.d("Highlighting message with mention: %s", content);
             chatMessage.setHighlight(true);
         }
 
@@ -681,7 +681,7 @@ public class ChatManager implements Runnable {
         if (globalSet != null && globalSet.get(version) != null)
             return globalSet.get(version);
 
-        Log.e(LOG_TAG, "Badge failed to load: \"" + badgeSet + "\" \"" + version + "\"");
+        Timber.e("Badge failed to load: \"" + badgeSet + "\" \"" + version + "\"");
         return null;
     }
 

@@ -12,7 +12,6 @@ import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.transition.Transition;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -72,6 +71,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import timber.log.Timber;
+
 
 interface EmoteKeyboardDelegate {
     void onEmoteClicked(Emote clickedEmote, View view);
@@ -89,7 +90,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private static ArrayList<Emote> supportedTextEmotes, customEmotes, customChannelEmotes, twitchEmotes, subscriberEmotes;
     private static ArrayList<Emote> recentEmotes, emotesToHide;
 
-    private final String LOG_TAG = getClass().getSimpleName();
     private final int VIBRATION_FEEDBACK = HapticFeedbackConstants.KEYBOARD_TAP;
 
     private boolean chatStatusBarShowing = true;
@@ -231,7 +231,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             @Override
             public void onConnected() {
                 if (isFragmentActive()) {
-                    Log.d(LOG_TAG, "Chat connected");
+                    Timber.d("Chat connected");
                     this.connected = true;
                     ChatFragment.this.showThenHideChatStatusBar();
                     mChatStatus.setText(R.string.chat_status_connected);
@@ -256,7 +256,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                         ChatFragment.this.showChatStatusBar();
                     }
 
-                    Log.d(LOG_TAG, "Roomstate has changed");
+                    Timber.d("Roomstate has changed");
                     this.roomStateIconChange(isR9K, mR9KIcon);
                     this.roomStateIconChange(isSlow, mSlowmodeIcon);
                     this.roomStateIconChange(isSubsOnly, mSubonlyIcon);
@@ -415,7 +415,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             if (emotesFromSettings != null) {
                 recentEmotes.addAll(emotesFromSettings);
             } else {
-                Log.e(LOG_TAG, "Failed to load recent emotes");
+                Timber.e("Failed to load recent emotes");
             }
         }
     }
@@ -479,7 +479,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
     private void subscriberEmotesLoaded(List<Emote> subscriberEmotesLoaded, EmotesPagerAdapter adapter) {
         if (!subscriberEmotesLoaded.isEmpty() && adapter != null && getContext() != null) {
-            Log.d(LOG_TAG, "Adding subscriber emotes: " + subscriberEmotesLoaded.size());
+            Timber.d("Adding subscriber emotes: %s", subscriberEmotesLoaded.size());
 
             Drawable icon = AppCompatResources.getDrawable(getContext(), R.drawable.ic_attach_money);
             if (icon == null) return;
@@ -504,7 +504,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
      * Emotes are made and added to the EmoteKeyboard;
      */
     private void customEmoteInfoLoaded(List<Emote> channel, List<Emote> global) {
-        Log.d(LOG_TAG, "Custom Emotes loaded: " + global.size());
+        Timber.d("Custom Emotes loaded: %s", global.size());
         customChannelEmotes = new ArrayList<>(channel);
         customEmotes = new ArrayList<>(global);
         customEmotes.addAll(channel);
@@ -527,7 +527,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     }
 
     private void notifyKeyboardHeightRecorded(int keyboardHeight) {
-        Log.d(LOG_TAG, "Keyboard height: " + keyboardHeight);
+        Timber.d("Keyboard height: %s", keyboardHeight);
         settings.setKeyboardHeight(keyboardHeight);
 
         ViewGroup.LayoutParams lp = emoteKeyboardContainer.getLayoutParams();
@@ -780,7 +780,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                                 if (lastBottom > r.bottom && lastBottom - r.bottom > 200 &&
                                         getResources().getConfiguration().orientation
                                                 == Configuration.ORIENTATION_PORTRAIT) {
-                                    Log.d(LOG_TAG, "Soft Keyboard shown");
+                                    Timber.d("Soft Keyboard shown");
 
                                     notifyKeyboardHeightRecorded(lastBottom - r.bottom);
                                     setKeyboardState(KeyboardState.SOFT);
@@ -807,7 +807,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         mSendButton.performHapticFeedback(VIBRATION_FEEDBACK);
 
-        Log.d(LOG_TAG, "Sending Message: " + message);
+        Timber.d("Sending Message: %s", message);
         Map<String, Emote> emotes = List.of(customEmotes, twitchEmotes, subscriberEmotes)
                 .stream()
                 .flatMap(Collection::stream)
@@ -823,7 +823,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         );
         try {
             addMessage(chatMessage);
-            Log.d(LOG_TAG, "Message added");
+            Timber.d("Message added");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -919,7 +919,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     }
 
     public static class EmoteGridFragment extends Fragment {
-        private final String LOG_TAG = getClass().getSimpleName();
         protected AutoSpanRecyclerView mEmoteRecyclerView;
         protected AutoSpanRecyclerView mPromotedEmotesRecyclerView;
         private EmoteFragmentType fragmentType;
@@ -988,7 +987,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         private void addSubscriberEmotes() {
             if (mAdapter != null && subscriberEmotes != null && mAdapter.getItemCount() == 0) {
-                Log.d(LOG_TAG, "Adding subscriber emotes");
+                Timber.d("Adding subscriber emotes");
                 mAdapter.addEmotes(subscriberEmotes);
             }
         }

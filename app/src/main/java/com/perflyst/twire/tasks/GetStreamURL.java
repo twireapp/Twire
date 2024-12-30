@@ -1,7 +1,5 @@
 package com.perflyst.twire.tasks;
 
-import android.util.Log;
-
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.Quality;
 import com.perflyst.twire.service.Service;
@@ -18,11 +16,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import okhttp3.Request;
+import timber.log.Timber;
 
 public class GetStreamURL implements Callable<Map<String, Quality>> {
     public static final String QUALITY_SOURCE = "chunked";
     public static final String QUALITY_AUTO = "auto";
-    private final String LOG_TAG = getClass().getSimpleName();
 
     private final String channelOrVod;
     protected final String playerType;
@@ -59,7 +57,7 @@ public class GetStreamURL implements Callable<Map<String, Quality>> {
             token = tokenJSON.getString("value");
             signature = tokenJSON.getString("signature");
 
-            Log.d("ACCESS_TOKEN_STRING", token);
+            Timber.tag("ACCESS_TOKEN_STRING").d(token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -79,7 +77,7 @@ public class GetStreamURL implements Callable<Map<String, Quality>> {
             streamUrl = proxy + "/playlist/" + Utils.safeEncode(parameters);
         }
 
-        Log.d(LOG_TAG, "HSL Playlist URL: " + streamUrl);
+        Timber.d("HSL Playlist URL: %s", streamUrl);
         return parseM3U8(streamUrl);
     }
 

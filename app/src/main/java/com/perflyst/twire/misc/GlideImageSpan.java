@@ -6,7 +6,6 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.rey.material.drawable.BlankDrawable;
+
+import timber.log.Timber;
 
 public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callback {
     private final TextView textView;
@@ -77,7 +78,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
 
                         if (resource.getIntrinsicWidth() != assumedSize) {
                             textView.setText(textView.getText());
-                            Log.d("EmoteShift", "Got " + resource.getIntrinsicWidth() + " but assumed " + assumedSize + " (" + url + ")");
+                            Timber.tag("EmoteShift").d("Got " + resource.getIntrinsicWidth() + " but assumed " + assumedSize + " (" + url + ")");
                         } else {
                             textView.invalidate();
                         }
