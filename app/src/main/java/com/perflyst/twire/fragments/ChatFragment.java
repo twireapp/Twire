@@ -55,9 +55,7 @@ import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
-import com.perflyst.twire.tasks.ConstructChatMessageTask;
 import com.perflyst.twire.tasks.GetTwitchEmotesTask;
-import com.perflyst.twire.tasks.SendMessageTask;
 import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.EditTextBackEvent;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
@@ -68,6 +66,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -809,29 +808,30 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mSendButton.performHapticFeedback(VIBRATION_FEEDBACK);
 
         Log.d(LOG_TAG, "Sending Message: " + message);
-        ConstructChatMessageTask getMessageTask = new ConstructChatMessageTask(
-                customEmotes,
-                twitchEmotes,
-                subscriberEmotes,
-                chatManager,
-                message
+        Map<String, Emote> emotes = List.of(customEmotes, twitchEmotes, subscriberEmotes)
+                .stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toMap(Emote::getKeyword, emote -> emote));
+
+        ChatMessage chatMessage = new ChatMessage(
+                message,
+                chatManager.getUserDisplayName(),
+                chatManager.getUserColor(),
+                chatManager.getBadges(chatManager.getUserBadges()),
+                ChatMessage.getEmotesFromMessage(message, emotes),
+                false
         );
-        Execute.background(getMessageTask, chatMessage -> {
-            if (chatMessage != null) {
-                try {
-                    addMessage(chatMessage);
-                    Log.d(LOG_TAG, "Message added");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        try {
+            addMessage(chatMessage);
+            Log.d(LOG_TAG, "Message added");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         setKeyboardState(KeyboardState.CLOSED);
         mSendText.setText("");
 
-        SendMessageTask sendMessageTask = new SendMessageTask(chatManager, message);
-        Execute.background(sendMessageTask);
+        chatManager.sendMessage(message);
     }
 
     /**

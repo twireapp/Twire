@@ -92,4 +92,18 @@ public class ChatMessage {
                 ", emotes=" + emotes +
                 '}';
     }
+
+    public static Map<Integer, Emote> getEmotesFromMessage(String message, Map<String, Emote> emoteMap) {
+        int position = 0;
+        Map<Integer, Emote> foundEmotes = new HashMap<>();
+        for (String word : message.split(" ")) {
+            Emote emote = emoteMap.get(word);
+            if (emote != null) {
+                foundEmotes.put(position, emote);
+            }
+            position += word.length() + 1;
+        }
+
+        return foundEmotes;
+    }
 }

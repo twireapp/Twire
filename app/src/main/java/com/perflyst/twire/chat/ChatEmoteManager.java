@@ -2,6 +2,7 @@ package com.perflyst.twire.chat;
 
 import androidx.annotation.Nullable;
 
+import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
@@ -239,19 +240,7 @@ class ChatEmoteManager {
      * @return The List of emotes in the message
      */
     Map<Integer, Emote> findCustomEmotes(String message) {
-        Map<Integer, Emote> emotes = new HashMap<>();
-
-        int position = 0;
-        for (String part : message.split(" ")) {
-            if (emoteKeywordToEmote.containsKey(part)) {
-                Emote emote = emoteKeywordToEmote.get(part);
-                emotes.put(position, emote);
-            }
-
-            position += part.length() + 1;
-        }
-
-        return emotes;
+        return ChatMessage.getEmotesFromMessage(message, emoteKeywordToEmote);
     }
 
     /**
