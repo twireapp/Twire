@@ -17,11 +17,9 @@ import java.util.concurrent.Callable;
  * Created by Sebastian Rask on 26-06-2016.
  */
 public class GetStreamsCountTask implements Callable<Integer> {
-    private final Settings settings;
     private final WeakReference<Context> context;
 
     public GetStreamsCountTask(Context context) {
-        this.settings = new Settings(context);
         this.context = new WeakReference<>(context);
     }
 

@@ -1,6 +1,5 @@
 package com.perflyst.twire.tasks;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.perflyst.twire.activities.setup.LoginActivity;
@@ -18,13 +17,9 @@ import java.lang.ref.WeakReference;
  */
 public class HandlerUserLoginTask implements Runnable {
     private final String LOG_TAG = getClass().getSimpleName();
-    private final Settings mSettings;
-    private final String token;
     private final WeakReference<LoginActivity> mLoginActivity;
 
-    public HandlerUserLoginTask(Context context, String token, LoginActivity mLoginActivity) {
-        this.mSettings = new Settings(context);
-        this.token = token;
+    public HandlerUserLoginTask(LoginActivity mLoginActivity) {
         this.mLoginActivity = new WeakReference<>(mLoginActivity);
     }
 
@@ -33,7 +28,7 @@ public class HandlerUserLoginTask implements Runnable {
         try {
             // the User is fetched by the Bearer token
             String BASE_USER_INFO_URL = "https://api.twitch.tv/helix/users";
-            String jsonString = Service.urlToJSONStringHelix(BASE_USER_INFO_URL, mSettings.getContext());
+            String jsonString = Service.urlToJSONStringHelix(BASE_USER_INFO_URL, mLoginActivity.get());
             Log.d(LOG_TAG, "JSON: " + jsonString);
 
             JSONObject baseJSON = new JSONObject(jsonString).getJSONArray("data").getJSONObject(0);
@@ -76,7 +71,7 @@ public class HandlerUserLoginTask implements Runnable {
         }
 
         if (mUserInfo != null) {
-            mSettings.setGeneralTwitchAccessToken(token);
+            var mSettings = new Settings(mLoginActivity.get());
             mSettings.setGeneralTwitchDisplayName((String) mUserInfo[0]);
             mSettings.setGeneralTwitchName((String) mUserInfo[1]);
             //mSettings.setGeneralTwitchUserEmail((String) mUserInfo[4]);

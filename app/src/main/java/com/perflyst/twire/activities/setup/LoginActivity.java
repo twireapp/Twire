@@ -148,7 +148,7 @@ public class LoginActivity extends SetupBaseActivity {
 
     private void setupPrelaunchLogin() {
         findViewById(R.id.btn_prelaunch_login).setOnClickListener(v -> {
-            HandlerUserLoginTask handleTask = new HandlerUserLoginTask(getBaseContext(), new Settings(this).getGeneralTwitchAccessToken(), LoginActivity.this);
+            HandlerUserLoginTask handleTask = new HandlerUserLoginTask(LoginActivity.this);
             Execute.background(handleTask);
         });
     }
@@ -342,7 +342,7 @@ public class LoginActivity extends SetupBaseActivity {
                             // set the access token here so the following request works
                             new Settings(getBaseContext()).setGeneralTwitchAccessToken(mAccessToken);
 
-                            HandlerUserLoginTask handleTask = new HandlerUserLoginTask(getBaseContext(), mAccessToken, LoginActivity.this);
+                            HandlerUserLoginTask handleTask = new HandlerUserLoginTask(LoginActivity.this);
                             Execute.background(handleTask);
 
                             CookieManager cm = CookieManager.getInstance();
