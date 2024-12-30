@@ -47,7 +47,7 @@ public class StartUpActivity extends ThemeActivity {
     private void validateToken() {
         ValidateOauthTokenTask validateTask = new ValidateOauthTokenTask(new Settings(getBaseContext()).getGeneralTwitchAccessToken(), getBaseContext());
         Execute.background(validateTask, validation -> {
-            if (validation != null && !validation.isTokenValid()) {
+            if (validation == null) {
                 Log.e(LOG_TAG, "Token invalid");
                 Intent loginIntent = new Intent(getBaseContext(), LoginActivity.class);
                 loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

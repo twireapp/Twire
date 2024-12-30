@@ -20,7 +20,7 @@ import okhttp3.Request;
 /**
  * Created by Sebastian Rask on 10-05-2016.
  */
-public class ValidateOauthTokenTask implements Callable<ValidateOauthTokenTask.TokenValidation> {
+public class ValidateOauthTokenTask implements Callable<String> {
     private final String oauthToken;
     private final WeakReference<Context> context;
 
@@ -29,7 +29,7 @@ public class ValidateOauthTokenTask implements Callable<ValidateOauthTokenTask.T
         this.context = new WeakReference<>(context);
     }
 
-    public TokenValidation call() {
+    public String call() {
         String url = "https://id.twitch.tv/oauth2/validate";
 
         try {
@@ -45,7 +45,7 @@ public class ValidateOauthTokenTask implements Callable<ValidateOauthTokenTask.T
                 return null;
 
             if (response.code == 401)
-                return new TokenValidation(null);
+                return null;
 
             String result = response.body;
             JSONObject topObject = new JSONObject(result);
@@ -64,32 +64,19 @@ public class ValidateOauthTokenTask implements Callable<ValidateOauthTokenTask.T
 
                 if (!scope_found) {
                     // The token is invalid because it lacks the required scopes.
-                    return new TokenValidation(null);
+                    return null;
                 }
             }
 
-            return new TokenValidation(user_id);
+            return user_id;
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         if (isNetworkConnectedThreadOnly(context.get())) {
-            return new TokenValidation("");
+            return "";
         } else {
             return null;
         }
-    }
-
-    public static class TokenValidation {
-        private final String userID;
-
-        TokenValidation(String userID) {
-            this.userID = userID;
-        }
-
-        public boolean isTokenValid() {
-            return userID != null;
-        }
-
     }
 }
