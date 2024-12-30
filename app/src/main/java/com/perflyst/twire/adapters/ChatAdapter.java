@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.GlideImageSpan;
 import com.perflyst.twire.model.Badge;
-import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.service.Service;
@@ -111,19 +110,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
                 checkForLink(builder.toString(), builder);
 
-                for (ChatEmote chatEmote : message.getEmotes()) {
-                    for (Integer emotePosition : chatEmote.getPositions()) {
-                        final Emote emote = chatEmote.getEmote();
-                        final int fromPosition = emotePosition + preLength;
-                        final int toPosition = emotePosition + emote.getKeyword().length() - 1 + preLength;
+                for (var entry : message.getEmotes().entrySet()) {
+                    Integer emotePosition = entry.getKey();
+                    final Emote emote = entry.getValue();
+                    final int fromPosition = emotePosition + preLength;
+                    final int toPosition = emotePosition + emote.getKeyword().length() - 1 + preLength;
 
-                        int emoteSize = settings.getEmoteSize();
-                        int emotePixels = emoteSize == 1 ? 28 : emoteSize == 2 ? 56 : 112;
+                    int emoteSize = settings.getEmoteSize();
+                    int emotePixels = emoteSize == 1 ? 28 : emoteSize == 2 ? 56 : 112;
 
-                        final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize, isNightTheme), holder.message, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
+                    final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize, isNightTheme), holder.message, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
 
-                        builder.setSpan(emoteSpan, fromPosition + beforeMessage.length(), toPosition + 1 + beforeMessage.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                    }
+                    builder.setSpan(emoteSpan, fromPosition + beforeMessage.length(), toPosition + 1 + beforeMessage.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 }
             }
 

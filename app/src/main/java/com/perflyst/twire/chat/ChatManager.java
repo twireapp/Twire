@@ -11,7 +11,6 @@ import android.util.SparseArray;
 
 import com.google.common.collect.ImmutableSetMultimap;
 import com.perflyst.twire.model.Badge;
-import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.model.IRCMessage;
@@ -383,21 +382,21 @@ public class ChatManager implements Runnable {
 
                 StringBuilder bodyBuilder = new StringBuilder();
                 JSONArray fragments = message.getJSONArray("fragments");
-                List<ChatEmote> emotes = new ArrayList<>();
+                Map<Integer, Emote> emotes = new HashMap<>();
                 for (int i = 0; i < fragments.length(); i++) {
                     JSONObject fragment = fragments.getJSONObject(i);
                     String text = fragment.getString("text");
 
                     JSONObject emote = fragment.optJSONObject("emote");
                     if (emote != null) {
-                        emotes.add(new ChatEmote(Emote.Twitch(text, emote.getString("emoteID")), new int[] { bodyBuilder.length() }));
+                        emotes.put(bodyBuilder.length(), Emote.Twitch(text, emote.getString("emoteID")));
                     }
 
                     bodyBuilder.append(text);
                 }
 
                 String body = bodyBuilder.toString();
-                emotes.addAll(mEmoteManager.findCustomEmotes(body));
+                emotes.putAll(mEmoteManager.findCustomEmotes(body));
 
                 //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
@@ -535,8 +534,8 @@ public class ChatManager implements Runnable {
         String color = tags.get("color");
         String displayName = tags.get("display-name");
         String content = message.content;
-        List<ChatEmote> emotes = new ArrayList<>(mEmoteManager.findTwitchEmotes(message.tags.get("emotes"), content));
-        emotes.addAll(mEmoteManager.findCustomEmotes(content));
+        Map<Integer, Emote> emotes = mEmoteManager.findTwitchEmotes(message.tags.get("emotes"), content);
+        emotes.putAll(mEmoteManager.findCustomEmotes(content));
         //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
         ChatMessage chatMessage = new ChatMessage(content, displayName, color, getBadges(badges), emotes, false);

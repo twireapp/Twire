@@ -2,7 +2,6 @@ package com.perflyst.twire.chat;
 
 import androidx.annotation.Nullable;
 
-import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
@@ -239,17 +238,14 @@ class ChatEmoteManager {
      * @param message The message to find emotes in
      * @return The List of emotes in the message
      */
-    List<ChatEmote> findCustomEmotes(String message) {
-        List<ChatEmote> emotes = new ArrayList<>();
+    Map<Integer, Emote> findCustomEmotes(String message) {
+        Map<Integer, Emote> emotes = new HashMap<>();
 
         int position = 0;
         for (String part : message.split(" ")) {
             if (emoteKeywordToEmote.containsKey(part)) {
                 Emote emote = emoteKeywordToEmote.get(part);
-
-                int[] positions = {position};
-                final ChatEmote chatEmote = new ChatEmote(emote, positions);
-                emotes.add(chatEmote);
+                emotes.put(position, emote);
             }
 
             position += part.length() + 1;
@@ -264,11 +260,11 @@ class ChatEmoteManager {
      * @param line The line to find emotes in
      * @return The list of emotes from the line
      */
-    List<ChatEmote> findTwitchEmotes(@Nullable String line, String message) {
+    Map<Integer, Emote> findTwitchEmotes(@Nullable String line, String message) {
         if (line == null)
-            return Collections.emptyList();
+            return Collections.emptyMap();
 
-        List<ChatEmote> emotes = new ArrayList<>();
+        Map<Integer, Emote> emotes = new HashMap<>();
         Matcher emoteMatcher = emotePattern.matcher(line);
 
         while (emoteMatcher.find()) {
@@ -289,7 +285,9 @@ class ChatEmoteManager {
                 }
             }
 
-            emotes.add(new ChatEmote(Emote.Twitch(keyword, emoteId), positions));
+            for (int position : positions) {
+                emotes.put(position, Emote.Twitch(keyword, emoteId));
+            }
         }
 
         return emotes;

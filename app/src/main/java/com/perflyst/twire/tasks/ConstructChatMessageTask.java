@@ -1,14 +1,13 @@
 package com.perflyst.twire.tasks;
 
 import com.perflyst.twire.chat.ChatManager;
-import com.perflyst.twire.model.ChatEmote;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
@@ -47,27 +46,27 @@ public class ConstructChatMessageTask implements Callable<ChatMessage> {
         return null;
     }
 
-    private ArrayList<ChatEmote> getMessageChatEmotes() {
-        ArrayList<ChatEmote> result = new ArrayList<>();
+    private Map<Integer, Emote> getMessageChatEmotes() {
+        Map<Integer, Emote> result = new HashMap<>();
         List<String> words = Arrays.asList(message.split(" "));
 
         if (subscriberEmotes != null) {
-            result.addAll(getEmotesFromList(words, subscriberEmotes));
+            result.putAll(getEmotesFromList(words, subscriberEmotes));
         }
 
         if (twitchEmotes != null) {
-            result.addAll(getEmotesFromList(words, twitchEmotes));
+            result.putAll(getEmotesFromList(words, twitchEmotes));
         }
 
         if (customEmotes != null) {
-            result.addAll(getEmotesFromList(words, customEmotes));
+            result.putAll(getEmotesFromList(words, customEmotes));
         }
 
         return result;
     }
 
-    private List<ChatEmote> getEmotesFromList(List<String> words, List<Emote> emotesToCheck) {
-        List<ChatEmote> result = new ArrayList<>();
+    private Map<Integer, Emote> getEmotesFromList(List<String> words, List<Emote> emotesToCheck) {
+        Map<Integer, Emote> result = new HashMap<>();
 
         for (String word : words) {
             if (emotesToCheck != null) {
@@ -78,7 +77,7 @@ public class ConstructChatMessageTask implements Callable<ChatMessage> {
 
                         wordOccurrences.put(word, wordIndex + word.length() - 1);
 
-                        result.add(new ChatEmote(emote, new int[]{wordIndex}));
+                        result.put(wordIndex, emote);
                     }
                 }
             }

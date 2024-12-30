@@ -5,20 +5,22 @@ import androidx.annotation.NonNull;
 
 import com.perflyst.twire.chat.ChatManager;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ChatMessage {
     private final String message;
     private final String name;
     private final String color;
     private final List<Badge> badges;
-    private final List<ChatEmote> emotes;
+    private final Map<Integer, Emote> emotes;
     private boolean highlight;
     private String id = null;
 
     public String systemMessage = "";
 
-    public ChatMessage(String message, String name, String color, List<Badge> badges, List<ChatEmote> emotes, boolean highlight) {
+    public ChatMessage(String message, String name, String color, List<Badge> badges, Map<Integer, Emote> emotes, boolean highlight) {
         this.message = message;
         this.name = name;
         this.color = color;
@@ -59,7 +61,7 @@ public class ChatMessage {
         return badges;
     }
 
-    public List<ChatEmote> getEmotes() {
+    public Map<Integer, Emote> getEmotes() {
         return emotes;
     }
 
