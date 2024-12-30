@@ -12,7 +12,7 @@ import com.perflyst.twire.R;
 import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.model.Theme;
-import com.perflyst.twire.tasks.GetLiveStreamURL;
+import com.perflyst.twire.tasks.GetStreamURL;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -454,7 +454,7 @@ public class Settings {
 
     public String getPrefStreamQuality() {
         SharedPreferences preferences = getPreferences();
-        return preferences.getString(this.STREAM_PREF_QUALITY, GetLiveStreamURL.QUALITY_AUTO);
+        return preferences.getString(this.STREAM_PREF_QUALITY, GetStreamURL.QUALITY_AUTO);
     }
 
     /**

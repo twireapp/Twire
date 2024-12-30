@@ -19,26 +19,24 @@ import java.util.regex.Pattern;
 
 import okhttp3.Request;
 
-/**
- * Async task. Gets the required access token for a specific streamer. Then starts the streamers live stream.
- * Requires to be executed with the username of the streamer and a reference to the VideoView
- */
-public class GetLiveStreamURL implements Callable<Map<String, Quality>> {
+public class GetStreamURL implements Callable<Map<String, Quality>> {
     public static final String QUALITY_SOURCE = "chunked";
     public static final String QUALITY_AUTO = "auto";
     private final String LOG_TAG = getClass().getSimpleName();
 
-    private final String streamerName;
+    private final String channelOrVod;
     protected final String playerType;
     private final String proxy;
+    private final boolean isLive;
 
-    public GetLiveStreamURL(String streamerName, String playerType, String proxy) {
-        this.streamerName = streamerName;
+    public GetStreamURL(String channel, String vod, String playerType, String proxy) {
+        this.isLive = vod == null;
+        this.channelOrVod = isLive ? channel : vod;
         this.playerType = playerType;
         this.proxy = proxy;
     }
 
-    protected JSONObject getToken(boolean isLive, String channelOrVod, String playerType) {
+    protected JSONObject getToken() {
         return Service.graphQL("PlaybackAccessToken", "0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712", new HashMap<>() {{
             put("isLive", isLive);
             put("isVod", !isLive);
@@ -52,12 +50,12 @@ public class GetLiveStreamURL implements Callable<Map<String, Quality>> {
         String signature = "";
         String token = "";
 
-        JSONObject dataObject = getToken(true, streamerName, playerType);
+        JSONObject dataObject = getToken();
         if (dataObject == null)
             return new LinkedHashMap<>();
 
         try {
-            JSONObject tokenJSON = dataObject.getJSONObject("streamPlaybackAccessToken");
+            JSONObject tokenJSON = dataObject.getJSONObject(isLive ? "streamPlaybackAccessToken" : "videoPlaybackAccessToken");
             token = tokenJSON.getString("value");
             signature = tokenJSON.getString("signature");
 
@@ -66,7 +64,7 @@ public class GetLiveStreamURL implements Callable<Map<String, Quality>> {
             e.printStackTrace();
         }
 
-        String streamUrl = String.format("https://usher.ttvnw.net/api/channel/hls/%s.m3u8" +
+        String streamUrl = String.format((isLive ? "https://usher.ttvnw.net/api/channel/hls/%s.m3u8" : "https://usher.ttvnw.net/vod/%s") +
                 "?player=twitchweb&" +
                 "&token=%s" +
                 "&sig=%s" +
@@ -74,10 +72,10 @@ public class GetLiveStreamURL implements Callable<Map<String, Quality>> {
                 "&allow_source=true" +
                 "&type=any" +
                 "&fast_bread=true" +
-                "&p=%s", streamerName, Utils.safeEncode(token), signature, "" + new Random().nextInt(6));
+                "&p=%s", channelOrVod, Utils.safeEncode(token), signature, "" + new Random().nextInt(6));
 
-        if (!proxy.isEmpty()) {
-            String parameters = streamerName + ".m3u8?allow_source=true&allow_audio_only=true&fast_bread=true";
+        if (isLive && !proxy.isEmpty()) {
+            String parameters = channelOrVod + ".m3u8?allow_source=true&allow_audio_only=true&fast_bread=true";
             streamUrl = proxy + "/playlist/" + Utils.safeEncode(parameters);
         }
 

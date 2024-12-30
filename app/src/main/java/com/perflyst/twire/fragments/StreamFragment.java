@@ -109,11 +109,10 @@ import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
-import com.perflyst.twire.tasks.GetLiveStreamURL;
 import com.perflyst.twire.tasks.GetPanelsTask;
 import com.perflyst.twire.tasks.GetStreamChattersTask;
+import com.perflyst.twire.tasks.GetStreamURL;
 import com.perflyst.twire.tasks.GetStreamViewersTask;
-import com.perflyst.twire.tasks.GetVODStreamURL;
 import com.perflyst.twire.utils.Execute;
 import com.rey.material.widget.ProgressView;
 
@@ -1188,13 +1187,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         String[] types = getResources().getStringArray(R.array.PlayerType);
 
-        if (vodId == null) {
-            GetLiveStreamURL task = new GetLiveStreamURL(mUserInfo.getLogin(), types[settings.getStreamPlayerType()], settings.getStreamPlayerProxy());
-            Execute.background(task, callback);
-        } else {
-            GetLiveStreamURL task = new GetVODStreamURL(vodId, types[settings.getStreamPlayerType()]);
-            Execute.background(task, callback);
-        }
+        GetStreamURL task = new GetStreamURL(mUserInfo.getLogin(), vodId, types[settings.getStreamPlayerType()], settings.getStreamPlayerProxy());
+        Execute.background(task, callback);
     }
 
     /**
@@ -1230,7 +1224,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             List<String> qualityList = new ArrayList<>(qualityURLs.keySet());
             int next = qualityList.indexOf(quality) + 1;
             if (next >= qualityList.size() - 1) {
-                startStreamWithQuality(GetLiveStreamURL.QUALITY_SOURCE);
+                startStreamWithQuality(GetStreamURL.QUALITY_SOURCE);
             } else {
                 startStreamWithQuality(qualityList.get(next));
             }
