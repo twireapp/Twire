@@ -143,7 +143,7 @@ public class Settings {
     private <T> void setValue(String key, T value) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(key, new Gson().toJson(value));
-        editor.commit();
+        editor.apply();
     }
 
     private <T> T getValue(String key, Class<T> type, T defaultValue) {
@@ -189,7 +189,7 @@ public class Settings {
     void setUsersNotToNotifyWhenLive(ArrayList<String> emotes) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.NOTIFY_LIVE, new Gson().toJson(emotes));
-        editor.commit();
+        editor.apply();
     }
 
     public int getKeyboardHeight() {
@@ -203,7 +203,7 @@ public class Settings {
     public void setKeyboardHeight(int height) {
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(CHAT_KEYBOARD_HEIGHT, height);
-        editor.commit();
+        editor.apply();
     }
 
     public ArrayList<Emote> getRecentEmotes() {
@@ -218,7 +218,7 @@ public class Settings {
     public void setRecentEmotes(ArrayList<Emote> emotes) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.CHAT_RECENT_EMOTES, new Gson().toJson(emotes));
-        editor.commit();
+        editor.apply();
     }
 
     public String getAppearanceGameSize() {
@@ -233,7 +233,7 @@ public class Settings {
     public void setAppearanceGameSize(String sizeName) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.APPEARANCE_GAME_SIZE, sizeName);
-        editor.commit();
+        editor.apply();
     }
 
     public String getAppearanceStreamSize() {
@@ -248,7 +248,7 @@ public class Settings {
     public void setAppearanceStreamSize(String sizeName) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.APPEARANCE_STREAM_SIZE, sizeName);
-        editor.commit();
+        editor.apply();
     }
 
     public String getAppearanceChannelSize() {
@@ -263,7 +263,7 @@ public class Settings {
     public void setAppearanceChannelSize(String sizeName) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.APPEARANCE_STREAMER_SIZE, sizeName);
-        editor.commit();
+        editor.apply();
     }
 
     public String getAppearanceChannelStyle() {
@@ -278,7 +278,7 @@ public class Settings {
     public void setAppearanceChannelStyle(String styleName) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.APPEARANCE_FOLLOW_STYLE, styleName);
-        editor.commit();
+        editor.apply();
     }
 
     public String getAppearanceGameStyle() {
@@ -293,7 +293,7 @@ public class Settings {
     public void setAppearanceGameStyle(String styleName) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.APPEARANCE_GAME_STYLE, styleName);
-        editor.commit();
+        editor.apply();
     }
 
     public String getAppearanceStreamStyle() {
@@ -308,7 +308,7 @@ public class Settings {
     public void setAppearanceStreamStyle(String styleName) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.APPEARANCE_STREAM_STYLE, styleName);
-        editor.commit();
+        editor.apply();
     }
 
     public String getStartPage() {
@@ -325,7 +325,7 @@ public class Settings {
     public void setStartPage(String startPage) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_START_PAGE, startPage);
-        editor.commit();
+        editor.apply();
     }
 
     private String getDefaultStartUpPageTitle() {
@@ -353,7 +353,7 @@ public class Settings {
     public void setEmoteSize(int emoteSize) {
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(this.CHAT_EMOTE_SIZE, emoteSize);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -373,7 +373,7 @@ public class Settings {
     public void setMessageSize(int messageSize) {
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(this.CHAT_MESSAGE_SIZE, messageSize);
-        editor.commit();
+        editor.apply();
     }
 
     public int getChatLandscapeWidth() {
@@ -390,7 +390,7 @@ public class Settings {
     public void setChatLandscapeWidth(int width) {
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(this.CHAT_LANDSCAPE_WIDTH, width);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -402,7 +402,7 @@ public class Settings {
     public void setShowChatInLandscape(boolean enableChat) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_LANDSCAPE_SWIPEABLE, enableChat);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean isChatInLandscapeEnabled() {
@@ -424,7 +424,7 @@ public class Settings {
     public void setChatLandscapeSwipeable(boolean enableChatSwipe) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_LANDSCAPE_ENABLE, enableChatSwipe);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean isTipsShown() {
@@ -439,7 +439,7 @@ public class Settings {
     public void setTipsShown(boolean shown) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.TIP_IS_SHOWN, shown);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -459,7 +459,7 @@ public class Settings {
     public void setTheme(Theme theme) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.THEME_CHOSEN, theme.toString());
-        editor.commit();
+        editor.apply();
     }
 
     public String getPrefStreamQuality() {
@@ -474,7 +474,7 @@ public class Settings {
     public void setPrefStreamQuality(String quality) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.STREAM_PREF_QUALITY, quality);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -488,7 +488,7 @@ public class Settings {
         Timber.d("Saving Current Progress: %s", progress);
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(this.STREAM_VOD_PROGRESS + VODid, progress);
-        editor.commit();
+        editor.apply();
     }
 
     public int getVodProgress(String VODid) {
@@ -512,7 +512,7 @@ public class Settings {
     public void setStreamSleepTimerHour(int hour) {
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(this.STREAM_SLEEP_HOUR, hour);
-        editor.commit();
+        editor.apply();
     }
 
     public int getStreamSleepTimerMinute() {
@@ -527,7 +527,7 @@ public class Settings {
     public void setStreamSleepTimerMinute(int minute) {
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(this.STREAM_SLEEP_MINUTE, minute);
-        editor.commit();
+        editor.apply();
     }
 
     public float getPlaybackSpeed() {
@@ -558,7 +558,7 @@ public class Settings {
     public void setGeneralTwitchAccessToken(String token) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_ACCESS_TOKEN_KEY, token);
-        editor.commit();
+        editor.apply();
     }
 
     public String getGeneralTwitchName() {
@@ -574,7 +574,7 @@ public class Settings {
     public void setGeneralTwitchName(String name) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_NAME_KEY, name);
-        editor.commit();
+        editor.apply();
     }
 
     public String getGeneralTwitchDisplayName() {
@@ -590,7 +590,7 @@ public class Settings {
     public void setGeneralTwitchDisplayName(String name) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_DISPLAY_NAME_KEY, name);
-        editor.commit();
+        editor.apply();
     }
 
     public String getGeneralTwitchUserBio() {
@@ -605,7 +605,7 @@ public class Settings {
     public void setGeneralTwitchUserBio(String aBio) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_USER_BIO, aBio);
-        editor.commit();
+        editor.apply();
     }
 
     public String getGeneralTwitchUserLogo() {
@@ -620,7 +620,7 @@ public class Settings {
     public void setGeneralTwitchUserLogo(String aLogoURLString) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_LOGO_URL, aLogoURLString);
-        editor.commit();
+        editor.apply();
     }
 
     public String getGeneralTwitchUserEmail() {
@@ -635,7 +635,7 @@ public class Settings {
     public void setGeneralTwitchUserEmail(String aEmail) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_USER_MAIL, aEmail);
-        editor.commit();
+        editor.apply();
     }
 
     public String getGeneralTwitchUserCreatedDate() {
@@ -650,7 +650,7 @@ public class Settings {
     public void setGeneralTwitchUserCreatedDate(String aCreatedAtDate) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_USER_CREATED, aCreatedAtDate);
-        editor.commit();
+        editor.apply();
     }
 
     public String getGeneralTwitchUserUpdatedDate() {
@@ -665,7 +665,7 @@ public class Settings {
     public void setGeneralTwitchUserUpdatedDate(String aUpdatedAtDate) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_USER_UPDATED, aUpdatedAtDate);
-        editor.commit();
+        editor.apply();
     }
 
     public String getGeneralTwitchUserType() {
@@ -680,7 +680,7 @@ public class Settings {
     public void setGeneralTwitchUserType(String aType) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_USER_TYPE, aType);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean getGeneralTwitchUserIsPartner() {
@@ -695,7 +695,7 @@ public class Settings {
     public void setGeneralTwitchUserIsPartner(boolean aUpdatedAtDate) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.GENERAL_TWITCH_USER_IS_PARTNER, aUpdatedAtDate);
-        editor.commit();
+        editor.apply();
     }
 
     public String getGeneralTwitchUserID() {
@@ -710,7 +710,7 @@ public class Settings {
     public void setGeneralTwitchUserID(String aID) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_TWITCH_USER_ID, aID);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean getStreamPlayerShowViewerCount() {
@@ -730,13 +730,13 @@ public class Settings {
     public void setStreamPlayerShowViewerCount(boolean showViewCount) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.STREAM_PLAYER_SHOW_VIEWERCOUNT, showViewCount);
-        editor.commit();
+        editor.apply();
     }
 
     public void setStreamPlayerRuntime(boolean showRuntime) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.STREAM_PLAYER_SHOW_RUNTIME, showRuntime);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean getGeneralFilterTopStreamsByLanguage() {
@@ -751,7 +751,7 @@ public class Settings {
     public void setGeneralFilterTopStreamsByLanguage(boolean filterTopStreamsByLanguage) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.GENERAL_FILTER_TOP_STREAMS_LANGUAGE, filterTopStreamsByLanguage);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean getStreamPlayerShowNavigationBar() {
@@ -766,7 +766,7 @@ public class Settings {
     public void setStreamPlayerShowNavigationBar(boolean showNavigationBar) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.STREAM_PLAYER_REVEAL_NAVIGATION, showNavigationBar);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean getStreamPlayerAutoContinuePlaybackOnReturn() {
@@ -791,7 +791,7 @@ public class Settings {
     public void setStreamPlayerType(int playerType) {
         SharedPreferences.Editor editor = getEditor();
         editor.putInt(this.STREAM_PLAYER_TYPE, playerType);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -806,7 +806,7 @@ public class Settings {
     public void setStreamPlayerProxy(String proxy) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.STREAM_PLAYER_PROXY, proxy);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -816,7 +816,7 @@ public class Settings {
     public void setStreamPlayerAutoContinuePlaybackOnReturn(boolean autoPlayback) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.STREAM_PLAYER_AUTO_PLAYBACK, autoPlayback);
-        editor.commit();
+        editor.apply();
     }
 
     public void setStreamPlayerLockedPlayback(boolean lockedPlayback) {
@@ -842,7 +842,7 @@ public class Settings {
     public void setSetup(boolean isSetup) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.SETUP_IS_SETUP, isSetup);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -852,7 +852,7 @@ public class Settings {
     public void setLogin(boolean isLoggedIn) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.SETUP_IS_LOGGED_IN, isLoggedIn);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean isLoggedIn() {
@@ -872,7 +872,7 @@ public class Settings {
     public void setChatEnableSSL(boolean SSL) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_ENABLE_SSL, SSL);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -887,7 +887,7 @@ public class Settings {
     public void setChatEmoteBTTV(boolean setting) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_EMOTE_BTTV, setting);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean getChatEmoteFFZ() {
@@ -898,7 +898,7 @@ public class Settings {
     public void setChatEmoteFFZ(boolean setting) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_EMOTE_FFZ, setting);
-        editor.commit();
+        editor.apply();
     }
 
     public boolean getChatEmoteSEVENTV() {
@@ -909,7 +909,7 @@ public class Settings {
     public void setChatEmoteSEVENTV(boolean setting) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_EMOTE_SEVENTV, setting);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -924,7 +924,7 @@ public class Settings {
     public void setChatAccountConnect(boolean AccountConnect) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.CHAT_ACCOUNT_CONNECT, AccountConnect);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -939,7 +939,7 @@ public class Settings {
     public void setGeneralUseImageProxy(boolean ImageProxy) {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.GENERAL_IMAGE_PROXY, ImageProxy);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -954,7 +954,7 @@ public class Settings {
     public void setImageProxyUrl(String url) {
         SharedPreferences.Editor editor = getEditor();
         editor.putString(this.GENERAL_IMAGE_PROXY_URL, url);
-        editor.commit();
+        editor.apply();
     }
 
     public Context getContext() {
