@@ -32,7 +32,6 @@
     <string name="navigation_drawer_top_games_title">Лучшие игры</string>
     <string name="navigation_drawer_top_streams_title">Лучшие трансляции</string>
     <string name="navigation_drawer_my_streams_title">Мои трансляции</string>
-    <string name="navigation_drawer_featured_title">Избранные трансляции</string>
     <string name="games_tab">ИГРЫ</string>
     <string name="streams_tab">ТРАНСЛЯЦИИ</string>
     <string name="search_hint">Поиск</string>

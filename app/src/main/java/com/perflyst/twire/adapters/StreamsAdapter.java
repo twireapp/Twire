@@ -24,8 +24,6 @@ import com.perflyst.twire.service.Service;
 import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
-import java.util.Comparator;
-
 /**
  * Created by Sebastian Rask on 11-04-2016.
  */
@@ -67,7 +65,6 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
     private final int topMargin, bottomMargin;
     private final Activity activity;
     private int rightMargin, leftMargin;
-    private boolean considerPriority;
 
     public StreamsAdapter(AutoSpanRecyclerView recyclerView, Activity aActivity) {
         super(recyclerView, aActivity);
@@ -76,7 +73,6 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         bottomMargin = (int) getContext().getResources().getDimension(R.dimen.stream_card_bottom_margin);
         topMargin = (int) getContext().getResources().getDimension(R.dimen.stream_card_top_margin);
         leftMargin = (int) getContext().getResources().getDimension(R.dimen.stream_card_left_margin);
-        considerPriority = false;
     }
 
 
@@ -191,20 +187,6 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
     }
 
     @Override
-    public void add(StreamInfo element) {
-        if (getElements().contains(element)) {
-            return;
-        }
-        if (considerPriority) {
-            int position = getElements().size();
-            getElements().add(position, element);
-            notifyItemInserted(position);
-        } else {
-            super.add(element);
-        }
-    }
-
-    @Override
     public String initElementStyle() {
         return getSettings().getAppearanceStreamStyle();
     }
@@ -228,36 +210,5 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         viewHolder.vTitle.setVisibility(View.GONE);
         viewHolder.vGame.setVisibility(View.GONE);
         viewHolder.sharedPadding.setVisibility(View.GONE);
-    }
-
-    public void setConsiderPriority(boolean boo) {
-        considerPriority = boo;
-    }
-
-    private static class StreamsWithPriorityComparator implements Comparator<StreamInfo> {
-        @Override
-        public int compare(StreamInfo lhs, StreamInfo rhs) {
-            if (lhs.isFeaturedStream() && rhs.isFeaturedStream()) { // Both is featured
-                int result = rhs.getPriority() - lhs.getPriority(); // Lowest number comes first
-                if (result == 0) { // If they have the same priority, then the Stream with the most viewers should come first
-                    result = lhs.getCurrentViewers() - rhs.getCurrentViewers();
-                }
-
-                return result;
-            } else if (lhs.isFeaturedStream() && !rhs.isFeaturedStream()) {
-                return 1;
-            } else if (!lhs.isFeaturedStream() && rhs.isFeaturedStream()) {
-                return -1;
-            } else { // None is featured
-                return lhs.getCurrentViewers() - rhs.getCurrentViewers();
-            }
-        }
-    }
-
-    private static class StreamsComparator implements Comparator<StreamInfo> {
-        @Override
-        public int compare(StreamInfo lhs, StreamInfo rhs) {
-            return lhs.compareTo(rhs);
-        }
     }
 }

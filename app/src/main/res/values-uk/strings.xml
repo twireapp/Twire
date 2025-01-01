@@ -31,7 +31,6 @@
     <string name="navigation_drawer_follows_title">Підписані стрімери</string>
     <string name="navigation_drawer_top_streams_title">Найпопулярніші трансляції</string>
     <string name="navigation_drawer_my_streams_title">Мої трансляції</string>
-    <string name="navigation_drawer_featured_title">Відібрані трансляції</string>
     <string name="games_tab">ІГРИ</string>
     <string name="streamers_tab">СТРІМЕРИ</string>
     <string name="streams_tab">ТРАНСЛЯЦІЇ</string>

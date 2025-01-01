@@ -193,9 +193,7 @@ public class SearchActivity extends ThemeActivity {
 
         @Override
         public MainActivityAdapter<StreamInfo, ?> constructAdapter() {
-            StreamsAdapter adapter = new StreamsAdapter(mRecyclerView, getActivity());
-            adapter.setConsiderPriority(false);
-            return adapter;
+            return new StreamsAdapter(mRecyclerView, getActivity());
         }
 
         @Override

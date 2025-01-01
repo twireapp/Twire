@@ -62,7 +62,6 @@
     <string name="navigation_drawer_top_streams_title">Nejsledovanější streamy</string>
     <string name="navigation_drawer_follows_title">Sledovaní streameři</string>
     <string name="navigation_drawer_my_streams_title">Moje streamy</string>
-    <string name="navigation_drawer_featured_title">Doporučené streamy</string>
     <string name="games_tab">HRY</string>
     <string name="streamers_tab">STREAMEŘI</string>
     <string name="streams_tab">STREAMY</string>

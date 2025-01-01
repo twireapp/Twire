@@ -159,7 +159,6 @@
     <string name="streamers_tab">STREAMERS</string>
     <string name="games_tab">SPIELE</string>
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_featured_title">Ausgewählte Streams</string>
     <string name="navigation_drawer_my_streams_title">Meine Streams</string>
     <string name="navigation_drawer_top_streams_title">Top Streams</string>
     <string name="navigation_drawer_follows_title">Followed Streamers</string>

@@ -143,7 +143,6 @@
     <string name="gen_dialog_login_or_out_content">您想登入新帳戶或是想登出自%s？</string>
     <string name="chat_status_connected">已連接至聊天室</string>
     <string name="chat_landscape_swipe">橫向時拖動以顯示聊天室</string>
-    <string name="navigation_drawer_featured_title">直播推介</string>
     <string name="login_user_cancel">您需要登入才可使用Twire…</string>
     <string name="tip_navigate">按此前往分頁</string>
     <string name="appearance_game_style_title">遊戲資料卡樣式</string>

@@ -91,7 +91,6 @@
     <string name="navigation_drawer_search_title">搜索</string>
     <string name="navigation_drawer_top_games_title">热门游戏</string>
     <string name="navigation_drawer_follows_title">已关注</string>
-    <string name="navigation_drawer_featured_title">推荐直播</string>
     <string name="navigation_drawer_top_streams_title">热门直播</string>
     <string name="navigation_drawer_my_streams_title">直播中</string>
     <string name="games_tab">游戏</string>

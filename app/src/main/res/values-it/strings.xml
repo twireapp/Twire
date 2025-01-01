@@ -158,7 +158,6 @@
     <string name="streamers_tab">STREAMER</string>
     <string name="games_tab">GIOCHI</string>
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_featured_title">Stream in primo piano</string>
     <string name="navigation_drawer_my_streams_title">I miei stream</string>
     <string name="navigation_drawer_top_streams_title">Migliori stream</string>
     <string name="navigation_drawer_follows_title">Streamer seguiti</string>

@@ -32,7 +32,6 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
     private String game;
     private int currentViewers;
     private String title;
-    private int priority; // Variable only used for featured streams
 
     public StreamInfo(UserInfo userInfo, String game, int currentViewers,
                       String[] previews, long startedAt, String title) {
@@ -42,7 +41,6 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
         this.previews = previews;
         this.startedAt = startedAt;
         this.title = title;
-        this.priority = -1;
     }
 
     public StreamInfo(Parcel in) {
@@ -54,9 +52,8 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
             this.title = stringsData[1];
         }
 
-        if (intData != null && intData.length == 2) {
+        if (intData != null && intData.length == 1) {
             this.currentViewers = intData[0];
-            this.priority = intData[1];
         }
 
         this.startedAt = in.readLong();
@@ -73,7 +70,6 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
 
         int[] intsToSend = {
                 currentViewers,
-                priority
         };
 
         dest.writeIntArray(intsToSend);
@@ -111,18 +107,6 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
 
     public long getStartedAt() {
         return startedAt;
-    }
-
-    public boolean isFeaturedStream() {
-        return getPriority() > -1;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
     }
 
     @Override

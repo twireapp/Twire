@@ -25,7 +25,6 @@ import androidx.fragment.app.Fragment;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.SearchActivity;
-import com.perflyst.twire.activities.main.FeaturedStreamsActivity;
 import com.perflyst.twire.activities.main.MainActivity;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
 import com.perflyst.twire.activities.main.MyStreamsActivity;
@@ -168,7 +167,6 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void setClickListeners() {
         // OnClick listeners for the items
-        setOnClick(binding.featuredStreamsContainer, FeaturedStreamsActivity.class);
         setOnClick(binding.topStreamsContainer, TopStreamsActivity.class);
         setOnClick(binding.topGamesContainer, TopGamesActivity.class);
         setOnClick(binding.myChannelsContainer, MyChannelsActivity.class);

@@ -93,7 +93,6 @@ public class ModelParcelableTest {
         assertArrayEquals(streamInfo.getPreviews(), newStreamInfo.getPreviews());
         assertEquals(streamInfo.getStartedAt(), newStreamInfo.getStartedAt());
         assertEquals(streamInfo.getTitle(), newStreamInfo.getTitle());
-        assertEquals(streamInfo.getPriority(), newStreamInfo.getPriority());
     }
 
     @Test

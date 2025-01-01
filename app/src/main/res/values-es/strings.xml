@@ -164,7 +164,6 @@
     <string name="streamers_tab">STREAMERS</string>
     <string name="games_tab">JUEGOS</string>
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_featured_title">Streams destacados</string>
     <string name="navigation_drawer_my_streams_title">Nuevos streams</string>
     <string name="navigation_drawer_top_streams_title">Trans. populares</string>
     <string name="navigation_drawer_follows_title">Streamers Seguidos</string>

@@ -29,7 +29,6 @@
     <string name="navigation_drawer_follows_title">Streamers que sigo</string>
     <string name="navigation_drawer_top_streams_title">Streams em alta</string>
     <string name="navigation_drawer_my_streams_title">Minhas streams</string>
-    <string name="navigation_drawer_featured_title">Streams em destaque</string>
     <string name="games_tab">JOGOS</string>
     <string name="streamers_tab">STREAMERS</string>
     <string name="streams_tab">STREAMS</string>

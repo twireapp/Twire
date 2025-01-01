@@ -112,7 +112,6 @@
     <string name="chat_status_connection_failed">Anslutning misslyckades</string>
     <string name="navigation_drawer_top_streams_title">Toppströmmar</string>
     <string name="navigation_drawer_my_streams_title">Mina strömmar</string>
-    <string name="navigation_drawer_featured_title">Utvalda strömmar</string>
     <string name="appearance_stream_header">Strömmar</string>
     <string name="appearance_streams_style_title">Strömstil</string>
     <string name="player_type">Typ av strömspelare</string>

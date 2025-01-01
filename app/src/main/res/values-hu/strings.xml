@@ -165,7 +165,6 @@
     <string name="navigation_drawer_top_games_title">Legnépszerűbb játékok</string>
     <string name="appearance_streamer_header">Streamerek</string>
     <string name="streams_tab">KÖZVETÍTÉSEK</string>
-    <string name="navigation_drawer_featured_title">Kiemelt közvetítések</string>
     <string name="appearance_streamer_style_title">Streamer stílusa</string>
     <string name="appearance_game_header">Játékok</string>
     <string name="navigation_drawer_my_streams_title">Saját közvetítések</string>

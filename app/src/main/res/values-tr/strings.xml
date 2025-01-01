@@ -74,7 +74,6 @@
     <string name="navigation_drawer_follows_title">Takip edilen yayıncılar</string>
     <string name="navigation_drawer_top_streams_title">Zirvedeki yayınlar</string>
     <string name="navigation_drawer_my_streams_title">Yayınlarım</string>
-    <string name="navigation_drawer_featured_title">Öne çıkan yayınlar</string>
     <string name="games_tab">OYUNLAR</string>
     <string name="streamers_tab">YAYINCILAR</string>
     <string name="streams_tab">YAYINLAR</string>

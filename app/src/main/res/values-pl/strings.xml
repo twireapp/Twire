@@ -10,7 +10,6 @@
     <string name="navigation_drawer_follows_title">Obserwowane profile</string>
     <string name="navigation_drawer_top_streams_title">Najpopularniejsze transmisje</string>
     <string name="navigation_drawer_my_streams_title">Moje transmisje</string>
-    <string name="navigation_drawer_featured_title">Proponowane transmisje</string>
     <string name="games_tab">GRY</string>
     <string name="streamers_tab">TRANSMITUJĄCY</string>
     <string name="streams_tab">TRANSMISJE</string>

@@ -153,9 +153,6 @@
     <!-- Top Streams Activity -->
     <string name="top_streams_activity_title" translatable="false">@string/navigation_drawer_top_streams_title</string>
 
-    <!-- Featured Streams Activity -->
-    <string name="featured_activity_title" translatable="false">@string/navigation_drawer_featured_title</string>
-
     <!-- OnlineStreamCardAdapter-->
     <string name="intent_key_streamer_info" translatable="false">StreamerInfoIntent</string>
     <string name="intent_key_stream_viewers" translatable="false">StreamViewers</string>
@@ -278,7 +275,6 @@
     <string name="games_tab">GAMES</string>
 
     <!-- Navigation Drawer -->
-    <string name="navigation_drawer_featured_title">Featured streams</string>
     <string name="navigation_drawer_my_streams_title">My streams</string>
     <string name="navigation_drawer_top_streams_title">Top streams</string>
     <string name="navigation_drawer_follows_title">Followed streamers</string>

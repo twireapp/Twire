@@ -99,10 +99,6 @@
             android:label="@string/top_streams_activity_title"
             android:launchMode="singleTop" />
         <activity
-            android:name=".activities.main.FeaturedStreamsActivity"
-            android:label="@string/featured_activity_title"
-            android:launchMode="singleTop" />
-        <activity
             android:name=".activities.setup.WelcomeActivity"
             android:label="@string/title_activity_welcome"
             android:screenOrientation="sensor" />

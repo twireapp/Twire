@@ -37,7 +37,6 @@ import androidx.customview.widget.ViewDragHelper;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.perflyst.twire.R;
-import com.perflyst.twire.activities.main.FeaturedStreamsActivity;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
 import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.main.TopGamesActivity;
@@ -182,9 +181,7 @@ public class Service {
         String title = new Settings(context).getStartPage();
 
         Class<?> activityClass = MyStreamsActivity.class;
-        if (title.equals(context.getString(R.string.navigation_drawer_featured_title))) {
-            activityClass = FeaturedStreamsActivity.class;
-        } else if (title.equals(context.getString(R.string.navigation_drawer_follows_title))) {
+        if (title.equals(context.getString(R.string.navigation_drawer_follows_title))) {
             activityClass = MyChannelsActivity.class;
         } else if (title.equals(context.getString(R.string.navigation_drawer_top_streams_title))) {
             activityClass = TopStreamsActivity.class;

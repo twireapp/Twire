@@ -135,7 +135,6 @@
     <string name="streamers_tab">KANAVAT</string>
     <string name="navigation_drawer_top_streams_title">Suosituimmat lähetykset</string>
     <string name="navigation_drawer_my_streams_title">Suosikkilähetykseni</string>
-    <string name="navigation_drawer_featured_title">Esiteltävät lähetykset</string>
     <string name="games_tab">PELIT</string>
     <string name="streams_tab">LÄHETYKSET</string>
     <string name="navigation_drawer_top_games_title">Suosituimmat kategoriat</string>

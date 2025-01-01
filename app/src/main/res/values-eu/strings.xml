@@ -22,7 +22,6 @@
     <string name="navigation_drawer_follows_title">Jarraitutako kanalak</string>
     <string name="navigation_drawer_top_streams_title">Zuzeneko arrakastatsuenak</string>
     <string name="navigation_drawer_my_streams_title">Nire zuzenekoak</string>
-    <string name="navigation_drawer_featured_title">Nabarmendutako zuzenekoak</string>
     <string name="streams_tab">ZUZENEKOAK</string>
     <string name="streamers_tab">KANALAK</string>
     <string name="appearance_streamer_header">Kanalak</string>

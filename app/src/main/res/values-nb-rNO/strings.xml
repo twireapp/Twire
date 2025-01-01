@@ -27,7 +27,6 @@
     <string name="navigation_drawer_follows_title">Fulgte strømmere</string>
     <string name="navigation_drawer_top_streams_title">Toppstrømmer</string>
     <string name="navigation_drawer_my_streams_title">Mine strømmer</string>
-    <string name="navigation_drawer_featured_title">Framhevede strømmer</string>
     <string name="games_tab">Spill</string>
     <string name="streamers_tab">Strømmere</string>
     <string name="streams_tab">Strømmer</string>

@@ -27,7 +27,6 @@
     <string name="navigation_drawer_follows_title">フォロー中のストリーマー</string>
     <string name="navigation_drawer_top_streams_title">人気のストリーム</string>
     <string name="navigation_drawer_my_streams_title">マイストリーム</string>
-    <string name="navigation_drawer_featured_title">注目のストリーム</string>
     <string name="games_tab">ゲー厶</string>
     <string name="streamers_tab">ストリーマー</string>
     <string name="streams_tab">ストリーム</string>
