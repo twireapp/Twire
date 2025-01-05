@@ -322,7 +322,7 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
     <string-array name="changelog_lines">
-        <item>V 2.12.0</item>
+        <item>V 2.11.0</item>
         <item>A Add background playback when the screen is locked.</item>
         <item>A Add support for proxies, which can be used to block ads.</item>
         <item>F Fix usher requests not using https.</item>
