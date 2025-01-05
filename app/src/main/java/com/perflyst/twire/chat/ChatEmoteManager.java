@@ -152,43 +152,35 @@ class ChatEmoteManager {
         }
 
         // 7TV emotes
-        // API Doc: https://github.com/SevenTV/ServerGo/blob/master/docs/rest-api.md
-        final String SEVENTV_GLOBAL_URL = "https://api.7tv.app/v2/emotes/global";
-        final String SEVENTV_CHANNEL_URL = "https://api.7tv.app/v2/users/" + channel.getLogin() + "/emotes";
+        // API Doc: https://7tv.io/v3/docs
+        final String SEVENTV_GLOBAL_URL = "https://7tv.io/v3/emote-sets/global";
+        final String SEVENTV_USER_URL = "https://7tv.io/v3/users/twitch/" + channel.getUserId();
 
         try {
-            String seventvResponseglobal = enabled_seventv ? Service.urlToJSONString(SEVENTV_GLOBAL_URL) : "";
-            if (!seventvResponseglobal.isEmpty()) {
-                // get global emotes
-                JSONArray seventvemotesglobal = new JSONArray(seventvResponseglobal);
+            if (enabled_seventv) {
+                HashMap<String, JSONObject> emoteSets = new HashMap<>();
 
-                // Read all the emotes
-                for (int i = 0; i < seventvemotesglobal.length(); i++) {
-                    Emote emote = To7TV(seventvemotesglobal.getJSONObject(i));
-                    emote.setCustomChannelEmote(false);
-                    customChannel.add(emote);
-                    emoteKeywordToEmote.put(emote.getKeyword(), emote);
-                }
-            }
+                // Get the global emote set
+                emoteSets.put("global", new JSONObject(Service.urlToJSONString(SEVENTV_GLOBAL_URL)));
 
-            String seventvResponsechannel = enabled_seventv ? Service.urlToJSONString(SEVENTV_CHANNEL_URL) : "";
-            if (!seventvResponseglobal.isEmpty()) {
-                // get channel emotes
-                JSONArray seventvemoteschannel;
-                try {
-                    JSONObject response = new JSONObject(seventvResponsechannel);
-                    seventvemoteschannel = new JSONArray();
-                } catch (JSONException e) {
-                    // If there is an exception above then the User has custom emotes
-                    seventvemoteschannel = new JSONArray(seventvResponsechannel);
-                }
+                // Get the channel's emote sets
+                JSONObject userData = new JSONObject(Service.urlToJSONString(SEVENTV_USER_URL));
+                if (!userData.isNull("emote_set")) emoteSets.put("channel", userData.getJSONObject("emote_set"));
 
-                // Read all the emotes
-                for (int i = 0; i < seventvemoteschannel.length(); i++) {
-                    Emote emote = To7TV(seventvemoteschannel.getJSONObject(i));
-                    emote.setCustomChannelEmote(true);
-                    customChannel.add(emote);
-                    emoteKeywordToEmote.put(emote.getKeyword(), emote);
+                // Load the emote sets
+                for (var entry : emoteSets.entrySet()) {
+                    JSONObject emoteSetData = entry.getValue();
+                    JSONArray emotes = emoteSetData.getJSONArray("emotes");
+                    for (int i = 0; i < emotes.length(); i++) {
+                        Emote emote = To7TV(emotes.getJSONObject(i));
+                        if (entry.getKey().equals("global")) {
+                            customGlobal.add(emote);
+                        } else {
+                            emote.setCustomChannelEmote(true);
+                            customChannel.add(emote);
+                        }
+                        emoteKeywordToEmote.put(emote.getKeyword(), emote);
+                    }
                 }
             }
         } catch (JSONException e) {
@@ -224,11 +216,18 @@ class ChatEmoteManager {
     }
 
     private Emote To7TV(JSONObject emoteObject) throws JSONException {
-        JSONArray urls = emoteObject.getJSONArray("urls");
+        JSONObject hostObject = emoteObject.getJSONObject("data").getJSONObject("host");
+        String baseUrl = String.format("https:%s/", hostObject.getString("url"));
+
+        JSONArray files = hostObject.getJSONArray("files");
         HashMap<Integer, String> urlMap = new HashMap<>();
-        for (int i = 0; i < urls.length(); i++) {
-            JSONArray pair = urls.getJSONArray(i);
-            urlMap.put(pair.getInt(0), pair.getString(1));
+        for (int i = 0; i < files.length(); i++) {
+            JSONObject file = files.getJSONObject(i);
+            String name = file.getString("name");
+            if (!name.endsWith(".webp")) continue;
+
+            Integer size = Integer.parseInt(name.substring(0, 1));
+            urlMap.put(size, baseUrl + name);
         }
 
         return new Emote(emoteObject.getString("name"), urlMap);

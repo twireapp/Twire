@@ -458,7 +458,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     if (vodId != null) {
                         player.setPlaybackSpeed(settings.getPlaybackSpeed());
                         PlaybackService.sendSkipSilenceUpdate(player);
-                        player.seekTo(settings.getVodProgress(vodId) * 1000L);
                     }
 
                     if (currentMediaItem != null) {
@@ -477,12 +476,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     private void releasePlayer() {
         if (player != null) {
-            if (vodId != null) {
-                settings.setVodProgress(vodId, player);
-            }
-
-            player.clearMediaItems();
             MediaController.releaseFuture(controllerFuture);
+            player.removeListener(this);
             player = null;
         }
     }
@@ -576,6 +571,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
     public void backPressed() {
         mVideoView.setVisibility(View.INVISIBLE);
+        player.clearMediaItems();
         releasePlayer();
     }
 
@@ -665,6 +661,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (fetchViewCountRunnable != null) {
             fetchViewCountHandler.removeCallbacks(fetchViewCountRunnable);
         }
+
+        releasePlayer();
 
         super.onDestroy();
     }
@@ -1298,6 +1296,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         MediaItem mediaItem = new MediaItem.Builder()
                 .setLiveConfiguration(new MediaItem.LiveConfiguration.Builder().setTargetOffsetMs(1000).build())
                 .setUri(url)
+                .setMediaId(vodId == null ? "" : vodId)
                 .setMediaMetadata(new MediaMetadata.Builder()
                         .setTitle(title)
                         .setArtist(mUserInfo.getDisplayName())
@@ -1306,8 +1305,18 @@ public class StreamFragment extends Fragment implements Player.Listener {
                         .build())
                 .build();
 
+        if (vodId != null) {
+            long startPosition = settings.getVodProgress(vodId) * 1000L;
+            // Don't lose the position if we're playing the same VOD
+            if (currentMediaItem != null && currentMediaItem.mediaId.equals(vodId)) {
+                startPosition = player.getCurrentPosition();
+            }
+
+            player.setMediaItem(mediaItem, startPosition);
+        } else {
+            player.setMediaItem(mediaItem, false);
+        }
         currentMediaItem = mediaItem;
-        player.setMediaItem(mediaItem, false);
         player.prepare();
 
         player.play();

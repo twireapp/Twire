@@ -6,7 +6,6 @@ import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
-import androidx.media3.common.Player;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.perflyst.twire.R;
@@ -452,8 +451,8 @@ public class Settings {
      */
 
     // TODO: This should probably be stored in a database.
-    public void setVodProgress(String VODid, Player player) {
-        int progress = (int) (player.getCurrentPosition() / 1000);
+    public void setVodProgress(String VODid, long currentPosition) {
+        int progress = (int) (currentPosition / 1000);
 
         Log.d(getClass().getSimpleName(), "Saving Current Progress: " + progress);
         SharedPreferences.Editor editor = getEditor();

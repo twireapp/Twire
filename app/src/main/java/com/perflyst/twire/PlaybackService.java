@@ -51,6 +51,16 @@ import java.util.HashMap;
                 .build();
         mediaSession = new MediaSession.Builder(this, player)
                 .setCallback(new MediaSessionCallback(this, player)).build();
+
+        Settings settings = new Settings(this);
+        player.addListener(new Player.Listener() {
+            @Override
+            public void onPositionDiscontinuity(@NonNull Player.PositionInfo oldPosition, @NonNull Player.PositionInfo newPosition, int reason) {
+                if (oldPosition.mediaItem == newPosition.mediaItem || oldPosition.mediaItem == null || oldPosition.mediaItem.mediaId.isEmpty()) return;
+
+                settings.setVodProgress(oldPosition.mediaItem.mediaId, oldPosition.positionMs);
+            }
+        });
     }
 
     @Nullable
@@ -69,6 +79,7 @@ import java.util.HashMap;
 
     @Override
     public void onDestroy() {
+        mediaSession.getPlayer().clearMediaItems();
         mediaSession.getPlayer().release();
         mediaSession.release();
         mediaSession = null;
