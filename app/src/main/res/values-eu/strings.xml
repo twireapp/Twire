@@ -194,9 +194,7 @@
     <string name="gen_dialog_export_follows_content">Esportatu nahi duzu jarraitzen duzun guztia\?</string>
     <string name="gen_dialog_import_follows_action">Inportatu</string>
     <string name="mute">Isilarazi</string>
-    <string name="player_channel_description">Twire-ko erreproduzitzailea</string>
     <string name="gen_import_database">Inportatu jarraipenak</string>
-    <string name="player_channel_name">Erreproduzitzailea</string>
     <string name="gen_toast_wipe_database">Ezabatutako jarraipenak</string>
     <string name="gen_wipe_summary">Honek ez ditu jarraipenak ezabatuko Twitch-en.</string>
     <string name="gen_toast_export_database">Esportatutako %1$x jarraipenak</string>

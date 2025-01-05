@@ -199,8 +199,6 @@
     <string name="gen_local_follows_header">Lokalne obserwowane</string>
     <string name="gen_wipe_summary">To nie wyczyści obserwowanych na Twitch\'u.</string>
     <string name="chat_paused">Zatrzymano czat z powodu przewijania.</string>
-    <string name="player_channel_description">Odtwarzacz Twire</string>
-    <string name="player_channel_name">Odtwarzacz</string>
     <string name="streamerInfo_chat_tab">Czat</string>
     <string name="settings_general_image_proxy_url_placeholder">url API</string>
 </resources>

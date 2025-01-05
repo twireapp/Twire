@@ -238,8 +238,6 @@
     <string name="gen_import_summary">Esto no añadirá seguimientos a Twitch.</string>
     <string name="chat_enable_ssl">Usar SSL para la conexión</string>
     <string name="chat_paused">Chat pausado debido a desplazamiento.</string>
-    <string name="player_channel_description">Reproductor para Twire</string>
-    <string name="player_channel_name">Reproducir</string>
     <string name="streamerInfo_chat_tab">Chat</string>
     <string name="settings_general_image_proxy_url_placeholder">URL de la API</string>
     <string name="player_proxy">Servidor proxy para streaming</string>

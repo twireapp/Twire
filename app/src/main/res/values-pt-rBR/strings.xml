@@ -199,8 +199,6 @@
     <string name="gen_export_summary">As exportações incluem os seguidores locais e da Twitch.</string>
     <string name="gen_local_follows_summary">Os usuários seguidos no Twire são armazenados localmente e não enviados à Twitch.</string>
     <string name="chat_paused">Bate-papo pausado devido à rolagem.</string>
-    <string name="player_channel_description">Player do Twire</string>
-    <string name="player_channel_name">Player</string>
     <string name="streamerInfo_chat_tab">Chat</string>
     <string name="settings_general_image_proxy_url_placeholder">URL da API</string>
 </resources>

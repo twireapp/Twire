@@ -199,8 +199,6 @@
     <string name="gen_export_summary">Dışa aktarım yerel ve Twitch takiplerini içerir.</string>
     <string name="gen_import_summary">Twitch\'e takipçi eklemez.</string>
     <string name="chat_paused">Kaydırma nedeniyle sohbet duraklatıldı.</string>
-    <string name="player_channel_name">Oynatıcı</string>
     <string name="streamerInfo_chat_tab">Sohbet</string>
     <string name="settings_general_image_proxy_url_placeholder">API URL\'si</string>
-    <string name="player_channel_description">Twire\'ın oynatıcısı</string>
 </resources>

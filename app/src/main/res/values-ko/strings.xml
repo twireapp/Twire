@@ -201,6 +201,4 @@
     <string name="chat_paused">스크롤해서 채팅이 멈췄습니다.</string>
     <string name="settings_general_image_proxy_url_placeholder">API url</string>
     <string name="streamerInfo_chat_tab">채팅</string>
-    <string name="player_channel_name">플레이어</string>
-    <string name="player_channel_description">Twire\'s 플레이어</string>
 </resources>

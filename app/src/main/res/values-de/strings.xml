@@ -238,8 +238,6 @@
     <string name="gen_import_summary">Dies wird keine Follower auf Twitch hinzufügen.</string>
     <string name="gen_local_follows_header">Lokale Follows</string>
     <string name="chat_paused">Chat wurde aufgrund des Scrollens angehalten.</string>
-    <string name="player_channel_description">Twires Player</string>
-    <string name="player_channel_name">Player</string>
     <string name="streamerInfo_chat_tab">Chat</string>
     <string name="settings_general_image_proxy_url_placeholder">API-URL</string>
 </resources>
