@@ -178,8 +178,6 @@
     <string name="retry">Prøv igjen</string>
     <string name="mute">Forstum</string>
     <string name="chat_enable_emote_ffz">Skru på FrankerFaceZ (FFZ)-smilefjes</string>
-    <string name="player_channel_name">Avspiller</string>
-    <string name="player_channel_description">Avspilleren i Twire</string>
     <string name="chat_paused">Sludring pauset som følge av rulling.</string>
     <string name="gen_local_follows_header">Lokale følginger</string>
     <string name="gen_local_follows_summary">Brukere fulgt i Twire lagres lokalt og sendes ikke til Twitch.</string>

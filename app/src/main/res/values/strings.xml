@@ -247,8 +247,6 @@
     <string name="chat_enable_emote_seventv">Enable 7TV Emotes</string>
 
     <!-- Stream Player Settings -->
-    <string name="player_channel_name">Player</string>
-    <string name="player_channel_description">Twire Player</string>
     <string name="player_locked_player">Play while locked</string>
     <string name="player_show_viewercount">Show viewer count</string>
     <string name="player_show_navigation">Reveal navigation bar on click</string>

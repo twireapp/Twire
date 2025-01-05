@@ -187,12 +187,10 @@
     <string name="streamers_tab">STRÖMMARE</string>
     <string name="mute">Tyst</string>
     <string name="retry">Försök igen</string>
-    <string name="player_channel_description">Twire\'s spelare</string>
     <string name="gen_import_database">Importera följare</string>
     <string name="navigation_drawer_follows_title">Följda strömmare</string>
     <string name="appearance_streamer_size_title">Strömmar storlek</string>
     <string name="gen_reset_tips">Återställ guidetips</string>
-    <string name="player_channel_name">Spelare</string>
     <string name="chat_enable_emote_ffz">Aktivera FrankerFaceZ (FFZ) emotes</string>
     <string name="gen_toast_wipe_database">Rensade följare</string>
     <string name="chat_enable_account_connect">Anslut med ditt konto</string>

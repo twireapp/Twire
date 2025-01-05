@@ -194,8 +194,6 @@
     <string name="retry">Повторити</string>
     <string name="mute">Заглушити</string>
     <string name="gen_import_summary">Це не додасть підписки на Twitch.</string>
-    <string name="player_channel_name">Програвач</string>
-    <string name="player_channel_description">Програвач Twire</string>
     <string name="chat_paused">Чат призупинено через прокрутку.</string>
     <string name="gen_wipe_summary">Це не зітре підписки на Twitch.</string>
     <string name="gen_local_follows_header">Локальні підписки</string>

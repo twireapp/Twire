@@ -40,6 +40,7 @@ public class Settings {
     private final String STREAM_PLAYER_SHOW_VIEWERCOUNT = "streamPlayerShowViewerCount",
             STREAM_PLAYER_SHOW_RUNTIME = "streamPlayerShowRuntime",
             STREAM_PLAYER_REVEAL_NAVIGATION = "streamPlayerRevealNavigation",
+            STREAM_PLAYER_AUTO_PLACKBACK = "streamPlayerAutoPlackbackOnReturn",
             STREAM_PLAYER_AUTO_PLAYBACK = "streamPlayerAutoPlaybackOnReturn",
             STREAM_PLAYER_LOCKED_PLAYBACK = "streamPlayerLockedPlayback",
             STREAM_PLAYER_TYPE = "streamPlayerType",
@@ -94,6 +95,11 @@ public class Settings {
                 editor.putInt(this.STREAM_VOD_PROGRESS + key.substring(this.STREAM_VOD_PROGRESS.length() + 1), preferences.getInt(key, 0));
                 editor.remove(key);
             } else if (key.startsWith(this.STREAM_VOD_LENGTH)) {
+                editor.remove(key);
+            }
+
+            if (key.startsWith(this.STREAM_PLAYER_AUTO_PLACKBACK) {
+                editor.putBoolean(this.STREAM_PLAYER_AUTO_PLAYBACK, preferences.getBoolean(key, true));
                 editor.remove(key);
             }
         }
@@ -736,11 +742,6 @@ public class Settings {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.STREAM_PLAYER_REVEAL_NAVIGATION, showNavigationBar);
         editor.commit();
-    }
-
-    public boolean getStreamPlayerAutoContinuePlayback() {
-        SharedPreferences preferences = getPreferences();
-        return preferences.getBoolean(this.STREAM_PLAYER_AUTO_PLAYBACK, false);
     }
 
     public boolean getStreamPlayerAutoContinuePlaybackOnReturn() {

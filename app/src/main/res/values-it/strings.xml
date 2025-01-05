@@ -238,8 +238,6 @@
     <string name="gen_export_summary">Le esportazioni includono sia gli utenti seguiti localmente sia quelli di Twitch.</string>
     <string name="gen_import_summary">Questo non aggiungerà utenti seguiti a Twitch.</string>
     <string name="chat_paused">Chat in pausa a causa dello scorrimento.</string>
-    <string name="player_channel_name">Riproduttore</string>
-    <string name="player_channel_description">Riproduttore di Twire</string>
     <string name="streamerInfo_chat_tab">Chat</string>
     <string name="settings_general_image_proxy_url_placeholder">URL API</string>
 </resources>

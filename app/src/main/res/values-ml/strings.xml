@@ -59,7 +59,6 @@
     <string name="no_elements_added_notice">%s ഒന്നും കണ്ടെത്താനായില്ല</string>
     <string name="true_night_theme_name">യഥാർത്ഥ രാത്രി</string>
     <string name="appearance_game_style_title">കളിയുടെ ശൈലി</string>
-    <string name="player_channel_name">കളിക്കാരൻ</string>
     <string name="router_nonexistent_user">ആ ഉപയോക്താവ് നിലവിലില്ല.</string>
     <string name="night_theme_name">രാത്രി</string>
     <string name="chat_message_size">സന്ദേശത്തിന്റെ വലുപ്പം</string>

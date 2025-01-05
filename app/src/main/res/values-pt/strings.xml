@@ -3,8 +3,6 @@
     <string name="login_user_cancel">Precisa fazer o login para usar o Twire, no entanto…</string>
     <string name="streams_tab">STREAMS</string>
     <string name="router_channel_error">Falha ao carregar o canal.</string>
-    <string name="player_channel_name">Player</string>
-    <string name="player_channel_description">Player do Twire</string>
     <string name="changelog_title">Histórico de atualização</string>
     <string name="changelog_show_after_update">Mostrar histórico de atualizações após uma atualização</string>
     <string name="done">FEITO</string>
