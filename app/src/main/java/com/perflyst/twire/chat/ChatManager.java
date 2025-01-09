@@ -382,6 +382,12 @@ public class ChatManager implements Runnable {
 
                 StringBuilder bodyBuilder = new StringBuilder();
                 JSONArray fragments = message.getJSONArray("fragments");
+                // Some messages have no fragments, no idea why. Twitch skips them so we will too.
+                if (fragments.length() == 0) {
+                    downloadedComments.poll();
+                    continue;
+                }
+
                 Map<Integer, Emote> emotes = new HashMap<>();
                 for (int i = 0; i < fragments.length(); i++) {
                     JSONObject fragment = fragments.getJSONObject(i);
