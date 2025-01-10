@@ -1370,18 +1370,16 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         TextView mNameView = mProfileBottomSheet.findViewById(R.id.twitch_name);
         TextView mFollowers = mProfileBottomSheet.findViewById(R.id.txt_followers);
-        TextView mViewers = mProfileBottomSheet.findViewById(R.id.txt_viewers);
         ImageView mFollowButton = mProfileBottomSheet.findViewById(R.id.follow_unfollow_icon);
         ImageView mFullProfileButton = mProfileBottomSheet.findViewById(R.id.full_profile_icon);
         RecyclerView mPanelsRecyclerView = mProfileBottomSheet.findViewById(R.id.panel_recyclerview);
-        if (mNameView == null || mFollowers == null || mViewers == null || mFullProfileButton == null || mPanelsRecyclerView == null)
+        if (mNameView == null || mFollowers == null || mFullProfileButton == null || mPanelsRecyclerView == null)
             return;
 
         mNameView.setText(mUserInfo.getDisplayName());
 
         Execute.background(() -> Service.getStreamerInfoFromUserId(mUserInfo.getUserId(), getContext()), channelInfo -> {
             channelInfo.getFollowers(getContext(), followers -> Utils.setNumber(mFollowers, followers), 0);
-            Utils.setNumber(mViewers, channelInfo.getViews());
 
             setupFollowButton(mFollowButton, channelInfo);
         });

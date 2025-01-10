@@ -145,7 +145,6 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, tempchannel.getString("DISPLAY_NAME"));
                 values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, tempchannel.getString("DESCRIPTION"));
                 values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, tempchannel.getInt("FOLLOWERS"));
-                values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, tempchannel.getInt("VIEWS"));
                 values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, tempchannel.getInt("NOTIFY"));
                 values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, tempchannel.getInt("IS_TWITCH"));
 
@@ -161,9 +160,9 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
 
                 // check what methode should be used
                 String sql = "SELECT * FROM " + SubscriptionsDbHelper.TABLE_NAME + " WHERE _ID=" + tempchannel.getInt("ID");
-                Cursor cursor = db.rawQuery(sql,null);
+                Cursor cursor = db.rawQuery(sql, null);
 
-                if (cursor.getCount()>0) {
+                if (cursor.getCount() > 0) {
                     db.replace(SubscriptionsDbHelper.TABLE_NAME, null, values);
                 } else {
                     db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values);
@@ -189,7 +188,6 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
             int displayNamePosition = cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME);
             int bioPosition = cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_DESCRIPTION);
             int followersPosition = cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_FOLLOWERS);
-            int viewsPosition = cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS);
             int logoPosition = cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_LOGO_URL);
             int bannerPosition = cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_VIDEO_BANNER_URL);
             int banner_profilePosition = cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL);
@@ -201,7 +199,6 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
             String displayname = cursor.getString(displayNamePosition);
             String description = cursor.getString(bioPosition);
             int followers = cursor.getInt(followersPosition);
-            int views = cursor.getInt(viewsPosition);
             String logo = cursor.getString(logoPosition);
             String banner = cursor.getString(bannerPosition);
             String profilebanner = cursor.getString(banner_profilePosition);
@@ -215,7 +212,6 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
                 tempchannel.put("DISPLAY_NAME", displayname);
                 tempchannel.put("DESCRIPTION", description);
                 tempchannel.put("FOLLOWERS", followers);
-                tempchannel.put("VIEWS", views);
                 tempchannel.put("LOGO", logo);
                 tempchannel.put("BANNER", banner);
                 tempchannel.put("PROFILE_BANNER", profilebanner);
@@ -228,7 +224,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
         }
         cursor.close();
 
-        if (channelstoExport.length()>0) {
+        if (channelstoExport.length() > 0) {
             try {
                 JSONObject channels = new JSONObject();
                 channels.put("Channels", channelstoExport);

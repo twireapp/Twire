@@ -545,7 +545,7 @@ public class Service {
             int views = info.getInt("view_count");
             String description = info.getString("description");
 
-            channelInfo = new ChannelInfo(JSONService.getUserInfo(info), description, -1, views, logoURL, videoBannerURL, profileBannerURL);
+            channelInfo = new ChannelInfo(JSONService.getUserInfo(info), description, -1, logoURL, videoBannerURL, profileBannerURL);
 
         } catch (JSONException e) {
             Timber.v(e);
@@ -586,7 +586,6 @@ public class Service {
                 String displayName = cursor.getString(2);
                 String streamDescription = cursor.getString(3);
                 int followers = cursor.getInt(4);
-                int views = cursor.getInt(5);
                 URL logo = null;
                 URL videoBanner = null;
                 URL profileBanner = null;
@@ -610,7 +609,7 @@ public class Service {
 
                 // Create new StreamerInfo object from data fetched from database
                 ChannelInfo mChannelInfo = new ChannelInfo(new UserInfo(streamerId, streamerName, displayName),
-                        streamDescription, followers, views, logo, videoBanner, profileBanner);
+                        streamDescription, followers, logo, videoBanner, profileBanner);
                 mChannelInfo.setNotifyWhenLive(notifyWhenLive);
                 subscriptions.put(mChannelInfo.getDisplayName(), mChannelInfo);
 
@@ -710,7 +709,7 @@ public class Service {
         values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, streamer.getLogin());
         values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, streamer.getDisplayName());
         values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, streamer.getStreamDescription());
-        values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, streamer.getViews());
+        values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, 0);
         values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, disableForStreamer ? 0 : 1); // Enable by default
         values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, 0);
 

@@ -26,9 +26,9 @@ public class JSONService {
     public static int getVodLength(String length) {
         int all = 0;
         String[] letters = {
-          "h",
-          "m",
-          "s"
+                "h",
+                "m",
+                "s"
         };
         int[] times = {
                 3600,
@@ -41,7 +41,7 @@ public class JSONService {
                 "[0-9]+[s]"
         };
 
-        for (int i=0; i < regex.length; i++) {
+        for (int i = 0; i < regex.length; i++) {
             Pattern pattern = Pattern.compile(regex[i]);
             Matcher matcher = pattern.matcher(length);
             if (matcher.find()) {
@@ -104,7 +104,7 @@ public class JSONService {
 
         String gameName = streamObject.getString(GAME_STRING);
 
-        String title = context.getString(R.string.default_stream_title, userInfo.getDisplayName(),  gameName);
+        String title = context.getString(R.string.default_stream_title, userInfo.getDisplayName(), gameName);
         int currentViewers = streamObject.getInt(CURRENT_VIEWERS_INT);
 
         if (streamObject.has(CHANNEL_STATUS_STRING)) {
@@ -154,7 +154,7 @@ public class JSONService {
             profileBannerURL = new URL(channel.getString(PROFILE_BANNER_URL_STRING));
         }
 
-        final ChannelInfo channelInfo = new ChannelInfo(userInfo, "", -1, views, logoURL, videoBannerURL, profileBannerURL);
+        final ChannelInfo channelInfo = new ChannelInfo(userInfo, "", -1, logoURL, videoBannerURL, profileBannerURL);
 
         channelInfo.setStreamDescription(channel.getString(BIO_STRING));
 

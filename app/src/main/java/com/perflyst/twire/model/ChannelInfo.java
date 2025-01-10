@@ -29,17 +29,16 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
     public static final Parcelable.Creator<ChannelInfo> CREATOR = new ClassLoaderCreator<ChannelInfo>() {
         @Override
         public ChannelInfo createFromParcel(Parcel source) {
-            String[] data = new String[9];
+            String[] data = new String[8];
 
             source.readStringArray(data);
             return new ChannelInfo(
                     new UserInfo(data[0], data[1], data[2]),
                     data[3],
                     Integer.parseInt(data[4]),
-                    Integer.parseInt(data[5]),
+                    findUrl(data[5]),
                     findUrl(data[6]),
-                    findUrl(data[7]),
-                    findUrl(data[8])
+                    findUrl(data[7])
             );
         }
 
@@ -65,18 +64,16 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
         }
     };
     @Nullable private Integer followers;
-    private final int views;
     private String streamDescription;
     private URL logoURL;
     private URL videoBannerURL;
     private URL profileBannerURL;
     private boolean notifyWhenLive;
 
-    public ChannelInfo(UserInfo userInfo, String streamDescription, int followers, int views, URL logoURL, URL videoBannerURL, URL profileBannerURL) {
+    public ChannelInfo(UserInfo userInfo, String streamDescription, int followers, URL logoURL, URL videoBannerURL, URL profileBannerURL) {
         super(userInfo.getUserId(), userInfo.getLogin(), userInfo.getDisplayName());
         this.streamDescription = streamDescription;
         this.followers = followers == -1 ? null : followers;
-        this.views = views;
         this.logoURL = logoURL;
         this.videoBannerURL = videoBannerURL;
         this.profileBannerURL = profileBannerURL;
@@ -97,7 +94,6 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
                 this.getDisplayName(),
                 this.streamDescription,
                 String.valueOf(Objects.requireNonNullElse(this.followers, -1)),
-                String.valueOf(this.views),
                 null, //this.logoURL.toString(),
                 null, //this.videoBannerURL.toString(),
                 null, //this.profileBannerURL.toString()
@@ -105,15 +101,15 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
 
         // Only send URLS with if they are not null
         if (this.logoURL != null) {
-            toSend[6] = String.valueOf(this.logoURL);
+            toSend[5] = String.valueOf(this.logoURL);
         }
 
         if (this.videoBannerURL != null) {
-            toSend[7] = String.valueOf(this.videoBannerURL);
+            toSend[6] = String.valueOf(this.videoBannerURL);
         }
 
         if (this.profileBannerURL != null) {
-            toSend[8] = String.valueOf(this.profileBannerURL);
+            toSend[7] = String.valueOf(this.profileBannerURL);
         }
 
         dest.writeStringArray(toSend);
@@ -172,10 +168,6 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
             e.printStackTrace();
             return null;
         }
-    }
-
-    public int getViews() {
-        return views;
     }
 
     public URL getVideoBannerURL() {

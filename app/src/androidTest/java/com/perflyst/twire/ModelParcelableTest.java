@@ -38,7 +38,6 @@ public class ModelParcelableTest {
                 new UserInfo("1", "login", "name"),
                 "description",
                 2,
-                3,
                 new URL("https://example.com/logo"),
                 new URL("https://example.com/videoBanner"),
                 new URL("https://example.com/profileBanner")
@@ -47,7 +46,6 @@ public class ModelParcelableTest {
         ChannelInfo newChannelInfo = clone(channelInfo);
 
         assertEquals(channelInfo.getStreamDescription(), newChannelInfo.getStreamDescription());
-        assertEquals(channelInfo.getViews(), newChannelInfo.getViews());
         assertEquals(channelInfo.getLogoURL(), newChannelInfo.getLogoURL());
         assertEquals(channelInfo.getVideoBannerURL(), newChannelInfo.getVideoBannerURL());
         assertEquals(channelInfo.getProfileBannerURL(), newChannelInfo.getProfileBannerURL());
