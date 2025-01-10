@@ -94,13 +94,11 @@ public class JSONService {
     }
 
     public static StreamInfo getStreamInfo(Context context, JSONObject streamObject, boolean loadDescription) throws JSONException, MalformedURLException {
-        Settings settings = new Settings(context);
         final String PREVIEW_LINK_OBJECT = "thumbnail_url";
         final String CHANNEL_STATUS_STRING = "title";
         final String GAME_STRING = "game_name";
         final String STREAM_START_TIME_STRING = "started_at";
         final String CURRENT_VIEWERS_INT = "viewer_count";
-        String prepend_image = "";
 
         UserInfo userInfo = getUserInfo(streamObject);
 
@@ -113,15 +111,11 @@ public class JSONService {
             title = streamObject.getString(CHANNEL_STATUS_STRING);
         }
 
-        if (settings.getGeneralUseImageProxy()) {
-            prepend_image = settings.getImageProxyUrl();
-        }
-
         // Helix has no previews Object but we can built that by hand
         String[] previews = {
-                prepend_image + streamObject.getString(PREVIEW_LINK_OBJECT).replace("{width}", "80").replace("{height}", "45"),
-                prepend_image + streamObject.getString(PREVIEW_LINK_OBJECT).replace("{width}", "320").replace("{height}", "180"),
-                prepend_image + streamObject.getString(PREVIEW_LINK_OBJECT).replace("{width}", "640").replace("{height}", "360"),
+                streamObject.getString(PREVIEW_LINK_OBJECT).replace("{width}", "80").replace("{height}", "45"),
+                streamObject.getString(PREVIEW_LINK_OBJECT).replace("{width}", "320").replace("{height}", "180"),
+                streamObject.getString(PREVIEW_LINK_OBJECT).replace("{width}", "640").replace("{height}", "360"),
         };
 
         String startedAtString = streamObject.getString(STREAM_START_TIME_STRING);
