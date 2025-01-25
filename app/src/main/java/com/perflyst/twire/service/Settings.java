@@ -98,7 +98,7 @@ public class Settings {
                 editor.remove(key);
             }
 
-            if (key.startsWith(this.STREAM_PLAYER_AUTO_PLACKBACK) {
+            if (key.equals(this.STREAM_PLAYER_AUTO_PLACKBACK)) {
                 editor.putBoolean(this.STREAM_PLAYER_AUTO_PLAYBACK, preferences.getBoolean(key, true));
                 editor.remove(key);
             }
@@ -887,7 +887,7 @@ public class Settings {
         editor.commit();
     }
 
-     /**
+    /**
      * Chat - Connect with Account
      */
 
