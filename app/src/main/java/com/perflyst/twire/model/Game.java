@@ -51,6 +51,10 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         this.gamePreviewLargeURL = gamePreviewLargeURL;
     }
 
+    public Game(com.github.twitch4j.helix.domain.Game game) {
+        this(game.getName(), game.getId(), game.getBoxArtUrl(150, 200), game.getBoxArtUrl(300, 400), game.getBoxArtUrl(600, 800));
+    }
+
     public Game(Parcel parcel) {
         String[] stringData = new String[5];
         int[] intData = new int[2];

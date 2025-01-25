@@ -6,8 +6,11 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.github.twitch4j.helix.domain.Video;
 import com.perflyst.twire.R;
 
+import java.time.Duration;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 
@@ -39,7 +42,7 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
     private final String displayName;
     private final String recordedAtString;
     private final int views;
-    private final int length;
+    private final long length;
     private boolean isBroadcast;
     private ZonedDateTime recordedAt;
     private ChannelInfo channelInfo;
@@ -57,6 +60,19 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         this.recordedAtString = recordedAt;
 
         setRecordedAtDate(recordedAt);
+    }
+
+    public VideoOnDemand(Video video) {
+        this.videoTitle = video.getTitle();
+        this.gameTitle = "";
+        this.previewUrl = video.getThumbnailUrl(320, 180);
+        this.videoId = video.getId();
+        this.channelName = video.getUserLogin();
+        this.displayName = video.getUserName();
+        this.views = video.getViewCount();
+        this.length = Duration.parse("PT" + video.getDuration()).getSeconds();
+        this.recordedAtString = video.getPublishedAtInstant().toString();
+        this.recordedAt = video.getPublishedAtInstant().atZone(ZoneOffset.UTC);
     }
 
     private VideoOnDemand(Parcel in) {
@@ -150,7 +166,7 @@ public class VideoOnDemand implements Comparable<VideoOnDemand>, Parcelable, Mai
         return views;
     }
 
-    public int getLength() {
+    public long getLength() {
         return length;
     }
 

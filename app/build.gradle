@@ -54,6 +54,10 @@ android {
         viewBinding true
         buildConfig true
     }
+
+    packagingOptions {
+        resources.excludes.add("dependencies.txt")
+    }
 }
 
 dependencies {
@@ -116,6 +120,10 @@ dependencies {
 
     //https://github.com/google/guava/releases
     api 'com.google.guava:guava:31.0.1-android'
+
+    //https://github.com/twitch4j/twitch4j
+    implementation 'com.github.twitch4j:twitch4j:1.23.0'
+    implementation 'io.github.xanthic.cache:cache-provider-androidx:0.6.2'
 
     //Testing
     testImplementation "junit:junit:4.13.2"

@@ -6,6 +6,7 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.github.twitch4j.helix.domain.Stream;
 import com.perflyst.twire.R;
 
 
@@ -41,6 +42,21 @@ public class StreamInfo implements Comparable<StreamInfo>, MainElement, Parcelab
         this.previews = previews;
         this.startedAt = startedAt;
         this.title = title;
+    }
+
+    public StreamInfo(Stream stream) {
+        this(
+                new UserInfo(stream.getUserId(), stream.getUserLogin(), stream.getUserName()),
+                stream.getGameName(),
+                stream.getViewerCount(),
+                new String[] {
+                        stream.getThumbnailUrl(80, 45),
+                        stream.getThumbnailUrl(320, 180),
+                        stream.getThumbnailUrl(640, 360),
+                },
+                stream.getStartedAtInstant().toEpochMilli(),
+                stream.getTitle()
+        );
     }
 
     public StreamInfo(Parcel in) {

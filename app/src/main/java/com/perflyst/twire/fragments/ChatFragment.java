@@ -278,7 +278,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                 GetTwitchEmotesTask getTwitchEmotesTask = new GetTwitchEmotesTask(emoteSets, (twitchEmotes, subscriberEmotes) -> {
                     twitchEmotesLoaded(twitchEmotes);
                     subscriberEmotesLoaded(subscriberEmotes, (EmotesPagerAdapter) mEmoteViewPager.getAdapter());
-                }, getContext());
+                });
                 Execute.background(getTwitchEmotesTask);
             }
 

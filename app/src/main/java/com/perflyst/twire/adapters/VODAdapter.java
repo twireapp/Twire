@@ -20,7 +20,6 @@ import androidx.cardview.widget.CardView;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.stream.VODActivity;
 import com.perflyst.twire.model.VideoOnDemand;
-import com.perflyst.twire.service.Service;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 import java.time.Duration;
@@ -171,7 +170,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
             viewHolder.vProgressBar.setPadding(0, 0, 0, 0);
 
             viewHolder.vPreviewImage.animate().alpha(VOD_WATCHED_IMAGE_ALPHA).setDuration(300).start();
-            viewHolder.vProgressBar.setMax(element.getLength());
+            viewHolder.vProgressBar.setMax((int) element.getLength());
             ObjectAnimator.ofInt(viewHolder.vProgressBar, "progress", vodProgress).setDuration(300).start();
         } else {
             viewHolder.vProgressBar.setVisibility(View.INVISIBLE);
@@ -204,7 +203,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
             time = DateUtils.formatDateTime(getContext(), milliseconds, DateUtils.FORMAT_SHOW_DATE);
         }
 
-        return time + " - " + Service.calculateTwitchVideoLength(vod.getLength());
+        return time + " - " + DateUtils.formatElapsedTime(vod.getLength());
     }
 
     @Override

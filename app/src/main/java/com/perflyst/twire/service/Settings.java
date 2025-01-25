@@ -8,6 +8,7 @@ import androidx.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.model.Emote;
 import com.perflyst.twire.model.Theme;
@@ -853,6 +854,8 @@ public class Settings {
         SharedPreferences.Editor editor = getEditor();
         editor.putBoolean(this.SETUP_IS_LOGGED_IN, isLoggedIn);
         editor.apply();
+
+        TwireApplication.updateCredential(context);
     }
 
     public boolean isLoggedIn() {

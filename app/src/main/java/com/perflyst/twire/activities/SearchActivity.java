@@ -16,11 +16,12 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.github.twitch4j.helix.domain.ChannelSearchResult;
+import com.github.twitch4j.helix.domain.HelixPagination;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.ChannelsAdapter;
 import com.perflyst.twire.adapters.GamesAdapter;
@@ -33,8 +34,6 @@ import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.Game;
 import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.model.StreamInfo;
-import com.perflyst.twire.service.JSONService;
-import com.perflyst.twire.service.Service;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.ChannelAutoSpanBehaviour;
@@ -42,12 +41,6 @@ import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.GameAutoSpanB
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour;
 import com.rey.material.widget.ProgressView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -138,11 +131,6 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public String getElementsURL() {
-            return "https://api.twitch.tv/helix/search/categories?query=" + query + "&first=" + getLimit() + getPagination();
-        }
-
-        @Override
         public AutoSpanBehaviour constructBehaviour() {
             return new GameAutoSpanBehaviour();
         }
@@ -157,33 +145,17 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public List<Game> getVisualElements() throws JSONException {
-            List<Game> mGames = new ArrayList<>();
-            if (query != null) {
-                String URL = getElementsURL();
-                JSONObject fullDataObject = new JSONObject(Service.urlToJSONStringHelix(URL, getContext()));
-                String GAMES_ARRAY = "data";
-                JSONArray gamesArray = fullDataObject.getJSONArray(GAMES_ARRAY);
+        public List<Game> getVisualElements() {
+            if (query == null) return List.of();
 
-                for (int i = 0; i < gamesArray.length(); i++) {
-                    JSONObject gameObject = gamesArray.getJSONObject(i);
-                    mGames.add(JSONService.getGame(gameObject));
-                }
-
-                setCursorFromResponse(fullDataObject);
-            }
-            return mGames;
+            var games = TwireApplication.helix.searchCategories(null, query, getLimit(), getCursor()).execute().getResults();
+            return games.stream().map(Game::new).toList();
         }
     }
 
     public static class SearchStreamsFragment extends SearchFragment<StreamInfo> {
         static SearchStreamsFragment newInstance() {
             return new SearchStreamsFragment();
-        }
-
-        @Override
-        public String getElementsURL() {
-            return "https://api.twitch.tv/helix/search/channels?query=" + query + "&first=" + getLimit() + getPagination() + "&live_only=true";
         }
 
         @Override
@@ -202,30 +174,14 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
-            List<StreamInfo> mStreams = new ArrayList<>();
-            if (query != null) {
-                String URL = getElementsURL();
-                JSONObject fullDataObject = new JSONObject(Service.urlToJSONStringHelix(URL, getContext()));
-                String STREAMS_ARRAY = "data";
-                JSONArray mStreamsArray = fullDataObject.getJSONArray(STREAMS_ARRAY);
+        public List<StreamInfo> getVisualElements() {
+            if (query == null) return List.of();
 
-                List<String> ids = new ArrayList<>();
-                for (int i = 0; i < mStreamsArray.length(); i++) {
-                    JSONObject streamObject = mStreamsArray.getJSONObject(i);
-                    ids.add(streamObject.getString("id"));
-                }
+            var search = TwireApplication.helix.searchChannels(null, query, getLimit(), getCursor(), true).execute();
+            setCursorFromResponse(search.getPagination());
 
-                String url = "https://api.twitch.tv/helix/streams?" + Joiner.on("&").join(Lists.transform(ids, id -> "user_id=" + id));
-                JSONArray result = new JSONObject(Service.urlToJSONStringHelix(url, getContext())).getJSONArray("data");
-                for (int i = 0; i < result.length(); i++) {
-                    mStreams.add(JSONService.getStreamInfo(getContext(), result.getJSONObject(i), false));
-                }
-
-                setCursorFromResponse(fullDataObject);
-            }
-
-            return mStreams;
+            var streams = TwireApplication.helix.getStreams(null, null, null, getLimit(), null, null, search.getResults().stream().map(ChannelSearchResult::getId).toList(), null).execute();
+            return streams.getStreams().stream().map(StreamInfo::new).toList();
         }
     }
 
@@ -237,11 +193,6 @@ public class SearchActivity extends ThemeActivity {
         @Override
         public void reset(String searchQuery) {
             super.reset(searchQuery);
-        }
-
-        @Override
-        public String getElementsURL() {
-            return "https://api.twitch.tv/helix/search/channels?query=" + query + "&limit=" + getLimit() + getPagination();
         }
 
         @Override
@@ -259,29 +210,12 @@ public class SearchActivity extends ThemeActivity {
         }
 
         @Override
-        public List<ChannelInfo> getVisualElements() throws JSONException, MalformedURLException {
-            List<ChannelInfo> mStreamers = new ArrayList<>();
-            if (query != null) {
-                String URL = getElementsURL();
-                JSONObject fullDataObject = new JSONObject(Service.urlToJSONStringHelix(URL, getContext()));
-                String CHANNELS_ARRAY = "data";
-                JSONArray mChannelArray = fullDataObject.getJSONArray(CHANNELS_ARRAY);
+        public List<ChannelInfo> getVisualElements() {
+            if (query == null) return List.of();
 
-                List<String> ids = new ArrayList<>();
-                for (int i = 0; i < mChannelArray.length(); i++) {
-                    JSONObject channel = mChannelArray.getJSONObject(i);
-                    ids.add(channel.getString("id"));
-                }
-
-                String url = "https://api.twitch.tv/helix/users?" + Joiner.on("&").join(Lists.transform(ids, id -> "id=" + id));
-                JSONArray result = new JSONObject(Service.urlToJSONStringHelix(url, getContext())).getJSONArray("data");
-                for (int i = 0; i < result.length(); i++) {
-                    mStreamers.add(JSONService.getStreamerInfo(getContext(), result.getJSONObject(i)));
-                }
-
-                setCursorFromResponse(fullDataObject);
-            }
-            return mStreamers;
+            var streams = TwireApplication.helix.searchChannels(null, query, getLimit(), getCursor(), false).execute();
+            setCursorFromResponse(streams.getPagination());
+            return streams.getResults().stream().map(ChannelInfo::new).toList();
         }
     }
 
@@ -364,18 +298,8 @@ public class SearchActivity extends ThemeActivity {
             }
         }
 
-        protected String getPagination() {
-            return getCursor() == null ? "" : ("&after=" + getCursor());
-        }
-
-        protected void setCursorFromResponse(JSONObject response) {
-            JSONObject pagination = response.optJSONObject("pagination");
-            if (pagination != null) {
-                String cursor = pagination.optString("cursor");
-                if (cursor.isEmpty()) {
-                    setCursor(cursor);
-                }
-            }
+        protected void setCursorFromResponse(HelixPagination pagination) {
+            setCursor(pagination.getCursor());
         }
 
         @Override
@@ -429,8 +353,6 @@ public class SearchActivity extends ThemeActivity {
         public void setMaxElementsToFetch(int aMax) {
             maxElementsToFetch = aMax;
         }
-
-        public abstract String getElementsURL();
 
         public abstract AutoSpanBehaviour constructBehaviour();
 

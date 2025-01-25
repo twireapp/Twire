@@ -37,11 +37,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.github.twitch4j.helix.domain.Video;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
 import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.adapters.VODAdapter;
@@ -51,7 +53,6 @@ import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.VideoOnDemand;
-import com.perflyst.twire.service.JSONService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetPanelsTask;
@@ -59,10 +60,6 @@ import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.VODAutoSpanBehaviour;
 import com.rey.material.widget.ProgressView;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +107,7 @@ public class ChannelActivity extends ThemeActivity {
         assert info != null;
 
         streamerInfoName.setText(info.getDisplayName());
-        info.getFollowers(getApplicationContext(), followers -> Utils.setNumber(streamerFollowers, followers), 0);
+        info.getFollowers(followers -> Utils.setNumber(streamerFollowers, followers), 0);
         streamerImage.setTransitionName(getString(R.string.streamerInfo_transition));
         setUpTabs();
         initStreamerImageAndColors();
@@ -442,7 +439,6 @@ public class ChannelActivity extends ThemeActivity {
         private ChannelInfo channelInfo;
         private boolean broadcasts, showError;
         private int limit = 20,
-                offset = 0,
                 maxElementsToFetch = 500;
         private ProgressView progressView;
 
@@ -507,11 +503,6 @@ public class ChannelActivity extends ThemeActivity {
         }
 
         private String pagination = "";
-
-        private String getUrl() {
-            String type = broadcasts ? "archive" : "highlight";
-            return "https://api.twitch.tv/helix/videos?user_id=" + channelInfo.getUserId() + "&first=" + getLimit() + "&type=" + type + (!pagination.isEmpty() ? "&after=" + pagination : "");
-        }
 
         @Override
         public void addToAdapter(List<VideoOnDemand> aObjectList) {
@@ -581,19 +572,18 @@ public class ChannelActivity extends ThemeActivity {
         }
 
         @Override
-        public List<VideoOnDemand> getVisualElements() throws JSONException {
+        public List<VideoOnDemand> getVisualElements() {
             List<VideoOnDemand> result = new ArrayList<>();
 
-            JSONObject vodsTopObject = new JSONObject(Service.urlToJSONStringHelix(getUrl(), getContext()));
-            JSONArray data = vodsTopObject.getJSONArray("data");
-            for (int i = 0; i < data.length(); i++) {
-                VideoOnDemand vod = JSONService.getVod(data.getJSONObject(i));
+            var response = TwireApplication.helix.getVideos(null, null, channelInfo.getUserId(), null, null, null, null, broadcasts ? Video.Type.ARCHIVE : Video.Type.HIGHLIGHT, null, getCursor(), null).execute();
+            for (var video : response.getVideos()) {
+                VideoOnDemand vod = new VideoOnDemand(video);
                 vod.setChannelInfo(channelInfo);
                 vod.setBroadcast(broadcasts);
                 result.add(vod);
             }
 
-            setCursor(vodsTopObject.getJSONObject("pagination").getString("cursor"));
+            setCursor(response.getPagination().getCursor());
 
             return result;
         }

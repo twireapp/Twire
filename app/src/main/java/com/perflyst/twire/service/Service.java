@@ -16,11 +16,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
@@ -37,6 +34,7 @@ import androidx.customview.widget.ViewDragHelper;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
 import com.perflyst.twire.activities.main.MyStreamsActivity;
 import com.perflyst.twire.activities.main.TopGamesActivity;
@@ -51,10 +49,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
@@ -101,42 +99,6 @@ public class Service {
         String[] emotes = {"('.')", "('x')", "(>_<)", "(>.<)", "(;-;)", "\\(o_o)/", "(O_o)", "(o_0)", "(≥o≤)", "(≥o≤)", "(·.·)", "(·_·)"};
         Random rnd = new Random();
         return emotes[rnd.nextInt(emotes.length - 1)];
-    }
-
-    /**
-     * Makes a timestamp from a length in seconds.
-     *
-     * @param videoLengthInSeconds Length in seconds
-     */
-    public static String calculateTwitchVideoLength(int videoLengthInSeconds) {
-        String result = "";
-        double hours = videoLengthInSeconds / 60.0 / 60.0;
-
-        double minutesAsDecimalHours = hours - Math.floor(hours);
-        double minutes = 60.0 * minutesAsDecimalHours;
-        double secondsAsDecimalMinutes = minutes - Math.floor(minutes);
-        double seconds = 60.0 * secondsAsDecimalMinutes;
-
-        if (hours >= 1) {
-            result = (int) Math.floor(hours) + ":";
-        }
-
-        result += numberToTime(minutes) + ":" + numberToTime(Math.round(seconds));
-
-        return result;
-    }
-
-    /**
-     * Converts Double to time. f.eks. 4.5 becomes "04"
-     */
-    private static String numberToTime(double time) {
-        int timeInt = (int) Math.floor(time);
-
-        if (timeInt < 10) {
-            return "0" + timeInt;
-        } else {
-            return "" + timeInt;
-        }
     }
 
     /**
@@ -237,31 +199,6 @@ public class Service {
     }
 
     /**
-     * Converts a drawable to a bitmap and returns it.
-     */
-    private static Bitmap drawableToBitmap(Drawable drawable) {
-        Bitmap bitmap;
-
-        if (drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if (bitmapDrawable.getBitmap() != null) {
-                return bitmapDrawable.getBitmap();
-            }
-        }
-
-        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        }
-
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bitmap;
-    }
-
-    /**
      * Creates a string with a unicode emoticon.
      */
     public static String getEmojiByUnicode(int unicode) {
@@ -339,38 +276,6 @@ public class Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Checks if the device is connected to a valid network
-     * Can only be called on a thread
-     */
-    public static boolean isNetworkConnectedThreadOnly(Context context) {
-        ConnectivityManager cm = ContextCompat.getSystemService(context, ConnectivityManager.class);
-        NetworkInfo networkInfo = null;
-        if (cm != null) {
-            networkInfo = cm.getActiveNetworkInfo();
-        }
-
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            try {
-                HttpURLConnection urlc = (HttpURLConnection)
-                        new URL("https://clients3.google.com/generate_204")
-                                .openConnection();
-                urlc.setRequestProperty("User-Agent", "Android");
-                urlc.setRequestProperty("Connection", "close");
-                urlc.setConnectTimeout(1500);
-                urlc.connect();
-                return urlc.getResponseCode() == 204 &&
-                        urlc.getContentLength() == 0;
-            } catch (IOException e) {
-                Timber.e(e, "Error checking internet connection");
-            }
-        } else {
-            Timber.d("No network available!");
-        }
-
-        return false;
     }
 
     public static void startNotifications(Context context) {
@@ -462,17 +367,6 @@ public class Service {
         return urlToJSONString(request);
     }
 
-    public static String urlToJSONStringHelix(String urlToRead, Context context) {
-        Request request = new Request.Builder()
-                .url(urlToRead)
-                .header("Client-ID", Service.getApplicationClientID())
-                .header("Accept", "application/json")
-                .header("Authorization", "Bearer " + new Settings(context).getGeneralTwitchAccessToken())
-                .build();
-
-        return urlToJSONString(request);
-    }
-
     public static JSONObject graphQL(String operation, String hash, Map<String, Object> variables) {
         String query = "[{\"operationName\":\"" + operation + "\",\"variables\":" + new JSONObject(variables) + ",\"extensions\":{\"persistedQuery\":{\"version\":1,\"sha256Hash\":\"" + hash + "\"}}}]";
 
@@ -519,41 +413,11 @@ public class Service {
         }
     }
 
-    public static HttpURLConnection openConnection(URL url) throws IOException {
-        return (HttpURLConnection) url.openConnection();
-    }
+    public static ChannelInfo getStreamerInfoFromUserId(String streamerId) {
+        var users = TwireApplication.helix.getUsers(null, List.of(streamerId), null).execute().getUsers();
+        if (users.isEmpty()) return null;
 
-    public static ChannelInfo getStreamerInfoFromUserId(String streamerId, Context context) throws NullPointerException {
-
-        ChannelInfo channelInfo = null;
-        try {
-            JSONObject info = new JSONObject(urlToJSONStringHelix("https://api.twitch.tv/helix/users?id=" + streamerId, context)).getJSONArray("data").getJSONObject(0);
-
-            URL logoURL = null;
-            URL videoBannerURL = null;
-            // I don´t think helix still has these: https://discuss.dev.twitch.tv/t/twitch-api-user-profile-banner/24463/4
-            URL profileBannerURL = null;
-
-            if (info.getString("profile_image_url").contains("https")) {
-                logoURL = new URL(info.getString("profile_image_url"));
-            }
-
-            if (info.getString("offline_image_url").contains("https")) {
-                videoBannerURL = new URL(info.getString("offline_image_url"));
-            }
-
-            int views = info.getInt("view_count");
-            String description = info.getString("description");
-
-            channelInfo = new ChannelInfo(JSONService.getUserInfo(info), description, -1, logoURL, videoBannerURL, profileBannerURL);
-
-        } catch (JSONException e) {
-            Timber.v(e);
-        } catch (MalformedURLException ef) {
-            Timber.v(ef);
-        }
-
-        return channelInfo;
+        return new ChannelInfo(users.get(0));
     }
 
     /**
@@ -725,7 +589,7 @@ public class Service {
             values.put(SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL, streamer.getProfileBannerURL().toString());
 
 
-        streamer.getFollowers(context, followers -> {
+        streamer.getFollowers(followers -> {
             values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, followers);
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(context);
             SQLiteDatabase db = helper.getWritableDatabase();

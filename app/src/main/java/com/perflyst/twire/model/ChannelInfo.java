@@ -9,13 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
+import com.github.twitch4j.helix.domain.ChannelSearchResult;
+import com.github.twitch4j.helix.domain.User;
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.SubscriptionsDbHelper;
 import com.perflyst.twire.utils.Execute;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -78,6 +79,24 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
         this.logoURL = logoURL;
         this.videoBannerURL = videoBannerURL;
         this.profileBannerURL = profileBannerURL;
+    }
+
+    public ChannelInfo(User user) {
+        super(user.getId(), user.getLogin(), user.getDisplayName());
+        this.streamDescription = user.getDescription();
+        this.followers = null;
+        this.logoURL = Utils.safeUrl(user.getProfileImageUrl());
+        this.videoBannerURL = Utils.safeUrl(user.getOfflineImageUrl());
+        this.profileBannerURL = null;
+    }
+
+    public ChannelInfo(ChannelSearchResult channel) {
+        super(channel.getId(), channel.getBroadcasterLogin(), channel.getDisplayName());
+        this.streamDescription = "";
+        this.followers = null;
+        this.logoURL = null;
+        this.videoBannerURL = null;
+        this.profileBannerURL = null;
     }
 
     // Parcel Part
@@ -149,26 +168,18 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
         this.streamDescription = streamDescription;
     }
 
-    public void getFollowers(Context context, Consumer<Integer> callback, int defaultValue) {
-        Execute.background(() -> fetchFollowers(context), followers -> callback.accept(Objects.requireNonNullElse(followers, defaultValue)));
+    public void getFollowers(Consumer<Integer> callback, int defaultValue) {
+        Execute.background(this::fetchFollowers, followers -> callback.accept(Objects.requireNonNullElse(followers, defaultValue)));
     }
 
     @Nullable
-    public Integer fetchFollowers(Context context) {
+    public Integer fetchFollowers() {
         if (followers != null) {
             return followers;
         }
 
-        String userFollows = Service.urlToJSONStringHelix("https://api.twitch.tv/helix/channels/followers?first=1&broadcaster_id=" + getUserId(), context);
-
-        try {
-            JSONObject fullDataObject = new JSONObject(userFollows);
-            followers = fullDataObject.getInt("total");
-            return followers;
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
+        var followers = TwireApplication.helix.getChannelFollowers(null, getUserId(), null, 1, null).execute();
+        return followers.getTotal();
     }
 
     public URL getVideoBannerURL() {
@@ -207,7 +218,7 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
     @Override
     public void refreshPreview(Context context, Runnable callback) {
         Execute.background(() -> {
-            ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(getUserId(), context);
+            ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(getUserId());
 
             if (mChannelInfo != null && logoURL != mChannelInfo.getLogoURL()) {
                 logoURL = mChannelInfo.getLogoURL();

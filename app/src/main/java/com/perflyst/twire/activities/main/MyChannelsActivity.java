@@ -12,7 +12,6 @@ import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.ChannelAutoSp
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Activity that shows the user's Twitch Follows.
@@ -45,7 +44,7 @@ public class MyChannelsActivity extends LazyMainActivity<ChannelInfo> {
     }
 
     @Override
-    public List<ChannelInfo> getVisualElements() throws ExecutionException, InterruptedException {
+    public List<ChannelInfo> getVisualElements() {
         if (TempStorage.hasLoadedStreamers()) {
             return new ArrayList<>(TempStorage.getLoadedStreamers());
         }

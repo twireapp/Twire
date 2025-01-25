@@ -691,7 +691,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         fetchViewCountRunnable = new Runnable() {
             @Override
             public void run() {
-                GetStreamViewersTask task = new GetStreamViewersTask(mUserInfo.getUserId(), getContext());
+                GetStreamViewersTask task = new GetStreamViewersTask(mUserInfo.getUserId());
                 Execute.background(task, currentViewers -> {
                     try {
                         Timber.d("Fetching viewers");
@@ -1381,8 +1381,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         mNameView.setText(mUserInfo.getDisplayName());
 
-        Execute.background(() -> Service.getStreamerInfoFromUserId(mUserInfo.getUserId(), getContext()), channelInfo -> {
-            channelInfo.getFollowers(getContext(), followers -> Utils.setNumber(mFollowers, followers), 0);
+        Execute.background(() -> Service.getStreamerInfoFromUserId(mUserInfo.getUserId()), channelInfo -> {
+            channelInfo.getFollowers(followers -> Utils.setNumber(mFollowers, followers), 0);
 
             setupFollowButton(mFollowButton, channelInfo);
         });

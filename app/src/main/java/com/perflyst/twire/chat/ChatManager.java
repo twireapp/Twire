@@ -8,7 +8,12 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.util.SparseArray;
 
+import com.github.twitch4j.helix.domain.ChatBadge;
+import com.github.twitch4j.helix.domain.ChatBadgeSet;
+import com.github.twitch4j.helix.domain.ChatBadgeSetList;
 import com.google.common.collect.ImmutableSetMultimap;
+import com.netflix.hystrix.HystrixCommand;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.model.Badge;
 import com.perflyst.twire.model.ChatMessage;
 import com.perflyst.twire.model.Emote;
@@ -55,8 +60,8 @@ public class ChatManager implements Runnable {
     private final String vodId;
     private final ChatCallback callback;
     private final ChatEmoteManager mEmoteManager;
-    private final Map<String, Map<String, Badge>> globalBadges = new HashMap<>();
-    private final Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
+    private Map<String, Map<String, Badge>> globalBadges = new HashMap<>();
+    private Map<String, Map<String, Badge>> channelBadges = new HashMap<>();
     // Default Twitch Chat connect IP/domain and port
     private String twitchChatServer = "irc.chat.twitch.tv";
     // Port 6667 for unsecure connection | 6697 for SSL
@@ -78,11 +83,8 @@ public class ChatManager implements Runnable {
     private boolean chatIsSlowmode;
     private boolean chatIsSubsonlymode;
 
-    private Context context;
-
     public ChatManager(Context aContext, UserInfo aChannel, String aVodId, ChatCallback aCallback) {
         instance = this;
-        this.context = aContext;
         Settings appSettings = new Settings(aContext);
         mEmoteManager = new ChatEmoteManager(aChannel, appSettings);
 
@@ -140,8 +142,8 @@ public class ChatManager implements Runnable {
         Timber.d("Trying to start chat " + channel.getLogin() + " for user " + user);
         mEmoteManager.loadCustomEmotes(() -> onUpdate(UpdateType.ON_CUSTOM_EMOTES_FETCHED));
 
-        readBadges("https://api.twitch.tv/helix/chat/badges/global/", globalBadges);
-        readBadges("https://api.twitch.tv/helix/chat/badges?broadcaster_id=" + channel.getUserId(), channelBadges);
+        globalBadges = readBadges(TwireApplication.helix.getGlobalChatBadges(null));
+        channelBadges = readBadges(TwireApplication.helix.getChannelChatBadges(null, channel.getUserId()));
         readFFZBadges();
 
         if (vodId == null) {
@@ -611,30 +613,23 @@ public class ChatManager implements Runnable {
         sendRawMessage("PART #" + channel.getLogin());
     }
 
-    private void readBadges(String url, Map<String, Map<String, Badge>> badgeMap) {
-        try {
-            JSONArray globalBadgeArray = new JSONObject(Service.urlToJSONStringHelix(url, context)).getJSONArray("data");
-            for (int i = 0; i < globalBadgeArray.length(); i++) {
-                String badgeSet = globalBadgeArray.getJSONObject(i).getString("set_id");
-                Map<String, Badge> versionMap = new HashMap<>();
-
-                badgeMap.put(badgeSet, versionMap);
-
-                JSONArray versions = globalBadgeArray.getJSONObject(i).getJSONArray("versions");
-                for (int j = 0; j < versions.length(); j++) {
-                    JSONObject versionObject = versions.getJSONObject(j);
-                    String version = versionObject.getString("id");
-                    SparseArray<String> urls = new SparseArray<>();
-                    urls.put(1, versionObject.getString("image_url_1x"));
-                    urls.put(2, versionObject.getString("image_url_2x"));
-                    urls.put(4, versionObject.getString("image_url_4x"));
-
-                    versionMap.put(version, new Badge(badgeSet, urls));
-                }
+    private Map<String, Map<String, Badge>> readBadges(HystrixCommand<ChatBadgeSetList> request) {
+        return new HashMap<>() {{
+            for (ChatBadgeSet badgeSet : request.execute().getBadgeSets()) {
+                put(badgeSet.getSetId(), new HashMap<>() {{
+                    for (ChatBadge badge : badgeSet.getVersions()) {
+                        put(badge.getId(), new Badge(
+                                badgeSet.getSetId(),
+                                new SparseArray<>() {{
+                                    put(1, badge.getSmallImageUrl());
+                                    put(2, badge.getMediumImageUrl());
+                                    put(4, badge.getLargeImageUrl());
+                                }})
+                        );
+                    }
+                }});
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        }};
     }
 
     private void readFFZBadges() {

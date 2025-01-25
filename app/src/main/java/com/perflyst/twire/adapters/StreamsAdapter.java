@@ -108,7 +108,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         UserInfo userInfo = item.getUserInfo();
 
         Execute.background(() -> {
-            ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(userInfo.getUserId(), getContext());
+            ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(userInfo.getUserId());
 
             Intent intent = new Intent(getContext(), ChannelActivity.class);
             intent.putExtra(getContext().getString(R.string.channel_info_intent_object), mChannelInfo);

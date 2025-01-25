@@ -68,7 +68,7 @@ public class AddFollowsToDB implements Runnable {
             values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, subToAdd.getLogin());
             values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, subToAdd.getDisplayName());
             values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, subToAdd.getStreamDescription());
-            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, Objects.requireNonNullElse(subToAdd.fetchFollowers(baseContext), 0));
+            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, Objects.requireNonNullElse(subToAdd.fetchFollowers(), 0));
             values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, subToAdd.isNotifyWhenLive() && !disableForStreamer ? 1 : 0);
             values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, 1);
 

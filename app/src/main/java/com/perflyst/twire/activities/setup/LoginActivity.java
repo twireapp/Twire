@@ -201,8 +201,6 @@ public class LoginActivity extends SetupBaseActivity {
     }
 
     public void handleLoginSuccess() {
-        new Settings(this).setLogin(true);
-
         toTransition = true;
         showSuccessAnimation();
         int TRANSITION_DELAY = 2000;

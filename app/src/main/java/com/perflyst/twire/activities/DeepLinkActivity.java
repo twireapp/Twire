@@ -8,17 +8,13 @@ import android.util.Patterns;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.activities.stream.VODActivity;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.model.VideoOnDemand;
 import com.perflyst.twire.service.DialogService;
-import com.perflyst.twire.service.JSONService;
-import com.perflyst.twire.service.Service;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -59,57 +55,43 @@ public class DeepLinkActivity extends AppCompatActivity {
     }
 
     Intent getNewIntent(List<String> params, int paramSize) throws Exception {
-        Intent intent = null;
         if (paramSize == 2 && params.get(0).equals("videos")) { // twitch.tv/videos/<id>
             errorMessage = R.string.router_vod_error;
 
-            JSONArray jsonArray = new JSONObject(Service.urlToJSONStringHelix("https://api.twitch.tv/helix/videos?id=" + params.get(1), this)).getJSONArray("data");
-            JSONObject jsonObject = jsonArray.getJSONObject(0);
-            VideoOnDemand vod = JSONService.getVod(jsonObject);
+            var videos = TwireApplication.helix.getVideos(null, List.of(params.get(1)), null, null, null, null, null, null, null, null, null).execute().getVideos();
+            if (videos.isEmpty()) return null;
 
-            String channel_request_url = "https://api.twitch.tv/helix/users?id=" + jsonObject.getString("user_id");
-            String channel_string = Service.urlToJSONStringHelix(channel_request_url, this);
-            JSONObject channel_object = new JSONObject(channel_string);
-            JSONArray temp_array = channel_object.getJSONArray("data");
-            JSONObject JSONChannel = temp_array.getJSONObject(0);
-            vod.setChannelInfo(JSONService.getStreamerInfo(this, JSONChannel));
+            var video = videos.get(0);
+            VideoOnDemand vod = new VideoOnDemand(video);
 
-            intent = VODActivity.createVODIntent(vod, this, false);
+            var users = TwireApplication.helix.getUsers(null, List.of(video.getUserId()), null).execute().getUsers();
+            if (users.isEmpty()) return null;
+
+            vod.setChannelInfo(new ChannelInfo(users.get(0)));
+
+            return VODActivity.createVODIntent(vod, this, false);
         } else if (paramSize == 1) { // twitch.tv/<channel>
-            String channel_request_url = "https://api.twitch.tv/helix/users?login=" + params.get(0);
-            String channel_string = Service.urlToJSONStringHelix(channel_request_url, this);
-            JSONObject channel_object = new JSONObject(channel_string);
-            JSONArray temp_array;
-            try {
-                temp_array = channel_object.getJSONArray("data");
-            } catch (Exception e) {
-                errorMessage = R.string.router_nonexistent_user;
-                return null;
-            }
-
-            JSONObject JSONChannel = temp_array.getJSONObject(0);
-
             errorMessage = R.string.router_channel_error;
 
-            String userID = JSONChannel.getString("id");
-            JSONObject streamsObject = new JSONObject(Service.urlToJSONStringHelix("https://api.twitch.tv/helix/streams?user_id=" + userID, this));
-            JSONArray real_stream = streamsObject.getJSONArray("data");
-            JSONObject streamObject = real_stream.length() == 0 ? null : real_stream.getJSONObject(0);
-
-            if (streamObject != null) {
-                StreamInfo stream = JSONService.getStreamInfo(this, streamObject, false);
-                intent = LiveStreamActivity.createLiveStreamIntent(stream, false, this);
-            } else {
-                // If we can't load the stream, try to show the user's channel instead.
-                ChannelInfo info = Service.getStreamerInfoFromUserId(userID, this);
-                if (info != null) {
-                    intent = new Intent(this, ChannelActivity.class);
-                    intent.putExtra(getString(R.string.channel_info_intent_object), info);
-                }
+            var streams = TwireApplication.helix.getStreams(null, null, null, null, null, null, null, List.of(params.get(0))).execute().getStreams();
+            if (!streams.isEmpty()) {
+                StreamInfo stream = new StreamInfo(streams.get(0));
+                return LiveStreamActivity.createLiveStreamIntent(stream, false, this);
             }
+
+            var users = TwireApplication.helix.getUsers(null, null, List.of(params.get(0))).execute().getUsers();
+            if (!users.isEmpty()) {
+                // If we can't load the stream, try to show the user's channel instead.
+                ChannelInfo info = new ChannelInfo(users.get(0));
+                return new Intent(this, ChannelActivity.class)
+                        .putExtra(getString(R.string.channel_info_intent_object), info);
+            }
+
+            errorMessage = R.string.router_nonexistent_user;
+            return null;
         }
 
-        return intent;
+        return null;
     }
 
     Uri getUri(Intent intent) {

@@ -3,21 +3,14 @@ package com.perflyst.twire.activities.main;
 import static com.perflyst.twire.misc.Utils.getSystemLanguage;
 
 import com.perflyst.twire.R;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
 import com.perflyst.twire.model.StreamInfo;
-import com.perflyst.twire.service.JSONService;
-import com.perflyst.twire.service.Service;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import timber.log.Timber;
@@ -51,21 +44,10 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
     }
 
     @Override
-    public List<StreamInfo> getVisualElements() throws JSONException, MalformedURLException {
-        final String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? "&language=" + getSystemLanguage() : "";
-        final String URL = "https://api.twitch.tv/helix/streams?first=" + getLimit() + (getCursor() != null ? "&after=" + getCursor() : "") + languageFilter;
-
-        List<StreamInfo> mResultList = new ArrayList<>();
-        String jsonString = Service.urlToJSONStringHelix(URL, this);
-        JSONObject fullDataObject = new JSONObject(jsonString);
-        JSONArray topStreamsArray = fullDataObject.getJSONArray("data");
-        setCursor(fullDataObject.getJSONObject("pagination").getString("cursor"));
-
-        for (int i = 0; i < topStreamsArray.length(); i++) {
-            JSONObject streamObject = topStreamsArray.getJSONObject(i);
-            mResultList.add(JSONService.getStreamInfo(getBaseContext(), streamObject, false));
-        }
-
-        return mResultList;
+    public List<StreamInfo> getVisualElements() {
+        final List<String> languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? List.of(getSystemLanguage()) : List.of();
+        var response = TwireApplication.helix.getStreams(null, getCursor(), null, getLimit(), null, languageFilter, null, null).execute();
+        setCursor(response.getPagination().getCursor());
+        return response.getStreams().stream().map(StreamInfo::new).toList();
     }
 }

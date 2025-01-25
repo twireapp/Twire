@@ -7,6 +7,8 @@ import android.widget.TextView;
 import androidx.annotation.FloatRange;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -52,6 +54,14 @@ public class Utils {
             return URLEncoder.encode(s, "utf-8");
         } catch (UnsupportedEncodingException ignore) {
             return s;
+        }
+    }
+
+    public static URL safeUrl(String url) {
+        try {
+            return new URL(url);
+        } catch (MalformedURLException e) {
+            return null;
         }
     }
 }

@@ -1,12 +1,11 @@
 package com.perflyst.twire.tasks;
 
-import static com.perflyst.twire.service.Service.SimpleResponse;
-import static com.perflyst.twire.service.Service.getApplicationClientID;
 import static com.perflyst.twire.service.Service.getStreamerInfoFromUserId;
-import static com.perflyst.twire.service.Service.makeRequest;
 
 import android.content.Context;
 
+import com.github.twitch4j.helix.domain.OutboundFollow;
+import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -14,16 +13,11 @@ import com.perflyst.twire.service.SubscriptionsDbHelper;
 import com.perflyst.twire.service.TempStorage;
 import com.perflyst.twire.utils.Execute;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Request;
 import timber.log.Timber;
 
 /**
@@ -53,38 +47,15 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
 
         String userId = mSettings.getGeneralTwitchUserID();
 
-        final String BASE_URL = "https://api.twitch.tv/helix/channels/followed?first=100&user_id=" + userId + "&after=";
-
         // Get all the userIds of a users follows
-        try {
-            while (true) {
-                Request request = new Request.Builder()
-                        .url(BASE_URL + currentCursor)
-                        .header("Client-ID", getApplicationClientID())
-                        .header("Authorization", "Bearer " + mSettings.getGeneralTwitchAccessToken())
-                        .build();
+        do {
+            var response = TwireApplication.helix.getFollowedChannels(null, userId, null, 100, currentCursor).execute();
+            var follows = response.getFollows();
+            if (follows != null)
+                userSubs.addAll(follows.stream().map(OutboundFollow::getBroadcasterId).toList());
 
-                SimpleResponse response = makeRequest(request);
-                if (response == null)
-                    return new ArrayList<>();
-
-                JSONObject page = new JSONObject(response.body);
-                JSONArray follows = page.getJSONArray("data");
-
-                for (int i = 0; i < follows.length(); i++) {
-                    JSONObject follow = follows.getJSONObject(i);
-                    userSubs.add(follow.getString("broadcaster_id"));
-                }
-
-                JSONObject pagination = page.getJSONObject("pagination");
-                if (!pagination.has("cursor"))
-                    break;
-
-                currentCursor = pagination.getString("cursor");
-            }
-        } catch (JSONException e) {
-            Timber.w(e);
-        }
+            currentCursor = response.getPagination().getCursor();
+        } while (currentCursor != null);
         // ------- Has now loaded all the user's followed streamers ----------
 
         ArrayList<String> loadedStreamerIds = new ArrayList<>();
@@ -165,7 +136,7 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
         @Override
         public void run() {
             for (String name : userIds) {
-                ChannelInfo info = getStreamerInfoFromUserId(name, baseContext.get());
+                ChannelInfo info = getStreamerInfoFromUserId(name);
                 if (info != null) {
                     info.setNotifyWhenLive(true); // Enable by default
                 }

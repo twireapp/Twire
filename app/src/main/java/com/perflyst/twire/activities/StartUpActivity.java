@@ -44,8 +44,7 @@ public class StartUpActivity extends ThemeActivity {
     }
 
     private void validateToken() {
-        ValidateOauthTokenTask validateTask = new ValidateOauthTokenTask(new Settings(getBaseContext()).getGeneralTwitchAccessToken(), getBaseContext());
-        Execute.background(validateTask, validation -> {
+        Execute.background(new ValidateOauthTokenTask(), validation -> {
             if (validation == null) {
                 Timber.e("Token invalid");
                 Intent loginIntent = new Intent(getBaseContext(), LoginActivity.class);
