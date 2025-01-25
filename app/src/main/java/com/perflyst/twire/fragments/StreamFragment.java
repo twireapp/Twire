@@ -488,7 +488,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
     @Override
     public void onEvents(@NonNull Player player, Player.Events events) {
         // Don't change the "keep screen on" state when chat only is enabled.
-        if (!events.containsAny(EVENT_PLAY_WHEN_READY_CHANGED, EVENT_PLAYBACK_STATE_CHANGED) || chatOnlyViewVisible) return;
+        if (!events.containsAny(EVENT_PLAY_WHEN_READY_CHANGED, EVENT_PLAYBACK_STATE_CHANGED) || chatOnlyViewVisible)
+            return;
 
         int playbackState = player.getPlaybackState();
         View view = getView();
@@ -671,7 +672,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
             public void run() {
                 GetStreamChattersTask task = new GetStreamChattersTask(mUserInfo.getLogin());
 
-                Execute.background(task, chatters -> {});
+                Execute.background(task, chatters -> {
+                });
 
                 if (!StreamFragment.this.isDetached()) {
                     fetchChattersHandler.postDelayed(this, fetchChattersDelay);
@@ -694,7 +696,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     try {
                         Timber.d("Fetching viewers");
 
-                        if (currentViewers > -1) Utils.setNumber(mCurrentViewersView, currentViewers);
+                        if (currentViewers > -1)
+                            Utils.setNumber(mCurrentViewersView, currentViewers);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

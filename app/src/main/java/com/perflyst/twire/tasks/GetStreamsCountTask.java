@@ -40,7 +40,7 @@ public class GetStreamsCountTask implements Callable<Integer> {
             for (ChannelInfo si : follows) {
                 // if the number of channels, already in the url, is smaller than 99 and is not the last channel
                 // e.g. if there are 160 Channels in the DB then this will result in 2 request urls ([0-99] and [100-159])
-                if (number <= 99 && exactnumber != follows.size() -1) {
+                if (number <= 99 && exactnumber != follows.size() - 1) {
                     if (first_id) {
                         // if this is the first id then use ?
                         user_logins = "?user_id=" + si.getUserId();
@@ -51,7 +51,7 @@ public class GetStreamsCountTask implements Callable<Integer> {
                     }
                     number++;
                     // if the request url has 100 user ids or is the last channel in the list
-                } else if (number > 99 || exactnumber == (follows.size() -1)) {
+                } else if (number > 99 || exactnumber == (follows.size() - 1)) {
                     // add the new request url to the list
                     requesturls.add(helix_url + user_logins);
                     // reset stuff
@@ -65,7 +65,7 @@ public class GetStreamsCountTask implements Callable<Integer> {
             final String STREAMS_ARRAY = "data";
             JSONArray final_array = new JSONArray();
             // for every request url in the list
-            for (int i=0; i<requesturls.size(); i++) {
+            for (int i = 0; i < requesturls.size(); i++) {
                 String temp_jsonString;
                 // request the url
                 temp_jsonString = Service.urlToJSONStringHelix(requesturls.get(i), context.get());
@@ -73,7 +73,7 @@ public class GetStreamsCountTask implements Callable<Integer> {
                 // create the array
                 JSONArray temp_array = fullDataObject.getJSONArray(STREAMS_ARRAY);
                 // append the new array to the final one
-                for (int x=0; x<temp_array.length(); x++) {
+                for (int x = 0; x < temp_array.length(); x++) {
                     final_array.put(temp_array.get(x));
                 }
             }

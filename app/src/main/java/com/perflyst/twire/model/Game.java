@@ -114,7 +114,9 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         return gamePreviewLargeURL;
     }
 
-    public String getGameId() { return gameId; }
+    public String getGameId() {
+        return gameId;
+    }
 
     @Override
     public boolean equals(Object o) {

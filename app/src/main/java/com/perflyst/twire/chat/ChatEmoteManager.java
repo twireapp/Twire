@@ -165,7 +165,8 @@ class ChatEmoteManager {
 
                 // Get the channel's emote sets
                 JSONObject userData = new JSONObject(Service.urlToJSONString(SEVENTV_USER_URL));
-                if (!userData.isNull("emote_set")) emoteSets.put("channel", userData.getJSONObject("emote_set"));
+                if (!userData.isNull("emote_set"))
+                    emoteSets.put("channel", userData.getJSONObject("emote_set"));
 
                 // Load the emote sets
                 for (var entry : emoteSets.entrySet()) {

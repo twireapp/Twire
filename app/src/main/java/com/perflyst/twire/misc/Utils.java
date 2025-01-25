@@ -31,7 +31,7 @@ public class Utils {
      * Sets the text of a {@link TextView} to a locale aware number.
      *
      * @param textView The {@link TextView} to set.
-     * @param number The number to set.
+     * @param number   The number to set.
      */
     public static void setNumber(TextView textView, long number) {
         textView.setText(NumberFormat.getIntegerInstance().format(number));
@@ -41,9 +41,9 @@ public class Utils {
      * Sets the text of a {@link TextView} to a locale aware percent.
      *
      * @param textView The {@link TextView} to set.
-     * @param percent The percent to set.
+     * @param percent  The percent to set.
      */
-    public static void setPercent(TextView textView, @FloatRange(from=0, to=1) double percent) {
+    public static void setPercent(TextView textView, @FloatRange(from = 0, to = 1) double percent) {
         textView.setText(NumberFormat.getPercentInstance().format(percent));
     }
 

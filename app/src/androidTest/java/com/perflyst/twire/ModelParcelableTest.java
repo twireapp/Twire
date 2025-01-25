@@ -79,7 +79,7 @@ public class ModelParcelableTest {
                 new UserInfo("1", "login", "name"),
                 "game",
                 2,
-                new String[] { "previews" },
+                new String[] {"previews"},
                 3,
                 "title"
         );

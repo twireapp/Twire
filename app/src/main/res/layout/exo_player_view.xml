@@ -2,22 +2,25 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.media3.ui.AspectRatioFrameLayout android:id="@id/exo_content_frame"
+    <androidx.media3.ui.AspectRatioFrameLayout
+        android:id="@id/exo_content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
 
         <!-- Video surface will be inserted as the first child of the content frame. -->
 
-        <View android:id="@id/exo_shutter"
+        <View
+            android:id="@id/exo_shutter"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@android:color/black"/>
+            android:background="@android:color/black" />
 
-        <ImageView android:id="@id/exo_artwork"
+        <ImageView
+            android:id="@id/exo_artwork"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"/>
+            android:scaleType="fitXY" />
 
         <com.rey.material.widget.ProgressView
             android:id="@+id/exo_buffering"
@@ -31,19 +34,21 @@
             app:pv_progressStyle="@style/CircularProgress" />
     </androidx.media3.ui.AspectRatioFrameLayout>
 
-    <FrameLayout android:id="@id/exo_overlay"
+    <FrameLayout
+        android:id="@id/exo_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:focusable="true"/>
+        android:focusable="true" />
 
     <ImageView
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <View android:id="@id/exo_controller_placeholder"
+    <View
+        android:id="@id/exo_controller_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
 </merge>

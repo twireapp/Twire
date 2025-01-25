@@ -313,7 +313,7 @@ public class Service {
     public static int getAccentColor(Context mContext) {
         TypedValue typedValue = new TypedValue();
 
-        TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[]{androidx.appcompat.R.attr.colorAccent});
+        TypedArray a = mContext.obtainStyledAttributes(typedValue.data, new int[] {androidx.appcompat.R.attr.colorAccent});
         int color = a.getColor(0, 0);
 
         a.recycle();
@@ -658,7 +658,7 @@ public class Service {
     }
 
     public static void updateStreamerInfoDbWithValues(ContentValues values, Context context, String id) {
-        updateStreamerInfoDbWithValues(values, context, SubscriptionsDbHelper.COLUMN_ID + "=?", new String[]{id});
+        updateStreamerInfoDbWithValues(values, context, SubscriptionsDbHelper.COLUMN_ID + "=?", new String[] {id});
     }
 
     private static void updateStreamerInfoDbWithValues(ContentValues values, Context context, String whereClause, String[] whereArgs) {

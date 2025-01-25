@@ -63,7 +63,8 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
             }
         }
     };
-    @Nullable private Integer followers;
+    @Nullable
+    private Integer followers;
     private String streamDescription;
     private URL logoURL;
     private URL videoBannerURL;

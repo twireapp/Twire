@@ -94,7 +94,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                 if (!message.systemMessage.isEmpty()) builder.append('\n');
 
                 for (Badge badge : message.getBadges()) {
-                    if (badge == null) { continue; }
+                    if (badge == null) {continue;}
 
                     final GlideImageSpan badgeSpan = new GlideImageSpan(context, badge.getUrl(2), holder.message, 36, 1, badge.color);
                     appendSpan(builder, "  ", badgeSpan).append(" ");
@@ -242,7 +242,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     public void clear(String target) {
-        for (int i = messages.size() - 1 ; i >= 0; i--) {
+        for (int i = messages.size() - 1; i >= 0; i--) {
             ChatMessage message = messages.get(i);
             if (!message.getName().equals(target) && !message.getID().equals(target)) {
                 continue;

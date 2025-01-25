@@ -33,7 +33,7 @@ public class GlideImageSpan extends VerticalImageSpan implements Drawable.Callba
 
         ColorDrawable backgroundDrawable = new ColorDrawable(Color.parseColor(backgroundColor));
 
-        this.layerDrawable = new LayerDrawable(new Drawable[]{backgroundDrawable, new BlankDrawable()});
+        this.layerDrawable = new LayerDrawable(new Drawable[] {backgroundDrawable, new BlankDrawable()});
         layerDrawable.setId(0, 0);
         layerDrawable.setId(1, 1);
     }

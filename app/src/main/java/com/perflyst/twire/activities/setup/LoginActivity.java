@@ -43,7 +43,7 @@ public class LoginActivity extends SetupBaseActivity {
     private static GetFollowsFromDB subscriptionsTask;
     private static boolean toTransition = false, isPartOfSetup = true;
     private final String LOGIN_URL = "https://id.twitch.tv/oauth2/authorize" +
-            "?client_id=" +  Service.getApplicationClientID() +
+            "?client_id=" + Service.getApplicationClientID() +
             "&redirect_uri=http%3A%2F%2Flocalhost/oauth_authorizing" +
             "&response_type=token" +
             "&scope=" + String.join("%20", Constants.TWITCH_SCOPES);

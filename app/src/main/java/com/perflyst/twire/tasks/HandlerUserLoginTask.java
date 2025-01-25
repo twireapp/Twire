@@ -52,7 +52,7 @@ public class HandlerUserLoginTask implements Runnable {
             String USER_ID_STRING = "id";
             String mID = baseJSON.getString(USER_ID_STRING);
 
-            mUserInfo = new Object[]{
+            mUserInfo = new Object[] {
                     mDisplayName,
                     mUserName,
                     mUserBio,

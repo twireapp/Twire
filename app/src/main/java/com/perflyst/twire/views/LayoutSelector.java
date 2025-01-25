@@ -74,11 +74,11 @@ public class LayoutSelector {
                 radioButton.setTextColor(Service.getColorAttribute(textColor, R.color.black_text, activity));
 
                 ColorStateList colorStateList = new ColorStateList(
-                        new int[][]{
-                                new int[]{-android.R.attr.state_checked},
-                                new int[]{android.R.attr.state_checked}
+                        new int[][] {
+                                new int[] {-android.R.attr.state_checked},
+                                new int[] {android.R.attr.state_checked}
                         },
-                        new int[]{
+                        new int[] {
 
                                 Color.GRAY, //Disabled
                                 Service.getColorAttribute(androidx.appcompat.R.attr.colorAccent, R.color.accent, activity), //Enabled

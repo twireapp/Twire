@@ -15,7 +15,7 @@ public class FollowHandler {
     private final Context mContext;
     private final Delegate mDelegate;
     private boolean isStreamerFollowed,
-                    isStreamerTwitch;
+            isStreamerTwitch;
 
     public FollowHandler(ChannelInfo mChannelInfo, Context mContext, Delegate mDelegate) {
         this.mChannelInfo = mChannelInfo;
@@ -41,6 +41,7 @@ public class FollowHandler {
         isStreamerFollowed = Service.isUserFollowingStreamer(mChannelInfo.getLogin(), mContext);
         return isStreamerFollowed;
     }
+
     public boolean isStreamerTwitch() {
         isStreamerTwitch = Service.isUserTwitch(mChannelInfo.getUserId(), mContext);
         return isStreamerTwitch;

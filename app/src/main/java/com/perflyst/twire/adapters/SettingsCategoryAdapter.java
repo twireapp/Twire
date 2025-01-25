@@ -27,6 +27,7 @@ public class SettingsCategoryAdapter extends RecyclerView.Adapter<SettingsCatego
         this.mCategories = mCategories;
         this.mCategoryCallback = mCategoryCallback;
     }
+
     @NonNull
     @Override
     public SettingsCategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -223,6 +223,7 @@ public class DialogService {
     }
 
     private static long newTime = 0;
+
     public static MaterialDialog getSeekDialog(Activity activity, Player player) {
         MaterialDialog dialog = getBaseThemedDialog(activity)
                 .title(R.string.stream_seek_dialog_title)
@@ -264,7 +265,7 @@ public class DialogService {
         source.setOnValueChangedListener((picker, old_value, new_value) -> {
             // If we overflow the picker, increment the next picker.
             if (old_value == 59 && new_value == 0) scrollPicker(destination, true);
-            // If we underflow the picker, decrement the next picker.
+                // If we underflow the picker, decrement the next picker.
             else if (old_value == 0 && new_value == 59) scrollPicker(destination, false);
             changeListener.onValueChange(picker, old_value, new_value);
         });
@@ -307,7 +308,7 @@ public class DialogService {
 
         // Speed
         Float initialSpeed = settings.getPlaybackSpeed();
-        Float[] speedValues = new Float[] { 0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f };
+        Float[] speedValues = new Float[] {0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f};
 
         TextView speedDisplay = customView.findViewById(R.id.speed_display);
         Slider slider = customView.findViewById(R.id.speed_slider);

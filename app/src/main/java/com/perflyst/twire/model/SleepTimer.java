@@ -59,26 +59,26 @@ public class SleepTimer {
         }
 
         DialogService.getSleepTimerDialog(activity, isRunning, (dialog, which) -> {
-                    View customView = dialog.getCustomView();
-                    if (customView == null) return;
-                    MaterialNumberPicker hourPicker = customView.findViewById(R.id.hourPicker);
-                    MaterialNumberPicker minPicker = customView.findViewById(R.id.minutePicker);
+                            View customView = dialog.getCustomView();
+                            if (customView == null) return;
+                            MaterialNumberPicker hourPicker = customView.findViewById(R.id.hourPicker);
+                            MaterialNumberPicker minPicker = customView.findViewById(R.id.minutePicker);
 
-                    int hour = hourPicker.getValue(), minute = minPicker.getValue();
+                            int hour = hourPicker.getValue(), minute = minPicker.getValue();
 
-                    if (isRunning) {
-                        sleepTimerProgressMinutes = hour * 60 + minute;
-                    } else {
-                        start(hour, minute);
-                    }
-                },
-                (dialog, which) -> {
-                    if (isRunning) {
-                        stop();
-                    }
-                },
-                hourToShow,
-                minuteToShow)
+                            if (isRunning) {
+                                sleepTimerProgressMinutes = hour * 60 + minute;
+                            } else {
+                                start(hour, minute);
+                            }
+                        },
+                        (dialog, which) -> {
+                            if (isRunning) {
+                                stop();
+                            }
+                        },
+                        hourToShow,
+                        minuteToShow)
                 .show();
     }
 

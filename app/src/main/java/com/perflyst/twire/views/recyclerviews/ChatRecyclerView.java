@@ -46,7 +46,8 @@ public class ChatRecyclerView extends RecyclerView {
     protected void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if (!isScrolled() && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) scrollToPosition(getAdapter().getItemCount() - 1);
+        if (!isScrolled() && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            scrollToPosition(getAdapter().getItemCount() - 1);
     }
 
     private void setScrolledListener() {

@@ -25,15 +25,18 @@ import android.util.Base64;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import androidx.media3.common.C;
-import androidx.media3.common.Format;
-import androidx.media3.common.ParserException;
 import androidx.media3.common.DrmInitData;
 import androidx.media3.common.DrmInitData.SchemeData;
-import androidx.media3.common.util.UnstableApi;
-import androidx.media3.extractor.mp4.PsshAtomUtil;
+import androidx.media3.common.Format;
 import androidx.media3.common.Metadata;
+import androidx.media3.common.MimeTypes;
+import androidx.media3.common.ParserException;
+import androidx.media3.common.util.Assertions;
+import androidx.media3.common.util.Log;
+import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.UriUtil;
+import androidx.media3.common.util.Util;
 import androidx.media3.exoplayer.hls.HlsTrackMetadataEntry;
 import androidx.media3.exoplayer.hls.HlsTrackMetadataEntry.VariantInfo;
 import androidx.media3.exoplayer.hls.playlist.HlsMediaPlaylist;
@@ -45,11 +48,8 @@ import androidx.media3.exoplayer.hls.playlist.HlsMultivariantPlaylist.Rendition;
 import androidx.media3.exoplayer.hls.playlist.HlsMultivariantPlaylist.Variant;
 import androidx.media3.exoplayer.hls.playlist.HlsPlaylist;
 import androidx.media3.exoplayer.upstream.ParsingLoadable;
-import androidx.media3.common.util.Assertions;
-import androidx.media3.common.util.Log;
-import androidx.media3.common.MimeTypes;
-import androidx.media3.common.util.UriUtil;
-import androidx.media3.common.util.Util;
+import androidx.media3.extractor.mp4.PsshAtomUtil;
+
 import com.google.common.collect.Iterables;
 
 import org.checkerframework.checker.nullness.qual.EnsuresNonNullIf;
@@ -73,11 +73,17 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** HLS playlists parsing logic. */
-@UnstableApi public final class LLHlsPlaylistParser implements ParsingLoadable.Parser<HlsPlaylist> {
+/**
+ * HLS playlists parsing logic.
+ */
+@UnstableApi
+public final class LLHlsPlaylistParser implements ParsingLoadable.Parser<HlsPlaylist> {
 
-    /** Exception thrown when merging a delta update fails. */
-    public static final class DeltaUpdateException extends IOException {}
+    /**
+     * Exception thrown when merging a delta update fails.
+     */
+    public static final class DeltaUpdateException extends IOException {
+    }
 
     private static final String LOG_TAG = "HlsPlaylistParser";
 
@@ -234,7 +240,8 @@ import java.util.regex.Pattern;
             Pattern.compile("\\{\\$([a-zA-Z0-9\\-_]+)\\}");
 
     private final HlsMultivariantPlaylist multivariantPlaylist;
-    @Nullable private final HlsMediaPlaylist previousMediaPlaylist;
+    @Nullable
+    private final HlsMediaPlaylist previousMediaPlaylist;
 
     /**
      * Creates an instance where media playlists are parsed without inheriting attributes from a
@@ -248,10 +255,10 @@ import java.util.regex.Pattern;
      * Creates an instance where parsed media playlists inherit attributes from the given master
      * playlist.
      *
-     * @param multivariantPlaylist The multivariant playlist from which media playlists will inherit
-     *     attributes.
+     * @param multivariantPlaylist  The multivariant playlist from which media playlists will inherit
+     *                              attributes.
      * @param previousMediaPlaylist The previous media playlist from which the new media playlist may
-     *     inherit skipped segments.
+     *                              inherit skipped segments.
      */
     public LLHlsPlaylistParser(
             HlsMultivariantPlaylist multivariantPlaylist,
@@ -1306,7 +1313,8 @@ import java.util.regex.Pattern;
         private final BufferedReader reader;
         private final Queue<String> extraLines;
 
-        @Nullable private String next;
+        @Nullable
+        private String next;
 
         public LineIterator(Queue<String> extraLines, BufferedReader reader) {
             this.extraLines = extraLines;
@@ -1331,7 +1339,9 @@ import java.util.regex.Pattern;
             return false;
         }
 
-        /** Return the next line, or throw {@link NoSuchElementException} if none. */
+        /**
+         * Return the next line, or throw {@link NoSuchElementException} if none.
+         */
         public String next() throws IOException {
             if (hasNext()) {
                 String result = next;

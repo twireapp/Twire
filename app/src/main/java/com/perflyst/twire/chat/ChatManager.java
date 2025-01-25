@@ -266,7 +266,7 @@ public class ChatManager implements Runnable {
     }
 
     private void processVodChat() {
-                try {
+        try {
             onUpdate(UpdateType.ON_CONNECTED);
 
             // Make sure that current progress has been set.
@@ -355,7 +355,8 @@ public class ChatManager implements Runnable {
 
                 nextCommentOffset = comment.contentOffset;
                 synchronized (vodLock) {
-                    while (currentProgress < nextCommentOffset && !seek && !isStopping) vodLock.wait();
+                    while (currentProgress < nextCommentOffset && !seek && !isStopping)
+                        vodLock.wait();
                 }
 
                 // If the user seeked, don't display this comment since it would now be an old comment.
@@ -486,15 +487,15 @@ public class ChatManager implements Runnable {
     private void handleRoomstate(IRCMessage message) {
         boolean roomstateChanged = false;
 
-        if( message.tags.get("r9k") != null) {
+        if (message.tags.get("r9k") != null) {
             chatIsR9kmode = message.tags.get("r9k").equals("1");
             roomstateChanged = true;
         }
-        if( message.tags.get("slow") != null) {
+        if (message.tags.get("slow") != null) {
             chatIsSlowmode = !message.tags.get("slow").equals("0");
             roomstateChanged = true;
         }
-        if( message.tags.get("subs-only") != null) {
+        if (message.tags.get("subs-only") != null) {
             chatIsSubsonlymode = message.tags.get("subs-only").equals("1");
             roomstateChanged = true;
         }
@@ -613,7 +614,7 @@ public class ChatManager implements Runnable {
     private void readBadges(String url, Map<String, Map<String, Badge>> badgeMap) {
         try {
             JSONArray globalBadgeArray = new JSONObject(Service.urlToJSONStringHelix(url, context)).getJSONArray("data");
-            for (int i = 0; i < globalBadgeArray.length(); i++ ) {
+            for (int i = 0; i < globalBadgeArray.length(); i++) {
                 String badgeSet = globalBadgeArray.getJSONObject(i).getString("set_id");
                 Map<String, Badge> versionMap = new HashMap<>();
 

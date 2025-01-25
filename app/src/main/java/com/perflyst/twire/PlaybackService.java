@@ -27,7 +27,8 @@ import com.perflyst.twire.service.Settings;
 
 import java.util.HashMap;
 
-@UnstableApi public class PlaybackService extends MediaSessionService {
+@UnstableApi
+public class PlaybackService extends MediaSessionService {
     private MediaSession mediaSession = null;
 
     private static final DefaultHttpDataSource.Factory dataSourceFactory = new DefaultHttpDataSource.Factory()
@@ -56,7 +57,8 @@ import java.util.HashMap;
         player.addListener(new Player.Listener() {
             @Override
             public void onPositionDiscontinuity(@NonNull Player.PositionInfo oldPosition, @NonNull Player.PositionInfo newPosition, int reason) {
-                if (oldPosition.mediaItem == newPosition.mediaItem || oldPosition.mediaItem == null || oldPosition.mediaItem.mediaId.isEmpty()) return;
+                if (oldPosition.mediaItem == newPosition.mediaItem || oldPosition.mediaItem == null || oldPosition.mediaItem.mediaId.isEmpty())
+                    return;
 
                 settings.setVodProgress(oldPosition.mediaItem.mediaId, oldPosition.positionMs);
             }

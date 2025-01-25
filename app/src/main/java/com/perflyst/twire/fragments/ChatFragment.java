@@ -191,8 +191,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         setupTransition();
 
-        chatManager = new ChatManager(getContext(), mUserInfo, vodID, new ChatManager.ChatCallback()
-        {
+        chatManager = new ChatManager(getContext(), mUserInfo, vodID, new ChatManager.ChatCallback() {
             private boolean connected = false;
 
             private boolean isFragmentActive() {

@@ -91,8 +91,7 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
         ArrayList<ChannelInfo> streamersToAddToDB = new ArrayList<>();
 
         try (SubscriptionsDbHelper helper = new SubscriptionsDbHelper(baseContext.get())) {
-            for (ChannelInfo si : TempStorage.getLoadedStreamers())
-            {
+            for (ChannelInfo si : TempStorage.getLoadedStreamers()) {
                 String streamerId = si.getUserId();
                 // If the streamer was followed by the user on Twitch but is no longer followed, remove it from the database
                 if (!userSubs.contains(streamerId) && Service.isUserTwitch(streamerId, baseContext.get())) {

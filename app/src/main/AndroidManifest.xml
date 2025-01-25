@@ -108,7 +108,7 @@
             android:parentActivityName=".activities.setup.WelcomeActivity"
             android:screenOrientation="sensor"
             android:configChanges="orientation|screenSize">
-        <meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.setup.WelcomeActivity" />
         </activity>
@@ -168,7 +168,7 @@
             android:foregroundServiceType="mediaPlayback"
             android:exported="true">
             <intent-filter>
-                <action android:name="androidx.media3.session.MediaSessionService"/>
+                <action android:name="androidx.media3.session.MediaSessionService" />
             </intent-filter>
         </service>
     </application>
