@@ -6,9 +6,11 @@
     android:background="?android:attr/colorBackground"
     android:orientation="vertical">
 
-    <com.perflyst.twire.views.FontFitTextView
+    <TextView
         android:id="@+id/emote_error_view"
-        style="@style/style_emote_error" />
+        style="@style/style_emote_error"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="@dimen/emote_error_text_size" />
 
     <TextView
         android:id="@+id/error_view"

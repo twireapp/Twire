@@ -2,6 +2,7 @@
 <com.perflyst.twire.views.FlingingNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:overScrollMode="never">
 
     <LinearLayout
@@ -10,8 +11,10 @@
         android:descendantFocusability="blocksDescendants"
         android:orientation="vertical">
 
-        <com.perflyst.twire.views.FontFitTextView
+        <TextView
             android:id="@+id/emote_error_view"
+            app:autoSizeTextType="uniform"
+            app:autoSizeMaxTextSize="@dimen/emote_error_text_size"
             style="@style/style_emote_error" />
 
         <TextView
