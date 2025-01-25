@@ -17,6 +17,7 @@
     <string name="subscription_card_displayName">Name</string>
     <string name="content_desc_twitchProfileBanner_imageView">The user\'s specified profile banner</string>
     <string name="content_desc_twitchLogo_imageView">Picture of the streamer\'s Twitch logo</string>
+    <!-- Used when the app wishes to display results to a user but there are no results. %s refers to the kind of results (videos, channels, streams, etc.) -->
     <string name="no_elements_added_notice">No %s could be found</string>
     <string name="vods">Videos</string>
     <string name="play">Play</string>
