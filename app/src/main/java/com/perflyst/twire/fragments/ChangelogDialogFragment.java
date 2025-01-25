@@ -44,10 +44,14 @@ public class ChangelogDialogFragment extends DialogFragment {
         assert activity != null;
 
         SpannableStringBuilder builder = new SpannableStringBuilder();
-        String[] lines = activity.getResources().getStringArray(R.array.changelog_lines);
+        String[] lines = activity.getResources().getString(R.string.changelog_lines).split("\n");
         boolean firstHeader = true;
         for (String line : lines) {
             line = line.trim();
+            if (line.isEmpty()) {
+                continue;
+            }
+
             char prefix = line.charAt(0);
             String text = line.substring(2);
             if (prefix == 'V') {

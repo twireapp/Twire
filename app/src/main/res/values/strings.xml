@@ -316,153 +316,153 @@
     <string name="changelog_title">Changelog</string>
     <string name="changelog_show_after_update">Show changelog after an update</string>
 
-    <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. -->
-    <string-array name="changelog_lines">
-        <item>V 2.11.0</item>
-        <item>A Add background playback when the screen is locked.</item>
-        <item>A Add support for proxies, which can be used to block ads.</item>
-        <item>F Fix usher requests not using https.</item>
+    <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. Only the last 10 versions will be kept. -->
+    <string name="changelog_lines">"
+        V 2.11.0
+        A Add background playback when the screen is locked.
+        A Add support for proxies, which can be used to block ads.
+        F Fix usher requests not using https.
 
-        <item>V 2.10.9</item>
-        <item>F Fix empty "My Streams" page</item>
-        <item>F Get followers from new Twitch API</item>
-        <item>C Remove viewer count from channel page</item>
-        <item>A Allow the minute and second pickers to wrap around</item>
-        <item>F Make the chat status bar hide completely</item>
-        <item>F Fix stream title color</item>
+        V 2.10.9
+        F Fix empty "My Streams" page
+        F Get followers from new Twitch API
+        C Remove viewer count from channel page
+        A Allow the minute and second pickers to wrap around
+        F Make the chat status bar hide completely
+        F Fix stream title color
 
-        <item>V 2.10.8</item>
-        <item>A Add rudimentary emote autocomplete.</item>
-        <item>F Video comments should load without needing to reconnect.</item>
-        <item>F Fix badges not loading and causing a crash.</item>
-        <item>C Bump minimum Android version to Android Lollipop 5.0.</item>
-        <item>C Reduce minimum chat size threshold for large tablets.</item>
-        <item>C Close stream on navigation back if initial orientation is landscape.</item>
+        V 2.10.8
+        A Add rudimentary emote autocomplete.
+        F Video comments should load without needing to reconnect.
+        F Fix badges not loading and causing a crash.
+        C Bump minimum Android version to Android Lollipop 5.0.
+        C Reduce minimum chat size threshold for large tablets.
+        C Close stream on navigation back if initial orientation is landscape.
 
-        <item>V 2.10.7</item>
-        <item>F Fix VOD chat only displaying one page of comments.</item>
-        <item>A Add chat notifications (subs, gifts, etc).</item>
-        <item>F Fix pagination not resetting in some results.</item>
-        <item>F Fix missing pagination in some results.</item>
-        <item>F Fix starting a new VOD when already watching one.</item>
-        <item>C Make chat messages not text selectable to improve performance. Text can be selected after clicking on the message.</item>
-        <item>F Fix messages not displaying if badges were broken.</item>
+        V 2.10.7
+        F Fix VOD chat only displaying one page of comments.
+        A Add chat notifications (subs, gifts, etc).
+        F Fix pagination not resetting in some results.
+        F Fix missing pagination in some results.
+        F Fix starting a new VOD when already watching one.
+        C Make chat messages not text selectable to improve performance. Text can be selected after clicking on the message.
+        F Fix messages not displaying if badges were broken.
 
-        <item>V 2.10.6</item>
-        <item>F Fix streams and VODs not playing.</item>
-        <item>A Open chat from channel profile.</item>
-        <item>F Fix 7TV emotes.</item>
-        <item>F Fix FFZ emotes and badges.</item>
-        <item>F Fix orientation lock with the fullscreen button.</item>
-        <item>F Fix media session.</item>
-        <item>F Fix going back from setup process.</item>
-        <item>F Make stream count localized.</item>
-        <item>F Make placeholder translatable.</item>
+        V 2.10.6
+        F Fix streams and VODs not playing.
+        A Open chat from channel profile.
+        F Fix 7TV emotes.
+        F Fix FFZ emotes and badges.
+        F Fix orientation lock with the fullscreen button.
+        F Fix media session.
+        F Fix going back from setup process.
+        F Make stream count localized.
+        F Make placeholder translatable.
 
-        <item>V 2.10.5</item>
-        <item>F Fix VOD chat locking up.</item>
-        <item>A Handle timeouts and deleted messages.</item>
-        <item>A Add media player notification.</item>
-        <item>A Show stream title while watching stream.</item>
-        <item>A Add indicator when chat is paused due to scrolling.</item>
-        <item>A Other media will now pause when starting content.</item>
-        <item>A Add themed app icon.</item>
-        <item>C Hide message options that don\'t apply to VODs.</item>
-        <item>C Implement better fullscreen toggle.</item>
-        <item>F Fix stream UI not fading out.</item>
-        <item>F Fix the navigation bar not being hidden in fullscreen.</item>
-        <item>C Enable SSL by default.</item>
-        <item>C Keep screen awake when \'Chat Only\' enabled.</item>
-        <item>C Lower max messages to 150.</item>
+        V 2.10.5
+        F Fix VOD chat locking up.
+        A Handle timeouts and deleted messages.
+        A Add media player notification.
+        A Show stream title while watching stream.
+        A Add indicator when chat is paused due to scrolling.
+        A Other media will now pause when starting content.
+        A Add themed app icon.
+        C Hide message options that don\'t apply to VODs.
+        C Implement better fullscreen toggle.
+        F Fix stream UI not fading out.
+        F Fix the navigation bar not being hidden in fullscreen.
+        C Enable SSL by default.
+        C Keep screen awake when \'Chat Only\' enabled.
+        C Lower max messages to 150.
 
-        <item>V 2.10.4</item>
-        <item>F Fix crash on devices not running Android Oreo.</item>
-        <item>C Don\'t go into PIP mode when paused.</item>
-        <item>C Don\'t keep screen on when there is nothing to play.</item>
-        <item>C Remove login requirement for startup pages.</item>
-        <item>F Fix chat only mode crashing.</item>
-        <item>F Fix crash when a followed streamer couldn\'t be found.</item>
-        <item>F Fix chat width being displayed incorrectly in settings.</item>
-        <item>F Fix exception when fetching follows.</item>
-        <item>C Update Korean, French, Italian, Polish, German, Chinese (Simplified), Czech, and Norwegian Bokmål translations.</item>
+        V 2.10.4
+        F Fix crash on devices not running Android Oreo.
+        C Don\'t go into PIP mode when paused.
+        C Don\'t keep screen on when there is nothing to play.
+        C Remove login requirement for startup pages.
+        F Fix chat only mode crashing.
+        F Fix crash when a followed streamer couldn\'t be found.
+        F Fix chat width being displayed incorrectly in settings.
+        F Fix exception when fetching follows.
+        C Update Korean, French, Italian, Polish, German, Chinese (Simplified), Czech, and Norwegian Bokmål translations.
 
-        <item>V 2.10.3</item>
-        <item>A Add low latency support.</item>
-        <item>C Make landscape chat visible by default.</item>
-        <item>C Improve app performance. (especially during VODs)</item>
-        <item>A Add animated 7TV Emotes.</item>
-        <item>F Fix VOD chat not loading.</item>
-        <item>C Make broadcasts and highlights load much faster.</item>
-        <item>C Improve picture in picture transition.</item>
-        <item>F Fix game search not working.</item>
-        <item>F Fix 7TV settings not being saved.</item>
-        <item>C Share the current quality to the external player.</item>
-        <item>F Fix refreshing animation playing when nothing is refreshing.</item>
-        <item>F Fix followed streamer\'s profiles getting out of date.</item>
-        <item>F Fix being able to partially move landscape chat.</item>
-        <item>C Update Korean, French, Finnish, Portuguese (Brazil), Swedish, Turkish, Ukrainian, Italian, Polish, German, Russian, and Czech translations.</item>
+        V 2.10.3
+        A Add low latency support.
+        C Make landscape chat visible by default.
+        C Improve app performance. (especially during VODs)
+        A Add animated 7TV Emotes.
+        F Fix VOD chat not loading.
+        C Make broadcasts and highlights load much faster.
+        C Improve picture in picture transition.
+        F Fix game search not working.
+        F Fix 7TV settings not being saved.
+        C Share the current quality to the external player.
+        F Fix refreshing animation playing when nothing is refreshing.
+        F Fix followed streamer\'s profiles getting out of date.
+        F Fix being able to partially move landscape chat.
+        C Update Korean, French, Finnish, Portuguese (Brazil), Swedish, Turkish, Ukrainian, Italian, Polish, German, Russian, and Czech translations.
 
-        <item>V 2.10.2</item>
-        <item>C Migrate to the new Twitch API.</item>
-        <item>A Add local follows.</item>
-        <item>F Fix gap in VOD progress bar.</item>
-        <item>F Fix main activities requesting data twice.</item>
-        <item>F Fix FFZ badges being put on the wrong users.</item>
-        <item>C Update French, Finnish, Portuguese (Brazil), Swedish, Turkish, Polish, German, Russian, Spanish, and Chinese (Traditional) translations.</item>
+        V 2.10.2
+        C Migrate to the new Twitch API.
+        A Add local follows.
+        F Fix gap in VOD progress bar.
+        F Fix main activities requesting data twice.
+        F Fix FFZ badges being put on the wrong users.
+        C Update French, Finnish, Portuguese (Brazil), Swedish, Turkish, Polish, German, Russian, Spanish, and Chinese (Traditional) translations.
 
-        <item>V 2.10.1</item>
-        <item>A Add 7TV emotes.</item>
-        <item>A Add skip silence feature.</item>
-        <item>F Fix recent emotes crash and support emote themes.</item>
-        <item>A Add source quality for VODs.</item>
-        <item>F Fix room state icons not showing correctly.</item>
-        <item>F Fix crash when chat room state changes.</item>
-        <item>F Fix preview image scaling.</item>
-        <item>C Update Hungarian, French, Portuguese (Brazil), Turkish, Basque, Esperanto, Italian, Polish, German, Russian and Chinese (Simplified) translations.</item>
+        V 2.10.1
+        A Add 7TV emotes.
+        A Add skip silence feature.
+        F Fix recent emotes crash and support emote themes.
+        A Add source quality for VODs.
+        F Fix room state icons not showing correctly.
+        F Fix crash when chat room state changes.
+        F Fix preview image scaling.
+        C Update Hungarian, French, Portuguese (Brazil), Turkish, Basque, Esperanto, Italian, Polish, German, Russian and Chinese (Simplified) translations.
 
-        <item>V 2.10.0</item>
-        <item>A Add playback speed control.</item>
-        <item>A Add SSL connection to chat.</item>
-        <item>A Add runtime label to stream cards and stream view.</item>
-        <item>A Add a sharing menu.</item>
-        <item>A Add an option to join chat anonymously.</item>
-        <item>A Add an option for image proxies.</item>
-        <item>C Improve the emote menu performance.</item>
-        <item>F Fix emotes not loading in the emote menu.</item>
-        <item>F Fix new emotes not being parsed correctly.</item>
-        <item>F Fix audio-only mode.</item>
-        <item>F Fix the character limit for sending messages.</item>
-        <item>F Fix the dates displayed for VODs.</item>
-        <item>F Fix the keyboard not closing when clicking on the background.</item>
-        <item>F Fix followed streamers not being cached.</item>
-        <item>C Remove streamer panels since the API has been removed.</item>
-        <item>F Fix the app crashing if a stream can\'t be loaded.</item>
-        <item>A Add an option for the player-type.</item>
-        <item>F Fix the emote keyboard not closing correctly.</item>
-        <item>F Fix crashes on older versions of Android.</item>
-        <item>A Add Korean translation.</item>
-        <item>C Update French, Finnish, Arabic, Portuguese (Brazil), Swedish, Turkish, Esperanto, Italian, Ukrainian, Polish, German, Russian, Spanish, Persian, Japanese, Chinese (Simplified), Norwegian Bokmål translations.</item>
+        V 2.10.0
+        A Add playback speed control.
+        A Add SSL connection to chat.
+        A Add runtime label to stream cards and stream view.
+        A Add a sharing menu.
+        A Add an option to join chat anonymously.
+        A Add an option for image proxies.
+        C Improve the emote menu performance.
+        F Fix emotes not loading in the emote menu.
+        F Fix new emotes not being parsed correctly.
+        F Fix audio-only mode.
+        F Fix the character limit for sending messages.
+        F Fix the dates displayed for VODs.
+        F Fix the keyboard not closing when clicking on the background.
+        F Fix followed streamers not being cached.
+        C Remove streamer panels since the API has been removed.
+        F Fix the app crashing if a stream can\'t be loaded.
+        A Add an option for the player-type.
+        F Fix the emote keyboard not closing correctly.
+        F Fix crashes on older versions of Android.
+        A Add Korean translation.
+        C Update French, Finnish, Arabic, Portuguese (Brazil), Swedish, Turkish, Esperanto, Italian, Ukrainian, Polish, German, Russian, Spanish, Persian, Japanese, Chinese (Simplified), Norwegian Bokmål translations.
 
-        <item>V 2.9.3</item>
-        <item>F Fix VODs not loading.</item>
-        <item>F Fix only seeing 20 followed channels.</item>
-        <item>F Fix not staying logged in between relaunches.</item>
-        <item>A Add Chinese (Simplified) and Finnish translations.</item>
-        <item>C Update German translation.</item>
+        V 2.9.3
+        F Fix VODs not loading.
+        F Fix only seeing 20 followed channels.
+        F Fix not staying logged in between relaunches.
+        A Add Chinese (Simplified) and Finnish translations.
+        C Update German translation.
 
-        <item>V 2.9.2</item>
-        <item>F Fix only the Auto quality being available.</item>
-        <item>F Fix page titles not being translated in some languages.</item>
-        <item>C Remove the My Games section.</item>
-        <item>A Add Basque translation.</item>
-        <item>C Update Chinese (Traditional), Portuguese (Brazil), and Russian translations.</item>
+        V 2.9.2
+        F Fix only the Auto quality being available.
+        F Fix page titles not being translated in some languages.
+        C Remove the My Games section.
+        A Add Basque translation.
+        C Update Chinese (Traditional), Portuguese (Brazil), and Russian translations.
 
-        <item>V 2.9.1</item>
-        <item>C Use the new embed ad blocking technique.</item>
-        <item>F Fix the changelog dialog popping up multiple times.</item>
-        <item>A Add Afrikaans, Arabic, Chinese (Traditional), Czech, Norwegian Bokmål, Portuguese (Brazil) and Russian translations.</item>
-        <item>C Update French, German, Italian and Spanish translations.</item>
-        <item>F Fix the changelog button not changing according to the theme.</item>
-        <item>F Fix the theme preview color for True night.</item>
-    </string-array>
+        V 2.9.1
+        C Use the new embed ad blocking technique.
+        F Fix the changelog dialog popping up multiple times.
+        A Add Afrikaans, Arabic, Chinese (Traditional), Czech, Norwegian Bokmål, Portuguese (Brazil) and Russian translations.
+        C Update French, German, Italian and Spanish translations.
+        F Fix the changelog button not changing according to the theme.
+        F Fix the theme preview color for True night.
+    "</string>
 </resources>
