@@ -76,7 +76,7 @@ public class SubscriptionsDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         try {
             if (newVersion == 7) {
-                new Settings(mContext).setUsersNotToNotifyWhenLive(getUsersNotToNotify(db));
+                Settings.setUsersNotToNotifyWhenLive(getUsersNotToNotify(db));
             }
         } catch (SQLiteException e) {
             e.printStackTrace();

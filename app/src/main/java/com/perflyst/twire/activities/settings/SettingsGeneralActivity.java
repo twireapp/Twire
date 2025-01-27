@@ -29,7 +29,6 @@ import java.util.regex.Matcher;
 import timber.log.Timber;
 
 public class SettingsGeneralActivity extends ThemeActivity {
-    private Settings settings;
     private TextView twitchNameView, startPageSubText, general_image_proxy_summary;
     private CheckedTextView filterTopStreamsByLanguageView, general_image_proxy;
     private EditText mImageProxyUrl;
@@ -39,7 +38,6 @@ public class SettingsGeneralActivity extends ThemeActivity {
         super.onCreate(savedInstanceState);
         var binding = ActivitySettingsGeneralBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        settings = new Settings(getBaseContext());
 
         final Toolbar toolbar = findViewById(R.id.settings_general_toolbar);
         setSupportActionBar(toolbar);
@@ -92,33 +90,33 @@ public class SettingsGeneralActivity extends ThemeActivity {
     }
 
     private void updateSummaries() {
-        updateSummary(general_image_proxy, general_image_proxy_summary, settings.getGeneralUseImageProxy());
-        mImageProxyUrl.setText(settings.getImageProxyUrl());
+        updateSummary(general_image_proxy, general_image_proxy_summary, Settings.getGeneralUseImageProxy());
+        mImageProxyUrl.setText(Settings.getImageProxyUrl());
     }
 
     private void initStartPageText() {
-        startPageSubText.setText(settings.getStartPage());
+        startPageSubText.setText(Settings.getStartPage());
     }
 
     private void initTwitchDisplayName() {
-        if (settings.isLoggedIn()) {
-            twitchNameView.setText(settings.getGeneralTwitchDisplayName());
+        if (Settings.isLoggedIn()) {
+            twitchNameView.setText(Settings.getGeneralTwitchDisplayName());
         } else {
             twitchNameView.setText(R.string.gen_not_logged_in);
         }
     }
 
     private void initFilterTopsStreamsByLanguage() {
-        filterTopStreamsByLanguageView.setChecked(settings.getGeneralFilterTopStreamsByLanguage());
+        filterTopStreamsByLanguageView.setChecked(Settings.getGeneralFilterTopStreamsByLanguage());
     }
 
     public void onClickTwitchName(View v) {
-        if (settings.isLoggedIn()) {
-            MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialog(this, settings.getGeneralTwitchDisplayName());
+        if (Settings.isLoggedIn()) {
+            MaterialDialog dialog = DialogService.getSettingsLoginOrLogoutDialog(this, Settings.getGeneralTwitchDisplayName());
             dialog.getBuilder().onPositive((dialog1, which) -> navigateToLogin());
 
             dialog.getBuilder().onNegative((dialog12, which) -> {
-                settings.setLogin(false);
+                Settings.setLoggedIn(false);
                 initTwitchDisplayName();
             });
 
@@ -131,7 +129,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
     public void onClickStartPage(View v) {
         MaterialDialog dialog = DialogService.getChooseStartUpPageDialog
                 (this, startPageSubText.getText().toString(), (dialog1, view, which, text) -> {
-                    settings.setStartPage(text.toString());
+                    Settings.setStartPage(text.toString());
                     startPageSubText.setText(text.toString());
                     return true;
                 });
@@ -147,17 +145,17 @@ public class SettingsGeneralActivity extends ThemeActivity {
     }
 
     public void onClickResetTips(View v) {
-        if (settings.isTipsShown()) {
+        if (Settings.isTipsShown()) {
             View topView = findViewById(R.id.container_settings_general);
             if (topView != null) {
                 Snackbar.make(topView, getString(R.string.gen_tips_have_been_reset), Snackbar.LENGTH_LONG).show();
             }
         }
-        settings.setTipsShown(false);
+        Settings.setTipsShown(false);
     }
 
     public void onClickFiltersStreamsByLanguageEnable(View v) {
-        settings.setGeneralFilterTopStreamsByLanguage(!settings.getGeneralFilterTopStreamsByLanguage());
+        Settings.setGeneralFilterTopStreamsByLanguage(!Settings.getGeneralFilterTopStreamsByLanguage());
         initFilterTopsStreamsByLanguage();
     }
 
@@ -171,7 +169,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
         MaterialDialog dialog = DialogService.getSettingsWipeFollowsDialog(this);
         dialog.getBuilder().onPositive((dialog1, which) -> {
             SubscriptionsDbHelper helper = new SubscriptionsDbHelper(getBaseContext());
-            helper.onWipe(helper.getWritableDatabase(), settings.isLoggedIn());
+            helper.onWipe(helper.getWritableDatabase(), Settings.isLoggedIn());
             Toast infoToast = Toast.makeText(getBaseContext(), getString(R.string.gen_toast_wipe_database), Toast.LENGTH_SHORT);
             infoToast.show();
         }).show();
@@ -200,7 +198,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
     }
 
     public void onClickImageProxy(View v) {
-        settings.setGeneralUseImageProxy(!settings.getGeneralUseImageProxy());
+        Settings.setGeneralUseImageProxy(!Settings.getGeneralUseImageProxy());
         updateSummaries();
     }
 
@@ -210,7 +208,7 @@ public class SettingsGeneralActivity extends ThemeActivity {
         // app/src/main/java/com/perflyst/twire/activities/DeepLinkActivity.java 115
         Matcher matcher = Patterns.WEB_URL.matcher(proxy_url);
         if (matcher.find()) {
-            settings.setImageProxyUrl(proxy_url);
+            Settings.setImageProxyUrl(proxy_url);
             Timber.d("Setting as Image Proxy: %s", proxy_url);
             updateSummaries();
         } else {

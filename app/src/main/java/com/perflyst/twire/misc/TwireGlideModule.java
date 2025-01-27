@@ -53,9 +53,8 @@ public class TwireGlideModule extends AppGlideModule {
                                                    int width,
                                                    int height,
                                                    @NonNull Options options) {
-            Settings settings = new Settings(context.get());
-            if (settings.getGeneralUseImageProxy()) {
-                String proxy = settings.getImageProxyUrl();
+            if (Settings.getGeneralUseImageProxy()) {
+                String proxy = Settings.getImageProxyUrl();
                 model = new GlideUrl(proxy + model.toStringUrl());
             }
 

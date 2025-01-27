@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.R;
-import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 
 /**
@@ -18,7 +17,6 @@ public class AutoSpanRecyclerView extends RecyclerView {
     private GridLayoutManager mManager;
     private int mSpanCount;
     private int mScrollAmount;
-    private Settings mSettings;
     private boolean scrolled;
     private String mSizeName;
     private AutoSpanBehaviour mBehaviour;
@@ -39,7 +37,6 @@ public class AutoSpanRecyclerView extends RecyclerView {
     }
 
     protected void init() {
-        mSettings = new Settings(getContext());
         mSpanCount = 1;
 
         this.addOnScrollListener(new OnScrollListener() {
@@ -80,7 +77,7 @@ public class AutoSpanRecyclerView extends RecyclerView {
             return false;
         }
 
-        String newSizeName = mBehaviour.getElementSizeName(mSettings);
+        String newSizeName = mBehaviour.getElementSizeName();
         if (mSizeName != null && !mSizeName.equals(newSizeName)) {
             mSizeName = newSizeName;
             return true;
@@ -111,7 +108,7 @@ public class AutoSpanRecyclerView extends RecyclerView {
             return;
         }
 
-        mSizeName = mBehaviour.getElementSizeName(mSettings);
+        mSizeName = mBehaviour.getElementSizeName();
         if (mSizeName.equals(getContext().getString(R.string.card_size_normal))) {
             additionSpan = 1;
         } else if (mSizeName.equals(getContext().getString(R.string.card_size_small))) {

@@ -21,7 +21,6 @@ import com.perflyst.twire.service.Settings;
 public class AppearanceSettingsFragment extends Fragment {
     private TextView themeSummary, streamsStyleSummary, gameStyleSummary, followStyleSummary, streamSizeSummary, gameSizeSummary, streamerSizeSummary;
     private ImageView themeSummaryColor;
-    private Settings settings;
 
     public static AppearanceSettingsFragment newInstance() {
         return new AppearanceSettingsFragment();
@@ -31,7 +30,6 @@ public class AppearanceSettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_appearance_settings, container, false);
-        settings = new Settings(getContext());
         themeSummary = rootView.findViewById(R.id.appearance_theme_color_summary);
         themeSummaryColor = rootView.findViewById(R.id.appearance_theme_color);
 
@@ -74,18 +72,18 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void initSummaries() {
         // Theme Summary
-        themeSummary.setText(settings.getTheme().name);
-        themeSummaryColor.setImageDrawable(AppCompatResources.getDrawable(requireContext(), settings.getTheme().chooser));
+        themeSummary.setText(Settings.getTheme().name);
+        themeSummaryColor.setImageDrawable(AppCompatResources.getDrawable(requireContext(), Settings.getTheme().chooser));
 
         // Style Summary
-        streamsStyleSummary.setText(settings.getAppearanceStreamStyle());
-        gameStyleSummary.setText(settings.getAppearanceGameStyle());
-        followStyleSummary.setText(settings.getAppearanceChannelStyle());
+        streamsStyleSummary.setText(Settings.getAppearanceStreamStyle());
+        gameStyleSummary.setText(Settings.getAppearanceGameStyle());
+        followStyleSummary.setText(Settings.getAppearanceChannelStyle());
 
         // Size Summary
-        streamSizeSummary.setText(settings.getAppearanceStreamSize());
-        gameSizeSummary.setText(settings.getAppearanceGameSize());
-        streamerSizeSummary.setText(settings.getAppearanceChannelSize());
+        streamSizeSummary.setText(Settings.getAppearanceStreamSize());
+        gameSizeSummary.setText(Settings.getAppearanceGameSize());
+        streamerSizeSummary.setText(Settings.getAppearanceChannelSize());
     }
 
     private void onClickThemeColor() {
@@ -115,7 +113,7 @@ public class AppearanceSettingsFragment extends Fragment {
                 sharedPadding.setVisibility(View.GONE);
             }
 
-            settings.setAppearanceStreamStyle(title);
+            Settings.setAppearanceStreamStyle(title);
             initSummaries();
 
         }).show();
@@ -156,7 +154,7 @@ public class AppearanceSettingsFragment extends Fragment {
                 sharedPadding.setVisibility(View.GONE);
             }
 
-            settings.setAppearanceGameStyle(title);
+            Settings.setAppearanceGameStyle(title);
             initSummaries();
         }).show();
     }
@@ -180,7 +178,7 @@ public class AppearanceSettingsFragment extends Fragment {
                 nameView.setVisibility(View.GONE);
             }
 
-            settings.setAppearanceChannelStyle(title);
+            Settings.setAppearanceChannelStyle(title);
             initSummaries();
         }).show();
     }
@@ -189,9 +187,9 @@ public class AppearanceSettingsFragment extends Fragment {
         DialogService.getChooseCardSizeDialog(
                 requireActivity(),
                 R.string.appearance_streams_size_title,
-                settings.getAppearanceStreamSize(),
+                Settings.getAppearanceStreamSize(),
                 (dialog, itemView, which, text) -> {
-                    settings.setAppearanceStreamSize(text.toString());
+                    Settings.setAppearanceStreamSize(text.toString());
                     initSummaries();
                     return true;
                 }
@@ -202,9 +200,9 @@ public class AppearanceSettingsFragment extends Fragment {
         DialogService.getChooseCardSizeDialog(
                 requireActivity(),
                 R.string.appearance_streamer_size_title,
-                settings.getAppearanceChannelSize(),
+                Settings.getAppearanceChannelSize(),
                 (dialog, itemView, which, text) -> {
-                    settings.setAppearanceChannelSize(text.toString());
+                    Settings.setAppearanceChannelSize(text.toString());
                     initSummaries();
                     return true;
                 }
@@ -215,9 +213,9 @@ public class AppearanceSettingsFragment extends Fragment {
         DialogService.getChooseCardSizeDialog(
                 requireActivity(),
                 R.string.appearance_game_size_title,
-                settings.getAppearanceGameSize(),
+                Settings.getAppearanceGameSize(),
                 (dialog, itemView, which, text) -> {
-                    settings.setAppearanceGameSize(text.toString());
+                    Settings.setAppearanceGameSize(text.toString());
                     initSummaries();
                     return true;
                 }

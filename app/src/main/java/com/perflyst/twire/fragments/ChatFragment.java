@@ -105,7 +105,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private ChatManager chatManager;
     private UserInfo mUserInfo;
     private String vodID;
-    private Settings settings;
 
     private RelativeLayout mChatInputLayout;
     private ChatRecyclerView mRecyclerView;
@@ -154,7 +153,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         LinearLayoutManager llm = new LinearLayoutManager(context);
         llm.setStackFromEnd(true);
-        settings = new Settings(context);
 
         mSendText = mRootView.findViewById(R.id.send_message_textview);
         mSendButton = mRootView.findViewById(R.id.chat_send_ic);
@@ -192,7 +190,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         mUserInfo = requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo));// intent.getParcelableExtra(getString(R.string.intent_key_streamer_info));
         vodID = requireArguments().getString(getString(R.string.stream_fragment_vod_id));
 
-        if (!settings.isLoggedIn() || vodID != null || !settings.getChatAccountConnect()) {
+        if (!Settings.isLoggedIn() || vodID != null || !Settings.getChatAccountConnect()) {
             userNotLoggedIn();
         } else {
             setupChatInput();
@@ -218,7 +216,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     @Override
     public void onStart() {
         super.onStart();
-        chatManager = new ChatManager(getContext(), mUserInfo, vodID, new ChatManager.ChatCallback() {
+        chatManager = new ChatManager(mUserInfo, vodID, new ChatManager.ChatCallback() {
             private boolean isFragmentActive() {
                 return !isDetached() && isAdded();
             }
@@ -392,7 +390,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
      */
     private void saveRecentEmotes() {
         if (recentEmotes != null && !recentEmotes.isEmpty()) {
-            settings.setRecentEmotes(recentEmotes);
+            Settings.setRecentEmotes(recentEmotes);
         }
     }
 
@@ -402,7 +400,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     private void loadRecentEmotes() {
         if (recentEmotes == null) {
             recentEmotes = new ArrayList<>();
-            ArrayList<Emote> emotesFromSettings = settings.getRecentEmotes();
+            ArrayList<Emote> emotesFromSettings = Settings.getRecentEmotes();
             if (emotesFromSettings != null) {
                 recentEmotes.addAll(emotesFromSettings);
             } else {
@@ -463,7 +461,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
      */
     private void twitchEmotesLoaded(List<Emote> emotesLoaded) {
         twitchEmotes = new ArrayList<>(emotesLoaded);
-        if (settings.isLoggedIn() && twitchEmotesFragment != null) {
+        if (Settings.isLoggedIn() && twitchEmotesFragment != null) {
             twitchEmotesFragment.addTwitchEmotes();
         }
     }
@@ -483,7 +481,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             adapter.notifyDataSetChanged();
 
             subscriberEmotes = new ArrayList<>(subscriberEmotesLoaded);
-            if (settings.isLoggedIn() && subscriberEmotesFragment != null) {
+            if (Settings.isLoggedIn() && subscriberEmotesFragment != null) {
                 subscriberEmotesFragment.addSubscriberEmotes();
             }
         }
@@ -502,13 +500,13 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         Collections.sort(customEmotes);
 
         checkRecentEmotes();
-        if (settings.isLoggedIn() && customEmotesFragment != null) {
+        if (Settings.isLoggedIn() && customEmotesFragment != null) {
             customEmotesFragment.addCustomEmotes();
         }
     }
 
     private void setInitialKeyboardHeight() {
-        int recordedHeight = settings.getKeyboardHeight();
+        int recordedHeight = Settings.getKeyboardHeight();
 
         if (recordedHeight > 200) {
             ViewGroup.LayoutParams lp = emoteKeyboardContainer.getLayoutParams();
@@ -519,7 +517,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
     private void notifyKeyboardHeightRecorded(int keyboardHeight) {
         Timber.d("Keyboard height: %s", keyboardHeight);
-        settings.setKeyboardHeight(keyboardHeight);
+        Settings.setKeyboardHeight(keyboardHeight);
 
         ViewGroup.LayoutParams lp = emoteKeyboardContainer.getLayoutParams();
         lp.height = keyboardHeight;
@@ -1051,7 +1049,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                         .from(parent.getContext())
                         .inflate(R.layout.view_emote_showcase, parent, false);
 
-                isDarkTheme = new Settings(getContext()).isDarkTheme();
+                isDarkTheme = Settings.isDarkTheme();
 
                 itemView.setOnClickListener(emoteClickListener);
                 itemView.setOnLongClickListener(emoteLongClickListener);

@@ -21,6 +21,7 @@ import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.misc.PreviewTarget;
 import com.perflyst.twire.misc.RoundImageAnimation;
 import com.perflyst.twire.model.ChannelInfo;
+import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 import java.util.List;
@@ -161,7 +162,7 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
 
     @Override
     public String initElementStyle() {
-        return getSettings().getAppearanceChannelStyle();
+        return Settings.getAppearanceChannelStyle();
     }
 
     @Override

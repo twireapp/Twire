@@ -24,16 +24,15 @@ public class StartUpActivity extends ThemeActivity {
         final View content = findViewById(android.R.id.content);
         content.getViewTreeObserver().addOnPreDrawListener(() -> false);
 
-        final Settings settings = new Settings(getBaseContext());
-        final boolean isSetup = settings.isSetup();
+        final boolean isSetup = Settings.isSetup();
         Intent intent;
         if (isSetup) {
             intent = Service.getStartPageIntent(getBaseContext());
-            if (settings.isLoggedIn()) {
+            if (Settings.isLoggedIn()) {
                 validateToken();
             }
 
-            if (!settings.isNotificationsDisabled()) {
+            if (!Settings.isNotificationsDisabled()) {
                 Service.startNotifications(getBaseContext());
             }
         } else {

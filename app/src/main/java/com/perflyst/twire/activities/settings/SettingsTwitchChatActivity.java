@@ -18,7 +18,6 @@ import com.perflyst.twire.service.DialogService;
 import com.perflyst.twire.service.Settings;
 
 public class SettingsTwitchChatActivity extends ThemeActivity {
-    private Settings settings;
     private TextView emoteSizeSummary, messageSizeSummary, chatLandscapeWidthSummary, chatLandscapeToggleSummary, chatLandscapeSwipeToShowSummary, chat_enable_ssl_summary, chat_enable_account_connect_summary, chat_enable_emote_bbtv_summary, chat_enable_emote_ffz_summary, chat_enable_emote_seventv_summary;
     private CheckedTextView chatLandscapeToggle, chatSwipeToShowToggle, chat_enable_ssl, chat_enable_account_connect, chat_enable_emote_bbtv, chat_enable_emote_ffz, chat_enable_emote_seventv;
 
@@ -27,7 +26,6 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
         super.onCreate(savedInstanceState);
         var binding = ActivitySettingsTwitchChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        settings = new Settings(getBaseContext());
 
         final Toolbar toolbar = findViewById(R.id.settings_player_toolbar);
         setSupportActionBar(toolbar);
@@ -76,22 +74,22 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 
     private void updateSummaries() {
         String[] sizes = getResources().getStringArray(R.array.ChatSize);
-        emoteSizeSummary.setText(sizes[settings.getEmoteSize() - 1]);
-        messageSizeSummary.setText(sizes[settings.getMessageSize() - 1]);
-        Utils.setPercent(chatLandscapeWidthSummary, settings.getChatLandscapeWidth() / 100f);
+        emoteSizeSummary.setText(sizes[Settings.getEmoteSize() - 1]);
+        messageSizeSummary.setText(sizes[Settings.getMessageSize() - 1]);
+        Utils.setPercent(chatLandscapeWidthSummary, Settings.getChatLandscapeWidth() / 100f);
 
         // Chat enabled in landscape
-        updateSummary(chatLandscapeToggle, chatLandscapeToggleSummary, settings.isChatInLandscapeEnabled());
+        updateSummary(chatLandscapeToggle, chatLandscapeToggleSummary, Settings.isChatInLandscapeEnabled());
         // Chat showable by swiping
-        updateSummary(chatSwipeToShowToggle, chatLandscapeSwipeToShowSummary, settings.isChatLandscapeSwipeable());
+        updateSummary(chatSwipeToShowToggle, chatLandscapeSwipeToShowSummary, Settings.isChatLandscapeSwipeable());
         // Chat SSL Enabled
-        updateSummary(chat_enable_ssl, chat_enable_ssl_summary, settings.getChatEnableSSL());
+        updateSummary(chat_enable_ssl, chat_enable_ssl_summary, Settings.getChatEnableSSL());
         // Update Chat Emote Stuff
-        updateSummary(chat_enable_emote_bbtv, chat_enable_emote_bbtv_summary, settings.getChatEmoteBTTV());
-        updateSummary(chat_enable_emote_ffz, chat_enable_emote_ffz_summary, settings.getChatEmoteFFZ());
-        updateSummary(chat_enable_emote_seventv, chat_enable_emote_seventv_summary, settings.getChatEmoteSEVENTV());
+        updateSummary(chat_enable_emote_bbtv, chat_enable_emote_bbtv_summary, Settings.getChatEmoteBTTV());
+        updateSummary(chat_enable_emote_ffz, chat_enable_emote_ffz_summary, Settings.getChatEmoteFFZ());
+        updateSummary(chat_enable_emote_seventv, chat_enable_emote_seventv_summary, Settings.getChatEmoteSEVENTV());
         // Chat enable Login with Account
-        updateSummary(chat_enable_account_connect, chat_enable_account_connect_summary, settings.getChatAccountConnect());
+        updateSummary(chat_enable_account_connect, chat_enable_account_connect_summary, Settings.getChatAccountConnect());
     }
 
     @Override
@@ -108,8 +106,8 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 
     public void onClickEmoteSize(View _view) {
         MaterialDialog dialog = DialogService.getChooseChatSizeDialog
-                (this, R.string.chat_emote_size, R.array.ChatSize, settings.getEmoteSize(), (dialog1, itemView, which, text) -> {
-                    settings.setEmoteSize(which + 1);
+                (this, R.string.chat_emote_size, R.array.ChatSize, Settings.getEmoteSize(), (dialog1, itemView, which, text) -> {
+                    Settings.setEmoteSize(which + 1);
                     updateSummaries();
                     return true;
                 });
@@ -118,8 +116,8 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
 
     public void onClickMessageSize(View _view) {
         MaterialDialog dialog = DialogService.getChooseChatSizeDialog
-                (this, R.string.chat_message_size, R.array.ChatSize, settings.getMessageSize(), (dialog1, itemView, which, text) -> {
-                    settings.setMessageSize(which + 1);
+                (this, R.string.chat_message_size, R.array.ChatSize, Settings.getMessageSize(), (dialog1, itemView, which, text) -> {
+                    Settings.setMessageSize(which + 1);
                     updateSummaries();
                     return true;
                 });
@@ -127,52 +125,52 @@ public class SettingsTwitchChatActivity extends ThemeActivity {
     }
 
     public void onClickChatLandscapeEnable(View _view) {
-        settings.setShowChatInLandscape(!settings.isChatInLandscapeEnabled());
+        Settings.setChatInLandscapeEnabled(!Settings.isChatInLandscapeEnabled());
         updateSummaries();
     }
 
     public void onClickChatLandscapeSwipeable(View _view) {
-        settings.setChatLandscapeSwipeable(!settings.isChatLandscapeSwipeable());
+        Settings.setChatLandscapeSwipeable(!Settings.isChatLandscapeSwipeable());
         updateSummaries();
     }
 
     public void onClickChatEnableSSL(View _view) {
-        settings.setChatEnableSSL(!settings.getChatEnableSSL());
+        Settings.setChatEnableSSL(!Settings.getChatEnableSSL());
         updateSummaries();
     }
 
 
     public void onClickChatEmoteBTTV(View _view) {
-        settings.setChatEmoteBTTV(!settings.getChatEmoteBTTV());
+        Settings.setChatEmoteBTTV(!Settings.getChatEmoteBTTV());
         updateSummaries();
     }
 
     public void onClickChatEmoteFFZ(View _view) {
-        settings.setChatEmoteFFZ(!settings.getChatEmoteFFZ());
+        Settings.setChatEmoteFFZ(!Settings.getChatEmoteFFZ());
         updateSummaries();
     }
 
     public void onClickChatEmoteSEVENTV(View _view) {
-        settings.setChatEmoteSEVENTV(!settings.getChatEmoteSEVENTV());
+        Settings.setChatEmoteSEVENTV(!Settings.getChatEmoteSEVENTV());
         updateSummaries();
     }
 
     public void onClickChatAccountConnect(View _view) {
-        settings.setChatAccountConnect(!settings.getChatAccountConnect());
+        Settings.setChatAccountConnect(!Settings.getChatAccountConnect());
         updateSummaries();
     }
 
     public void onClickChatLandScapeWidth(View _view) {
-        final int landscapeWidth = settings.getChatLandscapeWidth();
+        final int landscapeWidth = Settings.getChatLandscapeWidth();
 
         DialogService.getSliderDialog(
                 this,
                 (dialog, which) -> {
-                    settings.setChatLandscapeWidth(landscapeWidth);
+                    Settings.setChatLandscapeWidth(landscapeWidth);
                     updateSummaries();
                 },
                 (view, fromUser, oldPos, newPos, oldValue, newValue) -> {
-                    settings.setChatLandscapeWidth(newValue);
+                    Settings.setChatLandscapeWidth(newValue);
                     updateSummaries();
                 },
                 landscapeWidth,

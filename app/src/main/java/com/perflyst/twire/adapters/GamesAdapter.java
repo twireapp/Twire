@@ -16,6 +16,7 @@ import com.perflyst.twire.R;
 import com.perflyst.twire.activities.GameActivity;
 import com.perflyst.twire.activities.main.MainActivity;
 import com.perflyst.twire.model.Game;
+import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 /**
@@ -183,7 +184,7 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
 
     @Override
     public String initElementStyle() {
-        return getSettings().getAppearanceGameStyle();
+        return Settings.getAppearanceGameStyle();
     }
 
     @Override

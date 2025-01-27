@@ -28,7 +28,7 @@ public class FollowHandler {
     }
 
     private void init() {
-        if (new Settings(mContext).isLoggedIn()) {
+        if (Settings.isLoggedIn()) {
             isStreamerFollowed = Service.isUserFollowingStreamer(mChannelInfo.getLogin(), mContext);
             isStreamerTwitch = Service.isUserTwitch(mChannelInfo.getUserId(), mContext);
         } else {

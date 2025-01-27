@@ -6,10 +6,10 @@ import android.widget.TextView;
 
 import androidx.annotation.FloatRange;
 
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -50,11 +50,7 @@ public class Utils {
     }
 
     public static String safeEncode(String s) {
-        try {
-            return URLEncoder.encode(s, "utf-8");
-        } catch (UnsupportedEncodingException ignore) {
-            return s;
-        }
+        return URLEncoder.encode(s, StandardCharsets.UTF_8);
     }
 
     public static URL safeUrl(String url) {

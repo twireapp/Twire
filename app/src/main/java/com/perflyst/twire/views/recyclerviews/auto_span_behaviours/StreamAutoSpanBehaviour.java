@@ -11,8 +11,8 @@ import com.perflyst.twire.service.Settings;
 
 public class StreamAutoSpanBehaviour implements AutoSpanBehaviour {
     @Override
-    public String getElementSizeName(Settings settings) {
-        return settings.getAppearanceStreamSize();
+    public String getElementSizeName() {
+        return Settings.getAppearanceStreamSize();
     }
 
     @Override

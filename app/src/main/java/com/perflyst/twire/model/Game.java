@@ -29,7 +29,7 @@ public class Game implements Comparable<Game>, MainElement, Parcelable {
         }
 
     };
-    private String gameId;
+    private final String gameId;
     private int gameViewers;
     private int gameStreamers;
     private final String gameTitle;

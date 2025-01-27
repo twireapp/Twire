@@ -24,14 +24,14 @@ public class ThemeActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        Theme currentTheme = new Settings(this).getTheme();
+        Theme currentTheme = Settings.getTheme();
         if (!currentTheme.equals(theme)) {
             recreate();
         }
     }
 
     private void loadTheme() {
-        this.theme = new Settings(this).getTheme();
+        this.theme = Settings.getTheme();
         setTheme(theme.style);
     }
 

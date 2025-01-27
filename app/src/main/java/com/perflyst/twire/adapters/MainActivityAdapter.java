@@ -30,7 +30,6 @@ import com.perflyst.twire.R;
 import com.perflyst.twire.misc.PreviewTarget;
 import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.service.AnimationService;
-import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 import java.util.ArrayList;
@@ -48,7 +47,6 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
     private final int translateLength, cardWidth;
     private final View.OnClickListener mOnClickListener;
     private final View.OnLongClickListener mOnLongClickListener;
-    private final Settings mSettings;
     private String elementStyle;
     private List<E> mElements;
     private boolean sortElements, animateInsert;
@@ -60,7 +58,6 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         mTargets = new HashMap<>();
         mRecyclerView = recyclerView;
         context = aContext;
-        mSettings = new Settings(aContext);
 
         elementStyle = initElementStyle();
         mLastPosition = -1;
@@ -439,10 +436,6 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
 
     HashMap<CharSequence, PreviewTarget> getTargets() {
         return mTargets;
-    }
-
-    public Settings getSettings() {
-        return mSettings;
     }
 
     protected abstract static class ElementsViewHolder extends RecyclerView.ViewHolder {

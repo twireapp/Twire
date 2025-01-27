@@ -7,6 +7,7 @@ import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
 import com.perflyst.twire.model.StreamInfo;
+import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour;
@@ -45,7 +46,7 @@ public class TopStreamsActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     public List<StreamInfo> getVisualElements() {
-        final List<String> languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? List.of(getSystemLanguage()) : List.of();
+        final List<String> languageFilter = Settings.getGeneralFilterTopStreamsByLanguage() ? List.of(getSystemLanguage()) : List.of();
         var response = TwireApplication.helix.getStreams(null, getCursor(), null, getLimit(), null, languageFilter, null, null).execute();
         setCursor(response.getPagination().getCursor());
         return response.getStreams().stream().map(StreamInfo::new).toList();

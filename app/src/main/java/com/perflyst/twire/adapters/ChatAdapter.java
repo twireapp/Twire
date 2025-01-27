@@ -48,7 +48,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     private final List<ChatMessage> messages;
     private final ChatRecyclerView mRecyclerView;
     private final Activity context;
-    private final Settings settings;
     private final ChatAdapterCallback mCallback;
     private final boolean isNightTheme;
     private final float textSize;
@@ -58,9 +57,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
         mRecyclerView = aRecyclerView;
         context = aContext;
         mCallback = aCallback;
-        settings = new Settings(context);
 
-        isNightTheme = settings.isDarkTheme();
+        isNightTheme = Settings.isDarkTheme();
         textSize = aContext.getResources().getDimension(R.dimen.chat_message_text_size) * getTextScale();
     }
 
@@ -116,7 +114,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                     final int fromPosition = emotePosition + preLength;
                     final int toPosition = emotePosition + emote.getKeyword().length() - 1 + preLength;
 
-                    int emoteSize = settings.getEmoteSize();
+                    int emoteSize = Settings.getEmoteSize();
                     int emotePixels = emoteSize == 1 ? 28 : emoteSize == 2 ? 56 : 112;
 
                     final GlideImageSpan emoteSpan = new GlideImageSpan(context, emote.getEmoteUrl(emoteSize, isNightTheme), holder.message, emotePixels, (float) emote.getBestAvailableSize(emoteSize) / emoteSize);
@@ -178,7 +176,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     }
 
     private float getTextScale() {
-        int settingsSize = settings.getMessageSize();
+        int settingsSize = Settings.getMessageSize();
         switch (settingsSize) {
             case 1:
                 return 0.9f;

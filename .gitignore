@@ -53,3 +53,5 @@ freeline_project_description.json
 
 app/release/
 app/debug/
+
+.kotlin

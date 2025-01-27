@@ -43,7 +43,6 @@ import timber.log.Timber;
 public abstract class StreamActivity extends ThemeActivity implements StreamFragment.StreamFragmentListener {
     public StreamFragment mStreamFragment;
     public ChatFragment mChatFragment;
-    private Settings settings;
     private boolean mBackstackLost;
     private boolean onStopCalled;
     private int initialOrientation;
@@ -85,7 +84,6 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
             }
         }
 
-        settings = new Settings(this);
         updateOrientation();
     }
 
@@ -235,7 +233,7 @@ public abstract class StreamActivity extends ThemeActivity implements StreamFrag
         View chat = findViewById(R.id.chat_fragment);
         if (landscape) {
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) findViewById(R.id.chat_landscape_fragment).getLayoutParams();
-            lp.width = (int) (StreamFragment.getScreenRect(this).height() * (settings.getChatLandscapeWidth() / 100.0));
+            lp.width = (int) (StreamFragment.getScreenRect(this).height() * (Settings.getChatLandscapeWidth() / 100.0));
             Timber.d("TARGET WIDTH: %s", lp.width);
             chat.setLayoutParams(lp);
         } else {

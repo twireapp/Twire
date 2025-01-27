@@ -337,7 +337,7 @@ public class LoginActivity extends SetupBaseActivity {
                             }
 
                             // set the access token here so the following request works
-                            new Settings(getBaseContext()).setGeneralTwitchAccessToken(mAccessToken);
+                            Settings.setGeneralTwitchAccessToken(mAccessToken);
 
                             HandlerUserLoginTask handleTask = new HandlerUserLoginTask(LoginActivity.this);
                             Execute.background(handleTask);
@@ -395,8 +395,7 @@ public class LoginActivity extends SetupBaseActivity {
     private void navigateToNotificationActivity() {
         // Go to the login activity, with no transition.
         hasTransitioned = true;
-        Settings settings = new Settings(getBaseContext());
-        settings.setSetup(true);
+        Settings.setSetup(true);
         if (LoginActivity.loadingFollows()) {
             this.startActivity(new Intent(getBaseContext(), ConfirmSetupActivity.class));
         } else {
@@ -437,8 +436,8 @@ public class LoginActivity extends SetupBaseActivity {
             public void onAnimationEnd() {
                 hasTransitioned = true;
                 transitionAnimationWhite = whiteTransitionAnimation;
-                new Settings(getBaseContext()).setSetup(true);
-                new Settings(getBaseContext()).setLogin(false);
+                Settings.setSetup(true);
+                Settings.setLoggedIn(false);
                 Intent intent = Service.getStartPageIntent(getBaseContext());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
@@ -623,7 +622,7 @@ public class LoginActivity extends SetupBaseActivity {
     private void showSuccessAnimation() {
         Timber.d("Showing Success Animation");
         mSuccessMessage.setText(
-                getString(R.string.login_on_success_message, new Settings(getBaseContext()).getGeneralTwitchDisplayName())
+                getString(R.string.login_on_success_message, Settings.getGeneralTwitchDisplayName())
         );
         final AnimationSet mCircleShadowAnimations = getSuccessAnimation(mSuccessCircleShadow);
         final AnimationSet mIconAnimations = getSuccessAnimation(mSuccessIcon);

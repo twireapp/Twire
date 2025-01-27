@@ -59,7 +59,7 @@ public class AddFollowsToDB implements Runnable {
                 continue;
             }
 
-            ArrayList<String> usersNotToNotifyWhenLive = new Settings(baseContext).getUsersNotToNotifyWhenLive();
+            ArrayList<String> usersNotToNotifyWhenLive = Settings.getUsersNotToNotifyWhenLive();
             boolean disableForStreamer = usersNotToNotifyWhenLive != null && usersNotToNotifyWhenLive.contains(subToAdd.getUserId());
 
             // Create a new map of values where column names are the keys

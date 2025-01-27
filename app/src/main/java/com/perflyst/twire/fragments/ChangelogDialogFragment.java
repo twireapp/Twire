@@ -33,13 +33,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChangelogDialogFragment extends DialogFragment {
-    Settings settings;
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Activity activity = getActivity();
-        settings = new Settings(activity);
 
         assert activity != null;
 
@@ -94,11 +91,11 @@ public class ChangelogDialogFragment extends DialogFragment {
         textView.setText(builder);
 
         CheckedTextView checkedTextView = customView.findViewById(R.id.show_next_update);
-        checkedTextView.setChecked(settings.getShowChangelogs());
+        checkedTextView.setChecked(Settings.getShowChangelogs());
         checkedTextView.setOnClickListener(v -> {
-            boolean value = !settings.getShowChangelogs();
+            boolean value = !Settings.getShowChangelogs();
             checkedTextView.setChecked(value);
-            settings.setShowChangelogs(value);
+            Settings.setShowChangelogs(value);
         });
 
         Button doneButton = customView.findViewById(R.id.done_button);
@@ -111,6 +108,6 @@ public class ChangelogDialogFragment extends DialogFragment {
     public void onDismiss(@NonNull DialogInterface dialog) {
         super.onDismiss(dialog);
 
-        settings.setLastVersionCode(BuildConfig.VERSION_CODE);
+        Settings.setLastVersionCode(BuildConfig.VERSION_CODE);
     }
 }

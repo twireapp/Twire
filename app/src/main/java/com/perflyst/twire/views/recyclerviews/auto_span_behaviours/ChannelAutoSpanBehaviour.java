@@ -11,8 +11,8 @@ import com.perflyst.twire.service.Settings;
 
 public class ChannelAutoSpanBehaviour implements AutoSpanBehaviour {
     @Override
-    public String getElementSizeName(Settings settings) {
-        return settings.getAppearanceChannelSize();
+    public String getElementSizeName() {
+        return Settings.getAppearanceChannelSize();
     }
 
     @Override

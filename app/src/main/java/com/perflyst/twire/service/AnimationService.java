@@ -217,7 +217,7 @@ public class AnimationService {
         animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animationSet.setFillAfter(true);
         animationSet.setFillBefore(true);
-        animationSet.setDuration(ANIMATION_DURATION + row * BASE_DELAY);
+        animationSet.setDuration(ANIMATION_DURATION + (long) row * BASE_DELAY);
 
         aCard.setAnimation(animationSet);
     }

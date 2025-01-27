@@ -52,7 +52,6 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private Intent mIntent;
-    private Settings mSettings;
     private TooltipWindow themeTip;
 
     @Override
@@ -71,8 +70,6 @@ public class NavigationDrawerFragment extends Fragment {
         mAppTitleView = binding.txtAppName;
         mUserNameTextView = binding.txtTwitchDisplayname;
         mAppIcon = binding.imgAppIcon;
-
-        mSettings = new Settings(getActivity());
 
         initHeaderImage(binding.imgDrawerBanner);
         fetchAndSetOnlineSteamsCount();
@@ -134,9 +131,9 @@ public class NavigationDrawerFragment extends Fragment {
                 }
                 super.onDrawerOpened(drawerView);
 
-                if (!mSettings.isTipsShown()) {
+                if (!Settings.isTipsShown()) {
                     // Disable tips as soon as drawer is opened the first time
-                    mSettings.setTipsShown(true);
+                    Settings.setTipsShown(true);
                 }
 
                 mAppIcon.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.anim_icon_rotation));
@@ -230,8 +227,8 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void checkUserLogin() {
-        if (mSettings.isLoggedIn()) {
-            mUserNameTextView.setText(getString(R.string.navigation_drawer_logged_in_textview, mSettings.getGeneralTwitchDisplayName()));
+        if (Settings.isLoggedIn()) {
+            mUserNameTextView.setText(getString(R.string.navigation_drawer_logged_in_textview, Settings.getGeneralTwitchDisplayName()));
         } else {
             mUserNameTextView.setText(R.string.navigation_drawer_not_logged_in);
         }
@@ -242,7 +239,7 @@ public class NavigationDrawerFragment extends Fragment {
         headerImageView.setImageResource(R.drawable.nav_top);
         headerImageView.setOnClickListener(v -> {
 
-            if (mSettings.isLoggedIn()) {
+            if (Settings.isLoggedIn()) {
                 navigateToAccountManagement();
             } else {
                 navigateToLogin();

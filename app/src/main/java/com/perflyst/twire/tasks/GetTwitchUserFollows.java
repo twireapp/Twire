@@ -39,13 +39,11 @@ public class GetTwitchUserFollows implements Callable<ArrayList<ChannelInfo>> {
 
         String currentCursor = "";
 
-        Settings mSettings = new Settings(baseContext.get());
-
-        if (!mSettings.isLoggedIn()) {
+        if (!Settings.isLoggedIn()) {
             return new ArrayList<>();
         }
 
-        String userId = mSettings.getGeneralTwitchUserID();
+        String userId = Settings.getGeneralTwitchUserID();
 
         // Get all the userIds of a users follows
         do {

@@ -21,6 +21,7 @@ import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
+import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
@@ -188,7 +189,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
 
     @Override
     public String initElementStyle() {
-        return getSettings().getAppearanceStreamStyle();
+        return Settings.getAppearanceStreamStyle();
     }
 
     @Override

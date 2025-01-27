@@ -4,7 +4,6 @@ package com.perflyst.twire.chat;
  * Created by SebastianRask on 03-03-2016.
  */
 
-import android.content.Context;
 import android.os.SystemClock;
 import android.util.SparseArray;
 
@@ -78,14 +77,13 @@ public class ChatManager implements Runnable {
 
     private TwitchChat twitchChat;
 
-    public ChatManager(Context aContext, UserInfo aChannel, String aVodId, ChatCallback aCallback) {
+    public ChatManager(UserInfo aChannel, String aVodId, ChatCallback aCallback) {
         instance = this;
-        Settings appSettings = new Settings(aContext);
-        mEmoteManager = new ChatEmoteManager(aChannel, appSettings);
+        mEmoteManager = new ChatEmoteManager(aChannel);
 
-        Timber.d("Login with main Account: %s", appSettings.getChatAccountConnect());
+        Timber.d("Login with main Account: %s", Settings.getChatAccountConnect());
 
-        if (appSettings.isLoggedIn() && appSettings.getChatAccountConnect()) { // if user is logged in ...
+        if (Settings.isLoggedIn() && Settings.getChatAccountConnect()) { // if user is logged in ...
             // ... use their credentials
             Timber.d("Using user credentials for chat login.");
 
@@ -101,8 +99,8 @@ public class ChatManager implements Runnable {
         vodId = aVodId;
         callback = aCallback;
 
-        twitchChatServer = appSettings.getChatEnableSSL() ? TwitchChat.TWITCH_WEB_SOCKET_SERVER : "ws://irc-ws.chat.twitch.tv:80";
-        Timber.d("Use SSL Chat Server: %s", appSettings.getChatEnableSSL());
+        twitchChatServer = Settings.getChatEnableSSL() ? TwitchChat.TWITCH_WEB_SOCKET_SERVER : "ws://irc-ws.chat.twitch.tv:80";
+        Timber.d("Use SSL Chat Server: %s", Settings.getChatEnableSSL());
 
         nextCommentOffset = 0;
     }

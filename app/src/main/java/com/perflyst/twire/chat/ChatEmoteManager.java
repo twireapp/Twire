@@ -34,11 +34,9 @@ class ChatEmoteManager {
     private final Pattern emotePattern = Pattern.compile("(\\w+):((?:\\d+-\\d+,?)+)");
 
     private final UserInfo channel;
-    private final Settings settings;
 
-    ChatEmoteManager(UserInfo channel, Settings settings) {
+    ChatEmoteManager(UserInfo channel) {
         this.channel = channel;
-        this.settings = settings;
     }
 
 
@@ -51,9 +49,9 @@ class ChatEmoteManager {
         emoteKeywordToEmote = new HashMap<>();
 
         // Emote Settings
-        boolean enabled_bttv = settings.getChatEmoteBTTV();
-        boolean enabled_ffz = settings.getChatEmoteFFZ();
-        boolean enabled_seventv = settings.getChatEmoteSEVENTV();
+        boolean enabled_bttv = Settings.getChatEmoteBTTV();
+        boolean enabled_ffz = Settings.getChatEmoteFFZ();
+        boolean enabled_seventv = Settings.getChatEmoteSEVENTV();
 
         // BetterTTV emotes
         final String BTTV_GLOBAL_URL = "https://api.betterttv.net/3/cached/emotes/global";

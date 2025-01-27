@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -58,9 +59,13 @@ android {
     packagingOptions {
         resources.excludes.add("dependencies.txt")
     }
+    kotlinOptions {
+        jvmTarget = '11'
+    }
 }
 
 dependencies {
+    implementation 'androidx.core:core-ktx:1.15.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.6'
 
     //AndroidX

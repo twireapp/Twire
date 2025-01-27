@@ -19,13 +19,11 @@ public class SleepTimer {
     private final Handler sleepTimerHandler;
     private final Runnable sleepTimerRunnable;
     private final SleepTimerDelegate delegate;
-    private final Settings settings;
     private final Context context;
     private int sleepTimerProgressMinutes;
     private boolean isRunning;
 
     public SleepTimer(final SleepTimerDelegate delegate, Context context) {
-        this.settings = new Settings(context);
         this.context = context;
         this.delegate = delegate;
         sleepTimerProgressMinutes = Integer.MIN_VALUE;
@@ -50,8 +48,8 @@ public class SleepTimer {
     }
 
     public void show(Activity activity) {
-        int hourToShow = settings.getStreamSleepTimerHour();
-        int minuteToShow = settings.getStreamSleepTimerMinute();
+        int hourToShow = Settings.getStreamSleepTimerHour();
+        int minuteToShow = Settings.getStreamSleepTimerMinute();
 
         if (isRunning && sleepTimerProgressMinutes > 0) {
             hourToShow = sleepTimerProgressMinutes / 60;
@@ -87,8 +85,8 @@ public class SleepTimer {
         sleepTimerProgressMinutes = hour * 60 + minute;
         sleepTimerHandler.removeCallbacks(sleepTimerRunnable);
         sleepTimerHandler.postDelayed(sleepTimerRunnable, 0);
-        settings.setStreamSleepTimerHour(hour);
-        settings.setStreamSleepTimerMinute(minute);
+        Settings.setStreamSleepTimerHour(hour);
+        Settings.setStreamSleepTimerMinute(minute);
         if (hour > 0) {
             delegate.onStart(context.getString(R.string.stream_sleep_timer_started, hour, minute));
         } else {

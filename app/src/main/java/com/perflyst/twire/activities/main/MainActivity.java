@@ -67,7 +67,6 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     protected MainActivityAdapter<E, ?> mAdapter;
     protected NavigationDrawerFragment mDrawerFragment;
     protected UniversalOnScrollListener mScrollListener;
-    protected Settings settings;
     protected TooltipWindow mTooltip;
     // The position of the toolbars for the activity that started the transition to this activity
     private float fromToolbarPosition,
@@ -127,7 +126,6 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
         mDecorativeToolbar = binding.mainDecorativeToolbar;
 
         mDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.drawer_fragment);
-        settings = new Settings(getBaseContext());
 
         initErrorView();
         initTitleAndIcon();
@@ -288,7 +286,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
      * Check if usability Tips should be shown to the user
      */
     private void checkForTip() {
-        if (!settings.isTipsShown()) {
+        if (!Settings.isTipsShown()) {
             try {
                 mTooltip = new TooltipWindow(this, TooltipWindow.POSITION_TO_RIGHT);
                 mMainToolbar.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -317,7 +315,7 @@ public abstract class MainActivity<E extends Comparable<E> & MainElement> extend
     private void checkForUpdate() {
         int versionCode = BuildConfig.VERSION_CODE;
 
-        if (settings.getLastVersionCode() != versionCode && settings.getShowChangelogs()) {
+        if (Settings.getLastVersionCode() != versionCode && Settings.getShowChangelogs()) {
             new ChangelogDialogFragment().show(getSupportFragmentManager(), "ChangelogDialog");
         }
     }

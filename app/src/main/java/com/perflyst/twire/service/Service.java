@@ -140,7 +140,7 @@ public class Service {
      * @return The intent
      */
     public static Intent getStartPageIntent(Context context) {
-        String title = new Settings(context).getStartPage();
+        String title = Settings.getStartPage();
 
         Class<?> activityClass = MyStreamsActivity.class;
         if (title.equals(context.getString(R.string.navigation_drawer_follows_title))) {
@@ -564,7 +564,7 @@ public class Service {
     }
 
     public static void insertStreamerInfoToDB(Context context, ChannelInfo streamer) {
-        ArrayList<String> usersNotToNotifyWhenLive = new Settings(context).getUsersNotToNotifyWhenLive();
+        ArrayList<String> usersNotToNotifyWhenLive = Settings.getUsersNotToNotifyWhenLive();
         boolean disableForStreamer = usersNotToNotifyWhenLive != null && usersNotToNotifyWhenLive.contains(streamer.getUserId());
 
         // Create a new map of values where column names are the keys

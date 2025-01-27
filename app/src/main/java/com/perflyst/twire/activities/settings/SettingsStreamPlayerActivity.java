@@ -20,8 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SettingsStreamPlayerActivity extends ThemeActivity {
-
-    private Settings settings;
     private TextView mShowViewCountSummary, mShowNavigationBarSummary, mAutoPlaybackSummary, mLockedPlaybackSummary, mShowRuntimeSummary, mPlayerTypeSummary, mPlayerProxySummary;
     private CheckedTextView mShowViewCountView, mShowNavigationBarView, mAutoPlaybackView, mLockedPlaybackView, mShowRuntimeView;
 
@@ -31,7 +29,6 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
         var binding = ActivitySettingsStreamPlayerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        settings = new Settings(getBaseContext());
         mShowNavigationBarView = findViewById(R.id.player_show_navigation_title);
         mShowViewCountView = findViewById(R.id.player_show_viewercount_title);
         mShowRuntimeView = findViewById(R.id.player_show_runtime);
@@ -83,44 +80,44 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     private void updateSummaries() {
         String[] types = getResources().getStringArray(R.array.PlayerType);
-        mPlayerTypeSummary.setText(types[settings.getStreamPlayerType()]);
-        mPlayerProxySummary.setText(convertProxyOption(settings.getStreamPlayerProxy()));
-        updateSummary(mShowViewCountView, mShowViewCountSummary, settings.getStreamPlayerShowViewerCount());
-        updateSummary(mShowRuntimeView, mShowRuntimeSummary, settings.getStreamPlayerRuntime());
-        updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, settings.getStreamPlayerShowNavigationBar());
-        updateSummary(mAutoPlaybackView, mAutoPlaybackSummary, settings.getStreamPlayerAutoContinuePlaybackOnReturn());
-        updateSummary(mLockedPlaybackView, mLockedPlaybackSummary, settings.getStreamPlayerLockedPlayback());
+        mPlayerTypeSummary.setText(types[Settings.getStreamPlayerType()]);
+        mPlayerProxySummary.setText(convertProxyOption(Settings.getStreamPlayerProxy()));
+        updateSummary(mShowViewCountView, mShowViewCountSummary, Settings.getStreamPlayerShowViewerCount());
+        updateSummary(mShowRuntimeView, mShowRuntimeSummary, Settings.getStreamPlayerRuntime());
+        updateSummary(mShowNavigationBarView, mShowNavigationBarSummary, Settings.getStreamPlayerShowNavigationBar());
+        updateSummary(mAutoPlaybackView, mAutoPlaybackSummary, Settings.getStreamPlayerAutoContinuePlaybackOnReturn());
+        updateSummary(mLockedPlaybackView, mLockedPlaybackSummary, Settings.getStreamPlayerLockedPlayback());
     }
 
     public void onClickShowNavigationBar(View v) {
-        settings.setStreamPlayerShowNavigationBar(!settings.getStreamPlayerShowNavigationBar());
+        Settings.setStreamPlayerShowNavigationBar(!Settings.getStreamPlayerShowNavigationBar());
         updateSummaries();
     }
 
     public void onClickShowViewerCount(View v) {
-        settings.setStreamPlayerShowViewerCount(!settings.getStreamPlayerShowViewerCount());
+        Settings.setStreamPlayerShowViewerCount(!Settings.getStreamPlayerShowViewerCount());
         updateSummaries();
     }
 
     public void onClickShowRuntime(View v) {
-        settings.setStreamPlayerRuntime(!settings.getStreamPlayerRuntime());
+        Settings.setStreamPlayerRuntime(!Settings.getStreamPlayerRuntime());
         updateSummaries();
     }
 
     public void onClickAutoPlayback(View v) {
-        settings.setStreamPlayerAutoContinuePlaybackOnReturn(!settings.getStreamPlayerAutoContinuePlaybackOnReturn());
+        Settings.setStreamPlayerAutoContinuePlaybackOnReturn(!Settings.getStreamPlayerAutoContinuePlaybackOnReturn());
         updateSummaries();
     }
 
     public void onClickLockedPlayback(View v) {
-        settings.setStreamPlayerLockedPlayback(!settings.getStreamPlayerLockedPlayback());
+        Settings.setStreamPlayerLockedPlayback(!Settings.getStreamPlayerLockedPlayback());
         updateSummaries();
     }
 
     public void onClickPlayerType(View _view) {
         MaterialDialog dialog = DialogService.getChoosePlayerTypeDialog
-                (this, R.string.player_type, R.array.PlayerType, settings.getStreamPlayerType(), (dialog1, itemView, which, text) -> {
-                    settings.setStreamPlayerType(which);
+                (this, R.string.player_type, R.array.PlayerType, Settings.getStreamPlayerType(), (dialog1, itemView, which, text) -> {
+                    Settings.setStreamPlayerType(which);
                     updateSummaries();
                     return true;
                 });
@@ -135,7 +132,7 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
 
     public void onClickPlayerProxy(View _view) {
         List<String> proxies = Arrays.asList(getResources().getStringArray(R.array.PlayerProxies));
-        int selectedIndex = proxies.indexOf(settings.getStreamPlayerProxy());
+        int selectedIndex = proxies.indexOf(Settings.getStreamPlayerProxy());
         // Since the custom proxy is not in the presets, we need to select the custom option
         if (selectedIndex == -1) {
             selectedIndex = proxies.size() - 1;
@@ -148,13 +145,13 @@ public class SettingsStreamPlayerActivity extends ThemeActivity {
                     if (which == proxies.size() - 1) {
                         DialogService.getBaseThemedDialog(this)
                                 .title(R.string.player_proxy_custom)
-                                .input("https://example.com", settings.getStreamPlayerProxy(), false, (dialog1, input) -> {
-                                    settings.setStreamPlayerProxy(input.toString());
+                                .input("https://example.com", Settings.getStreamPlayerProxy(), false, (dialog1, input) -> {
+                                    Settings.setStreamPlayerProxy(input.toString());
                                     updateSummaries();
                                 })
                                 .show();
                     } else {
-                        settings.setStreamPlayerProxy(proxies.get(which));
+                        Settings.setStreamPlayerProxy(proxies.get(which));
                         updateSummaries();
                     }
 

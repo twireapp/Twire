@@ -20,6 +20,7 @@ import androidx.cardview.widget.CardView;
 import com.perflyst.twire.R;
 import com.perflyst.twire.activities.stream.VODActivity;
 import com.perflyst.twire.model.VideoOnDemand;
+import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 import java.time.Duration;
@@ -164,7 +165,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         }
 
         if (hasVodBeenWatched(element.getVideoId())) {
-            int vodProgress = getSettings().getVodProgress(element.getVideoId());
+            int vodProgress = Settings.getVodProgress(element.getVideoId());
 
             viewHolder.vProgressBar.setVisibility(View.VISIBLE);
             viewHolder.vProgressBar.setPadding(0, 0, 0, 0);
@@ -179,7 +180,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
     }
 
     private boolean hasVodBeenWatched(String id) {
-        return getSettings().getVodProgress(id) > 0;
+        return Settings.getVodProgress(id) > 0;
     }
 
     private String getFormattedLengthAndTime(VideoOnDemand vod) {
@@ -228,7 +229,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
 
     @Override
     public String initElementStyle() {
-        return getSettings().getAppearanceStreamStyle();
+        return Settings.getAppearanceStreamStyle();
     }
 
     @Override

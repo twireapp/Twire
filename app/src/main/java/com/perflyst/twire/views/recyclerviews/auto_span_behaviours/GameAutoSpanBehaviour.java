@@ -11,8 +11,8 @@ import com.perflyst.twire.service.Settings;
 
 public class GameAutoSpanBehaviour implements AutoSpanBehaviour {
     @Override
-    public String getElementSizeName(Settings settings) {
-        return settings.getAppearanceGameSize();
+    public String getElementSizeName() {
+        return Settings.getAppearanceGameSize();
     }
 
     @Override

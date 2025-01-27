@@ -65,11 +65,11 @@ public class ChannelInfo extends UserInfo implements Comparable<ChannelInfo>, Pa
         }
     };
     @Nullable
-    private Integer followers;
+    private final Integer followers;
     private String streamDescription;
     private URL logoURL;
-    private URL videoBannerURL;
-    private URL profileBannerURL;
+    private final URL videoBannerURL;
+    private final URL profileBannerURL;
     private boolean notifyWhenLive;
 
     public ChannelInfo(UserInfo userInfo, String streamDescription, int followers, URL logoURL, URL videoBannerURL, URL profileBannerURL) {

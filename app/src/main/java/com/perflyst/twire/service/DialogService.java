@@ -32,7 +32,7 @@ import java.util.Arrays;
  */
 public class DialogService {
     public static MaterialDialog getThemeDialog(final Activity activity) {
-        final Theme CURRENT_THEME = new Settings(activity).getTheme();
+        final Theme CURRENT_THEME = Settings.getTheme();
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(activity);
         adapter.addAll(Arrays.stream(Theme.values()).map(theme -> getThemeDialogAdapterItem(theme.name, theme.chooser, activity)).toList());
 
@@ -42,7 +42,7 @@ public class DialogService {
                     Theme theme = Theme.values()[which];
                     dialog1.dismiss();
 
-                    new Settings(activity).setTheme(theme);
+                    Settings.setTheme(theme);
                     if (!theme.equals(CURRENT_THEME)) {
                         activity.recreate();
                     }
@@ -110,7 +110,7 @@ public class DialogService {
 
     public static MaterialDialog getChooseStreamCardStyleDialog(Activity activity, LayoutSelector.OnLayoutSelected onLayoutSelected) {
         LayoutSelector layoutSelector = new LayoutSelector(R.layout.cell_stream, R.array.StreamsCardStyles, onLayoutSelected, activity)
-                .setSelectedLayoutTitle(new Settings(activity).getAppearanceStreamStyle())
+                .setSelectedLayoutTitle(Settings.getAppearanceStreamStyle())
                 .setTextColorAttr(R.attr.navigationDrawerTextColor)
                 .setPreviewMaxHeightRes(R.dimen.stream_preview_max_height);
 
@@ -123,7 +123,7 @@ public class DialogService {
 
     public static MaterialDialog getChooseGameCardStyleDialog(Activity activity, LayoutSelector.OnLayoutSelected onLayoutSelected) {
         LayoutSelector layoutSelector = new LayoutSelector(R.layout.cell_game, R.array.GameCardStyles, onLayoutSelected, activity)
-                .setSelectedLayoutTitle(new Settings(activity).getAppearanceGameStyle())
+                .setSelectedLayoutTitle(Settings.getAppearanceGameStyle())
                 .setTextColorAttr(R.attr.navigationDrawerTextColor)
                 .setPreviewMaxHeightRes(R.dimen.game_preview_max_height);
 
@@ -136,7 +136,7 @@ public class DialogService {
 
     public static MaterialDialog getChooseStreamerCardStyleDialog(Activity activity, LayoutSelector.OnLayoutSelected onLayoutSelected) {
         LayoutSelector layoutSelector = new LayoutSelector(R.layout.cell_channel, R.array.FollowCardStyles, onLayoutSelected, activity)
-                .setSelectedLayoutTitle(new Settings(activity).getAppearanceChannelStyle())
+                .setSelectedLayoutTitle(Settings.getAppearanceChannelStyle())
                 .setTextColorAttr(R.attr.navigationDrawerTextColor)
                 .setPreviewMaxHeightRes(R.dimen.subscription_card_preview_max_height);
 
@@ -304,10 +304,9 @@ public class DialogService {
                 .build();
 
         View customView = dialog.getCustomView();
-        Settings settings = new Settings(customView.getContext());
 
         // Speed
-        Float initialSpeed = settings.getPlaybackSpeed();
+        Float initialSpeed = Settings.getPlaybackSpeed();
         Float[] speedValues = new Float[] {0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f};
 
         TextView speedDisplay = customView.findViewById(R.id.speed_display);
@@ -316,7 +315,7 @@ public class DialogService {
         slider.setValueDescriptionProvider((value) -> activity.getString(R.string.playback_speed, speedValues[value]));
         slider.setOnPositionChangeListener((view, fromUser, oldPos, newPos, oldValue, newValue) -> {
             float newSpeed = speedValues[newValue];
-            settings.setPlaybackSpeed(newSpeed);
+            Settings.setPlaybackSpeed(newSpeed);
             player.setPlaybackSpeed(newSpeed);
             speedDisplay.setText(activity.getString(R.string.playback_speed_display, newSpeed));
         });
@@ -325,10 +324,10 @@ public class DialogService {
 
         // Skip Silence
         CheckedTextView skipSilenceView = customView.findViewById(R.id.skip_silence);
-        skipSilenceView.setChecked(settings.getSkipSilence());
+        skipSilenceView.setChecked(Settings.getSkipSilence());
         skipSilenceView.setOnClickListener((view) -> {
-            boolean newState = !settings.getSkipSilence();
-            settings.setSkipSilence(newState);
+            boolean newState = !Settings.getSkipSilence();
+            Settings.setSkipSilence(newState);
             PlaybackService.sendSkipSilenceUpdate(player);
             skipSilenceView.setChecked(newState);
         });

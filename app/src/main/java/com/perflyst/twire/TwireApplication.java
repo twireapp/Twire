@@ -1,7 +1,6 @@
 package com.perflyst.twire;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.github.philippheuer.credentialmanager.CredentialManager;
 import com.github.philippheuer.credentialmanager.CredentialManagerBuilder;
@@ -31,8 +30,10 @@ public class TwireApplication extends Application {
         super.onCreate();
         Timber.plant(new Timber.DebugTree());
 
+        Settings.init(this);
+
         CredentialManager credentialManager = CredentialManagerBuilder.builder().build();
-        updateCredential(this);
+        updateCredential();
 
         CacheApiSettings.getInstance().setDefaultCacheProvider(new AndroidLruProvider());
         twitchClient = TwitchClientBuilder.builder()
@@ -47,13 +48,12 @@ public class TwireApplication extends Application {
         identityProvider = credentialManager.getIdentityProviderByName("twitch", TwitchIdentityProvider.class).get();
     }
 
-    public static void updateCredential(Context context) {
+    public static void updateCredential() {
         OAuth2Credential result;
-        var settings = new Settings(context);
-        if (!settings.isLoggedIn()) {
+        if (!Settings.isLoggedIn()) {
             result = new OAuth2Credential("twitch", "invalid-token");
         } else {
-            result = new OAuth2Credential("twitch", settings.getGeneralTwitchAccessToken(), settings.getGeneralTwitchDisplayName(), settings.getGeneralTwitchUserID(), null, -1, null);
+            result = new OAuth2Credential("twitch", Settings.getGeneralTwitchAccessToken(), Settings.getGeneralTwitchDisplayName(), Settings.getGeneralTwitchUserID(), null, -1, null);
         }
 
         credential.updateCredential(result);

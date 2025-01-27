@@ -177,7 +177,7 @@ public class ChannelActivity extends ThemeActivity {
 
     private void initStreamerImageAndColors() {
         Target<Bitmap> mTarget = getLightThemeTarget();
-        if (new Settings(this).isDarkTheme()) {
+        if (Settings.isDarkTheme()) {
             mTarget = getNightThemeTarget();
         }
 
@@ -590,7 +590,7 @@ public class ChannelActivity extends ThemeActivity {
     }
 
     private class ChannelStateAdapter extends FragmentStateAdapter {
-        private Fragment[] tabFragments;
+        private final Fragment[] tabFragments;
 
         ChannelStateAdapter(final FragmentActivity fa) {
             super(fa);

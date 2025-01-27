@@ -11,6 +11,7 @@ import com.perflyst.twire.adapters.MainActivityAdapter;
 import com.perflyst.twire.adapters.StreamsAdapter;
 import com.perflyst.twire.model.Game;
 import com.perflyst.twire.model.StreamInfo;
+import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour;
@@ -55,7 +56,7 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
 
     @Override
     public List<StreamInfo> getVisualElements() {
-        final String languageFilter = settings.getGeneralFilterTopStreamsByLanguage() ? getSystemLanguage() : null;
+        final String languageFilter = Settings.getGeneralFilterTopStreamsByLanguage() ? getSystemLanguage() : null;
         var response = TwireApplication.helix.getStreams(null, getCursor(), null, getLimit(), List.of(game.getGameId()), List.of(languageFilter), null, null).execute();
         setCursor(response.getPagination().getCursor());
         return response.getStreams().stream().map(StreamInfo::new).toList();

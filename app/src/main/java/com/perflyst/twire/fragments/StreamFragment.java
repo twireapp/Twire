@@ -147,7 +147,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
     private String vodId;
     private String title;
     private long startTime;
-    private Settings settings;
     private SleepTimer sleepTimer;
     private Map<String, Quality> qualityURLs;
     private boolean isLandscape = false;
@@ -241,7 +240,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
                              Bundle savedInstanceState) {
         Bundle args = getArguments();
         setHasOptionsMenu(true);
-        settings = new Settings(getActivity());
 
         if (args != null) {
             mUserInfo = args.getParcelable(getString(R.string.stream_fragment_streamerInfo));
@@ -292,7 +290,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         mActivity = (AppCompatActivity) getActivity();
         mOverlay = mVideoView.getOverlayFrameLayout();
 
-        landscapeChatVisible = settings.isChatInLandscapeEnabled();
+        landscapeChatVisible = Settings.isChatInLandscapeEnabled();
 
         setupToolbar();
         setupSpinner();
@@ -331,7 +329,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             View mTimeController = mVideoView.findViewById(R.id.time_controller);
             mTimeController.setVisibility(View.INVISIBLE);
 
-            if (!settings.getStreamPlayerRuntime()) {
+            if (!Settings.getStreamPlayerRuntime()) {
                 mRuntime.setVisibility(View.GONE);
             } else {
                 startTime = args.getLong(getString(R.string.stream_fragment_start_time));
@@ -339,7 +337,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
 
 
-            if (args != null && args.containsKey(getString(R.string.stream_fragment_viewers)) && settings.getStreamPlayerShowViewerCount()) {
+            if (args != null && args.containsKey(getString(R.string.stream_fragment_viewers)) && Settings.getStreamPlayerShowViewerCount()) {
                 Utils.setNumber(mCurrentViewersView, args.getInt(getString(R.string.stream_fragment_viewers)));
                 startFetchingViewers();
             } else {
@@ -353,7 +351,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         }
 
         if (autoPlay || vodId != null) {
-            startStreamWithQuality(settings.getPrefStreamQuality());
+            startStreamWithQuality(Settings.getPrefStreamQuality());
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -454,7 +452,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     mVideoView.setPlayer(player);
 
                     if (vodId != null) {
-                        player.setPlaybackSpeed(settings.getPlaybackSpeed());
+                        player.setPlaybackSpeed(Settings.getPlaybackSpeed());
                         PlaybackService.sendSkipSilenceUpdate(player);
                     }
 
@@ -608,9 +606,9 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         if (audioViewVisible && !isAudioOnlyModeEnabled()) {
             disableAudioOnlyView();
-            startStreamWithQuality(settings.getPrefStreamQuality());
-        } else if (!castingViewVisible && !audioViewVisible && hasPaused && settings.getStreamPlayerAutoContinuePlaybackOnReturn()) {
-            startStreamWithQuality(settings.getPrefStreamQuality());
+            startStreamWithQuality(Settings.getPrefStreamQuality());
+        } else if (!castingViewVisible && !audioViewVisible && hasPaused && Settings.getStreamPlayerAutoContinuePlaybackOnReturn()) {
+            startStreamWithQuality(Settings.getPrefStreamQuality());
         }
 
         registerAudioOnlyDelegate();
@@ -645,7 +643,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         Timber.d("Stream Fragment Stopped");
         super.onStop();
 
-        if (!castingViewVisible && !audioViewVisible && player != null && !settings.getStreamPlayerLockedPlayback()) {
+        if (!castingViewVisible && !audioViewVisible && player != null && !Settings.getStreamPlayerLockedPlayback()) {
             player.pause();
         }
 
@@ -727,7 +725,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * If the screen is in landscape it is show, else it is shown
      */
     private void checkShowChatButtonVisibility() {
-        if (isLandscape && settings.isChatInLandscapeEnabled()) {
+        if (isLandscape && Settings.isChatInLandscapeEnabled()) {
             mShowChatButton.setVisibility(View.VISIBLE);
         } else {
             mShowChatButton.setVisibility(View.GONE);
@@ -830,7 +828,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     private void setupLandscapeChat() {
-        if (!settings.isChatLandscapeSwipeable() || !settings.isChatInLandscapeEnabled()) {
+        if (!Settings.isChatLandscapeSwipeable() || !Settings.isChatInLandscapeEnabled()) {
             return;
         }
 
@@ -904,7 +902,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
     }
 
     private int getLandscapeChatTargetWidth() {
-        return (int) (getScreenRect(getActivity()).height() * (settings.getChatLandscapeWidth() / 100.0));
+        return (int) (getScreenRect(getActivity()).height() * (Settings.getChatLandscapeWidth() / 100.0));
     }
 
     private void initCastingView() {
@@ -1084,7 +1082,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * Otherwise the icons would be covered my the navigationbar
      */
     private void keepControlIconsInView() {
-        if (settings.getStreamPlayerShowNavigationBar()) {
+        if (Settings.getStreamPlayerShowNavigationBar()) {
             int ctrlPadding = originalCtrlToolbarPadding;
             int mainPadding = originalMainToolbarPadding;
             int delta = getNavigationBarHeight();
@@ -1178,7 +1176,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                     qualityURLs = url;
 
                     if (!isAudioOnlyModeEnabled()) {
-                        startStreamWithQuality(new Settings(getContext()).getPrefStreamQuality());
+                        startStreamWithQuality(Settings.getPrefStreamQuality());
                     }
                 } else {
                     playbackFailed();
@@ -1190,7 +1188,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         String[] types = getResources().getStringArray(R.array.PlayerType);
 
-        GetStreamURL task = new GetStreamURL(mUserInfo.getLogin(), vodId, types[settings.getStreamPlayerType()], settings.getStreamPlayerProxy());
+        GetStreamURL task = new GetStreamURL(mUserInfo.getLogin(), vodId, types[Settings.getStreamPlayerType()], Settings.getStreamPlayerProxy());
         Execute.background(task, callback);
     }
 
@@ -1262,7 +1260,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
                 .build();
 
         if (vodId != null) {
-            long startPosition = settings.getVodProgress(vodId) * 1000L;
+            long startPosition = Settings.getVodProgress(vodId) * 1000L;
             // Don't lose the position if we're playing the same VOD
             if (currentMediaItem != null && currentMediaItem.mediaId.equals(vodId)) {
                 startPosition = player.getCurrentPosition();
@@ -1346,7 +1344,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         qualityView.setOnClickListener(v -> {
             // don´t set audio only mode as default
             if (!quality.equals("audio_only")) {
-                settings.setPrefStreamQuality(quality);
+                Settings.setPrefStreamQuality(quality);
             }
             // don`t allow to change the Quality when using audio only Mode
             if (!isAudioOnlyModeEnabled()) {
@@ -1552,8 +1550,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
         // start stream with last quality
         releasePlayer();
         initializePlayer();
-        updateSelectedQuality(settings.getPrefStreamQuality());
-        startStreamWithQuality(settings.getPrefStreamQuality());
+        updateSelectedQuality(Settings.getPrefStreamQuality());
+        startStreamWithQuality(Settings.getPrefStreamQuality());
 
         // resume the stream
         player.play();
@@ -1617,7 +1615,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         if (!castingViewVisible) {
             initializePlayer();
-            startStreamWithQuality(settings.getPrefStreamQuality());
+            startStreamWithQuality(Settings.getPrefStreamQuality());
         }
 
         optionsMenuItem.setVisible(false);

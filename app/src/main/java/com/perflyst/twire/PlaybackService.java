@@ -1,6 +1,5 @@
 package com.perflyst.twire;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -51,16 +50,15 @@ public class PlaybackService extends MediaSessionService {
                 .setHandleAudioBecomingNoisy(true)
                 .build();
         mediaSession = new MediaSession.Builder(this, player)
-                .setCallback(new MediaSessionCallback(this, player)).build();
+                .setCallback(new MediaSessionCallback(player)).build();
 
-        Settings settings = new Settings(this);
         player.addListener(new Player.Listener() {
             @Override
             public void onPositionDiscontinuity(@NonNull Player.PositionInfo oldPosition, @NonNull Player.PositionInfo newPosition, int reason) {
                 if (oldPosition.mediaItem == newPosition.mediaItem || oldPosition.mediaItem == null || oldPosition.mediaItem.mediaId.isEmpty())
                     return;
 
-                settings.setVodProgress(oldPosition.mediaItem.mediaId, oldPosition.positionMs);
+                Settings.setVodProgress(oldPosition.mediaItem.mediaId, oldPosition.positionMs);
             }
         });
     }
@@ -130,7 +128,7 @@ public class PlaybackService extends MediaSessionService {
                 @NonNull SessionCommand customCommand,
                 @NonNull Bundle args) {
             if (customCommand.customAction.equals(UPDATE_SKIP_SILENCE)) {
-                player.setSkipSilenceEnabled(new Settings(context).getSkipSilence());
+                player.setSkipSilenceEnabled(Settings.getSkipSilence());
                 return Futures.immediateFuture(new SessionResult(SessionResult.RESULT_SUCCESS));
             }
 
