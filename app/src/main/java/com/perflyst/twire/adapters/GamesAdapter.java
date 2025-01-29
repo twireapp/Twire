@@ -148,7 +148,7 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
     @Override
     void setViewData(Game element, GameViewHolder viewHolder) {
         // Set the data on the holder's views
-        String mGameTitle = element.getGameTitle();
+        String mGameTitle = element.gameTitle;
         //String mGameViewers = Integer.toString(element.getGameViewers());
         viewHolder.getGameTitle().setText(mGameTitle);
         /*

@@ -72,7 +72,7 @@ public class AppearanceSettingsFragment extends Fragment {
 
     private void initSummaries() {
         // Theme Summary
-        themeSummary.setText(Settings.getTheme().name);
+        themeSummary.setText(Settings.getTheme().getNameRes());
         themeSummaryColor.setImageDrawable(AppCompatResources.getDrawable(requireContext(), Settings.getTheme().chooser));
 
         // Style Summary

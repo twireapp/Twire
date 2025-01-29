@@ -117,7 +117,7 @@ object Settings {
                 Theme.valueOf(oldTheme)
             } catch (e: IllegalArgumentException) {
                 val newTheme = Arrays.stream(Theme.entries.toTypedArray<Theme>())
-                    .filter { theme: Theme -> context.getString(theme.name) == oldTheme }
+                    .filter { theme: Theme -> context.getString(theme.nameRes) == oldTheme }
                     .findFirst()
                     .orElse(Theme.BLUE)
                 theme = newTheme

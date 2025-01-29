@@ -411,8 +411,8 @@ public class ChannelActivity extends ThemeActivity {
             TextView mDescription = rootView.findViewById(R.id.description);
             findErrorView(rootView);
 
-            if (info != null && info.getStreamDescription() != null && !info.getStreamDescription().equals("null") && !info.getStreamDescription().isEmpty()) {
-                mDescription.setText(info.getStreamDescription());
+            if (info != null && info.streamDescription != null && !info.streamDescription.equals("null") && !info.streamDescription.isEmpty()) {
+                mDescription.setText(info.streamDescription);
             } else {
                 showError();
             }
@@ -578,8 +578,8 @@ public class ChannelActivity extends ThemeActivity {
             var response = TwireApplication.helix.getVideos(null, null, channelInfo.getUserId(), null, null, null, null, broadcasts ? Video.Type.ARCHIVE : Video.Type.HIGHLIGHT, null, getCursor(), null).execute();
             for (var video : response.getVideos()) {
                 VideoOnDemand vod = new VideoOnDemand(video);
-                vod.setChannelInfo(channelInfo);
-                vod.setBroadcast(broadcasts);
+                vod.channelInfo = channelInfo;
+                vod.isBroadcast = broadcasts;
                 result.add(vod);
             }
 

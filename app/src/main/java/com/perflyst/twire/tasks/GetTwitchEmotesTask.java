@@ -33,7 +33,7 @@ public class GetTwitchEmotesTask implements Runnable {
             if (Objects.equals(emoteData.getEmoteSetId(), "0")) {
                 twitchEmotes.add(emote);
             } else {
-                emote.setSubscriberEmote(true);
+                emote.isSubscriberEmote = true;
                 subscriberEmotes.add(emote);
             }
         }

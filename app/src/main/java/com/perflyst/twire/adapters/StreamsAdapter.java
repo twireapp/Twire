@@ -106,7 +106,7 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         int itemPosition = getRecyclerView().getChildAdapterPosition(view);
 
         StreamInfo item = getElements().get(itemPosition);
-        UserInfo userInfo = item.getUserInfo();
+        UserInfo userInfo = item.userInfo;
 
         Execute.background(() -> {
             ChannelInfo mChannelInfo = Service.getStreamerInfoFromUserId(userInfo.getUserId());
@@ -157,13 +157,13 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
         viewHolder.vPreviewImage.getLayoutParams().width = metrics.widthPixels;
 
-        String viewers = getContext().getString(R.string.my_streams_cell_current_viewers, element.getCurrentViewers());
-        String gameAndViewers = viewers + " - " + element.getGame();
+        String viewers = getContext().getString(R.string.my_streams_cell_current_viewers, element.currentViewers);
+        String gameAndViewers = viewers + " - " + element.game;
 
-        viewHolder.vDisplayName.setText(element.getUserInfo().getDisplayName());
-        viewHolder.vTitle.setText(element.getTitle());
+        viewHolder.vDisplayName.setText(element.userInfo.getDisplayName());
+        viewHolder.vTitle.setText(element.title);
         viewHolder.vGame.setText(gameAndViewers);
-        viewHolder.vOnlineSince.setText(OnlineSince.getOnlineSince(element.getStartedAt()));
+        viewHolder.vOnlineSince.setText(OnlineSince.getOnlineSince(element.startedAt));
         viewHolder.vPreviewImage.setVisibility(View.VISIBLE);
     }
 

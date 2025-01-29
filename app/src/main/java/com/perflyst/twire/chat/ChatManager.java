@@ -384,12 +384,12 @@ public class ChatManager implements Runnable {
         //Pattern.compile(Pattern.quote(userDisplayName), Pattern.CASE_INSENSITIVE).matcher(message).find();
 
         ChatMessage chatMessage = new ChatMessage(content, displayName, color, getBadges(badges), emotes, false);
-        chatMessage.setID(message.getEventId());
+        chatMessage.setId(message.getEventId());
         chatMessage.systemMessage = messageEvent.getTagValue("system-msg").orElse("");
 
         if (content.contains("@" + getUserDisplayName())) {
             Timber.d("Highlighting message with mention: %s", content);
-            chatMessage.setHighlight(true);
+            chatMessage.isHighlight = true;
         }
 
         onMessage(chatMessage);

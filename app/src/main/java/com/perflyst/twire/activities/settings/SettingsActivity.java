@@ -55,7 +55,7 @@ public class SettingsActivity extends ThemeActivity implements SettingsCategoryA
     @Override
     public void onCategoryClicked(SettingsCategory category) {
         ActivityOptions settingsAnim = ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_right_anim, R.anim.fade_out_semi_anim); // First animation is how the new activity enters - Second is how the current activity exits
-        startActivity(category.getIntent(), settingsAnim.toBundle());
+        startActivity(category.intent, settingsAnim.toBundle());
     }
 
     private List<SettingsCategory> constructSettingsCategories() {

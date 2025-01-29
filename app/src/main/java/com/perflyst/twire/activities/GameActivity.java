@@ -31,7 +31,7 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
         Intent intent = getIntent();
         game = intent.getParcelableExtra(getString(R.string.game_intent_key));
         assert game != null;
-        mTitleView.setText(game.getGameTitle());
+        mTitleView.setText(game.gameTitle);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class GameActivity extends LazyMainActivity<StreamInfo> {
     @Override
     public List<StreamInfo> getVisualElements() {
         final String languageFilter = Settings.getGeneralFilterTopStreamsByLanguage() ? getSystemLanguage() : null;
-        var response = TwireApplication.helix.getStreams(null, getCursor(), null, getLimit(), List.of(game.getGameId()), List.of(languageFilter), null, null).execute();
+        var response = TwireApplication.helix.getStreams(null, getCursor(), null, getLimit(), List.of(game.gameId), List.of(languageFilter), null, null).execute();
         setCursor(response.getPagination().getCursor());
         return response.getStreams().stream().map(StreamInfo::new).toList();
     }

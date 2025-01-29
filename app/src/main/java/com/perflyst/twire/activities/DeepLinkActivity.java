@@ -67,7 +67,7 @@ public class DeepLinkActivity extends AppCompatActivity {
             var users = TwireApplication.helix.getUsers(null, List.of(video.getUserId()), null).execute().getUsers();
             if (users.isEmpty()) return null;
 
-            vod.setChannelInfo(new ChannelInfo(users.get(0)));
+            vod.channelInfo = new ChannelInfo(users.get(0));
 
             return VODActivity.createVODIntent(vod, this, false);
         } else if (paramSize == 1) { // twitch.tv/<channel>

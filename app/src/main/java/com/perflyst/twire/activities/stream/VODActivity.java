@@ -44,9 +44,9 @@ public class VODActivity extends StreamActivity {
         }
 
         Bundle args = new Bundle();
-        args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mVod.getChannelInfo());
-        args.putString(getString(R.string.stream_fragment_vod_id), mVod.getVideoId());
-        args.putString(getString(R.string.stream_fragment_title), mVod.getVideoTitle());
+        args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mVod.channelInfo);
+        args.putString(getString(R.string.stream_fragment_vod_id), mVod.videoId);
+        args.putString(getString(R.string.stream_fragment_title), mVod.videoTitle);
         return args;
     }
 
@@ -57,7 +57,7 @@ public class VODActivity extends StreamActivity {
             FragmentManager fm = getSupportFragmentManager();
 
             if (vodsFragments == null) {
-                vodsFragments = ChannelActivity.VodFragment.newInstance(mVod.isBroadcast(), mVod.getChannelInfo());
+                vodsFragments = ChannelActivity.VodFragment.newInstance(mVod.isBroadcast, mVod.channelInfo);
                 fm.beginTransaction().replace(R.id.additional_vods_container, vodsFragments).commit();
             }
         }
@@ -70,8 +70,8 @@ public class VODActivity extends StreamActivity {
 
     private void setVodData() {
         if (mVod != null) {
-            mTitleView.setText(mVod.getVideoTitle());
-            mViewsView.setText(getString(R.string.vod_views, mVod.getViews()));
+            mTitleView.setText(mVod.videoTitle);
+            mViewsView.setText(getString(R.string.vod_views, mVod.views));
         }
     }
 

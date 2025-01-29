@@ -572,21 +572,21 @@ public class Service {
         values.put(SubscriptionsDbHelper.COLUMN_ID, streamer.getUserId());
         values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, streamer.getLogin());
         values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, streamer.getDisplayName());
-        values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, streamer.getStreamDescription());
+        values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, streamer.streamDescription);
         values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, 0);
         values.put(SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE, disableForStreamer ? 0 : 1); // Enable by default
         values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, 0);
 
 
         // Test if the URL strings are null, to make sure we don't call toString on a null.
-        if (streamer.getLogoURL() != null)
-            values.put(SubscriptionsDbHelper.COLUMN_LOGO_URL, streamer.getLogoURL().toString());
+        if (streamer.logoURL != null)
+            values.put(SubscriptionsDbHelper.COLUMN_LOGO_URL, streamer.logoURL.toString());
 
-        if (streamer.getVideoBannerURL() != null)
-            values.put(SubscriptionsDbHelper.COLUMN_VIDEO_BANNER_URL, streamer.getVideoBannerURL().toString());
+        if (streamer.videoBannerURL != null)
+            values.put(SubscriptionsDbHelper.COLUMN_VIDEO_BANNER_URL, streamer.videoBannerURL.toString());
 
-        if (streamer.getProfileBannerURL() != null)
-            values.put(SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL, streamer.getProfileBannerURL().toString());
+        if (streamer.profileBannerURL != null)
+            values.put(SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL, streamer.profileBannerURL.toString());
 
 
         streamer.getFollowers(followers -> {

@@ -97,7 +97,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
             Intent intent = VODActivity.createVODIntent(item, getContext(), true);
 
             intent.putExtra(getContext().getString(R.string.stream_preview_url), item.getMediumPreview());
-            intent.putExtra(getContext().getString(R.string.stream_preview_alpha), hasVodBeenWatched(item.getVideoId()) ? VOD_WATCHED_IMAGE_ALPHA : 1.0f);
+            intent.putExtra(getContext().getString(R.string.stream_preview_alpha), hasVodBeenWatched(item.videoId) ? VOD_WATCHED_IMAGE_ALPHA : 1.0f);
 
             final View sharedView = view.findViewById(R.id.image_stream_preview);
             sharedView.setTransitionName(getContext().getString(R.string.stream_preview_transition));
@@ -151,27 +151,27 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
         viewHolder.vPreviewImage.getLayoutParams().width = metrics.widthPixels;
 
-        String gameAndViewers = getContext().getString(R.string.vod_views, element.getViews());
-        if (!element.getGameTitle().isEmpty()) {
-            gameAndViewers += " - " + element.getGameTitle();
+        String gameAndViewers = getContext().getString(R.string.vod_views, element.views);
+        if (!element.gameTitle.isEmpty()) {
+            gameAndViewers += " - " + element.gameTitle;
         }
-        viewHolder.vTitle.setText(element.getVideoTitle());
+        viewHolder.vTitle.setText(element.videoTitle);
         viewHolder.vGame.setText(gameAndViewers);
         viewHolder.vPreviewImage.setVisibility(View.VISIBLE);
-        viewHolder.vDisplayName.setText(element.getDisplayName());
+        viewHolder.vDisplayName.setText(element.displayName);
         viewHolder.vTimeStamp.setText(getFormattedLengthAndTime(element));
         if (!showName) {
             viewHolder.vDisplayName.setVisibility(View.GONE);
         }
 
-        if (hasVodBeenWatched(element.getVideoId())) {
-            int vodProgress = Settings.getVodProgress(element.getVideoId());
+        if (hasVodBeenWatched(element.videoId)) {
+            int vodProgress = Settings.getVodProgress(element.videoId);
 
             viewHolder.vProgressBar.setVisibility(View.VISIBLE);
             viewHolder.vProgressBar.setPadding(0, 0, 0, 0);
 
             viewHolder.vPreviewImage.animate().alpha(VOD_WATCHED_IMAGE_ALPHA).setDuration(300).start();
-            viewHolder.vProgressBar.setMax((int) element.getLength());
+            viewHolder.vProgressBar.setMax((int) element.length);
             ObjectAnimator.ofInt(viewHolder.vProgressBar, "progress", vodProgress).setDuration(300).start();
         } else {
             viewHolder.vProgressBar.setVisibility(View.INVISIBLE);
@@ -185,7 +185,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
 
     private String getFormattedLengthAndTime(VideoOnDemand vod) {
         String time;
-        ZonedDateTime now = ZonedDateTime.now(), vodDate = vod.getRecordedAt();
+        ZonedDateTime now = ZonedDateTime.now(), vodDate = vod.recordedAt;
 
         long daysAgo = Duration.between(vodDate, now).toDays();
         long milliseconds = vodDate.toInstant().toEpochMilli();
@@ -204,7 +204,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
             time = DateUtils.formatDateTime(getContext(), milliseconds, DateUtils.FORMAT_SHOW_DATE);
         }
 
-        return time + " - " + DateUtils.formatElapsedTime(vod.getLength());
+        return time + " - " + DateUtils.formatElapsedTime(vod.length);
     }
 
     @Override

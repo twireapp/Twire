@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.ZonedDateTime;
 
 public class ModelParcelableTest {
     // https://stackoverflow.com/a/56254187/8213163
@@ -45,10 +46,13 @@ public class ModelParcelableTest {
 
         ChannelInfo newChannelInfo = clone(channelInfo);
 
-        assertEquals(channelInfo.getStreamDescription(), newChannelInfo.getStreamDescription());
-        assertEquals(channelInfo.getLogoURL(), newChannelInfo.getLogoURL());
-        assertEquals(channelInfo.getVideoBannerURL(), newChannelInfo.getVideoBannerURL());
-        assertEquals(channelInfo.getProfileBannerURL(), newChannelInfo.getProfileBannerURL());
+        assertEquals(channelInfo.streamDescription, newChannelInfo.streamDescription);
+        assertEquals(channelInfo.logoURL, newChannelInfo.logoURL);
+        assertEquals(channelInfo.videoBannerURL, newChannelInfo.videoBannerURL);
+        assertEquals(channelInfo.profileBannerURL, newChannelInfo.profileBannerURL);
+        assertEquals(channelInfo.getUserId(), newChannelInfo.getUserId());
+        assertEquals(channelInfo.getDisplayName(), newChannelInfo.getDisplayName());
+        assertEquals(channelInfo.getLogin(), newChannelInfo.getLogin());
     }
 
     @Test
@@ -65,9 +69,9 @@ public class ModelParcelableTest {
 
         Game newGame = clone(game);
 
-        assertEquals(game.getGameTitle(), newGame.getGameTitle());
-        assertEquals(game.getGameId(), newGame.getGameId());
-        assertEquals(game.getGameViewers(), newGame.getGameViewers());
+        assertEquals(game.gameTitle, newGame.gameTitle);
+        assertEquals(game.gameId, newGame.gameId);
+        assertEquals(game.gameViewers, newGame.gameViewers);
         assertEquals(game.getLowPreview(), newGame.getLowPreview());
         assertEquals(game.getMediumPreview(), newGame.getMediumPreview());
         assertEquals(game.getHighPreview(), newGame.getHighPreview());
@@ -86,11 +90,11 @@ public class ModelParcelableTest {
 
         StreamInfo newStreamInfo = clone(streamInfo);
 
-        assertEquals(streamInfo.getGame(), newStreamInfo.getGame());
-        assertEquals(streamInfo.getCurrentViewers(), newStreamInfo.getCurrentViewers());
-        assertArrayEquals(streamInfo.getPreviews(), newStreamInfo.getPreviews());
-        assertEquals(streamInfo.getStartedAt(), newStreamInfo.getStartedAt());
-        assertEquals(streamInfo.getTitle(), newStreamInfo.getTitle());
+        assertEquals(streamInfo.game, newStreamInfo.game);
+        assertEquals(streamInfo.currentViewers, newStreamInfo.currentViewers);
+        assertArrayEquals(streamInfo.previews, newStreamInfo.previews);
+        assertEquals(streamInfo.startedAt, newStreamInfo.startedAt);
+        assertEquals(streamInfo.title, newStreamInfo.title);
     }
 
     @Test
@@ -117,18 +121,20 @@ public class ModelParcelableTest {
                 "id",
                 "channelName",
                 "displayName",
+                ZonedDateTime.parse("1970-01-01T00:00:00.000Z"),
                 1,
                 2,
-                "1997-01-01"
+                false,
+                null
         );
 
         VideoOnDemand newVideoOnDemand = clone(videoOnDemand);
 
-        assertEquals(videoOnDemand.getVideoTitle(), newVideoOnDemand.getVideoTitle());
-        assertEquals(videoOnDemand.getGameTitle(), newVideoOnDemand.getGameTitle());
-        assertEquals(videoOnDemand.getVideoId(), newVideoOnDemand.getVideoId());
-        assertEquals(videoOnDemand.getViews(), newVideoOnDemand.getViews());
-        assertEquals(videoOnDemand.getLength(), newVideoOnDemand.getLength());
-        assertEquals(videoOnDemand.getRecordedAt(), newVideoOnDemand.getRecordedAt());
+        assertEquals(videoOnDemand.videoTitle, newVideoOnDemand.videoTitle);
+        assertEquals(videoOnDemand.gameTitle, newVideoOnDemand.gameTitle);
+        assertEquals(videoOnDemand.videoId, newVideoOnDemand.videoId);
+        assertEquals(videoOnDemand.views, newVideoOnDemand.views);
+        assertEquals(videoOnDemand.length, newVideoOnDemand.length);
+        assertEquals(videoOnDemand.recordedAt, newVideoOnDemand.recordedAt);
     }
 }

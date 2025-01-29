@@ -32,12 +32,12 @@ public class LiveStreamActivity extends StreamActivity {
 
     public static Intent createLiveStreamIntent(StreamInfo stream, boolean sharedTransition, Context context) {
         Intent liveStreamIntent = new Intent(context, LiveStreamActivity.class);
-        liveStreamIntent.putExtra(context.getString(R.string.intent_key_streamer_info), stream.getUserInfo());
-        liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_viewers), stream.getCurrentViewers());
-        liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_start_time), stream.getStartedAt());
+        liveStreamIntent.putExtra(context.getString(R.string.intent_key_streamer_info), stream.userInfo);
+        liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_viewers), stream.currentViewers);
+        liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_start_time), stream.startedAt);
         liveStreamIntent.putExtra(context.getString(R.string.stream_preview_url), stream.getMediumPreview());
         liveStreamIntent.putExtra(context.getString(R.string.stream_shared_transition), sharedTransition);
-        liveStreamIntent.putExtra(context.getString(R.string.stream_fragment_title), stream.getTitle());
+        liveStreamIntent.putExtra(context.getString(R.string.stream_fragment_title), stream.title);
         return liveStreamIntent;
     }
 

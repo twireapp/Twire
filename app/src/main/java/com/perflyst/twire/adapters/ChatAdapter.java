@@ -76,7 +76,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     public void onBindViewHolder(@NonNull final ContactViewHolder holder, int position) {
         try {
             final ChatMessage message = messages.get(position);
-            if (message.getName() == null) {
+            if (message.name == null) {
                 return;
             }
 
@@ -88,31 +88,31 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                 holder.message.setBackgroundResource(0);
             }
 
-            if (!message.getMessage().isEmpty()) {
+            if (!message.message.isEmpty()) {
                 if (!message.systemMessage.isEmpty()) builder.append('\n');
 
-                for (Badge badge : message.getBadges()) {
+                for (Badge badge : message.badges) {
                     if (badge == null) {continue;}
 
                     final GlideImageSpan badgeSpan = new GlideImageSpan(context, badge.getUrl(2), holder.message, 36, 1, badge.color);
                     appendSpan(builder, "  ", badgeSpan).append(" ");
                 }
 
-                int nameColor = getNameColor(message.getColor());
-                appendSpan(builder, message.getName(), new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
+                int nameColor = getNameColor(message.color);
+                appendSpan(builder, message.name, new ForegroundColorSpan(nameColor), new StyleSpan(Typeface.BOLD));
 
                 int preLength = builder.length();
                 String beforeMessage = ": ";
-                String messageWithPre = beforeMessage + message.getMessage();
+                String messageWithPre = beforeMessage + message.message;
                 appendSpan(builder, messageWithPre, new ForegroundColorSpan(getMessageColor()));
 
                 checkForLink(builder.toString(), builder);
 
-                for (var entry : message.getEmotes().entrySet()) {
+                for (var entry : message.emotes.entrySet()) {
                     Integer emotePosition = entry.getKey();
                     final Emote emote = entry.getValue();
                     final int fromPosition = emotePosition + preLength;
-                    final int toPosition = emotePosition + emote.getKeyword().length() - 1 + preLength;
+                    final int toPosition = emotePosition + emote.keyword.length() - 1 + preLength;
 
                     int emoteSize = Settings.getEmoteSize();
                     int emotePixels = emoteSize == 1 ? 28 : emoteSize == 2 ? 56 : 112;
@@ -123,14 +123,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
                 }
             }
 
-            if (message.isHighlight()) {
+            if (message.isHighlight) {
                 holder.message.setBackgroundColor(Service.getColorAttribute(androidx.appcompat.R.attr.colorAccent, R.color.accent, context));
             }
 
             holder.message.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
             holder.message.setText(builder);
             holder.message.setMovementMethod(LinkMovementMethod.getInstance());
-            holder.message.setOnClickListener(view -> mCallback.onMessageClicked(builder, message.getName(), message.getMessage()));
+            holder.message.setOnClickListener(view -> mCallback.onMessageClicked(builder, message.name, message.message));
 
         } catch (Exception e) {
             //In case twitch doesn't comply to their own API.
@@ -141,7 +141,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
 
     public void getNamesThatMatches(String match, List<String> suggestions) {
         for (ChatMessage message : messages) {
-            String name = message.getName();
+            String name = message.name;
             if (name.toLowerCase().matches("^" + match + "\\w+") && !suggestions.contains(name)) {
                 suggestions.add(name);
             }
@@ -230,7 +230,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
             checkSize();
             mRecyclerView.scrollToPosition(messages.size() - 1);
         }
-        Timber.v("Adding Message %s", message.getMessage());
+        Timber.v("Adding Message %s", message.message);
     }
 
     public void clear() {
@@ -242,7 +242,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ContactViewHol
     public void clear(String target) {
         for (int i = messages.size() - 1; i >= 0; i--) {
             ChatMessage message = messages.get(i);
-            if (!message.getID().equals(target)) {
+            if (!message.getId().equals(target)) {
                 continue;
             }
 

@@ -41,7 +41,7 @@ public class HandlerUserLoginTask implements Runnable {
             Settings.setGeneralTwitchUserUpdatedDate(user.getCreatedAt().toString());
 
         // Now that we have the user, update the credential
-        TwireApplication.updateCredential(mLoginActivity.get());
+        TwireApplication.updateCredential();
 
         Execute.ui(() -> mLoginActivity.get().handleLoginSuccess());
     }

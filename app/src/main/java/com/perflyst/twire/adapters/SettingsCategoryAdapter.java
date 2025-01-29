@@ -38,9 +38,9 @@ public class SettingsCategoryAdapter extends RecyclerView.Adapter<SettingsCatego
     @Override
     public void onBindViewHolder(@NonNull SettingsCategoryViewHolder holder, int position) {
         SettingsCategory category = mCategories.get(position);
-        holder.mTitleView.setText(category.getTitleRes());
-        holder.mSummaryView.setText(category.getSummaryRes());
-        holder.mCategoryIconView.setImageResource(category.getIconRes());
+        holder.mTitleView.setText(category.titleRes);
+        holder.mSummaryView.setText(category.summaryRes);
+        holder.mCategoryIconView.setImageResource(category.iconRes);
 
         if (mCategoryCallback != null) {
             holder.itemView.setOnClickListener(view -> mCategoryCallback.onCategoryClicked(category));

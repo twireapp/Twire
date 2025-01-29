@@ -34,7 +34,7 @@ public class DialogService {
     public static MaterialDialog getThemeDialog(final Activity activity) {
         final Theme CURRENT_THEME = Settings.getTheme();
         final MaterialSimpleListAdapter adapter = new MaterialSimpleListAdapter(activity);
-        adapter.addAll(Arrays.stream(Theme.values()).map(theme -> getThemeDialogAdapterItem(theme.name, theme.chooser, activity)).toList());
+        adapter.addAll(Arrays.stream(Theme.values()).map(theme -> getThemeDialogAdapterItem(theme.getNameRes(), theme.chooser, activity)).toList());
 
         final MaterialDialog.Builder dialog = getBaseThemedDialog(activity)
                 .title(R.string.theme_dialog_title)

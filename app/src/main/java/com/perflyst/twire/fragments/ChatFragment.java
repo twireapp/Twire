@@ -418,9 +418,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             emotesToHide = new ArrayList<>();
 
             for (Emote emote : recentEmotes) {
-                if (subscriberEmotes != null && emote.isSubscriberEmote() && !subscriberEmotes.contains(emote)) {
+                if (subscriberEmotes != null && emote.isSubscriberEmote && !subscriberEmotes.contains(emote)) {
                     emotesToRemove.add(emote);
-                } else if (customChannelEmotes != null && emote.isCustomChannelEmote() && !customChannelEmotes.contains(emote)) {
+                } else if (customChannelEmotes != null && emote.isCustomChannelEmote && !customChannelEmotes.contains(emote)) {
                     emotesToHide.add(emote);
                 }
             }
@@ -688,7 +688,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     } else if (firstCharacter.equals(":") && customEmotes != null) {
                         suggestions = Stream.of(customEmotes, customEmotes, twitchEmotes, subscriberEmotes)
                                 .flatMap(Collection::stream)
-                                .map(Emote::getKeyword)
+                                .map(emote -> emote.keyword)
                                 .filter(keyword -> keyword.toLowerCase().contains(lastWord))
                                 .distinct()
                                 .limit(10)
@@ -800,7 +800,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         Map<String, Emote> emotes = List.of(customEmotes, twitchEmotes, subscriberEmotes)
                 .stream()
                 .flatMap(Collection::stream)
-                .collect(Collectors.toMap(Emote::getKeyword, emote -> emote));
+                .collect(Collectors.toMap(emote -> emote.keyword, emote -> emote));
 
         ChatMessage chatMessage = new ChatMessage(
                 message,
@@ -844,7 +844,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
 
         if (clickedEmote != null) {
             int startPosition = mSendText.getSelectionStart();
-            String emoteKeyword = clickedEmote.getKeyword();
+            String emoteKeyword = clickedEmote.keyword;
 
             if (startPosition != 0 && getSendText().charAt(startPosition - 1) != ' ') {
                 emoteKeyword = " " + emoteKeyword;
@@ -1033,7 +1033,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
                     int itemPosition = mEmoteRecyclerView.getChildLayoutPosition(view);
                     Emote emoteClicked = emotes.get(itemPosition);
 
-                    Toast.makeText(getContext(), emoteClicked.getKeyword(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), emoteClicked.keyword, Toast.LENGTH_SHORT).show();
                     return false;
                 }
             };
@@ -1060,11 +1060,11 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             public void onBindViewHolder(@NonNull final EmoteViewHolder holder, int position) {
                 final Emote emoteAtPosition = emotes.get(position);
 
-                if (emoteAtPosition.isTextEmote()) {
-                    holder.mTextEmote.setText(emoteAtPosition.getKeyword());
+                int EMOTE_SIZE = 2;
+                String emoteUrl = emoteAtPosition.getEmoteUrl(EMOTE_SIZE, isDarkTheme);
+                if (emoteUrl == null) {
+                    holder.mTextEmote.setText(emoteAtPosition.keyword);
                 } else {
-                    int EMOTE_SIZE = 2;
-                    String emoteUrl = emoteAtPosition.getEmoteUrl(EMOTE_SIZE, isDarkTheme);
 
                     Glide.with(requireContext()).load(emoteUrl).into(holder.mImageEmote);
                 }
