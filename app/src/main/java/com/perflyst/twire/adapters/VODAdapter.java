@@ -96,7 +96,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         } else {
             Intent intent = VODActivity.createVODIntent(item, getContext(), true);
 
-            intent.putExtra(getContext().getString(R.string.stream_preview_url), item.getMediumPreview());
+            intent.putExtra(getContext().getString(R.string.stream_preview_url), item.getPreviewUrl());
             intent.putExtra(getContext().getString(R.string.stream_preview_alpha), hasVodBeenWatched(item.videoId) ? VOD_WATCHED_IMAGE_ALPHA : 1.0f);
 
             final View sharedView = view.findViewById(R.id.image_stream_preview);

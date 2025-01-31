@@ -11,9 +11,7 @@ class StreamInfo(
     @JvmField val userInfo: UserInfo,
     @JvmField var game: String? = null,
     @JvmField var currentViewers: Int = 0,
-    override val highPreview: String,
-    override val mediumPreview: String,
-    override val lowPreview: String,
+    override val previewTemplate: String?,
     @JvmField val startedAt: Long,
     @JvmField var title: String? = null
 ) : Comparable<StreamInfo>, MainElement, Parcelable {
@@ -21,9 +19,7 @@ class StreamInfo(
         UserInfo(stream.userId, stream.userLogin, stream.userName),
         stream.gameName,
         stream.viewerCount,
-        stream.getThumbnailUrl(80, 45),
-        stream.getThumbnailUrl(320, 180),
-        stream.getThumbnailUrl(640, 360),
+        stream.thumbnailUrlTemplate,
         stream.startedAtInstant.toEpochMilli(),
         stream.title
     )

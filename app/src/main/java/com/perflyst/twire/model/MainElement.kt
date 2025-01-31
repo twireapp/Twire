@@ -6,11 +6,17 @@ import android.content.Context
  * Created by Sebastian Rask on 04-04-2016.
  */
 interface MainElement {
-    val highPreview: String?
+    val previewUrl: String?
+        get() = previewTemplate?.replace(Regex("%?\\{width\\}"), width)
+            ?.replace(Regex("%?\\{height\\}"), height)
 
-    val mediumPreview: String?
+    val previewTemplate: String?
 
-    val lowPreview: String?
+    val width: String
+        get() = "320"
+
+    val height: String
+        get() = "180"
 
     fun getPlaceHolder(context: Context): Int
 

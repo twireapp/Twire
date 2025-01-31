@@ -16,7 +16,7 @@ import java.time.ZonedDateTime
 class VideoOnDemand(
     @JvmField val videoTitle: String?,
     @JvmField val gameTitle: String?,
-    private val previewUrl: String,
+    override val previewTemplate: String,
     @JvmField val videoId: String?,
     private val channelName: String?,
     @JvmField val displayName: String?,
@@ -29,7 +29,7 @@ class VideoOnDemand(
     constructor(video: Video) : this(
         video.title,
         "",
-        video.getThumbnailUrl(320, 180),
+        video.thumbnailUrl,
         video.id,
         video.userLogin,
         video.userName,
@@ -41,12 +41,6 @@ class VideoOnDemand(
     override fun compareTo(other: VideoOnDemand): Int {
         return recordedAt.compareTo(other.recordedAt)
     }
-
-    override val highPreview: String get() = previewUrl
-
-    override val mediumPreview: String get() = previewUrl
-
-    override val lowPreview: String get() = previewUrl
 
     override fun getPlaceHolder(context: Context): Int {
         return R.drawable.template_stream

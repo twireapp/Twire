@@ -17,18 +17,14 @@ class Game(
     @JvmField
     var gameViewers: Int = -1,
     private var gameStreamers: Int = -1,
-    override val lowPreview: String,
-    override val mediumPreview: String,
-    override val highPreview: String
+    override val previewTemplate: String?,
 ) : Comparable<Game>, MainElement, Parcelable {
     constructor(game: com.github.twitch4j.helix.domain.Game) : this(
         game.name,
         game.id,
         -1,
         -1,
-        game.getBoxArtUrl(150, 200),
-        game.getBoxArtUrl(300, 400),
-        game.getBoxArtUrl(600, 800)
+        game.boxArtUrl
     )
 
     override fun equals(other: Any?): Boolean = when (other) {
@@ -39,6 +35,12 @@ class Game(
     override fun hashCode(): Int = gameTitle.hashCode()
 
     override fun compareTo(other: Game): Int = this.gameViewers - other.gameViewers
+
+    override val width: String
+        get() = "300"
+
+    override val height: String
+        get() = "400"
 
     override fun getPlaceHolder(context: Context): Int = R.drawable.template_game
 }

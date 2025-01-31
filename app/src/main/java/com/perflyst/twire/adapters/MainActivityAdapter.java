@@ -85,7 +85,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
             return;
         }
         View viewToInsert = viewHolder.getElementWrapper();
-        String previewURL = element.getMediumPreview();
+        String previewURL = element.getPreviewUrl();
 
         initElementStyle(viewHolder);
         setViewData(element, viewHolder);
@@ -172,7 +172,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
 
             @Override
             public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                element.refreshPreview(context, () -> loadImagePreview(element.getMediumPreview(), element, viewHolder));
+                element.refreshPreview(context, () -> loadImagePreview(element.getPreviewUrl(), element, viewHolder));
             }
         };
 

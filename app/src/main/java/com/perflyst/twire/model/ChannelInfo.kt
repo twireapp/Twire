@@ -108,13 +108,7 @@ class ChannelInfo(
         return followers.total
     }
 
-    override val highPreview: String?
-        get() = mediumPreview
-
-    override val lowPreview: String?
-        get() = mediumPreview
-
-    override val mediumPreview: String?
+    override val previewTemplate: String?
         get() = logoURL?.toString()
 
     override fun getPlaceHolder(context: Context): Int = R.drawable.ic_profile_template_300p
