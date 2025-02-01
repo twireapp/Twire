@@ -60,6 +60,18 @@ public class PlaybackService extends MediaSessionService {
 
                 Settings.setVodProgress(oldPosition.mediaItem.mediaId, oldPosition.positionMs);
             }
+
+            @Override
+            public void onPlayWhenReadyChanged(boolean playWhenReady, int reason) {
+                var media = player.getCurrentMediaItem();
+                if (media != null) {
+                    if (media.mediaId.isEmpty()) {
+                        player.seekToDefaultPosition(); // Go forward to live
+                    } else if (!playWhenReady) {
+                        Settings.setVodProgress(media.mediaId, player.getCurrentPosition());
+                    }
+                }
+            }
         });
     }
 
@@ -93,11 +105,9 @@ public class PlaybackService extends MediaSessionService {
     public static class MediaSessionCallback implements MediaSession.Callback {
         public static final String UPDATE_SKIP_SILENCE = "UPDATE_SKIP_SILENCE";
 
-        private final Context context;
         private final ExoPlayer player;
 
-        public MediaSessionCallback(Context context, ExoPlayer player) {
-            this.context = context;
+        public MediaSessionCallback(ExoPlayer player) {
             this.player = player;
         }
 
