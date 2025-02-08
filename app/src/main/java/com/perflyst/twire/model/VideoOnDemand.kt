@@ -1,9 +1,7 @@
 package com.perflyst.twire.model
 
-import android.content.Context
 import android.os.Parcelable
 import com.github.twitch4j.helix.domain.Video
-import com.perflyst.twire.R
 import kotlinx.parcelize.Parcelize
 import java.time.Duration
 import java.time.ZoneOffset
@@ -16,7 +14,7 @@ import java.time.ZonedDateTime
 class VideoOnDemand(
     @JvmField val videoTitle: String?,
     @JvmField val gameTitle: String?,
-    override val previewTemplate: String,
+    @JvmField val previewTemplate: String,
     @JvmField val videoId: String?,
     private val channelName: String?,
     @JvmField val displayName: String?,
@@ -25,7 +23,7 @@ class VideoOnDemand(
     @JvmField val length: Long,
     @JvmField var isBroadcast: Boolean = false,
     @JvmField var channelInfo: ChannelInfo? = null
-) : Comparable<VideoOnDemand>, Parcelable, MainElement {
+) : Comparable<VideoOnDemand>, Parcelable {
     constructor(video: Video) : this(
         video.title,
         "",
@@ -40,9 +38,5 @@ class VideoOnDemand(
 
     override fun compareTo(other: VideoOnDemand): Int {
         return recordedAt.compareTo(other.recordedAt)
-    }
-
-    override fun getPlaceHolder(context: Context): Int {
-        return R.drawable.template_stream
     }
 }

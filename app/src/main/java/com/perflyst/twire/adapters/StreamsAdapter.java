@@ -3,6 +3,7 @@ package com.perflyst.twire.adapters;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -185,6 +186,21 @@ public class StreamsAdapter extends MainActivityAdapter<StreamInfo, StreamViewHo
     @Override
     int calculateCardWidth() {
         return getRecyclerView().getElementWidth();
+    }
+
+    @Override
+    int compareTo(StreamInfo element, StreamInfo other) {
+        return element.compareTo(other);
+    }
+
+    @Override
+    String getPreviewTemplate(StreamInfo element) {
+        return element.previewTemplate;
+    }
+
+    @Override
+    int getPlaceHolder(StreamInfo element, Context context) {
+        return R.drawable.template_stream;
     }
 
     @Override

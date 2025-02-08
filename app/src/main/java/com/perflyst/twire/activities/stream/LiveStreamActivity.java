@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.adapters.MentionAdapter;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.model.UserInfo;
 
@@ -35,7 +36,7 @@ public class LiveStreamActivity extends StreamActivity {
         liveStreamIntent.putExtra(context.getString(R.string.intent_key_streamer_info), stream.userInfo);
         liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_viewers), stream.currentViewers);
         liveStreamIntent.putExtra(context.getString(R.string.intent_key_stream_start_time), stream.startedAt);
-        liveStreamIntent.putExtra(context.getString(R.string.stream_preview_url), stream.getPreviewUrl());
+        liveStreamIntent.putExtra(context.getString(R.string.stream_preview_url), Utils.getPreviewUrl(stream.previewTemplate));
         liveStreamIntent.putExtra(context.getString(R.string.stream_shared_transition), sharedTransition);
         liveStreamIntent.putExtra(context.getString(R.string.stream_fragment_title), stream.title);
         return liveStreamIntent;

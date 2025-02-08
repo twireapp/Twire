@@ -1,9 +1,7 @@
 package com.perflyst.twire.model
 
-import android.content.Context
 import android.os.Parcelable
 import com.github.twitch4j.helix.domain.Stream
-import com.perflyst.twire.R
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -11,10 +9,10 @@ class StreamInfo(
     @JvmField val userInfo: UserInfo,
     @JvmField var game: String? = null,
     @JvmField var currentViewers: Int = 0,
-    override val previewTemplate: String?,
+    @JvmField val previewTemplate: String?,
     @JvmField val startedAt: Long,
     @JvmField var title: String? = null
-) : Comparable<StreamInfo>, MainElement, Parcelable {
+) : Comparable<StreamInfo>, Parcelable {
     constructor(stream: Stream) : this(
         UserInfo(stream.userId, stream.userLogin, stream.userName),
         stream.gameName,
@@ -37,6 +35,4 @@ class StreamInfo(
     override fun compareTo(other: StreamInfo): Int = currentViewers - other.currentViewers
 
     override fun toString(): String = userInfo.displayName
-
-    override fun getPlaceHolder(context: Context): Int = R.drawable.template_stream
 }

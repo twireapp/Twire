@@ -32,7 +32,6 @@ import com.perflyst.twire.misc.LazyFetchingOnScrollListener;
 import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.Game;
-import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
@@ -219,7 +218,7 @@ public class SearchActivity extends ThemeActivity {
         }
     }
 
-    public static abstract class SearchFragment<E extends Comparable<E> & MainElement> extends Fragment implements LazyFetchingActivity<E> {
+    public static abstract class SearchFragment<E> extends Fragment implements LazyFetchingActivity<E> {
         protected MainActivityAdapter<E, ?> mAdapter;
         protected AutoSpanRecyclerView mRecyclerView;
         protected ProgressView mProgressView;

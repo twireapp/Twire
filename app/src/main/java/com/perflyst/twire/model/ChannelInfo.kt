@@ -1,16 +1,11 @@
 package com.perflyst.twire.model
 
-import android.content.ContentValues
-import android.content.Context
 import android.os.Parcelable
 import androidx.core.util.Consumer
 import com.github.twitch4j.helix.domain.ChannelSearchResult
 import com.github.twitch4j.helix.domain.User
-import com.perflyst.twire.R
 import com.perflyst.twire.TwireApplication
 import com.perflyst.twire.misc.Utils
-import com.perflyst.twire.service.Service
-import com.perflyst.twire.service.SubscriptionsDbHelper
 import com.perflyst.twire.utils.Execute
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -33,7 +28,7 @@ class ChannelInfo(
     override var userId: String,
     override var login: String,
     override var displayName: String,
-) : UserInfo(userId, login, displayName), Comparable<ChannelInfo>, Parcelable, MainElement {
+) : UserInfo(userId, login, displayName), Comparable<ChannelInfo>, Parcelable {
     // Parcel Part End
     @IgnoredOnParcel
     var isNotifyWhenLive: Boolean = false
@@ -106,29 +101,5 @@ class ChannelInfo(
         val followers =
             TwireApplication.helix.getChannelFollowers(null, userId, null, 1, null).execute()
         return followers.total
-    }
-
-    override val previewTemplate: String?
-        get() = logoURL?.toString()
-
-    override fun getPlaceHolder(context: Context): Int = R.drawable.ic_profile_template_300p
-
-    override fun refreshPreview(context: Context, callback: Runnable) {
-        Execute.background {
-            val mChannelInfo =
-                Service.getStreamerInfoFromUserId(userId)
-            if (mChannelInfo != null && logoURL !== mChannelInfo.logoURL) {
-                logoURL = mChannelInfo.logoURL
-                callback.run()
-
-                val values = ContentValues()
-                values.put(SubscriptionsDbHelper.COLUMN_LOGO_URL, logoURL.toString())
-                Service.updateStreamerInfoDbWithValues(
-                    values,
-                    context,
-                    userId
-                )
-            }
-        }
     }
 }

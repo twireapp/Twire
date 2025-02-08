@@ -183,6 +183,31 @@ public class GamesAdapter extends MainActivityAdapter<Game, GameViewHolder> {
     }
 
     @Override
+    int compareTo(Game element, Game other) {
+        return element.compareTo(other);
+    }
+
+    @Override
+    String getPreviewTemplate(Game element) {
+        return element.previewTemplate;
+    }
+
+    @Override
+    String getWidth() {
+        return "300";
+    }
+
+    @Override
+    String getHeight() {
+        return "400";
+    }
+
+    @Override
+    int getPlaceHolder(Game element, Context context) {
+        return R.drawable.template_game;
+    }
+
+    @Override
     public String initElementStyle() {
         return Settings.getAppearanceGameStyle();
     }

@@ -3,6 +3,7 @@ package com.perflyst.twire.adapters;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.SharedElementCallback;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.util.DisplayMetrics;
@@ -21,7 +22,10 @@ import com.perflyst.twire.activities.ChannelActivity;
 import com.perflyst.twire.misc.PreviewTarget;
 import com.perflyst.twire.misc.RoundImageAnimation;
 import com.perflyst.twire.model.ChannelInfo;
+import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
+import com.perflyst.twire.service.SubscriptionsDbHelper;
+import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
 import java.util.List;
@@ -158,6 +162,41 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
         int screenWidth = metrics.widthPixels;
         int spanCount = screenWidth / ((int) getContext().getResources().getDimension(R.dimen.subscription_card_width) + (int) getContext().getResources().getDimension(R.dimen.subscription_card_margin));
         return (int) (screenWidth / (double) spanCount) - (int) (getContext().getResources().getDimension(R.dimen.subscription_card_margin) * 2) - (int) (getContext().getResources().getDimension(R.dimen.subscription_card_elevation) * 2);
+    }
+
+    @Override
+    int compareTo(ChannelInfo element, ChannelInfo other) {
+        return element.compareTo(other);
+    }
+
+    @Override
+    String getPreviewTemplate(ChannelInfo element) {
+        if (element.logoURL == null) return null;
+        return element.logoURL.toString();
+    }
+
+    @Override
+    int getPlaceHolder(ChannelInfo element, Context context) {
+        return R.drawable.ic_profile_template_300p;
+    }
+
+    @Override
+    void refreshPreview(ChannelInfo element, Context context, Runnable callback) {
+        Execute.background(() -> {
+            var mChannelInfo = Service.getStreamerInfoFromUserId(element.getUserId());
+            if (mChannelInfo != null && element.logoURL != mChannelInfo.logoURL && mChannelInfo.logoURL != null) {
+                element.logoURL = mChannelInfo.logoURL;
+                callback.run();
+
+                var values = new ContentValues();
+                values.put(SubscriptionsDbHelper.COLUMN_LOGO_URL, element.logoURL.toString());
+                Service.updateStreamerInfoDbWithValues(
+                        values,
+                        context,
+                        element.getUserId()
+                );
+            }
+        });
     }
 
     @Override

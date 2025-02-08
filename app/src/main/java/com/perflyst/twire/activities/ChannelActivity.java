@@ -183,7 +183,7 @@ public class ChannelActivity extends ThemeActivity {
 
         Glide.with(getBaseContext())
                 .asBitmap()
-                .load(info.getPreviewUrl())
+                .load(String.valueOf(info.logoURL))
                 .into(mTarget);
     }
 

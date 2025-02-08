@@ -1,8 +1,6 @@
 package com.perflyst.twire.model
 
-import android.content.Context
 import android.os.Parcelable
-import com.perflyst.twire.R
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -17,8 +15,8 @@ class Game(
     @JvmField
     var gameViewers: Int = -1,
     private var gameStreamers: Int = -1,
-    override val previewTemplate: String?,
-) : Comparable<Game>, MainElement, Parcelable {
+    @JvmField val previewTemplate: String?,
+) : Comparable<Game>, Parcelable {
     constructor(game: com.github.twitch4j.helix.domain.Game) : this(
         game.name,
         game.id,
@@ -35,12 +33,4 @@ class Game(
     override fun hashCode(): Int = gameTitle.hashCode()
 
     override fun compareTo(other: Game): Int = this.gameViewers - other.gameViewers
-
-    override val width: String
-        get() = "300"
-
-    override val height: String
-        get() = "400"
-
-    override fun getPlaceHolder(context: Context): Int = R.drawable.template_game
 }

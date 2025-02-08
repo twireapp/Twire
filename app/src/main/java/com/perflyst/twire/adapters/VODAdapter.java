@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.SharedElementCallback;
+import android.content.Context;
 import android.content.Intent;
 import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
@@ -96,7 +97,7 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
         } else {
             Intent intent = VODActivity.createVODIntent(item, getContext(), true);
 
-            intent.putExtra(getContext().getString(R.string.stream_preview_url), item.getPreviewUrl());
+            intent.putExtra(getContext().getString(R.string.stream_preview_url), getPreviewUrl(item));
             intent.putExtra(getContext().getString(R.string.stream_preview_alpha), hasVodBeenWatched(item.videoId) ? VOD_WATCHED_IMAGE_ALPHA : 1.0f);
 
             final View sharedView = view.findViewById(R.id.image_stream_preview);
@@ -225,6 +226,21 @@ public class VODAdapter extends MainActivityAdapter<VideoOnDemand, VODViewHolder
     @Override
     int calculateCardWidth() {
         return getRecyclerView().getElementWidth();
+    }
+
+    @Override
+    int compareTo(VideoOnDemand element, VideoOnDemand other) {
+        return element.compareTo(other);
+    }
+
+    @Override
+    String getPreviewTemplate(VideoOnDemand element) {
+        return element.previewTemplate;
+    }
+
+    @Override
+    int getPlaceHolder(VideoOnDemand element, Context context) {
+        return R.drawable.template_stream;
     }
 
     @Override

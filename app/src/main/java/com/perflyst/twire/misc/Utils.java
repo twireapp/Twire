@@ -60,4 +60,12 @@ public class Utils {
             return null;
         }
     }
+
+    public static String getPreviewUrl(String url, String width, String height) {
+        return url.replaceAll("%?\\{width\\}", width).replaceAll("%?\\{height\\}", height);
+    }
+
+    public static String getPreviewUrl(String url) {
+        return getPreviewUrl(url, "320", "180");
+    }
 }

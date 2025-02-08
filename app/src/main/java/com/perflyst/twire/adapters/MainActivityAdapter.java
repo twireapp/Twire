@@ -14,6 +14,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -28,7 +29,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.bumptech.glide.signature.ObjectKey;
 import com.perflyst.twire.R;
 import com.perflyst.twire.misc.PreviewTarget;
-import com.perflyst.twire.model.MainElement;
+import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.AnimationService;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 
@@ -40,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Sebastian Rask on 03-04-2016.
  */
-public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
+public abstract class MainActivityAdapter<E,
         T extends MainActivityAdapter.ElementsViewHolder> extends RecyclerView.Adapter<T> {
     private final HashMap<CharSequence, PreviewTarget> mTargets;
     private final AutoSpanRecyclerView mRecyclerView;
@@ -85,7 +86,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
             return;
         }
         View viewToInsert = viewHolder.getElementWrapper();
-        String previewURL = element.getPreviewUrl();
+        String previewURL = getPreviewUrl(element);
 
         initElementStyle(viewHolder);
         setViewData(element, viewHolder);
@@ -143,7 +144,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
                         System.currentTimeMillis() / TimeUnit.MINUTES.toMillis(5)))
                 // Image to show while loading, on failure, or if previewURL is null
                 .placeholder(AppCompatResources.getDrawable(
-                        context, element.getPlaceHolder(getContext())))
+                        context, getPlaceHolder(element, getContext())))
                 // Fade from placeholder image to loaded image over 300ms with cross fade
                 .transition(BitmapTransitionOptions.withWrapped(new DrawableCrossFadeFactory
                         .Builder(300).setCrossFadeEnabled(true).build()));
@@ -172,7 +173,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
 
             @Override
             public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                element.refreshPreview(context, () -> loadImagePreview(element.getPreviewUrl(), element, viewHolder));
+                refreshPreview(element, context, () -> loadImagePreview(getPreviewUrl(element), element, viewHolder));
             }
         };
 
@@ -217,7 +218,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
                 boolean foundPosition = false;
                 while (!foundPosition && position < mElements.size()) {
                     E elementToCompare = mElements.get(position);
-                    if (element.compareTo(elementToCompare) > 0) {
+                    if (compareTo(element, elementToCompare) > 0) {
                         foundPosition = true;
                     } else {
                         position++;
@@ -390,6 +391,29 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
 
     abstract int calculateCardWidth();
 
+    // MainElement implementation
+    abstract int compareTo(E element, E other);
+
+    String getPreviewUrl(E element) {
+        return Utils.getPreviewUrl(getPreviewTemplate(element), getWidth(), getHeight());
+    }
+
+    abstract String getPreviewTemplate(E element);
+
+    String getWidth() {
+        return "320";
+    }
+
+    String getHeight() {
+        return "180";
+    }
+
+    @DrawableRes
+    abstract int getPlaceHolder(E element, Context context);
+
+    void refreshPreview(E element, Context context, Runnable callback) {
+    }
+
     List<E> getElements() {
         return mElements;
     }
@@ -438,7 +462,7 @@ public abstract class MainActivityAdapter<E extends Comparable<E> & MainElement,
         return mTargets;
     }
 
-    protected abstract static class ElementsViewHolder extends RecyclerView.ViewHolder {
+    public abstract static class ElementsViewHolder extends RecyclerView.ViewHolder {
         ElementsViewHolder(View v) {
             super(v);
         }

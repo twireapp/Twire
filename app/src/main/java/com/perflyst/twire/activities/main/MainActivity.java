@@ -27,7 +27,6 @@ import com.perflyst.twire.fragments.ChangelogDialogFragment;
 import com.perflyst.twire.fragments.NavigationDrawerFragment;
 import com.perflyst.twire.misc.TooltipWindow;
 import com.perflyst.twire.misc.UniversalOnScrollListener;
-import com.perflyst.twire.model.MainElement;
 import com.perflyst.twire.service.AnimationService;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
@@ -40,7 +39,7 @@ import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehav
 import timber.log.Timber;
 
 
-public abstract class MainActivity<E extends Comparable<E> & MainElement> extends ThemeActivity {
+public abstract class MainActivity<E> extends ThemeActivity {
     private static final String FIRST_VISIBLE_ELEMENT_POSITION = "firstVisibleElementPosition";
 
     private ActivityMainBinding binding;
