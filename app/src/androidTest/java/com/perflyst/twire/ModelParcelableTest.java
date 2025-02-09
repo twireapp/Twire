@@ -1,6 +1,5 @@
 package com.perflyst.twire;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import android.os.Parcel;
@@ -62,9 +61,7 @@ public class ModelParcelableTest {
                 "1",
                 2,
                 3,
-                "https://example.com/small",
-                "https://example.com/medium",
-                "https://example.com/large"
+                "https://example.com/"
         );
 
         Game newGame = clone(game);
@@ -72,9 +69,7 @@ public class ModelParcelableTest {
         assertEquals(game.gameTitle, newGame.gameTitle);
         assertEquals(game.gameId, newGame.gameId);
         assertEquals(game.gameViewers, newGame.gameViewers);
-        assertEquals(game.getLowPreview(), newGame.getLowPreview());
-        assertEquals(game.getMediumPreview(), newGame.getMediumPreview());
-        assertEquals(game.getHighPreview(), newGame.getHighPreview());
+        assertEquals(game.previewTemplate, newGame.previewTemplate);
     }
 
     @Test
@@ -83,7 +78,7 @@ public class ModelParcelableTest {
                 new UserInfo("1", "login", "name"),
                 "game",
                 2,
-                new String[] {"previews"},
+                "preview",
                 3,
                 "title"
         );
@@ -92,7 +87,7 @@ public class ModelParcelableTest {
 
         assertEquals(streamInfo.game, newStreamInfo.game);
         assertEquals(streamInfo.currentViewers, newStreamInfo.currentViewers);
-        assertArrayEquals(streamInfo.previews, newStreamInfo.previews);
+        assertEquals(streamInfo.previewTemplate, newStreamInfo.previewTemplate);
         assertEquals(streamInfo.startedAt, newStreamInfo.startedAt);
         assertEquals(streamInfo.title, newStreamInfo.title);
     }
