@@ -1,13 +1,7 @@
-name: Nightly
+name: Build
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - "master"
-    paths:
-      - "app/**"
-      - ".github/workflows/**"
 
 jobs:
   build:
@@ -35,9 +29,7 @@ jobs:
       - name: Build APK
         run: |
           export versionCode=$(date '+%s')
-          export versionName=$(git rev-parse --short HEAD)
           sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle
-          sed -i "s,^\(\s*versionName\)  *.*,\1 \"$versionName\"," app/build.gradle
 
           ./gradlew assembleRelease
 
@@ -56,10 +48,8 @@ jobs:
       - uses: IsaacShelton/update-existing-release@v1.3.4
         with:
           token: ${{secrets.GITHUB_TOKEN}}
-          release: "Nightly"
-          tag: "nightly"
-          replace: true
-          prerelease: true
+          prerelease: false
+          draft: true
           files: >
             ${{ steps.sign_app.outputs.signedReleaseFile }}
 
