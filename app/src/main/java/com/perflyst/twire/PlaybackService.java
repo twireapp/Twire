@@ -5,13 +5,19 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.media3.common.C;
+import androidx.media3.common.MediaItem;
 import androidx.media3.common.Player;
 import androidx.media3.common.util.UnstableApi;
+import androidx.media3.common.util.Util;
 import androidx.media3.datasource.DefaultHttpDataSource;
 import androidx.media3.exoplayer.ExoPlayer;
 import androidx.media3.exoplayer.SeekParameters;
+import androidx.media3.exoplayer.drm.DrmSessionManagerProvider;
 import androidx.media3.exoplayer.hls.HlsMediaSource;
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 import androidx.media3.exoplayer.source.MediaSource;
+import androidx.media3.exoplayer.upstream.LoadErrorHandlingPolicy;
 import androidx.media3.session.MediaController;
 import androidx.media3.session.MediaSession;
 import androidx.media3.session.MediaSessionService;
@@ -37,8 +43,47 @@ public class PlaybackService extends MediaSessionService {
                 put("Origin", "https://player.twitch.tv");
             }});
 
-    private static final MediaSource.Factory mediaSourceFactory = new HlsMediaSource.Factory(dataSourceFactory)
-            .setPlaylistParserFactory(new LLHlsPlaylistParserFactory());
+    private static final MediaSource.Factory mediaSourceFactory = new MediaSource.Factory() {
+        @NonNull
+        @Override
+        public MediaSource.Factory setDrmSessionManagerProvider(@NonNull DrmSessionManagerProvider drmSessionManagerProvider) {
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public MediaSource.Factory setLoadErrorHandlingPolicy(@NonNull LoadErrorHandlingPolicy loadErrorHandlingPolicy) {
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public int[] getSupportedTypes() {
+            return new int[] {
+                    C.CONTENT_TYPE_HLS,
+                    C.CONTENT_TYPE_OTHER
+            };
+        }
+
+        @NonNull
+        @Override
+        public MediaSource createMediaSource(@NonNull MediaItem mediaItem) {
+            assert mediaItem.localConfiguration != null;
+
+            @C.ContentType int type = Util.inferContentTypeForUriAndMimeType(
+                    mediaItem.localConfiguration.uri,
+                    mediaItem.localConfiguration.mimeType
+            );
+
+            if (type == C.CONTENT_TYPE_HLS) {
+                return new HlsMediaSource.Factory(dataSourceFactory)
+                        .setPlaylistParserFactory(new LLHlsPlaylistParserFactory())
+                        .createMediaSource(mediaItem);
+            }
+
+            return new DefaultMediaSourceFactory(dataSourceFactory).createMediaSource(mediaItem);
+        }
+    };
 
     @Override
     public void onCreate() {

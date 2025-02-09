@@ -1188,7 +1188,8 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         String[] types = getResources().getStringArray(R.array.PlayerType);
 
-        GetStreamURL task = new GetStreamURL(mUserInfo.getLogin(), vodId, types[Settings.getStreamPlayerType()], Settings.getStreamPlayerProxy());
+        var isClip = requireArguments().containsKey(Constants.KEY_CLIP);
+        GetStreamURL task = new GetStreamURL(mUserInfo.getLogin(), vodId, types[Settings.getStreamPlayerType()], Settings.getStreamPlayerProxy(), isClip);
         Execute.background(task, callback);
     }
 

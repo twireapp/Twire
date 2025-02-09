@@ -68,6 +68,7 @@ public class ChatManager implements Runnable {
 
     private final Object vodLock = new Object();
     private double nextCommentOffset = 0;
+    private int vodOffset = 0;
 
     private boolean isStopping;
     // Data about the user and how to display his/hers message
@@ -77,7 +78,7 @@ public class ChatManager implements Runnable {
 
     private TwitchChat twitchChat;
 
-    public ChatManager(UserInfo aChannel, String aVodId, ChatCallback aCallback) {
+    public ChatManager(UserInfo aChannel, String aVodId, Integer vodOffset, ChatCallback aCallback) {
         instance = this;
         mEmoteManager = new ChatEmoteManager(aChannel);
 
@@ -97,6 +98,7 @@ public class ChatManager implements Runnable {
 
         channel = aChannel;
         vodId = aVodId;
+        this.vodOffset = vodOffset;
         callback = aCallback;
 
         twitchChatServer = Settings.getChatEnableSSL() ? TwitchChat.TWITCH_WEB_SOCKET_SERVER : "ws://irc-ws.chat.twitch.tv:80";
@@ -106,7 +108,7 @@ public class ChatManager implements Runnable {
     }
 
     public void updateVodProgress(long aCurrentProgress, boolean aSeek) {
-        currentProgress = aCurrentProgress / 1000f;
+        currentProgress = aCurrentProgress / 1000f + vodOffset;
         seek |= aSeek;
 
         // Only notify the thread when there's work to do.

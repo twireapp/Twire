@@ -37,6 +37,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+import com.github.twitch4j.helix.domain.Clip;
 import com.github.twitch4j.helix.domain.Video;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -45,6 +46,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.main.LazyFetchingActivity;
+import com.perflyst.twire.adapters.ClipAdapter;
 import com.perflyst.twire.adapters.PanelAdapter;
 import com.perflyst.twire.adapters.VODAdapter;
 import com.perflyst.twire.fragments.ChatFragment;
@@ -152,6 +154,7 @@ public class ChannelActivity extends ThemeActivity {
                 R.string.streamerInfo_desc_tab,
                 R.string.streamerInfo_broadcasts_tab,
                 R.string.streamerInfo_highlights_tab,
+                R.string.streamerInfo_clips_tab,
                 R.string.streamerInfo_chat_tab
         };
         new TabLayoutMediator(mTabLayout, mViewPager2, (tab, position) -> tab.setText(tabTitles[position])).attach();
@@ -589,6 +592,152 @@ public class ChannelActivity extends ThemeActivity {
         }
     }
 
+
+    public static class ClipFragment extends ChannelFragment implements LazyFetchingActivity<Clip> {
+        protected AutoSpanRecyclerView mRecyclerView;
+        protected ClipAdapter mAdapter;
+        private ChannelInfo channelInfo;
+        private boolean showError;
+        private int limit = 20,
+                maxElementsToFetch = 500;
+        private ProgressView progressView;
+
+        public static ClipFragment newInstance(ChannelInfo channelInfo) {
+            ClipFragment fragment = new ClipFragment();
+            Bundle args = new Bundle();
+            args.putParcelable(fragmentVodsStreamerInfoArg, channelInfo);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        @Override
+        protected void showError() {
+            super.showError();
+            mErrorText.setText(getString(R.string.no_elements_added_notice, getString(R.string.streamerInfo_clips_tab).toLowerCase()));
+        }
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_channel_vods, container, false);
+
+            Bundle args = getArguments();
+            if (args != null) {
+                channelInfo = args.getParcelable(fragmentVodsStreamerInfoArg);
+            }
+
+            mRecyclerView = rootView.findViewById(R.id.recyclerview_vods);
+            progressView = rootView.findViewById(R.id.circle_progress);
+
+            findErrorView(rootView);
+            if (showError) {
+                showError();
+            }
+
+            if (mAdapter == null) {
+                mRecyclerView.setBehaviour(new VODAutoSpanBehaviour());
+                mAdapter = new ClipAdapter(mRecyclerView, getActivity());
+                mAdapter.setShowName(false);
+                progressView.start();
+            }
+
+            mAdapter.setTopMargin((int) getResources().getDimension(R.dimen.search_new_adapter_top_margin));
+            mAdapter.setSortElements(false);
+            mAdapter.disableInsertAnimation();
+            LazyFetchingOnScrollListener<Clip> lazyFetchingOnScrollListener = new LazyFetchingOnScrollListener<>(this);
+            mRecyclerView.addOnScrollListener(lazyFetchingOnScrollListener);
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setItemAnimator(null);
+            mRecyclerView.setHasFixedSize(true);
+
+            lazyFetchingOnScrollListener.checkForNewElements(mRecyclerView);
+
+            return rootView;
+        }
+
+        private String pagination = "";
+
+        @Override
+        public void addToAdapter(List<Clip> aObjectList) {
+            mAdapter.addList(aObjectList);
+        }
+
+        @Override
+        public void startRefreshing() {
+
+        }
+
+        @Override
+        public void stopRefreshing() {
+
+        }
+
+        @Override
+        public String getCursor() {
+            return pagination;
+        }
+
+        @Override
+        public void setCursor(String cursor) {
+            pagination = cursor;
+        }
+
+        @Override
+        public void startProgress() {
+
+        }
+
+        @Override
+        public void stopProgress() {
+            progressView.stop();
+        }
+
+        @Override
+        public int getLimit() {
+            return limit;
+        }
+
+        @Override
+        public void setLimit(int aLimit) {
+            limit = aLimit;
+        }
+
+        @Override
+        public int getMaxElementsToFetch() {
+            return maxElementsToFetch;
+        }
+
+        @Override
+        public void setMaxElementsToFetch(int aMax) {
+            maxElementsToFetch = aMax;
+        }
+
+        @Override
+        public void notifyUserNoElementsAdded() {
+            if (mAdapter.getItemCount() > 0) return;
+
+            Execute.ui(() -> {
+                if (mErrorEmote != null && mErrorText != null) {
+                    showError();
+                    showError = true;
+                }
+            });
+        }
+
+        @Override
+        public List<Clip> getVisualElements() {
+            var response = TwireApplication.helix.getClips(null, channelInfo.getUserId(), null, null, getCursor(), null, getLimit(), null, null, null).execute();
+            setCursor(response.getPagination().getCursor());
+
+            return response.getData();
+        }
+    }
+
     private class ChannelStateAdapter extends FragmentStateAdapter {
         private final Fragment[] tabFragments;
 
@@ -598,12 +747,13 @@ public class ChannelActivity extends ThemeActivity {
             ChannelFragment mDescriptionFragment = InfoFragment.newInstance(info);
             ChannelFragment mBroadcastsFragment = VodFragment.newInstance(true, info);
             ChannelFragment mHighlightsFragment = VodFragment.newInstance(false, info);
+            ChannelFragment mClipsFragment = ClipFragment.newInstance(info);
 
             Bundle chatBundle = new Bundle();
             chatBundle.putParcelable(getString(R.string.stream_fragment_streamerInfo), info);
             ChatFragment mChatFragment = ChatFragment.getInstance(chatBundle);
 
-            tabFragments = new Fragment[] {mDescriptionFragment, mBroadcastsFragment, mHighlightsFragment, mChatFragment};
+            tabFragments = new Fragment[] {mDescriptionFragment, mBroadcastsFragment, mHighlightsFragment, mClipsFragment, mChatFragment};
         }
 
         @NonNull

@@ -9,4 +9,6 @@ public class Constants {
             "chat:read",
             "user:read:follows"
     };
+
+    public final static String KEY_CLIP = "key_clip";
 }

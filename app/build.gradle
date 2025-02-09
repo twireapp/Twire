@@ -136,4 +136,11 @@ dependencies {
     def androidXTestVersion = "1.4.0"
     androidTestImplementation "androidx.test:runner:$androidXTestVersion"
     androidTestImplementation "androidx.test:rules:$androidXTestVersion"
+
+    // noinspection AnnotationProcessorOnCompilePath
+    compileOnly "org.projectlombok:lombok:1.18.36"
+
+    def parcelerVersion = "1.1.12"
+    implementation "org.parceler:parceler-api:$parcelerVersion"
+    annotationProcessor "org.parceler:parceler:$parcelerVersion"
 }

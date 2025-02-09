@@ -28,11 +28,15 @@ import android.widget.ImageButton;
 
 import androidx.annotation.AttrRes;
 import androidx.annotation.ColorRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.customview.widget.ViewDragHelper;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
 import com.perflyst.twire.activities.main.MyChannelsActivity;
@@ -630,4 +634,17 @@ public class Service {
         }
     }
 
+    public static LoadingCache<String, String> gameNameCache = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .build(new CacheLoader<>() {
+                @NonNull
+                @Override
+                public String load(@NonNull String gameId) {
+                    return TwireApplication.helix.getGames(null, List.of(gameId), null, null)
+                            .execute()
+                            .getGames()
+                            .get(0)
+                            .getName();
+                }
+            });
 }

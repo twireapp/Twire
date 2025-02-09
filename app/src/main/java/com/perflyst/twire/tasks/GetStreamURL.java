@@ -26,15 +26,27 @@ public class GetStreamURL implements Callable<Map<String, Quality>> {
     protected final String playerType;
     private final String proxy;
     private final boolean isLive;
+    private final boolean isClip;
 
-    public GetStreamURL(String channel, String vod, String playerType, String proxy) {
+    public GetStreamURL(String channel, String vod, String playerType, String proxy, boolean isClip) {
         this.isLive = vod == null;
         this.channelOrVod = isLive ? channel : vod;
         this.playerType = playerType;
         this.proxy = proxy;
+        this.isClip = isClip;
     }
 
     protected JSONObject getToken() {
+        if (isClip) {
+            return Service.graphQL(
+                    "VideoAccessToken_Clip",
+                    "36b89d2507fce29e5ca551df756d27c1cfe079e2609642b4390aa4c35796eb11",
+                    new HashMap<>() {{
+                        put("slug", channelOrVod);
+                    }});
+        }
+
+
         return Service.graphQL("PlaybackAccessToken", "0828119ded1c13477966434e15800ff57ddacf13ba1911c129dc2200705b0712", new HashMap<>() {{
             put("isLive", isLive);
             put("isVod", !isLive);
@@ -53,9 +65,13 @@ public class GetStreamURL implements Callable<Map<String, Quality>> {
             return new LinkedHashMap<>();
 
         try {
-            JSONObject tokenJSON = dataObject.getJSONObject(isLive ? "streamPlaybackAccessToken" : "videoPlaybackAccessToken");
+            if (isClip) dataObject = dataObject.getJSONObject("clip");
+
+            JSONObject tokenJSON = dataObject.getJSONObject(isLive ? "streamPlaybackAccessToken" : isClip ? "playbackAccessToken" : "videoPlaybackAccessToken");
             token = tokenJSON.getString("value");
             signature = tokenJSON.getString("signature");
+
+            if (isClip) return handleClip(token, signature, dataObject);
 
             Timber.tag("ACCESS_TOKEN_STRING").d(token);
         } catch (JSONException e) {
@@ -104,5 +120,20 @@ public class GetStreamURL implements Callable<Map<String, Quality>> {
         }
 
         return resultList;
+    }
+
+    private Map<String, Quality> handleClip(String token, String signature, JSONObject dataObject) throws JSONException {
+        var videoQualities = dataObject.getJSONArray("videoQualities");
+        LinkedHashMap<String, Quality> qualities = new LinkedHashMap<>();
+        for (int i = 0; i < videoQualities.length(); i++) {
+            JSONObject quality = videoQualities.getJSONObject(i);
+            String qualityName = quality.getString("quality");
+            String qualityUrl = quality.getString("sourceURL");
+            qualityUrl += "?sig=" + signature + "&token=" + Utils.safeEncode(token);
+
+            qualities.put(qualityName, new Quality(qualityName, qualityUrl));
+        }
+
+        return qualities;
     }
 }

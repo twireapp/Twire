@@ -46,6 +46,7 @@ import com.github.twitch4j.chat.events.roomstate.Robot9000Event;
 import com.github.twitch4j.chat.events.roomstate.SlowModeEvent;
 import com.github.twitch4j.chat.events.roomstate.SubscribersOnlyEvent;
 import com.github.twitch4j.client.websocket.domain.WebsocketConnectionState;
+import com.github.twitch4j.helix.domain.Clip;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.tabs.TabLayout;
@@ -62,11 +63,14 @@ import com.perflyst.twire.model.UserInfo;
 import com.perflyst.twire.service.Service;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetTwitchEmotesTask;
+import com.perflyst.twire.utils.Constants;
 import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.EditTextBackEvent;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.ChatRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.EmoteAutoSpanBehaviour;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -216,7 +220,20 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
     @Override
     public void onStart() {
         super.onStart();
-        chatManager = new ChatManager(mUserInfo, vodID, new ChatManager.ChatCallback() {
+
+        Clip clip = Parcels.unwrap(requireArguments().getParcelable(Constants.KEY_CLIP));
+        Integer vodOffset = 0;
+        if (clip != null) {
+            vodID = clip.getVideoId();
+            vodOffset = clip.getVodOffset();
+            // If the video offset is null, we can't load the chat.
+            if (vodOffset == null) {
+                showChatStatusBar();
+                mChatStatus.setText(getString(R.string.clip_chat_expired));
+            }
+        }
+
+        chatManager = new ChatManager(mUserInfo, vodID, vodOffset, new ChatManager.ChatCallback() {
             private boolean isFragmentActive() {
                 return !isDetached() && isAdded();
             }
@@ -290,7 +307,7 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             }
         });
 
-        Execute.background(chatManager);
+        if (vodOffset != null) Execute.background(chatManager);
 
         if (supportedTextEmotes == null) {
             supportedTextEmotes = new ArrayList<>();

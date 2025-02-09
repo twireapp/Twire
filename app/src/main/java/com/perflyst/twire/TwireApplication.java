@@ -9,8 +9,11 @@ import com.github.twitch4j.ITwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.auth.providers.TwitchIdentityProvider;
 import com.github.twitch4j.helix.TwitchHelix;
+import com.github.twitch4j.helix.domain.Clip;
 import com.perflyst.twire.misc.SecretKeys;
 import com.perflyst.twire.service.Settings;
+
+import org.parceler.ParcelClass;
 
 import io.github.xanthic.cache.core.CacheApiSettings;
 import io.github.xanthic.cache.provider.androidx.AndroidLruProvider;
@@ -19,6 +22,7 @@ import timber.log.Timber;
 /**
  * Created by SebastianRask on 20-02-2016.
  */
+@ParcelClass(Clip.class)
 public class TwireApplication extends Application {
     public static ITwitchClient twitchClient;
     public static TwitchHelix helix;

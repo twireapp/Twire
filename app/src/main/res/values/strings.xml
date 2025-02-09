@@ -31,6 +31,7 @@
     <string name="title_activity_streamer_info">Channel</string>
     <string name="streamerInfo_desc_tab">Description</string>
     <string name="streamerInfo_broadcasts_tab">Broadcasts</string>
+    <string name="streamerInfo_clips_tab">Clips</string>
     <string name="streamerInfo_highlights_tab">Highlights</string>
     <string name="streamerInfo_chat_tab">Chat</string>
     <string name="streamerInfo_transition" translatable="false">streamerInfoPicTrans</string>
@@ -90,6 +91,9 @@
     <string name="title_activity_vod">Video On Demand</string>
     <string name="intent_vod" translatable="false">intent_vod</string>
     <string name="vod_views">%,d views</string>
+
+    <!-- Clip activity -->
+    <string name="clip_chat_expired">Chat replay is no longer available.</string>
 
     <!-- Fonts -->
     <string name="font_roboto_regular" translatable="false">sans-serif</string>

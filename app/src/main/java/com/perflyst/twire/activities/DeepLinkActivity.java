@@ -9,12 +9,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.perflyst.twire.R;
 import com.perflyst.twire.TwireApplication;
+import com.perflyst.twire.activities.stream.ClipActivity;
 import com.perflyst.twire.activities.stream.LiveStreamActivity;
 import com.perflyst.twire.activities.stream.VODActivity;
 import com.perflyst.twire.model.ChannelInfo;
 import com.perflyst.twire.model.StreamInfo;
 import com.perflyst.twire.model.VideoOnDemand;
 import com.perflyst.twire.service.DialogService;
+import com.perflyst.twire.service.Service;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -89,6 +91,14 @@ public class DeepLinkActivity extends AppCompatActivity {
 
             errorMessage = R.string.router_nonexistent_user;
             return null;
+        } else if (paramSize == 3) { // twitch.tv/<channel>/clip/<id>
+            var clips = TwireApplication.helix.getClips(null, null, null, List.of(params.get(2)), null, null, 1, null, null, false).execute().getData();
+            if (clips.isEmpty()) return null;
+
+            var clip = clips.get(0);
+            var channel = Service.getStreamerInfoFromUserId(clip.getBroadcasterId());
+
+            return ClipActivity.createClipIntent(clip, channel, this, false);
         }
 
         return null;
