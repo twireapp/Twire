@@ -22,7 +22,9 @@ class Game(
         game.id,
         -1,
         -1,
-        game.boxArtUrl
+        // When Twitch returns the box art from search results, it has the size already filled in as 52x72.
+        // We'll replace it so that it can be used as a template for the preview image.
+        game.boxArtUrl.replace("52x72", "{width}x{height}")
     )
 
     override fun equals(other: Any?): Boolean = when (other) {
