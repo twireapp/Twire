@@ -53,12 +53,15 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
+      - name: Rename APK
+        run: mv ${{ steps.sign_app.outputs.signedReleaseFile }} Twire-nightly.apk
+
       - uses: softprops/action-gh-release@v2
         with:
           prerelease: true
           name: "Nightly"
           tag_name: "nightly"
-          files: ${{ steps.sign_app.outputs.signedReleaseFile }}
+          files: Twire-nightly.apk
 
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
