@@ -186,7 +186,7 @@ public class ChannelsAdapter extends MainActivityAdapter<ChannelInfo, StreamerIn
             var mChannelInfo = Service.getStreamerInfoFromUserId(element.getUserId());
             if (mChannelInfo != null && element.logoURL != mChannelInfo.logoURL && mChannelInfo.logoURL != null) {
                 element.logoURL = mChannelInfo.logoURL;
-                callback.run();
+                Execute.ui(callback);
 
                 var values = new ContentValues();
                 values.put(SubscriptionsDbHelper.COLUMN_LOGO_URL, element.logoURL.toString());

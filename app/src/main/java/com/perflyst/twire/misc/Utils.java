@@ -62,6 +62,7 @@ public class Utils {
     }
 
     public static String getPreviewUrl(String url, String width, String height) {
+        if (url == null) return null;
         return url.replaceAll("%?\\{width\\}", width).replaceAll("%?\\{height\\}", height);
     }
 

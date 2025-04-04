@@ -279,7 +279,7 @@ public class ConfirmSetupActivity extends SetupBaseActivity {
                 return;
             }
 
-            activity.get().showTransitionAnimation().addListener(animator);
+            Execute.ui(() -> activity.get().showTransitionAnimation().addListener(animator));
         }
     }
 
