@@ -67,7 +67,7 @@ android {
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.15.0'
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.6'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 
     //AndroidX
     implementation "androidx.core:core:1.9.0"
@@ -137,10 +137,15 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$androidXTestVersion"
     androidTestImplementation "androidx.test:rules:$androidXTestVersion"
 
-    // noinspection AnnotationProcessorOnCompilePath
-    compileOnly "org.projectlombok:lombok:1.18.36"
-
     def parcelerVersion = "1.1.12"
     implementation "org.parceler:parceler-api:$parcelerVersion"
     annotationProcessor "org.parceler:parceler:$parcelerVersion"
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        dependencySubstitution {
+            substitute module('io.github.openfeign:feign-core:13.5') using module('com.github.samfundev.feign:feign-core:473f95b104')
+        }
+    }
 }

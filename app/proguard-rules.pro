@@ -9,19 +9,23 @@
 -dontwarn me.zhanghai.android.materialprogressbar.IndeterminateHorizontalProgressDrawable
 -dontwarn me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable
 
--dontwarn java.beans.BeanInfo
--dontwarn java.beans.ConstructorProperties
--dontwarn java.beans.IntrospectionException
--dontwarn java.beans.Introspector
--dontwarn java.beans.PropertyDescriptor
--dontwarn java.beans.Transient
+-dontwarn java.beans.**
 -dontwarn java.lang.management.ManagementFactory
--dontwarn javax.management.InstanceAlreadyExistsException
--dontwarn javax.management.InstanceNotFoundException
--dontwarn javax.management.MBeanRegistrationException
--dontwarn javax.management.MBeanServer
--dontwarn javax.management.MalformedObjectNameException
--dontwarn javax.management.NotCompliantMBeanException
--dontwarn javax.management.ObjectInstance
--dontwarn javax.management.ObjectName
--dontwarn javax.management.StandardMBean
+-dontwarn javax.management.**
+
+-dontwarn lombok.Generated
+-dontwarn lombok.NonNull
+
+# Twitch4J and Feign
+-keep class com.github.twitch4j.common.feign.JsonStringExpander
+-keep class com.github.twitch4j.common.feign.ObjectToJsonExpander
+
+# Pagination isn't returned without this
+-keep class com.github.twitch4j.helix.domain.HelixPagination
+
+# Apache uses some reflection to find it's logger
+-keep class org.apache.commons.logging.impl.LogFactoryImpl
+-keep class org.apache.commons.logging.impl.SimpleLog { *; }
+
+# We need to be able to configure Hystrix to use a higher pool limit
+-keep class com.netflix.config.** { *; }
