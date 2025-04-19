@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/settingsBackgroundColor"
+    android:background="?attr/colorPrimary"
+    android:fitsSystemWindows="true"
     tools:context="com.perflyst.twire.activities.settings.SettingsStreamPlayerActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -18,7 +19,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/settings_player_toolbar">
+        android:layout_below="@id/settings_player_toolbar"
+        android:background="?attr/settingsBackgroundColor">
 
         <LinearLayout
             android:layout_width="match_parent"

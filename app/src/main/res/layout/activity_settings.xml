@@ -2,9 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/settingsBackgroundColor"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
-    tools:context="com.perflyst.twire.activities.settings.SettingsActivity">
+    tools:context="com.perflyst.twire.activities.settings.SettingsActivity"
+    android:fitsSystemWindows="true">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_toolbar"
@@ -18,6 +19,7 @@
         android:id="@+id/settings_category_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="?attr/settingsBackgroundColor" />
 
 </LinearLayout>

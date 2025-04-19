@@ -98,6 +98,8 @@ public class ChannelActivity extends ThemeActivity {
         mAppBar = findViewById(R.id.appbar);
         mFab = findViewById(R.id.fab);
 
+        toolbar.setTitle("");
+
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fitsSystemWindows="true"
+    android:background="?attr/colorPrimary"
     tools:context="com.perflyst.twire.activities.settings.SettingsAppearanceActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -12,7 +14,6 @@
         android:layout_height="wrap_content"
         android:height="@dimen/main_toolbar_height"
         android:background="?attr/colorPrimary"
-        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <androidx.fragment.app.FragmentContainerView

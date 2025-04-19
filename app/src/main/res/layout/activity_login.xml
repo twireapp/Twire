@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorSetupMain"
-    tools:context="com.perflyst.twire.activities.setup.LoginActivity">
+    tools:context="com.perflyst.twire.activities.setup.LoginActivity"
+    android:fitsSystemWindows="true">
 
     <RelativeLayout
         android:layout_width="match_parent"

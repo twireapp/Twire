@@ -7,6 +7,7 @@
 
     <!-- Main Content -->
     <RelativeLayout
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?android:attr/colorBackground">
@@ -102,11 +103,18 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true">
 
-            <com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView
-                android:id="@+id/main_list"
-                style="@style/autospanRecyclerView"
+            <androidx.core.view.insets.ProtectionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/list_protection"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent">
+
+                <com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView
+                    android:id="@+id/main_list"
+                    style="@style/autospanRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false" />
+            </androidx.core.view.insets.ProtectionLayout>
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <com.google.android.material.progressindicator.LinearProgressIndicator

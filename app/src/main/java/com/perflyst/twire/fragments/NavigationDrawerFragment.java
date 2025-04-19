@@ -20,6 +20,7 @@ import androidx.annotation.AnimRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
@@ -39,6 +40,8 @@ import com.perflyst.twire.misc.Utils;
 import com.perflyst.twire.service.Settings;
 import com.perflyst.twire.tasks.GetStreamsCountTask;
 import com.perflyst.twire.utils.Execute;
+
+import dev.chrisbanes.insetter.Insetter;
 
 public class NavigationDrawerFragment extends Fragment {
 
@@ -75,6 +78,8 @@ public class NavigationDrawerFragment extends Fragment {
         fetchAndSetOnlineSteamsCount();
         setClickListeners();
         checkUserLogin();
+
+        Insetter.builder().paddingBottom(WindowInsetsCompat.Type.systemBars(), false).applyToView(binding.drawerContainer);
 
         return binding.getRoot();
     }

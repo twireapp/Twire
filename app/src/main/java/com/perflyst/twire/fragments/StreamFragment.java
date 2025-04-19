@@ -10,6 +10,7 @@ import static com.perflyst.twire.misc.Utils.appendSpan;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.PictureInPictureParams;
 import android.content.ComponentName;
@@ -37,6 +38,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
+import android.view.RoundedCorner;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -61,6 +63,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
@@ -123,13 +126,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import dev.chrisbanes.insetter.Insetter;
 import timber.log.Timber;
 
 @OptIn(markerClass = UnstableApi.class)
 public class StreamFragment extends Fragment implements Player.Listener {
     private static final int SHOW_TIMEOUT = 3000;
 
-    private static int totalVerticalInset;
+    private static int rightInset = 0;
     private static boolean pipDisabling; // Tracks the PIP disabling animation.
     private final Handler fetchViewCountHandler = new Handler(),
             fetchChattersHandler = new Handler(),
@@ -224,7 +228,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
             width = metrics.widthPixels;
             height = metrics.heightPixels;
 
-            return new Rect(0, 0, Math.min(width, height), Math.max(width, height) - totalVerticalInset);
+            return new Rect(0, 0, Math.min(width, height), Math.max(width, height));
         }
 
         return new Rect();
@@ -355,30 +359,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
             startStreamWithQuality(Settings.getPrefStreamQuality());
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            mRootView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                @Override
-                public void onViewAttachedToWindow(@NonNull View v) {
-                    DisplayCutout displayCutout = getDisplayCutout();
-                    if (displayCutout != null) {
-                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                            totalVerticalInset = displayCutout.getSafeInsetLeft() + displayCutout.getSafeInsetRight();
-                        } else {
-                            totalVerticalInset = displayCutout.getSafeInsetTop() + displayCutout.getSafeInsetBottom();
-                        }
-
-                        setVideoViewLayout();
-                        setupLandscapeChat();
-                        streamFragmentCallback.refreshLayout();
-                    }
-                }
-
-                @Override
-                public void onViewDetachedFromWindow(@NonNull View v) {
-                }
-            });
-        }
-
         // Enabled after the user toggles the fullscreen mode
         // Unlocks the orientation of the screen after the user rotates to the new orientation
         orientationListener = new OrientationEventListener(getActivity()) {
@@ -404,7 +384,38 @@ public class StreamFragment extends Fragment implements Player.Listener {
             }
         };
 
+        // Apply the insets to the root view in portrait
+        // But use the rounded corners for the controls in landscape
+        Insetter.builder().setOnApplyInsetsListener((v, windowInsets, initialState) -> {
+            Insets insets = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars());
+            boolean isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+
+            if (isLandscape) {
+                v.setPadding(0, 0, 0, 0);
+
+                // set control padding
+                var left = 0;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    left = calculatePadding(RoundedCorner.POSITION_TOP_LEFT);
+                    rightInset = calculatePadding(RoundedCorner.POSITION_TOP_RIGHT);
+                }
+                mVideoInterface.setPadding(left, 0, rightInset, 0);
+            } else {
+                v.setPadding(insets.left, insets.top, insets.right, insets.bottom);
+                mVideoInterface.setPadding(0, 0, 0, 0);
+            }
+        }).applyToView(mRootView);
+
         return mRootView;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    int calculatePadding(int position) {
+        var rootInsets = rootView.getRootWindowInsets();
+        var corner = rootInsets.getRoundedCorner(position);
+        if (corner == null) return 0;
+        var radius = corner.getRadius();
+        return (int) (radius - radius / Math.sqrt(2) - getResources().getDimension(R.dimen.toolbar_icon_padding));
     }
 
     @Override
@@ -550,11 +561,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
 
         Rect videoRect = new Rect();
         mVideoView.getVideoSurfaceView().getGlobalVisibleRect(videoRect);
-
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            videoRect.left += totalVerticalInset;
-            videoRect.right += totalVerticalInset;
-        }
 
         PictureInPictureParams.Builder builder = new PictureInPictureParams.Builder()
                 .setAspectRatio(new Rational(16, 9))
@@ -900,6 +906,12 @@ public class StreamFragment extends Fragment implements Player.Listener {
         resizeWidthAnimation.setDuration(250);
         mVideoWrapper.startAnimation(resizeWidthAnimation);
         mShowChatButton.animate().rotation(visible ? 180f : 0).start();
+
+        var animator = ValueAnimator.ofInt(mVideoInterface.getPaddingRight(), visible ? 0 : rightInset).setDuration(250);
+        animator.addUpdateListener((_animator) ->
+                mVideoInterface.setPadding(mVideoInterface.getPaddingLeft(), 0, (Integer) _animator.getAnimatedValue(), 0)
+        );
+        animator.start();
     }
 
     private int getLandscapeChatTargetWidth() {
@@ -1068,13 +1080,6 @@ public class StreamFragment extends Fragment implements Player.Listener {
      * Shows the video control interface with animations
      */
     private void showVideoInterface() {
-        int MaintoolbarY = 0, CtrlToolbarY = 0;
-        if (isLandscape && Service.isTablet(getContext())) {
-            CtrlToolbarY = getNavigationBarHeight();
-        }
-
-        mControlToolbar.setTranslationY(-CtrlToolbarY);
-        mToolbar.setTranslationY(MaintoolbarY);
         mVideoInterface.animate().alpha(1f).setInterpolator(new AccelerateDecelerateInterpolator()).setListener(null).start();
     }
 

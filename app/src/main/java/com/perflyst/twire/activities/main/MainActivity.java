@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.insets.GradientProtection;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -36,6 +38,10 @@ import com.perflyst.twire.utils.Execute;
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView;
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehaviour;
 
+import java.util.List;
+
+import dev.chrisbanes.insetter.Insetter;
+import dev.chrisbanes.insetter.Side;
 import timber.log.Timber;
 
 
@@ -161,6 +167,33 @@ public abstract class MainActivity<E> extends ThemeActivity {
         checkForTip();
         checkForUpdate();
         customizeActivity();
+
+        // Handle insets
+        Insetter.builder()
+                .padding(WindowInsetsCompat.Type.displayCutout(), Side.LEFT | Side.RIGHT)
+                .applyToView(binding.mainContent)
+                .applyToView(binding.drawerFragment);
+
+        Insetter.builder()
+                .paddingTop(WindowInsetsCompat.Type.systemBars(), false)
+                .applyToView(binding.mainToolbar)
+                .applyToView(binding.mainList);
+
+        Insetter.builder().setOnApplyInsetsListener((view, windowInsets, initialState) -> {
+            var insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
+            binding.mainDecorativeToolbar.setMinimumHeight((int) getResources().getDimension(R.dimen.additional_toolbar_height) + insets.top);
+        }).applyToView(binding.getRoot());
+
+        Insetter.builder()
+                .marginTop(WindowInsetsCompat.Type.systemBars(), false)
+                .applyToView(binding.iconContainer);
+
+        binding.listProtection.setProtections(List.of(
+                new GradientProtection(
+                        WindowInsetsCompat.Side.TOP,
+                        Service.getColorAttribute(androidx.appcompat.R.attr.colorPrimary, R.color.primary, this)
+                )
+        ));
     }
 
     @Override

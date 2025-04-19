@@ -4,8 +4,9 @@
     android:id="@+id/container_settings_general"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/settingsBackgroundColor"
-    tools:context="com.perflyst.twire.activities.settings.SettingsGeneralActivity">
+    android:background="?attr/colorPrimary"
+    tools:context="com.perflyst.twire.activities.settings.SettingsGeneralActivity"
+    android:fitsSystemWindows="true">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_general_toolbar"
@@ -13,13 +14,13 @@
         android:layout_height="wrap_content"
         android:height="@dimen/main_toolbar_height"
         android:background="?attr/colorPrimary"
-        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/settings_general_toolbar">
+        android:layout_below="@id/settings_general_toolbar"
+        android:background="?attr/settingsBackgroundColor">
 
         <LinearLayout
             android:layout_width="match_parent"

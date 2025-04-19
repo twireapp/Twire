@@ -32,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -82,6 +83,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import dev.chrisbanes.insetter.Insetter;
 import timber.log.Timber;
 
 
@@ -205,6 +207,9 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
         setupKeyboardShowListener();
 
         setupTransition();
+
+        Insetter.builder().paddingBottom(WindowInsetsCompat.Type.systemBars(), false).applyToView(mRootView);
+
         return mRootView;
     }
 
