@@ -519,7 +519,7 @@ public class StreamFragment extends Fragment implements Player.Listener {
         if (isPlaying) {
             showPauseIcon();
 
-            if (!isAudioOnlyModeEnabled() && vodId == null) {
+            if (!isAudioOnlyModeEnabled() && vodId == null && player != null) {
                 player.seekToDefaultPosition(); // Go forward to live
             }
         } else {
