@@ -29,3 +29,8 @@
 
 # We need to be able to configure Hystrix to use a higher pool limit
 -keep class com.netflix.config.** { *; }
+
+# Keep events subscribers
+-keepclassmembers class * {
+    @com.github.philippheuer.events4j.simple.domain.EventSubscriber <methods>;
+}
