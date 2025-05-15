@@ -33,7 +33,7 @@ class VideoOnDemand(
         video.userName,
         video.publishedAtInstant.atZone(ZoneOffset.UTC),
         video.viewCount,
-        Duration.parse("PT" + video.duration).seconds
+        Duration.parse("PT${video.duration}").seconds
     )
 
     override fun compareTo(other: VideoOnDemand): Int {

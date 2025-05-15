@@ -19,28 +19,25 @@ class ClipActivity : StreamActivity() {
     private var mTitleView: TextView? = null
     private var mViewsView: TextView? = null
 
-    override fun getLayoutResource(): Int {
-        return R.layout.activity_vod
-    }
+    override val layoutResource: Int get() = R.layout.activity_vod
 
-    override fun getVideoContainerResource(): Int {
-        return R.id.video_fragment_container
-    }
+    override val videoContainerResource: Int get() = R.id.video_fragment_container
 
-    override fun getStreamArguments(): Bundle {
-        if (clip == null) {
-            val intent = intent
-            clip = Parcels.unwrap(intent.getParcelableExtra(Constants.KEY_CLIP))
-            channel = intent.getParcelableExtra(getString(R.string.channel_info_intent_object))
+    override val streamArguments: Bundle
+        get() {
+            if (clip == null) {
+                val intent = intent
+                clip = Parcels.unwrap(intent.getParcelableExtra(Constants.KEY_CLIP))
+                channel = intent.getParcelableExtra(getString(R.string.channel_info_intent_object))
+            }
+
+            val args = Bundle()
+            args.putParcelable(Constants.KEY_CLIP, Parcels.wrap(clip))
+            args.putParcelable(getString(R.string.stream_fragment_streamerInfo), channel)
+            args.putString(getString(R.string.stream_fragment_vod_id), clip!!.id)
+            args.putString(getString(R.string.stream_fragment_title), clip!!.title)
+            return args
         }
-
-        val args = Bundle()
-        args.putParcelable(Constants.KEY_CLIP, Parcels.wrap(clip))
-        args.putParcelable(getString(R.string.stream_fragment_streamerInfo), channel)
-        args.putString(getString(R.string.stream_fragment_vod_id), clip!!.id)
-        args.putString(getString(R.string.stream_fragment_title), clip!!.title)
-        return args
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,9 +45,9 @@ class ClipActivity : StreamActivity() {
             val fm = supportFragmentManager
 
             if (clipsFragment == null) {
-                clipsFragment = ChannelActivity.ClipFragment.newInstance(channel);
+                clipsFragment = ChannelActivity.ClipFragment.newInstance(channel)
                 fm.beginTransaction()
-                    .replace(R.id.additional_vods_container, clipsFragment as Fragment).commit();
+                    .replace(R.id.additional_vods_container, clipsFragment as Fragment).commit()
             }
         }
 

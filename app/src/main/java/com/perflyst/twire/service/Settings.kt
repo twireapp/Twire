@@ -94,7 +94,7 @@ object Settings {
 
         preferences.edit {
             for (key in preferences.all.keys) {
-                if (key.startsWith(STREAM_VOD_PROGRESS + "v")) {
+                if (key.startsWith("${STREAM_VOD_PROGRESS}v")) {
                     putInt(
                         STREAM_VOD_PROGRESS + key.substring(
                             STREAM_VOD_PROGRESS.length + 1
@@ -335,18 +335,18 @@ object Settings {
      */
     // TODO: This should probably be stored in a database.
     @JvmStatic
-    fun setVodProgress(VODid: String, currentPosition: Long) {
+    fun setVodProgress(vodID: String, currentPosition: Long) {
         val progress = (currentPosition / 1000).toInt()
 
         Timber.d("Saving Current Progress: %s", progress)
         preferences.edit {
-            putInt(STREAM_VOD_PROGRESS + VODid, progress)
+            putInt(STREAM_VOD_PROGRESS + vodID, progress)
         }
     }
 
     @JvmStatic
-    fun getVodProgress(VODid: String): Int =
-        preferences.getInt(STREAM_VOD_PROGRESS + VODid, 0)
+    fun getVodProgress(vodID: String): Int =
+        preferences.getInt(STREAM_VOD_PROGRESS + vodID, 0)
 
     /**
      * Stream Sleep Timer - Hour

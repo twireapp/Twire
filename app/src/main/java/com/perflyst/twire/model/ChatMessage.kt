@@ -18,9 +18,9 @@ data class ChatMessage(
     var systemMessage: String = ""
 
     init {
-        if (ChatManager.ffzBadgeMap != null) {
+        ChatManager.ffzBadgeMap?.let { ffzBadgeMap ->
             // Load any special FFZ badges the user has
-            for (badge in ChatManager.ffzBadgeMap[name.lowercase(Locale.getDefault())]) {
+            for (badge in ffzBadgeMap[name.lowercase(Locale.getDefault())]) {
                 if (badge.replaces != null) {
                     for (i in badges.indices) {
                         if (badges[i] != null && badges[i]!!.name == badge.replaces) {
@@ -37,7 +37,7 @@ data class ChatMessage(
 
     companion object {
         @JvmStatic
-        fun getEmotesFromMessage(message: String, emoteMap: Map<String?, Emote?>): Map<Int, Emote> {
+        fun getEmotesFromMessage(message: String, emoteMap: Map<String, Emote>): Map<Int, Emote> {
             var position = 0
             val foundEmotes: MutableMap<Int, Emote> = HashMap()
             for (word in message.split(" ".toRegex()).dropLastWhile { it.isEmpty() }
