@@ -5,10 +5,11 @@
     android:orientation="vertical"
     android:padding="@dimen/recyclerview_panel_padding">
 
-    <com.perflyst.twire.views.DynamicImageView
+    <ImageView
         android:id="@+id/panel_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true" />
 
     <TextView
         android:id="@+id/panel_html"

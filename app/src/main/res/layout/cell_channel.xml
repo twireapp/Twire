@@ -14,11 +14,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.perflyst.twire.views.DynamicImageView
+        <ImageView
             android:id="@+id/profileLogoImageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/content_desc_twitchLogo_imageView" />
 
         <TextView
