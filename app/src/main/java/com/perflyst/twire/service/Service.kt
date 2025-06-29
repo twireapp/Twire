@@ -2,31 +2,21 @@ package com.perflyst.twire.service
 
 import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffXfermode
-import android.graphics.Rect
-import android.graphics.RectF
 import android.graphics.drawable.ColorDrawable
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.createBitmap
 import androidx.customview.widget.ViewDragHelper
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.common.cache.CacheBuilder
@@ -89,37 +79,6 @@ object Service {
             val rnd = Random()
             return emotes[rnd.nextInt(emotes.size - 1)]
         }
-
-    /**
-     * Creates a bitmap with rounded corners.
-     *
-     * @param bitmap The bitmap
-     * @param i      the corner radius in pixels
-     * @return The bitmap with rounded corners
-     */
-    fun getRoundedCornerBitmap(bitmap: Bitmap?, i: Int): Bitmap {
-        if (bitmap == null) {
-            return createBitmap(1, 1)
-        }
-
-        val output = createBitmap(bitmap.getWidth(), bitmap.getHeight())
-        val canvas = Canvas(output)
-
-        val color = -0xbdbdbe
-        val paint = Paint()
-        val rect = Rect(0, 0, bitmap.getWidth(), bitmap.getHeight())
-        val rectF = RectF(rect)
-
-        paint.isAntiAlias = true
-        canvas.drawARGB(0, 0, 0, 0)
-        paint.setColor(color)
-        canvas.drawRoundRect(rectF, i.toFloat(), i.toFloat(), paint)
-
-        paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-        canvas.drawBitmap(bitmap, rect, rect, paint)
-
-        return output
-    }
 
     /**
      * Returns an intent with the right destination activity.
@@ -196,54 +155,6 @@ object Service {
         }
 
         return color
-    }
-
-    /**
-     * Creates a string with a unicode emoticon.
-     */
-    fun getEmojiByUnicode(unicode: Int): String {
-        return String(Character.toChars(unicode))
-    }
-
-    /**
-     * Hides the onscreen keyboard if it is visible
-     */
-    fun hideKeyboard(activity: Activity) {
-        // Check if no view has focus:
-        val view = activity.currentFocus
-        if (view != null) {
-            val imm = ContextCompat.getSystemService(
-                activity,
-                InputMethodManager::class.java
-            )
-            imm?.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
-
-    /**
-     * Shows the soft keyboard
-     */
-    fun showKeyboard(activity: Activity) {
-        // Check if no view has focus:
-        val view = activity.currentFocus
-        if (view != null) {
-            val inputMethodManager = ContextCompat.getSystemService(
-                activity,
-                InputMethodManager::class.java
-            )
-            inputMethodManager?.showSoftInput(view, 0)
-        }
-    }
-
-    /**
-     * Returns whether the device is a tablet or not.
-     */
-    fun isTablet(context: Context?): Boolean {
-        return if (context == null) {
-            false
-        } else {
-            context.resources.getBoolean(R.bool.isTablet)
-        }
     }
 
     /**

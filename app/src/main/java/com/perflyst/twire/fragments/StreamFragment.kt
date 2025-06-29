@@ -1081,7 +1081,7 @@ class StreamFragment : Fragment(), Player.Listener {
             var mainPadding = originalMainToolbarPadding
             val delta = this.navigationBarHeight
 
-            if (isLandscape && !Service.isTablet(context)) {
+            if (isLandscape && !resources.getBoolean(R.bool.isTablet)) {
                 ctrlPadding += delta
                 mainPadding += delta
             }

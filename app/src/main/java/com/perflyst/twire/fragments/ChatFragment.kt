@@ -22,6 +22,7 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -30,6 +31,7 @@ import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -294,7 +296,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
         if (supportedTextEmotes == null) {
             supportedTextEmotes = ArrayList()
             for (supportedUnicodeEmote in supportedUnicodeEmotes) {
-                supportedTextEmotes!!.add(Emote(Service.getEmojiByUnicode(supportedUnicodeEmote)))
+                supportedTextEmotes!!.add(Emote(Character.toString(supportedUnicodeEmote)))
             }
         }
     }
@@ -549,22 +551,33 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
 
         when (state) {
             KeyboardState.EMOTE -> {
-                if (keyboardState == KeyboardState.SOFT) Service.hideKeyboard(requireActivity())
+                if (keyboardState == KeyboardState.SOFT) toggleKeyboard(false)
 
                 emoteKeyboardContainer!!.visibility = View.VISIBLE
             }
 
             KeyboardState.SOFT -> {
-                Service.showKeyboard(requireActivity())
+                toggleKeyboard(true)
             }
 
             KeyboardState.CLOSED -> {
                 emoteKeyboardContainer!!.visibility = View.GONE
-                Service.hideKeyboard(requireActivity())
+                toggleKeyboard(false)
             }
         }
 
         keyboardState = state
+    }
+
+    fun toggleKeyboard(visible: Boolean) {
+        val inputMethodManager = ContextCompat.getSystemService(
+            requireActivity(),
+            InputMethodManager::class.java
+        )
+        requireActivity().currentFocus?.let { currentFocus ->
+            if (visible) inputMethodManager?.showSoftInput(currentFocus, 0)
+            else inputMethodManager?.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+        }
     }
 
     private fun setupEmoteViews() {
