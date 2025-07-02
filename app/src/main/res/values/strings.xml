@@ -330,6 +330,21 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. Only the last 10 versions will be kept. -->
     <string name="changelog_lines">"
+        v 2.12.0
+        A Add support for clips.
+        A Add edge to edge support.
+        A Add opt-in error reporting.
+        A Add play when locked setting.
+        F Fix 7tv not working.
+        F Fix VODs not starting where you left off.
+        F Fix image proxy not being applied everywhere.
+        F Fix Twitch follows not being removed after unfollowing on Twitch.
+        F Fix up some potential memory leaks with AsyncTasks.
+        F Fix VODs not updating their watched duration in the UI.
+        F Don't show empty VOD messages.
+        C Remove featured streams.
+        C Remove channel view counts.
+
         V 2.11.0
         A Add background playback when the screen is locked.
         A Add support for proxies, which can be used to block ads.
@@ -468,13 +483,5 @@
         C Remove the My Games section.
         A Add Basque translation.
         C Update Chinese (Traditional), Portuguese (Brazil), and Russian translations.
-
-        V 2.9.1
-        C Use the new embed ad blocking technique.
-        F Fix the changelog dialog popping up multiple times.
-        A Add Afrikaans, Arabic, Chinese (Traditional), Czech, Norwegian Bokmål, Portuguese (Brazil) and Russian translations.
-        C Update French, German, Italian and Spanish translations.
-        F Fix the changelog button not changing according to the theme.
-        F Fix the theme preview color for True night.
     "</string>
 </resources>
