@@ -154,3 +154,7 @@ configurations.configureEach {
         }
     }
 }
+
+sentry {
+    includeProguardMapping = false
+}
