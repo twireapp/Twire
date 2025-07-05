@@ -202,4 +202,7 @@
     <string name="chat_enable_emote_seventv">Aktivera 7TV Emotes</string>
     <string name="player_proxy">Ström proxy</string>
     <string name="player_proxy_custom">Anpassad proxy</string>
+    <string name="player_locked_player">Spela medan den är låst</string>
+    <string name="clip_chat_expired">Omspelning av chatten är inte längre tillgänglig.</string>
+    <string name="streamerInfo_clips_tab">Klipp</string>
 </resources>
