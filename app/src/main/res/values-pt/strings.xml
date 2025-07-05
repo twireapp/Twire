@@ -200,4 +200,7 @@
     <string name="appearance_stream_header">Fluxos</string>
     <string name="streamerInfo_chat_tab">Bate-papo</string>
     <string name="settings_general_image_proxy_url_placeholder">API url</string>
+    <string name="player_locked_player">Reproduzir enquanto bloqueado</string>
+    <string name="player_proxy">Proxy Stream</string>
+    <string name="player_proxy_custom">Proxy personalizado</string>
 </resources>
