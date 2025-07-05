@@ -330,7 +330,7 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. Only the last 10 versions will be kept. -->
     <string name="changelog_lines">"
-        v 2.12.0
+        V 2.12.0
         A Add support for clips.
         A Add edge to edge support.
         A Add opt-in error reporting.

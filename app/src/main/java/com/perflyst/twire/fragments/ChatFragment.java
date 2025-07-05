@@ -425,8 +425,6 @@ public class ChatFragment extends Fragment implements EmoteKeyboardDelegate, Cha
             ArrayList<Emote> emotesFromSettings = Settings.getRecentEmotes();
             if (emotesFromSettings != null) {
                 recentEmotes.addAll(emotesFromSettings);
-            } else {
-                Timber.e("Failed to load recent emotes");
             }
         }
     }

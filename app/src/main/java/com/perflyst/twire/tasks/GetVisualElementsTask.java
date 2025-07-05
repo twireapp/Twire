@@ -21,6 +21,8 @@ public class GetVisualElementsTask<T> implements Callable<List<T>> {
 
         try {
             resultList.addAll(mLazyActivity.getVisualElements());
+        } catch (InterruptedException e) {
+            return resultList;
         } catch (Exception e) {
             Timber.e(e);
         }
