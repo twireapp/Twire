@@ -1,0 +1,1 @@
+Suporta VODs com replay de chat, emotes personalizados (BTTV, FFZ e 7TV) e modo picture-in-picture.

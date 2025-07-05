@@ -1,0 +1,1 @@
+Twire é um reprodutor e navegador da Twitch de código aberto e sem anúncios.
