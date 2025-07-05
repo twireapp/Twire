@@ -241,4 +241,7 @@
     <string name="settings_general_image_proxy_url_placeholder">URL de la API</string>
     <string name="player_proxy">Servidor proxy para streaming</string>
     <string name="player_proxy_custom">Servidor proxy personalizado</string>
+    <string name="player_locked_player">Reproducir mientras bloqueado</string>
+    <string name="streamerInfo_clips_tab">Cortos</string>
+    <string name="clip_chat_expired">La reproducción de mensajes no se encuentra disponible</string>
 </resources>
