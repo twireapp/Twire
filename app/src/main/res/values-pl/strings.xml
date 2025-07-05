@@ -200,4 +200,9 @@
     <string name="chat_paused">Zatrzymano czat z powodu przewijania.</string>
     <string name="streamerInfo_chat_tab">Czat</string>
     <string name="settings_general_image_proxy_url_placeholder">url API</string>
+    <string name="player_locked_player">Odtwarzaj gdy zablokowany</string>
+    <string name="player_proxy">Proxy dla streamów</string>
+    <string name="player_proxy_custom">Niestandardowe proxy</string>
+    <string name="streamerInfo_clips_tab">Klipy</string>
+    <string name="clip_chat_expired">Powtórka chatu nie jest już dostępna.</string>
 </resources>
