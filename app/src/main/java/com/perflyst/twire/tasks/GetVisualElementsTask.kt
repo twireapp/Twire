@@ -1,5 +1,6 @@
 package com.perflyst.twire.tasks
 
+import com.netflix.hystrix.exception.HystrixRuntimeException
 import com.perflyst.twire.activities.main.LazyFetchingActivity
 import com.perflyst.twire.utils.Execute
 import timber.log.Timber
@@ -12,8 +13,9 @@ class GetVisualElementsTask<T>(private val mLazyActivity: LazyFetchingActivity<T
 
         try {
             resultList.addAll(mLazyActivity.visualElements)
-        } catch (_: InterruptedException) {
-            return resultList
+        } catch (e: HystrixRuntimeException) {
+            if (e.cause is InterruptedException) return resultList
+            else Timber.e(e)
         } catch (e: Exception) {
             Timber.e(e)
         }

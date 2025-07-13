@@ -35,8 +35,7 @@ class SleepTimer(private val delegate: SleepTimerDelegate, private val context: 
                         sleepTimerHandler.postDelayed(this, (1000 * 60).toLong())
                     }
                 } catch (e: Exception) {
-                    Timber.e(e)
-                    Timber.e("Sleep Timer runnable failed")
+                    Timber.e(e, "Sleep Timer runnable failed")
                 }
             }
         }

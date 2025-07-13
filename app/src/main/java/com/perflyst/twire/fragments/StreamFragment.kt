@@ -488,7 +488,7 @@ class StreamFragment : Fragment(), Player.Listener {
     }
 
     override fun onPlayerError(exception: PlaybackException) {
-        Timber.e("Something went wrong playing the stream for ${mUserInfo!!.displayName} - Exception: $exception")
+        Timber.e(exception, "Something went wrong playing the stream")
 
         playbackFailed()
     }
