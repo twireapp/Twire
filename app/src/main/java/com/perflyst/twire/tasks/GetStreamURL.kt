@@ -76,7 +76,7 @@ class GetStreamURL(
         }
 
         var streamUrl =
-            (if (isLive) "https://usher.ttvnw.net/api/channel/hls/$channelOrVod.m3u8" else "https://usher.ttvnw.net/vod/$channelOrVod.mp4") +
+            (if (isLive) "https://usher.ttvnw.net/api/channel/hls/$channelOrVod.m3u8" else "https://usher.ttvnw.net/vod/$channelOrVod") +
                     "?player=twitchweb&" +
                     "&token=${safeEncode(token)}" +
                     "&sig=$signature" +
