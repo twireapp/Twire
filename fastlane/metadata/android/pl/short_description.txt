@@ -1,1 +1,1 @@
-Twire to otwartoźródłowa, wolna od reklam aplikacja do Twitch'a na Androida.
+Twire to otwartoźródłowa, wolna od reklam przeglądarka i odtwarzacz Twitch'a na Androida.
