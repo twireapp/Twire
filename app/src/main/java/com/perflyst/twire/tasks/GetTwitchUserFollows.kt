@@ -20,11 +20,11 @@ import java.util.concurrent.TimeUnit
  *
  * Returns an ArrayList of stream names
  */
-class GetTwitchUserFollows(baseContext: Context?) : Callable<ArrayList<ChannelInfo>?> {
+class GetTwitchUserFollows(baseContext: Context?) : Callable<List<ChannelInfo>> {
     private val timerStart = System.currentTimeMillis()
     private val baseContext: WeakReference<Context?> = WeakReference<Context?>(baseContext)
 
-    override fun call(): ArrayList<ChannelInfo> {
+    override fun call(): List<ChannelInfo> {
         val userSubs = ArrayList<String>()
 
         var currentCursor: String? = ""
@@ -48,7 +48,6 @@ class GetTwitchUserFollows(baseContext: Context?) : Callable<ArrayList<ChannelIn
 
         // ------- Has now loaded all the user's followed streamers ----------
         val loadedStreamerIds = ArrayList<String?>()
-        val streamersToAddToDB = ArrayList<ChannelInfo>()
 
         SubscriptionsDbHelper(baseContext.get()).use { helper ->
             for (si in TempStorage.loadedStreamers) {
@@ -73,43 +72,11 @@ class GetTwitchUserFollows(baseContext: Context?) : Callable<ArrayList<ChannelIn
             }
         }
         // Find the Twitch userIds that the app hasn't already loaded. Add it to the list of userIds that will be added to the database
-        val IdsToAddToDB = ArrayList<String>()
-        val streamerInfoThreads: ArrayList<StreamerInfoFromIdsThread> =
-            ArrayList()
-        for (id in userSubs) {
-            if (!loadedStreamerIds.contains(id)) {
-                IdsToAddToDB.add(id)
-            }
-        }
+        val idsToAddToDB = userSubs.filter { !loadedStreamerIds.contains(it) }
 
-        // Create the threads with part of the userIds
-        val NAMES_PER_THREAD = 20
-        var i = 0
-        while (i < IdsToAddToDB.size) {
-            var lastIndex = i + NAMES_PER_THREAD
-            if (lastIndex > IdsToAddToDB.size) {
-                lastIndex = IdsToAddToDB.size
-            }
-            val streamerInfoThread =
-                StreamerInfoFromIdsThread(ArrayList(IdsToAddToDB.subList(i, lastIndex)))
-            streamerInfoThread.start()
-            streamerInfoThreads.add(streamerInfoThread)
-            i += NAMES_PER_THREAD
-        }
-
-        // Wait for the threads to finish
-        for (thread in streamerInfoThreads) {
-            try {
-                thread.join()
-            } catch (e: InterruptedException) {
-                Timber.e(e)
-            }
-        }
-
-        // Get the result from the threads and add the StreamerInfo objects to the result list
-        for (thread in streamerInfoThreads) {
-            streamersToAddToDB.addAll(thread.streamers)
-        }
+        val streamersToAddToDB = idsToAddToDB.chunked(100).flatMap {
+            TwireApplication.helix.getUsers(null, it, null).execute().users
+        }.map(::ChannelInfo)
 
         // If there are any streamers to add to the DB - Create a task and do so.
         if (!streamersToAddToDB.isEmpty()) {
@@ -123,21 +90,5 @@ class GetTwitchUserFollows(baseContext: Context?) : Callable<ArrayList<ChannelIn
         Timber.d("Completed task in ${TimeUnit.MILLISECONDS.toSeconds(duration)} seconds")
 
         return streamersToAddToDB
-    }
-
-    private inner class StreamerInfoFromIdsThread(private val userIds: ArrayList<String>) :
-        Thread() {
-        val streamers: ArrayList<ChannelInfo> = ArrayList()
-
-        override fun run() {
-            for (name in userIds) {
-                val info = Service.getStreamerInfoFromUserId(name)
-                if (info != null) {
-                    info.isNotifyWhenLive = true // Enable by default
-                    streamers.add(info)
-                }
-            }
-            Timber.d("Thread - Adding ${streamers.size} streamers")
-        }
     }
 }

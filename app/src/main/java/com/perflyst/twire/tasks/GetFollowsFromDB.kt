@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
  */
 class GetFollowsFromDB(baseContext: Context?) : Callable<MutableMap<String, ChannelInfo>> {
     private val timerStart = System.currentTimeMillis()
-    private val twitchUserFollows: ListenableFutureTask<ArrayList<ChannelInfo>?> =
+    private val twitchUserFollows: ListenableFutureTask<List<ChannelInfo>> =
         ListenableFutureTask.create(GetTwitchUserFollows(baseContext))
     private val baseContext: WeakReference<Context?> = WeakReference<Context?>(baseContext)
 

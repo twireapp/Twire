@@ -17,7 +17,7 @@ import java.util.TreeMap
  * Precondition: This task requires two inputs. First input should be an ArrayList of streamerInfo objects you want to add to the database.
  * The second should be the BaseContext
  */
-class AddFollowsToDB(baseContext: Context?, private val subsToAdd: ArrayList<ChannelInfo>) :
+class AddFollowsToDB(baseContext: Context?, private val subsToAdd: List<ChannelInfo>) :
     Runnable {
     private val baseContext: WeakReference<Context?> = WeakReference<Context?>(baseContext)
 
