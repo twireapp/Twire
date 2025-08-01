@@ -275,7 +275,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
                 }
             }
 
-            override fun onEmoteSetsFetched(emoteSets: MutableList<String>?) {
+            override fun onEmoteSetsFetched(emoteSets: MutableList<String>) {
                 val getTwitchEmotesTask = GetTwitchEmotesTask(
                     emoteSets
                 ) { twitchEmotes: MutableList<Emote>?, subscriberEmotes: MutableList<Emote>? ->

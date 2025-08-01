@@ -525,7 +525,7 @@ class ChatManager(aChannel: UserInfo, aVodId: String?, vodOffset: Int, aCallback
 
         fun onCustomEmoteIdFetched(channel: MutableList<Emote>, global: MutableList<Emote>)
 
-        fun onEmoteSetsFetched(emoteSets: MutableList<String>?)
+        fun onEmoteSetsFetched(emoteSets: MutableList<String>)
     }
 
     companion object {
