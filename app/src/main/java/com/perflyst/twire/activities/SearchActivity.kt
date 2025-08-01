@@ -117,7 +117,7 @@ class SearchActivity : ThemeActivity() {
 
         override val visualElements: MutableList<Game>
             get() {
-                if (query == null) return mutableListOf()
+                if (query.isNullOrEmpty()) return mutableListOf()
 
                 val games =
                     TwireApplication.helix.searchCategories(null, query, limit, cursor)
@@ -146,7 +146,7 @@ class SearchActivity : ThemeActivity() {
 
         override val visualElements: MutableList<StreamInfo>
             get() {
-                if (query == null) return mutableListOf()
+                if (query.isNullOrEmpty()) return mutableListOf()
 
                 val search =
                     TwireApplication.helix.searchChannels(null, query, limit, cursor, true)
@@ -188,7 +188,7 @@ class SearchActivity : ThemeActivity() {
 
         override val visualElements: MutableList<ChannelInfo>
             get() {
-                if (query == null) return mutableListOf()
+                if (query.isNullOrEmpty()) return mutableListOf()
 
                 val streams =
                     TwireApplication.helix.searchChannels(null, query, limit, cursor, false)
