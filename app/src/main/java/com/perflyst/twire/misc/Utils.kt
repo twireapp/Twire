@@ -4,6 +4,7 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.widget.TextView
 import androidx.annotation.FloatRange
+import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLEncoder
@@ -52,7 +53,11 @@ object Utils {
 
     @JvmStatic
     fun safeEncode(s: String?): String? {
-        return URLEncoder.encode(s, StandardCharsets.UTF_8)
+        return try {
+            URLEncoder.encode(s, StandardCharsets.UTF_8.toString())
+        } catch (_: UnsupportedEncodingException) {
+            s
+        }
     }
 
     fun safeUrl(url: String?): URL? {
