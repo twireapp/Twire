@@ -668,7 +668,7 @@ class StreamFragment : Fragment(), Player.Listener {
                     try {
                         Timber.d("Fetching viewers")
 
-                        if (currentViewers!! > -1) Utils.setNumber(
+                        if (currentViewers != null) Utils.setNumber(
                             mCurrentViewersView,
                             currentViewers.toLong()
                         )

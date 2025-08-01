@@ -15,9 +15,9 @@ class GetStreamViewersTask(private val streamerUserId: String) : Callable<Int?> 
             1,
             null,
             null,
-            listOf<String?>(this.streamerUserId),
+            listOf(this.streamerUserId),
             null
         ).execute()
-        return streams.streams[0].viewerCount
+        return if (streams.streams.isEmpty()) null else streams.streams[0].viewerCount
     }
 }
