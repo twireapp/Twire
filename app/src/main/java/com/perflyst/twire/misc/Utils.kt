@@ -2,6 +2,7 @@ package com.perflyst.twire.misc
 
 import android.text.SpannableStringBuilder
 import android.text.Spanned
+import android.text.format.DateUtils
 import android.widget.TextView
 import androidx.annotation.FloatRange
 import java.io.UnsupportedEncodingException
@@ -76,5 +77,9 @@ object Utils {
 
     fun getPreviewUrl(url: String?): String? {
         return getPreviewUrl(url, "320", "180")
+    }
+
+    fun getOnlineSince(startedAt: Long): String {
+        return DateUtils.formatElapsedTime((System.currentTimeMillis() - startedAt) / 1000)
     }
 }

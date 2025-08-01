@@ -15,7 +15,7 @@ import com.perflyst.twire.R
 import com.perflyst.twire.activities.ChannelActivity
 import com.perflyst.twire.activities.stream.LiveStreamActivity.Companion.createLiveStreamIntent
 import com.perflyst.twire.adapters.MainActivityAdapter.ElementsViewHolder
-import com.perflyst.twire.misc.OnlineSince
+import com.perflyst.twire.misc.Utils
 import com.perflyst.twire.model.StreamInfo
 import com.perflyst.twire.service.Service
 import com.perflyst.twire.service.Settings.appearanceStreamStyle
@@ -151,7 +151,7 @@ class StreamsAdapter(recyclerView: AutoSpanRecyclerView, private val activity: A
         viewHolder.vDisplayName.text = element.userInfo.displayName
         viewHolder.vTitle.text = element.title
         viewHolder.vGame.text = gameAndViewers
-        viewHolder.vOnlineSince.text = OnlineSince.getOnlineSince(element.startedAt)
+        viewHolder.vOnlineSince.text = Utils.getOnlineSince(element.startedAt)
         viewHolder.vPreviewImage.setVisibility(View.VISIBLE)
     }
 

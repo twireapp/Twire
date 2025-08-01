@@ -87,7 +87,6 @@ import com.perflyst.twire.activities.stream.StreamActivity
 import com.perflyst.twire.adapters.PanelAdapter
 import com.perflyst.twire.chat.ChatManager
 import com.perflyst.twire.misc.FollowHandler
-import com.perflyst.twire.misc.OnlineSince
 import com.perflyst.twire.misc.ResizeHeightAnimation
 import com.perflyst.twire.misc.ResizeWidthAnimation
 import com.perflyst.twire.misc.Utils
@@ -316,7 +315,7 @@ class StreamFragment : Fragment(), Player.Listener {
             } else {
                 startTime = args!!.getLong(getString(R.string.stream_fragment_start_time))
                 controlView.setProgressUpdateListener { position: Long, bufferedPosition: Long ->
-                    mRuntime.text = OnlineSince.getOnlineSince(startTime)
+                    mRuntime.text = Utils.getOnlineSince(startTime)
                 }
             }
 
