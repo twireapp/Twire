@@ -284,7 +284,11 @@ class StreamFragment : Fragment(), Player.Listener {
             )
         }
 
-        initializePlayer()
+        initializePlayer {
+            if (autoPlay || vodId != null) {
+                startStreamWithQuality(prefStreamQuality)
+            }
+        }
 
         controlView =
             mVideoView.findViewById(androidx.media3.ui.R.id.exo_controller)
@@ -335,10 +339,6 @@ class StreamFragment : Fragment(), Player.Listener {
 
             mVideoView.findViewById<View?>(R.id.exo_position)
                 .setOnClickListener { v: View? -> showSeekDialog() }
-        }
-
-        if (autoPlay || vodId != null) {
-            startStreamWithQuality(prefStreamQuality)
         }
 
         // Enabled after the user toggles the fullscreen mode
@@ -422,7 +422,7 @@ class StreamFragment : Fragment(), Player.Listener {
         }
     }
 
-    private fun initializePlayer() {
+    private fun initializePlayer(callback: Runnable) {
         if (player == null) {
             val sessionToken = SessionToken(
                 requireContext(),
@@ -436,6 +436,8 @@ class StreamFragment : Fragment(), Player.Listener {
                     override fun onSuccess(result: MediaController?) {
                         player = result
                         player?.let { player ->
+                            callback.run()
+
                             player.addListener(streamFragment)
                             mVideoView.setPlayer(player)
 
@@ -457,6 +459,8 @@ class StreamFragment : Fragment(), Player.Listener {
                 },
                 ContextCompat.getMainExecutor(requireContext())
             )
+        } else {
+            callback.run()
         }
     }
 
@@ -552,7 +556,7 @@ class StreamFragment : Fragment(), Player.Listener {
 
     fun backPressed() {
         mVideoView.setVisibility(View.INVISIBLE)
-        player!!.clearMediaItems()
+        player?.clearMediaItems()
         releasePlayer()
     }
 
@@ -569,7 +573,7 @@ class StreamFragment : Fragment(), Player.Listener {
     override fun onStart() {
         super.onStart()
         if (Util.SDK_INT > 23) {
-            initializePlayer()
+            initializePlayer {}
         }
     }
 
@@ -578,19 +582,23 @@ class StreamFragment : Fragment(), Player.Listener {
 
         pipDisabling = false
 
+        val init = {
+            if (this.isAudioOnlyModeEnabled && !this.isAudioOnlyModeEnabled) {
+                disableAudioOnlyView()
+                startStreamWithQuality(prefStreamQuality)
+            } else if (!castingViewVisible && !this.isAudioOnlyModeEnabled && hasPaused && streamPlayerAutoContinuePlaybackOnReturn) {
+                startStreamWithQuality(prefStreamQuality)
+            }
+        }
+
         if (Util.SDK_INT <= 23 || player == null) {
-            initializePlayer()
+            initializePlayer(init)
+        } else {
+            init()
         }
 
         originalMainToolbarPadding = mToolbar.getPaddingRight()
         originalCtrlToolbarPadding = mControlToolbar.getPaddingRight()
-
-        if (this.isAudioOnlyModeEnabled && !this.isAudioOnlyModeEnabled) {
-            disableAudioOnlyView()
-            startStreamWithQuality(prefStreamQuality)
-        } else if (!castingViewVisible && !this.isAudioOnlyModeEnabled && hasPaused && streamPlayerAutoContinuePlaybackOnReturn) {
-            startStreamWithQuality(prefStreamQuality)
-        }
 
         registerAudioOnlyDelegate()
 
@@ -1581,12 +1589,13 @@ class StreamFragment : Fragment(), Player.Listener {
 
         // start stream with last quality
         releasePlayer()
-        initializePlayer()
-        updateSelectedQuality(prefStreamQuality)
-        startStreamWithQuality(prefStreamQuality)
+        initializePlayer {
+            updateSelectedQuality(prefStreamQuality)
+            startStreamWithQuality(prefStreamQuality)
 
-        // resume the stream
-        player!!.play()
+            // resume the stream
+            player!!.play()
+        }
     }
 
     private fun stopAudioOnlyNoServiceCall() {
@@ -1661,8 +1670,9 @@ class StreamFragment : Fragment(), Player.Listener {
         )
 
         if (!castingViewVisible) {
-            initializePlayer()
-            startStreamWithQuality(prefStreamQuality)
+            initializePlayer {
+                startStreamWithQuality(prefStreamQuality)
+            }
         }
 
         optionsMenuItem!!.isVisible = false
