@@ -40,43 +40,45 @@ class TwireApplication : Application() {
         super.onCreate()
         Timber.plant(DebugTree())
 
-        SentryAndroid.init(this) { options: SentryAndroidOptions? ->
-            options!!.isEnableDeduplication = false
-            options.setBeforeSend { event, hint ->
-                event.user = null
-                event.breadcrumbs = null
-                event.setModules(null)
-                event.environment = BuildConfig.BUILD_TYPE
-                event.release = BuildConfig.VERSION_NAME
-                event.contexts.remove(Device.TYPE)
-                event.contexts.put(OperatingSystem.TYPE, object : HashMap<Any, Any>() {
-                    init {
-                        put("name", "Android")
-                        put("version", Build.VERSION.RELEASE)
-                    }
-                })
-                event.contexts.put(App.TYPE, object : HashMap<Any, Any>() {
-                    init {
-                        put("app_version", BuildConfig.VERSION_NAME)
-                    }
-                })
-                event.removeTag("isSideLoaded")
-                event.setTag("os.version", Build.VERSION.RELEASE)
-                event.sdk = null
+        if (!BuildConfig.DEBUG) {
+            SentryAndroid.init(this) { options: SentryAndroidOptions? ->
+                options!!.isEnableDeduplication = false
+                options.setBeforeSend { event, hint ->
+                    event.user = null
+                    event.breadcrumbs = null
+                    event.setModules(null)
+                    event.environment = BuildConfig.BUILD_TYPE
+                    event.release = BuildConfig.VERSION_NAME
+                    event.contexts.remove(Device.TYPE)
+                    event.contexts.put(OperatingSystem.TYPE, object : HashMap<Any, Any>() {
+                        init {
+                            put("name", "Android")
+                            put("version", Build.VERSION.RELEASE)
+                        }
+                    })
+                    event.contexts.put(App.TYPE, object : HashMap<Any, Any>() {
+                        init {
+                            put("app_version", BuildConfig.VERSION_NAME)
+                        }
+                    })
+                    event.removeTag("isSideLoaded")
+                    event.setTag("os.version", Build.VERSION.RELEASE)
+                    event.sdk = null
 
-                if (event.getExtra("consent") != null) return@setBeforeSend event
+                    if (event.getExtra("consent") != null) return@setBeforeSend event
 
-                if (reportErrors == ReportErrors.ASK) {
-                    DeepLinkActivity.Companion.SENTRY_EVENTS.add(event)
-                    startActivity(
-                        Intent(this, DeepLinkActivity::class.java)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            .putExtra("reportErrors", true)
-                    )
-                } else if (reportErrors == ReportErrors.ALWAYS) {
-                    return@setBeforeSend event
+                    if (reportErrors == ReportErrors.ASK) {
+                        DeepLinkActivity.Companion.SENTRY_EVENTS.add(event)
+                        startActivity(
+                            Intent(this, DeepLinkActivity::class.java)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                .putExtra("reportErrors", true)
+                        )
+                    } else if (reportErrors == ReportErrors.ALWAYS) {
+                        return@setBeforeSend event
+                    }
+                    null
                 }
-                null
             }
         }
 
