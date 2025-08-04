@@ -153,6 +153,8 @@ class SearchActivity : ThemeActivity() {
                         .execute()
                 setCursorFromResponse(search.pagination)
 
+                if (search.results.isEmpty()) return mutableListOf()
+
                 val streams = TwireApplication.helix.getStreams(
                     null,
                     null,
