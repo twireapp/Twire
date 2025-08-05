@@ -9,15 +9,15 @@ plugins {
 
 android {
     namespace = "com.perflyst.twire"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = "25.0.8775105"
 
     defaultConfig {
         applicationId = "com.perflyst.twire"
         minSdk = 21
         targetSdk = 35
-        versionCode = 536
-        versionName = "2.12.1"
+        versionCode = 537
+        versionName = "2.12.2"
 
         vectorDrawables.useSupportLibrary = true
 

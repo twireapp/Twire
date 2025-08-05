@@ -330,7 +330,16 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. Only the last 10 versions will be kept. -->
     <string name="changelog_lines">"
-        V 2.12.0
+        V 2.12.2
+        F Fix crash on older versions of Android
+        F Fix player being used before it's ready
+        F Fix some exception handling
+        F Fix emotes and follows not being fetched in chunks
+        F Fix search searching when there's no query
+        F Fix streams being fetched when there's no stream results
+        F Fix fetching viewers for offline streams
+
+        V 2.12.0 / 2.12.1
         A Add support for clips.
         A Add edge to edge support.
         A Add opt-in error reporting.
@@ -476,12 +485,5 @@
         F Fix not staying logged in between relaunches.
         A Add Chinese (Simplified) and Finnish translations.
         C Update German translation.
-
-        V 2.9.2
-        F Fix only the Auto quality being available.
-        F Fix page titles not being translated in some languages.
-        C Remove the My Games section.
-        A Add Basque translation.
-        C Update Chinese (Traditional), Portuguese (Brazil), and Russian translations.
     "</string>
 </resources>
