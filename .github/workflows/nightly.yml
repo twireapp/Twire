@@ -36,8 +36,8 @@ jobs:
         run: |
           export versionCode=$(date '+%s')
           export versionName=$(git rev-parse --short HEAD)
-          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
-          sed -i "s,^\(\s*versionName\)  *.*,\1 \"$versionName\"," app/build.gradle.kts
+          sed -i "s,^\(\s*versionCode\) = [0-9].*,\1 = $versionCode," app/build.gradle.kts
+          sed -i "s,^\(\s*versionName\) = .*,\1 = \"$versionName\"," app/build.gradle.kts
 
           ./gradlew assembleRelease
 
