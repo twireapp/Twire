@@ -29,7 +29,7 @@ jobs:
       - name: Build APK
         run: |
           export versionCode=$(date '+%s')
-          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle
+          sed -i "s,^\(\s*versionCode\)  *[0-9].*,\1 $versionCode," app/build.gradle.kts
 
           ./gradlew assembleRelease
 
