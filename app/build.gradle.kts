@@ -158,11 +158,7 @@ dependencies {
 configurations.all {
     resolutionStrategy {
         // Force specific Jackson versions that work with Android API 21
-        force(
-            "com.fasterxml.jackson.core:jackson-core:2.13.5",
-            "com.fasterxml.jackson.core:jackson-databind:2.13.5",
-            "com.fasterxml.jackson.core:jackson-annotations:2.13.5"
-        )
+        force("com.fasterxml.jackson:jackson-bom:2.13.5")
 
         dependencySubstitution {
             substitute(module("io.github.openfeign:feign-core:13.5"))
