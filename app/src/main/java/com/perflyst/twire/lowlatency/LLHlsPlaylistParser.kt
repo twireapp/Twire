@@ -400,7 +400,7 @@ class LLHlsPlaylistParser
                     // tags.
                     mediaTags.add(line)
                 } else if (line.startsWith(TAG_SESSION_KEY)) {
-                    val keyFormat: String =
+                    val keyFormat: String? =
                         parseOptionalStringAttr(
                             line,
                             REGEX_KEYFORMAT,
@@ -746,7 +746,7 @@ class LLHlsPlaylistParser
             val tags: MutableList<String> = ArrayList()
 
             var segmentDurationUs = 0L
-            var segmentTitle = ""
+            var segmentTitle: String? = ""
             var hasDiscontinuitySequence = false
             var playlistDiscontinuitySequence = 0
             var relativeDiscontinuitySequence = 0
@@ -920,7 +920,7 @@ class LLHlsPlaylistParser
                     }
                 } else if (line.startsWith(TAG_KEY)) {
                     val method: String = parseStringAttr(line, REGEX_METHOD, variableDefinitions)
-                    val keyFormat: String =
+                    val keyFormat: String? =
                         parseOptionalStringAttr(
                             line,
                             REGEX_KEYFORMAT,
@@ -1163,7 +1163,7 @@ class LLHlsPlaylistParser
                         HlsMediaPlaylist.Segment(
                             segmentUri,
                             initializationSegment ?: inferredInitSegment,
-                            segmentTitle,
+                            segmentTitle!!,
                             segmentDurationUs,
                             relativeDiscontinuitySequence,
                             segmentStartTimeUs,
@@ -1310,7 +1310,7 @@ class LLHlsPlaylistParser
         private fun parseDrmSchemeData(
             line: String, keyFormat: String?, variableDefinitions: MutableMap<String, String>
         ): SchemeData? {
-            val keyFormatVersions: String =
+            val keyFormatVersions: String? =
                 parseOptionalStringAttr(line, REGEX_KEYFORMATVERSIONS, "1", variableDefinitions)
             if (KEYFORMAT_WIDEVINE_PSSH_BINARY == keyFormat) {
                 val uriString: String = parseStringAttr(line, REGEX_URI, variableDefinitions)
@@ -1451,7 +1451,7 @@ class LLHlsPlaylistParser
             pattern: Pattern,
             defaultValue: @PolyNull String?,
             variableDefinitions: MutableMap<String, String>
-        ): @PolyNull String {
+        ): @PolyNull String? {
             val matcher = pattern.matcher(line)
             val value: @PolyNull String? =
                 if (matcher.find()) Assertions.checkNotNull<String?>(matcher.group(1)) else defaultValue
@@ -1461,7 +1461,7 @@ class LLHlsPlaylistParser
                 replaceVariableReferences(
                     value,
                     variableDefinitions
-                ))!!
+                ))
         }
 
         private fun parseOptionalDoubleAttr(
