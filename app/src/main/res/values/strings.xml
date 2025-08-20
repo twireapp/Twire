@@ -330,6 +330,12 @@
 
     <!-- The first letter of each line of the changelog denotes if it's about a new Version, Addition, Fix or Change and should not be translated. Only the last 10 versions will be kept. -->
     <string name="changelog_lines">"
+        V 2.12.3
+        F Fix compatibility on older versions of Android
+        F Fix low latency parser not properly handling null values
+        F Fix message box stuck under keyboard
+        F Fix auto quality
+
         V 2.12.2
         F Fix crash on older versions of Android
         F Fix player being used before it's ready
@@ -478,12 +484,5 @@
         F Fix crashes on older versions of Android.
         A Add Korean translation.
         C Update French, Finnish, Arabic, Portuguese (Brazil), Swedish, Turkish, Esperanto, Italian, Ukrainian, Polish, German, Russian, Spanish, Persian, Japanese, Chinese (Simplified), Norwegian Bokmål translations.
-
-        V 2.9.3
-        F Fix VODs not loading.
-        F Fix only seeing 20 followed channels.
-        F Fix not staying logged in between relaunches.
-        A Add Chinese (Simplified) and Finnish translations.
-        C Update German translation.
     "</string>
 </resources>
