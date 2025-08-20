@@ -549,22 +549,10 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
         requireActivity().window
             .setSoftInputMode(if (emoteKeyboardContainer!!.isVisible) WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING else WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
-        when (state) {
-            KeyboardState.EMOTE -> {
-                if (keyboardState == KeyboardState.SOFT) toggleKeyboard(false)
 
-                emoteKeyboardContainer!!.visibility = View.VISIBLE
-            }
-
-            KeyboardState.SOFT -> {
-                toggleKeyboard(true)
-            }
-
-            KeyboardState.CLOSED -> {
-                emoteKeyboardContainer!!.visibility = View.GONE
-                toggleKeyboard(false)
-            }
-        }
+        emoteKeyboardContainer!!.visibility =
+            if (state == KeyboardState.CLOSED) View.GONE else View.VISIBLE
+        toggleKeyboard(state == KeyboardState.SOFT)
 
         keyboardState = state
     }
