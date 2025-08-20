@@ -398,8 +398,6 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
             val emotesFromSettings = Settings.recentEmotes
             if (emotesFromSettings != null) {
                 recentEmotes!!.addAll(emotesFromSettings)
-            } else {
-                Timber.e("Failed to load recent emotes")
             }
         }
     }
