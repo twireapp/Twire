@@ -283,7 +283,7 @@ object Settings {
      * Chat - The chat landscape width: From 0 to 100
      */
     @JvmStatic
-    var chatLandscapeWidth by Pref(CHAT_LANDSCAPE_WIDTH, 40)
+    var chatLandscapeWidth by Pref(CHAT_LANDSCAPE_WIDTH, 35)
 
     /**
      * Chat - Should the chat be able to be showed in landscape
