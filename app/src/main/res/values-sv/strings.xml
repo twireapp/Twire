@@ -205,4 +205,8 @@
     <string name="player_locked_player">Spela medan den är låst</string>
     <string name="clip_chat_expired">Omspelning av chatten är inte längre tillgänglig.</string>
     <string name="streamerInfo_clips_tab">Klipp</string>
+    <string name="report_error_never">Aldrig</string>
+    <string name="report_error_always">Alltid</string>
+    <string name="report_error_ask">Fråga först</string>
+    <string name="report_error_title">Rapportera fel</string>
 </resources>
