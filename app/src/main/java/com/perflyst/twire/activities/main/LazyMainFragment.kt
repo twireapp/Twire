@@ -3,17 +3,19 @@ package com.perflyst.twire.activities.main
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.perflyst.twire.R
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener
+import com.perflyst.twire.misc.addBackPressed
 import com.perflyst.twire.tasks.GetVisualElementsTask
 import com.perflyst.twire.utils.Execute
 
 /**
  * Main Activity that loads it's content only when it is needed.
  */
-abstract class LazyMainActivity<T> : MainActivity<T>(), LazyFetchingActivity<T> {
+abstract class LazyMainFragment<T> : MainFragment<T>(), LazyFetchingFragment<T> {
     protected lateinit var mOnScrollListener: LazyFetchingOnScrollListener<T>
 
     protected var snackbar: Snackbar? = null
@@ -38,23 +40,23 @@ abstract class LazyMainActivity<T> : MainActivity<T>(), LazyFetchingActivity<T> 
         }, duration.toLong())
     }
 
-    override fun onCreate(savedInstance: Bundle?) {
-        super.onCreate(savedInstance)
+    override fun onViewCreated(view: View, savedInstance: Bundle?) {
+        super.onViewCreated(view, savedInstance)
 
         // Set up the snackbar for when the user experience a no reply from twitch's servers
         snackbar = setupSnackbar()
 
         mSwipeRefreshLayout.setProgressViewOffset(
             true,
-            getResources().getDimension(R.dimen.swipe_refresh_start_offset).toInt(),
-            getResources().getDimension(R.dimen.swipe_refresh_end_offset).toInt()
+            resources.getDimension(R.dimen.swipe_refresh_start_offset).toInt(),
+            resources.getDimension(R.dimen.swipe_refresh_end_offset).toInt()
         )
         mSwipeRefreshLayout.setOnRefreshListener { this.refreshElements() }
 
         //  Set up the specialized OnScrollListener
         mRecyclerView.clearOnScrollListeners()
         mOnScrollListener = LazyFetchingOnScrollListener(
-            this,
+            requireActivity() as AppCompatActivity,
             mMainToolbar,
             mDecorativeToolbar,
             mToolbarShadow,
@@ -76,11 +78,11 @@ abstract class LazyMainActivity<T> : MainActivity<T>(), LazyFetchingActivity<T> 
         val getElementsTask = GetVisualElementsTask<T>(this)
         Execute.background<MutableList<T>>(getElementsTask)
         startProgress()
-    }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        hideErrorView()
+        addBackPressed(this::hideErrorView)
+
+        mAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
     }
 
     private fun setupSnackbar(): Snackbar {
@@ -95,7 +97,7 @@ abstract class LazyMainActivity<T> : MainActivity<T>(), LazyFetchingActivity<T> 
     }
 
     protected fun shouldShowErrorView() {
-        runOnUiThread {
+        activity?.runOnUiThread {
             if (maxElementsToFetch == 0) {
                 showErrorView()
             } else {

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.perflyst.twire.R
 import com.perflyst.twire.adapters.MentionAdapter
 import com.perflyst.twire.adapters.MentionAdapter.MentionAdapterDelegate
+import com.perflyst.twire.databinding.ActivityStreamBinding
 import com.perflyst.twire.misc.Utils
 import com.perflyst.twire.model.StreamInfo
 import com.perflyst.twire.model.UserInfo
@@ -19,25 +20,26 @@ import timber.log.Timber
 /**
  * Created by Sebastian Rask on 18-06-2016.
  */
-class LiveStreamActivity : StreamActivity() {
+class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBinding::inflate) {
     private var mMentionRecyclerView: RecyclerView? = null
     private var mMentionAdapter: MentionAdapter? = null
     private var mMentionContainer: View? = null
-
-    override val layoutResource: Int get() = R.layout.activity_stream
 
     override val videoContainerResource: Int get() = R.id.video_fragment_container
 
     override val streamArguments: Bundle
         get() {
-            val intent = getIntent()
+            val intent = requireArguments()
             val mUserInfo =
-                intent.getParcelableExtra<UserInfo?>(getString(R.string.intent_key_streamer_info))
+                intent.getParcelable<UserInfo?>(getString(R.string.intent_key_streamer_info))
             val currentViewers =
-                intent.getIntExtra(getString(R.string.intent_key_stream_viewers), -1)
+                intent.getInt(getString(R.string.intent_key_stream_viewers), -1)
             val currentStartTime =
-                intent.getLongExtra(getString(R.string.intent_key_stream_start_time), 0)
-            val title = intent.getStringExtra(getString(R.string.stream_fragment_title))
+                intent.getLong(getString(R.string.intent_key_stream_start_time), 0)
+            val title = intent.getString(getString(R.string.stream_fragment_title))
+            val previewUrl = intent.getString(getString(R.string.stream_preview_url))
+            val sharedTransition =
+                intent.getBoolean(getString(R.string.stream_shared_transition), false)
 
             val args = Bundle()
             args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mUserInfo)
@@ -45,20 +47,19 @@ class LiveStreamActivity : StreamActivity() {
             args.putLong(getString(R.string.stream_fragment_start_time), currentStartTime)
             args.putBoolean(getString(R.string.stream_fragment_autoplay), true)
             args.putString(getString(R.string.stream_fragment_title), title)
+            args.putString(getString(R.string.stream_preview_url), previewUrl)
+            args.putBoolean(getString(R.string.stream_shared_transition), sharedTransition)
             return args
         }
 
-    override fun onCreate(savedInstance: Bundle?) {
-        super.onCreate(savedInstance)
-        if (savedInstance == null) {
-            supportFragmentManager
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-            if (mMentionRecyclerView == null) {
-                mMentionContainer = findViewById(R.id.mention_container)
-                mMentionContainer!!.visibility = View.GONE
-                mMentionRecyclerView = findViewById(R.id.mention_recyclerview)
-                setupMentionSuggestionRecyclerView()
-            }
+        if (savedInstanceState == null && mMentionRecyclerView == null) {
+            mMentionContainer = view.findViewById(R.id.mention_container)
+            mMentionContainer!!.visibility = View.GONE
+            mMentionRecyclerView = view.findViewById(R.id.mention_recyclerview)
+            setupMentionSuggestionRecyclerView()
         }
     }
 
@@ -67,9 +68,9 @@ class LiveStreamActivity : StreamActivity() {
         Timber.d("Live stream activity stopped")
     }
 
-    override fun onBackPressed() {
+    override fun onBackPressed(): Boolean {
         setSuggestions(ArrayList(), null)
-        super.onBackPressed()
+        return super.onBackPressed()
     }
 
     fun setSuggestions(suggestions: MutableList<String>, inputRect: Rect?) {
@@ -90,7 +91,7 @@ class LiveStreamActivity : StreamActivity() {
                 override fun onGlobalLayout() {
                     mMentionContainer!!.getViewTreeObserver().removeOnGlobalLayoutListener(this)
                     //ToDo: Check height of container and adjust if necessary
-                    getResources().getDimension(R.dimen.chat_mention_suggestions_max_height)
+                    resources.getDimension(R.dimen.chat_mention_suggestions_max_height)
                     val currentHeight = mMentionContainer!!.height.toFloat()
 
                     /*
@@ -111,13 +112,13 @@ class LiveStreamActivity : StreamActivity() {
 
     private fun setupMentionSuggestionRecyclerView() {
         mMentionAdapter = MentionAdapter(MentionAdapterDelegate { suggestion: String? ->
-            this@LiveStreamActivity.setSuggestions(ArrayList(), null)
+            this@LiveStreamFragment.setSuggestions(ArrayList(), null)
             if (mChatFragment == null) {
                 return@MentionAdapterDelegate
             }
             mChatFragment!!.insertMentionSuggestion(suggestion!!)
         })
-        mMentionRecyclerView!!.setLayoutManager(LinearLayoutManager(this))
+        mMentionRecyclerView!!.setLayoutManager(LinearLayoutManager(requireContext()))
         mMentionRecyclerView!!.setAdapter(mMentionAdapter)
     }
 
@@ -128,7 +129,7 @@ class LiveStreamActivity : StreamActivity() {
             sharedTransition: Boolean,
             context: Context
         ): Intent {
-            val liveStreamIntent = Intent(context, LiveStreamActivity::class.java)
+            val liveStreamIntent = Intent(context, LiveStreamFragment::class.java)
             liveStreamIntent.putExtra(
                 context.getString(R.string.intent_key_streamer_info),
                 stream.userInfo

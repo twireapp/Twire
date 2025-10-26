@@ -5,13 +5,14 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.CheckedTextView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.ThemeActivity
 import com.perflyst.twire.databinding.ActivitySettingsTwitchChatBinding
+import com.perflyst.twire.fragments.BindingFragment
 import com.perflyst.twire.misc.Utils
+import com.perflyst.twire.misc.popBackStack
+import com.perflyst.twire.misc.setupToolbar
 import com.perflyst.twire.service.DialogService
 import com.perflyst.twire.service.Settings.chatAccountConnect
 import com.perflyst.twire.service.Settings.chatEmoteBTTV
@@ -25,7 +26,8 @@ import com.perflyst.twire.service.Settings.isChatLandscapeSwipeable
 import com.perflyst.twire.service.Settings.messageSize
 import com.rey.material.widget.Slider
 
-class SettingsTwitchChatActivity : ThemeActivity() {
+class SettingsTwitchChatFragment :
+    BindingFragment<ActivitySettingsTwitchChatBinding>(ActivitySettingsTwitchChatBinding::inflate) {
     private lateinit var emoteSizeSummary: TextView
     private lateinit var messageSizeSummary: TextView
     private lateinit var chatLandscapeWidthSummary: TextView
@@ -44,39 +46,31 @@ class SettingsTwitchChatActivity : ThemeActivity() {
     private lateinit var chatEnableEmoteFFZ: CheckedTextView
     private lateinit var chatEnableEmoteSeventv: CheckedTextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivitySettingsTwitchChatBinding.inflate(layoutInflater)
-        setContentView(binding.getRoot())
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupToolbar(binding.settingsPlayerToolbar, R.string.settings_chat_name)
 
-        val toolbar = findViewById<Toolbar?>(R.id.settings_player_toolbar)
-        setSupportActionBar(toolbar)
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        }
-
-        emoteSizeSummary = findViewById(R.id.chat_emote_size_summary)
-        messageSizeSummary = findViewById(R.id.message_size_summary)
-        chatLandscapeWidthSummary = findViewById(R.id.chat_landscape_summary)
-        chatLandscapeToggleSummary = findViewById(R.id.chat_landscape_enable_summary)
-        chatLandscapeSwipeToShowSummary = findViewById(R.id.chat_landscape_swipe_summary)
-        chatEnableSslSummary = findViewById(R.id.chat_enable_ssl_summary)
-        chatEnableEmoteBBTVSummary = findViewById(R.id.chat_enable_emote_bttv_summary)
-        chatEnableEmoteFFZSummary = findViewById(R.id.chat_enable_emote_ffz_summary)
+        emoteSizeSummary = view.findViewById(R.id.chat_emote_size_summary)
+        messageSizeSummary = view.findViewById(R.id.message_size_summary)
+        chatLandscapeWidthSummary = view.findViewById(R.id.chat_landscape_summary)
+        chatLandscapeToggleSummary = view.findViewById(R.id.chat_landscape_enable_summary)
+        chatLandscapeSwipeToShowSummary = view.findViewById(R.id.chat_landscape_swipe_summary)
+        chatEnableSslSummary = view.findViewById(R.id.chat_enable_ssl_summary)
+        chatEnableEmoteBBTVSummary = view.findViewById(R.id.chat_enable_emote_bttv_summary)
+        chatEnableEmoteFFZSummary = view.findViewById(R.id.chat_enable_emote_ffz_summary)
         chatEnableEmoteSeventvSummary =
-            findViewById(R.id.chat_enable_emote_seventv_summary)
+            view.findViewById(R.id.chat_enable_emote_seventv_summary)
         chatEnableAccountConnectSummary =
-            findViewById(R.id.chat_enable_account_connect_summary)
+            view.findViewById(R.id.chat_enable_account_connect_summary)
 
 
-        chatLandscapeToggle = findViewById(R.id.chat_landscape_enable_title)
-        chatSwipeToShowToggle = findViewById(R.id.chat_landscape_swipe_title)
-        chatEnableSsl = findViewById(R.id.chat_enable_ssl)
-        chatEnableEmoteBBTV = findViewById(R.id.chat_enable_emote_bttv)
-        chatEnableEmoteFFZ = findViewById(R.id.chat_enable_emote_ffz)
-        chatEnableEmoteSeventv = findViewById(R.id.chat_enable_emote_seventv)
+        chatLandscapeToggle = view.findViewById(R.id.chat_landscape_enable_title)
+        chatSwipeToShowToggle = view.findViewById(R.id.chat_landscape_swipe_title)
+        chatEnableSsl = view.findViewById(R.id.chat_enable_ssl)
+        chatEnableEmoteBBTV = view.findViewById(R.id.chat_enable_emote_bttv)
+        chatEnableEmoteFFZ = view.findViewById(R.id.chat_enable_emote_ffz)
+        chatEnableEmoteSeventv = view.findViewById(R.id.chat_enable_emote_seventv)
         chatEnableAccountConnect =
-            findViewById(R.id.chat_enable_account_connect)
+            view.findViewById(R.id.chat_enable_account_connect)
 
         updateSummaries()
 
@@ -118,7 +112,7 @@ class SettingsTwitchChatActivity : ThemeActivity() {
     }
 
     private fun updateSummaries() {
-        val sizes = getResources().getStringArray(R.array.ChatSize)
+        val sizes = resources.getStringArray(R.array.ChatSize)
         emoteSizeSummary.text = sizes[emoteSize - 1]
         messageSizeSummary.text = sizes[messageSize - 1]
         Utils.setPercent(chatLandscapeWidthSummary, (chatLandscapeWidth / 100f).toDouble())
@@ -149,19 +143,14 @@ class SettingsTwitchChatActivity : ThemeActivity() {
         )
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        this.overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_right_anim)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        onBackPressed()
+        popBackStack()
         return super.onOptionsItemSelected(item)
     }
 
     fun onClickEmoteSize() {
         val dialog = DialogService.getChooseChatSizeDialog(
-            this,
+            requireActivity(),
             R.string.chat_emote_size,
             R.array.ChatSize,
             emoteSize
@@ -175,7 +164,7 @@ class SettingsTwitchChatActivity : ThemeActivity() {
 
     fun onClickMessageSize() {
         val dialog = DialogService.getChooseChatSizeDialog(
-            this,
+            requireActivity(),
             R.string.chat_message_size,
             R.array.ChatSize,
             messageSize
@@ -227,7 +216,7 @@ class SettingsTwitchChatActivity : ThemeActivity() {
         val landscapeWidth = chatLandscapeWidth
 
         DialogService.getSliderDialog(
-            this,
+            requireActivity(),
             { dialog: MaterialDialog?, which: DialogAction? ->
                 chatLandscapeWidth = landscapeWidth
                 updateSummaries()

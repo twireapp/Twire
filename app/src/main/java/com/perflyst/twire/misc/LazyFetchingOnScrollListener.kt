@@ -7,7 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.common.util.concurrent.ListenableFuture
-import com.perflyst.twire.activities.main.LazyFetchingActivity
+import com.perflyst.twire.activities.main.LazyFetchingFragment
 import com.perflyst.twire.tasks.GetVisualElementsTask
 import com.perflyst.twire.utils.Execute
 
@@ -21,7 +21,7 @@ class LazyFetchingOnScrollListener<T>(
     mToolbarShadow: View?,
     mIconCircle: View?,
     mIconText: TextView?,
-    private val mLazyFetchingActivity: LazyFetchingActivity<T>,
+    private val mLazyFetchingFragment: LazyFetchingFragment<T>,
     isMainActivity: Boolean
 ) : UniversalOnScrollListener(
     mActivity,
@@ -35,14 +35,14 @@ class LazyFetchingOnScrollListener<T>(
     private var getElementsTask: ListenableFuture<MutableList<T>>? = null
 
 
-    constructor(aLazyFetchingActivity: LazyFetchingActivity<T>) : this(
+    constructor(aLazyFetchingFragment: LazyFetchingFragment<T>) : this(
         null,
         null,
         null,
         null,
         null,
         null,
-        aLazyFetchingActivity,
+        aLazyFetchingFragment,
         false
     )
 
@@ -58,7 +58,7 @@ class LazyFetchingOnScrollListener<T>(
     }
 
     fun checkForNewElements(recyclerView: RecyclerView) {
-        val maxElementsToFetchTotal = mLazyFetchingActivity.maxElementsToFetch
+        val maxElementsToFetchTotal = mLazyFetchingFragment.maxElementsToFetch
 
         val mAdapter = recyclerView.adapter ?: return
 
@@ -69,9 +69,9 @@ class LazyFetchingOnScrollListener<T>(
             // If there are only two rows left, then fetch more.
             if (lm!!.findLastCompletelyVisibleItemPosition() >= lm.getItemCount() - lm.spanCount * 2 - 1) {
                 getElementsTask = Execute.background(
-                    GetVisualElementsTask(mLazyFetchingActivity)
+                    GetVisualElementsTask(mLazyFetchingFragment)
                 ) { elements -> getElementsTask = null }
-                mLazyFetchingActivity.startProgress()
+                mLazyFetchingFragment.startProgress()
             }
         }
     }

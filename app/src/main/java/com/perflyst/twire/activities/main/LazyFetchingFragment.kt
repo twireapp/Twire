@@ -3,7 +3,7 @@ package com.perflyst.twire.activities.main
 /**
  * Created by SebastianRask on 18-09-2015.
  */
-interface LazyFetchingActivity<T> {
+interface LazyFetchingFragment<T> {
     fun addToAdapter(aObjectList: MutableList<T>)
 
     fun startRefreshing()

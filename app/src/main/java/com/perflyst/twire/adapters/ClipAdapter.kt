@@ -1,9 +1,5 @@
 package com.perflyst.twire.adapters
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.ActivityOptions
-import android.app.SharedElementCallback
 import android.content.Context
 import android.text.format.DateUtils
 import android.view.View
@@ -12,11 +8,13 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
 import com.github.twitch4j.helix.domain.Clip
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.stream.ClipActivity
-import com.perflyst.twire.activities.stream.ClipActivity.Companion.createClipIntent
+import com.perflyst.twire.activities.stream.ClipFragment
+import com.perflyst.twire.activities.stream.ClipFragment.Companion.createClipIntent
 import com.perflyst.twire.adapters.MainActivityAdapter.ElementsViewHolder
+import com.perflyst.twire.misc.navigate
 import com.perflyst.twire.service.Service
 import com.perflyst.twire.service.Settings.appearanceStreamStyle
 import com.perflyst.twire.utils.Execute
@@ -45,10 +43,10 @@ class ClipViewHolder(v: View) : ElementsViewHolder(v) {
     override val elementWrapper: View get() = vCard
 }
 
-class ClipAdapter(recyclerView: AutoSpanRecyclerView, private val activity: Activity) :
+class ClipAdapter(recyclerView: AutoSpanRecyclerView, private val fragment: Fragment) :
     MainActivityAdapter<Clip, ClipViewHolder>(
         recyclerView,
-        activity
+        fragment.requireContext()
     ) {
     private val topMargin: Int
     private val bottomMargin: Int
@@ -70,10 +68,10 @@ class ClipAdapter(recyclerView: AutoSpanRecyclerView, private val activity: Acti
     override fun handleElementOnClick(view: View) {
         val itemPosition = recyclerView.getChildAdapterPosition(view)
         val item = elements[itemPosition]!!
-        if (activity is ClipActivity) {
-            activity.intent
-                .putExtra(context.getString(R.string.stream_shared_transition), false)
-            activity.startNewClip(item)
+        if (fragment is ClipFragment) {
+            fragment.requireArguments()
+                .putBoolean(context.getString(R.string.stream_shared_transition), false)
+            fragment.startNewClip(item)
         } else {
             val intent = createClipIntent(
                 item, Service.getStreamerInfoFromUserId(item.broadcasterId),
@@ -84,29 +82,16 @@ class ClipAdapter(recyclerView: AutoSpanRecyclerView, private val activity: Acti
 
             val sharedView = view.findViewById<View>(R.id.image_stream_preview)
             sharedView.transitionName = context.getString(R.string.stream_preview_transition)
-            val options = ActivityOptions.makeSceneTransitionAnimation(
-                activity, sharedView, context.getString(R.string.stream_preview_transition)
-            )
 
-            activity.setExitSharedElementCallback(object : SharedElementCallback() {
-                @SuppressLint("NewApi")
-                override fun onSharedElementEnd(
-                    sharedElementNames: List<String>,
-                    sharedElements: List<View>,
-                    sharedElementSnapshots: List<View>
-                ) {
-                    super.onSharedElementEnd(
-                        sharedElementNames,
-                        sharedElements,
-                        sharedElementSnapshots
-                    )
+            fragment.parentFragmentManager.setFragmentResultListener(
+                "fragmentFinished",
+                fragment.viewLifecycleOwner
+            ) { key, bundle ->
+                notifyItemChanged(itemPosition)
+                fragment.parentFragmentManager.clearFragmentResultListener("fragmentFinished")
+            }
 
-                    notifyItemChanged(itemPosition)
-                    activity.setExitSharedElementCallback(null)
-                }
-            })
-
-            activity.startActivity(intent, options.toBundle())
+            fragment.navigate(ClipFragment::class.java, intent.extras)
         }
     }
 

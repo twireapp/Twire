@@ -58,82 +58,11 @@
             android:value="false" />
 
         <activity
-            android:name=".activities.stream.LiveStreamActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:label="@string/title_activity_live_stream"
-            android:launchMode="singleTop"
-            android:supportsPictureInPicture="true"
-            tools:targetApi="n" />
-        <activity
-            android:name=".activities.stream.VODActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:label="@string/title_activity_vod"
-            android:launchMode="singleTop"
-            android:supportsPictureInPicture="true"
-            tools:targetApi="n" />
-        <activity
-            android:name=".activities.stream.ClipActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:label="@string/title_activity_vod"
-            android:launchMode="singleTop"
-            android:supportsPictureInPicture="true"
-            tools:targetApi="n" />
-        <activity
-            android:name=".activities.main.MyChannelsActivity"
-            android:label="@string/my_channels_activity_label"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".activities.settings.SettingsActivity"
-            android:label="@string/settings_activity_title" />
-        <activity
-            android:name=".activities.ChannelActivity"
-            android:label="@string/title_activity_streamer_info" />
-        <activity
-            android:name=".activities.settings.SettingsGeneralActivity"
-            android:label="@string/settings_general_name" />
-        <activity
-            android:name=".activities.settings.SettingsAppearanceActivity"
-            android:label="@string/settings_appearance_name" />
-        <activity
-            android:name=".activities.settings.SettingsTwitchChatActivity"
-            android:label="@string/settings_chat_name" />
-        <activity
-            android:name=".activities.main.MyStreamsActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".activities.main.TopGamesActivity"
-            android:label="@string/top_games_activity_title"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".activities.GameActivity"
-            android:label="@string/title_activity_game"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".activities.main.TopStreamsActivity"
-            android:label="@string/top_streams_activity_title"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".activities.setup.WelcomeActivity"
-            android:label="@string/title_activity_welcome"
-            android:screenOrientation="sensor" />
-        <activity
-            android:name=".activities.setup.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:parentActivityName=".activities.setup.WelcomeActivity"
-            android:screenOrientation="sensor"
-            android:configChanges="orientation|screenSize">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activities.setup.WelcomeActivity" />
-        </activity>
-        <activity
-            android:name=".activities.setup.ConfirmSetupActivity"
-            android:label="@string/title_activity_welcome"
-            android:screenOrientation="sensor" />
-        <activity
             android:name=".activities.StartUpActivity"
             android:exported="true"
-            android:theme="@style/StartUpTheme">
+            android:theme="@style/StartUpTheme"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:supportsPictureInPicture="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -143,16 +72,14 @@
         </activity>
 
         <activity
-            android:name=".activities.SearchActivity"
-            android:label="@string/title_activity_search" />
-        <activity android:name=".activities.settings.SettingsStreamPlayerActivity" />
-        <activity
             android:name=".activities.DeepLinkActivity"
             android:excludeFromRecents="true"
             android:label="@string/router_activity_label"
             android:taskAffinity=""
             android:theme="@style/DeepLinkTheme"
-            android:exported="true">
+            android:exported="true"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:supportsPictureInPicture="true">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

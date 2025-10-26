@@ -1,7 +1,6 @@
 package com.perflyst.twire.activities.setup
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -24,7 +23,11 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.perflyst.twire.R
+import com.perflyst.twire.databinding.ActivityLoginBinding
 import com.perflyst.twire.misc.SecretKeys
+import com.perflyst.twire.misc.addBackPressed
+import com.perflyst.twire.misc.navigate
+import com.perflyst.twire.misc.popBackStack
 import com.perflyst.twire.service.Service
 import com.perflyst.twire.service.Settings.generalTwitchAccessToken
 import com.perflyst.twire.service.Settings.generalTwitchDisplayName
@@ -43,10 +46,11 @@ import timber.log.Timber
 import java.lang.String
 import kotlin.Boolean
 import kotlin.Int
+import kotlin.also
 import kotlin.math.hypot
 import kotlin.math.max
 
-class LoginActivity : SetupBaseActivity() {
+class LoginFragment : SetupBaseFragment<ActivityLoginBinding>(ActivityLoginBinding::inflate) {
     private val loginUrl = "https://id.twitch.tv/oauth2/authorize" +
             "?client_id=" + SecretKeys.APPLICATION_CLIENT_ID +
             "&redirect_uri=http%3A%2F%2Flocalhost/oauth_authorizing" +
@@ -82,28 +86,27 @@ class LoginActivity : SetupBaseActivity() {
     private lateinit var mLoginTextContainer: RelativeLayout
     private var mSnackbar: SnackBar? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        mLoginTextContainer = findViewById<RelativeLayout>(R.id.login_text_container)
-        mWebViewProgress = findViewById<ProgressView>(R.id.SetupProgress)
-        mWebViewContainer = findViewById<FrameLayout>(R.id.webview_container)
-        mContinueFABContainer = findViewById<FrameLayout>(R.id.login_continue_circle_container)
-        mGearIcon = findViewById<ImageView>(R.id.login_icon)
-        mSuccessIcon = findViewById<ImageView>(R.id.login_icon_done)
-        mContinueIcon = findViewById<ImageView>(R.id.forward_arrow)
-        mLoginTextLineOne = findViewById<TextView>(R.id.login_text_line_one)
-        mLoginTextLineTwo = findViewById<TextView>(R.id.login_text_line_two)
-        mSuccessMessage = findViewById<TextView>(R.id.login_success_message)
-        mSkipText = findViewById<TextView>(R.id.skip_text)
-        loginWebView = findViewById<WebView>(R.id.login_webview)
-        mContinueFAB = findViewById<View>(R.id.login_continue_circle)
-        mContinueFABShadow = findViewById<View>(R.id.login_continue_circle_shadow)
-        mSuccessCircle = findViewById<View>(R.id.login_success_circle)
-        mSuccessCircleShadow = findViewById<View>(R.id.login_success_shadow)
-        mTransitionViewWhite = findViewById<View>(R.id.transition_view)
-        mTransitionViewBlue = findViewById<View>(R.id.transition_view_blue)
+        mLoginTextContainer = view.findViewById<RelativeLayout>(R.id.login_text_container)
+        mWebViewProgress = view.findViewById<ProgressView>(R.id.SetupProgress)
+        mWebViewContainer = view.findViewById<FrameLayout>(R.id.webview_container)
+        mContinueFABContainer = view.findViewById<FrameLayout>(R.id.login_continue_circle_container)
+        mGearIcon = view.findViewById<ImageView>(R.id.login_icon)
+        mSuccessIcon = view.findViewById<ImageView>(R.id.login_icon_done)
+        mContinueIcon = view.findViewById<ImageView>(R.id.forward_arrow)
+        mLoginTextLineOne = view.findViewById<TextView>(R.id.login_text_line_one)
+        mLoginTextLineTwo = view.findViewById<TextView>(R.id.login_text_line_two)
+        mSuccessMessage = view.findViewById<TextView>(R.id.login_success_message)
+        mSkipText = view.findViewById<TextView>(R.id.skip_text)
+        loginWebView = view.findViewById<WebView>(R.id.login_webview)
+        mContinueFAB = view.findViewById<View>(R.id.login_continue_circle)
+        mContinueFABShadow = view.findViewById<View>(R.id.login_continue_circle_shadow)
+        mSuccessCircle = view.findViewById<View>(R.id.login_success_circle)
+        mSuccessCircleShadow = view.findViewById<View>(R.id.login_success_shadow)
+        mTransitionViewWhite = view.findViewById<View>(R.id.transition_view)
+        mTransitionViewBlue = view.findViewById<View>(R.id.transition_view_blue)
 
         mSuccessMessage.visibility = View.INVISIBLE
         mContinueIcon.setVisibility(View.INVISIBLE)
@@ -120,7 +123,9 @@ class LoginActivity : SetupBaseActivity() {
 
         checkSetupType()
 
-        val textPosition = (2.5 * (Service.getScreenHeight(this) / 5)).toInt().toFloat()
+        val textPosition =
+            (2.5 * (Service.getScreenHeight(requireContext()) / 5)).toInt()
+                .toFloat()
         mLoginTextContainer.y = textPosition
         mSuccessMessage.y = textPosition
         mContinueFABContainer.setOnClickListener { v: View? -> showLoginView() }
@@ -143,11 +148,13 @@ class LoginActivity : SetupBaseActivity() {
         val showContinueIconDelay = 600
         animationSet.setStartOffset(showContinueIconDelay.toLong())
         animationSet.start()
+
+        addBackPressed(this::onBackPressed)
     }
 
     private fun setupPrelaunchLogin() {
-        findViewById<View?>(R.id.btn_prelaunch_login)?.setOnClickListener { v: View? ->
-            val handleTask = HandlerUserLoginTask(this@LoginActivity)
+        view?.findViewById<View?>(R.id.btn_prelaunch_login)?.setOnClickListener { v: View? ->
+            val handleTask = HandlerUserLoginTask(this@LoginFragment)
             Execute.background(handleTask)
         }
     }
@@ -164,42 +171,35 @@ class LoginActivity : SetupBaseActivity() {
      * Sets states correctly depending on result
      */
     private fun checkSetupType() {
-        if (intent.hasExtra(getString(R.string.login_intent_part_of_setup))) {
-            isPartOfSetup =
-                intent.getBooleanExtra(getString(R.string.login_intent_part_of_setup), true)
-
-            if (intent.hasExtra(getString(R.string.login_intent_token_not_valid)) && intent.getBooleanExtra(
-                    getString(R.string.login_intent_token_not_valid),
-                    false
-                )
-            ) {
+        val args = arguments
+        if (args != null) {
+            isPartOfSetup = args.getBoolean(getString(R.string.login_intent_part_of_setup), true)
+            if (args.getBoolean(getString(R.string.login_intent_token_not_valid), false)) {
                 mLoginTextLineOne.setText(R.string.login_invalid_token_text_line_one)
                 mLoginTextLineTwo.setText(R.string.login_invalid_token_text_line_two)
             }
         }
     }
 
-    public override fun onResume() {
+    override fun onResume() {
         super.onResume()
-
         if (transitionAnimationWhite != null && hasTransitioned) {
             showReverseTransitionAnimation()
         }
     }
 
-    override fun onBackPressed() {
+    fun onBackPressed(): Boolean {
         if (isWebViewShown && !isWebViewHiding) {
             hideLoginView()
         } else {
             toTransition = false
             hideAllViews()!!.setAnimationListener(object : AnimationListenerAdapter() {
                 override fun onAnimationEnd(animation: Animation?) {
-                    super@LoginActivity.onBackPressed()
-                    // We don't want a transition when going back. The activities handle the animation themselves.
-                    overridePendingTransition(0, 0)
+                    popBackStack()
                 }
             })
         }
+        return true
     }
 
     fun handleLoginSuccess() {
@@ -221,7 +221,7 @@ class LoginActivity : SetupBaseActivity() {
         // OR if the user signs in to a new account.
 
         // Seb you wonderful man. - Seb from the future
-        subscriptionsTask = GetFollowsFromDB(this)
+        subscriptionsTask = GetFollowsFromDB(requireContext())
         Execute.background(subscriptionsTask!!)
     }
 
@@ -247,7 +247,7 @@ class LoginActivity : SetupBaseActivity() {
                     loginWebView.loadUrl(loginUrl)
                     sb!!.dismiss()
                 }
-                .show(this@LoginActivity)
+                .show(requireActivity())
         }, showSnackbarDelay.toLong())
     }
 
@@ -265,7 +265,7 @@ class LoginActivity : SetupBaseActivity() {
                 override fun onAnimationEnd(animation: Animation?) {
                     loginWebView.loadUrl(loginUrl)
                     Handler().postDelayed(
-                        { mSnackbar!!.show(this@LoginActivity) },
+                        { mSnackbar!!.show(requireActivity()) },
                         showSnackbarDelay.toLong()
                     )
                 }
@@ -298,7 +298,7 @@ class LoginActivity : SetupBaseActivity() {
     }
 
     private fun initSnackbar() {
-        mSnackbar = SnackBar(this)
+        mSnackbar = SnackBar(requireActivity())
         mSnackbar!!.applyStyle(R.style.snack_bar_style_mobile)
     }
 
@@ -306,7 +306,7 @@ class LoginActivity : SetupBaseActivity() {
     private fun initLoginView() {
         val cm = CookieManager.getInstance()
         cm.removeAllCookie()
-        val db = WebViewDatabase.getInstance(this)
+        val db = WebViewDatabase.getInstance(requireContext())
         db.clearFormData()
 
         val ws = loginWebView.getSettings()
@@ -356,7 +356,7 @@ class LoginActivity : SetupBaseActivity() {
                         // set the access token here so the following request works
                         generalTwitchAccessToken = mAccessToken
 
-                        val handleTask = HandlerUserLoginTask(this@LoginActivity)
+                        val handleTask = HandlerUserLoginTask(this@LoginFragment)
                         Execute.background(handleTask)
 
                         val cm = CookieManager.getInstance()
@@ -409,15 +409,14 @@ class LoginActivity : SetupBaseActivity() {
     }
 
     private fun navigateToNotificationActivity() {
-        // Go to the login activity, with no transition.
+        // Go to the start page, with no transition and no way back into setup.
         hasTransitioned = true
         isSetup = true
         if (loadingFollows()) {
-            this.startActivity(Intent(baseContext, ConfirmSetupActivity::class.java))
+            navigate(ConfirmSetupFragment::class.java, backStack = false)
         } else {
-            this.startActivity(Service.getStartPageIntent(baseContext))
+            navigate(Service.getStartPageClass(requireContext()), single = true, backStack = false)
         }
-        this.overridePendingTransition(0, 0)
     }
 
     private fun showSkippingAnimation() {
@@ -454,9 +453,7 @@ class LoginActivity : SetupBaseActivity() {
                 transitionAnimationWhite = whiteTransitionAnimation
                 isSetup = true
                 isLoggedIn = false
-                val intent = Service.getStartPageIntent(baseContext)
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                startActivity(intent)
+                navigate(Service.getStartPageClass(requireContext()), single = true, backStack = false)
             }
 
             override fun onAnimationCancel() {
@@ -773,7 +770,12 @@ class LoginActivity : SetupBaseActivity() {
         mContinueFABShadow.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
         val mTranslationAnimation: Animation =
-            TranslateAnimation(0f, 0f, 0f, (Service.getScreenHeight(this) * -1).toFloat())
+            TranslateAnimation(
+                0f,
+                0f,
+                0f,
+                (Service.getScreenHeight(requireContext()) * -1).toFloat()
+            )
         mTranslationAnimation.fillAfter = true
         mTranslationAnimation.interpolator = OvershootInterpolator(1f)
 
@@ -801,7 +803,12 @@ class LoginActivity : SetupBaseActivity() {
 
 
         val mTranslationAnimation: Animation =
-            TranslateAnimation(0f, 0f, (-1 * Service.getScreenHeight(this)).toFloat(), 0f)
+            TranslateAnimation(
+                0f,
+                0f,
+                (-1 * Service.getScreenHeight(requireContext())).toFloat(),
+                0f
+            )
         mTranslationAnimation.fillAfter = true
         mTranslationAnimation.interpolator = OvershootInterpolator(0.7f)
 

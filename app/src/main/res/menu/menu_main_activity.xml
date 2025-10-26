@@ -1,5 +1,5 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.perflyst.twire.activities.main.MainActivity">
+    tools:context="com.perflyst.twire.activities.main.MainFragment">
 
     <!--item
         android:id="@+id/search_menu_item"

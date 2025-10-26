@@ -54,11 +54,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.common.collect.ImmutableMap
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.stream.LiveStreamActivity
+import com.perflyst.twire.activities.stream.LiveStreamFragment
 import com.perflyst.twire.adapters.ChatAdapter
 import com.perflyst.twire.adapters.ChatAdapter.ChatAdapterCallback
 import com.perflyst.twire.chat.ChatManager
 import com.perflyst.twire.chat.ChatManager.ChatCallback
+import com.perflyst.twire.databinding.FragmentChatBinding
 import com.perflyst.twire.databinding.FragmentEmoteGridBinding
 import com.perflyst.twire.fragments.ChatFragment.EmoteGridFragment.EmoteAdapter.EmoteViewHolder
 import com.perflyst.twire.misc.ResizeHeightAnimation
@@ -88,7 +89,8 @@ internal interface EmoteKeyboardDelegate {
     fun onEmoteClicked(clickedEmote: Emote?, view: View)
 }
 
-class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
+class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::inflate),
+    EmoteKeyboardDelegate, ChatAdapterCallback {
     private val vibrationFeedback = HapticFeedbackConstants.KEYBOARD_TAP
 
     private var chatStatusBarShowing = true
@@ -132,28 +134,25 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
         EMOTE
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val mRootView = inflater.inflate(R.layout.fragment_chat, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val context = requireContext()
 
         val llm = LinearLayoutManager(context)
         llm.setStackFromEnd(true)
 
-        mSendText = mRootView.findViewById(R.id.send_message_textview)
-        mSendButton = mRootView.findViewById(R.id.chat_send_ic)
-        mSlowmodeIcon = mRootView.findViewById(R.id.slowmode_ic)
-        mSubonlyIcon = mRootView.findViewById(R.id.subsonly_ic)
-        mR9KIcon = mRootView.findViewById(R.id.r9k_ic)
-        mRecyclerView = mRootView.findViewById(R.id.ChatRecyclerView)
-        chatInputDivider = mRootView.findViewById(R.id.chat_input_divider)
-        mChatInputLayout = mRootView.findViewById(R.id.chat_input)
+        mSendText = view.findViewById(R.id.send_message_textview)
+        mSendButton = view.findViewById(R.id.chat_send_ic)
+        mSlowmodeIcon = view.findViewById(R.id.slowmode_ic)
+        mSubonlyIcon = view.findViewById(R.id.subsonly_ic)
+        mR9KIcon = view.findViewById(R.id.r9k_ic)
+        mRecyclerView = view.findViewById(R.id.ChatRecyclerView)
+        chatInputDivider = view.findViewById(R.id.chat_input_divider)
+        mChatInputLayout = view.findViewById(R.id.chat_input)
         mChatInputLayout.bringToFront()
-        mChatStatus = mRootView.findViewById(R.id.chat_status_text)
+        mChatStatus = view.findViewById(R.id.chat_status_text)
         mChatAdapter = ChatAdapter(mRecyclerView, requireActivity(), this)
-        mChatStatusBar = mRootView.findViewById(R.id.chat_status_bar)
+        mChatStatusBar = view.findViewById(R.id.chat_status_bar)
 
         roomStateMap = ImmutableMap.of<Class<out ChannelStatesEvent?>?, ImageView?>(
             SlowModeEvent::class.java, mSlowmodeIcon,
@@ -161,11 +160,11 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
             SubscribersOnlyEvent::class.java, mSubonlyIcon
         )
 
-        mEmoteKeyboardButton = mRootView.findViewById(R.id.chat_emote_keyboard_ic)
-        mEmoteChatBackspace = mRootView.findViewById(R.id.emote_backspace)
-        emoteKeyboardContainer = mRootView.findViewById(R.id.emote_keyboard_container)
-        mEmoteTabs = mRootView.findViewById(R.id.tabs)
-        mEmoteViewPager = mRootView.findViewById(R.id.tabs_viewpager)
+        mEmoteKeyboardButton = view.findViewById(R.id.chat_emote_keyboard_ic)
+        mEmoteChatBackspace = view.findViewById(R.id.emote_backspace)
+        emoteKeyboardContainer = view.findViewById(R.id.emote_keyboard_container)
+        mEmoteTabs = view.findViewById(R.id.tabs)
+        mEmoteViewPager = view.findViewById(R.id.tabs_viewpager)
         selectedTabColorRes =
             Service.getColorAttribute(R.attr.textColor, R.color.black_text, context)
         unselectedTabColorRes = Service.getColorAttribute(
@@ -178,7 +177,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
         mRecyclerView.setAdapter(mChatAdapter)
         mRecyclerView.setLayoutManager(llm)
         mRecyclerView.setItemAnimator(null)
-        mRecyclerView.setChatPaused(mRootView.findViewById(R.id.chat_paused))
+        mRecyclerView.setChatPaused(view.findViewById(R.id.chat_paused))
 
         mUserInfo =
             requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo)) // intent.getParcelableExtra(getString(R.string.intent_key_streamer_info));
@@ -197,9 +196,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
         setupTransition()
 
         Insetter.builder().paddingBottom(WindowInsetsCompat.Type.systemBars(), false)
-            .applyToView(mRootView)
-
-        return mRootView
+            .applyToView(view)
     }
 
     private var roomStateMap: MutableMap<Class<out ChannelStatesEvent?>?, ImageView?>? = null
@@ -220,7 +217,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
             }
         }
 
-        chatManager = ChatManager(mUserInfo!!, vodID, vodOffset!!, object : ChatCallback {
+        chatManager = ChatManager(mUserInfo!!, vodID, vodOffset ?: 0, object : ChatCallback {
             val isFragmentActive: Boolean
                 get() = !isDetached && isAdded
 
@@ -746,10 +743,10 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
     }
 
     private fun setSuggestions(suggestions: MutableList<String>) {
-        if (activity is LiveStreamActivity && activity != null) {
+        if (parentFragment is LiveStreamFragment && parentFragment != null) {
             val mInputRect = Rect()
             mSendText.getGlobalVisibleRect(mInputRect)
-            (activity as LiveStreamActivity).setSuggestions(suggestions, mInputRect)
+            (parentFragment as LiveStreamFragment).setSuggestions(suggestions, mInputRect)
         }
     }
 
@@ -921,18 +918,16 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
         ALL
     }
 
-    class EmoteGridFragment : Fragment() {
+    class EmoteGridFragment :
+        BindingFragment<FragmentEmoteGridBinding>(FragmentEmoteGridBinding::inflate) {
         private var mEmoteRecyclerView: AutoSpanRecyclerView? = null
         private var mPromotedEmotesRecyclerView: AutoSpanRecyclerView? = null
         private var fragmentType: EmoteFragmentType? = null
         internal var mAdapter: EmoteAdapter? = null
         private var callback: EmoteKeyboardDelegate? = null
 
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View {
-            val binding = FragmentEmoteGridBinding.inflate(inflater)
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
 
             mEmoteRecyclerView = binding.emoteRecyclerview
             mPromotedEmotesRecyclerView = binding.promotedEmotesRecyclerview
@@ -957,8 +952,6 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
                 EmoteFragmentType.SUBSCRIBER -> addSubscriberEmotes()
                 null -> {}
             }
-
-            return binding.getRoot()
         }
 
         internal fun addSubscriberEmotes() {

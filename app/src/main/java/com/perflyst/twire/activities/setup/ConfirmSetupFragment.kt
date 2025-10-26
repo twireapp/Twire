@@ -15,6 +15,8 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.perflyst.twire.R
+import com.perflyst.twire.databinding.ActivityConfirmSetupBinding
+import com.perflyst.twire.misc.navigate
 import com.perflyst.twire.service.Service
 import com.perflyst.twire.utils.AnimationListenerAdapter
 import com.perflyst.twire.utils.Execute
@@ -26,7 +28,8 @@ import java.lang.ref.WeakReference
 import kotlin.math.hypot
 import kotlin.math.max
 
-class ConfirmSetupActivity : SetupBaseActivity() {
+class ConfirmSetupFragment :
+    SetupBaseFragment<ActivityConfirmSetupBinding>(ActivityConfirmSetupBinding::inflate) {
     private val revealAnimationDuration = 650
     private val revealAnimationDelay = 200
     var transitionAnimationWhite: SupportAnimator? = null
@@ -41,20 +44,19 @@ class ConfirmSetupActivity : SetupBaseActivity() {
     private lateinit var mTransitionViewWhite: View
     private lateinit var mContinueFABContainer: FrameLayout
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_confirm_setup)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val mLoginTextContainer = findViewById<RelativeLayout>(R.id.login_text_container)
-        mSetupProgress = findViewById(R.id.SetupProgress)
-        mContinueFABContainer = findViewById(R.id.login_continue_circle_container)
-        mGearIcon = findViewById(R.id.login_icon)
-        mContinueIcon = findViewById(R.id.forward_arrow)
-        mLoginTextLineOne = findViewById(R.id.login_text_line_one)
-        mLoginTextLineTwo = findViewById(R.id.login_text_line_two)
-        mContinueFAB = findViewById(R.id.login_continue_circle)
-        mContinueFABShadow = findViewById(R.id.login_continue_circle_shadow)
-        mTransitionViewWhite = findViewById(R.id.transition_view_blue)
+        val mLoginTextContainer = view.findViewById<RelativeLayout>(R.id.login_text_container)
+        mSetupProgress = view.findViewById(R.id.SetupProgress)
+        mContinueFABContainer = view.findViewById(R.id.login_continue_circle_container)
+        mGearIcon = view.findViewById(R.id.login_icon)
+        mContinueIcon = view.findViewById(R.id.forward_arrow)
+        mLoginTextLineOne = view.findViewById(R.id.login_text_line_one)
+        mLoginTextLineTwo = view.findViewById(R.id.login_text_line_two)
+        mContinueFAB = view.findViewById(R.id.login_continue_circle)
+        mContinueFABShadow = view.findViewById(R.id.login_continue_circle_shadow)
+        mTransitionViewWhite = view.findViewById(R.id.transition_view_blue)
 
         mContinueIcon.setVisibility(View.INVISIBLE)
         mLoginTextLineOne.visibility = View.INVISIBLE
@@ -62,7 +64,7 @@ class ConfirmSetupActivity : SetupBaseActivity() {
         mGearIcon.setVisibility(View.INVISIBLE)
         mTransitionViewWhite.visibility = View.INVISIBLE
 
-        val textPosition = (2.5 * (Service.getScreenHeight(baseContext) / 5)).toInt().toFloat()
+        val textPosition = (2.5 * (Service.getScreenHeight(requireContext()) / 5)).toInt().toFloat()
         mLoginTextContainer.y = textPosition
 
         mContinueFABContainer.bringToFront()
@@ -78,7 +80,7 @@ class ConfirmSetupActivity : SetupBaseActivity() {
         Execute.background(checkingTask)
     }
 
-    public override fun onResume() {
+    override fun onResume() {
         super.onResume()
         if (transitionAnimationWhite != null && hasTransitioned) {
             showReverseTransitionAnimation()
@@ -86,21 +88,10 @@ class ConfirmSetupActivity : SetupBaseActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        hideAllViews()!!.setAnimationListener(object : AnimationListenerAdapter() {
-            override fun onAnimationEnd(animation: Animation?) {
-                super@ConfirmSetupActivity.onBackPressed()
-                // We don't want a transition when going back. The activities handle the animation themselves.
-                overridePendingTransition(0, 0)
-            }
-        })
-    }
-
-
     private fun navigateToNextActivity() {
         hasTransitioned = true
-        this.startActivity(Service.getStartPageIntent(baseContext))
-        this.overridePendingTransition(0, 0)
+
+        navigate(Service.getStartPageClass(requireContext()), single = true, backStack = false)
     }
 
     /**
@@ -233,12 +224,12 @@ class ConfirmSetupActivity : SetupBaseActivity() {
         mContinueIcon.startAnimation(mAnimations)
     }
 
-    private class CheckDataFetchingTask(activity: ConfirmSetupActivity?) : Runnable {
-        private val activity: WeakReference<ConfirmSetupActivity?> =
-            WeakReference<ConfirmSetupActivity?>(activity)
+    private class CheckDataFetchingTask(activity: ConfirmSetupFragment?) : Runnable {
+        private val activity: WeakReference<ConfirmSetupFragment?> =
+            WeakReference<ConfirmSetupFragment?>(activity)
 
         override fun run() {
-            while (LoginActivity.loadingFollows()) {
+            while (LoginFragment.loadingFollows()) {
                 try {
                     Thread.sleep(200)
                 } catch (e: InterruptedException) {

@@ -3,32 +3,33 @@ package com.perflyst.twire.activities.stream
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResult
 import com.github.twitch4j.helix.domain.Clip
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.ChannelActivity
+import com.perflyst.twire.activities.ChannelFragment
+import com.perflyst.twire.databinding.ActivityVodBinding
 import com.perflyst.twire.model.ChannelInfo
 import com.perflyst.twire.utils.Constants
 import org.parceler.Parcels
 
-class ClipActivity : StreamActivity() {
+class ClipFragment : VideoFragment<ActivityVodBinding>(ActivityVodBinding::inflate) {
     private var clip: Clip? = null
     private var channel: ChannelInfo? = null
     private var clipsFragment: Fragment? = null
     private var mTitleView: TextView? = null
     private var mViewsView: TextView? = null
 
-    override val layoutResource: Int get() = R.layout.activity_vod
-
     override val videoContainerResource: Int get() = R.id.video_fragment_container
 
     override val streamArguments: Bundle
         get() {
             if (clip == null) {
-                val intent = intent
-                clip = Parcels.unwrap(intent.getParcelableExtra(Constants.KEY_CLIP))
-                channel = intent.getParcelableExtra(getString(R.string.channel_info_intent_object))
+                val intent = requireArguments()
+                clip = Parcels.unwrap(intent.getParcelable(Constants.KEY_CLIP))
+                channel = intent.getParcelable(getString(R.string.channel_info_intent_object))
             }
 
             val args = Bundle()
@@ -39,22 +40,27 @@ class ClipActivity : StreamActivity() {
             return args
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if (savedInstanceState == null) {
-            val fm = supportFragmentManager
+            val fm = childFragmentManager
 
             if (clipsFragment == null) {
-                clipsFragment = ChannelActivity.ClipFragment.newInstance(channel)
+                clipsFragment = ChannelFragment.ClipFragment.newInstance(channel)
                 fm.beginTransaction()
                     .replace(R.id.additional_vods_container, clipsFragment as Fragment).commit()
             }
         }
 
-        mTitleView = findViewById(R.id.title)
-        mViewsView = findViewById(R.id.views)
+        mTitleView = requireView().findViewById(R.id.title)
+        mViewsView = requireView().findViewById(R.id.views)
 
         setClipData()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        setFragmentResult("fragmentFinished", Bundle.EMPTY)
     }
 
     private fun setClipData() {
@@ -78,7 +84,7 @@ class ClipActivity : StreamActivity() {
             context: Context,
             transition: Boolean
         ): Intent {
-            val intent = Intent(context, ClipActivity::class.java)
+            val intent = Intent(context, ClipFragment::class.java)
             intent.putExtra(Constants.KEY_CLIP, Parcels.wrap(clip))
             intent.putExtra(context.getString(R.string.channel_info_intent_object), channel)
             intent.putExtra(context.getString(R.string.stream_shared_transition), transition)

@@ -1,38 +1,38 @@
 package com.perflyst.twire.fragments
 
 import android.app.Activity
-import android.app.ActivityOptions
-import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.LayoutInflater
+import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.AnimRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.transition.Fade
+import androidx.transition.Slide
+import androidx.transition.Transition
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.SearchActivity
-import com.perflyst.twire.activities.main.MainActivity
-import com.perflyst.twire.activities.main.MyChannelsActivity
-import com.perflyst.twire.activities.main.MyStreamsActivity
-import com.perflyst.twire.activities.main.TopGamesActivity
-import com.perflyst.twire.activities.main.TopStreamsActivity
-import com.perflyst.twire.activities.settings.SettingsActivity
-import com.perflyst.twire.activities.settings.SettingsGeneralActivity
-import com.perflyst.twire.activities.setup.LoginActivity
+import com.perflyst.twire.activities.SearchFragment
+import com.perflyst.twire.activities.main.MainFragment
+import com.perflyst.twire.activities.main.MyChannelsFragment
+import com.perflyst.twire.activities.main.MyStreamsFragment
+import com.perflyst.twire.activities.main.TopGamesFragment
+import com.perflyst.twire.activities.main.TopStreamsFragment
+import com.perflyst.twire.activities.settings.SettingsFragment
+import com.perflyst.twire.activities.settings.SettingsGeneralFragment
+import com.perflyst.twire.activities.setup.LoginFragment
 import com.perflyst.twire.databinding.FragmentNavigationDrawerBinding
 import com.perflyst.twire.misc.TooltipWindow
 import com.perflyst.twire.misc.Utils
+import com.perflyst.twire.misc.navigate
 import com.perflyst.twire.service.Settings.generalTwitchDisplayName
 import com.perflyst.twire.service.Settings.isLoggedIn
 import com.perflyst.twire.service.Settings.isTipsShown
@@ -41,9 +41,8 @@ import com.perflyst.twire.utils.Execute
 import dev.chrisbanes.insetter.Insetter
 
 
-class NavigationDrawerFragment : Fragment() {
-    private var _binding: FragmentNavigationDrawerBinding? = null
-    private val binding get() = _binding!!
+class NavigationDrawerFragment :
+    BindingFragment<FragmentNavigationDrawerBinding>(FragmentNavigationDrawerBinding::inflate) {
     private lateinit var mStreamsCount: TextView
     private lateinit var mStreamsCountWrapper: FrameLayout
     private var containerView: View? = null
@@ -52,18 +51,14 @@ class NavigationDrawerFragment : Fragment() {
     private lateinit var mAppIcon: ImageView
     private var mDrawerToggle: ActionBarDrawerToggle? = null
     private var mDrawerLayout: DrawerLayout? = null
-    private var mIntent: Intent? = null
+    private var mFragment: Class<out Fragment>? = null
     private val themeTip: TooltipWindow? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentNavigationDrawerBinding.inflate(inflater, container, false)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         mStreamsCount = binding.streamsCount
         mStreamsCountWrapper = binding.streamsCountWrapper
-        containerView = container
+        containerView = requireParentFragment().requireView().findViewById(R.id.drawer_fragment)
         mAppTitleView = binding.txtAppName
         mUserNameTextView = binding.txtTwitchDisplayname
         mAppIcon = binding.imgAppIcon
@@ -76,8 +71,6 @@ class NavigationDrawerFragment : Fragment() {
         Insetter.builder().paddingBottom(WindowInsetsCompat.Type.systemBars(), false).applyToView(
             binding.drawerContainer
         )
-
-        return binding.getRoot()
     }
 
     override fun onStart() {
@@ -92,11 +85,6 @@ class NavigationDrawerFragment : Fragment() {
         if (themeTip != null && themeTip.isTooltipShown) {
             themeTip.dismissTooltip()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun fetchAndSetOnlineSteamsCount() {
@@ -147,14 +135,14 @@ class NavigationDrawerFragment : Fragment() {
             override fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
 
-                if (mIntent != null) {
-                    if (activity is MainActivity<*>) {
-                        val fromActivity = activity as MainActivity<*>?
-                        fromActivity!!.transitionToOtherMainActivity(mIntent!!)
+                if (mFragment != null) {
+                    if (parentFragment is MainFragment<*>) {
+                        val fromActivity = parentFragment as MainFragment<*>?
+                        fromActivity!!.transitionToOtherMainActivity(mFragment!!)
                     } else if (context != null) {
-                        startActivity(mIntent, null)
+                        navigate(mFragment!!, single = true)
                     }
-                    mIntent = null
+                    mFragment = null
                 }
             }
         }
@@ -168,38 +156,36 @@ class NavigationDrawerFragment : Fragment() {
 
     private fun setClickListeners() {
         // OnClick listeners for the items
-        setOnClick(binding.topStreamsContainer, TopStreamsActivity::class.java)
-        setOnClick(binding.topGamesContainer, TopGamesActivity::class.java)
-        setOnClick(binding.myChannelsContainer, MyChannelsActivity::class.java)
-        setOnClick(binding.myStreamsContainer, MyStreamsActivity::class.java)
+        setOnClick(binding.topStreamsContainer, TopStreamsFragment::class.java)
+        setOnClick(binding.topGamesContainer, TopGamesFragment::class.java)
+        setOnClick(binding.myChannelsContainer, MyChannelsFragment::class.java)
+        setOnClick(binding.myStreamsContainer, MyStreamsFragment::class.java)
 
         setInstantOnClick(
             binding.searchContainer,
-            SearchActivity::class.java,
-            R.anim.slide_in_bottom_anim
+            SearchFragment::class.java,
+            Slide()
         )
         setInstantOnClick(
             binding.settingsContainer,
-            SettingsActivity::class.java,
-            R.anim.slide_in_right_anim
+            SettingsFragment::class.java,
+            Slide(Gravity.END)
         )
     }
 
-    private fun setInstantOnClick(view: View, activityClass: Class<*>?, @AnimRes inAnimation: Int) {
+    private fun setInstantOnClick(
+        view: View,
+        fragmentClass: Class<out Fragment>?,
+        inAnimation: Transition
+    ) {
         view.setOnClickListener { view1: View? ->
-            val intent = Intent(activity, activityClass)
-            val searchAnim = ActivityOptions.makeCustomAnimation(
-                activity,
-                inAnimation,
-                R.anim.fade_out_semi_anim
-            )
-            startActivity(intent, searchAnim.toBundle())
+            navigate(fragmentClass!!, enterAnim = inAnimation, exitAnim = Fade())
             mDrawerLayout!!.closeDrawer(containerView!!)
         }
     }
 
-    private fun setOnClick(view: View, aActivity: Class<*>?) {
-        if (requireActivity().javaClass == aActivity) {
+    private fun setOnClick(view: View, aActivity: Class<out Fragment>?) {
+        if (requireParentFragment().javaClass == aActivity) {
             // Get the attribute highlight color
             val a = TypedValue()
             requireActivity().getTheme()
@@ -221,8 +207,8 @@ class NavigationDrawerFragment : Fragment() {
         mDrawerView: View
     ) {
         mViewToListen.setOnClickListener { v: View? ->
-            if (activity is MainActivity<*>) {
-                (activity as MainActivity<*>).scrollToTopAndRefresh()
+            if (parentFragment is MainFragment<*>) {
+                (parentFragment as MainFragment<*>).scrollToTopAndRefresh()
             } else {
                 requireActivity().recreate()
             }
@@ -231,14 +217,11 @@ class NavigationDrawerFragment : Fragment() {
     }
 
     private fun setStandardOnClick(
-        mViewToListen: View, mFromActivity: Activity?, mToClass: Class<*>?,
+        mViewToListen: View, mFromActivity: Activity?, mToClass: Class<out Fragment>?,
         mDrawerLayout: DrawerLayout, mDrawerView: View
     ) {
         mViewToListen.setOnClickListener { v: View? ->
-            val intent = Intent(mFromActivity, mToClass)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION or Intent.FLAG_ACTIVITY_REORDER_TO_FRONT) // We don't want to use a transition animation
-
-            mIntent = intent
+            mFragment = mToClass
 
             // Close the drawer. This way the intent will be used to launch the next activity,
             // as the OnCloseListener will start the activity, now that the mIntent contains an actual reference
@@ -270,14 +253,13 @@ class NavigationDrawerFragment : Fragment() {
     }
 
     private fun navigateToAccountManagement() {
-        val settingsGeneralActivity = Intent(context, SettingsGeneralActivity::class.java)
-        startActivity(settingsGeneralActivity)
+        navigate(SettingsGeneralFragment::class.java)
     }
 
 
     private fun navigateToLogin() {
-        val loginIntent = Intent(context, LoginActivity::class.java)
-        loginIntent.putExtra(getString(R.string.login_intent_part_of_setup), false)
-        startActivity(loginIntent)
+        val args = Bundle()
+        args.putBoolean(getString(R.string.login_intent_part_of_setup), false)
+        navigate(LoginFragment::class.java, args)
     }
 }

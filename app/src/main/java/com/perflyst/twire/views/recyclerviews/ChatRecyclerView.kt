@@ -34,7 +34,7 @@ class ChatRecyclerView : RecyclerView {
     }
 
     val isScrolled: Boolean
-        get() = amountScrolled > 1
+        get() = amountScrolled > 1 && adapter!!.itemCount > 0
 
     fun setChatPaused(chatPaused: TextView) {
         this.chatPaused = chatPaused

@@ -1,6 +1,5 @@
 package com.perflyst.twire.activities.setup
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
@@ -19,6 +18,8 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.perflyst.twire.R
+import com.perflyst.twire.databinding.ActivityWelcomeBinding
+import com.perflyst.twire.misc.navigate
 import com.perflyst.twire.service.Service
 import com.perflyst.twire.utils.AnimationListenerAdapter
 import io.codetail.animation.SupportAnimator
@@ -27,7 +28,7 @@ import timber.log.Timber
 import kotlin.math.hypot
 import kotlin.math.max
 
-class WelcomeActivity : SetupBaseActivity() {
+class WelcomeFragment : SetupBaseFragment<ActivityWelcomeBinding>(ActivityWelcomeBinding::inflate) {
     val revealAnimationDuration: Int = 650
     val revealAnimationDelay: Int = 200
     val animationsStartDelay: Int = 500
@@ -50,22 +51,21 @@ class WelcomeActivity : SetupBaseActivity() {
     private lateinit var mTransitionViewBlue: View
     private lateinit var mLogoContainer: FrameLayout
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_welcome)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val mWelcomeText = findViewById<RelativeLayout>(R.id.welcome_text)
-        mWelcomeTextLineOne = findViewById(R.id.welcome_text_line_one)
-        mWelcomeTextLineTwo = findViewById(R.id.welcome_text_line_two)
+        val mWelcomeText = view.findViewById<RelativeLayout>(R.id.welcome_text)
+        mWelcomeTextLineOne = view.findViewById(R.id.welcome_text_line_one)
+        mWelcomeTextLineTwo = view.findViewById(R.id.welcome_text_line_two)
 
-        mLogo = findViewById(R.id.welcome_icon)
-        mContinueIcon = findViewById(R.id.forward_arrow)
-        mLogoContainer = findViewById(R.id.welcome_icon_layout)
-        mLogoCenter = findViewById(R.id.welcome_icon_center)
-        mContinueFAB = findViewById(R.id.continue_circle)
-        mContinueFABShadow = findViewById(R.id.welcome_continue_circle_shadow)
-        mTransitionViewWhite = findViewById(R.id.transition_view)
-        mTransitionViewBlue = findViewById(R.id.transition_view_blue)
+        mLogo = view.findViewById(R.id.welcome_icon)
+        mContinueIcon = view.findViewById(R.id.forward_arrow)
+        mLogoContainer = view.findViewById(R.id.welcome_icon_layout)
+        mLogoCenter = view.findViewById(R.id.welcome_icon_center)
+        mContinueFAB = view.findViewById(R.id.continue_circle)
+        mContinueFABShadow = view.findViewById(R.id.welcome_continue_circle_shadow)
+        mTransitionViewWhite = view.findViewById(R.id.transition_view)
+        mTransitionViewBlue = view.findViewById(R.id.transition_view_blue)
 
         mTransitionViewBlue.visibility = View.INVISIBLE
         mTransitionViewWhite.visibility = View.INVISIBLE
@@ -82,7 +82,7 @@ class WelcomeActivity : SetupBaseActivity() {
 
         // Change the position of the WelcomeText. Doing it this way is more dynamic, instead of a fixed
         // DP length from the bottom
-        val yPosition = (2.5 * (Service.getScreenHeight(this) / 5)).toInt()
+        val yPosition = (2.5 * (Service.getScreenHeight(requireContext()) / 5)).toInt()
         mWelcomeText.y = yPosition.toFloat()
 
         // Start the animations. Make sure the animations that in the correct order,
@@ -189,7 +189,7 @@ class WelcomeActivity : SetupBaseActivity() {
         }
     }
 
-    public override fun onResume() {
+    override fun onResume() {
         super.onResume()
         // The user has returned from the login screen. Lol wtf?
         if (transitionAnimationWhite != null && hasTransitioned) {
@@ -248,9 +248,7 @@ class WelcomeActivity : SetupBaseActivity() {
     private fun navigateToLoginActivity() {
         // Go to the login activity, with no transition.
         hasTransitioned = true
-        val loginActivityIntent = Intent(baseContext, LoginActivity::class.java)
-        loginActivityIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-        startActivity(loginActivityIntent, null)
+        navigate(LoginFragment::class.java)
     }
 
     /**
@@ -259,7 +257,8 @@ class WelcomeActivity : SetupBaseActivity() {
     private fun startLogoContainerAnimations(): AnimationSet {
         mLogoCenter.setLayerType(View.LAYER_TYPE_HARDWARE, null)
         val mInitLogoAnimations = AnimationSet(true)
-        val trans = TranslateAnimation(0f, 0f, Service.getScreenHeight(this).toFloat(), 0f)
+        val trans =
+            TranslateAnimation(0f, 0f, Service.getScreenHeight(requireContext()).toFloat(), 0f)
 
         mInitLogoAnimations.setDuration(logoContainerAnimationDuration.toLong())
         mInitLogoAnimations.setFillAfter(true)
@@ -339,8 +338,8 @@ class WelcomeActivity : SetupBaseActivity() {
 
         val travelDistance = if (lineNumber < 3) TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_SP,
-            getResources().getDimension(R.dimen.welcome_text_line_three_size),
-            getResources().displayMetrics
+            resources.getDimension(R.dimen.welcome_text_line_three_size),
+            resources.displayMetrics
         ).toInt() else
             0
 
@@ -385,8 +384,8 @@ class WelcomeActivity : SetupBaseActivity() {
         mContinueFABShadow.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
         val travelDistance = Service.dpToPixels(
-            baseContext,
-            getResources().getDimension(R.dimen.welcome_continue_circle_diameter)
+            requireContext(),
+            resources.getDimension(R.dimen.welcome_continue_circle_diameter)
         )
 
         val mTranslationAnimation: Animation =

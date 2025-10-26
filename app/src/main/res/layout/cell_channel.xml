@@ -14,13 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/profileLogoImageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/content_desc_twitchLogo_imageView" />
+            android:contentDescription="@string/content_desc_twitchLogo_imageView"
+            app:roundPercent="0" />
 
         <TextView
             android:id="@+id/displayName"

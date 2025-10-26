@@ -2,7 +2,8 @@ package com.perflyst.twire.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.perflyst.twire.activities.main.MainActivity
+import com.perflyst.twire.R
+import com.perflyst.twire.activities.main.MainFragment
 import com.perflyst.twire.model.Theme
 import com.perflyst.twire.service.Settings
 
@@ -32,8 +33,9 @@ open class ThemeActivity : AppCompatActivity() {
     }
 
     override fun recreate() {
-        if (this is MainActivity<*>) {
-            this.recyclerView.scrollToPosition(0)
+        val fragment = supportFragmentManager.findFragmentById(R.id.startup_activity)
+        if (fragment is MainFragment<*>) {
+            fragment.scrollToTop()
         }
         super.recreate()
     }

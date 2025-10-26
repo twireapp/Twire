@@ -1,7 +1,7 @@
 package com.perflyst.twire.tasks
 
 import com.perflyst.twire.TwireApplication
-import com.perflyst.twire.activities.setup.LoginActivity
+import com.perflyst.twire.activities.setup.LoginFragment
 import com.perflyst.twire.service.Settings.generalTwitchDisplayName
 import com.perflyst.twire.service.Settings.generalTwitchName
 import com.perflyst.twire.service.Settings.generalTwitchUserBio
@@ -18,9 +18,9 @@ import java.lang.ref.WeakReference
 /**
  * Created by SebastianRask on 03-11-2015.
  */
-class HandlerUserLoginTask(mLoginActivity: LoginActivity?) : Runnable {
-    private val mLoginActivity: WeakReference<LoginActivity?> =
-        WeakReference<LoginActivity?>(mLoginActivity)
+class HandlerUserLoginTask(mLoginActivity: LoginFragment?) : Runnable {
+    private val mLoginActivity: WeakReference<LoginFragment?> =
+        WeakReference<LoginFragment?>(mLoginActivity)
 
     override fun run() {
         // the User is fetched by the Bearer token

@@ -13,7 +13,7 @@ import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.AutoSpanBehav
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpanBehaviour
 import timber.log.Timber
 
-class MyStreamsActivity : LazyMainActivity<StreamInfo>() {
+class MyStreamsFragment : LazyMainFragment<StreamInfo>() {
     override val activityIconRes: Int get() = R.drawable.ic_favorite
 
     override val activityTitleRes: Int get() = R.string.my_streams_activity_title
@@ -23,7 +23,7 @@ class MyStreamsActivity : LazyMainActivity<StreamInfo>() {
     }
 
     override fun constructAdapter(recyclerView: AutoSpanRecyclerView): MainActivityAdapter<StreamInfo, *> {
-        return StreamsAdapter(recyclerView, this)
+        return StreamsAdapter(recyclerView, requireActivity())
     }
 
     override fun addToAdapter(aObjectList: MutableList<StreamInfo>) {
@@ -34,7 +34,7 @@ class MyStreamsActivity : LazyMainActivity<StreamInfo>() {
     override val visualElements: MutableList<StreamInfo>
         get() {
             if (!TempStorage.hasLoadedStreamers()) {
-                GetFollowsFromDB(this).call()
+                GetFollowsFromDB(requireContext()).call()
             }
 
             val channels = TempStorage.loadedStreamers.map(UserInfo::userId).toList()

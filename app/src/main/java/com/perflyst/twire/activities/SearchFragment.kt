@@ -1,5 +1,6 @@
 package com.perflyst.twire.activities
 
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,21 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.github.twitch4j.helix.domain.HelixPagination
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.perflyst.twire.R
 import com.perflyst.twire.TwireApplication
-import com.perflyst.twire.activities.main.LazyFetchingActivity
+import com.perflyst.twire.activities.main.LazyFetchingFragment
 import com.perflyst.twire.adapters.ChannelsAdapter
 import com.perflyst.twire.adapters.GamesAdapter
 import com.perflyst.twire.adapters.MainActivityAdapter
 import com.perflyst.twire.adapters.StreamsAdapter
 import com.perflyst.twire.databinding.ActivitySearchBinding
+import com.perflyst.twire.databinding.FragmentSearchBinding
+import com.perflyst.twire.fragments.BindingFragment
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener
 import com.perflyst.twire.misc.Utils
+import com.perflyst.twire.misc.popBackStack
 import com.perflyst.twire.model.ChannelInfo
 import com.perflyst.twire.model.Game
 import com.perflyst.twire.model.StreamInfo
@@ -35,23 +38,17 @@ import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.StreamAutoSpa
 import com.rey.material.widget.ProgressView
 import timber.log.Timber
 
-class SearchActivity : ThemeActivity() {
-    private var binding: ActivitySearchBinding? = null
+class SearchFragment : BindingFragment<ActivitySearchBinding>(ActivitySearchBinding::inflate) {
     var query: String? = null
         private set
-    private lateinit var mStreamsFragment: SearchFragment<*>
-    private lateinit var mChannelsFragment: SearchFragment<*>
-    private lateinit var mGamesFragment: SearchFragment<*>
+    private lateinit var mStreamsFragment: ResultsFragment<*>
+    private lateinit var mChannelsFragment: ResultsFragment<*>
+    private lateinit var mGamesFragment: ResultsFragment<*>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding!!.getRoot())
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpTabs()
 
-        binding!!.editTextSearch.addTextChangedListener(object : TextWatcher {
+        binding.editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 Timber.d("Text changed. Resetting fragments")
                 val newQuery = Utils.safeEncode(s.toString())
@@ -67,21 +64,16 @@ class SearchActivity : ThemeActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
         })
-        binding!!.icBackArrow.setOnClickListener { v: View? -> onBackPressed() }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim)
+        binding.icBackArrow.setOnClickListener { v: View? -> popBackStack() }
     }
 
     private fun setUpTabs() {
-        val mViewPager2 = binding!!.searchViewPager2
+        val mViewPager2 = binding.searchViewPager2
 
         // Set up the ViewPager2 with the sections adapter.
         mViewPager2.setAdapter(SearchStateAdapter(this))
 
-        val tabLayout = findViewById<TabLayout>(R.id.search_tabLayout)
+        val tabLayout = binding.searchTabLayout
         TabLayoutMediator(
             tabLayout,
             mViewPager2
@@ -95,7 +87,7 @@ class SearchActivity : ThemeActivity() {
         }.attach()
     }
 
-    class SearchGamesFragment : SearchFragment<Game>() {
+    class ResultsGamesFragment : ResultsFragment<Game>() {
         override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -126,13 +118,13 @@ class SearchActivity : ThemeActivity() {
             }
 
         companion object {
-            fun newInstance(): SearchGamesFragment {
-                return SearchGamesFragment()
+            fun newInstance(): ResultsGamesFragment {
+                return ResultsGamesFragment()
             }
         }
     }
 
-    class SearchStreamsFragment : SearchFragment<StreamInfo>() {
+    class ResultsStreamsFragment : ResultsFragment<StreamInfo>() {
         override fun constructBehaviour(): AutoSpanBehaviour {
             return StreamAutoSpanBehaviour()
         }
@@ -169,20 +161,20 @@ class SearchActivity : ThemeActivity() {
             }
 
         companion object {
-            fun newInstance(): SearchStreamsFragment {
-                return SearchStreamsFragment()
+            fun newInstance(): ResultsStreamsFragment {
+                return ResultsStreamsFragment()
             }
         }
     }
 
-    class SearchChannelsFragment : SearchFragment<ChannelInfo>() {
+    class ResultsChannelsFragment : ResultsFragment<ChannelInfo>() {
 
         override fun constructBehaviour(): AutoSpanBehaviour {
             return ChannelAutoSpanBehaviour()
         }
 
         override fun constructAdapter(): MainActivityAdapter<ChannelInfo, *> {
-            return ChannelsAdapter(mRecyclerView, requireContext(), requireActivity())
+            return ChannelsAdapter(mRecyclerView, requireContext(), this)
         }
 
         override fun notifyUserNoElementsAdded() {
@@ -200,13 +192,15 @@ class SearchActivity : ThemeActivity() {
             }
 
         companion object {
-            fun newInstance(): SearchChannelsFragment {
-                return SearchChannelsFragment()
+            fun newInstance(): ResultsChannelsFragment {
+                return ResultsChannelsFragment()
             }
         }
     }
 
-    abstract class SearchFragment<E> : Fragment(), LazyFetchingActivity<E> {
+    abstract class ResultsFragment<E> :
+        BindingFragment<FragmentSearchBinding>(FragmentSearchBinding::inflate),
+        LazyFetchingFragment<E> {
         protected var mAdapter: MainActivityAdapter<E, *>? = null
         protected lateinit var mRecyclerView: AutoSpanRecyclerView
         protected var mProgressView: ProgressView? = null
@@ -216,14 +210,11 @@ class SearchActivity : ThemeActivity() {
         override var maxElementsToFetch = 500
         override var cursor: String? = null
 
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View? {
-            val rootView = inflater.inflate(R.layout.fragment_search, container, false)
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
 
-            mRecyclerView = rootView.findViewById(R.id.span_recyclerview)
-            mProgressView = rootView.findViewById(R.id.circle_progress)
+            mRecyclerView = view.findViewById(R.id.span_recyclerview)
+            mProgressView = view.findViewById(R.id.circle_progress)
 
             lazyFetchingOnScrollListener = LazyFetchingOnScrollListener(this)
 
@@ -239,8 +230,6 @@ class SearchActivity : ThemeActivity() {
                 imm.hideSoftInputFromWindow(v!!.windowToken, 0)
                 false
             }
-
-            return rootView
         }
 
         private fun setupRecyclerViewAndAdapter() {
@@ -255,14 +244,15 @@ class SearchActivity : ThemeActivity() {
                     resources.getDimension(R.dimen.search_new_adapter_top_margin).toInt()
                 mAdapter!!.setSortElements(false)
             }
+            mAdapter!!.parentFragment = this
 
             mRecyclerView.setAdapter(mAdapter)
         }
 
         private fun checkForQuery() {
-            check(activity is SearchActivity) { "This fragment can only be used with SearchActivity" }
+            check(parentFragment is SearchFragment) { "This fragment can only be used with SearchActivity" }
 
-            val activityQuery = (activity as SearchActivity).query
+            val activityQuery = (parentFragment as SearchFragment).query
             if (activityQuery != null && activityQuery != query) {
                 reset(activityQuery)
             }
@@ -307,11 +297,11 @@ class SearchActivity : ThemeActivity() {
         abstract fun constructAdapter(): MainActivityAdapter<E, *>
     }
 
-    private inner class SearchStateAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+    private inner class SearchStateAdapter(fa: Fragment) : FragmentStateAdapter(fa) {
         init {
-            mStreamsFragment = SearchStreamsFragment.newInstance()
-            mChannelsFragment = SearchChannelsFragment.newInstance()
-            mGamesFragment = SearchGamesFragment.newInstance()
+            mStreamsFragment = ResultsStreamsFragment.newInstance()
+            mChannelsFragment = ResultsChannelsFragment.newInstance()
+            mGamesFragment = ResultsGamesFragment.newInstance()
         }
 
         override fun createFragment(position: Int): Fragment {

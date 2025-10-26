@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
-    tools:context="com.perflyst.twire.activities.settings.SettingsActivity"
+    tools:context="com.perflyst.twire.activities.settings.SettingsFragment"
     android:fitsSystemWindows="true">
 
     <androidx.appcompat.widget.Toolbar

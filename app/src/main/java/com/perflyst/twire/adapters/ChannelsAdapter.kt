@@ -1,23 +1,20 @@
 package com.perflyst.twire.adapters
 
-import android.app.Activity
-import android.app.ActivityOptions
-import android.app.SharedElementCallback
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
-import android.view.animation.Animation
-import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.transition.Fade
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.ChannelActivity
+import com.perflyst.twire.activities.ChannelFragment
 import com.perflyst.twire.adapters.MainActivityAdapter.ElementsViewHolder
-import com.perflyst.twire.misc.RoundImageAnimation
+import com.perflyst.twire.misc.navigate
 import com.perflyst.twire.model.ChannelInfo
 import com.perflyst.twire.service.Service
 import com.perflyst.twire.service.Settings.appearanceChannelStyle
@@ -43,7 +40,7 @@ class StreamerInfoViewHolder(v: View) : ElementsViewHolder(v) {
 class ChannelsAdapter(
     recyclerView: AutoSpanRecyclerView,
     aContext: Context,
-    private val activity: Activity
+    private val fragment: Fragment
 ) : MainActivityAdapter<ChannelInfo, StreamerInfoViewHolder>(recyclerView, aContext) {
     private val regMargin: Int =
         context.resources.getDimension(R.dimen.subscription_card_margin).toInt()
@@ -55,45 +52,19 @@ class ChannelsAdapter(
     override fun handleElementOnClick(view: View) {
         val itemPosition = recyclerView.getChildAdapterPosition(view)
         val item = elements[itemPosition]
-        val vh = recyclerView.getChildViewHolder(view) as StreamerInfoViewHolder
-        val previewTarget = targets.get(vh.targetsKey)
-
-        // Create intent for opening StreamerInfo activity. Send the StreamerInfo object with
-        // the intent, and flag it to make sure it creates a new task on the history stack
-        val intent = Intent(context, ChannelActivity::class.java)
-        intent.putExtra(context.getString(R.string.channel_info_intent_object), item)
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
         val sharedView = view.findViewById<View>(R.id.profileLogoImageView)
-        sharedView.transitionName = context.getString(R.string.streamerInfo_transition)
-        val options = ActivityOptions.makeSceneTransitionAnimation(
-            activity, sharedView, context.getString(R.string.streamerInfo_transition)
+        val bundle = bundleOf(
+            context.getString(R.string.channel_info_intent_object) to item
         )
-
-        activity.setExitSharedElementCallback(object : SharedElementCallback() {
-            override fun onSharedElementEnd(
-                sharedElementNames: MutableList<String?>?,
-                sharedElements: MutableList<View?>,
-                sharedElementSnapshots: MutableList<View?>?
-            ) {
-                super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots)
-
-                if (!sharedElements.isEmpty() && sharedElements[0] != null && previewTarget != null) {
-                    val element = sharedElements[0]!!
-                    val anim: Animation = RoundImageAnimation(
-                        element.width / 2,
-                        0,
-                        element as ImageView,
-                        previewTarget.preview
-                    )
-                    anim.setDuration(200)
-                    anim.interpolator = DecelerateInterpolator()
-                    view.startAnimation(anim)
-                }
-                activity.setExitSharedElementCallback(null)
-            }
-        })
-        activity.startActivity(intent, options.toBundle())
+        fragment.navigate(
+            ChannelFragment::class.java,
+            bundle,
+            enterAnim = Fade(),
+            exitAnim = Fade(),
+            sharedElement = sharedView,
+            sharedName = context.getString(R.string.streamerInfo_transition)
+        )
     }
 
     override fun setViewLayoutParams(view: View, position: Int) {
@@ -120,6 +91,7 @@ class ChannelsAdapter(
     override fun setViewData(element: ChannelInfo, viewHolder: StreamerInfoViewHolder) {
         viewHolder.vDisplayName.text = element.displayName
         viewHolder.vDisplayName.forceLayout()
+        viewHolder.previewView.transitionName = element.userId
     }
 
     override val layoutResource: Int get() = R.layout.cell_channel

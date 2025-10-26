@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorSetupMain"
-    tools:context="com.perflyst.twire.activities.setup.ConfirmSetupActivity">
+    tools:context="com.perflyst.twire.activities.setup.ConfirmSetupFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"

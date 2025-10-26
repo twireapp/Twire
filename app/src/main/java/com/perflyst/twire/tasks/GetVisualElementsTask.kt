@@ -1,12 +1,12 @@
 package com.perflyst.twire.tasks
 
 import com.netflix.hystrix.exception.HystrixRuntimeException
-import com.perflyst.twire.activities.main.LazyFetchingActivity
+import com.perflyst.twire.activities.main.LazyFetchingFragment
 import com.perflyst.twire.utils.Execute
 import timber.log.Timber
 import java.util.concurrent.Callable
 
-class GetVisualElementsTask<T>(private val mLazyActivity: LazyFetchingActivity<T>) :
+class GetVisualElementsTask<T>(private val mLazyActivity: LazyFetchingFragment<T>) :
     Callable<MutableList<T>> {
     override fun call(): MutableList<T> {
         val resultList: MutableList<T> = ArrayList()

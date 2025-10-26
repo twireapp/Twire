@@ -1,10 +1,23 @@
 package com.perflyst.twire.misc
 
+import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.format.DateUtils
+import android.view.View
 import android.widget.TextView
+import androidx.activity.addCallback
 import androidx.annotation.FloatRange
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.commit
+import androidx.transition.Transition
+import androidx.transition.TransitionInflater
+import com.perflyst.twire.R
+import com.perflyst.twire.activities.StartUpActivity
+import com.perflyst.twire.utils.RoundTransition
 import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
 import java.net.URL
@@ -12,6 +25,7 @@ import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 import java.text.NumberFormat
 import java.util.Locale
+import java.util.Stack
 
 object Utils {
     val systemLanguage: String
@@ -82,4 +96,103 @@ object Utils {
     fun getOnlineSince(startedAt: Long): String {
         return DateUtils.formatElapsedTime((System.currentTimeMillis() - startedAt) / 1000)
     }
+}
+
+private val FragmentActivity.singleStack: Stack<Pair<Class<out Fragment>, Bundle?>>
+    get() = (this as? StartUpActivity)?.singleStack
+        ?: throw IllegalStateException("single=true navigation requires a StartUpActivity host")
+
+fun Fragment.navigate(
+    fragment: Class<out Fragment>,
+    args: Bundle? = null,
+    enterAnim: Transition? = null,
+    exitAnim: Transition? = null,
+    backStack: Boolean = true,
+    single: Boolean = false,
+    sharedElement: View? = null,
+    sharedName: String? = null
+) {
+    requireActivity().navigate(
+        fragment,
+        args,
+        enterAnim,
+        exitAnim,
+        backStack,
+        single,
+        sharedElement,
+        sharedName
+    )
+}
+
+fun FragmentActivity.navigate(
+    fragment: Class<out Fragment>,
+    args: Bundle? = null,
+    enterAnim: Transition? = null,
+    exitAnim: Transition? = null,
+    backStack: Boolean = true,
+    single: Boolean = false,
+    sharedElement: View? = null,
+    sharedName: String? = null
+) {
+    supportFragmentManager.commit {
+        setReorderingAllowed(true)
+        if (sharedElement != null) {
+            addSharedElement(sharedElement, sharedName ?: sharedElement.transitionName)
+        }
+
+        if (exitAnim != null) {
+            supportFragmentManager.findFragmentById(R.id.startup_activity)?.exitTransition =
+                exitAnim
+        }
+
+        val fragmentInstance = fragment.getDeclaredConstructor().newInstance().apply {
+            arguments = args
+            enterTransition = enterAnim
+            returnTransition = exitAnim
+            sharedElementEnterTransition = (TransitionInflater.from(baseContext)
+                .inflateTransition(R.transition.change_image_transform) as androidx.transition.TransitionSet)
+                .addTransition(
+                    RoundTransition()
+                )
+        }
+
+        replace(R.id.startup_activity, fragmentInstance)
+        if (single) {
+            if (!backStack) singleStack.clear()
+            singleStack.removeIf { it.first == fragment }
+            singleStack.push(Pair(fragment, args))
+        } else if (backStack) {
+            addToBackStack(null)
+        } else {
+            supportFragmentManager.popBackStackImmediate(
+                null,
+                androidx.fragment.app.FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+        }
+    }
+}
+
+fun Fragment.setupToolbar(
+    toolbar: Toolbar,
+    title: Int? = null
+) {
+    val activity = requireActivity() as AppCompatActivity
+    activity.setSupportActionBar(toolbar)
+    activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+    activity.supportActionBar?.title = title?.let { getString(it) }
+    setHasOptionsMenu(true)
+}
+
+fun Fragment.addBackPressed(callback: () -> Boolean) {
+    requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+        if (!callback()) {
+            isEnabled = false
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+            isEnabled = true
+        }
+    }
+}
+
+fun Fragment.popBackStack() {
+    requireActivity().supportFragmentManager.popBackStack()
 }

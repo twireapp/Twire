@@ -1,6 +1,7 @@
 package com.perflyst.twire.views.recyclerviews
 
 import android.content.Context
+import android.content.res.Configuration
 import android.util.AttributeSet
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -117,4 +118,15 @@ class AutoSpanRecyclerView : RecyclerView {
 
     val elementWidth: Int
         get() = mBehaviour!!.getElementWidth(context)
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        // The number of items in the first row can change because of a configuration change, which effects which items have additional margin applied to them.
+        adapter?.let {
+            if (it.itemCount >= 1) {
+                it.notifyItemRangeChanged(1, it.itemCount - 1)
+            }
+        }
+    }
 }

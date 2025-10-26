@@ -2,7 +2,9 @@ package com.perflyst.twire.activities.setup
 
 import android.os.Handler
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -15,11 +17,13 @@ import android.view.animation.ScaleAnimation
 import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
 import com.perflyst.twire.R
+import com.perflyst.twire.fragments.BindingFragment
 import com.perflyst.twire.utils.AnimationListenerAdapter
 
-open class SetupBaseActivity : AppCompatActivity() {
+open class SetupBaseFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGroup?, Boolean) -> T) :
+    BindingFragment<T>(inflate) {
     val showContinueIconDuration: Int = 650
 
     protected fun hideViewAnimation(view: View, duration: Int): AnimationSet {
@@ -62,8 +66,8 @@ open class SetupBaseActivity : AppCompatActivity() {
 
         val travelDistance = if (lineNumber < 3) TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_SP,
-            getResources().getDimension(R.dimen.welcome_text_line_three_size),
-            getResources().displayMetrics
+            resources.getDimension(R.dimen.welcome_text_line_three_size),
+            resources.displayMetrics
         ).toInt() else
             0
 

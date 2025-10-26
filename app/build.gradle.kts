@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("io.sentry.android.gradle") version "5.3.0"
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -150,9 +151,13 @@ dependencies {
     val parcelerVersion = "1.1.12"
     implementation("org.parceler:parceler-api:$parcelerVersion")
     annotationProcessor("org.parceler:parceler:$parcelerVersion")
+    kapt("org.parceler:parceler:$parcelerVersion")
 
     //https://github.com/chrisbanes/insetter/
     implementation("dev.chrisbanes.insetter:insetter:0.6.1")
+
+    implementation("androidx.activity:activity-ktx:1.11.0")
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
 }
 
 configurations.all {

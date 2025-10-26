@@ -16,6 +16,7 @@ import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
@@ -60,6 +61,8 @@ abstract class MainActivityAdapter<E, T : ElementsViewHolder>(
     private var animateInsert: Boolean
     private var mLastPosition: Int
     var topMarginFirst: Int
+
+    var parentFragment: Fragment? = null
 
     init {
 
@@ -171,10 +174,14 @@ abstract class MainActivityAdapter<E, T : ElementsViewHolder>(
                     if (!success) previewView.setImageBitmap(bitmap)
                     preview = bitmap
                 }
+
+                parentFragment?.startPostponedEnterTransition()
             }
 
             override fun onLoadStarted(placeHolderDrawable: Drawable?) {
                 viewHolder.previewView.setImageDrawable(placeHolderDrawable)
+
+                parentFragment?.startPostponedEnterTransition()
             }
 
             override fun onLoadCleared(placeholder: Drawable?) {

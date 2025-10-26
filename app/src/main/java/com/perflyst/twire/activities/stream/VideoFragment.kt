@@ -13,51 +13,54 @@ import android.transition.Slide
 import android.transition.Transition
 import android.transition.TransitionSet
 import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.viewbinding.ViewBinding
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.ThemeActivity
+import com.perflyst.twire.fragments.BindingFragment
 import com.perflyst.twire.fragments.ChatFragment
 import com.perflyst.twire.fragments.ChatFragment.Companion.getInstance
-import com.perflyst.twire.fragments.StreamFragment
-import com.perflyst.twire.fragments.StreamFragment.Companion.getScreenRect
-import com.perflyst.twire.fragments.StreamFragment.Companion.newInstance
-import com.perflyst.twire.fragments.StreamFragment.StreamFragmentListener
+import com.perflyst.twire.fragments.PlayerFragment
+import com.perflyst.twire.fragments.PlayerFragment.Companion.getScreenRect
+import com.perflyst.twire.fragments.PlayerFragment.Companion.newInstance
+import com.perflyst.twire.fragments.PlayerFragment.PlayerFragmentListener
+import com.perflyst.twire.misc.addBackPressed
+import com.perflyst.twire.misc.popBackStack
 import com.perflyst.twire.service.Settings.chatLandscapeWidth
 import timber.log.Timber
 
-abstract class StreamActivity : ThemeActivity(), StreamFragmentListener {
-    var mStreamFragment: StreamFragment? = null
+abstract class VideoFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGroup?, Boolean) -> T) :
+    BindingFragment<T>(inflate), PlayerFragmentListener {
+    var mPlayerFragment: PlayerFragment? = null
     var mChatFragment: ChatFragment? = null
     private var mBackstackLost = false
     private var onStopCalled = false
     private var initialOrientation = 0
-
-    protected abstract val layoutResource: Int
+    private var userLeaveHintListener: Runnable? = null
 
     protected abstract val videoContainerResource: Int
 
     protected abstract val streamArguments: Bundle?
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(this.layoutResource)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+        val activity = requireActivity()
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
 
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.black)
+        val window = activity.window
+        window.navigationBarColor = ContextCompat.getColor(activity, R.color.black)
+        window.statusBarColor = ContextCompat.getColor(activity, R.color.black)
 
-        initialOrientation = getResources().configuration.orientation
+        initialOrientation = resources.configuration.orientation
 
         if (savedInstanceState == null) {
-            val fm = supportFragmentManager
+            val fm = childFragmentManager
 
             window.setEnterTransition(constructTransitions())
             window.setReturnTransition(constructTransitions())
@@ -69,17 +72,30 @@ abstract class StreamActivity : ThemeActivity(), StreamFragmentListener {
                 fm.beginTransaction().replace(R.id.chat_fragment, mChatFragment!!).commit()
             }
 
-            if (mStreamFragment == null) {
-                mStreamFragment = newInstance(this.streamArguments)
+            if (mPlayerFragment == null) {
+                mPlayerFragment = newInstance(this.streamArguments)
                 fm.beginTransaction().replace(
                     this.videoContainerResource,
-                    mStreamFragment!!,
+                    mPlayerFragment!!,
                     getString(R.string.stream_fragment_tag)
                 ).commit()
             }
         }
 
         updateOrientation()
+
+        addBackPressed(this::onBackPressed)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            userLeaveHintListener = Runnable { onUserLeaveHint() }
+            requireActivity().addOnUserLeaveHintListener(userLeaveHintListener!!)
+        }
+    }
+
+    override fun onDestroyView() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            userLeaveHintListener?.let { requireActivity().removeOnUserLeaveHintListener(it) }
+        }
+        super.onDestroyView()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -88,57 +104,46 @@ abstract class StreamActivity : ThemeActivity(), StreamFragmentListener {
     }
 
     protected fun resetStream() {
-        val fm = supportFragmentManager
-        mStreamFragment = newInstance(this.streamArguments)
-        fm.beginTransaction().replace(this.videoContainerResource, mStreamFragment!!).commit()
+        val fm = childFragmentManager
+        mPlayerFragment = newInstance(this.streamArguments)
+        fm.beginTransaction().replace(this.videoContainerResource, mPlayerFragment!!).commit()
     }
 
-    public override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onBackPressed() {
+    open fun onBackPressed(): Boolean {
         if (mChatFragment == null || !mChatFragment!!.notifyBackPressed()) {
-            return
+            return true
         }
 
         // Eww >(
-        if (mStreamFragment != null) {
+        if (mPlayerFragment != null) {
             val isCurrentlyLandscape =
-                getResources().configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+                resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
             val wasInitiallyLandscape = initialOrientation == Configuration.ORIENTATION_LANDSCAPE
             if (isCurrentlyLandscape && !wasInitiallyLandscape) {
-                mStreamFragment!!.toggleFullscreen()
-            } else if (mStreamFragment!!.chatOnlyViewVisible) {
+                mPlayerFragment!!.toggleFullscreen()
+            } else if (mPlayerFragment!!.chatOnlyViewVisible) {
                 this.finish()
-                this.overrideTransition()
             } else {
-                super.onBackPressed()
                 try {
-                    mStreamFragment!!.backPressed()
+                    mPlayerFragment!!.backPressed()
                 } catch (e: NullPointerException) {
                     Timber.e(e)
                 }
-                this.overrideTransition()
             }
-        } else {
-            super.onBackPressed()
-            this.overrideTransition()
         }
+        return true
     }
 
-    @RequiresApi(24)
-    public override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun onUserLeaveHint() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             return
         }
 
-        if (mStreamFragment!!.playWhenReady && applicationContext.packageManager
+        if (mPlayerFragment!!.playWhenReady && requireActivity().applicationContext.packageManager
                 .hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
         ) {
-            enterPictureInPictureMode()
+            requireActivity().enterPictureInPictureMode()
         }
     }
 
@@ -160,46 +165,14 @@ abstract class StreamActivity : ThemeActivity(), StreamFragmentListener {
         return set
     }
 
-    private fun overrideTransition() {
-        this.overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu_stream, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) { // Call the super method as we also want the user to go all the way back to last mActivity if the user is in full screen mode
-            if (mStreamFragment != null) {
-                if (!mStreamFragment!!.isVideoInterfaceShowing) {
-                    return false
-                }
-
-                if (mStreamFragment!!.chatOnlyViewVisible) {
-                    finish()
-                } else {
-                    super.onBackPressed()
-                    mStreamFragment!!.backPressed()
-                }
-                overrideTransition()
-            }
-
-            return true
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
-
     override fun onAttachFragment(fragment: Fragment) {
-        if (fragment is StreamFragment) {
-            fragment.streamFragmentCallback = this
+        if (fragment is PlayerFragment) {
+            fragment.playerFragmentCallback = this
         }
 
         if (mChatFragment == null && fragment is ChatFragment) mChatFragment = fragment
 
-        if (mStreamFragment == null && fragment is StreamFragment) mStreamFragment = fragment
+        if (mPlayerFragment == null && fragment is PlayerFragment) mPlayerFragment = fragment
     }
 
     override fun onSeek() {
@@ -211,29 +184,31 @@ abstract class StreamActivity : ThemeActivity(), StreamFragmentListener {
     }
 
     val mainContentLayout: View?
-        get() = findViewById(R.id.main_content)
+        get() = view?.findViewById(R.id.main_content)
 
     fun updateOrientation() {
         val landscape =
-            getResources().configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+            resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-        val chat = findViewById<View>(R.id.chat_fragment)
+        val chat = requireView().findViewById<View>(R.id.chat_fragment)
         if (landscape) {
             val lp =
-                findViewById<View?>(R.id.chat_landscape_fragment)?.layoutParams as RelativeLayout.LayoutParams
-            lp.width = (getScreenRect(this).height() * (chatLandscapeWidth / 100.0)).toInt()
+                requireView().findViewById<View?>(R.id.chat_landscape_fragment)?.layoutParams as RelativeLayout.LayoutParams
+            lp.width =
+                (getScreenRect(requireActivity()).height() * (chatLandscapeWidth / 100.0)).toInt()
             Timber.d("TARGET WIDTH: %s", lp.width)
             chat.setLayoutParams(lp)
         } else {
-            chat.setLayoutParams(findViewById<View?>(R.id.chat_placement_wrapper)?.layoutParams)
+            chat.setLayoutParams(requireView().findViewById<View?>(R.id.chat_placement_wrapper)?.layoutParams)
         }
 
-        val layoutParams = findViewById<View?>(this.videoContainerResource)?.layoutParams
+        val layoutParams =
+            requireView().findViewById<View?>(this.videoContainerResource)?.layoutParams
         layoutParams?.height =
             if (landscape) ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
     }
 
-    public override fun onStop() {
+    override fun onStop() {
         super.onStop()
         onStopCalled = true
     }
@@ -243,8 +218,8 @@ abstract class StreamActivity : ThemeActivity(), StreamFragmentListener {
         onStopCalled = false
     }
 
-    override fun onPictureInPictureModeChanged(enabled: Boolean, newConfig: Configuration?) {
-        super.onPictureInPictureModeChanged(enabled, newConfig)
+    override fun onPictureInPictureModeChanged(enabled: Boolean) {
+        super.onPictureInPictureModeChanged(enabled)
         mBackstackLost = mBackstackLost or enabled
 
         if (!enabled && onStopCalled) {
@@ -252,12 +227,12 @@ abstract class StreamActivity : ThemeActivity(), StreamFragmentListener {
         }
     }
 
-    override fun finish() {
+    fun finish() {
         if (mBackstackLost) {
-            navToLauncherTask(applicationContext)
-            finishAndRemoveTask()
+            navToLauncherTask(requireActivity().applicationContext)
+            popBackStack()
         } else {
-            super.finish()
+            popBackStack()
         }
     }
 

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -19,12 +20,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.Toolbar
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
+import androidx.core.graphics.drawable.toDrawable
+import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -40,14 +43,20 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.perflyst.twire.R
 import com.perflyst.twire.TwireApplication
-import com.perflyst.twire.activities.main.LazyFetchingActivity
+import com.perflyst.twire.activities.main.LazyFetchingFragment
 import com.perflyst.twire.adapters.ClipAdapter
 import com.perflyst.twire.adapters.PanelAdapter
 import com.perflyst.twire.adapters.VODAdapter
+import com.perflyst.twire.databinding.ActivityStreamerInfoBinding
+import com.perflyst.twire.databinding.FragmentChannelDescriptionBinding
+import com.perflyst.twire.databinding.FragmentChannelVodsBinding
+import com.perflyst.twire.fragments.BindingFragment
 import com.perflyst.twire.fragments.ChatFragment.Companion.getInstance
 import com.perflyst.twire.misc.FollowHandler
 import com.perflyst.twire.misc.LazyFetchingOnScrollListener
 import com.perflyst.twire.misc.Utils
+import com.perflyst.twire.misc.popBackStack
+import com.perflyst.twire.misc.setupToolbar
 import com.perflyst.twire.model.ChannelInfo
 import com.perflyst.twire.model.Panel
 import com.perflyst.twire.model.VideoOnDemand
@@ -60,7 +69,8 @@ import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.VODAutoSpanBe
 import com.rey.material.widget.ProgressView
 import java.util.Locale
 
-class ChannelActivity : ThemeActivity() {
+class ChannelFragment :
+    BindingFragment<ActivityStreamerInfoBinding>(ActivityStreamerInfoBinding::inflate) {
     private val showFabDelay = 300
     private lateinit var info: ChannelInfo
     private var streamerImage: ImageView? = null
@@ -73,32 +83,28 @@ class ChannelActivity : ThemeActivity() {
     private var colorFadeDuration = 0
     private var mFollowHandler: FollowHandler? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_streamer_info)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // Get the various handles of view and layouts that is part of this view
-        streamerImage = findViewById(R.id.profileImageView)
-        val streamerInfoName = findViewById<TextView>(R.id.twitch_name)
-        val streamerFollowers = findViewById<TextView>(R.id.txt_followers)
-        toolbar = findViewById(R.id.StreamerInfo_Toolbar)
-        additionalToolbar = findViewById(R.id.additional_toolbar)
-        mViewPager2 = findViewById(R.id.streamer_info_viewPager2)
-        mTabLayout = findViewById(R.id.streamer_info_tabLayout)
-        mAppBar = findViewById(R.id.appbar)
-        mFab = findViewById(R.id.fab)
+        streamerImage = view.findViewById(R.id.profileImageView)
+        val streamerInfoName = view.findViewById<TextView>(R.id.twitch_name)
+        val streamerFollowers = view.findViewById<TextView>(R.id.txt_followers)
+        toolbar = view.findViewById(R.id.StreamerInfo_Toolbar)
+        additionalToolbar = view.findViewById(R.id.additional_toolbar)
+        mViewPager2 = view.findViewById(R.id.streamer_info_viewPager2)
+        mTabLayout = view.findViewById(R.id.streamer_info_tabLayout)
+        mAppBar = view.findViewById(R.id.appbar)
+        mFab = view.findViewById(R.id.fab)
 
-        toolbar!!.setTitle("")
-
-        setSupportActionBar(toolbar)
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        }
+        setupToolbar(toolbar!!)
 
         // Get the StreamerInfo object sent with the intent to open this activity
-        val intent = getIntent()
+        val intent = arguments
         info =
-            intent.getParcelableExtra(getString(R.string.channel_info_intent_object))!!
+            intent?.getParcelable(getString(R.string.channel_info_intent_object))!!
+
+        postponeEnterTransition()
 
         streamerInfoName.text = info.displayName
         info.getFollowers({ followers: Int? ->
@@ -113,34 +119,23 @@ class ChannelActivity : ThemeActivity() {
         initiateFAB()
     }
 
-    public override fun onStart() {
-        super.onStart()
-        overridePendingTransition(R.anim.slide_in_bottom_anim, R.anim.fade_out_semi_anim)
-    }
-
     override fun onResume() {
         colorFadeDuration = 800
         initiateFAB()
         super.onResume()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_streamer_info, menu)
-        return true
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_streamer_info, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        onBackPressed()
+        popBackStack()
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        this.overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_bottom_anim)
-    }
-
     private fun setUpTabs() {
-        mViewPager2!!.setAdapter(ChannelStateAdapter(this))
+        mViewPager2!!.setAdapter(ChannelStateAdapter(requireActivity()))
 
         val tabTitles = intArrayOf(
             R.string.streamerInfo_desc_tab,
@@ -178,7 +173,7 @@ class ChannelActivity : ThemeActivity() {
             mTarget = this.nightThemeTarget
         }
 
-        Glide.with(baseContext)
+        Glide.with(this@ChannelFragment)
             .asBitmap()
             .load(info.logoURL.toString())
             .into<Target<Bitmap?>?>(mTarget)
@@ -190,13 +185,23 @@ class ChannelActivity : ThemeActivity() {
                 bitmap: Bitmap,
                 transition: Transition<in Bitmap?>?
             ) {
-                val drawable =
-                    RoundedBitmapDrawableFactory.create(getResources(), bitmap)
-                drawable.isCircular = true
+                if (!isAdded) return
+                val drawable = bitmap.toDrawable(resources)
                 streamerImage!!.setImageDrawable(drawable)
+
+                streamerImage!!.doOnPreDraw {
+                    startPostponedEnterTransition()
+                }
             }
 
             override fun onLoadCleared(placeholder: Drawable?) {
+            }
+
+            override fun onLoadFailed(errorDrawable: Drawable?) {
+                if (!isAdded) return
+                streamerImage!!.doOnPreDraw {
+                    startPostponedEnterTransition()
+                }
             }
         }
 
@@ -206,21 +211,20 @@ class ChannelActivity : ThemeActivity() {
                 bitmap: Bitmap,
                 transition: Transition<in Bitmap?>?
             ) {
-                val drawable =
-                    RoundedBitmapDrawableFactory.create(getResources(), bitmap)
-                drawable.isCircular = true
+                if (!isAdded) return
+                val drawable = bitmap.toDrawable(resources)
                 streamerImage!!.setImageDrawable(drawable)
 
                 val palette = Palette.from(bitmap).generate()
                 val defaultColor = Service.getColorAttribute(
                     androidx.appcompat.R.attr.colorPrimary,
                     R.color.primary,
-                    baseContext
+                    requireContext()
                 )
                 val defaultDarkColor = Service.getColorAttribute(
                     androidx.appcompat.R.attr.colorPrimaryDark,
                     R.color.primaryDark,
-                    baseContext
+                    requireContext()
                 )
 
                 val vibrant = palette.getVibrantColor(defaultColor)
@@ -293,20 +297,27 @@ class ChannelActivity : ThemeActivity() {
                     mFab!!.backgroundTintList = ColorStateList.valueOf(compositeNewColor)
                     mTabLayout!!.setSelectedTabIndicatorColor(compositeNewColor)
 
-                    val window = getWindow()
+                    val window = requireActivity().window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
                     window.statusBarColor = newColorDark
                 }
+
+                startPostponedEnterTransition()
             }
 
             override fun onLoadCleared(placeholder: Drawable?) {
+            }
+
+            override fun onLoadFailed(errorDrawable: Drawable?) {
+                if (!isAdded) return
+                startPostponedEnterTransition()
             }
         }
 
     private fun initiateFAB() {
         mFollowHandler = FollowHandler(
             info,
-            baseContext,
+            requireContext(),
             (FollowHandler.Delegate { mFab!!.hide() })
         )
 
@@ -342,7 +353,7 @@ class ChannelActivity : ThemeActivity() {
         val hideFabDuration = 200
         mFab!!.animate()
             .translationY(
-                getResources().getDimension(R.dimen.streamerInfo_fab_size) + getResources().getDimension(
+                resources.getDimension(R.dimen.streamerInfo_fab_size) + resources.getDimension(
                     R.dimen.streamerInfo_fab_margin
                 )
             )
@@ -390,7 +401,8 @@ class ChannelActivity : ThemeActivity() {
             .start()
     }
 
-    abstract class ChannelFragment : Fragment() {
+    abstract class ChannelFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGroup?, Boolean) -> T) :
+        BindingFragment<T>(inflate) {
         var mErrorEmote: TextView? = null
         var mErrorText: TextView? = null
 
@@ -406,24 +418,21 @@ class ChannelActivity : ThemeActivity() {
         }
     }
 
-    class InfoFragment : ChannelFragment() {
+    class InfoFragment :
+        ChannelFragment<FragmentChannelDescriptionBinding>(FragmentChannelDescriptionBinding::inflate) {
         private var info: ChannelInfo? = null
 
         private var mPanelsRecyclerView: RecyclerView? = null
 
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View {
-            val rootView = inflater.inflate(R.layout.fragment_channel_description, container, false)
-
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
             if (arguments != null) {
                 info = requireArguments().getParcelable(FRAGMENT_STREAMER_INFO_ARG)
             }
 
-            mPanelsRecyclerView = rootView.findViewById(R.id.panel_recyclerview)
-            val mDescription = rootView.findViewById<TextView>(R.id.description)
-            findErrorView(rootView)
+            mPanelsRecyclerView = view.findViewById(R.id.panel_recyclerview)
+            val mDescription = view.findViewById<TextView>(R.id.description)
+            findErrorView(view)
 
             if (info != null && info!!.streamDescription != null && (info!!.streamDescription != "null") && !info!!.streamDescription!!.isEmpty()) {
                 mDescription.text = info!!.streamDescription
@@ -432,8 +441,6 @@ class ChannelActivity : ThemeActivity() {
             }
 
             setupPanels()
-
-            return rootView
         }
 
         private fun setupPanels() {
@@ -461,7 +468,9 @@ class ChannelActivity : ThemeActivity() {
         }
     }
 
-    class VodFragment : ChannelFragment(), LazyFetchingActivity<VideoOnDemand> {
+    class VodFragment :
+        ChannelFragment<FragmentChannelVodsBinding>(FragmentChannelVodsBinding::inflate),
+        LazyFetchingFragment<VideoOnDemand> {
         private lateinit var mRecyclerView: AutoSpanRecyclerView
         private var mAdapter: VODAdapter? = null
         private var channelInfo: ChannelInfo? = null
@@ -479,11 +488,8 @@ class ChannelActivity : ThemeActivity() {
             )
         }
 
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View {
-            val rootView = inflater.inflate(R.layout.fragment_channel_vods, container, false)
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
 
             val args = arguments
             if (args != null) {
@@ -491,17 +497,17 @@ class ChannelActivity : ThemeActivity() {
                 broadcasts = args.getBoolean(FRAGMENT_VODS_BROAD_CASTS_ONLY_ARG)
             }
 
-            mRecyclerView = rootView.findViewById(R.id.recyclerview_vods)
-            progressView = rootView.findViewById(R.id.circle_progress)
+            mRecyclerView = view.findViewById(R.id.recyclerview_vods)
+            progressView = view.findViewById(R.id.circle_progress)
 
-            findErrorView(rootView)
+            findErrorView(view)
             if (showError) {
                 showError()
             }
 
             if (mAdapter == null) {
                 mRecyclerView.setBehaviour(VODAutoSpanBehaviour())
-                mAdapter = VODAdapter(mRecyclerView, requireActivity())
+                mAdapter = VODAdapter(mRecyclerView, this)
                 mAdapter!!.setShowName(false)
                 progressView!!.start()
             }
@@ -517,8 +523,6 @@ class ChannelActivity : ThemeActivity() {
             mRecyclerView.setHasFixedSize(true)
 
             lazyFetchingOnScrollListener.checkForNewElements(mRecyclerView)
-
-            return rootView
         }
 
         override var cursor: String? = ""
@@ -594,7 +598,9 @@ class ChannelActivity : ThemeActivity() {
     }
 
 
-    class ClipFragment : ChannelFragment(), LazyFetchingActivity<Clip> {
+    class ClipFragment :
+        ChannelFragment<FragmentChannelVodsBinding>(FragmentChannelVodsBinding::inflate),
+        LazyFetchingFragment<Clip> {
         private var mRecyclerView: AutoSpanRecyclerView? = null
         private var mAdapter: ClipAdapter? = null
         private var channelInfo: ChannelInfo? = null
@@ -613,28 +619,24 @@ class ChannelActivity : ThemeActivity() {
             )
         }
 
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View {
-            val rootView = inflater.inflate(R.layout.fragment_channel_vods, container, false)
-
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
             val args = arguments
             if (args != null) {
                 channelInfo = args.getParcelable(FRAGMENT_VODS_STREAMER_INFO_ARG)
             }
 
-            mRecyclerView = rootView.findViewById(R.id.recyclerview_vods)
-            progressView = rootView.findViewById(R.id.circle_progress)
+            mRecyclerView = view.findViewById(R.id.recyclerview_vods)
+            progressView = view.findViewById(R.id.circle_progress)
 
-            findErrorView(rootView)
+            findErrorView(view)
             if (showError) {
                 showError()
             }
 
             if (mAdapter == null) {
                 mRecyclerView!!.setBehaviour(VODAutoSpanBehaviour())
-                mAdapter = ClipAdapter(mRecyclerView!!, requireActivity())
+                mAdapter = ClipAdapter(mRecyclerView!!, this)
                 mAdapter!!.setShowName(false)
                 progressView!!.start()
             }
@@ -650,8 +652,6 @@ class ChannelActivity : ThemeActivity() {
             mRecyclerView!!.setHasFixedSize(true)
 
             lazyFetchingOnScrollListener.checkForNewElements(mRecyclerView!!)
-
-            return rootView
         }
 
         override var cursor: String? = ""
@@ -718,11 +718,12 @@ class ChannelActivity : ThemeActivity() {
         private val tabFragments: Array<Fragment>
 
         init {
-            val mDescriptionFragment: ChannelFragment = InfoFragment.newInstance(info)
-            val mBroadcastsFragment: ChannelFragment = VodFragment.newInstance(true, info)
-            val mHighlightsFragment: ChannelFragment =
+            val mDescriptionFragment: ChannelFragment<*> = InfoFragment.newInstance(info)
+            val mBroadcastsFragment: ChannelFragment<*> =
+                VodFragment.newInstance(true, info)
+            val mHighlightsFragment: ChannelFragment<*> =
                 VodFragment.newInstance(false, info)
-            val mClipsFragment: ChannelFragment = ClipFragment.newInstance(info)
+            val mClipsFragment: ChannelFragment<*> = ClipFragment.newInstance(info)
 
             val chatBundle = Bundle()
             chatBundle.putParcelable(getString(R.string.stream_fragment_streamerInfo), info)

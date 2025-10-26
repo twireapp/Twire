@@ -2,17 +2,15 @@ package com.perflyst.twire.activities
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.util.Patterns
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.perflyst.twire.R
 import com.perflyst.twire.TwireApplication
-import com.perflyst.twire.activities.stream.ClipActivity.Companion.createClipIntent
-import com.perflyst.twire.activities.stream.LiveStreamActivity
-import com.perflyst.twire.activities.stream.VODActivity
+import com.perflyst.twire.activities.stream.ClipFragment.Companion.createClipIntent
+import com.perflyst.twire.activities.stream.LiveStreamFragment
+import com.perflyst.twire.activities.stream.VODFragment
 import com.perflyst.twire.model.ChannelInfo
 import com.perflyst.twire.model.StreamInfo
 import com.perflyst.twire.model.VideoOnDemand
@@ -22,23 +20,24 @@ import com.perflyst.twire.service.Service
 import com.perflyst.twire.service.Settings.reportErrors
 import io.sentry.Sentry
 import io.sentry.SentryEvent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.LinkedList
 import java.util.Objects
 import java.util.Queue
 
-class DeepLinkActivity : AppCompatActivity() {
+class DeepLinkActivity : StartUpActivity() {
     private var errorMessage = R.string.router_unknown_error
-    public override fun onCreate(savedInstance: Bundle?) {
-        super.onCreate(savedInstance)
 
+    override suspend fun resolveStartupIntent(): Intent? {
         if (intent.hasExtra("reportErrors")) {
-            reportErrorDialog()
-            return
+            withContext(Dispatchers.Main) { reportErrorDialog() }
+            return null
         }
 
-        val data = getUri(intent)
-        val params: MutableList<String> = LinkedList<String>(data!!.pathSegments)
+        val data = getUri(intent) ?: return null
+        val params: MutableList<String> = LinkedList(data.pathSegments)
 
         // twitch.tv/<channel>/video/<id> -> twitch.tv/videos/<id>
         if (params.size == 3 && (params[1] == "video" || params[1] == "v")) {
@@ -46,23 +45,21 @@ class DeepLinkActivity : AppCompatActivity() {
             params.removeAt(0)
         }
 
-        val paramSize = params.size
-
-        Thread {
-            var intent: Intent? = null
+        val result = withContext(Dispatchers.IO) {
             try {
-                intent = getNewIntent(params, paramSize)
-            } catch (exception: Exception) {
-                Timber.e(exception)
+                getNewIntent(params, params.size)
+            } catch (e: Exception) {
+                Timber.e(e)
+                null
             }
-            if (intent == null) {
-                runOnUiThread {
-                    DialogService.getRouterErrorDialog(this, errorMessage).show()
-                }
-            } else {
-                startActivity(intent)
+        }
+
+        if (result == null) {
+            withContext(Dispatchers.Main) {
+                DialogService.getRouterErrorDialog(this@DeepLinkActivity, errorMessage).show()
             }
-        }.start()
+        }
+        return result
     }
 
     private fun reportErrorDialog() {
@@ -126,7 +123,7 @@ class DeepLinkActivity : AppCompatActivity() {
 
             vod.channelInfo = ChannelInfo(users[0]!!)
 
-            return VODActivity.createVODIntent(vod, this, false)
+            return VODFragment.createVODIntent(vod, this, false)
         } else if (paramSize == 1) { // twitch.tv/<channel>
             errorMessage = R.string.router_channel_error
 
@@ -142,7 +139,7 @@ class DeepLinkActivity : AppCompatActivity() {
             ).execute().streams
             if (!streams.isEmpty()) {
                 val stream = StreamInfo(streams[0]!!)
-                return LiveStreamActivity.createLiveStreamIntent(stream, false, this)
+                return LiveStreamFragment.createLiveStreamIntent(stream, false, this)
             }
 
             val users = TwireApplication.helix.getUsers(null, null, listOf(params[0]))
@@ -150,7 +147,7 @@ class DeepLinkActivity : AppCompatActivity() {
             if (!users.isEmpty()) {
                 // If we can't load the stream, try to show the user's channel instead.
                 val info = ChannelInfo(users[0]!!)
-                return Intent(this, ChannelActivity::class.java)
+                return Intent(this, ChannelFragment::class.java)
                     .putExtra(getString(R.string.channel_info_intent_object), info)
             }
 

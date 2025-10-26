@@ -1,18 +1,22 @@
 package com.perflyst.twire.adapters
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.core.os.bundleOf
+import androidx.fragment.app.FragmentActivity
+import androidx.transition.Fade
+import androidx.transition.Slide
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.GameActivity
-import com.perflyst.twire.activities.main.MainActivity
+import com.perflyst.twire.activities.GameFragment
+import com.perflyst.twire.activities.main.MainFragment
 import com.perflyst.twire.adapters.MainActivityAdapter.ElementsViewHolder
+import com.perflyst.twire.misc.navigate
 import com.perflyst.twire.model.Game
 import com.perflyst.twire.service.Settings.appearanceGameStyle
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView
@@ -45,7 +49,7 @@ class GameViewHolder(v: View) : ElementsViewHolder(v) {
 class GamesAdapter(
     recyclerView: AutoSpanRecyclerView,
     aContext: Context,
-    private val mActivity: Activity?
+    private val mActivity: FragmentActivity?
 ) : MainActivityAdapter<Game, GameViewHolder>(recyclerView, aContext) {
     private val regMargin: Int = context.resources.getDimension(R.dimen.game_card_margin).toInt()
     private val bottomMargin: Int =
@@ -66,26 +70,22 @@ class GamesAdapter(
         val itemPosition = recyclerView.getChildAdapterPosition(view)
         val gameClicked = elements[itemPosition]
 
-        val intent = Intent(context, GameActivity::class.java)
-        intent.putExtra(context.getString(R.string.game_intent_key), gameClicked)
+        when (parentFragment) {
+            null -> {}
 
-        //intent.putExtra(context.getString(R.string.game_intent_image_key), Service.getDrawableByteArray(viewHolder.getGamePreview().getDrawable()));
-        when (mActivity) {
-            null -> {
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(intent)
-            }
-
-            is MainActivity<*> -> {
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-                mActivity.transitionToOtherMainActivity(intent)
+            is MainFragment<*> -> {
+                (parentFragment as MainFragment<*>).transitionToOtherMainActivity(
+                    GameFragment::class.java,
+                    bundleOf(context.getString(R.string.game_intent_key) to gameClicked)
+                )
             }
 
             else -> {
-                mActivity.startActivity(intent)
-                mActivity.overridePendingTransition(
-                    R.anim.slide_in_right_anim,
-                    R.anim.fade_out_semi_anim
+                mActivity!!.navigate(
+                    GameFragment::class.java,
+                    bundleOf(context.getString(R.string.game_intent_key) to gameClicked),
+                    enterAnim = Slide(Gravity.END),
+                    exitAnim = Fade()
                 )
             }
         }

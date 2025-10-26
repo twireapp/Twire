@@ -1,21 +1,25 @@
 package com.perflyst.twire.adapters
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.FragmentActivity
+import androidx.transition.Fade
+import androidx.transition.Slide
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.ChannelActivity
-import com.perflyst.twire.activities.stream.LiveStreamActivity.Companion.createLiveStreamIntent
+import com.perflyst.twire.activities.ChannelFragment
+import com.perflyst.twire.activities.stream.LiveStreamFragment
+import com.perflyst.twire.activities.stream.LiveStreamFragment.Companion.createLiveStreamIntent
 import com.perflyst.twire.adapters.MainActivityAdapter.ElementsViewHolder
 import com.perflyst.twire.misc.Utils
+import com.perflyst.twire.misc.navigate
 import com.perflyst.twire.model.StreamInfo
 import com.perflyst.twire.service.Service
 import com.perflyst.twire.service.Settings.appearanceStreamStyle
@@ -41,7 +45,7 @@ class StreamViewHolder(v: View) : ElementsViewHolder(v) {
     override val elementWrapper: View get() = vCard
 }
 
-class StreamsAdapter(recyclerView: AutoSpanRecyclerView, private val activity: Activity) :
+class StreamsAdapter(recyclerView: AutoSpanRecyclerView, private val activity: FragmentActivity) :
     MainActivityAdapter<StreamInfo, StreamViewHolder>(
         recyclerView,
         activity
@@ -74,15 +78,18 @@ class StreamsAdapter(recyclerView: AutoSpanRecyclerView, private val activity: A
             return
         }
 
-        val item = elements[itemPosition]!!
+        val item = elements[itemPosition]
         val intent = createLiveStreamIntent(item, true, context)
 
         val sharedView = view.findViewById<View>(R.id.image_stream_preview)
         sharedView.transitionName = context.getString(R.string.stream_preview_transition)
-        val options = ActivityOptions.makeSceneTransitionAnimation(
-            activity, sharedView, context.getString(R.string.stream_preview_transition)
+        activity.navigate(
+            LiveStreamFragment::class.java,
+            intent.extras,
+            enterAnim = Slide(),
+            exitAnim = Fade(),
+            sharedElement = sharedView,
         )
-        activity.startActivity(intent, options.toBundle())
     }
 
     override fun handleElementOnLongClick(view: View) {
@@ -93,18 +100,21 @@ class StreamsAdapter(recyclerView: AutoSpanRecyclerView, private val activity: A
 
         Execute.background {
             val mChannelInfo = Service.getStreamerInfoFromUserId(userInfo.userId)
-            val intent = Intent(context, ChannelActivity::class.java)
+            val intent = Intent(context, ChannelFragment::class.java)
             intent.putExtra(
                 context.getString(R.string.channel_info_intent_object),
                 mChannelInfo
             )
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-            context.startActivity(intent)
-            activity.overridePendingTransition(
-                R.anim.slide_in_right_anim,
-                R.anim.fade_out_semi_anim
-            )
+            Execute.ui {
+                activity.navigate(
+                    ChannelFragment::class.java,
+                    intent.extras,
+                    enterAnim = Slide(Gravity.END),
+                    exitAnim = Fade()
+                )
+            }
         }
     }
 

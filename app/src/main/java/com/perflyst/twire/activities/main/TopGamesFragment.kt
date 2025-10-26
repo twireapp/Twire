@@ -14,7 +14,7 @@ import timber.log.Timber
  * Activity that loads and shows the top games on Twitch.
  * The Activity loads the content as it is needed.
  */
-class TopGamesActivity : LazyMainActivity<Game>() {
+class TopGamesFragment : LazyMainFragment<Game>() {
     override val activityIconRes: Int get() = R.drawable.ic_games
 
     override val activityTitleRes: Int get() = R.string.top_games_activity_title
@@ -34,7 +34,7 @@ class TopGamesActivity : LazyMainActivity<Game>() {
     }
 
     override fun constructAdapter(recyclerView: AutoSpanRecyclerView): MainActivityAdapter<Game, *> {
-        return GamesAdapter(recyclerView, baseContext, this)
+        return GamesAdapter(recyclerView, requireContext(), requireActivity())
     }
 
     override val visualElements: MutableList<Game>

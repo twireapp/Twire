@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:fitsSystemWindows="true"
-    tools:context="com.perflyst.twire.activities.settings.SettingsStreamPlayerActivity">
+    tools:context="com.perflyst.twire.activities.settings.SettingsStreamPlayerFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/settings_player_toolbar"

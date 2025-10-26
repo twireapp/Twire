@@ -11,6 +11,8 @@ import android.view.animation.Animation
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.perflyst.twire.R
 import com.perflyst.twire.service.Service
@@ -86,7 +88,14 @@ open class UniversalOnScrollListener(
         }
     }
 
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy2: Int) {
+        var dy = dy2
+        // If the recyclerview updates it's layout, we'll need to recalculate the scroll position
+        if (dy == 0) {
+            val exactScrollPosition = calculateExactScrollPosition(recyclerView)
+            dy = exactScrollPosition - amountScrolled
+        }
+
         if (isMainActivity) {
             var TOOLBAR_HEIGHT =
                 mActivity!!.getResources().getDimension(R.dimen.main_toolbar_height).toInt()
@@ -290,5 +299,49 @@ open class UniversalOnScrollListener(
                 }
             })
         }
+    }
+
+    /**
+     * Calculates the exact scroll position based on the RecyclerView's current state.
+     * This is useful for state restoration when items have uniform height/width.
+     *
+     * @param recyclerView The RecyclerView to calculate scroll position for
+     * @return The calculated scroll position in pixels
+     */
+    private fun calculateExactScrollPosition(recyclerView: RecyclerView): Int {
+        if (recyclerView !is AutoSpanRecyclerView) {
+            return recyclerView.computeVerticalScrollOffset()
+        }
+
+        val layoutManager = recyclerView.manager
+        val firstVisiblePosition = layoutManager.findFirstVisibleItemPosition()
+
+        if (firstVisiblePosition == RecyclerView.NO_POSITION) {
+            return 0
+        }
+
+        // Get the first visible child view
+        val firstVisibleView = layoutManager.findViewByPosition(firstVisiblePosition)
+            ?: return recyclerView.computeVerticalScrollOffset()
+
+        // Total height per item including view height and margins
+        val itemHeight = firstVisibleView.height
+        val totalItemHeight =
+            itemHeight + firstVisibleView.marginTop + firstVisibleView.marginBottom
+
+        // Get the top offset of the first visible item relative to RecyclerView's padding
+        val firstVisibleTop = firstVisibleView.top - recyclerView.paddingTop
+
+        // Calculate rows scrolled (accounting for grid span)
+        val rowsScrolled = firstVisiblePosition / layoutManager.spanCount
+
+        // Special handling for the first item which may have extra top margin
+        val firstItemExtraMargin = if (isMainActivity && mActivity != null) {
+            mActivity.resources.getDimension(R.dimen.stream_card_first_top_margin).toInt()
+        } else {
+            0
+        }
+
+        return (rowsScrolled * totalItemHeight) + firstItemExtraMargin - firstVisibleTop
     }
 }

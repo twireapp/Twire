@@ -4,7 +4,6 @@ import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.drawable.ColorDrawable
 import android.util.DisplayMetrics
@@ -19,15 +18,16 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.customview.widget.ViewDragHelper
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.common.cache.LoadingCache
 import com.perflyst.twire.R
 import com.perflyst.twire.TwireApplication
-import com.perflyst.twire.activities.main.MyChannelsActivity
-import com.perflyst.twire.activities.main.MyStreamsActivity
-import com.perflyst.twire.activities.main.TopGamesActivity
-import com.perflyst.twire.activities.main.TopStreamsActivity
+import com.perflyst.twire.activities.main.MyChannelsFragment
+import com.perflyst.twire.activities.main.MyStreamsFragment
+import com.perflyst.twire.activities.main.TopGamesFragment
+import com.perflyst.twire.activities.main.TopStreamsFragment
 import com.perflyst.twire.misc.SecretKeys
 import com.perflyst.twire.model.ChannelInfo
 import com.perflyst.twire.model.UserInfo
@@ -86,27 +86,25 @@ object Service {
      * @param context The context from which the method is called
      * @return The intent
      */
-    fun getStartPageIntent(context: Context): Intent {
+    fun getStartPageClass(context: Context): Class<out Fragment> {
         val title = startPage
 
-        var activityClass: Class<*> = MyStreamsActivity::class.java
+        var activityClass: Class<out Fragment> = MyStreamsFragment::class.java
         when (title) {
             context.getString(R.string.navigation_drawer_follows_title) -> {
-                activityClass = MyChannelsActivity::class.java
+                activityClass = MyChannelsFragment::class.java
             }
 
             context.getString(R.string.navigation_drawer_top_streams_title) -> {
-                activityClass = TopStreamsActivity::class.java
+                activityClass = TopStreamsFragment::class.java
             }
 
             context.getString(R.string.navigation_drawer_top_games_title) -> {
-                activityClass = TopGamesActivity::class.java
+                activityClass = TopGamesFragment::class.java
             }
         }
 
-        val intent = Intent(context, activityClass)
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        return intent
+        return activityClass
     }
 
     /**

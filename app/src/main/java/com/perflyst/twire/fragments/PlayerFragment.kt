@@ -19,7 +19,6 @@ import android.support.v4.media.MediaMetadataCompat
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
-import android.transition.Transition
 import android.util.DisplayMetrics
 import android.util.Rational
 import android.view.LayoutInflater
@@ -52,7 +51,6 @@ import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.Fragment
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaItem.LiveConfiguration
 import androidx.media3.common.MediaMetadata
@@ -70,6 +68,8 @@ import androidx.media3.ui.PlayerView.ControllerVisibilityListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Fade
+import androidx.transition.Slide
+import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.balysv.materialripple.MaterialRippleLayout
 import com.bumptech.glide.Glide
@@ -82,14 +82,17 @@ import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.perflyst.twire.PlaybackService
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.ChannelActivity
-import com.perflyst.twire.activities.stream.StreamActivity
+import com.perflyst.twire.activities.ChannelFragment
+import com.perflyst.twire.activities.stream.VideoFragment
 import com.perflyst.twire.adapters.PanelAdapter
 import com.perflyst.twire.chat.ChatManager
+import com.perflyst.twire.databinding.FragmentStreamBinding
 import com.perflyst.twire.misc.FollowHandler
 import com.perflyst.twire.misc.ResizeHeightAnimation
 import com.perflyst.twire.misc.ResizeWidthAnimation
 import com.perflyst.twire.misc.Utils
+import com.perflyst.twire.misc.navigate
+import com.perflyst.twire.misc.popBackStack
 import com.perflyst.twire.model.ChannelInfo
 import com.perflyst.twire.model.Quality
 import com.perflyst.twire.model.SleepTimer
@@ -127,7 +130,8 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 @OptIn(UnstableApi::class)
-class StreamFragment : Fragment(), Player.Listener {
+class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBinding::inflate),
+    Player.Listener {
     private val fetchViewCountHandler = Handler()
     private val fetchChattersHandler = Handler()
     private val vodHandler = Handler()
@@ -136,7 +140,7 @@ class StreamFragment : Fragment(), Player.Listener {
     private val fetchChattersDelay = 1000 * 60 // 30 seco... Nah just kidding. Also a minute.
 
     @JvmField
-    var streamFragmentCallback: StreamFragmentListener? = null
+    var playerFragmentCallback: PlayerFragmentListener? = null
 
     @JvmField
     var chatOnlyViewVisible: Boolean = false
@@ -210,12 +214,13 @@ class StreamFragment : Fragment(), Player.Listener {
         setHasOptionsMenu(true)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val args = arguments
         setHasOptionsMenu(true)
+
+
+        postponeEnterTransition()
 
         if (args != null) {
             mUserInfo =
@@ -225,8 +230,7 @@ class StreamFragment : Fragment(), Player.Listener {
             title = args.getString(getString(R.string.stream_fragment_title))
         }
 
-        val mRootView = inflater.inflate(R.layout.fragment_stream, container, false)
-        mRootView.requestLayout()
+        view.requestLayout()
 
         // If the user has been in FULL SCREEN mode and presses the back button, we want to change the orientation to portrait.
         // As soon as the orientation has change we don't want to force the user to will be in portrait, so we "release" the request.
@@ -240,19 +244,16 @@ class StreamFragment : Fragment(), Player.Listener {
 
         //  If no streamer info is available we cant show the stream.
         if (mUserInfo == null) {
-            if (activity != null) {
-                requireActivity().finish()
-            }
-            return rootView
+            return popBackStack()
         }
 
-        rootView = mRootView as ViewGroup
-        mVideoView = mRootView.findViewById(R.id.VideoView)
+        rootView = view as ViewGroup
+        mVideoView = view.findViewById(R.id.VideoView)
         mVideoInterface = mVideoView.findViewById(R.id.video_interface)
         mToolbar = mVideoView.findViewById(R.id.main_toolbar)
         mTitleText = mVideoView.findViewById(R.id.toolbar_title)
         mControlToolbar = mVideoView.findViewById(R.id.control_toolbar_wrapper)
-        mVideoWrapper = mRootView.findViewById(R.id.video_wrapper)
+        mVideoWrapper = view.findViewById(R.id.video_wrapper)
         mPlayPauseWrapper = mVideoView.findViewById(R.id.play_pause_wrapper)
         mPlayIcon = mVideoView.findViewById(R.id.ic_play)
         mPauseIcon = mVideoView.findViewById(R.id.ic_pause)
@@ -276,6 +277,8 @@ class StreamFragment : Fragment(), Player.Listener {
         setupShowChatButton()
 
         if (savedInstanceState == null) setPreviewAndCheckForSharedTransition()
+
+        setVideoViewLayout()
 
         mFullScreenButton.setOnClickListener { v: View? -> toggleFullscreen() }
         mPlayPauseWrapper.setOnClickListener { v: View? ->
@@ -394,9 +397,7 @@ class StreamFragment : Fragment(), Player.Listener {
                     v!!.setPadding(insets.left, insets.top, insets.right, insets.bottom)
                     mVideoInterface.setPadding(0, 0, 0, 0)
                 }
-            }.applyToView(mRootView)
-
-        return mRootView
+            }.applyToView(view)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.S)
@@ -428,7 +429,7 @@ class StreamFragment : Fragment(), Player.Listener {
                 ComponentName(requireContext(), PlaybackService::class.java)
             )
             controllerFuture = MediaController.Builder(requireContext(), sessionToken).buildAsync()
-            val streamFragment = this
+            val playerFragment = this
             Futures.addCallback<MediaController?>(
                 controllerFuture,
                 object : FutureCallback<MediaController?> {
@@ -437,7 +438,7 @@ class StreamFragment : Fragment(), Player.Listener {
                         player?.let { player ->
                             callback.run()
 
-                            player.addListener(streamFragment)
+                            player.addListener(playerFragment)
                             mVideoView.setPlayer(player)
 
                             if (vodId != null) {
@@ -468,6 +469,7 @@ class StreamFragment : Fragment(), Player.Listener {
         MediaController.releaseFuture(controllerFuture!!)
         player!!.removeListener(this)
         player = null
+        updatePIPParameters()
     }
 
     val playWhenReady: Boolean
@@ -523,7 +525,7 @@ class StreamFragment : Fragment(), Player.Listener {
         val newMs = newPosition.positionMs
         // A seek is when we've gone backwards or we go more than 10 seconds forward.
         val seek = oldMs > newMs || newMs - oldMs > 10000
-        if (seek) streamFragmentCallback!!.onSeek()
+        if (seek) playerFragmentCallback!!.onSeek()
         ChatManager.instance?.updateVodProgress(newMs, seek)
     }
 
@@ -536,7 +538,7 @@ class StreamFragment : Fragment(), Player.Listener {
     }
 
     fun updatePIPParameters() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || player == null) return
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
 
         val videoRect = Rect()
         mVideoView.videoSurfaceView!!.getGlobalVisibleRect(videoRect)
@@ -546,7 +548,7 @@ class StreamFragment : Fragment(), Player.Listener {
             .setSourceRectHint(videoRect)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            builder.setAutoEnterEnabled(player!!.getPlayWhenReady())
+            builder.setAutoEnterEnabled(player?.getPlayWhenReady() ?: false)
         }
 
         mActivity!!.setPictureInPictureParams(builder.build())
@@ -609,7 +611,7 @@ class StreamFragment : Fragment(), Player.Listener {
     override fun onPause() {
         super.onPause()
 
-        Timber.d("Stream Fragment paused")
+        Timber.d("Player Fragment paused")
         if (pictureInPictureEnabled) return
 
         hasPaused = true
@@ -622,7 +624,7 @@ class StreamFragment : Fragment(), Player.Listener {
     }
 
     override fun onStop() {
-        Timber.d("Stream Fragment Stopped")
+        Timber.d("Player Fragment Stopped")
         super.onStop()
 
         if (!castingViewVisible && !this.isAudioOnlyModeEnabled && player != null && !streamPlayerLockedPlayback) {
@@ -654,7 +656,7 @@ class StreamFragment : Fragment(), Player.Listener {
                     task
                 ) { chatters: ArrayList<String>? -> }
 
-                if (!this@StreamFragment.isDetached) {
+                if (!this@PlayerFragment.isDetached) {
                     fetchChattersHandler.postDelayed(this, fetchChattersDelay.toLong())
                 }
             }
@@ -683,7 +685,7 @@ class StreamFragment : Fragment(), Player.Listener {
                     }
                 }
 
-                if (!this@StreamFragment.isDetached) {
+                if (!this@PlayerFragment.isDetached) {
                     fetchViewCountHandler.postDelayed(this, fetchViewCountDelay.toLong())
                 }
             }
@@ -804,6 +806,7 @@ class StreamFragment : Fragment(), Player.Listener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_stream, menu)
         optionsMenuItem = menu.findItem(R.id.menu_item_options)
         optionsMenuItem!!.isVisible = chatOnlyViewVisible
         optionsMenuItem!!.setOnMenuItemClickListener { menuItem: MenuItem? ->
@@ -844,6 +847,21 @@ class StreamFragment : Fragment(), Player.Listener {
 
             R.id.menu_item_playback -> {
                 playbackButtonClicked()
+                return true
+            }
+
+            android.R.id.home -> { // Call the super method as we also want the user to go all the way back to last mActivity if the user is in full screen mode
+                if (!isVideoInterfaceShowing) {
+                    return false
+                }
+
+                if (chatOnlyViewVisible) {
+                    requireActivity().supportFragmentManager.popBackStack()
+                } else {
+                    requireActivity().supportFragmentManager.popBackStack()
+                    backPressed()
+                }
+
                 return true
             }
 
@@ -968,9 +986,9 @@ class StreamFragment : Fragment(), Player.Listener {
      * Checks if the activity was started with a shared view in high API levels.
      */
     private fun setPreviewAndCheckForSharedTransition() {
-        val intent = requireActivity().intent
-        if (intent.hasExtra(getString(R.string.stream_preview_url))) {
-            val imageUrl = intent.getStringExtra(getString(R.string.stream_preview_url))
+        val args = arguments
+        if (args != null && args.containsKey(getString(R.string.stream_preview_url))) {
+            val imageUrl = args.getString(getString(R.string.stream_preview_url))
 
             if (imageUrl == null || imageUrl.isEmpty()) {
                 return
@@ -983,43 +1001,44 @@ class StreamFragment : Fragment(), Player.Listener {
                 .into(mPreview)
         }
 
-        if (intent.getBooleanExtra(getString(R.string.stream_shared_transition), false)) {
+        if (args != null && args.getBoolean(getString(R.string.stream_shared_transition), false)) {
             mPreview.transitionName = getString(R.string.stream_preview_transition)
+            startPostponedEnterTransition()
 
             val viewsToHide = arrayOf<View>(mToolbar, mControlToolbar)
             for (view in viewsToHide) {
                 view.visibility = View.INVISIBLE
             }
 
-            requireActivity().window.enterTransition
-                .addListener(object : Transition.TransitionListener {
-                    override fun onTransitionEnd(transition: Transition?) {
-                        TransitionManager.beginDelayedTransition(
-                            mVideoWrapper,
-                            Fade()
-                                .setDuration(340)
-                                .excludeTarget(mVideoView, true)
-                                .excludeTarget(mPreview, true)
-                        )
+            val showViews = {
+                TransitionManager.beginDelayedTransition(
+                    mVideoWrapper,
+                    Fade()
+                        .setDuration(340)
+                        .excludeTarget(mVideoView, true)
+                        .excludeTarget(mPreview, true)
+                )
+                for (view in viewsToHide) {
+                    view.visibility = View.VISIBLE
+                }
+            }
 
-                        for (view in viewsToHide) {
-                            view.visibility = View.VISIBLE
-                        }
+            val enterTransition =
+                requireActivity().supportFragmentManager.findFragmentById(R.id.startup_activity)?.sharedElementEnterTransition as Transition?
+            if (enterTransition != null) {
+                enterTransition.addListener(object :
+                    androidx.transition.TransitionListenerAdapter() {
+                    override fun onTransitionEnd(transition: Transition) {
+                        showViews()
                     }
 
-                    override fun onTransitionCancel(transition: Transition?) {
-                        onTransitionEnd(transition)
-                    }
-
-                    override fun onTransitionStart(transition: Transition?) {
-                    }
-
-                    override fun onTransitionPause(transition: Transition?) {
-                    }
-
-                    override fun onTransitionResume(transition: Transition?) {
+                    override fun onTransitionCancel(transition: Transition) {
+                        showViews()
                     }
                 })
+            } else {
+                showViews()
+            }
         }
     }
 
@@ -1249,7 +1268,7 @@ class StreamFragment : Fragment(), Player.Listener {
         action: View.OnClickListener? = null
     ) {
         if (activity != null && !isDetached) {
-            val mainView = (activity as StreamActivity).mainContentLayout
+            val mainView = (parentFragment as VideoFragment<*>).mainContentLayout
 
             if ((snackbar == null || !snackbar!!.isShown) && mainView != null) {
                 snackbar = Snackbar.make(mainView, message, 4000)
@@ -1284,8 +1303,8 @@ class StreamFragment : Fragment(), Player.Listener {
         }
 
         // Grab the preview image from the intent and give it to the media metadata
-        val intent = requireActivity().intent
-        val uriString = intent.getStringExtra(getString(R.string.stream_preview_url))
+        val intent = requireParentFragment().requireArguments()
+        val uriString = intent.getString(getString(R.string.stream_preview_url))
 
         val mediaItem = MediaItem.Builder()
             .setLiveConfiguration(LiveConfiguration.Builder().setTargetOffsetMs(1000).build())
@@ -1455,10 +1474,14 @@ class StreamFragment : Fragment(), Player.Listener {
 
         mFullProfileButton.setOnClickListener { view: View? ->
             mProfileBottomSheet!!.dismiss()
-            val intent = Intent(context, ChannelActivity::class.java)
-            intent.putExtra(getString(R.string.channel_info_intent_object), mUserInfo)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+            val args = Bundle()
+            args.putParcelable(getString(R.string.channel_info_intent_object), mUserInfo)
+            navigate(
+                ChannelFragment::class.java,
+                args,
+                enterAnim = Slide(),
+                exitAnim = Fade()
+            )
         }
 
         setupPanels(mPanelsRecyclerView)
@@ -1787,7 +1810,7 @@ class StreamFragment : Fragment(), Player.Listener {
         mQualityWrapper.visibility = View.GONE
     }
 
-    interface StreamFragmentListener {
+    interface PlayerFragmentListener {
         fun onSeek()
 
         fun refreshLayout()
@@ -1800,8 +1823,8 @@ class StreamFragment : Fragment(), Player.Listener {
         private var pipDisabling = false // Tracks the PIP disabling animation.
 
         @JvmStatic
-        fun newInstance(args: Bundle?): StreamFragment {
-            val fragment = StreamFragment()
+        fun newInstance(args: Bundle?): PlayerFragment {
+            val fragment = PlayerFragment()
             fragment.setArguments(args)
             return fragment
         }

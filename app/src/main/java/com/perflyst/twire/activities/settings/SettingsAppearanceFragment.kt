@@ -1,17 +1,20 @@
-package com.perflyst.twire.fragments
+package com.perflyst.twire.activities.settings
 
 import android.os.Bundle
 import android.view.Gravity
-import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.MaterialDialog
 import com.perflyst.twire.R
+import com.perflyst.twire.databinding.ActivitySettingsAppearanceBinding
+import com.perflyst.twire.fragments.BindingFragment
+import com.perflyst.twire.misc.popBackStack
+import com.perflyst.twire.misc.setupToolbar
 import com.perflyst.twire.service.DialogService
 import com.perflyst.twire.service.Settings.appearanceChannelSize
 import com.perflyst.twire.service.Settings.appearanceChannelStyle
@@ -21,8 +24,8 @@ import com.perflyst.twire.service.Settings.appearanceStreamSize
 import com.perflyst.twire.service.Settings.appearanceStreamStyle
 import com.perflyst.twire.service.Settings.theme
 
-
-class AppearanceSettingsFragment : Fragment() {
+class SettingsAppearanceFragment :
+    BindingFragment<ActivitySettingsAppearanceBinding>(ActivitySettingsAppearanceBinding::inflate) {
     private lateinit var themeSummary: TextView
     private lateinit var streamsStyleSummary: TextView
     private lateinit var gameStyleSummary: TextView
@@ -32,26 +35,28 @@ class AppearanceSettingsFragment : Fragment() {
     private lateinit var streamerSizeSummary: TextView
     private lateinit var themeSummaryColor: ImageView
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val rootView = inflater.inflate(R.layout.fragment_appearance_settings, container, false)
-        themeSummary = rootView.findViewById(R.id.appearance_theme_color_summary)
-        themeSummaryColor = rootView.findViewById(R.id.appearance_theme_color)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupToolbar(binding.settingsAppearanceToolbar, R.string.settings_appearance_name)
 
-        streamsStyleSummary = rootView.findViewById(R.id.appearance_streams_style_summary)
-        gameStyleSummary = rootView.findViewById(R.id.appearance_game_style_summary)
-        followStyleSummary = rootView.findViewById(R.id.appearance_streamer_style_summary)
+        themeSummary = view.findViewById(R.id.appearance_theme_color_summary)
+        themeSummaryColor = view.findViewById(R.id.appearance_theme_color)
 
-        streamSizeSummary = rootView.findViewById(R.id.appearance_streams_size_summary)
-        gameSizeSummary = rootView.findViewById(R.id.appearance_game_size_summary)
-        streamerSizeSummary = rootView.findViewById(R.id.appearance_streamer_size_summary)
+        streamsStyleSummary = view.findViewById(R.id.appearance_streams_style_summary)
+        gameStyleSummary = view.findViewById(R.id.appearance_game_style_summary)
+        followStyleSummary = view.findViewById(R.id.appearance_streamer_style_summary)
+
+        streamSizeSummary = view.findViewById(R.id.appearance_streams_size_summary)
+        gameSizeSummary = view.findViewById(R.id.appearance_game_size_summary)
+        streamerSizeSummary = view.findViewById(R.id.appearance_streamer_size_summary)
 
         initSummaries()
-        initOnClicks(rootView)
+        initOnClicks(view)
+    }
 
-        return rootView
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        popBackStack()
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initOnClicks(rootView: View) {
@@ -249,11 +254,5 @@ class AppearanceSettingsFragment : Fragment() {
             initSummaries()
             true
         }.show()
-    }
-
-    companion object {
-        fun newInstance(): AppearanceSettingsFragment {
-            return AppearanceSettingsFragment()
-        }
     }
 }

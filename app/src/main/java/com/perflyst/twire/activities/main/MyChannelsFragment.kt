@@ -14,9 +14,9 @@ import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.ChannelAutoSp
  * Activity that shows the user's Twitch Follows.
  * If there are no follows in TempStorage when the activity is created, then the activity initiates an AsyncTask that connects to Twitch, that loads and adds the follows to this activity
  */
-class MyChannelsActivity : LazyMainActivity<ChannelInfo>() {
+class MyChannelsFragment : LazyMainFragment<ChannelInfo>() {
     override fun constructAdapter(recyclerView: AutoSpanRecyclerView): MainActivityAdapter<ChannelInfo, *> {
-        return ChannelsAdapter(mRecyclerView, baseContext, this)
+        return ChannelsAdapter(mRecyclerView, requireContext(), this)
     }
 
     override val activityIconRes: Int get() = R.drawable.ic_person
@@ -37,7 +37,7 @@ class MyChannelsActivity : LazyMainActivity<ChannelInfo>() {
                 return ArrayList(TempStorage.loadedStreamers)
             }
 
-            val subscriptionsTask = GetFollowsFromDB(this)
+            val subscriptionsTask = GetFollowsFromDB(requireActivity())
 
             return ArrayList(subscriptionsTask.call().values)
         }

@@ -1,6 +1,5 @@
 package com.perflyst.twire.activities.settings
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Patterns
 import android.view.MenuItem
@@ -9,15 +8,18 @@ import android.widget.CheckedTextView
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.material.snackbar.Snackbar
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.ThemeActivity
-import com.perflyst.twire.activities.setup.LoginActivity
+import com.perflyst.twire.activities.setup.LoginFragment
 import com.perflyst.twire.databinding.ActivitySettingsGeneralBinding
+import com.perflyst.twire.fragments.BindingFragment
 import com.perflyst.twire.fragments.ChangelogDialogFragment
+import com.perflyst.twire.misc.navigate
+import com.perflyst.twire.misc.popBackStack
+import com.perflyst.twire.misc.setupToolbar
 import com.perflyst.twire.service.DialogService
 import com.perflyst.twire.service.ReportErrors
 import com.perflyst.twire.service.Settings.generalFilterTopStreamsByLanguage
@@ -31,7 +33,8 @@ import com.perflyst.twire.service.Settings.startPage
 import com.perflyst.twire.service.SubscriptionsDbHelper
 import timber.log.Timber
 
-class SettingsGeneralActivity : ThemeActivity() {
+class SettingsGeneralFragment :
+    BindingFragment<ActivitySettingsGeneralBinding>(ActivitySettingsGeneralBinding::inflate) {
     private lateinit var twitchNameView: TextView
     private lateinit var startPageSubText: TextView
     private lateinit var generalImageProxySummary: TextView
@@ -40,24 +43,16 @@ class SettingsGeneralActivity : ThemeActivity() {
     private lateinit var generalImageProxy: CheckedTextView
     private lateinit var mImageProxyUrl: EditText
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivitySettingsGeneralBinding.inflate(layoutInflater)
-        setContentView(binding.getRoot())
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setupToolbar(binding.settingsGeneralToolbar, R.string.settings_general_name)
 
-        val toolbar = findViewById<Toolbar?>(R.id.settings_general_toolbar)
-        setSupportActionBar(toolbar)
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        }
+        twitchNameView = view.findViewById(R.id.general_current_twitch_name)
+        startPageSubText = view.findViewById(R.id.start_page_sub_text)
+        filterTopStreamsByLanguageView = view.findViewById(R.id.language_filter_title)
 
-        twitchNameView = findViewById(R.id.general_current_twitch_name)
-        startPageSubText = findViewById(R.id.start_page_sub_text)
-        filterTopStreamsByLanguageView = findViewById(R.id.language_filter_title)
-
-        generalImageProxySummary = findViewById(R.id.general_image_proxy_summary)
-        generalImageProxy = findViewById(R.id.general_image_proxy)
-        mImageProxyUrl = findViewById(R.id.image_proxy_url_input)
+        generalImageProxySummary = view.findViewById(R.id.general_image_proxy_summary)
+        generalImageProxy = view.findViewById(R.id.general_image_proxy)
+        mImageProxyUrl = view.findViewById(R.id.image_proxy_url_input)
         errorReportSubText = binding.errorReportSubText
 
         updateSummaries()
@@ -98,7 +93,7 @@ class SettingsGeneralActivity : ThemeActivity() {
         }
         binding.errorReportButton.setOnClickListener { view: View? ->
             DialogService.getChooseDialog(
-                this,
+                requireActivity(),
                 (R.string.report_error_title),
                 R.array.ErrorReportOptions,
                 reportErrors.ordinal
@@ -110,14 +105,9 @@ class SettingsGeneralActivity : ThemeActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        this.overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_right_anim)
-    }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        onBackPressed()
+        popBackStack()
         return super.onOptionsItemSelected(item)
     }
 
@@ -151,7 +141,10 @@ class SettingsGeneralActivity : ThemeActivity() {
     fun onClickTwitchName() {
         if (isLoggedIn) {
             val dialog =
-                DialogService.getSettingsLoginOrLogoutDialog(this, generalTwitchDisplayName)
+                DialogService.getSettingsLoginOrLogoutDialog(
+                    requireActivity(),
+                    generalTwitchDisplayName
+                )
             dialog.builder
                 .onPositive { dialog1: MaterialDialog?, which: DialogAction? -> navigateToLogin() }
 
@@ -169,7 +162,7 @@ class SettingsGeneralActivity : ThemeActivity() {
 
     fun onClickStartPage() {
         val dialog = DialogService.getChooseStartUpPageDialog(
-            this,
+            requireActivity(),
             startPageSubText.getText().toString()
         ) { dialog1: MaterialDialog?, view: View?, which: Int, text: CharSequence? ->
             startPage = text.toString()
@@ -181,15 +174,16 @@ class SettingsGeneralActivity : ThemeActivity() {
     }
 
     private fun navigateToLogin() {
-        val loginIntent = Intent(this, LoginActivity::class.java)
-        loginIntent.putExtra(getString(R.string.login_intent_part_of_setup), false)
-
-        startActivity(loginIntent)
+        navigate(
+            LoginFragment::class.java, bundleOf(
+                getString(R.string.login_intent_part_of_setup) to false
+            )
+        )
     }
 
     fun onClickResetTips() {
         if (isTipsShown) {
-            val topView = findViewById<View?>(R.id.container_settings_general)
+            val topView = requireView().findViewById<View?>(R.id.container_settings_general)
             if (topView != null) {
                 Snackbar.make(
                     topView,
@@ -207,18 +201,18 @@ class SettingsGeneralActivity : ThemeActivity() {
     }
 
     fun onClickOpenChangelog() {
-        ChangelogDialogFragment().show(supportFragmentManager, "ChangelogDialog")
+        ChangelogDialogFragment().show(parentFragmentManager, "ChangelogDialog")
     }
 
     // Database Stuff below
     fun onClickWipeFollows() {
-        val dialog = DialogService.getSettingsWipeFollowsDialog(this)
+        val dialog = DialogService.getSettingsWipeFollowsDialog(requireActivity())
         dialog.builder
             .onPositive { dialog1: MaterialDialog?, which: DialogAction? ->
-                val helper = SubscriptionsDbHelper(baseContext)
+                val helper = SubscriptionsDbHelper(requireContext())
                 helper.onWipe(helper.writableDatabase, isLoggedIn)
                 val infoToast = Toast.makeText(
-                    baseContext,
+                    requireContext(),
                     getString(R.string.gen_toast_wipe_database),
                     Toast.LENGTH_SHORT
                 )
@@ -228,13 +222,13 @@ class SettingsGeneralActivity : ThemeActivity() {
 
     // Export/Import for Follows
     fun onExport() {
-        val dialog = DialogService.getSettingsExportFollowsDialog(this)
+        val dialog = DialogService.getSettingsExportFollowsDialog(requireActivity())
         dialog.builder
             .onPositive { dialog1: MaterialDialog?, which: DialogAction? ->
-                val helper = SubscriptionsDbHelper(baseContext)
+                val helper = SubscriptionsDbHelper(requireContext())
                 val exported = helper.onExport(helper.writableDatabase)
                 val infoToast = Toast.makeText(
-                    baseContext,
+                    requireContext(),
                     String.format(getString(R.string.gen_toast_export_database), exported),
                     Toast.LENGTH_SHORT
                 )
@@ -243,13 +237,13 @@ class SettingsGeneralActivity : ThemeActivity() {
     }
 
     fun onImport() {
-        val dialog = DialogService.getSettingsImportFollowsDialog(this)
+        val dialog = DialogService.getSettingsImportFollowsDialog(requireActivity())
         dialog.builder
             .onPositive { dialog1: MaterialDialog?, which: DialogAction? ->
-                val helper = SubscriptionsDbHelper(baseContext)
+                val helper = SubscriptionsDbHelper(requireContext())
                 val imported = helper.onImport(helper.writableDatabase)
                 val infoToast = Toast.makeText(
-                    baseContext,
+                    requireContext(),
                     String.format(getString(R.string.gen_toast_import_database), imported),
                     Toast.LENGTH_SHORT
                 )

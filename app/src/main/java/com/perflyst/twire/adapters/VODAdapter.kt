@@ -1,10 +1,6 @@
 package com.perflyst.twire.adapters
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.ActivityOptions
-import android.app.SharedElementCallback
 import android.content.Context
 import android.text.format.DateUtils
 import android.view.View
@@ -14,10 +10,14 @@ import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
+import androidx.transition.Fade
+import androidx.transition.Slide
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.stream.VODActivity
-import com.perflyst.twire.activities.stream.VODActivity.Companion.createVODIntent
+import com.perflyst.twire.activities.stream.VODFragment
+import com.perflyst.twire.activities.stream.VODFragment.Companion.createVODIntent
 import com.perflyst.twire.adapters.MainActivityAdapter.ElementsViewHolder
+import com.perflyst.twire.misc.navigate
 import com.perflyst.twire.model.VideoOnDemand
 import com.perflyst.twire.service.Settings.appearanceStreamStyle
 import com.perflyst.twire.service.Settings.getVodProgress
@@ -46,10 +46,10 @@ class VODViewHolder(v: View) : ElementsViewHolder(v) {
     override val elementWrapper: View get() = vCard
 }
 
-class VODAdapter(recyclerView: AutoSpanRecyclerView, private val activity: Activity) :
+class VODAdapter(recyclerView: AutoSpanRecyclerView, private val fragment: Fragment) :
     MainActivityAdapter<VideoOnDemand, VODViewHolder>(
         recyclerView,
-        activity
+        fragment.requireActivity()
     ) {
     private val vodWatchedImageAlpha = 0.5f
     val topMargin: Int
@@ -75,10 +75,10 @@ class VODAdapter(recyclerView: AutoSpanRecyclerView, private val activity: Activ
     override fun handleElementOnClick(view: View) {
         val itemPosition = recyclerView.getChildAdapterPosition(view)
         val item = elements[itemPosition]!!
-        if (activity is VODActivity) {
-            activity.intent
-                .putExtra(context.getString(R.string.stream_shared_transition), false)
-            activity.startNewVOD(item)
+        if (fragment is VODFragment) {
+            fragment.requireArguments()
+                .putBoolean(context.getString(R.string.stream_shared_transition), false)
+            fragment.startNewVOD(item)
         } else {
             val intent = createVODIntent(item, context, true)
 
@@ -93,29 +93,21 @@ class VODAdapter(recyclerView: AutoSpanRecyclerView, private val activity: Activ
 
             val sharedView = view.findViewById<View>(R.id.image_stream_preview)
             sharedView.transitionName = context.getString(R.string.stream_preview_transition)
-            val options = ActivityOptions.makeSceneTransitionAnimation(
-                activity, sharedView, context.getString(R.string.stream_preview_transition)
+
+            fragment.parentFragmentManager.setFragmentResultListener(
+                "fragmentFinished",
+                fragment.viewLifecycleOwner
+            ) { key, bundle ->
+                notifyItemChanged(itemPosition)
+                fragment.parentFragmentManager.clearFragmentResultListener("fragmentFinished")
+            }
+
+            fragment.navigate(
+                VODFragment::class.java, intent.extras,
+                enterAnim = Slide(),
+                exitAnim = Fade(),
+                sharedElement = sharedView
             )
-
-            activity.setExitSharedElementCallback(object : SharedElementCallback() {
-                @SuppressLint("NewApi")
-                override fun onSharedElementEnd(
-                    sharedElementNames: MutableList<String?>?,
-                    sharedElements: MutableList<View?>?,
-                    sharedElementSnapshots: MutableList<View?>?
-                ) {
-                    super.onSharedElementEnd(
-                        sharedElementNames,
-                        sharedElements,
-                        sharedElementSnapshots
-                    )
-
-                    notifyItemChanged(itemPosition)
-                    activity.setExitSharedElementCallback(null)
-                }
-            })
-
-            activity.startActivity(intent, options.toBundle())
         }
     }
 

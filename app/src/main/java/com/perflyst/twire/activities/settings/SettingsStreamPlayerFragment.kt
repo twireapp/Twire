@@ -5,11 +5,12 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.CheckedTextView
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import com.afollestad.materialdialogs.MaterialDialog
 import com.perflyst.twire.R
-import com.perflyst.twire.activities.ThemeActivity
 import com.perflyst.twire.databinding.ActivitySettingsStreamPlayerBinding
+import com.perflyst.twire.fragments.BindingFragment
+import com.perflyst.twire.misc.popBackStack
+import com.perflyst.twire.misc.setupToolbar
 import com.perflyst.twire.service.DialogService
 import com.perflyst.twire.service.Settings.streamPlayerAutoContinuePlaybackOnReturn
 import com.perflyst.twire.service.Settings.streamPlayerLockedPlayback
@@ -19,7 +20,8 @@ import com.perflyst.twire.service.Settings.streamPlayerShowNavigationBar
 import com.perflyst.twire.service.Settings.streamPlayerShowViewerCount
 import com.perflyst.twire.service.Settings.streamPlayerType
 
-class SettingsStreamPlayerActivity : ThemeActivity() {
+class SettingsStreamPlayerFragment :
+    BindingFragment<ActivitySettingsStreamPlayerBinding>(ActivitySettingsStreamPlayerBinding::inflate) {
     private lateinit var mShowViewCountSummary: TextView
     private lateinit var mShowNavigationBarSummary: TextView
     private lateinit var mAutoPlaybackSummary: TextView
@@ -33,31 +35,22 @@ class SettingsStreamPlayerActivity : ThemeActivity() {
     private lateinit var mLockedPlaybackView: CheckedTextView
     private lateinit var mShowRuntimeView: CheckedTextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivitySettingsStreamPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.getRoot())
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        mShowNavigationBarView = view.findViewById(R.id.player_show_navigation_title)
+        mShowViewCountView = view.findViewById(R.id.player_show_viewercount_title)
+        mShowRuntimeView = view.findViewById(R.id.player_show_runtime)
+        mAutoPlaybackView = view.findViewById(R.id.player_auto_continue_playback_title)
+        mLockedPlaybackView = view.findViewById(R.id.player_locked_playback_title)
+        mPlayerTypeSummary = view.findViewById(R.id.player_type_summary)
+        mPlayerProxySummary = view.findViewById(R.id.player_proxy_summary)
 
-        mShowNavigationBarView = findViewById(R.id.player_show_navigation_title)
-        mShowViewCountView = findViewById(R.id.player_show_viewercount_title)
-        mShowRuntimeView = findViewById(R.id.player_show_runtime)
-        mAutoPlaybackView = findViewById(R.id.player_auto_continue_playback_title)
-        mLockedPlaybackView = findViewById(R.id.player_locked_playback_title)
-        mPlayerTypeSummary = findViewById(R.id.player_type_summary)
-        mPlayerProxySummary = findViewById(R.id.player_proxy_summary)
+        mShowViewCountSummary = view.findViewById(R.id.player_show_viewercount_title_summary)
+        mShowRuntimeSummary = view.findViewById(R.id.player_show_runtime_summary)
+        mShowNavigationBarSummary = view.findViewById(R.id.player_show_navigation_summary)
+        mAutoPlaybackSummary = view.findViewById(R.id.player_auto_continue_playback_summary)
+        mLockedPlaybackSummary = view.findViewById(R.id.player_locked_playback_summary)
 
-        mShowViewCountSummary = findViewById(R.id.player_show_viewercount_title_summary)
-        mShowRuntimeSummary = findViewById(R.id.player_show_runtime_summary)
-        mShowNavigationBarSummary = findViewById(R.id.player_show_navigation_summary)
-        mAutoPlaybackSummary = findViewById(R.id.player_auto_continue_playback_summary)
-        mLockedPlaybackSummary = findViewById(R.id.player_locked_playback_summary)
-
-        val toolbar = findViewById<Toolbar?>(R.id.settings_player_toolbar)
-        setSupportActionBar(toolbar)
-        if (supportActionBar != null) {
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar!!.title = getString(R.string.settings_stream_player_name)
-        }
+        setupToolbar(binding.settingsPlayerToolbar, R.string.settings_stream_player_name)
 
         updateSummaries()
 
@@ -86,13 +79,8 @@ class SettingsStreamPlayerActivity : ThemeActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        this.overridePendingTransition(R.anim.fade_in_semi_anim, R.anim.slide_out_right_anim)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        onBackPressed()
+        popBackStack()
         return super.onOptionsItemSelected(item)
     }
 
@@ -102,7 +90,7 @@ class SettingsStreamPlayerActivity : ThemeActivity() {
     }
 
     private fun updateSummaries() {
-        val types = getResources().getStringArray(R.array.PlayerType)
+        val types = resources.getStringArray(R.array.PlayerType)
         mPlayerTypeSummary.text = types[streamPlayerType]
         mPlayerProxySummary.text = convertProxyOption(streamPlayerProxy)
         updateSummary(mShowViewCountView, mShowViewCountSummary, streamPlayerShowViewerCount)
@@ -147,7 +135,7 @@ class SettingsStreamPlayerActivity : ThemeActivity() {
 
     fun onClickPlayerType() {
         val dialog = DialogService.getChoosePlayerTypeDialog(
-            this,
+            requireActivity(),
             R.string.player_type,
             R.array.PlayerType,
             streamPlayerType
@@ -165,21 +153,21 @@ class SettingsStreamPlayerActivity : ThemeActivity() {
     }
 
     fun onClickPlayerProxy() {
-        val proxies = listOf(*getResources().getStringArray(R.array.PlayerProxies))
+        val proxies = listOf(*resources.getStringArray(R.array.PlayerProxies))
         var selectedIndex = proxies.indexOf(streamPlayerProxy)
         // Since the custom proxy is not in the presets, we need to select the custom option
         if (selectedIndex == -1) {
             selectedIndex = proxies.size - 1
         }
 
-        DialogService.getBaseThemedDialog(this)
+        DialogService.getBaseThemedDialog(requireActivity())
             .title(R.string.player_proxy)
             .items(proxies.map(this::convertProxyOption))
             .itemsCallbackSingleChoice(
                 selectedIndex
             ) { dialog: MaterialDialog?, itemView: View?, which: Int, text: CharSequence? ->
                 if (which == proxies.size - 1) {
-                    DialogService.getBaseThemedDialog(this)
+                    DialogService.getBaseThemedDialog(requireActivity())
                         .title(R.string.player_proxy_custom)
                         .input(
                             "https://example.com",
