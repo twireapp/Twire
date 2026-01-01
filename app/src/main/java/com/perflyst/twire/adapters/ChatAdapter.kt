@@ -227,8 +227,12 @@ class ChatAdapter(
     }
 
     private fun getNameColor(colorFromAPI: String?): Int {
+        val parsedColor = runCatching { colorFromAPI?.toColorInt() }
+            .onFailure { Timber.e(it, "Failed to parse color: \"$colorFromAPI\"") }
+            .getOrNull()
+
         val blackText = "#000000"
-        if (colorFromAPI == null || colorFromAPI == blackText) {
+        if (parsedColor == null || colorFromAPI == blackText) {
             return if (isNightTheme) {
                 ContextCompat.getColor(context, R.color.blue_500)
             } else {
@@ -241,7 +245,7 @@ class ChatAdapter(
             return ContextCompat.getColor(context, R.color.blue_700)
         }
 
-        return colorFromAPI.toColorInt()
+        return parsedColor
     }
 
     private val messageColor: Int
