@@ -812,9 +812,9 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
 
         val chatMessage = ChatMessage(
             message,
-            chatManager.userDisplayName!!,
+            chatManager.userDisplayName ?: "You",
             chatManager.userColor,
-            chatManager.getBadges(chatManager.userBadges!!),
+            chatManager.getBadges(chatManager.userBadges ?: mutableMapOf()),
             getEmotesFromMessage(message, emotes),
             false
         )

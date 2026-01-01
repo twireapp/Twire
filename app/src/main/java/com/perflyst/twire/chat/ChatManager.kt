@@ -34,6 +34,7 @@ import org.json.JSONObject
 import timber.log.Timber
 import java.util.LinkedList
 import java.util.Queue
+import kotlin.jvm.optionals.getOrNull
 
 /*
 * Created by SebastianRask on 03-03-2016.
@@ -361,7 +362,7 @@ class ChatManager(aChannel: UserInfo, aVodId: String?, vodOffset: Int, aCallback
         if (userDisplayName != null) return
 
         userBadges = event.messageEvent.getBadges()
-        userColor = event.color.orElse("")
+        userColor = event.color.getOrNull()
         userDisplayName = event.displayName.orElse("")
         callback.onEmoteSetsFetched(event.emoteSets)
     }
