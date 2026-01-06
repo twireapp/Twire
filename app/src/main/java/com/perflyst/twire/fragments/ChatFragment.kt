@@ -807,8 +807,11 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
         mSendButton.performHapticFeedback(vibrationFeedback)
 
         Timber.d("Sending Message: %s", message)
-        val emotes = listOf(customEmotes!!, twitchEmotes!!, subscriberEmotes!!).flatten()
-            .associateBy { it.keyword }
+        val emotes = listOfNotNull(
+            customEmotes,
+            twitchEmotes,
+            subscriberEmotes
+        ).flatten().associateBy { it.keyword }
 
         val chatMessage = ChatMessage(
             message,
