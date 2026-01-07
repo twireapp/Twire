@@ -36,19 +36,19 @@ class SettingsStreamPlayerFragment :
     private lateinit var mShowRuntimeView: CheckedTextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        mShowNavigationBarView = view.findViewById(R.id.player_show_navigation_title)
-        mShowViewCountView = view.findViewById(R.id.player_show_viewercount_title)
-        mShowRuntimeView = view.findViewById(R.id.player_show_runtime)
-        mAutoPlaybackView = view.findViewById(R.id.player_auto_continue_playback_title)
-        mLockedPlaybackView = view.findViewById(R.id.player_locked_playback_title)
-        mPlayerTypeSummary = view.findViewById(R.id.player_type_summary)
-        mPlayerProxySummary = view.findViewById(R.id.player_proxy_summary)
+        mShowNavigationBarView = binding.playerShowNavigationTitle
+        mShowViewCountView = binding.playerShowViewercountTitle
+        mShowRuntimeView = binding.playerShowRuntime
+        mAutoPlaybackView = binding.playerAutoContinuePlaybackTitle
+        mLockedPlaybackView = binding.playerLockedPlaybackTitle
+        mPlayerTypeSummary = binding.playerTypeSummary
+        mPlayerProxySummary = binding.playerProxySummary
 
-        mShowViewCountSummary = view.findViewById(R.id.player_show_viewercount_title_summary)
-        mShowRuntimeSummary = view.findViewById(R.id.player_show_runtime_summary)
-        mShowNavigationBarSummary = view.findViewById(R.id.player_show_navigation_summary)
-        mAutoPlaybackSummary = view.findViewById(R.id.player_auto_continue_playback_summary)
-        mLockedPlaybackSummary = view.findViewById(R.id.player_locked_playback_summary)
+        mShowViewCountSummary = binding.playerShowViewercountTitleSummary
+        mShowRuntimeSummary = binding.playerShowRuntimeSummary
+        mShowNavigationBarSummary = binding.playerShowNavigationSummary
+        mAutoPlaybackSummary = binding.playerAutoContinuePlaybackSummary
+        mLockedPlaybackSummary = binding.playerLockedPlaybackSummary
 
         setupToolbar(binding.settingsPlayerToolbar, R.string.settings_stream_player_name)
 

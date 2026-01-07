@@ -13,7 +13,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
-import com.perflyst.twire.R
+import com.perflyst.twire.databinding.TooltipLayoutBinding
 import io.codetail.animation.SupportAnimator
 import io.codetail.animation.ViewAnimationUtils
 
@@ -24,11 +24,12 @@ import io.codetail.animation.ViewAnimationUtils
 class TooltipWindow(ctx: Context?, private val position: Int) {
     private val REVEAL_DURATION = 500
     private val tipWindow: PopupWindow = PopupWindow(ctx)
-    private val contentView: View = LayoutInflater.from(ctx).inflate(R.layout.tooltip_layout, null)
-    private val mTipText: TextView = contentView.findViewById(R.id.tooltip_text)
-    private val mNavLeftArrow: ImageView = contentView.findViewById(R.id.tooltip_nav_left)
-    private val mNavUpArrow: ImageView = contentView.findViewById(R.id.tooltip_nav_up)
-    private val mainLayout: LinearLayout = contentView.findViewById(R.id.main_layout)
+    private val binding = TooltipLayoutBinding.inflate(LayoutInflater.from(ctx))
+    private val contentView: View = binding.root
+    private val mTipText: TextView = binding.tooltipText
+    private val mNavLeftArrow: ImageView = binding.tooltipNavLeft
+    private val mNavUpArrow: ImageView = binding.tooltipNavUp
+    private val mainLayout: LinearLayout = binding.mainLayout
     private var revealTransition: SupportAnimator? = null
     private val handler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {

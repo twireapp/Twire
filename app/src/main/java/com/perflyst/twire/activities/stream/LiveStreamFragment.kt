@@ -56,9 +56,9 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
         super.onViewCreated(view, savedInstanceState)
 
         if (savedInstanceState == null && mMentionRecyclerView == null) {
-            mMentionContainer = view.findViewById(R.id.mention_container)
+            mMentionContainer = binding.mentionContainer
             mMentionContainer!!.visibility = View.GONE
-            mMentionRecyclerView = view.findViewById(R.id.mention_recyclerview)
+            mMentionRecyclerView = binding.mentionRecyclerview
             setupMentionSuggestionRecyclerView()
         }
     }

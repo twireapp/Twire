@@ -54,18 +54,18 @@ class WelcomeFragment : SetupBaseFragment<ActivityWelcomeBinding>(ActivityWelcom
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mWelcomeText = view.findViewById<RelativeLayout>(R.id.welcome_text)
-        mWelcomeTextLineOne = view.findViewById(R.id.welcome_text_line_one)
-        mWelcomeTextLineTwo = view.findViewById(R.id.welcome_text_line_two)
+        val mWelcomeText = binding.welcomeText
+        mWelcomeTextLineOne = binding.welcomeTextLineOne
+        mWelcomeTextLineTwo = binding.welcomeTextLineTwo
 
-        mLogo = view.findViewById(R.id.welcome_icon)
-        mContinueIcon = view.findViewById(R.id.forward_arrow)
-        mLogoContainer = view.findViewById(R.id.welcome_icon_layout)
-        mLogoCenter = view.findViewById(R.id.welcome_icon_center)
-        mContinueFAB = view.findViewById(R.id.continue_circle)
-        mContinueFABShadow = view.findViewById(R.id.welcome_continue_circle_shadow)
-        mTransitionViewWhite = view.findViewById(R.id.transition_view)
-        mTransitionViewBlue = view.findViewById(R.id.transition_view_blue)
+        mLogo = binding.welcomeIcon
+        mContinueIcon = binding.forwardArrow
+        mLogoContainer = binding.welcomeIconLayout
+        mLogoCenter = binding.welcomeIconCenter
+        mContinueFAB = binding.continueCircle
+        mContinueFABShadow = binding.welcomeContinueCircleShadow
+        mTransitionViewWhite = binding.transitionView
+        mTransitionViewBlue = binding.transitionViewBlue
 
         mTransitionViewBlue.visibility = View.INVISIBLE
         mTransitionViewWhite.visibility = View.INVISIBLE

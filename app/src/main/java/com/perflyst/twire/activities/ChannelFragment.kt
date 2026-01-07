@@ -87,15 +87,15 @@ class ChannelFragment :
         super.onViewCreated(view, savedInstanceState)
 
         // Get the various handles of view and layouts that is part of this view
-        streamerImage = view.findViewById(R.id.profileImageView)
-        val streamerInfoName = view.findViewById<TextView>(R.id.twitch_name)
-        val streamerFollowers = view.findViewById<TextView>(R.id.txt_followers)
-        toolbar = view.findViewById(R.id.StreamerInfo_Toolbar)
-        additionalToolbar = view.findViewById(R.id.additional_toolbar)
-        mViewPager2 = view.findViewById(R.id.streamer_info_viewPager2)
-        mTabLayout = view.findViewById(R.id.streamer_info_tabLayout)
-        mAppBar = view.findViewById(R.id.appbar)
-        mFab = view.findViewById(R.id.fab)
+        streamerImage = binding.profileImageView
+        val streamerInfoName = binding.twitchName
+        val streamerFollowers = binding.txtFollowers
+        toolbar = binding.StreamerInfoToolbar
+        additionalToolbar = binding.additionalToolbar
+        mViewPager2 = binding.streamerInfoViewPager2
+        mTabLayout = binding.streamerInfoTabLayout
+        mAppBar = binding.appbar
+        mFab = binding.fab
 
         setupToolbar(toolbar!!)
 
@@ -430,8 +430,8 @@ class ChannelFragment :
                 info = requireArguments().getParcelable(FRAGMENT_STREAMER_INFO_ARG)
             }
 
-            mPanelsRecyclerView = view.findViewById(R.id.panel_recyclerview)
-            val mDescription = view.findViewById<TextView>(R.id.description)
+            mPanelsRecyclerView = binding.panelRecyclerview
+            val mDescription = binding.description
             findErrorView(view)
 
             if (info != null && info!!.streamDescription != null && (info!!.streamDescription != "null") && !info!!.streamDescription!!.isEmpty()) {
@@ -497,8 +497,8 @@ class ChannelFragment :
                 broadcasts = args.getBoolean(FRAGMENT_VODS_BROAD_CASTS_ONLY_ARG)
             }
 
-            mRecyclerView = view.findViewById(R.id.recyclerview_vods)
-            progressView = view.findViewById(R.id.circle_progress)
+            mRecyclerView = binding.recyclerviewVods
+            progressView = binding.circleProgress
 
             findErrorView(view)
             if (showError) {
@@ -626,8 +626,8 @@ class ChannelFragment :
                 channelInfo = args.getParcelable(FRAGMENT_VODS_STREAMER_INFO_ARG)
             }
 
-            mRecyclerView = view.findViewById(R.id.recyclerview_vods)
-            progressView = view.findViewById(R.id.circle_progress)
+            mRecyclerView = binding.recyclerviewVods
+            progressView = binding.circleProgress
 
             findErrorView(view)
             if (showError) {

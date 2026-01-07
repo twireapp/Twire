@@ -158,7 +158,7 @@ abstract class MainFragment<E> :
 
         // Setup Drawer Fragment
         mDrawerFragment!!.setUp(
-            view.findViewById(R.id.followed_channels_drawer_layout),
+            binding.followedChannelsDrawerLayout,
             mMainToolbar
         )
 

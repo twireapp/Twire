@@ -38,19 +38,19 @@ class SettingsAppearanceFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupToolbar(binding.settingsAppearanceToolbar, R.string.settings_appearance_name)
 
-        themeSummary = view.findViewById(R.id.appearance_theme_color_summary)
-        themeSummaryColor = view.findViewById(R.id.appearance_theme_color)
+        themeSummary = binding.appearanceThemeColorSummary
+        themeSummaryColor = binding.appearanceThemeColor
 
-        streamsStyleSummary = view.findViewById(R.id.appearance_streams_style_summary)
-        gameStyleSummary = view.findViewById(R.id.appearance_game_style_summary)
-        followStyleSummary = view.findViewById(R.id.appearance_streamer_style_summary)
+        streamsStyleSummary = binding.appearanceStreamsStyleSummary
+        gameStyleSummary = binding.appearanceGameStyleSummary
+        followStyleSummary = binding.appearanceStreamerStyleSummary
 
-        streamSizeSummary = view.findViewById(R.id.appearance_streams_size_summary)
-        gameSizeSummary = view.findViewById(R.id.appearance_game_size_summary)
-        streamerSizeSummary = view.findViewById(R.id.appearance_streamer_size_summary)
+        streamSizeSummary = binding.appearanceStreamsSizeSummary
+        gameSizeSummary = binding.appearanceGameSizeSummary
+        streamerSizeSummary = binding.appearanceStreamerSizeSummary
 
         initSummaries()
-        initOnClicks(view)
+        initOnClicks()
     }
 
 
@@ -59,28 +59,14 @@ class SettingsAppearanceFragment :
         return super.onOptionsItemSelected(item)
     }
 
-    private fun initOnClicks(rootView: View) {
-        val themeColorWrapper = rootView.findViewById<View>(R.id.appearance_theme_color_wrapper)
-        themeColorWrapper.setOnClickListener { v: View? -> onClickThemeColor() }
-
-        val streamStyleWrapper = rootView.findViewById<View>(R.id.appearance_streams_style_wrapper)
-        streamStyleWrapper.setOnClickListener { view: View? -> onClickStreamStyle() }
-
-        val streamSizeWrapper = rootView.findViewById<View>(R.id.appearance_streams_size_wrapper)
-        streamSizeWrapper.setOnClickListener { v: View? -> onClickStreamSize() }
-
-        val gameStyleWrapper = rootView.findViewById<View>(R.id.appearance_game_style_wrapper)
-        gameStyleWrapper.setOnClickListener { view: View? -> onClickGameStyle() }
-
-        val gameSizeWrapper = rootView.findViewById<View>(R.id.appearance_game_size_wrapper)
-        gameSizeWrapper.setOnClickListener { v1: View? -> onClickGameSize() }
-
-        val streamerStyleWrapper =
-            rootView.findViewById<View>(R.id.appearance_streamer_style_wrapper)
-        streamerStyleWrapper.setOnClickListener { view: View? -> onClickStreamerStyle() }
-
-        val streamerSizeWrapper = rootView.findViewById<View>(R.id.appearance_streamer_size_wrapper)
-        streamerSizeWrapper.setOnClickListener { v: View? -> onClickStreamerSize() }
+    private fun initOnClicks() {
+        binding.appearanceThemeColorWrapper.setOnClickListener { onClickThemeColor() }
+        binding.appearanceStreamsStyleWrapper.setOnClickListener { onClickStreamStyle() }
+        binding.appearanceStreamsSizeWrapper.setOnClickListener { onClickStreamSize() }
+        binding.appearanceGameStyleWrapper.setOnClickListener { onClickGameStyle() }
+        binding.appearanceGameSizeWrapper.setOnClickListener { onClickGameSize() }
+        binding.appearanceStreamerStyleWrapper.setOnClickListener { onClickStreamerStyle() }
+        binding.appearanceStreamerSizeWrapper.setOnClickListener { onClickStreamerSize() }
     }
 
     private fun initSummaries() {

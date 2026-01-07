@@ -55,12 +55,15 @@ import com.google.android.material.tabs.TabLayout
 import com.google.common.collect.ImmutableMap
 import com.perflyst.twire.R
 import com.perflyst.twire.activities.stream.LiveStreamFragment
+import com.perflyst.twire.adapters.BindingViewHolder
 import com.perflyst.twire.adapters.ChatAdapter
 import com.perflyst.twire.adapters.ChatAdapter.ChatAdapterCallback
 import com.perflyst.twire.chat.ChatManager
 import com.perflyst.twire.chat.ChatManager.ChatCallback
+import com.perflyst.twire.databinding.ChatMessageOptionsBinding
 import com.perflyst.twire.databinding.FragmentChatBinding
 import com.perflyst.twire.databinding.FragmentEmoteGridBinding
+import com.perflyst.twire.databinding.ViewEmoteShowcaseBinding
 import com.perflyst.twire.fragments.ChatFragment.EmoteGridFragment.EmoteAdapter.EmoteViewHolder
 import com.perflyst.twire.misc.ResizeHeightAnimation
 import com.perflyst.twire.model.ChatMessage
@@ -141,18 +144,18 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
         val llm = LinearLayoutManager(context)
         llm.setStackFromEnd(true)
 
-        mSendText = view.findViewById(R.id.send_message_textview)
-        mSendButton = view.findViewById(R.id.chat_send_ic)
-        mSlowmodeIcon = view.findViewById(R.id.slowmode_ic)
-        mSubonlyIcon = view.findViewById(R.id.subsonly_ic)
-        mR9KIcon = view.findViewById(R.id.r9k_ic)
-        mRecyclerView = view.findViewById(R.id.ChatRecyclerView)
-        chatInputDivider = view.findViewById(R.id.chat_input_divider)
-        mChatInputLayout = view.findViewById(R.id.chat_input)
+        mSendText = binding.sendMessageTextview
+        mSendButton = binding.chatSendIc
+        mSlowmodeIcon = binding.slowmodeIc
+        mSubonlyIcon = binding.subsonlyIc
+        mR9KIcon = binding.r9kIc
+        mRecyclerView = binding.ChatRecyclerView
+        chatInputDivider = binding.chatInputDivider
+        mChatInputLayout = binding.chatInput
         mChatInputLayout.bringToFront()
-        mChatStatus = view.findViewById(R.id.chat_status_text)
+        mChatStatus = binding.chatStatusText
         mChatAdapter = ChatAdapter(mRecyclerView, requireActivity(), this)
-        mChatStatusBar = view.findViewById(R.id.chat_status_bar)
+        mChatStatusBar = binding.chatStatusBar
 
         roomStateMap = ImmutableMap.of<Class<out ChannelStatesEvent?>?, ImageView?>(
             SlowModeEvent::class.java, mSlowmodeIcon,
@@ -160,11 +163,11 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             SubscribersOnlyEvent::class.java, mSubonlyIcon
         )
 
-        mEmoteKeyboardButton = view.findViewById(R.id.chat_emote_keyboard_ic)
-        mEmoteChatBackspace = view.findViewById(R.id.emote_backspace)
-        emoteKeyboardContainer = view.findViewById(R.id.emote_keyboard_container)
-        mEmoteTabs = view.findViewById(R.id.tabs)
-        mEmoteViewPager = view.findViewById(R.id.tabs_viewpager)
+        mEmoteKeyboardButton = binding.chatEmoteKeyboardIc
+        mEmoteChatBackspace = binding.emoteBackspace
+        emoteKeyboardContainer = binding.emoteKeyboardContainer
+        mEmoteTabs = binding.tabs
+        mEmoteViewPager = binding.tabsViewpager
         selectedTabColorRes =
             Service.getColorAttribute(R.attr.textColor, R.color.black_text, context)
         unselectedTabColorRes = Service.getColorAttribute(
@@ -177,7 +180,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
         mRecyclerView.setAdapter(mChatAdapter)
         mRecyclerView.setLayoutManager(llm)
         mRecyclerView.setItemAnimator(null)
-        mRecyclerView.setChatPaused(view.findViewById(R.id.chat_paused))
+        mRecyclerView.setChatPaused(binding.chatPaused)
 
         mUserInfo =
             requireArguments().getParcelable(getString(R.string.stream_fragment_streamerInfo)) // intent.getParcelableExtra(getString(R.string.intent_key_streamer_info));
@@ -847,7 +850,8 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
         userName: String?,
         message: String?
     ) {
-        val v = LayoutInflater.from(context).inflate(R.layout.chat_message_options, null)
+        val binding = ChatMessageOptionsBinding.inflate(LayoutInflater.from(context))
+        val v = binding.root
         bottomSheetDialog = BottomSheetDialog(requireContext())
         bottomSheetDialog!!.setContentView(v)
         val behavior = BottomSheetBehavior.from<View>(v.parent as View)
@@ -859,9 +863,9 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             )
         }
 
-        val mMessage = v.findViewById<TextView>(R.id.text_chat_message)
-        val mMention = v.findViewById<TextView>(R.id.text_mention)
-        val mDuplicateMessage = v.findViewById<TextView>(R.id.text_duplicate_message)
+        val mMessage = binding.textChatMessage
+        val mMention = binding.textMention
+        val mDuplicateMessage = binding.textDuplicateMessage
 
         if (vodID != null) {
             mMention.visibility = View.GONE
@@ -994,15 +998,14 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
                 }
 
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmoteViewHolder {
-                val itemView = LayoutInflater
-                    .from(parent.context)
-                    .inflate(R.layout.view_emote_showcase, parent, false)
+                val binding = ViewEmoteShowcaseBinding.inflate(layoutInflater)
+                val itemView = binding.root
 
                 isDarkTheme = Settings.isDarkTheme
 
                 itemView.setOnClickListener(emoteClickListener)
                 itemView.setOnLongClickListener(emoteLongClickListener)
-                return EmoteViewHolder(itemView)
+                return EmoteViewHolder(binding)
             }
 
             override fun onBindViewHolder(holder: EmoteViewHolder, position: Int) {
@@ -1011,9 +1014,9 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
                 val emoteSize = 2
                 val emoteUrl = emoteAtPosition.getEmoteUrl(emoteSize, isDarkTheme)
                 if (emoteUrl == null) {
-                    holder.mTextEmote.text = emoteAtPosition.keyword
+                    holder.binding.textEmote.text = emoteAtPosition.keyword
                 } else {
-                    Glide.with(requireContext()).load(emoteUrl).into(holder.mImageEmote)
+                    Glide.with(requireContext()).load(emoteUrl).into(holder.binding.imageEmote)
                 }
             }
 
@@ -1090,11 +1093,8 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
                 notifyDataSetChanged()
             }
 
-            internal inner class EmoteViewHolder(itemView: View) :
-                RecyclerView.ViewHolder(itemView) {
-                val mImageEmote: ImageView = itemView.findViewById(R.id.imageEmote)
-                val mTextEmote: TextView = itemView.findViewById(R.id.textEmote)
-            }
+            inner class EmoteViewHolder(binding: ViewEmoteShowcaseBinding) :
+                BindingViewHolder<ViewEmoteShowcaseBinding>(binding)
         }
 
         companion object {

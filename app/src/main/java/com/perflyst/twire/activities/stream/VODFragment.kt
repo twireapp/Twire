@@ -46,8 +46,8 @@ class VODFragment : VideoFragment<ActivityVodBinding>(ActivityVodBinding::inflat
             }
         }
 
-        mTitleView = requireView().findViewById(R.id.title)
-        mViewsView = requireView().findViewById(R.id.views)
+        mTitleView = binding.title
+        mViewsView = binding.views
 
         setVodData()
     }

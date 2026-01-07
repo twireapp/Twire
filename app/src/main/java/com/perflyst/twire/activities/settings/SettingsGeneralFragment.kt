@@ -46,13 +46,13 @@ class SettingsGeneralFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupToolbar(binding.settingsGeneralToolbar, R.string.settings_general_name)
 
-        twitchNameView = view.findViewById(R.id.general_current_twitch_name)
-        startPageSubText = view.findViewById(R.id.start_page_sub_text)
-        filterTopStreamsByLanguageView = view.findViewById(R.id.language_filter_title)
+        twitchNameView = binding.generalCurrentTwitchName
+        startPageSubText = binding.startPageSubText
+        filterTopStreamsByLanguageView = binding.languageFilterTitle
 
-        generalImageProxySummary = view.findViewById(R.id.general_image_proxy_summary)
-        generalImageProxy = view.findViewById(R.id.general_image_proxy)
-        mImageProxyUrl = view.findViewById(R.id.image_proxy_url_input)
+        generalImageProxySummary = binding.generalImageProxySummary
+        generalImageProxy = binding.generalImageProxy
+        mImageProxyUrl = binding.imageProxyUrlInput
         errorReportSubText = binding.errorReportSubText
 
         updateSummaries()
@@ -183,14 +183,12 @@ class SettingsGeneralFragment :
 
     fun onClickResetTips() {
         if (isTipsShown) {
-            val topView = requireView().findViewById<View?>(R.id.container_settings_general)
-            if (topView != null) {
-                Snackbar.make(
-                    topView,
-                    getString(R.string.gen_tips_have_been_reset),
-                    Snackbar.LENGTH_LONG
-                ).show()
-            }
+            val topView = binding.containerSettingsGeneral
+            Snackbar.make(
+                topView,
+                getString(R.string.gen_tips_have_been_reset),
+                Snackbar.LENGTH_LONG
+            ).show()
         }
         isTipsShown = false
     }

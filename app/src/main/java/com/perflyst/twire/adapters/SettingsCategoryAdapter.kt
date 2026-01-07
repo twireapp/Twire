@@ -1,13 +1,10 @@
 package com.perflyst.twire.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.perflyst.twire.R
 import com.perflyst.twire.adapters.SettingsCategoryAdapter.SettingsCategoryViewHolder
+import com.perflyst.twire.databinding.CellSettingsCategoryBinding
 import com.perflyst.twire.model.SettingsCategory
 
 /**
@@ -18,22 +15,23 @@ class SettingsCategoryAdapter(
     private var mCategoryCallback: CategoryCallback?
 ) : RecyclerView.Adapter<SettingsCategoryViewHolder?>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsCategoryViewHolder {
-        val itemView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.cell_settings_category, parent, false)
-        return SettingsCategoryViewHolder(itemView)
+        val binding = CellSettingsCategoryBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return SettingsCategoryViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SettingsCategoryViewHolder, position: Int) {
         val category = mCategories[position]
-        holder.mTitleView.setText(category.titleRes)
-        holder.mSummaryView.setText(category.summaryRes)
-        holder.mCategoryIconView.setImageResource(category.iconRes)
+        holder.binding.txtCategoryTitle.setText(category.titleRes)
+        holder.binding.txtCategorySummary.setText(category.summaryRes)
+        holder.binding.imgCategoryIcon.setImageResource(category.iconRes)
 
         if (mCategoryCallback != null) {
-            holder.itemView.setOnClickListener { view: View? ->
-                mCategoryCallback!!.onCategoryClicked(
-                    category
-                )
+            holder.itemView.setOnClickListener {
+                mCategoryCallback!!.onCategoryClicked(category)
             }
         }
     }
@@ -46,12 +44,6 @@ class SettingsCategoryAdapter(
         fun onCategoryClicked(category: SettingsCategory)
     }
 
-    class SettingsCategoryViewHolder internal constructor(itemView: View) :
-        RecyclerView.ViewHolder(itemView) {
-        var mTitleView: TextView = itemView.findViewById(R.id.txt_category_title)
-
-        var mSummaryView: TextView = itemView.findViewById(R.id.txt_category_summary)
-
-        var mCategoryIconView: ImageView = itemView.findViewById(R.id.img_category_icon)
-    }
+    class SettingsCategoryViewHolder(binding: CellSettingsCategoryBinding) :
+        BindingViewHolder<CellSettingsCategoryBinding>(binding)
 }

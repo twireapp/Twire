@@ -21,7 +21,6 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.util.DisplayMetrics
 import android.util.Rational
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -87,6 +86,9 @@ import com.perflyst.twire.activities.stream.VideoFragment
 import com.perflyst.twire.adapters.PanelAdapter
 import com.perflyst.twire.chat.ChatManager
 import com.perflyst.twire.databinding.FragmentStreamBinding
+import com.perflyst.twire.databinding.QualityItemBinding
+import com.perflyst.twire.databinding.StreamProfilePreviewBinding
+import com.perflyst.twire.databinding.StreamSettingsBinding
 import com.perflyst.twire.misc.FollowHandler
 import com.perflyst.twire.misc.ResizeHeightAnimation
 import com.perflyst.twire.misc.ResizeWidthAnimation
@@ -248,12 +250,12 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
         }
 
         rootView = view as ViewGroup
-        mVideoView = view.findViewById(R.id.VideoView)
+        mVideoView = binding.VideoView
         mVideoInterface = mVideoView.findViewById(R.id.video_interface)
         mToolbar = mVideoView.findViewById(R.id.main_toolbar)
         mTitleText = mVideoView.findViewById(R.id.toolbar_title)
         mControlToolbar = mVideoView.findViewById(R.id.control_toolbar_wrapper)
-        mVideoWrapper = view.findViewById(R.id.video_wrapper)
+        mVideoWrapper = binding.videoWrapper
         mPlayPauseWrapper = mVideoView.findViewById(R.id.play_pause_wrapper)
         mPlayIcon = mVideoView.findViewById(R.id.ic_play)
         mPauseIcon = mVideoView.findViewById(R.id.ic_pause)
@@ -1398,8 +1400,8 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
             val qualityKey: String = entry.key
             if (qualityKey == "audio_only") continue
 
-            val layout = LayoutInflater.from(context)
-                .inflate(R.layout.quality_item, null) as MaterialRippleLayout
+            val binding = QualityItemBinding.inflate(layoutInflater)
+            val layout = binding.root
             val textView = layout.getChildAt(0) as TextView
             textView.text =
                 if (quality.name == "Auto") getString(R.string.quality_auto) else quality.name
@@ -1436,7 +1438,8 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
     }
 
     private fun setupProfileBottomSheet() {
-        val v = LayoutInflater.from(requireContext()).inflate(R.layout.stream_profile_preview, null)
+        val profileBinding = StreamProfilePreviewBinding.inflate(layoutInflater)
+        val v = profileBinding.root
         mProfileBottomSheet = BottomSheetDialog(requireContext())
         mProfileBottomSheet!!.setContentView(v)
         val behavior = getDefaultBottomSheetBehaviour(v)
@@ -1447,15 +1450,11 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
             )
         }
 
-        val mNameView = mProfileBottomSheet!!.findViewById<TextView?>(R.id.twitch_name)
-        val mFollowers = mProfileBottomSheet!!.findViewById<TextView?>(R.id.txt_followers)
-        val mFollowButton =
-            mProfileBottomSheet!!.findViewById<ImageView?>(R.id.follow_unfollow_icon)
-        val mFullProfileButton =
-            mProfileBottomSheet!!.findViewById<ImageView?>(R.id.full_profile_icon)
-        val mPanelsRecyclerView =
-            mProfileBottomSheet!!.findViewById<RecyclerView?>(R.id.panel_recyclerview)
-        if (mNameView == null || mFollowers == null || mFullProfileButton == null || mPanelsRecyclerView == null) return
+        val mNameView = profileBinding.twitchName
+        val mFollowers = profileBinding.txtFollowers
+        val mFollowButton = profileBinding.followUnfollowIcon
+        val mFullProfileButton = profileBinding.fullProfileIcon
+        val mPanelsRecyclerView = profileBinding.panelRecyclerview
 
         mNameView.text = mUserInfo!!.displayName
 
@@ -1469,7 +1468,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
                         followers!!.toLong()
                     )
                 }, 0)
-                setupFollowButton(mFollowButton!!, channelInfo)
+                setupFollowButton(mFollowButton, channelInfo)
             })
 
         mFullProfileButton.setOnClickListener { view: View? ->
@@ -1547,11 +1546,12 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
     private fun setupSpinner() {
         mQualityButton.setOnClickListener { v: View? -> mQualityBottomSheet!!.show() }
 
-        val v = LayoutInflater.from(context).inflate(R.layout.stream_settings, null)
+        val streamSettingsBinding = StreamSettingsBinding.inflate(layoutInflater)
         mQualityBottomSheet = BottomSheetDialog(requireContext())
-        mQualityBottomSheet!!.setContentView(v)
+        mQualityBottomSheet!!.setContentView(streamSettingsBinding.root)
 
-        val behavior: BottomSheetBehavior<*> = getDefaultBottomSheetBehaviour(v)
+        val behavior: BottomSheetBehavior<*> =
+            getDefaultBottomSheetBehaviour(streamSettingsBinding.root)
 
         mQualityBottomSheet!!.setOnDismissListener { dialogInterface: DialogInterface? ->
             behavior.setState(
@@ -1559,17 +1559,13 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
             )
         }
 
-        mQualityWrapper = mQualityBottomSheet!!.findViewById(R.id.quality_wrapper)!!
-        mAudioOnlySelector =
-            mQualityBottomSheet!!.findViewById(R.id.audio_only_selector)
-        mMuteSelector = mQualityBottomSheet!!.findViewById(R.id.mute_selector)
-        mChatOnlySelector =
-            mQualityBottomSheet!!.findViewById(R.id.chat_only_selector)
-        val optionsTitle = mQualityBottomSheet!!.findViewById<TextView?>(R.id.options_text)
+        mQualityWrapper = streamSettingsBinding.qualityWrapper
+        mAudioOnlySelector = streamSettingsBinding.audioOnlySelector
+        mMuteSelector = streamSettingsBinding.muteSelector
+        mChatOnlySelector = streamSettingsBinding.chatOnlySelector
+        val optionsTitle = streamSettingsBinding.optionsText
 
-        if (optionsTitle != null) {
-            optionsTitle.visibility = View.VISIBLE
-        }
+        optionsTitle.visibility = View.VISIBLE
 
         if (vodId == null) {
             mChatOnlySelector!!.setVisibility(View.VISIBLE)

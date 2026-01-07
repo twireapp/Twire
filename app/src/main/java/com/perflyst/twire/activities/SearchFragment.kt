@@ -213,8 +213,8 @@ class SearchFragment : BindingFragment<ActivitySearchBinding>(ActivitySearchBind
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
 
-            mRecyclerView = view.findViewById(R.id.span_recyclerview)
-            mProgressView = view.findViewById(R.id.circle_progress)
+            mRecyclerView = binding.spanRecyclerview
+            mProgressView = binding.circleProgress
 
             lazyFetchingOnScrollListener = LazyFetchingOnScrollListener(this)
 

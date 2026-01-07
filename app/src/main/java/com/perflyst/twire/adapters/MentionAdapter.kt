@@ -2,12 +2,10 @@ package com.perflyst.twire.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.perflyst.twire.R
 import com.perflyst.twire.adapters.MentionAdapter.SuggestionViewHolder
+import com.perflyst.twire.databinding.MentionSuggestionBinding
 
 /**
  * Created by Sebastian Rask on 29-01-2017.
@@ -21,19 +19,16 @@ class MentionAdapter(private val mDelegate: MentionAdapterDelegate) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SuggestionViewHolder {
-        val itemView = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.mention_suggestion, parent, false)
-
-        return SuggestionViewHolder(itemView)
+        val binding = MentionSuggestionBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return SuggestionViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: SuggestionViewHolder, position: Int) {
-        holder.mName.text = mentionSuggestions[position]
-        holder.itemView.setOnClickListener { view: View? ->
-            mDelegate.onSuggestionClick(
-                holder.mName.getText().toString()
-            )
+        holder.binding.txtSuggestion.text = mentionSuggestions[position]
+        holder.itemView.setOnClickListener {
+            mDelegate.onSuggestionClick(holder.binding.txtSuggestion.getText().toString())
         }
     }
 
@@ -51,7 +46,6 @@ class MentionAdapter(private val mDelegate: MentionAdapterDelegate) :
         fun onSuggestionClick(suggestion: String?)
     }
 
-    class SuggestionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val mName: TextView = itemView.findViewById(R.id.txtSuggestion)
-    }
+    class SuggestionViewHolder(binding: MentionSuggestionBinding) :
+        BindingViewHolder<MentionSuggestionBinding>(binding)
 }

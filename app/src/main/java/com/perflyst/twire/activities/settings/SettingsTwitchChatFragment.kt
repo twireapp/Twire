@@ -49,28 +49,25 @@ class SettingsTwitchChatFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setupToolbar(binding.settingsPlayerToolbar, R.string.settings_chat_name)
 
-        emoteSizeSummary = view.findViewById(R.id.chat_emote_size_summary)
-        messageSizeSummary = view.findViewById(R.id.message_size_summary)
-        chatLandscapeWidthSummary = view.findViewById(R.id.chat_landscape_summary)
-        chatLandscapeToggleSummary = view.findViewById(R.id.chat_landscape_enable_summary)
-        chatLandscapeSwipeToShowSummary = view.findViewById(R.id.chat_landscape_swipe_summary)
-        chatEnableSslSummary = view.findViewById(R.id.chat_enable_ssl_summary)
-        chatEnableEmoteBBTVSummary = view.findViewById(R.id.chat_enable_emote_bttv_summary)
-        chatEnableEmoteFFZSummary = view.findViewById(R.id.chat_enable_emote_ffz_summary)
-        chatEnableEmoteSeventvSummary =
-            view.findViewById(R.id.chat_enable_emote_seventv_summary)
-        chatEnableAccountConnectSummary =
-            view.findViewById(R.id.chat_enable_account_connect_summary)
+        emoteSizeSummary = binding.chatEmoteSizeSummary
+        messageSizeSummary = binding.messageSizeSummary
+        chatLandscapeWidthSummary = binding.chatLandscapeSummary
+        chatLandscapeToggleSummary = binding.chatLandscapeEnableSummary
+        chatLandscapeSwipeToShowSummary = binding.chatLandscapeSwipeSummary
+        chatEnableSslSummary = binding.chatEnableSslSummary
+        chatEnableEmoteBBTVSummary = binding.chatEnableEmoteBttvSummary
+        chatEnableEmoteFFZSummary = binding.chatEnableEmoteFfzSummary
+        chatEnableEmoteSeventvSummary = binding.chatEnableEmoteSeventvSummary
+        chatEnableAccountConnectSummary = binding.chatEnableAccountConnectSummary
 
 
-        chatLandscapeToggle = view.findViewById(R.id.chat_landscape_enable_title)
-        chatSwipeToShowToggle = view.findViewById(R.id.chat_landscape_swipe_title)
-        chatEnableSsl = view.findViewById(R.id.chat_enable_ssl)
-        chatEnableEmoteBBTV = view.findViewById(R.id.chat_enable_emote_bttv)
-        chatEnableEmoteFFZ = view.findViewById(R.id.chat_enable_emote_ffz)
-        chatEnableEmoteSeventv = view.findViewById(R.id.chat_enable_emote_seventv)
-        chatEnableAccountConnect =
-            view.findViewById(R.id.chat_enable_account_connect)
+        chatLandscapeToggle = binding.chatLandscapeEnableTitle
+        chatSwipeToShowToggle = binding.chatLandscapeSwipeTitle
+        chatEnableSsl = binding.chatEnableSsl
+        chatEnableEmoteBBTV = binding.chatEnableEmoteBttv
+        chatEnableEmoteFFZ = binding.chatEnableEmoteFfz
+        chatEnableEmoteSeventv = binding.chatEnableEmoteSeventv
+        chatEnableAccountConnect = binding.chatEnableAccountConnect
 
         updateSummaries()
 

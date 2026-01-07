@@ -152,7 +152,7 @@ abstract class MainActivity<E> : ThemeActivity() {
 
         // Setup Drawer Fragment
         mDrawerFragment!!.setUp(
-            findViewById(R.id.followed_channels_drawer_layout),
+            binding.followedChannelsDrawerLayout,
             mMainToolbar
         )
 

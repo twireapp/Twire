@@ -23,6 +23,7 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.perflyst.twire.R
 import com.perflyst.twire.adapters.ChatAdapter.ContactViewHolder
+import com.perflyst.twire.databinding.ChatMessageBinding
 import com.perflyst.twire.misc.GlideImageSpan
 import com.perflyst.twire.misc.Utils
 import com.perflyst.twire.model.ChatMessage
@@ -52,9 +53,10 @@ class ChatAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-        val itemView = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.chat_message, parent, false)
+        val itemView = ChatMessageBinding.inflate(
+            LayoutInflater
+                .from(parent.context)
+        )
 
         return ContactViewHolder(itemView)
     }
@@ -311,7 +313,8 @@ class ChatAdapter(
         )
     }
 
-    class ContactViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val message: TextView = itemView.findViewById(R.id.txt_message)
+    class ContactViewHolder(binding: ChatMessageBinding) :
+        BindingViewHolder<ChatMessageBinding>(binding) {
+        val message: TextView = binding.txtMessage
     }
 }

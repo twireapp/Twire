@@ -47,16 +47,16 @@ class ConfirmSetupFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mLoginTextContainer = view.findViewById<RelativeLayout>(R.id.login_text_container)
-        mSetupProgress = view.findViewById(R.id.SetupProgress)
-        mContinueFABContainer = view.findViewById(R.id.login_continue_circle_container)
-        mGearIcon = view.findViewById(R.id.login_icon)
-        mContinueIcon = view.findViewById(R.id.forward_arrow)
-        mLoginTextLineOne = view.findViewById(R.id.login_text_line_one)
-        mLoginTextLineTwo = view.findViewById(R.id.login_text_line_two)
-        mContinueFAB = view.findViewById(R.id.login_continue_circle)
-        mContinueFABShadow = view.findViewById(R.id.login_continue_circle_shadow)
-        mTransitionViewWhite = view.findViewById(R.id.transition_view_blue)
+        val mLoginTextContainer = binding.loginTextContainer
+        mSetupProgress = binding.SetupProgress
+        mContinueFABContainer = binding.loginContinueCircleContainer
+        mGearIcon = binding.loginIcon
+        mContinueIcon = binding.forwardArrow
+        mLoginTextLineOne = binding.loginTextLineOne
+        mLoginTextLineTwo = binding.loginTextLineTwo
+        mContinueFAB = binding.loginContinueCircle
+        mContinueFABShadow = binding.loginContinueCircleShadow
+        mTransitionViewWhite = binding.transitionViewBlue
 
         mContinueIcon.setVisibility(View.INVISIBLE)
         mLoginTextLineOne.visibility = View.INVISIBLE
