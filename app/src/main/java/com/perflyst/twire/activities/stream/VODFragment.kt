@@ -14,6 +14,11 @@ import com.perflyst.twire.model.VideoOnDemand
 
 class VODFragment : VideoFragment<ActivityVodBinding>(ActivityVodBinding::inflate) {
     private var mVod: VideoOnDemand? = null
+        get() {
+            if (field == null) field =
+                requireArguments().getParcelable(getString(R.string.intent_vod))
+            return field
+        }
     private var vodsFragments: Fragment? = null
     private var mTitleView: TextView? = null
     private var mViewsView: TextView? = null
@@ -22,11 +27,6 @@ class VODFragment : VideoFragment<ActivityVodBinding>(ActivityVodBinding::inflat
 
     override val streamArguments: Bundle
         get() {
-            if (mVod == null) {
-                val intent = requireArguments()
-                mVod = intent.getParcelable(getString(R.string.intent_vod))
-            }
-
             val args = Bundle()
             args.putParcelable(getString(R.string.stream_fragment_streamerInfo), mVod!!.channelInfo)
             args.putString(getString(R.string.stream_fragment_vod_id), mVod!!.videoId)
