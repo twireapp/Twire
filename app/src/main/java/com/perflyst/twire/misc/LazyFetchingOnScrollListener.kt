@@ -60,10 +60,7 @@ class LazyFetchingOnScrollListener<T>(
     fun checkForNewElements(recyclerView: RecyclerView) {
         val maxElementsToFetchTotal = mLazyFetchingActivity.maxElementsToFetch
 
-        val mAdapter = recyclerView.adapter
-        if (mAdapter == null) {
-            return
-        }
+        val mAdapter = recyclerView.adapter ?: return
 
         // Only bother to check if we need to fetch more game objects if we are not already in the process of doing so.
         if (getElementsTask == null && mAdapter.itemCount < maxElementsToFetchTotal) {

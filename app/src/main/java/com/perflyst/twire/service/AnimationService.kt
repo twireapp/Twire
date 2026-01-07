@@ -212,10 +212,8 @@ object AnimationService {
             val positionRowDistance = abs(getRowPosFromIndex(i, aRecyclerView) - startPositionRow)
             val delay = (positionColumnDistance + positionRowDistance) * DELAY_BETWEEN + 1
 
-            val mHideAnimations = startAlphaHideAnimation(delay, VIEW, includeTranslation)
-            if (mHideAnimations == null) {
-                return -1
-            }
+            val mHideAnimations =
+                startAlphaHideAnimation(delay, VIEW, includeTranslation) ?: return -1
             val hideAnimationDuration = mHideAnimations.getDuration().toInt()
 
             if (hideAnimationDuration + delay > clearingDuration) {
@@ -399,7 +397,7 @@ object AnimationService {
         mAnimations.addAnimation(mHideViewAnimation)
         mAnimations.setFillAfter(true)
 
-        if (VIEW != null) VIEW.startAnimation(mAnimations)
+        VIEW?.startAnimation(mAnimations)
 
         return mAnimations
     }

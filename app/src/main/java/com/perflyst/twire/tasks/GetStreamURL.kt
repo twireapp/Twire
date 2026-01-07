@@ -53,12 +53,11 @@ class GetStreamURL(
                 })
         }
 
-    override fun call(): MutableMap<String, Quality>? {
+    override fun call(): MutableMap<String, Quality> {
         var signature = ""
         var token = ""
 
-        var dataObject = this.token
-        if (dataObject == null) return LinkedHashMap()
+        var dataObject = this.token ?: return LinkedHashMap()
 
         try {
             if (isClip) dataObject = dataObject.getJSONObject("clip")
@@ -109,13 +108,13 @@ class GetStreamURL(
 
         val resultList = LinkedHashMap<String, Quality>()
         if (result == null) return resultList
-        resultList.put(QUALITY_AUTO, Quality("Auto", urlToRead))
+        resultList[QUALITY_AUTO] = Quality("Auto", urlToRead)
 
         val p = Pattern.compile("GROUP-ID=\"(.+)\",NAME=\"(.+)\".+\\n.+\\n(https?://\\S+)")
         val m = p.matcher(result)
 
         while (m.find()) {
-            resultList.put(m.group(1), Quality(m.group(2)!!, m.group(3)!!))
+            resultList[m.group(1)] = Quality(m.group(2)!!, m.group(3)!!)
         }
 
         return resultList
@@ -135,7 +134,7 @@ class GetStreamURL(
             var qualityUrl = quality.getString("sourceURL")
             qualityUrl += "?sig=$signature&token=${safeEncode(token)}"
 
-            qualities.put(qualityName, Quality(qualityName, qualityUrl))
+            qualities[qualityName] = Quality(qualityName, qualityUrl)
         }
 
         return qualities

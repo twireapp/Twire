@@ -309,9 +309,9 @@ class SearchActivity : ThemeActivity() {
 
     private inner class SearchStateAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         init {
-            mStreamsFragment = SearchStreamsFragment.Companion.newInstance()
-            mChannelsFragment = SearchChannelsFragment.Companion.newInstance()
-            mGamesFragment = SearchGamesFragment.Companion.newInstance()
+            mStreamsFragment = SearchStreamsFragment.newInstance()
+            mChannelsFragment = SearchChannelsFragment.newInstance()
+            mGamesFragment = SearchGamesFragment.newInstance()
         }
 
         override fun createFragment(position: Int): Fragment {

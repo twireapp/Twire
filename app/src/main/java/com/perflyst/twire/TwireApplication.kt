@@ -68,7 +68,7 @@ class TwireApplication : Application() {
                     if (event.getExtra("consent") != null) return@setBeforeSend event
 
                     if (reportErrors == ReportErrors.ASK) {
-                        DeepLinkActivity.Companion.SENTRY_EVENTS.add(event)
+                        DeepLinkActivity.SENTRY_EVENTS.add(event)
                         startActivity(
                             Intent(this, DeepLinkActivity::class.java)
                                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -93,7 +93,7 @@ class TwireApplication : Application() {
             .withDefaultAuthToken(credential)
             .withCredentialManager(credentialManager)
             .withEnableHelix(true)
-            .withRequestQueueSize(Int.Companion.MAX_VALUE)
+            .withRequestQueueSize(Int.MAX_VALUE)
             .build()
         helix = twitchClient!!.helix
 

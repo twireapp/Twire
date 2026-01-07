@@ -82,10 +82,7 @@ abstract class MainActivityAdapter<E, T : ElementsViewHolder>(
     }
 
     override fun onBindViewHolder(viewHolder: T, position: Int) {
-        val element = elements[position]
-        if (element == null) {
-            return
-        }
+        val element = elements[position] ?: return
         val viewToInsert = viewHolder.elementWrapper
         val previewURL = getPreviewUrl(element)
 
@@ -192,7 +189,7 @@ abstract class MainActivityAdapter<E, T : ElementsViewHolder>(
         }
 
         creator.into<PreviewTarget?>(mTarget)
-        targets.put(viewHolder.targetsKey, mTarget)
+        targets[viewHolder.targetsKey] = mTarget
     }
 
     private fun animateInsert(position: Int, viewToInsert: View) {
@@ -263,7 +260,6 @@ abstract class MainActivityAdapter<E, T : ElementsViewHolder>(
         var timeBeforeLastAnimIsDone = animationDuration
         for (i in startPosition..endPosition) {
             val delay = (i - startPosition) * baseDelay
-            val finalI = i
 
             val translateLength = context.resources.displayMetrics.heightPixels
             val mTranslateAnim: Animation =
@@ -279,7 +275,7 @@ abstract class MainActivityAdapter<E, T : ElementsViewHolder>(
             mAnimSet.setFillBefore(true)
 
             Handler().postDelayed({
-                val v = recyclerView.manager.getChildAt(finalI)
+                val v = recyclerView.manager.getChildAt(i)
                 v?.startAnimation(mAnimSet)
             }, delay.toLong())
 

@@ -69,7 +69,7 @@ class AutoSpanRecyclerView : RecyclerView {
             return false
         }
 
-        val newSizeName: String? = mBehaviour!!.elementSizeName
+        val newSizeName: String = mBehaviour!!.elementSizeName
         if (mSizeName != null && mSizeName != newSizeName) {
             mSizeName = newSizeName
             return true

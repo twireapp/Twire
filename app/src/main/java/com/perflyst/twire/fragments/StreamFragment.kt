@@ -402,8 +402,7 @@ class StreamFragment : Fragment(), Player.Listener {
     @RequiresApi(api = Build.VERSION_CODES.S)
     fun calculatePadding(position: Int): Int {
         val rootInsets = rootView.getRootWindowInsets()
-        val corner = rootInsets.getRoundedCorner(position)
-        if (corner == null) return 0
+        val corner = rootInsets.getRoundedCorner(position) ?: return 0
         val radius = corner.radius
         return (radius - radius / sqrt(2.0) - resources.getDimension(R.dimen.toolbar_icon_padding)).toInt()
     }
@@ -484,8 +483,7 @@ class StreamFragment : Fragment(), Player.Listener {
         ) return
 
         val playbackState = player.playbackState
-        val view = getView()
-        if (view == null) return
+        val view = view ?: return
         view.keepScreenOn =
             player.playWhenReady && (playbackState == Player.STATE_READY || playbackState == Player.STATE_BUFFERING)
     }
@@ -1388,7 +1386,7 @@ class StreamFragment : Fragment(), Player.Listener {
                 if (quality.name == "Auto") getString(R.string.quality_auto) else quality.name
 
             setQualityOnClick(textView, qualityKey)
-            qualityOptions.put(qualityKey, textView)
+            qualityOptions[qualityKey] = textView
             mQualityWrapper.addView(layout)
         }
     }
@@ -1731,10 +1729,7 @@ class StreamFragment : Fragment(), Player.Listener {
         mActivity!!.setSupportActionBar(mToolbar)
         mToolbar.bringToFront()
 
-        val actionBar = mActivity!!.supportActionBar
-        if (actionBar == null) {
-            return
-        }
+        val actionBar = mActivity!!.supportActionBar ?: return
 
         val builder = SpannableStringBuilder()
         builder.append(mUserInfo!!.displayName)

@@ -174,7 +174,7 @@ class PlaybackService : MediaSessionService() {
         fun sendSkipSilenceUpdate(mediaController: MediaController) {
             mediaController.sendCustomCommand(
                 SessionCommand(
-                    MediaSessionCallback.Companion.UPDATE_SKIP_SILENCE,
+                    MediaSessionCallback.UPDATE_SKIP_SILENCE,
                     Bundle.EMPTY
                 ), Bundle.EMPTY
             )

@@ -51,7 +51,7 @@ internal class ChatEmoteManager(private val channel: UserInfo) {
                 for (i in 0..<globalEmotes.length()) {
                     val emote = ToBTTV(globalEmotes.getJSONObject(i))
                     globalCustomEmotes.add(emote)
-                    emoteKeywordToEmote!!.put(emote.keyword, emote)
+                    emoteKeywordToEmote!![emote.keyword] = emote
                 }
             }
 
@@ -74,7 +74,7 @@ internal class ChatEmoteManager(private val channel: UserInfo) {
                     val emote = ToBTTV(channelEmotes.getJSONObject(i))
                     emote.isCustomChannelEmote = true
                     channelCustomEmotes.add(emote)
-                    emoteKeywordToEmote!!.put(emote.keyword, emote)
+                    emoteKeywordToEmote!![emote.keyword] = emote
                 }
             }
         } catch (e: JSONException) {
@@ -110,7 +110,7 @@ internal class ChatEmoteManager(private val channel: UserInfo) {
                 for (emoteIndex in 0..<emoticons.length()) {
                     val emote = ToFFZ(emoticons.getJSONObject(emoteIndex))
                     globalCustomEmotes.add(emote)
-                    emoteKeywordToEmote!!.put(emote.keyword, emote)
+                    emoteKeywordToEmote!![emote.keyword] = emote
                 }
             }
 
@@ -127,7 +127,7 @@ internal class ChatEmoteManager(private val channel: UserInfo) {
                             val emote = ToFFZ(emoticons.getJSONObject(emoteIndex))
                             emote.isCustomChannelEmote = true
                             channelCustomEmotes.add(emote)
-                            emoteKeywordToEmote!!.put(emote.keyword, emote)
+                            emoteKeywordToEmote!![emote.keyword] = emote
                         }
                     }
                 }
@@ -146,14 +146,12 @@ internal class ChatEmoteManager(private val channel: UserInfo) {
                 val emoteSets = HashMap<String, JSONObject>()
 
                 // Get the global emote set
-                emoteSets.put("global", JSONObject(Service.urlToJSONString(SEVENTV_GLOBAL_URL)))
+                emoteSets["global"] = JSONObject(Service.urlToJSONString(SEVENTV_GLOBAL_URL))
 
                 // Get the channel's emote sets
                 val userData = JSONObject(Service.urlToJSONString(SEVENTV_USER_URL))
-                if (!userData.isNull("emote_set")) emoteSets.put(
-                    "channel",
+                if (!userData.isNull("emote_set")) emoteSets["channel"] =
                     userData.getJSONObject("emote_set")
-                )
 
                 // Load the emote sets
                 for (entry in emoteSets.entries) {
@@ -167,7 +165,7 @@ internal class ChatEmoteManager(private val channel: UserInfo) {
                             emote.isCustomChannelEmote = true
                             channelCustomEmotes.add(emote)
                         }
-                        emoteKeywordToEmote!!.put(emote.keyword, emote)
+                        emoteKeywordToEmote!![emote.keyword] = emote
                     }
                 }
             }
@@ -200,7 +198,7 @@ internal class ChatEmoteManager(private val channel: UserInfo) {
         val iterator = urls.keys()
         while (iterator.hasNext()) {
             val key = iterator.next()
-            urlMap.put(key.toInt(), urls.getString(key))
+            urlMap[key.toInt()] = urls.getString(key)
         }
 
         return Emote(emoteObject.getString(EMOTE_NAME), urlMap)
@@ -218,8 +216,8 @@ internal class ChatEmoteManager(private val channel: UserInfo) {
             val name = file.getString("name")
             if (!name.endsWith(".webp")) continue
 
-            val size = name.substring(0, 1).toInt()
-            urlMap.put(size, baseUrl + name)
+            val size = name.take(1).toInt()
+            urlMap[size] = baseUrl + name
         }
 
         return Emote(emoteObject.getString("name"), urlMap)
@@ -269,7 +267,7 @@ internal class ChatEmoteManager(private val channel: UserInfo) {
             }
 
             for (position in positions) {
-                emotes.put(position, Emote.Twitch(keyword, emoteId!!))
+                emotes[position] = Emote.Twitch(keyword, emoteId!!)
             }
         }
 

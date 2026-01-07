@@ -22,7 +22,7 @@ class SleepTimer(private val delegate: SleepTimerDelegate, private val context: 
     private var isRunning = false
 
     init {
-        sleepTimerProgressMinutes = Int.Companion.MIN_VALUE
+        sleepTimerProgressMinutes = Int.MIN_VALUE
         sleepTimerHandler = Handler()
         sleepTimerRunnable = object : Runnable {
             override fun run() {
@@ -54,8 +54,7 @@ class SleepTimer(private val delegate: SleepTimerDelegate, private val context: 
             activity,
             isRunning,
             { dialog: MaterialDialog?, which: DialogAction? ->
-                val customView = dialog!!.customView
-                if (customView == null) return@getSleepTimerDialog
+                val customView = dialog!!.customView ?: return@getSleepTimerDialog
                 val hourPicker = customView.findViewById<MaterialNumberPicker>(R.id.hourPicker)
                 val minPicker = customView.findViewById<MaterialNumberPicker>(R.id.minutePicker)
 

@@ -291,7 +291,7 @@ class ChatManager(aChannel: UserInfo, aVodId: String?, vodOffset: Int, aCallback
                         val version = userBadge.getString("version")
                         if (setID.isEmpty() || version.isEmpty()) continue
 
-                        badges.put(setID, version)
+                        badges[setID] = version
                     }
                 }
 
@@ -314,7 +314,7 @@ class ChatManager(aChannel: UserInfo, aVodId: String?, vodOffset: Int, aCallback
 
                     val emote = fragment.optJSONObject("emote")
                     if (emote != null) {
-                        emotes.put(bodyBuilder.length, Twitch(text, emote.getString("emoteID")))
+                        emotes[bodyBuilder.length] = Twitch(text, emote.getString("emoteID"))
                     }
 
                     bodyBuilder.append(text)

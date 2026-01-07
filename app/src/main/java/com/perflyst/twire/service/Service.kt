@@ -302,8 +302,7 @@ object Service {
             .post(query.toRequestBody("application/json".toMediaType()))
             .build()
 
-        val result = urlToJSONString(request)
-        if (result == null) return null
+        val result = urlToJSONString(request) ?: return null
 
         try {
             val array = JSONArray(result)
@@ -315,8 +314,7 @@ object Service {
     }
 
     fun urlToJSONString(request: Request): String? {
-        val response = makeRequest(request)
-        if (response == null) return null
+        val response = makeRequest(request) ?: return null
 
         val result = response.body
 
@@ -355,16 +353,16 @@ object Service {
         val mDbHelper = SubscriptionsDbHelper(context)
         val DISTINCT = true
         val allColumns = arrayOf<String?>(
-            SubscriptionsDbHelper.Companion.COLUMN_ID,
-            SubscriptionsDbHelper.Companion.COLUMN_STREAMER_NAME,
-            SubscriptionsDbHelper.Companion.COLUMN_DISPLAY_NAME,
-            SubscriptionsDbHelper.Companion.COLUMN_DESCRIPTION,
-            SubscriptionsDbHelper.Companion.COLUMN_FOLLOWERS,
-            SubscriptionsDbHelper.Companion.COLUMN_UNIQUE_VIEWS,
-            SubscriptionsDbHelper.Companion.COLUMN_LOGO_URL,
-            SubscriptionsDbHelper.Companion.COLUMN_VIDEO_BANNER_URL,
-            SubscriptionsDbHelper.Companion.COLUMN_PROFILE_BANNER_URL,
-            SubscriptionsDbHelper.Companion.COLUMN_NOTIFY_WHEN_LIVE
+            SubscriptionsDbHelper.COLUMN_ID,
+            SubscriptionsDbHelper.COLUMN_STREAMER_NAME,
+            SubscriptionsDbHelper.COLUMN_DISPLAY_NAME,
+            SubscriptionsDbHelper.COLUMN_DESCRIPTION,
+            SubscriptionsDbHelper.COLUMN_FOLLOWERS,
+            SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS,
+            SubscriptionsDbHelper.COLUMN_LOGO_URL,
+            SubscriptionsDbHelper.COLUMN_VIDEO_BANNER_URL,
+            SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL,
+            SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE
         )
 
         // Get the data repository in read mode
@@ -372,7 +370,7 @@ object Service {
 
         val cursor = db.query(
             DISTINCT,
-            SubscriptionsDbHelper.Companion.TABLE_NAME,
+            SubscriptionsDbHelper.TABLE_NAME,
             allColumns,
             null, null, null, null, null, null
         )
@@ -406,7 +404,7 @@ object Service {
                     streamDescription, followers, logo, videoBanner, profileBanner
                 )
                 mChannelInfo.isNotifyWhenLive = notifyWhenLive
-                subscriptions.put(mChannelInfo.displayName, mChannelInfo)
+                subscriptions[mChannelInfo.displayName] = mChannelInfo
 
                 // Move to the next record in the database
                 cursor.moveToNext()
@@ -427,7 +425,7 @@ object Service {
         val mDbHelper = SubscriptionsDbHelper(context)
         val db = mDbHelper.readableDatabase
         val query =
-            "SELECT * FROM ${SubscriptionsDbHelper.Companion.TABLE_NAME} WHERE ${SubscriptionsDbHelper.Companion.COLUMN_STREAMER_NAME}='$streamername';"
+            "SELECT * FROM ${SubscriptionsDbHelper.TABLE_NAME} WHERE ${SubscriptionsDbHelper.COLUMN_STREAMER_NAME}='$streamername';"
         var result = false
         val cursor = db.rawQuery(query, null)
         if (cursor.count > 0) {
@@ -442,11 +440,11 @@ object Service {
         val mDbHelper = SubscriptionsDbHelper(context)
         val db = mDbHelper.readableDatabase
         val query =
-            "SELECT * FROM ${SubscriptionsDbHelper.Companion.TABLE_NAME} WHERE ${SubscriptionsDbHelper.Companion.COLUMN_ID}='$streamerId';"
+            "SELECT * FROM ${SubscriptionsDbHelper.TABLE_NAME} WHERE ${SubscriptionsDbHelper.COLUMN_ID}='$streamerId';"
         var result = false
         val cursor = db.rawQuery(query, null)
         val columnIndex =
-            cursor.getColumnIndex(SubscriptionsDbHelper.Companion.COLUMN_IS_TWITCH_FOLLOW)
+            cursor.getColumnIndex(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW)
         if (cursor.moveToFirst()) {
             result = cursor.getInt(columnIndex) > 0
         }
@@ -459,7 +457,7 @@ object Service {
         updateStreamerInfoDbWithValues(
             values,
             context,
-            "${SubscriptionsDbHelper.Companion.COLUMN_ID}=?",
+            "${SubscriptionsDbHelper.COLUMN_ID}=?",
             arrayOf(id)
         )
     }
@@ -477,7 +475,7 @@ object Service {
 
             if (isDbSafe(db)) {
                 db.update(
-                    SubscriptionsDbHelper.Companion.TABLE_NAME,
+                    SubscriptionsDbHelper.TABLE_NAME,
                     values,
                     whereClause,
                     whereArgs
@@ -502,8 +500,8 @@ object Service {
         val streamerId = channelInfo.userId
         if (!isUserTwitch(streamerId, context)) {
             result = db.delete(
-                SubscriptionsDbHelper.Companion.TABLE_NAME,
-                "${SubscriptionsDbHelper.Companion.COLUMN_ID} = '$streamerId'",
+                SubscriptionsDbHelper.TABLE_NAME,
+                "${SubscriptionsDbHelper.COLUMN_ID} = '$streamerId'",
                 null
             ) > 0
 
@@ -522,40 +520,40 @@ object Service {
 
         // Create a new map of values where column names are the keys
         val values = ContentValues()
-        values.put(SubscriptionsDbHelper.Companion.COLUMN_ID, streamer.userId)
-        values.put(SubscriptionsDbHelper.Companion.COLUMN_STREAMER_NAME, streamer.login)
-        values.put(SubscriptionsDbHelper.Companion.COLUMN_DISPLAY_NAME, streamer.displayName)
-        values.put(SubscriptionsDbHelper.Companion.COLUMN_DESCRIPTION, streamer.streamDescription)
-        values.put(SubscriptionsDbHelper.Companion.COLUMN_UNIQUE_VIEWS, 0)
+        values.put(SubscriptionsDbHelper.COLUMN_ID, streamer.userId)
+        values.put(SubscriptionsDbHelper.COLUMN_STREAMER_NAME, streamer.login)
+        values.put(SubscriptionsDbHelper.COLUMN_DISPLAY_NAME, streamer.displayName)
+        values.put(SubscriptionsDbHelper.COLUMN_DESCRIPTION, streamer.streamDescription)
+        values.put(SubscriptionsDbHelper.COLUMN_UNIQUE_VIEWS, 0)
         values.put(
-            SubscriptionsDbHelper.Companion.COLUMN_NOTIFY_WHEN_LIVE,
+            SubscriptionsDbHelper.COLUMN_NOTIFY_WHEN_LIVE,
             if (disableForStreamer) 0 else 1
         ) // Enable by default
-        values.put(SubscriptionsDbHelper.Companion.COLUMN_IS_TWITCH_FOLLOW, 0)
+        values.put(SubscriptionsDbHelper.COLUMN_IS_TWITCH_FOLLOW, 0)
 
 
         // Test if the URL strings are null, to make sure we don't call toString on a null.
         if (streamer.logoURL != null) values.put(
-            SubscriptionsDbHelper.Companion.COLUMN_LOGO_URL,
+            SubscriptionsDbHelper.COLUMN_LOGO_URL,
             streamer.logoURL.toString()
         )
 
         if (streamer.videoBannerURL != null) values.put(
-            SubscriptionsDbHelper.Companion.COLUMN_VIDEO_BANNER_URL,
+            SubscriptionsDbHelper.COLUMN_VIDEO_BANNER_URL,
             streamer.videoBannerURL.toString()
         )
 
         if (streamer.profileBannerURL != null) values.put(
-            SubscriptionsDbHelper.Companion.COLUMN_PROFILE_BANNER_URL,
+            SubscriptionsDbHelper.COLUMN_PROFILE_BANNER_URL,
             streamer.profileBannerURL.toString()
         )
 
 
         streamer.getFollowers({ followers: Int? ->
-            values.put(SubscriptionsDbHelper.Companion.COLUMN_FOLLOWERS, followers)
+            values.put(SubscriptionsDbHelper.COLUMN_FOLLOWERS, followers)
             val helper = SubscriptionsDbHelper(context)
             val db = helper.writableDatabase
-            db.insert(SubscriptionsDbHelper.Companion.TABLE_NAME, null, values)
+            db.insert(SubscriptionsDbHelper.TABLE_NAME, null, values)
             db.close()
         }, 0)
 
@@ -568,8 +566,8 @@ object Service {
         val helper = SubscriptionsDbHelper(context)
         helper.onUpgrade(
             helper.writableDatabase,
-            SubscriptionsDbHelper.Companion.DATABASE_VERSION,
-            SubscriptionsDbHelper.Companion.DATABASE_VERSION + 1
+            SubscriptionsDbHelper.DATABASE_VERSION,
+            SubscriptionsDbHelper.DATABASE_VERSION + 1
         )
     }
 

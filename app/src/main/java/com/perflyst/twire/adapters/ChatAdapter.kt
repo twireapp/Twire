@@ -157,8 +157,7 @@ class ChatAdapter(
             }
         } catch (e: Exception) {
             //In case twitch doesn't comply to their own API.
-            Timber.d("Failed to show Message")
-            Timber.e(e)
+            Timber.e(e, "Failed to show Message")
         }
     }
 

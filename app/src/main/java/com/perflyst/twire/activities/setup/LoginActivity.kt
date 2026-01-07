@@ -388,7 +388,7 @@ class LoginActivity : SetupBaseActivity() {
         loginWebView.loadUrl(loginUrl)
     }
 
-    private fun hideAllViews(): AnimationSet? {
+    private fun hideAllViews(): AnimationSet {
         if (mContinueIcon.isVisible) {
             hideContinueIconAnimations(mContinueIcon)
         }

@@ -241,8 +241,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
             override fun onConnectionChanged(state: WebsocketConnectionState) {
                 if (!this.isFragmentActive) return
 
-                @StringRes val message: Int? = connectionMap[state]
-                if (message == null) return
+                @StringRes val message: Int = connectionMap[state] ?: return
 
                 showChatStatusBar()
                 mChatStatus.setText(message)
@@ -254,8 +253,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
             override fun onRoomStateChange(event: ChannelStatesEvent) {
                 if (!this.isFragmentActive) return
 
-                val icon = roomStateMap!!.getOrDefault(event.javaClass, null)
-                if (icon == null) return
+                val icon = roomStateMap!!.getOrDefault(event.javaClass, null) ?: return
 
                 Timber.d("Roomstate has changed")
                 icon.setVisibility(if (event.isActive) View.VISIBLE else View.GONE)
@@ -471,7 +469,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
             Timber.d("Adding subscriber emotes: %s", subscriberEmotesLoaded.size)
 
             val icon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_attach_money)
-            if (icon == null) return
+                ?: return
             icon.colorFilter = PorterDuffColorFilter(
                 unselectedTabColorRes!!,
                 PorterDuff.Mode.SRC_IN
@@ -742,7 +740,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
     fun insertMentionSuggestion(mention: String) {
         val currentInputText = this.sendText.toString()
         val mentionStart = currentInputText.lastIndexOf('@')
-        val newInputText = "${currentInputText.substring(0, mentionStart + 1)}$mention "
+        val newInputText = "${currentInputText.take(mentionStart + 1)}$mention "
         mSendText.setText(newInputText)
         mSendText.setSelection(newInputText.length)
     }
@@ -933,7 +931,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
         override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-        ): View? {
+        ): View {
             val binding = FragmentEmoteGridBinding.inflate(inflater)
 
             mEmoteRecyclerView = binding.emoteRecyclerview
@@ -1051,8 +1049,6 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
 
                 val manager = recyclerView.layoutManager
                 if (manager is GridLayoutManager) {
-                    val gridLayoutManager = manager
-
                     recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
                         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -1062,7 +1058,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
 
                             // To improve performance when scrolling emotes, we'll bump up the max recycled views.
                             recyclerView.recycledViewPool
-                                .setMaxRecycledViews(0, gridLayoutManager.spanCount * 2)
+                                .setMaxRecycledViews(0, manager.spanCount * 2)
                             columnsFound = true
                         }
                     })
@@ -1158,15 +1154,15 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
             val delegate: EmoteKeyboardDelegate = this@ChatFragment
 
             textEmotesFragment =
-                EmoteGridFragment.Companion.newInstance(EmoteFragmentType.UNICODE, delegate)
+                EmoteGridFragment.newInstance(EmoteFragmentType.UNICODE, delegate)
             recentEmotesFragment =
-                EmoteGridFragment.Companion.newInstance(EmoteFragmentType.ALL, delegate)
+                EmoteGridFragment.newInstance(EmoteFragmentType.ALL, delegate)
             twitchEmotesFragment =
-                EmoteGridFragment.Companion.newInstance(EmoteFragmentType.TWITCH, delegate)
+                EmoteGridFragment.newInstance(EmoteFragmentType.TWITCH, delegate)
             subscriberEmotesFragment =
-                EmoteGridFragment.Companion.newInstance(EmoteFragmentType.SUBSCRIBER, delegate)
+                EmoteGridFragment.newInstance(EmoteFragmentType.SUBSCRIBER, delegate)
             customEmotesFragment =
-                EmoteGridFragment.Companion.newInstance(EmoteFragmentType.CUSTOM, delegate)
+                EmoteGridFragment.newInstance(EmoteFragmentType.CUSTOM, delegate)
         }
 
         override fun getItem(position: Int): Fragment {
@@ -1181,7 +1177,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
                 subscribePosition -> subscriberEmotesFragment!!
                 customPosition -> customEmotesFragment!!
                 emojiPosition -> textEmotesFragment!!
-                else -> EmoteGridFragment.Companion.newInstance()
+                else -> EmoteGridFragment.newInstance()
             }
         }
 

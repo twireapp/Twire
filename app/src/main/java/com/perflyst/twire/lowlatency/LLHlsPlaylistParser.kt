@@ -389,10 +389,8 @@ class LLHlsPlaylistParser
                 val isIFrameOnlyVariant: Boolean = line.startsWith(TAG_I_FRAME_STREAM_INF)
 
                 if (line.startsWith(TAG_DEFINE)) {
-                    variableDefinitions.put( /* key= */
-                        parseStringAttr(line, REGEX_NAME, variableDefinitions),  /* value= */
+                    variableDefinitions[parseStringAttr(line, REGEX_NAME, variableDefinitions)] =
                         parseStringAttr(line, REGEX_VALUE, variableDefinitions)
-                    )
                 } else if (line == TAG_INDEPENDENT_SEGMENTS) {
                     hasIndependentSegmentsTag = true
                 } else if (line.startsWith(TAG_MEDIA)) {
@@ -496,7 +494,7 @@ class LLHlsPlaylistParser
                     var variantInfosForUrl = urlToVariantInfos.get(uri)
                     if (variantInfosForUrl == null) {
                         variantInfosForUrl = ArrayList()
-                        urlToVariantInfos.put(uri, variantInfosForUrl)
+                        urlToVariantInfos[uri] = variantInfosForUrl
                     }
                     variantInfosForUrl.add(
                         VariantInfo(
@@ -861,15 +859,17 @@ class LLHlsPlaylistParser
                     if (importName != null) {
                         val value = multivariantPlaylist.variableDefinitions[importName]
                         if (value != null) {
-                            variableDefinitions.put(importName, value)
+                            variableDefinitions[importName] = value
                         } else {
                             // The multivariant playlist does not declare the imported variable. Ignore.
                         }
                     } else {
-                        variableDefinitions.put(
-                            parseStringAttr(line, REGEX_NAME, variableDefinitions),
+                        variableDefinitions[parseStringAttr(
+                            line,
+                            REGEX_NAME,
+                            variableDefinitions
+                        )] =
                             parseStringAttr(line, REGEX_VALUE, variableDefinitions)
-                        )
                     }
                 } else if (line.startsWith(TAG_MEDIA_DURATION)) {
                     segmentDurationUs = parseTimeSecondsToUs(line, REGEX_MEDIA_DURATION)
@@ -952,7 +952,7 @@ class LLHlsPlaylistParser
                                 parseDrmSchemeData(line, keyFormat, variableDefinitions)
                             if (schemeData != null) {
                                 cachedDrmInitData = null
-                                currentSchemeDatas.put(keyFormat, schemeData)
+                                currentSchemeDatas[keyFormat] = schemeData
                             }
                         }
                     }
@@ -1147,7 +1147,7 @@ class LLHlsPlaylistParser
                                 null,  /* encryptionIV= */
                                 null
                             )
-                        urlToInferredInitSegment.put(segmentUri, inferredInitSegment)
+                        urlToInferredInitSegment[segmentUri] = inferredInitSegment
                     }
 
                     if (cachedDrmInitData == null && !currentSchemeDatas.isEmpty()) {
@@ -1206,10 +1206,8 @@ class LLHlsPlaylistParser
                         )!!.parts else trailingParts
                     lastPartIndex = lastParts.size - 1
                 }
-                renditionReportMap.put(
-                    renditionReport.playlistUri,
+                renditionReportMap[renditionReport.playlistUri] =
                     RenditionReport(renditionReport.playlistUri, lastMediaSequence, lastPartIndex)
-                )
             }
 
             if (preloadPart != null) {
@@ -1317,14 +1315,14 @@ class LLHlsPlaylistParser
                 return SchemeData(
                     C.WIDEVINE_UUID,
                     MimeTypes.VIDEO_MP4,
-                    Base64.decode(uriString.substring(uriString.indexOf(',')), Base64.DEFAULT)
+                    Base64.decode(uriString.substringAfter(','), Base64.DEFAULT)
                 )
             } else if (KEYFORMAT_WIDEVINE_PSSH_JSON == keyFormat) {
                 return SchemeData(C.WIDEVINE_UUID, "hls", Util.getUtf8Bytes(line))
             } else if (KEYFORMAT_PLAYREADY == keyFormat && "1" == keyFormatVersions) {
                 val uriString: String = parseStringAttr(line, REGEX_URI, variableDefinitions)
                 val data =
-                    Base64.decode(uriString.substring(uriString.indexOf(',')), Base64.DEFAULT)
+                    Base64.decode(uriString.substringAfter(','), Base64.DEFAULT)
                 val psshData = PsshAtomUtil.buildPsshAtom(C.PLAYREADY_UUID, data)
                 return SchemeData(C.PLAYREADY_UUID, MimeTypes.VIDEO_MP4, psshData)
             }

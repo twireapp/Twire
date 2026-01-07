@@ -99,7 +99,6 @@ class ChannelActivity : ThemeActivity() {
         val intent = getIntent()
         info =
             intent.getParcelableExtra(getString(R.string.channel_info_intent_object))!!
-        checkNotNull(info)
 
         streamerInfoName.text = info.displayName
         info.getFollowers({ followers: Int? ->
@@ -719,11 +718,11 @@ class ChannelActivity : ThemeActivity() {
         private val tabFragments: Array<Fragment>
 
         init {
-            val mDescriptionFragment: ChannelFragment = InfoFragment.Companion.newInstance(info)
-            val mBroadcastsFragment: ChannelFragment = VodFragment.Companion.newInstance(true, info)
+            val mDescriptionFragment: ChannelFragment = InfoFragment.newInstance(info)
+            val mBroadcastsFragment: ChannelFragment = VodFragment.newInstance(true, info)
             val mHighlightsFragment: ChannelFragment =
-                VodFragment.Companion.newInstance(false, info)
-            val mClipsFragment: ChannelFragment = ClipFragment.Companion.newInstance(info)
+                VodFragment.newInstance(false, info)
+            val mClipsFragment: ChannelFragment = ClipFragment.newInstance(info)
 
             val chatBundle = Bundle()
             chatBundle.putParcelable(getString(R.string.stream_fragment_streamerInfo), info)

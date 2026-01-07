@@ -442,8 +442,7 @@ abstract class MainActivity<E> : ThemeActivity() {
      */
     fun transitionToOtherMainActivity(aIntent: Intent) {
         hideErrorView()
-        val manager = mRecyclerView.layoutManager as GridLayoutManager?
-        if (manager == null) return
+        val manager = mRecyclerView.layoutManager as GridLayoutManager? ?: return
         val firstVisibleItemPosition = manager.findFirstVisibleItemPosition()
         val lastVisibleItemPosition = manager.findLastVisibleItemPosition()
 
@@ -487,8 +486,7 @@ abstract class MainActivity<E> : ThemeActivity() {
      */
     open fun checkIsBackFromMainActivity() {
         if (isTransitioned) {
-            val manager = mRecyclerView.layoutManager as GridLayoutManager?
-            if (manager == null) return
+            val manager = mRecyclerView.layoutManager as GridLayoutManager? ?: return
             val delayBetween = 50
             val firstVisibleItemPosition = manager.findFirstVisibleItemPosition()
             val lastVisibleItemPosition = manager.findLastVisibleItemPosition()

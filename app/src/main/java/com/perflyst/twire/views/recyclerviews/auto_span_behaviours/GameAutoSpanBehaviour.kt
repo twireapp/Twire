@@ -11,7 +11,7 @@ class GameAutoSpanBehaviour : AutoSpanBehaviour {
     override val elementSizeName: String get() = appearanceGameSize
 
     override fun getElementWidth(context: Context): Int {
-        return context.getResources().getDimension(R.dimen.game_card_width)
-            .toInt() + context.getResources().getDimension(R.dimen.game_card_margin).toInt()
+        return context.resources.getDimension(R.dimen.game_card_width)
+            .toInt() + context.resources.getDimension(R.dimen.game_card_margin).toInt()
     }
 }

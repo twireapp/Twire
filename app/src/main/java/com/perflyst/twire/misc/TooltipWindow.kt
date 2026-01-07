@@ -23,7 +23,7 @@ import io.codetail.animation.ViewAnimationUtils
 
 class TooltipWindow(ctx: Context?, private val position: Int) {
     private val REVEAL_DURATION = 500
-    private val tipWindow: PopupWindow? = PopupWindow(ctx)
+    private val tipWindow: PopupWindow = PopupWindow(ctx)
     private val contentView: View = LayoutInflater.from(ctx).inflate(R.layout.tooltip_layout, null)
     private val mTipText: TextView = contentView.findViewById(R.id.tooltip_text)
     private val mNavLeftArrow: ImageView = contentView.findViewById(R.id.tooltip_nav_left)

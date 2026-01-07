@@ -58,7 +58,7 @@ class NavigationDrawerFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentNavigationDrawerBinding.inflate(inflater, container, false)
 
         mStreamsCount = binding.streamsCount

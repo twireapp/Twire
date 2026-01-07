@@ -94,7 +94,7 @@ class AddFollowsToDB(baseContext: Context?, private val subsToAdd: List<ChannelI
             subsAdded.add(subToAdd)
 
             // And to the map to ensure we can check if they are online
-            subsToCheck.put(subToAdd.login, subToAdd)
+            subsToCheck[subToAdd.login] = subToAdd
         }
         db.close()
 

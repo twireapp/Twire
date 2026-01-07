@@ -194,8 +194,7 @@ abstract class StreamActivity : ThemeActivity(), StreamFragmentListener {
 
     override fun onAttachFragment(fragment: Fragment) {
         if (fragment is StreamFragment) {
-            val streamFragment = fragment
-            streamFragment.streamFragmentCallback = this
+            fragment.streamFragmentCallback = this
         }
 
         if (mChatFragment == null && fragment is ChatFragment) mChatFragment = fragment

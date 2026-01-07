@@ -106,7 +106,7 @@ class ConfirmSetupActivity : SetupBaseActivity() {
     /**
      * Animations here from and down
      */
-    private fun hideAllViews(): AnimationSet? {
+    private fun hideAllViews(): AnimationSet {
         if (mContinueIcon.isVisible) {
             hideContinueIconAnimations(mContinueIcon)
         }
@@ -238,7 +238,7 @@ class ConfirmSetupActivity : SetupBaseActivity() {
             WeakReference<ConfirmSetupActivity?>(activity)
 
         override fun run() {
-            while (LoginActivity.Companion.loadingFollows()) {
+            while (LoginActivity.loadingFollows()) {
                 try {
                     Thread.sleep(200)
                 } catch (e: InterruptedException) {

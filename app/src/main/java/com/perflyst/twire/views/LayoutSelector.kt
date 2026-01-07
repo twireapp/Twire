@@ -62,11 +62,10 @@ class LayoutSelector(
             val radioButton = AppCompatRadioButton(activity)
             radioButton.text = layoutTitle
 
-            val finalI = i
             radioButton.setOnClickListener { v: View? ->
                 selectCallback.onSelected(
                     layoutTitle,
-                    finalI,
+                    i,
                     inflated
                 )
             }

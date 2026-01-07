@@ -85,10 +85,7 @@ class SubscriptionsDbHelper(private val mContext: Context?) : SQLiteOpenHelper(
             return 0
         }
         try {
-            val filedata = read(mContext, EXPORT_NAME)
-            if (filedata == null) {
-                return 0
-            }
+            val filedata = read(mContext, EXPORT_NAME) ?: return 0
             val channelsfile = JSONObject(filedata)
             val channels = channelsfile.getJSONArray("Channels")
             for (i in 0..<channels.length()) {
