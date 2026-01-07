@@ -45,12 +45,12 @@ class NavigationDrawerFragment :
     BindingFragment<FragmentNavigationDrawerBinding>(FragmentNavigationDrawerBinding::inflate) {
     private lateinit var mStreamsCount: TextView
     private lateinit var mStreamsCountWrapper: FrameLayout
-    private var containerView: View? = null
+    private lateinit var containerView: View
     private lateinit var mAppTitleView: TextView
     private lateinit var mUserNameTextView: TextView
     private lateinit var mAppIcon: ImageView
-    private var mDrawerToggle: ActionBarDrawerToggle? = null
-    private var mDrawerLayout: DrawerLayout? = null
+    private lateinit var mDrawerToggle: ActionBarDrawerToggle
+    private lateinit var mDrawerLayout: DrawerLayout
     private var mFragment: Class<out Fragment>? = null
     private val themeTip: TooltipWindow? = null
 
@@ -75,9 +75,7 @@ class NavigationDrawerFragment :
 
     override fun onStart() {
         super.onStart()
-        if (mDrawerLayout != null) { // If this layout isn't null then we know that the drawer has been setup
-            checkUserLogin()
-        }
+        checkUserLogin()
     }
 
     override fun onDestroy() {
@@ -105,7 +103,7 @@ class NavigationDrawerFragment :
         Utils.setNumber(mStreamsCount, count.toLong())
     }
 
-    fun setUp(drawerLayout: DrawerLayout?, toolbar: Toolbar?) {
+    fun setUp(drawerLayout: DrawerLayout, toolbar: Toolbar?) {
         mDrawerLayout = drawerLayout
 
         // Create listener for changes in the nav drawer state.
@@ -148,10 +146,10 @@ class NavigationDrawerFragment :
         }
 
         // set the listener on the nav drawer
-        mDrawerLayout!!.addDrawerListener(mDrawerToggle!!)
+        mDrawerLayout.addDrawerListener(mDrawerToggle)
 
         // This simple method gives us the burger icon for the toolbar
-        mDrawerLayout!!.post { mDrawerToggle!!.syncState() }
+        mDrawerLayout.post { mDrawerToggle.syncState() }
     }
 
     private fun setClickListeners() {
@@ -180,7 +178,7 @@ class NavigationDrawerFragment :
     ) {
         view.setOnClickListener { view1: View? ->
             navigate(fragmentClass!!, enterAnim = inAnimation, exitAnim = Fade())
-            mDrawerLayout!!.closeDrawer(containerView!!)
+            mDrawerLayout.closeDrawer(containerView)
         }
     }
 
@@ -195,9 +193,9 @@ class NavigationDrawerFragment :
                 view.setBackgroundColor(color)
             }
 
-            setCloseDrawerOnClick(view, mDrawerLayout!!, containerView!!)
+            setCloseDrawerOnClick(view, mDrawerLayout, containerView)
         } else {
-            setStandardOnClick(view, activity, aActivity, mDrawerLayout!!, containerView!!)
+            setStandardOnClick(view, activity, aActivity, mDrawerLayout, containerView)
         }
     }
 

@@ -180,20 +180,20 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
     private lateinit var castingTextView: TextView
     private lateinit var mCurrentViewersView: TextView
     private lateinit var mRuntime: TextView
-    private var mActivity: AppCompatActivity? = null
+    private lateinit var mActivity: AppCompatActivity
     private var snackbar: Snackbar? = null
     private lateinit var mBufferingView: ProgressView
-    private var mQualityBottomSheet: BottomSheetDialog? = null
-    private var mProfileBottomSheet: BottomSheetDialog? = null
-    private var mAudioOnlySelector: CheckedTextView? = null
-    private var mMuteSelector: CheckedTextView? = null
-    private var mChatOnlySelector: CheckedTextView? = null
+    private lateinit var mQualityBottomSheet: BottomSheetDialog
+    private lateinit var mProfileBottomSheet: BottomSheetDialog
+    private lateinit var mAudioOnlySelector: CheckedTextView
+    private lateinit var mMuteSelector: CheckedTextView
+    private lateinit var mChatOnlySelector: CheckedTextView
     private lateinit var rootView: ViewGroup
     private var optionsMenuItem: MenuItem? = null
     private lateinit var mQualityWrapper: LinearLayout
     private lateinit var mOverlay: View
     private lateinit var controlView: PlayerControlView
-    private var orientationListener: OrientationEventListener? = null
+    private lateinit var orientationListener: OrientationEventListener
 
     private val vodRunnable: Runnable = object : Runnable {
         override fun run() {
@@ -267,7 +267,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
         mBufferingView = mVideoView.findViewById(R.id.exo_buffering)
         mCurrentViewersView = mVideoView.findViewById(R.id.txtViewViewers)
         mRuntime = mVideoView.findViewById(R.id.txtViewRuntime)
-        mActivity = activity as AppCompatActivity?
+        mActivity = activity as AppCompatActivity
         mOverlay = mVideoView.overlayFrameLayout!!
 
         landscapeChatVisible = isChatInLandscapeEnabled
@@ -365,7 +365,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
                 val requestedOrientation = requireActivity().getRequestedOrientation()
                 if (estimatedOrientation == requestedOrientation) {
                     requireActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-                    orientationListener!!.disable()
+                    orientationListener.disable()
                 }
             }
 
@@ -553,7 +553,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
             builder.setAutoEnterEnabled(player?.getPlayWhenReady() ?: false)
         }
 
-        mActivity!!.setPictureInPictureParams(builder.build())
+        mActivity.setPictureInPictureParams(builder.build())
     }
 
     fun backPressed() {
@@ -618,9 +618,9 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
 
         hasPaused = true
 
-        mQualityBottomSheet?.dismiss()
+        mQualityBottomSheet.dismiss()
 
-        mProfileBottomSheet?.dismiss()
+        mProfileBottomSheet.dismiss()
 
         ChatManager.instance?.setPreviousProgress()
     }
@@ -738,7 +738,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
     }
 
     private fun profileButtonClicked() {
-        mProfileBottomSheet!!.show()
+        mProfileBottomSheet.show()
     }
 
     private fun sleepButtonClicked() {
@@ -1183,7 +1183,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
                 0
             ) == 1
         ) {
-            orientationListener!!.enable()
+            orientationListener.enable()
         }
     }
 
@@ -1426,7 +1426,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
             if (!this.isAudioOnlyModeEnabled) {
                 startStreamWithQuality(quality)
                 resetQualityViewBackground(qualityView)
-                mQualityBottomSheet!!.dismiss()
+                mQualityBottomSheet.dismiss()
             }
         }
     }
@@ -1441,10 +1441,10 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
         val profileBinding = StreamProfilePreviewBinding.inflate(layoutInflater)
         val v = profileBinding.root
         mProfileBottomSheet = BottomSheetDialog(requireContext())
-        mProfileBottomSheet!!.setContentView(v)
+        mProfileBottomSheet.setContentView(v)
         val behavior = getDefaultBottomSheetBehaviour(v)
 
-        mProfileBottomSheet!!.setOnDismissListener { dialogInterface: DialogInterface? ->
+        mProfileBottomSheet.setOnDismissListener { dialogInterface: DialogInterface? ->
             behavior.setState(
                 BottomSheetBehavior.STATE_COLLAPSED
             )
@@ -1472,7 +1472,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
             })
 
         mFullProfileButton.setOnClickListener { view: View? ->
-            mProfileBottomSheet!!.dismiss()
+            mProfileBottomSheet.dismiss()
             val args = Bundle()
             args.putParcelable(getString(R.string.channel_info_intent_object), mUserInfo)
             navigate(
@@ -1544,16 +1544,16 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
      * Automatically hides the text of the selected Quality
      */
     private fun setupSpinner() {
-        mQualityButton.setOnClickListener { v: View? -> mQualityBottomSheet!!.show() }
+        mQualityButton.setOnClickListener { v: View? -> mQualityBottomSheet.show() }
 
         val streamSettingsBinding = StreamSettingsBinding.inflate(layoutInflater)
         mQualityBottomSheet = BottomSheetDialog(requireContext())
-        mQualityBottomSheet!!.setContentView(streamSettingsBinding.root)
+        mQualityBottomSheet.setContentView(streamSettingsBinding.root)
 
         val behavior: BottomSheetBehavior<*> =
             getDefaultBottomSheetBehaviour(streamSettingsBinding.root)
 
-        mQualityBottomSheet!!.setOnDismissListener { dialogInterface: DialogInterface? ->
+        mQualityBottomSheet.setOnDismissListener { dialogInterface: DialogInterface? ->
             behavior.setState(
                 BottomSheetBehavior.STATE_COLLAPSED
             )
@@ -1568,23 +1568,23 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
         optionsTitle.visibility = View.VISIBLE
 
         if (vodId == null) {
-            mChatOnlySelector!!.setVisibility(View.VISIBLE)
+            mChatOnlySelector.setVisibility(View.VISIBLE)
         }
 
-        mAudioOnlySelector!!.setVisibility(View.VISIBLE)
-        mAudioOnlySelector!!.setOnClickListener { view: View? ->
-            mQualityBottomSheet!!.dismiss()
+        mAudioOnlySelector.setVisibility(View.VISIBLE)
+        mAudioOnlySelector.setOnClickListener { view: View? ->
+            mQualityBottomSheet.dismiss()
             audioOnlyClicked()
         }
 
-        mMuteSelector!!.setVisibility(View.VISIBLE)
-        mMuteSelector!!.setOnClickListener { view: View? ->
-            mQualityBottomSheet!!.dismiss()
+        mMuteSelector.setVisibility(View.VISIBLE)
+        mMuteSelector.setOnClickListener { view: View? ->
+            mQualityBottomSheet.dismiss()
             muteClicked()
         }
 
-        mChatOnlySelector!!.setOnClickListener { view: View? ->
-            mQualityBottomSheet!!.dismiss()
+        mChatOnlySelector.setOnClickListener { view: View? ->
+            mQualityBottomSheet.dismiss()
             setChatOnlyView(!chatOnlyViewVisible)
         }
     }
@@ -1608,7 +1608,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
     private fun disableAudioOnlyView() {
         if (this.isAudioOnlyModeEnabled) {
             this.isAudioOnlyModeEnabled = false
-            mAudioOnlySelector!!.isChecked = false
+            mAudioOnlySelector.isChecked = false
             mVideoView.setVisibility(View.VISIBLE)
             mBufferingView.visibility = View.VISIBLE
             Service.bringToBack(mPreview)
@@ -1620,8 +1620,8 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
     }
 
     private fun audioOnlyClicked() {
-        mAudioOnlySelector!!.isChecked = !mAudioOnlySelector!!.isChecked
-        if (mAudioOnlySelector!!.isChecked) {
+        mAudioOnlySelector.isChecked = !mAudioOnlySelector.isChecked
+        if (mAudioOnlySelector.isChecked) {
             initAudioOnlyView()
         } else {
             stopAudioOnly()
@@ -1629,8 +1629,8 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
     }
 
     private fun muteClicked() {
-        mMuteSelector!!.isChecked = !mMuteSelector!!.isChecked
-        if (mMuteSelector!!.isChecked) {
+        mMuteSelector.isChecked = !mMuteSelector.isChecked
+        if (mMuteSelector.isChecked) {
             player!!.setVolume(0f)
         } else {
             player!!.setVolume(1f)
@@ -1660,7 +1660,7 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
 
         chatOnlyViewVisible = enabled
 
-        mChatOnlySelector!!.isChecked = chatOnlyViewVisible
+        mChatOnlySelector.isChecked = chatOnlyViewVisible
         if (chatOnlyViewVisible) initChatOnlyView()
         else disableChatOnlyView()
 
@@ -1745,10 +1745,10 @@ class PlayerFragment : BindingFragment<FragmentStreamBinding>(FragmentStreamBind
     private fun setupToolbar() {
         mToolbar.setPadding(0, 0, Service.dpToPixels(requireActivity(), 5f), 0)
         setHasOptionsMenu(true)
-        mActivity!!.setSupportActionBar(mToolbar)
+        mActivity.setSupportActionBar(mToolbar)
         mToolbar.bringToFront()
 
-        val actionBar = mActivity!!.supportActionBar ?: return
+        val actionBar = mActivity.supportActionBar ?: return
 
         val builder = SpannableStringBuilder()
         builder.append(mUserInfo!!.displayName)

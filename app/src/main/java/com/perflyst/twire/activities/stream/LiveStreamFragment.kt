@@ -21,9 +21,9 @@ import timber.log.Timber
  * Created by Sebastian Rask on 18-06-2016.
  */
 class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBinding::inflate) {
-    private var mMentionRecyclerView: RecyclerView? = null
-    private var mMentionAdapter: MentionAdapter? = null
-    private var mMentionContainer: View? = null
+    private lateinit var mMentionRecyclerView: RecyclerView
+    private lateinit var mMentionAdapter: MentionAdapter
+    private lateinit var mMentionContainer: View
 
     override val videoContainerResource: Int get() = R.id.video_fragment_container
 
@@ -55,9 +55,9 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState == null && mMentionRecyclerView == null) {
+        if (savedInstanceState == null) {
             mMentionContainer = binding.mentionContainer
-            mMentionContainer!!.visibility = View.GONE
+            mMentionContainer.visibility = View.GONE
             mMentionRecyclerView = binding.mentionRecyclerview
             setupMentionSuggestionRecyclerView()
         }
@@ -74,25 +74,21 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
     }
 
     fun setSuggestions(suggestions: MutableList<String>, inputRect: Rect?) {
-        if (mMentionAdapter == null) {
-            return
-        }
-
-        mMentionAdapter!!.setSuggestions(suggestions)
+        mMentionAdapter.setSuggestions(suggestions)
 
         if (inputRect == null) {
             return
         }
 
-        mMentionContainer!!.visibility = if (suggestions.isEmpty()) View.GONE else View.VISIBLE
+        mMentionContainer.visibility = if (suggestions.isEmpty()) View.GONE else View.VISIBLE
 
-        mMentionContainer!!.getViewTreeObserver()
+        mMentionContainer.getViewTreeObserver()
             .addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
-                    mMentionContainer!!.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+                    mMentionContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this)
                     //ToDo: Check height of container and adjust if necessary
                     resources.getDimension(R.dimen.chat_mention_suggestions_max_height)
-                    val currentHeight = mMentionContainer!!.height.toFloat()
+                    val currentHeight = mMentionContainer.height.toFloat()
 
                     /*
                 if (maxHeight < currentHeight) {
@@ -104,7 +100,7 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
                     currentHeight = maxHeight;
                 }
 */
-                    mMentionContainer!!.y =
+                    mMentionContainer.y =
                         (inputRect.top - inputRect.height() - currentHeight.toInt()).toFloat()
                 }
             })
@@ -113,13 +109,10 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
     private fun setupMentionSuggestionRecyclerView() {
         mMentionAdapter = MentionAdapter(MentionAdapterDelegate { suggestion: String? ->
             this@LiveStreamFragment.setSuggestions(ArrayList(), null)
-            if (mChatFragment == null) {
-                return@MentionAdapterDelegate
-            }
-            mChatFragment!!.insertMentionSuggestion(suggestion!!)
+            mChatFragment.insertMentionSuggestion(suggestion!!)
         })
-        mMentionRecyclerView!!.setLayoutManager(LinearLayoutManager(requireContext()))
-        mMentionRecyclerView!!.setAdapter(mMentionAdapter)
+        mMentionRecyclerView.setLayoutManager(LinearLayoutManager(requireContext()))
+        mMentionRecyclerView.setAdapter(mMentionAdapter)
     }
 
     companion object {

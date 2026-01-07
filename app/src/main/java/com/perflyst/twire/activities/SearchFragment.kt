@@ -201,9 +201,9 @@ class SearchFragment : BindingFragment<ActivitySearchBinding>(ActivitySearchBind
     abstract class ResultsFragment<E> :
         BindingFragment<FragmentSearchBinding>(FragmentSearchBinding::inflate),
         LazyFetchingFragment<E> {
-        protected var mAdapter: MainActivityAdapter<E, *>? = null
+        protected lateinit var mAdapter: MainActivityAdapter<E, *>
         protected lateinit var mRecyclerView: AutoSpanRecyclerView
-        protected var mProgressView: ProgressView? = null
+        protected lateinit var mProgressView: ProgressView
         var query: String? = null
         private var lazyFetchingOnScrollListener: LazyFetchingOnScrollListener<E>? = null
         override var limit = 20
@@ -238,13 +238,11 @@ class SearchFragment : BindingFragment<ActivitySearchBinding>(ActivitySearchBind
             mRecyclerView.setItemAnimator(null)
             mRecyclerView.setHasFixedSize(true)
 
-            if (mAdapter == null) {
-                mAdapter = constructAdapter()
-                mAdapter!!.topMarginFirst =
-                    resources.getDimension(R.dimen.search_new_adapter_top_margin).toInt()
-                mAdapter!!.setSortElements(false)
-            }
-            mAdapter!!.parentFragment = this
+            mAdapter = constructAdapter()
+            mAdapter.topMarginFirst =
+                resources.getDimension(R.dimen.search_new_adapter_top_margin).toInt()
+            mAdapter.setSortElements(false)
+            mAdapter.parentFragment = this
 
             mRecyclerView.setAdapter(mAdapter)
         }
@@ -259,16 +257,14 @@ class SearchFragment : BindingFragment<ActivitySearchBinding>(ActivitySearchBind
         }
 
         open fun reset(searchQuery: String?) {
-            if (mAdapter != null) {
-                query = searchQuery
-                cursor = null
-                mAdapter!!.clearNoAnimation()
-                mRecyclerView.scrollToPosition(0)
-                startProgress()
-                startRefreshing()
-                lazyFetchingOnScrollListener!!.resetAndFetch(mRecyclerView)
-                mProgressView!!.start()
-            }
+            query = searchQuery
+            cursor = null
+            mAdapter.clearNoAnimation()
+            mRecyclerView.scrollToPosition(0)
+            startProgress()
+            startRefreshing()
+            lazyFetchingOnScrollListener!!.resetAndFetch(mRecyclerView)
+            mProgressView.start()
         }
 
         protected fun setCursorFromResponse(pagination: HelixPagination) {
@@ -276,7 +272,7 @@ class SearchFragment : BindingFragment<ActivitySearchBinding>(ActivitySearchBind
         }
 
         override fun stopProgress() {
-            mProgressView!!.stop()
+            mProgressView.stop()
         }
 
         override fun startProgress() {
@@ -289,7 +285,7 @@ class SearchFragment : BindingFragment<ActivitySearchBinding>(ActivitySearchBind
         }
 
         override fun addToAdapter(aObjectList: MutableList<E>) {
-            mAdapter!!.addList(aObjectList)
+            mAdapter.addList(aObjectList)
         }
 
         abstract fun constructBehaviour(): AutoSpanBehaviour?

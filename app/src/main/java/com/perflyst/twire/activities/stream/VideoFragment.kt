@@ -36,8 +36,8 @@ import timber.log.Timber
 
 abstract class VideoFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGroup?, Boolean) -> T) :
     BindingFragment<T>(inflate), PlayerFragmentListener {
-    var mPlayerFragment: PlayerFragment? = null
-    var mChatFragment: ChatFragment? = null
+    lateinit var mPlayerFragment: PlayerFragment
+    lateinit var mChatFragment: ChatFragment
     private var mBackstackLost = false
     private var onStopCalled = false
     private var initialOrientation = 0
@@ -65,21 +65,15 @@ abstract class VideoFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGrou
             window.setEnterTransition(constructTransitions())
             window.setReturnTransition(constructTransitions())
 
-            // If the Fragment is non-null, then it is currently being
-            // retained across a configuration change.
-            if (mChatFragment == null) {
-                mChatFragment = getInstance(this.streamArguments)
-                fm.beginTransaction().replace(R.id.chat_fragment, mChatFragment!!).commit()
-            }
+            mChatFragment = getInstance(this.streamArguments)
+            fm.beginTransaction().replace(R.id.chat_fragment, mChatFragment).commit()
 
-            if (mPlayerFragment == null) {
-                mPlayerFragment = newInstance(this.streamArguments)
-                fm.beginTransaction().replace(
-                    this.videoContainerResource,
-                    mPlayerFragment!!,
-                    getString(R.string.stream_fragment_tag)
-                ).commit()
-            }
+            mPlayerFragment = newInstance(this.streamArguments)
+            fm.beginTransaction().replace(
+                this.videoContainerResource,
+                mPlayerFragment,
+                getString(R.string.stream_fragment_tag)
+            ).commit()
         }
 
         updateOrientation()
@@ -106,29 +100,27 @@ abstract class VideoFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGrou
     protected fun resetStream() {
         val fm = childFragmentManager
         mPlayerFragment = newInstance(this.streamArguments)
-        fm.beginTransaction().replace(this.videoContainerResource, mPlayerFragment!!).commit()
+        fm.beginTransaction().replace(this.videoContainerResource, mPlayerFragment).commit()
     }
 
     open fun onBackPressed(): Boolean {
-        if (mChatFragment == null || !mChatFragment!!.notifyBackPressed()) {
+        if (!mChatFragment.notifyBackPressed()) {
             return true
         }
 
         // Eww >(
-        if (mPlayerFragment != null) {
-            val isCurrentlyLandscape =
-                resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-            val wasInitiallyLandscape = initialOrientation == Configuration.ORIENTATION_LANDSCAPE
-            if (isCurrentlyLandscape && !wasInitiallyLandscape) {
-                mPlayerFragment!!.toggleFullscreen()
-            } else if (mPlayerFragment!!.chatOnlyViewVisible) {
-                this.finish()
-            } else {
-                try {
-                    mPlayerFragment!!.backPressed()
-                } catch (e: NullPointerException) {
-                    Timber.e(e)
-                }
+        val isCurrentlyLandscape =
+            resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+        val wasInitiallyLandscape = initialOrientation == Configuration.ORIENTATION_LANDSCAPE
+        if (isCurrentlyLandscape && !wasInitiallyLandscape) {
+            mPlayerFragment.toggleFullscreen()
+        } else if (mPlayerFragment.chatOnlyViewVisible) {
+            this.finish()
+        } else {
+            try {
+                mPlayerFragment.backPressed()
+            } catch (e: NullPointerException) {
+                Timber.e(e)
             }
         }
         return true
@@ -140,7 +132,7 @@ abstract class VideoFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGrou
             return
         }
 
-        if (mPlayerFragment!!.playWhenReady && requireActivity().applicationContext.packageManager
+        if (mPlayerFragment.playWhenReady && requireActivity().applicationContext.packageManager
                 .hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)
         ) {
             requireActivity().enterPictureInPictureMode()
@@ -170,13 +162,13 @@ abstract class VideoFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGrou
             fragment.playerFragmentCallback = this
         }
 
-        if (mChatFragment == null && fragment is ChatFragment) mChatFragment = fragment
+        if (fragment is ChatFragment) mChatFragment = fragment
 
-        if (mPlayerFragment == null && fragment is PlayerFragment) mPlayerFragment = fragment
+        if (fragment is PlayerFragment) mPlayerFragment = fragment
     }
 
     override fun onSeek() {
-        mChatFragment!!.clearMessages()
+        mChatFragment.clearMessages()
     }
 
     override fun refreshLayout() {

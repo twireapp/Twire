@@ -65,7 +65,7 @@ abstract class MainActivity<E> : ThemeActivity() {
 
     protected lateinit var mDecorativeToolbar: Toolbar
     protected lateinit var mAdapter: MainActivityAdapter<E, *>
-    protected var mDrawerFragment: NavigationDrawerFragment? = null
+    protected lateinit var mDrawerFragment: NavigationDrawerFragment
     protected lateinit var mScrollListener: UniversalOnScrollListener
     protected var mTooltip: TooltipWindow? = null
 
@@ -125,8 +125,7 @@ abstract class MainActivity<E> : ThemeActivity() {
         mMainToolbar = binding.mainToolbar
         mDecorativeToolbar = binding.mainDecorativeToolbar
 
-        mDrawerFragment =
-            supportFragmentManager.findFragmentById(R.id.drawer_fragment) as NavigationDrawerFragment?
+        mDrawerFragment = binding.drawerFragment.getFragment()
 
         initErrorView()
         initTitleAndIcon()
@@ -151,7 +150,7 @@ abstract class MainActivity<E> : ThemeActivity() {
         mTitleView.bringToFront()
 
         // Setup Drawer Fragment
-        mDrawerFragment!!.setUp(
+        mDrawerFragment.setUp(
             binding.followedChannelsDrawerLayout,
             mMainToolbar
         )

@@ -73,15 +73,15 @@ class ChannelFragment :
     BindingFragment<ActivityStreamerInfoBinding>(ActivityStreamerInfoBinding::inflate) {
     private val showFabDelay = 300
     private lateinit var info: ChannelInfo
-    private var streamerImage: ImageView? = null
-    private var toolbar: Toolbar? = null
-    private var additionalToolbar: Toolbar? = null
-    private var mViewPager2: ViewPager2? = null
-    private var mTabLayout: TabLayout? = null
-    private var mAppBar: AppBarLayout? = null
-    private var mFab: FloatingActionButton? = null
+    private lateinit var streamerImage: ImageView
+    private lateinit var toolbar: Toolbar
+    private lateinit var additionalToolbar: Toolbar
+    private lateinit var mViewPager2: ViewPager2
+    private lateinit var mTabLayout: TabLayout
+    private lateinit var mAppBar: AppBarLayout
+    private lateinit var mFab: FloatingActionButton
     private var colorFadeDuration = 0
-    private var mFollowHandler: FollowHandler? = null
+    private lateinit var mFollowHandler: FollowHandler
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -97,7 +97,7 @@ class ChannelFragment :
         mAppBar = binding.appbar
         mFab = binding.fab
 
-        setupToolbar(toolbar!!)
+        setupToolbar(toolbar)
 
         // Get the StreamerInfo object sent with the intent to open this activity
         val intent = arguments
@@ -113,7 +113,7 @@ class ChannelFragment :
                 followers!!.toLong()
             )
         }, 0)
-        streamerImage!!.transitionName = getString(R.string.streamerInfo_transition)
+        streamerImage.transitionName = getString(R.string.streamerInfo_transition)
         setUpTabs()
         initStreamerImageAndColors()
         initiateFAB()
@@ -135,7 +135,7 @@ class ChannelFragment :
     }
 
     private fun setUpTabs() {
-        mViewPager2!!.setAdapter(ChannelStateAdapter(requireActivity()))
+        mViewPager2.setAdapter(ChannelStateAdapter(requireActivity()))
 
         val tabTitles = intArrayOf(
             R.string.streamerInfo_desc_tab,
@@ -145,17 +145,17 @@ class ChannelFragment :
             R.string.streamerInfo_chat_tab
         )
         TabLayoutMediator(
-            mTabLayout!!,
-            mViewPager2!!
+            mTabLayout,
+            mViewPager2
         ) { tab: TabLayout.Tab?, position: Int -> tab!!.setText(tabTitles[position]) }.attach()
 
-        mTabLayout!!.addOnTabSelectedListener(object : OnTabSelectedListener {
+        mTabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                mAppBar!!.setExpanded(
+                mAppBar.setExpanded(
                     tab.text != null &&
                             tab.text == getString(R.string.streamerInfo_desc_tab), true
                 )
-                mViewPager2!!.setCurrentItem(tab.position, true)
+                mViewPager2.setCurrentItem(tab.position, true)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -187,9 +187,9 @@ class ChannelFragment :
             ) {
                 if (!isAdded) return
                 val drawable = bitmap.toDrawable(resources)
-                streamerImage!!.setImageDrawable(drawable)
+                streamerImage.setImageDrawable(drawable)
 
-                streamerImage!!.doOnPreDraw {
+                streamerImage.doOnPreDraw {
                     startPostponedEnterTransition()
                 }
             }
@@ -199,7 +199,7 @@ class ChannelFragment :
 
             override fun onLoadFailed(errorDrawable: Drawable?) {
                 if (!isAdded) return
-                streamerImage!!.doOnPreDraw {
+                streamerImage.doOnPreDraw {
                     startPostponedEnterTransition()
                 }
             }
@@ -213,7 +213,7 @@ class ChannelFragment :
             ) {
                 if (!isAdded) return
                 val drawable = bitmap.toDrawable(resources)
-                streamerImage!!.setImageDrawable(drawable)
+                streamerImage.setImageDrawable(drawable)
 
                 val palette = Palette.from(bitmap).generate()
                 val defaultColor = Service.getColorAttribute(
@@ -294,8 +294,8 @@ class ChannelFragment :
                         primaryColorDark,
                         colorFadeDuration
                     )
-                    mFab!!.backgroundTintList = ColorStateList.valueOf(compositeNewColor)
-                    mTabLayout!!.setSelectedTabIndicatorColor(compositeNewColor)
+                    mFab.backgroundTintList = ColorStateList.valueOf(compositeNewColor)
+                    mTabLayout.setSelectedTabIndicatorColor(compositeNewColor)
 
                     val window = requireActivity().window
                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -318,26 +318,26 @@ class ChannelFragment :
         mFollowHandler = FollowHandler(
             info,
             requireContext(),
-            (FollowHandler.Delegate { mFab!!.hide() })
+            (FollowHandler.Delegate { mFab.hide() })
         )
 
         // If the channel got imported from Twitch, then hide the Follow/Unfollow Button
-        if (mFollowHandler!!.isStreamerTwitch()) {
+        if (mFollowHandler.isStreamerTwitch()) {
             hideFAB()
         } else {
-            mFab!!.setOnClickListener { v: View? ->
-                if (mFollowHandler!!.isStreamerFollowed()) {
-                    mFollowHandler!!.unfollowStreamer()
+            mFab.setOnClickListener { v: View? ->
+                if (mFollowHandler.isStreamerFollowed()) {
+                    mFollowHandler.unfollowStreamer()
                 } else {
-                    mFollowHandler!!.followStreamer()
+                    mFollowHandler.followStreamer()
                 }
                 hideFAB()
                 Handler().postDelayed({
-                    updateFABIcon(mFollowHandler!!.isStreamerFollowed())
+                    updateFABIcon(mFollowHandler.isStreamerFollowed())
                     showFAB()
                 }, showFabDelay.toLong())
             }
-            updateFABIcon(mFollowHandler!!.isStreamerFollowed())
+            updateFABIcon(mFollowHandler.isStreamerFollowed())
         }
     }
 
@@ -346,12 +346,12 @@ class ChannelFragment :
             R.drawable.ic_heart_broken
         else
             R.drawable.ic_favorite
-        mFab!!.setImageResource(imageRes)
+        mFab.setImageResource(imageRes)
     }
 
     private fun hideFAB() {
         val hideFabDuration = 200
-        mFab!!.animate()
+        mFab.animate()
             .translationY(
                 resources.getDimension(R.dimen.streamerInfo_fab_size) + resources.getDimension(
                     R.dimen.streamerInfo_fab_margin
@@ -361,11 +361,11 @@ class ChannelFragment :
             .setInterpolator(AccelerateInterpolator())
             .setListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator) {
-                    mFab!!.isClickable = false
+                    mFab.isClickable = false
                 }
 
                 override fun onAnimationEnd(animation: Animator) {
-                    mFab!!.visibility = View.INVISIBLE
+                    mFab.visibility = View.INVISIBLE
                 }
 
                 override fun onAnimationCancel(animation: Animator) {
@@ -379,17 +379,17 @@ class ChannelFragment :
 
     private fun showFAB() {
         val showFabDuration = 300
-        mFab!!.animate()
+        mFab.animate()
             .translationY(0f)
             .setDuration(showFabDuration.toLong())
             .setInterpolator(OvershootInterpolator())
             .setListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator) {
-                    mFab!!.visibility = View.VISIBLE
+                    mFab.visibility = View.VISIBLE
                 }
 
                 override fun onAnimationEnd(animation: Animator) {
-                    mFab!!.isClickable = true
+                    mFab.isClickable = true
                 }
 
                 override fun onAnimationCancel(animation: Animator) {
@@ -422,7 +422,7 @@ class ChannelFragment :
         ChannelFragment<FragmentChannelDescriptionBinding>(FragmentChannelDescriptionBinding::inflate) {
         private var info: ChannelInfo? = null
 
-        private var mPanelsRecyclerView: RecyclerView? = null
+        private lateinit var mPanelsRecyclerView: RecyclerView
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
@@ -446,8 +446,8 @@ class ChannelFragment :
         private fun setupPanels() {
             val mPanelsAdapter = PanelAdapter(requireActivity())
             val llm = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            mPanelsRecyclerView!!.setAdapter(mPanelsAdapter)
-            mPanelsRecyclerView!!.setLayoutManager(llm)
+            mPanelsRecyclerView.setAdapter(mPanelsAdapter)
+            mPanelsRecyclerView.setLayoutManager(llm)
 
             val mTask = GetPanelsTask(info!!.login)
             Execute.background(
@@ -472,13 +472,13 @@ class ChannelFragment :
         ChannelFragment<FragmentChannelVodsBinding>(FragmentChannelVodsBinding::inflate),
         LazyFetchingFragment<VideoOnDemand> {
         private lateinit var mRecyclerView: AutoSpanRecyclerView
-        private var mAdapter: VODAdapter? = null
+        private lateinit var mAdapter: VODAdapter
         private var channelInfo: ChannelInfo? = null
         private var broadcasts = false
         private var showError = false
         override var limit = 20
         override var maxElementsToFetch = 500
-        private var progressView: ProgressView? = null
+        private lateinit var progressView: ProgressView
 
         override fun showError() {
             super.showError()
@@ -505,17 +505,15 @@ class ChannelFragment :
                 showError()
             }
 
-            if (mAdapter == null) {
-                mRecyclerView.setBehaviour(VODAutoSpanBehaviour())
-                mAdapter = VODAdapter(mRecyclerView, this)
-                mAdapter!!.setShowName(false)
-                progressView!!.start()
-            }
+            mRecyclerView.setBehaviour(VODAutoSpanBehaviour())
+            mAdapter = VODAdapter(mRecyclerView, this)
+            mAdapter.setShowName(false)
+            progressView.start()
 
-            mAdapter!!.topMarginFirst =
+            mAdapter.topMarginFirst =
                 resources.getDimension(R.dimen.search_new_adapter_top_margin).toInt()
-            mAdapter!!.setSortElements(false)
-            mAdapter!!.disableInsertAnimation()
+            mAdapter.setSortElements(false)
+            mAdapter.disableInsertAnimation()
             val lazyFetchingOnScrollListener = LazyFetchingOnScrollListener<VideoOnDemand>(this)
             mRecyclerView.addOnScrollListener(lazyFetchingOnScrollListener)
             mRecyclerView.setAdapter(mAdapter)
@@ -528,7 +526,7 @@ class ChannelFragment :
         override var cursor: String? = ""
 
         override fun addToAdapter(aObjectList: MutableList<VideoOnDemand>) {
-            mAdapter!!.addList(aObjectList)
+            mAdapter.addList(aObjectList)
         }
 
         override fun startRefreshing() {
@@ -541,11 +539,11 @@ class ChannelFragment :
         }
 
         override fun stopProgress() {
-            progressView!!.stop()
+            progressView.stop()
         }
 
         override fun notifyUserNoElementsAdded() {
-            if (mAdapter!!.itemCount > 0) return
+            if (mAdapter.itemCount > 0) return
 
             Execute.ui {
                 if (mErrorEmote != null && mErrorText != null) {
@@ -601,13 +599,13 @@ class ChannelFragment :
     class ClipFragment :
         ChannelFragment<FragmentChannelVodsBinding>(FragmentChannelVodsBinding::inflate),
         LazyFetchingFragment<Clip> {
-        private var mRecyclerView: AutoSpanRecyclerView? = null
-        private var mAdapter: ClipAdapter? = null
+        private lateinit var mRecyclerView: AutoSpanRecyclerView
+        private lateinit var mAdapter: ClipAdapter
         private var channelInfo: ChannelInfo? = null
         private var showError = false
         override var limit = 20
         override var maxElementsToFetch = 500
-        private var progressView: ProgressView? = null
+        private lateinit var progressView: ProgressView
 
         override fun showError() {
             super.showError()
@@ -634,30 +632,28 @@ class ChannelFragment :
                 showError()
             }
 
-            if (mAdapter == null) {
-                mRecyclerView!!.setBehaviour(VODAutoSpanBehaviour())
-                mAdapter = ClipAdapter(mRecyclerView!!, this)
-                mAdapter!!.setShowName(false)
-                progressView!!.start()
-            }
+            mRecyclerView.setBehaviour(VODAutoSpanBehaviour())
+            mAdapter = ClipAdapter(mRecyclerView, this)
+            mAdapter.setShowName(false)
+            progressView.start()
 
-            mAdapter!!.topMarginFirst =
+            mAdapter.topMarginFirst =
                 resources.getDimension(R.dimen.search_new_adapter_top_margin).toInt()
-            mAdapter!!.setSortElements(false)
-            mAdapter!!.disableInsertAnimation()
+            mAdapter.setSortElements(false)
+            mAdapter.disableInsertAnimation()
             val lazyFetchingOnScrollListener = LazyFetchingOnScrollListener<Clip>(this)
-            mRecyclerView!!.addOnScrollListener(lazyFetchingOnScrollListener)
-            mRecyclerView!!.setAdapter(mAdapter)
-            mRecyclerView!!.setItemAnimator(null)
-            mRecyclerView!!.setHasFixedSize(true)
+            mRecyclerView.addOnScrollListener(lazyFetchingOnScrollListener)
+            mRecyclerView.setAdapter(mAdapter)
+            mRecyclerView.setItemAnimator(null)
+            mRecyclerView.setHasFixedSize(true)
 
-            lazyFetchingOnScrollListener.checkForNewElements(mRecyclerView!!)
+            lazyFetchingOnScrollListener.checkForNewElements(mRecyclerView)
         }
 
         override var cursor: String? = ""
 
         override fun addToAdapter(aObjectList: MutableList<Clip>) {
-            mAdapter!!.addList(aObjectList)
+            mAdapter.addList(aObjectList)
         }
 
         override fun startRefreshing() {
@@ -670,11 +666,11 @@ class ChannelFragment :
         }
 
         override fun stopProgress() {
-            progressView!!.stop()
+            progressView.stop()
         }
 
         override fun notifyUserNoElementsAdded() {
-            if (mAdapter!!.itemCount > 0) return
+            if (mAdapter.itemCount > 0) return
 
             Execute.ui {
                 if (mErrorEmote != null && mErrorText != null) {

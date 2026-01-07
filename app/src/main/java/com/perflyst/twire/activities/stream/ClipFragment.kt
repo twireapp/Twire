@@ -19,8 +19,8 @@ class ClipFragment : VideoFragment<ActivityVodBinding>(ActivityVodBinding::infla
     private var clip: Clip? = null
     private var channel: ChannelInfo? = null
     private var clipsFragment: Fragment? = null
-    private var mTitleView: TextView? = null
-    private var mViewsView: TextView? = null
+    private lateinit var mTitleView: TextView
+    private lateinit var mViewsView: TextView
 
     override val videoContainerResource: Int get() = R.id.video_fragment_container
 
@@ -65,8 +65,8 @@ class ClipFragment : VideoFragment<ActivityVodBinding>(ActivityVodBinding::infla
 
     private fun setClipData() {
         if (clip != null) {
-            mTitleView!!.text = clip!!.title
-            mViewsView!!.text = getString(R.string.vod_views, clip!!.viewCount)
+            mTitleView.text = clip!!.title
+            mViewsView.text = getString(R.string.vod_views, clip!!.viewCount)
         }
     }
 

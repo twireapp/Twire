@@ -98,7 +98,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
 
     private var chatStatusBarShowing = true
 
-    private var mChatAdapter: ChatAdapter? = null
+    private lateinit var mChatAdapter: ChatAdapter
     private lateinit var chatManager: ChatManager
     private var mUserInfo: UserInfo? = null
     private var vodID: String? = null
@@ -120,15 +120,15 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     private var twitchEmotesFragment: EmoteGridFragment? = null
     private var customEmotesFragment: EmoteGridFragment? = null
     private var subscriberEmotesFragment: EmoteGridFragment? = null
-    private var mEmoteKeyboardButton: ImageView? = null
-    private var mEmoteChatBackspace: ImageView? = null
-    private var emoteKeyboardContainer: ViewGroup? = null
-    private var mEmoteTabs: TabLayout? = null
-    private var mEmoteViewPager: ViewPager? = null
+    private lateinit var mEmoteKeyboardButton: ImageView
+    private lateinit var mEmoteChatBackspace: ImageView
+    private lateinit var emoteKeyboardContainer: ViewGroup
+    private lateinit var mEmoteTabs: TabLayout
+    private lateinit var mEmoteViewPager: ViewPager
     private var selectedTabColorRes: Int? = null
     private var unselectedTabColorRes: Int? = null
     private var keyboardState: KeyboardState? = KeyboardState.CLOSED
-    private var defaultBackgroundColor: ColorFilter? = null
+    private lateinit var defaultBackgroundColor: ColorFilter
     private var bottomSheetDialog: BottomSheetDialog? = null
 
     private enum class KeyboardState {
@@ -232,9 +232,9 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
                 if (!this.isFragmentActive) return
 
                 if (target == null) {
-                    mChatAdapter!!.clear()
+                    mChatAdapter.clear()
                 } else {
-                    mChatAdapter!!.clear(target)
+                    mChatAdapter.clear(target)
                 }
             }
 
@@ -282,7 +282,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
                     )
                     subscriberEmotesLoaded(
                         subscriberEmotes!!,
-                        mEmoteViewPager!!.adapter as EmotesPagerAdapter?
+                        mEmoteViewPager.adapter as EmotesPagerAdapter?
                     )
                 }
                 Execute.background(getTwitchEmotesTask)
@@ -441,7 +441,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     fun notifyBackPressed(): Boolean {
         // Check if the emote keyboard is open and close it.
         // The latter condition should never happen but it's been added since you can't detect if the soft keyboard is open reliably.
-        if (keyboardState == KeyboardState.EMOTE || (keyboardState == KeyboardState.CLOSED && emoteKeyboardContainer!!.isVisible)) {
+        if (keyboardState == KeyboardState.EMOTE || (keyboardState == KeyboardState.CLOSED && emoteKeyboardContainer.isVisible)) {
             setKeyboardState(KeyboardState.CLOSED)
             return false
         } else {
@@ -474,9 +474,9 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
                 PorterDuff.Mode.SRC_IN
             )
 
-            val newTab = mEmoteTabs!!.newTab()
+            val newTab = mEmoteTabs.newTab()
             newTab.setIcon(icon)
-            mEmoteTabs!!.addTab(newTab, adapter.subscribePosition, false)
+            mEmoteTabs.addTab(newTab, adapter.subscribePosition, false)
             adapter.showSubscriberEmote = true
             adapter.notifyDataSetChanged()
 
@@ -505,9 +505,9 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
         val recordedHeight = keyboardHeight
 
         if (recordedHeight > 200) {
-            val lp = emoteKeyboardContainer!!.layoutParams
+            val lp = emoteKeyboardContainer.layoutParams
             lp.height = recordedHeight
-            emoteKeyboardContainer!!.setLayoutParams(lp)
+            emoteKeyboardContainer.setLayoutParams(lp)
         }
     }
 
@@ -515,9 +515,9 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
         Timber.d("Keyboard height: %s", keyboardHeight)
         Settings.keyboardHeight = keyboardHeight
 
-        val lp = emoteKeyboardContainer!!.layoutParams
+        val lp = emoteKeyboardContainer.layoutParams
         lp.height = keyboardHeight
-        emoteKeyboardContainer!!.setLayoutParams(lp)
+        emoteKeyboardContainer.setLayoutParams(lp)
     }
 
     private fun emoteButtonClicked(clickedView: View) {
@@ -535,17 +535,17 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     private fun setKeyboardState(state: KeyboardState) {
         if (keyboardState == state) return
 
-        if (state == KeyboardState.EMOTE) mEmoteKeyboardButton!!.setColorFilter(
+        if (state == KeyboardState.EMOTE) mEmoteKeyboardButton.setColorFilter(
             Service.getAccentColor(
                 requireContext()
             )
         )
-        else mEmoteKeyboardButton!!.colorFilter = defaultBackgroundColor
+        else mEmoteKeyboardButton.colorFilter = defaultBackgroundColor
         requireActivity().window
-            .setSoftInputMode(if (emoteKeyboardContainer!!.isVisible) WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING else WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+            .setSoftInputMode(if (emoteKeyboardContainer.isVisible) WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING else WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
 
-        emoteKeyboardContainer!!.visibility =
+        emoteKeyboardContainer.visibility =
             if (state == KeyboardState.CLOSED) View.GONE else View.VISIBLE
         toggleKeyboard(state == KeyboardState.SOFT)
 
@@ -565,13 +565,13 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
 
     private fun setupEmoteViews() {
         setInitialKeyboardHeight()
-        mEmoteKeyboardButton!!.setOnClickListener { clickedView: View? ->
+        mEmoteKeyboardButton.setOnClickListener { clickedView: View? ->
             this.emoteButtonClicked(
                 clickedView!!
             )
         }
 
-        mEmoteChatBackspace!!.setOnClickListener { view: View? ->
+        mEmoteChatBackspace.setOnClickListener { view: View? ->
             mSendText.dispatchKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL))
             requireView().performHapticFeedback(vibrationFeedback)
         }
@@ -584,8 +584,8 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
 
         val pagerAdapter = EmotesPagerAdapter(requireActivity().supportFragmentManager)
 
-        for (i in 0..<mEmoteTabs!!.tabCount) {
-            val tab = mEmoteTabs!!.getTabAt(i)
+        for (i in 0..<mEmoteTabs.tabCount) {
+            val tab = mEmoteTabs.getTabAt(i)
             val icon = tab?.icon
 
             if (icon != null) {
@@ -603,8 +603,8 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             }
         }
 
-        mEmoteViewPager!!.setAdapter(pagerAdapter)
-        mEmoteViewPager!!.addOnPageChangeListener(object : OnPageChangeListener {
+        mEmoteViewPager.setAdapter(pagerAdapter)
+        mEmoteViewPager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
@@ -613,8 +613,8 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             }
 
             override fun onPageSelected(position: Int) {
-                if (mEmoteTabs!!.tabCount - 1 >= position) {
-                    val tab = mEmoteTabs!!.getTabAt(position)
+                if (mEmoteTabs.tabCount - 1 >= position) {
+                    val tab = mEmoteTabs.getTabAt(position)
                     tab?.select()
                 }
             }
@@ -623,7 +623,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             }
         })
 
-        mEmoteTabs!!.addOnTabSelectedListener(
+        mEmoteTabs.addOnTabSelectedListener(
             object : TabLayout.ViewPagerOnTabSelectedListener(mEmoteViewPager) {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     super.onTabSelected(tab)
@@ -691,7 +691,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
                     val firstCharacter = matcher.group(1)
                     val lastWord = matcher.group(2)!!.lowercase(Locale.getDefault())
                     if (firstCharacter == "@") {
-                        mChatAdapter!!.getNamesThatMatches(lastWord, suggestions)
+                        mChatAdapter.getNamesThatMatches(lastWord, suggestions)
                     } else if (firstCharacter == ":" && customEmotes != null) {
                         suggestions = sequenceOf(
                             customEmotes!!,
@@ -816,11 +816,11 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
      * Adds a Twitch-message to the recyclerview
      */
     private fun addMessage(message: ChatMessage) {
-        mChatAdapter!!.add(message)
+        mChatAdapter.add(message)
     }
 
     fun clearMessages() {
-        if (mChatAdapter != null) mChatAdapter!!.clear()
+        mChatAdapter.clear()
     }
 
     /**
@@ -904,8 +904,8 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
 
     class EmoteGridFragment :
         BindingFragment<FragmentEmoteGridBinding>(FragmentEmoteGridBinding::inflate) {
-        private var mEmoteRecyclerView: AutoSpanRecyclerView? = null
-        private var mPromotedEmotesRecyclerView: AutoSpanRecyclerView? = null
+        private lateinit var mEmoteRecyclerView: AutoSpanRecyclerView
+        private lateinit var mPromotedEmotesRecyclerView: AutoSpanRecyclerView
         private var fragmentType: EmoteFragmentType? = null
         internal var mAdapter: EmoteAdapter? = null
         private var callback: EmoteKeyboardDelegate? = null
@@ -916,17 +916,17 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             mEmoteRecyclerView = binding.emoteRecyclerview
             mPromotedEmotesRecyclerView = binding.promotedEmotesRecyclerview
 
-            mEmoteRecyclerView!!.setBehaviour(EmoteAutoSpanBehaviour())
-            mPromotedEmotesRecyclerView!!.setBehaviour(EmoteAutoSpanBehaviour())
+            mEmoteRecyclerView.setBehaviour(EmoteAutoSpanBehaviour())
+            mPromotedEmotesRecyclerView.setBehaviour(EmoteAutoSpanBehaviour())
 
-            mEmoteRecyclerView!!.setHasFixedSize(false)
-            mPromotedEmotesRecyclerView!!.setHasFixedSize(false)
+            mEmoteRecyclerView.setHasFixedSize(false)
+            mPromotedEmotesRecyclerView.setHasFixedSize(false)
 
             mAdapter = EmoteAdapter()
             val mPromotedAdapter = EmoteAdapter()
 
-            mEmoteRecyclerView!!.setAdapter(mAdapter)
-            mPromotedEmotesRecyclerView!!.setAdapter(mPromotedAdapter)
+            mEmoteRecyclerView.setAdapter(mAdapter)
+            mPromotedEmotesRecyclerView.setAdapter(mPromotedAdapter)
 
             when (fragmentType) {
                 EmoteFragmentType.UNICODE -> addUnicodeEmotes()
@@ -980,7 +980,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             private var isDarkTheme = false
 
             private val emoteClickListener: View.OnClickListener = View.OnClickListener { view ->
-                val itemPosition = mEmoteRecyclerView!!.getChildLayoutPosition(view)
+                val itemPosition = mEmoteRecyclerView.getChildLayoutPosition(view)
                 val emoteClicked = emotes[itemPosition]
 
                 if (callback != null) {
@@ -990,7 +990,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
 
             private val emoteLongClickListener: OnLongClickListener =
                 OnLongClickListener { view ->
-                    val itemPosition = mEmoteRecyclerView!!.getChildLayoutPosition(view)
+                    val itemPosition = mEmoteRecyclerView.getChildLayoutPosition(view)
                     val emoteClicked = emotes[itemPosition]
 
                     Toast.makeText(context, emoteClicked.keyword, Toast.LENGTH_SHORT).show()

@@ -19,9 +19,9 @@ class VODFragment : VideoFragment<ActivityVodBinding>(ActivityVodBinding::inflat
                 requireArguments().getParcelable(getString(R.string.intent_vod))
             return field
         }
-    private var vodsFragments: Fragment? = null
-    private var mTitleView: TextView? = null
-    private var mViewsView: TextView? = null
+    private lateinit var vodsFragments: Fragment
+    private lateinit var mTitleView: TextView
+    private lateinit var mViewsView: TextView
 
     override val videoContainerResource: Int get() = R.id.video_fragment_container
 
@@ -39,11 +39,9 @@ class VODFragment : VideoFragment<ActivityVodBinding>(ActivityVodBinding::inflat
         if (savedInstanceState == null) {
             val fm = childFragmentManager
 
-            if (vodsFragments == null) {
-                vodsFragments = newInstance(mVod!!.isBroadcast, mVod!!.channelInfo)
-                fm.beginTransaction().replace(R.id.additional_vods_container, vodsFragments!!)
-                    .commit()
-            }
+            vodsFragments = newInstance(mVod!!.isBroadcast, mVod!!.channelInfo)
+            fm.beginTransaction().replace(R.id.additional_vods_container, vodsFragments)
+                .commit()
         }
 
         mTitleView = binding.title
@@ -59,8 +57,8 @@ class VODFragment : VideoFragment<ActivityVodBinding>(ActivityVodBinding::inflat
 
     private fun setVodData() {
         if (mVod != null) {
-            mTitleView!!.text = mVod!!.videoTitle
-            mViewsView!!.text = getString(R.string.vod_views, mVod!!.views)
+            mTitleView.text = mVod!!.videoTitle
+            mViewsView.text = getString(R.string.vod_views, mVod!!.views)
         }
     }
 
