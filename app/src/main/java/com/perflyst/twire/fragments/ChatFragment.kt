@@ -18,7 +18,6 @@ import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.EditorInfo
@@ -32,6 +31,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -295,7 +295,6 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             }
         }
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -758,34 +757,15 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     private fun setupKeyboardShowListener() {
         if (activity == null) return
 
-        val mRootWindow = requireActivity().window
-        val mRootView2 = mRootWindow.decorView.findViewById<View>(android.R.id.content)
-        mRootView2.getViewTreeObserver().addOnGlobalLayoutListener(
-            object : OnGlobalLayoutListener {
-                var lastBottom: Int = -1
+        ViewCompat.setOnApplyWindowInsetsListener(requireView()) { _, insets ->
+            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
 
-                override fun onGlobalLayout() {
-                    try {
-                        if (this@ChatFragment.isAdded) {
-                            val r = Rect()
-                            val view = mRootWindow.decorView
-                            view.getWindowVisibleDisplayFrame(r)
+            notifyKeyboardHeightRecorded(imeHeight)
+            if (imeVisible && keyboardState == KeyboardState.CLOSED) setKeyboardState(KeyboardState.SOFT)
 
-                            if (lastBottom > r.bottom && lastBottom - r.bottom > 200 && (resources.configuration.orientation
-                                        == Configuration.ORIENTATION_PORTRAIT)
-                            ) {
-                                Timber.d("Soft Keyboard shown")
-
-                                notifyKeyboardHeightRecorded(lastBottom - r.bottom)
-                                setKeyboardState(KeyboardState.SOFT)
-                            }
-                            lastBottom = r.bottom
-                        }
-                    } catch (e: IllegalStateException) {
-                        Timber.e(e)
-                    }
-                }
-            })
+            insets
+        }
     }
 
 
