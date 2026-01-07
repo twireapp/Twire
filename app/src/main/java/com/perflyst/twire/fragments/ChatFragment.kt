@@ -94,7 +94,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
     private var chatStatusBarShowing = true
 
     private var mChatAdapter: ChatAdapter? = null
-    private var chatManager: ChatManager? = null
+    private lateinit var chatManager: ChatManager
     private var mUserInfo: UserInfo? = null
     private var vodID: String? = null
 
@@ -291,7 +291,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
             }
         })
 
-        if (vodOffset != null) Execute.background(chatManager!!)
+        if (vodOffset != null) Execute.background(chatManager)
 
         if (supportedTextEmotes == null) {
             supportedTextEmotes = ArrayList()
@@ -311,7 +311,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
 
     override fun onStop() {
         super.onStop()
-        chatManager!!.stop()
+        chatManager.stop()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -812,9 +812,9 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
 
         val chatMessage = ChatMessage(
             message,
-            chatManager!!.userDisplayName!!,
-            chatManager!!.userColor,
-            chatManager!!.getBadges(chatManager!!.userBadges!!),
+            chatManager.userDisplayName!!,
+            chatManager.userColor,
+            chatManager.getBadges(chatManager.userBadges!!),
             getEmotesFromMessage(message, emotes),
             false
         )
@@ -828,7 +828,7 @@ class ChatFragment : Fragment(), EmoteKeyboardDelegate, ChatAdapterCallback {
         setKeyboardState(KeyboardState.CLOSED)
         mSendText.setText("")
 
-        chatManager!!.sendMessage(message)
+        chatManager.sendMessage(message)
     }
 
     /**
