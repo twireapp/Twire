@@ -743,8 +743,17 @@ class StreamFragment : Fragment(), Player.Listener {
         if (sleepTimer == null) {
             sleepTimer = SleepTimer(object : SleepTimerDelegate {
                 override fun onTimesUp() {
-                    stopAudioOnly()
-                    player!!.pause()
+                    // If in audio-only mode, just disable the view without restarting the stream
+                    if (isAudioOnlyModeEnabled) {
+                        disableAudioOnlyView()
+                    }
+                    // Pause the current player
+                    if (player != null) {
+                        player?.pause()
+                    } else {
+                        // App is minimized - connect to PlaybackService to pause
+                        pausePlaybackService()
+                    }
                 }
 
                 override fun onStart(message: String) {
@@ -758,6 +767,33 @@ class StreamFragment : Fragment(), Player.Listener {
         }
 
         sleepTimer!!.show(requireActivity())
+    }
+
+    /**
+     * Connects to the PlaybackService and pauses playback.
+     * Used when the sleep timer fires while the app is minimized.
+     */
+    private fun pausePlaybackService() {
+        val context = context ?: return
+        val sessionToken = SessionToken(
+            context,
+            ComponentName(context, PlaybackService::class.java)
+        )
+        val future = MediaController.Builder(context, sessionToken).buildAsync()
+        Futures.addCallback(
+            future,
+            object : FutureCallback<MediaController> {
+                override fun onSuccess(controller: MediaController?) {
+                    controller?.pause()
+                    MediaController.releaseFuture(future)
+                }
+
+                override fun onFailure(t: Throwable) {
+                    Timber.e(t, "SleepTimer: Failed to connect to PlaybackService")
+                }
+            },
+            ContextCompat.getMainExecutor(context)
+        )
     }
 
     private fun playbackButtonClicked() {
