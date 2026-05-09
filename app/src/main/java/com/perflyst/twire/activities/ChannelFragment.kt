@@ -294,6 +294,12 @@ class ChannelFragment :
                         primaryColorDark,
                         colorFadeDuration
                     )
+                    Service.animateBackgroundColorChange(
+                        mAppBar,
+                        newColorDark,
+                        Service.getBackgroundColorFromView(mAppBar, defaultDarkColor),
+                        colorFadeDuration
+                    )
                     mFab.backgroundTintList = ColorStateList.valueOf(compositeNewColor)
                     mTabLayout.setSelectedTabIndicatorColor(compositeNewColor)
 
