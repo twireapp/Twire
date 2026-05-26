@@ -129,8 +129,9 @@ class ClipAdapter(recyclerView: AutoSpanRecyclerView, private val fragment: Frag
 
         val gameAndViewers = context.getString(R.string.vod_views, element.viewCount)
         if (element.gameId.isNotEmpty()) {
-            Execute.background({ Service.gameNameCache.get(element.gameId) }, { name ->
-                viewHolder.vGame.text = "${viewHolder.vGame.text} - $name"
+            Execute.background({ Service.gameNameCache[element.gameId] }, { name ->
+                if (name.isPresent)
+                    viewHolder.vGame.text = "${viewHolder.vGame.text} - $name"
             })
         }
         viewHolder.vTitle.text = element.title

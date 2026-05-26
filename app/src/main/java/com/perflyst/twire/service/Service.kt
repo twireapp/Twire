@@ -45,6 +45,7 @@ import timber.log.Timber
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
+import java.util.Optional
 import java.util.Random
 import java.util.TreeMap
 import java.util.concurrent.TimeUnit
@@ -574,14 +575,14 @@ object Service {
         return (dp * scale + 0.5f).toInt()
     }
 
-    var gameNameCache: LoadingCache<String?, String?> = CacheBuilder.newBuilder()
+    var gameNameCache: LoadingCache<String, Optional<String>> = CacheBuilder.newBuilder()
         .maximumSize(100)
-        .build<String?, String?>(object : CacheLoader<String, String>() {
-            override fun load(gameId: String): String {
-                return TwireApplication.helix.getGames(null, listOf(gameId), null, null)
+        .build(object : CacheLoader<String, Optional<String>>() {
+            override fun load(gameId: String): Optional<String> {
+                val games = TwireApplication.helix.getGames(null, listOf(gameId), null, null)
                     .execute()
-                    .games[0]
-                    .name
+                    .games
+                return if (games.isEmpty()) Optional.empty() else Optional.of(games[0].name)
             }
         })
 

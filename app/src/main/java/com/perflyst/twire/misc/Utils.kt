@@ -196,3 +196,8 @@ fun Fragment.addBackPressed(callback: () -> Boolean) {
 fun Fragment.popBackStack() {
     requireActivity().supportFragmentManager.popBackStack()
 }
+
+inline fun <reified T> Bundle.optional(key: String): T? {
+    @Suppress("DEPRECATION")
+    return get(key) as? T
+}
