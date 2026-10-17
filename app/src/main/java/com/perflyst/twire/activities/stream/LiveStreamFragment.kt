@@ -100,8 +100,16 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
                     currentHeight = maxHeight;
                 }
 */
+                    // inputRect is in screen coordinates while `y` is parent-relative. Those
+                    // match under edge-to-edge, but not below API 35 in portrait where the decor
+                    // applies the insets itself.
+                    val parentLocation = IntArray(2)
+                    (mMentionContainer.parent as View).getLocationOnScreen(parentLocation)
+
+                    // No `- inputRect.height()`: the container should stop at the top edge of the
+                    // input bar, not one input height above it.
                     mMentionContainer.y =
-                        (inputRect.top - inputRect.height() - currentHeight.toInt()).toFloat()
+                        (inputRect.top - parentLocation[1] - currentHeight.toInt()).toFloat()
                 }
             })
     }
