@@ -128,7 +128,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     private var selectedTabColorRes: Int? = null
     private var unselectedTabColorRes: Int? = null
     private var keyboardState: KeyboardState? = KeyboardState.CLOSED
-    private lateinit var defaultBackgroundColor: ColorFilter
+    private var defaultBackgroundColor: ColorFilter? = null
     private var bottomSheetDialog: BottomSheetDialog? = null
 
     private enum class KeyboardState {
@@ -799,6 +799,13 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             getEmotesFromMessage(message, emotes),
             false
         )
+        // Send before touching the UI, so a failure further down can't swallow the message.
+        if (!chatManager.sendMessage(message)) {
+            // Keep the text so the user can retry once the chat is connected.
+            Toast.makeText(context, R.string.chat_message_not_sent, Toast.LENGTH_SHORT).show()
+            return
+        }
+
         try {
             addMessage(chatMessage)
             Timber.d("Message added")
@@ -808,8 +815,6 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
 
         setKeyboardState(KeyboardState.CLOSED)
         mSendText.setText("")
-
-        chatManager.sendMessage(message)
     }
 
     /**

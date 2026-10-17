@@ -55,12 +55,12 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState == null) {
-            mMentionContainer = binding.mentionContainer
-            mMentionContainer.visibility = View.GONE
-            mMentionRecyclerView = binding.mentionRecyclerview
-            setupMentionSuggestionRecyclerView()
-        }
+        // The binding is recreated on every onCreateView, so these have to be rebound even when
+        // the fragment is being restored from saved state.
+        mMentionContainer = binding.mentionContainer
+        mMentionContainer.visibility = View.GONE
+        mMentionRecyclerView = binding.mentionRecyclerview
+        setupMentionSuggestionRecyclerView()
     }
 
     override fun onStop() {
@@ -109,6 +109,7 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
     private fun setupMentionSuggestionRecyclerView() {
         mMentionAdapter = MentionAdapter(MentionAdapterDelegate { suggestion: String? ->
             this@LiveStreamFragment.setSuggestions(ArrayList(), null)
+            if (!isChatFragmentInitialized) return@MentionAdapterDelegate
             mChatFragment.insertMentionSuggestion(suggestion!!)
         })
         mMentionRecyclerView.setLayoutManager(LinearLayoutManager(requireContext()))

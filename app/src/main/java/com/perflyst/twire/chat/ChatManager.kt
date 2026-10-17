@@ -427,9 +427,17 @@ class ChatManager(aChannel: UserInfo, aVodId: String?, vodOffset: Int, aCallback
      * Send a message to a hashChannel on Twitch (Don't need to be on that hashChannel)
      *
      * @param message The message that will be sent
+     * @return false if the chat isn't connected yet and the message was not sent
      */
-    fun sendMessage(message: String?) {
-        twitchChat!!.sendMessage(channel.login, message)
+    fun sendMessage(message: String?): Boolean {
+        val chat = twitchChat
+        if (chat == null) {
+            Timber.w("Tried to send a message before the chat was connected")
+            return false
+        }
+
+        chat.sendMessage(channel.login, message)
+        return true
     }
 
     private fun readBadges(request: HystrixCommand<ChatBadgeSetList>): MutableMap<String, MutableMap<String, Badge>> {
