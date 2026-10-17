@@ -55,12 +55,12 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (savedInstanceState == null) {
-            mMentionContainer = binding.mentionContainer
-            mMentionContainer.visibility = View.GONE
-            mMentionRecyclerView = binding.mentionRecyclerview
-            setupMentionSuggestionRecyclerView()
-        }
+        // The binding is recreated on every onCreateView, so these have to be rebound even when
+        // the fragment is being restored from saved state.
+        mMentionContainer = binding.mentionContainer
+        mMentionContainer.visibility = View.GONE
+        mMentionRecyclerView = binding.mentionRecyclerview
+        setupMentionSuggestionRecyclerView()
     }
 
     override fun onStop() {
@@ -100,8 +100,16 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
                     currentHeight = maxHeight;
                 }
 */
+                    // inputRect is in screen coordinates while `y` is parent-relative. Those
+                    // match under edge-to-edge, but not below API 35 in portrait where the decor
+                    // applies the insets itself.
+                    val parentLocation = IntArray(2)
+                    (mMentionContainer.parent as View).getLocationOnScreen(parentLocation)
+
+                    // No `- inputRect.height()`: the container should stop at the top edge of the
+                    // input bar, not one input height above it.
                     mMentionContainer.y =
-                        (inputRect.top - inputRect.height() - currentHeight.toInt()).toFloat()
+                        (inputRect.top - parentLocation[1] - currentHeight.toInt()).toFloat()
                 }
             })
     }
@@ -109,6 +117,7 @@ class LiveStreamFragment : VideoFragment<ActivityStreamBinding>(ActivityStreamBi
     private fun setupMentionSuggestionRecyclerView() {
         mMentionAdapter = MentionAdapter(MentionAdapterDelegate { suggestion: String? ->
             this@LiveStreamFragment.setSuggestions(ArrayList(), null)
+            if (!isChatFragmentInitialized) return@MentionAdapterDelegate
             mChatFragment.insertMentionSuggestion(suggestion!!)
         })
         mMentionRecyclerView.setLayoutManager(LinearLayoutManager(requireContext()))

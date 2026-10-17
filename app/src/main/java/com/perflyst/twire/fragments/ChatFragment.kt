@@ -6,6 +6,7 @@ import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.SpannableStringBuilder
@@ -82,7 +83,6 @@ import com.perflyst.twire.views.EditTextBackEvent
 import com.perflyst.twire.views.recyclerviews.AutoSpanRecyclerView
 import com.perflyst.twire.views.recyclerviews.ChatRecyclerView
 import com.perflyst.twire.views.recyclerviews.auto_span_behaviours.EmoteAutoSpanBehaviour
-import dev.chrisbanes.insetter.Insetter
 import org.parceler.Parcels
 import timber.log.Timber
 import java.util.Locale
@@ -128,7 +128,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     private var selectedTabColorRes: Int? = null
     private var unselectedTabColorRes: Int? = null
     private var keyboardState: KeyboardState? = KeyboardState.CLOSED
-    private lateinit var defaultBackgroundColor: ColorFilter
+    private var defaultBackgroundColor: ColorFilter? = null
     private var bottomSheetDialog: BottomSheetDialog? = null
 
     private enum class KeyboardState {
@@ -194,12 +194,11 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             setupEmoteViews()
         }
 
-        setupKeyboardShowListener()
-
         setupTransition()
 
-        Insetter.builder().paddingBottom(WindowInsetsCompat.Type.systemBars(), false)
-            .applyToView(view)
+        // Must be last: a View only holds a single OnApplyWindowInsetsListener, so anything
+        // registering one after this point would silently replace it.
+        setupKeyboardShowListener()
     }
 
     private var roomStateMap: MutableMap<Class<out ChannelStatesEvent?>?, ImageView?>? = null
@@ -504,7 +503,7 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     private fun setInitialKeyboardHeight() {
         val recordedHeight = keyboardHeight
 
-        if (recordedHeight > 200) {
+        if (recordedHeight > minKeyboardHeightPx) {
             val lp = emoteKeyboardContainer.layoutParams
             lp.height = recordedHeight
             emoteKeyboardContainer.setLayoutParams(lp)
@@ -512,6 +511,12 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     }
 
     private fun notifyKeyboardHeightRecorded(keyboardHeight: Int) {
+        // Never persist a zero or bogus height (suggestion strip, animation frames).
+        if (keyboardHeight <= minKeyboardHeightPx) return
+        // Idempotent: this runs on every insets dispatch, and setLayoutParams triggers a
+        // requestLayout.
+        if (emoteKeyboardContainer.layoutParams.height == keyboardHeight) return
+
         Timber.d("Keyboard height: %s", keyboardHeight)
         Settings.keyboardHeight = keyboardHeight
 
@@ -541,12 +546,17 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             )
         )
         else mEmoteKeyboardButton.colorFilter = defaultBackgroundColor
-        requireActivity().window
-            .setSoftInputMode(if (emoteKeyboardContainer.isVisible) WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING else WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        // Derive this from `state` rather than the container's current visibility: that is only
+        // updated below, so the old code read a stale value on the CLOSED -> SOFT transition.
+        requireActivity().window.setSoftInputMode(
+            if (state == KeyboardState.EMOTE) WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING
+            else WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        )
 
-
+        // Visible in EMOTE only. In SOFT the input is lifted by the window resize or by the insets
+        // padding (see handleImeAsPadding), so a spacer here would just stack on top of it.
         emoteKeyboardContainer.visibility =
-            if (state == KeyboardState.CLOSED) View.GONE else View.VISIBLE
+            if (state == KeyboardState.EMOTE) View.VISIBLE else View.GONE
         toggleKeyboard(state == KeyboardState.SOFT)
 
         keyboardState = state
@@ -659,6 +669,11 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
         mSendText.bringToFront()
 
         mSendButton.setOnClickListener { v: View? -> sendMessage() }
+        // The focus listener below only fires on a focus *change*: tapping an already focused
+        // input while the emote keyboard is up would open the IME without leaving EMOTE.
+        mSendText.setOnClickListener {
+            if (keyboardState == KeyboardState.EMOTE) setKeyboardState(KeyboardState.SOFT)
+        }
         mSendText.setOnEditTextImeBackListener { ctrl: EditTextBackEvent?, text: String? ->
             if (keyboardState == KeyboardState.SOFT) setKeyboardState(
                 KeyboardState.CLOSED
@@ -745,11 +760,21 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     }
 
     private fun setSuggestions(suggestions: MutableList<String>) {
-        if (parentFragment is LiveStreamFragment && parentFragment != null) {
-            val mInputRect = Rect()
-            mSendText.getGlobalVisibleRect(mInputRect)
-            (parentFragment as LiveStreamFragment).setSuggestions(suggestions, mInputRect)
-        }
+        val parent = parentFragment as? LiveStreamFragment ?: return
+
+        // getGlobalVisibleRect() returns the *visible* part of the view, which is wrong as soon
+        // as the input is partially covered by the keyboard. Measure it on screen instead, and
+        // target the whole input bar so the suggestions sit above all of it.
+        val location = IntArray(2)
+        mChatInputLayout.getLocationOnScreen(location)
+        val inputRect = Rect(
+            location[0],
+            location[1],
+            location[0] + mChatInputLayout.width,
+            location[1] + mChatInputLayout.height
+        )
+
+        parent.setSuggestions(suggestions, inputRect)
     }
 
     private fun userNotLoggedIn() {
@@ -757,18 +782,71 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
         chatInputDivider.visibility = View.GONE
     }
 
+    /**
+     * Android 15 (API 35) enforces EDGE_TO_EDGE_ENFORCED for apps targeting SDK 35+:
+     * SOFT_INPUT_ADJUST_RESIZE becomes a no-op, the window is no longer resized, and the IME has
+     * to be compensated with padding instead. The same happens from API 30 in landscape, where
+     * PlayerFragment stops the decor from fitting the system windows. Otherwise the system still
+     * resizes the window, so adding padding would offset the input twice. Below API 30 the legacy
+     * behaviour is kept as is, since the compat IME insets are only a heuristic there.
+     */
+    private val handleImeAsPadding
+        get() = Build.VERSION.SDK_INT >= 35 || (Build.VERSION.SDK_INT >= 30 &&
+                resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+
+    private val minKeyboardHeightPx
+        get() = (MIN_KEYBOARD_HEIGHT_DP * resources.displayMetrics.density).toInt()
+
     private fun setupKeyboardShowListener() {
         if (activity == null) return
 
-        ViewCompat.setOnApplyWindowInsetsListener(requireView()) { _, insets ->
-            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
-            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+        val root = requireView()
+        // Captured once: the listener runs on every dispatch and the padding would otherwise
+        // accumulate.
+        val initialPaddingBottom = root.paddingBottom
 
-            notifyKeyboardHeightRecorded(imeHeight)
-            if (imeVisible && keyboardState == KeyboardState.CLOSED) setKeyboardState(KeyboardState.SOFT)
+        // Only react to the IME actually going away. Below API 30 its visibility is a heuristic,
+        // and right after requesting SOFT it is still reported hidden, so acting on the absolute
+        // value would close the keyboard we just opened.
+        var lastImeVisible = false
+
+        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
+            val barsBottom = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
+            // The IME inset is measured from the bottom of the screen, so it already covers the
+            // navigation bar.
+            val imeOverBars =
+                (insets.getInsets(WindowInsetsCompat.Type.ime()).bottom - barsBottom)
+                    .coerceAtLeast(0)
+
+            // Our own emote keyboard already occupies the bottom of the fragment, so don't
+            // stack the IME padding on top of it. They overlap while toggling between the two,
+            // and while the IME is open on top of the emote keyboard.
+            val emoteSpace =
+                if (emoteKeyboardContainer.isVisible) emoteKeyboardContainer.layoutParams.height
+                else 0
+            val extraBottom =
+                if (handleImeAsPadding) (imeOverBars - emoteSpace).coerceAtLeast(0) else 0
+            v.setPadding(
+                v.paddingLeft,
+                v.paddingTop,
+                v.paddingRight,
+                initialPaddingBottom + barsBottom + extraBottom
+            )
+
+            if (imeVisible) notifyKeyboardHeightRecorded(imeOverBars)
+
+            if (imeVisible && keyboardState == KeyboardState.CLOSED) {
+                setKeyboardState(KeyboardState.SOFT)
+            } else if (lastImeVisible && !imeVisible && keyboardState == KeyboardState.SOFT) {
+                setKeyboardState(KeyboardState.CLOSED)
+            }
+            lastImeVisible = imeVisible
 
             insets
         }
+
+        ViewCompat.requestApplyInsets(root)
     }
 
 
@@ -799,6 +877,13 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
             getEmotesFromMessage(message, emotes),
             false
         )
+        // Send before touching the UI, so a failure further down can't swallow the message.
+        if (!chatManager.sendMessage(message)) {
+            // Keep the text so the user can retry once the chat is connected.
+            Toast.makeText(context, R.string.chat_message_not_sent, Toast.LENGTH_SHORT).show()
+            return
+        }
+
         try {
             addMessage(chatMessage)
             Timber.d("Message added")
@@ -808,8 +893,6 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
 
         setKeyboardState(KeyboardState.CLOSED)
         mSendText.setText("")
-
-        chatManager.sendMessage(message)
     }
 
     /**
@@ -1164,6 +1247,9 @@ class ChatFragment : BindingFragment<FragmentChatBinding>(FragmentChatBinding::i
     }
 
     companion object {
+        /** Below this, the inset isn't a real keyboard (suggestion strip, animation frames). */
+        private const val MIN_KEYBOARD_HEIGHT_DP = 100
+
         private val supportedUnicodeEmotes = arrayOf<Int>(
             0x1F600,
             0x1F601,

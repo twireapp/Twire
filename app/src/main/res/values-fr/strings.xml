@@ -82,6 +82,7 @@
     <string name="chat_status_connected">Prêt à chatter</string>
     <string name="chat_status_reconnecting">Reconnexion…</string>
     <string name="chat_status_connection_failed">Échec de la connexion</string>
+    <string name="chat_message_not_sent">Chat pas encore connecté, message non envoyé</string>
     <!-- ChannelInfo activity -->
     <!-- My Streams activity -->
     <string name="my_streams_preview_image">Aperçu du direct</string>

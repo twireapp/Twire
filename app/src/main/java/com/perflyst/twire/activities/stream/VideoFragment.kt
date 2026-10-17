@@ -38,6 +38,10 @@ abstract class VideoFragment<T : ViewBinding>(inflate: (LayoutInflater, ViewGrou
     BindingFragment<T>(inflate), PlayerFragmentListener {
     lateinit var mPlayerFragment: PlayerFragment
     lateinit var mChatFragment: ChatFragment
+
+    /** `isInitialized` isn't reachable from subclasses, so expose it here. */
+    val isChatFragmentInitialized: Boolean get() = this::mChatFragment.isInitialized
+
     private var mBackstackLost = false
     private var onStopCalled = false
     private var initialOrientation = 0
